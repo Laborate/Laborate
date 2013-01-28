@@ -1,5 +1,10 @@
 <?php
 
+if($_SERVER['REMOTE_ADDR'] != "127.00.00.1") {
+    error_reporting(E_ERROR | E_PARSE);
+    ini_set("display_errors", 1);
+}
+
 if (!isset($_SESSION)) { session_start(); }
 
 if (!isset($_SESSION['CREATED'])) {
@@ -20,12 +25,10 @@ if(isset($_SESSION['userId'])) {
     }
 }
 
-if($_SERVER['REMOTE_ADDR'] == "127.00.00.1") { //Production
-    ini_set("display_errors", 0);
-    $_SESSION['cache'] = false;
-}
-else { //Local
-    ini_set("display_errors", 1);
+if($_SERVER['REMOTE_ADDR'] == "127.00.00.1") {
     $_SESSION['cache'] = true;
+}
+else {
+    $_SESSION['cache'] = false;
 }
 ?>
