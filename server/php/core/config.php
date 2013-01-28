@@ -1,6 +1,6 @@
 <?php
 
-if($_SERVER['REMOTE_ADDR'] != "127.00.00.1") {
+if($_SERVER['REMOTE_ADDR'] != "127.0.0.1") {
     error_reporting(E_ERROR | E_PARSE);
     ini_set("display_errors", 1);
 }
@@ -25,7 +25,7 @@ if(isset($_SESSION['userId'])) {
     }
 }
 
-if($_SERVER['REMOTE_ADDR'] == "127.00.00.1") {
+if($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
     $_SESSION['cache'] = true;
 }
 else {
