@@ -1,0 +1,48 @@
+<?php
+$hostname_database = "localhost";
+$database_database = "Codelaborate";
+$username_database = "root";
+$password_database = "bjv0623";
+$database = mysql_pconnect($hostname_database, $username_database, $password_database) or trigger_error(mysql_error(),E_USER_ERROR);
+mysql_select_db($database_database, $database);
+
+if (!function_exists("GetSQLValueString")) {
+    function GetSQLValueString($theValue, $theType, $theDefinedValue = "", $theNotDefinedValue = "") {
+        if (PHP_VERSION < 6) {
+            $theValue = get_magic_quotes_gpc() ? stripslashes($theValue) : $theValue;
+        }
+
+        $theValue = function_exists("mysql_real_escape_string") ? mysql_real_escape_string($theValue) : mysql_escape_string($theValue);
+
+        switch ($theType) {
+        case "text":
+          $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+          break;
+        case "long":
+        case "int":
+          $theValue = ($theValue != "") ? intval($theValue) : "NULL";
+          break;
+        case "double":
+          $theValue = ($theValue != "") ? doubleval($theValue) : "NULL";
+          break;
+        case "date":
+          $theValue = ($theValue != "") ? "'" . $theValue . "'" : "NULL";
+          break;
+        case "defined":
+          $theValue = ($theValue != "") ? $theDefinedValue : $theNotDefinedValue;
+          break;
+        }
+        return $theValue;
+    }
+}
+
+global $Sessions, $row_Sessions;
+$query_Sessions = 'SELECT * FROM sessions ORDER BY session_name ASC';
+$Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
+$row_Sessions = mysql_fetch_assoc($Sessions);
+
+global $Users, $row_Users;
+$query_Sessions = "SELECT * FROM users WHERE users.user_id = '".$_SESSION['userId']."'";
+$Users = mysql_query($query_Sessions , $database) or die(mysql_error());
+$row_Users = mysql_fetch_assoc($Users);
+?>

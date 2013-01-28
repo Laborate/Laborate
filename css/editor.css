@@ -1,0 +1,38 @@
+html, body { overflow: hidden; }
+
+#editorCodeMirror {
+	overflow: hidden;
+	clear: none;
+	margin: 0px 230px 0px 211px;
+    padding: 0px 5px 0px 0px;
+}
+
+#editorCodeMirror .CodeMirror-scroll {
+    width: 100%;
+}
+
+span.CodeMirror-matchhighlight { background: #adfab4 }
+.CodeMirror-focused span.CodeMirror-matchhighlight { background: #adfab4; }
+
+#editorCodeMirror .highLightLine {
+    background: rgba(96,180,222,0.4);
+}
+
+#editorCodeMirror .CodeMirror-matchingbracket, #editorCodeMirror .CodeMirror-nonmatchingbracket {
+    color: #a62da2;
+}
+
+#editorCodeMirror .CodeMirror-selected {
+    background: #ACCBFA;
+}
+
+#editorCodeMirror .CodeMirror-gutter {
+	padding-right: 10px;
+	background: none;
+	border: none;
+
+}
+
+#editorCodeMirror .CodeMirror-gutter-text {
+    color: #666;
+}

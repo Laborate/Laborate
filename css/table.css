@@ -1,0 +1,60 @@
+.notification {
+    width: 555px;
+    padding: 10px 0px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.notification_yellow { color: #333; background: #faffc5; }
+.notification_red { color: #e12424; background: #ffc5c5; }
+.notification a { color: #0079D3; }
+.notification a:hover { text-decoration: underline; }
+
+.table_header {
+    width: 535px;
+    color: #1B74D3;
+    padding: 5px 10px;
+    background: #F0F9FF;
+    border-bottom: solid 1px #82CEFE;
+    box-shadow: 0px 1px 2px #ccc;
+    position: relative;
+    z-index: 100;
+}
+
+.table {
+  padding: 0px;
+  color: #666;
+}
+
+.table .td {
+    padding: 10px;
+    border-bottom: solid 1px #ededed;
+}
+
+.table .td:hover {
+    background: #f8f8f8;
+}
+
+.table .td:last-child {
+    border: none;
+}
+
+.table_header ul li, .table ul li {
+    float: left;
+    width: 20%;
+    text-align: left;
+}
+
+.table_header ul li:first-child, .table ul li:first-child {
+    margin-right: 10px;
+    width: 45%;
+}
+
+.table_header ul li:last-child, .table ul li:last-child {
+    width: auto;
+}
+
+.table ul li a { color: #000; }
+.table ul li a:hover { text-decoration: underline; }
