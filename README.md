@@ -1,3 +1,10 @@
+Clone To Existing Directory
+-----------------------------
+```bash
+git clone git@github.com:bvallelunga/Codelaborate.git foo; mv foo/* foo/.git* .; rm -R foo/
+```
+
+
 Locally
 ---------
 **start node**
