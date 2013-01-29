@@ -10,7 +10,7 @@ getDependencies(["core", "editor", "chatroom", "header", "backdrop"]);
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>code-laborate<?php if(isset($_GET['i'])) { echo " ~ ".$initalize[1]; } ?></title>
+    <title><?php if(isset($_GET['i'])) { echo $initalize[1]." · "; } ?>Code-Laborate</title>
     <script src="http://test:8000/socket.io/socket.io.js"></script>
   	<script type="text/javascript">
   	    try {

@@ -11,7 +11,7 @@ require("server/php/template/documents.php");
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>code-laborate ~ My Documents</title>
+	<title>My Documents · Code-Laborate</title>
 	<?php placeDependencies(); ?>
 </head>
 <body>
