@@ -136,7 +136,7 @@ $(window).ready(function() {
 
 $(window).resize(function() { $("#locations").css("height", ($(window).height() - 120) + "px"); });
 
-$("#locations ul li:not(.selected)").live("click", function() {
+$("#locations:not(.remove) ul li:not(.selected)").live("click", function() {
     $(".location").hide();
     $("#locations ul li").removeClass("selected");
     $(this).addClass("selected");
@@ -149,6 +149,19 @@ $("#locations ul li:not(.selected)").live("click", function() {
         $("#files #location_template").show();
         updateFiles($(this).attr("id"));
     }
+});
+
+$("#locations.remove ul li").live("click", function() {
+    var id = $(this).attr("id");
+    $(this).remove();
+
+    if(window.sidebar == id) {
+        $(".location").hide();
+        $("#files #location_online").show();
+        window.sidebar = "online";
+    }
+
+    $.post("server/php/user/update.php", { locations_remove: id });
 });
 
 $("#locations #remove_location").live("click", function() {

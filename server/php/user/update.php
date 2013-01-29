@@ -1,4 +1,6 @@
 <?php
+$GLOBALS['ajax_message'] = "";
+require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
@@ -17,5 +19,6 @@ if(isset($_POST['locations_remove'])) {
     $query_Sessions = sprintf("UPDATE users SET user_locations=%s WHERE user_id=%s",
         GetSQLValueString(json_encode($locations), "text"), $_SESSION['userId']);
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
+    echo $_POST['locations_remove'];
 }
 ?>
