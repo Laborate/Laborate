@@ -32,7 +32,7 @@ require("server/php/template/documents.php");
     <div id="files">
         <div id="location_online" class="location">
             <form class="file_search">
-                <input type="text" class="input left search_input" name="s" placeholder="Search For Files"/>
+                <input type="text" class="input left search_input" autocomplete="off" name="s" placeholder="Search For Files"/>
                 <select name="p" class="select left">
                     <option value="">Protection</option>
                     <option value="o" <?php if($_GET['p'] == "o") { echo "selected"; } ?>>Protection: Open</option>
@@ -54,7 +54,7 @@ require("server/php/template/documents.php");
         </div>
         <div id="location_template" class="location" data="">
             <form class="file_search">
-                <input type="text" class="input left search_input_full" name="s" placeholder="Search For Files"/>
+                <input type="text" class="input left search_input_full" name="s" autocomplete="off" placeholder="Search For Files"/>
                 <input type="submit" class="button blue left search_submit" value="Search" />
                 <a href="/editor" class="button green right">New File</a>
                 <div class="clear"></div>
