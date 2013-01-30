@@ -1,90 +1,178 @@
 //Pop Up
-function popUp(preset) {
-    if(preset == "location") {
-        $("#popup #location").show();
+function popUp(preset, data) {
+    $("#popup .presets").hide();
+    if(preset == "location_add") {
+        $("#popup #location_add").show();
         $("#popup #popup_header #popup_header_name").text("New Location");
         $("#popup").css({"width": "280"});
     }
 
+    if(preset == "location_delete") {
+        $("#popup #location_remove").show();
+        $("#popup #popup_header #popup_header_name").text("Confirm Location Deletion?");
+        $("#popup").css({"width": "250"});
+
+        $("#popup #location_remove input[type=button]").live("click", function() {
+            popUpClose();
+        });
+    }
+
     $("#popup .selection").hide().eq(0).show();
-    $("#popUp input[type=text], #popUp input[type=password], #popUp select").val('');
+    $("#popUp input[type=text], #popUp input[type=password], #popUp select").val('').css({"border":""});
     $("#popup .selected").removeClass("selected");
     $("#popup").hAlign().vAlign().show();
     $("#popup_backdrop").show();
 }
 
-$("#popup #popup_location_type").live("change", function() {
-    $("#popup .selection").hide();
-    if($(this).val() == "ftp" || $(this).val() == "sftp") {
-        $("#popup_location_ftp").show();
-    }
-    else {
-        $("#popup_location_" + $(this).val()).show();
-    }
-    $("#popup").hAlign().vAlign();
+$("#popup_header_exit, #popup_backdrop").live("click", function() { popUpClose(); });
+
+//Close PopUp
+function popUpClose() {
+
+    //Remove Live Events From Forms
+    $("#popup .presets form").die();
+    $("#popup #popup_location_type").die();
+    $("#popup #popup_location_github ul li").die();
+    $("#popup #location_remove input[type=button]").die();
+
+    $("#popup").hide();
+    $("#popup_backdrop").hide();
+}
+
+//SideBar Menu System
+$(window).ready(function() {
+    $("#locations").css("height", ($(window).height() - 95) + "px");
+    $("#locations #online").addClass("selected");
+    $("#location_online").show();
+    window.sidebar = "online";
 });
 
-$("#popup #popup_location_github ul li").live("click", function() {
-    $("#popup #popup_location_github ul li").removeClass("selected");
+//Set Location Height On Resize
+$(window).resize(function() {
+    $("#locations").css("height", ($(window).height() - 95) + "px");
+});
+
+//Change File Library Based Off Of Location
+$("#locations:not(.remove) ul li:not(.selected)").live("click", function() {
+    $(".location").hide();
+    $("#locations ul li").removeClass("selected");
     $(this).addClass("selected");
-});
+    window.sidebar = $(this).attr("id");
 
-
-//New Location Submit
-$("#popup .presets form").live("submit", function() {
-    var type = $("#popup #popup_location_type").val();
-    var passed = true;
-    var items = {"type": type};
-
-    if($("#popup #popup_location_name").val() == "") {
-        $("#popup #popup_location_name").css({"border":"solid thin #CC352D"});
-        passed = false;
+    if($(this).attr("id") == "online") {
+        $("#files #location_online").show();
     }
     else {
-        $("#popup #popup_location_name").css({"border":""});
-        items["name"] = $("#popup #popup_location_name").val();
+        $("#files #location_template").show();
+        updateFiles($(this).attr("id"));
     }
+});
 
-    $("#popup_location_" + type).find("input, select").each(function() {
-        if($(this).val() == "") {
-            $(this).css({"border": "solid thin #CC352D"});
-            passed = false;
+//Remove Location
+$("#locations.remove ul li").live("click", function() {
+    var li = $(this);
+    var id = li.attr("id");
+    popUp("location_delete");
+
+    $("#popup #location_remove input[type=button]").live("click", function() {
+        li.remove();
+
+        if(window.sidebar == id) {
+            $(".location").hide();
+            $("#files #location_online").show();
+            window.sidebar = "online";
         }
-        else {
-            $(this).css({"border": ""});
-            items[$(this).attr("name")] = $(this).val();
+
+        $.post("server/php/user/update.php", { locations_remove: id });
+
+        if($("#locations.remove ul li").size() == 1) {
+            $("#locations").toggleClass("remove");
+            $("#locations #online").toggle().addClass("selected");
         }
     });
+});
 
-    if(type == "github") {
-        if($("#popup_location_" + type + " .selected").text() == "") {
-            $("#popup_location_" + type).css({"border": "solid thin #CC352D"});
+//Add Location
+$("#locations #add_location").live("click", function() {
+    popUp("location_add");
+
+    $("#popup #popup_location_type").live("change", function() {
+        $("#popup .selection").hide();
+
+        if($(this).val() == "ftp" || $(this).val() == "sftp") {
+            $("#popup_location_ftp").show();
+        }
+        else {
+            $("#popup_location_" + $(this).val()).show();
+        }
+        $("#popup").hAlign().vAlign();
+    });
+
+    $("#popup #popup_location_github ul li").live("click", function() {
+        $("#popup #popup_location_github ul li").removeClass("selected");
+        $(this).addClass("selected");
+    });
+
+    $("#popup .presets form").live("submit", function() {
+        var type = $("#popup #popup_location_type").val();
+        var passed = true;
+        var items = {"type": type};
+
+        if($("#popup #popup_location_name").val() == "") {
+            $("#popup #popup_location_name").css({"border":"solid thin #CC352D"});
             passed = false;
         }
         else {
-            $("#popup_location_" + type).css({"border": ""});
-            items["github_repository"] = $("#popup_location_" + type + " .selected").text();
+            $("#popup #popup_location_name").css({"border":""});
+            items["name"] = $("#popup #popup_location_name").val();
         }
-    }
 
-    if(passed) {
-        if(type == "github") { var icon = "icon-github"; }
-        else { var icon = "icon-storage"; }
-        var key = Math.floor((Math.random()*10000)+1);
-        var li = '<li id="' + key +'"><span class="icon ' + icon +'"></span>' + $("#popup #popup_location_name").val() + '</li>';
-        $("#locations ul").append(li);
-        $("#popup").hide();
-        $("#popup_backdrop").hide();
-        $.post("server/php/user/update.php", { locations_add: [key, items] });
-    }
+        $("#popup_location_" + type).find("input[type=text], select").each(function() {
+            if($(this).val() == "") {
+                $(this).css({"border": "solid thin #CC352D"});
+                passed = false;
+            }
+            else {
+                $(this).css({"border": ""});
+                items[$(this).attr("name")] = $(this).val();
+            }
+        });
 
-    return false;
+        if(type == "github") {
+            if($("#popup_location_" + type + " .selected").text() == "") {
+                $("#popup_location_" + type).css({"border": "solid thin #CC352D"});
+                passed = false;
+            }
+            else {
+                $("#popup_location_" + type).css({"border": ""});
+                items["github_repository"] = $("#popup_location_" + type + " .selected").text();
+            }
+        }
+
+        if(passed) {
+            if(type == "github") { var icon = "icon-github"; }
+            else if(type == "ftp") { var icon = "icon-drawer-2"; }
+            else if(type == "sftp") { var icon = "icon-locked"; }
+            else { var icon = "icon-storage"; }
+            var key = Math.floor((Math.random()*10000)+1);
+            var li = '<li id="' + key +'"><span class="icon ' + icon +'"></span>' + $("#popup #popup_location_name").val() + '</li>';
+            $("#locations ul").append(li);
+            popUpClose();
+            $.post("server/php/user/update.php", { locations_add: [key, items] });
+        }
+        return false;
+    });
 });
 
+//Set Toggle Remove Class
+$("#locations #remove_location, #locations #finished_remove_location").live("click", function() {
+    $("#locations").toggleClass("remove");
+    $("#locations #online").toggle();
+});
 
-$("#popup_header_exit, #popup_backdrop").live("click", function() { $("#popup").hide(); $("#popup_backdrop").hide(); });
-$("#add_location").live("click", function() { popUp("location"); });
-
+function updateFiles(id) {
+    //$("#location_template_loading").hide();
+}
 
 //Search
 $(".file_search select").live("change", function() { $(this).parent("form").submit(); });
@@ -125,58 +213,6 @@ $(".file_search").live("submit", function() {
 
     return false;
 });
-
-//SideBar Menu System
-$(window).ready(function() {
-    $("#locations").css("height", ($(window).height() - 120) + "px");
-    $("#locations #online").addClass("selected");
-    $("#location_online").show();
-    window.sidebar = "online";
-});
-
-$(window).resize(function() { $("#locations").css("height", ($(window).height() - 120) + "px"); });
-
-$("#locations:not(.remove) ul li:not(.selected)").live("click", function() {
-    $(".location").hide();
-    $("#locations ul li").removeClass("selected");
-    $(this).addClass("selected");
-    window.sidebar = $(this).attr("id");
-
-    if($(this).attr("id") == "online") {
-        $("#files #location_online").show();
-    }
-    else {
-        $("#files #location_template").show();
-        updateFiles($(this).attr("id"));
-    }
-});
-
-$("#locations.remove ul li").live("click", function() {
-    var id = $(this).attr("id");
-    $(this).remove();
-
-    if(window.sidebar == id) {
-        $(".location").hide();
-        $("#files #location_online").show();
-        window.sidebar = "online";
-    }
-
-    $.post("server/php/user/update.php", { locations_remove: id });
-});
-
-$("#locations #remove_location").live("click", function() {
-    $("#locations").addClass("remove");
-    $("#locations #online").hide();
-});
-
-$("#locations #cancel_remove_location").live("click", function() {
-    $("#locations").removeClass("remove");
-    $("#locations #online").show();
-});
-
-function updateFiles(id) {
-    //$("#location_template_loading").hide();
-}
 
 //File System
 $(".file .file_attributes").live("click", function() {

@@ -67,6 +67,8 @@ function echoLocations() {
 
     foreach ($locations as $key => $value) {
         if($value["type"] == "github") { $icon = "icon-github"; }
+        elseif($value["type"] == "ftp") { $icon = "icon-drawer-2"; }
+        elseif($value["type"] == "sftp") { $icon = "icon-locked"; }
         else { $icon = "icon-storage"; }
     ?>
         <li id="<?php echo $key; ?>"><span class="icon <?php echo $icon; ?>"></span><?php echo $value["name"]; ?></li>

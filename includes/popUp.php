@@ -4,7 +4,7 @@
         <div id="popup_header_exit" class="right">X</div>
         <div class="clear"></div>
     </div>
-    <div class="presets" id="location">
+    <div class="presets" id="location_add">
         <form>
             <table width="100%" cellpadding="0px" cellspacing="0px">
                 <tr>
@@ -52,6 +52,9 @@
             </div>
             <input type="submit" class="button blue full" value="Add Location" />
         </form>
+    </div>
+    <div class="presets" id="location_remove">
+        <input type="button" class="button blue full" value="Yes, I am sure" />
     </div>
 </div>
 <div id="popup_backdrop" class="hidden"></div>

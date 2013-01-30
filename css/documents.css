@@ -1,12 +1,13 @@
 #locations {
     position: absolute;
-    width: 200px;
+    width: 300px;
     top: 70px;
     left: 20px;
-    padding: 10px 10px 15px 10px;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
     overflow: scroll;
+    background: #f8fafb;
+    border: solid 1px #dadcde;
 }
 
 #locations #locations_header {
@@ -14,8 +15,10 @@
     font-size: 18px;
     position: relative;
     border-bottom: solid 1px #ccc;
-    padding-bottom: 13px;
-    margin-bottom: 20px;
+    padding: 10px 10px 13px 10px;
+    margin-bottom: 15px;
+    background: -webkit-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    color: #52595d;
 }
 
 #locations #locations_header .location_button {
@@ -26,19 +29,23 @@
     border-radius: 3px;
     -moz-border-radius: 3px;
     position: absolute;
-    top: 0px;
+    top: 10px;
 }
 
 #locations #locations_header #add_location {
-    right: 30px;
+    right: 40px;
 }
 
-#locations #locations_header #remove_location, #locations #locations_header #cancel_remove_location {
-    right: 0px;
+#locations #locations_header #remove_location, #locations #locations_header #finished_remove_location {
+    right: 10px;
 }
 
-#locations.remove #cancel_remove_location {
+#locations.remove #finished_remove_location {
     padding-top: 2px !important;
+}
+
+#locations ul {
+    padding: 0px 10px;
 }
 
 #locations ul li {
@@ -47,6 +54,7 @@
     cursor: pointer;
     font-size: 15px;
     font-weight: bold;
+    color: #555;
 }
 
 #locations ul li .icon {
@@ -55,7 +63,7 @@
 }
 
 #locations ul li:hover {
-    color: #0093e2;
+    color: #333;
 }
 
 #locations ul li.selected {
@@ -74,7 +82,7 @@
     display: none;
 }
 
-#locations.remove #cancel_remove_location {
+#locations.remove #finished_remove_location {
     display: inline-block;
 }
 
@@ -100,8 +108,9 @@
 }
 
 #files {
-    margin-left: 280px;
+    margin-left: 350px;
     margin-top: 15px;
+    min-width: 630px;
 }
 
 .file_search {

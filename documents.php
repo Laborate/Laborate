@@ -16,16 +16,16 @@ require("server/php/template/documents.php");
 </head>
 <body>
     <?php $title = "My Documents"; include("includes/header.php"); ?>
-    <div id="locations" class="light_grey">
+    <div id="locations">
         <div id="locations_header">
             <div class="left">Locations</div>
             <input type="button" id="add_location" class="button location_button blue right" value="+" />
             <input type="button" id="remove_location" class="button location_button red right" value="-" />
-            <input type="button" id="cancel_remove_location" class="button location_button red hidden right" value="cancel" />
+            <input type="button" id="finished_remove_location" class="button location_button red hidden right" value="finished" />
             <div class="clear"></div>
         </div>
         <ul>
-            <li id="online"><span class="icon icon-folder"></span>Online Files</li>
+            <li id="online"><span class="icon icon-briefcase"></span>Online Files</li>
             <?php echoLocations(); ?>
         </ul>
     </div>

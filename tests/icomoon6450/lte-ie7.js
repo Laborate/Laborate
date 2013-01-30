@@ -245,7 +245,6 @@ window.onload = function() {
 			'icon-file-word' : '&#xe0e9;',
 			'icon-user-8' : '&#xe0ed;',
 			'icon-feed-5' : '&#xe0ee;',
-			'icon-folder-2' : '&#xe0ef;',
 			'icon-file-6' : '&#xe0f0;',
 			'icon-picture' : '&#xe0f1;',
 			'icon-warning-2' : '&#xe0f2;',
@@ -301,8 +300,6 @@ window.onload = function() {
 			'icon-clock' : '&#xe124;',
 			'icon-book-alt2' : '&#xe125;',
 			'icon-box' : '&#xe126;',
-			'icon-folder-stroke' : '&#xe127;',
-			'icon-folder-fill' : '&#xe128;',
 			'icon-pilcrow' : '&#xe129;',
 			'icon-hash' : '&#xe12a;',
 			'icon-info-5' : '&#xe12b;',
@@ -327,7 +324,8 @@ window.onload = function() {
 			'icon-arrow-up-4' : '&#xe13e;',
 			'icon-arrow-down-4' : '&#xe13f;',
 			'icon-arrow-right-alt1' : '&#xe140;',
-			'icon-move-horizontal-alt2' : '&#xe141;'
+			'icon-move-horizontal-alt2' : '&#xe141;',
+			'icon-folder-2' : '&#xe142;'
 		},
 		els = document.getElementsByTagName('*'),
 		i, attr, html, c, el;
