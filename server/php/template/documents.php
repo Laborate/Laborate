@@ -77,7 +77,6 @@ function echoLocations() {
 }
 
 function echoRepositories() {
-
     foreach (getRepositories() as $key => $value) {
         $repo_name = explode("/", $value);
     ?>

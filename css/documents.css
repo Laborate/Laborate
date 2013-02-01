@@ -90,12 +90,15 @@
     display: inline-block;
 }
 
+#location_template {
+    position: relative;
+}
+
 #location_template #location_template_loading {
     color: #5e5134;
     background: #fce4a6;
     padding: 5px 10px;
     text-align: center;
-    margin: -36px auto 0px auto;
     width: 100px;
     border: solid 1px #e9ba45;
     border-radius: 3px;
@@ -107,8 +110,9 @@
     -webkit-box-shadow: 0px 1px 3px #c9ae6a;
     -ms-box-shadow: 0px 1px 3px #c9ae6a;
     -o-box-shadow: 0px 1px 3px #c9ae6a;
-    position: relative;
+    position: absolute;
     z-index: 10000;
+    top: 30px;
 }
 
 #files {
@@ -184,6 +188,7 @@
 #files .file .file_attributes.password { background-image: url("/img/document_password.png"); }
 #files .file .file_attributes.employee { background-image: url("/img/document_employees.png"); }
 #files .file .file_attributes.folder { background-image: url("/img/document_folder.png"); }
+#files .file .file_attributes.back { background-image: url("/img/document_back.png"); }
 
 #files .notFound { display: none; }
 

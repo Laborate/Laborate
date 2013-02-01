@@ -27,8 +27,11 @@ function getDirectory($repo, $dir="") {
     $url = "https://api.github.com/repos/".$repo."/contents/".$dir;
     $fields = array("access_token" => $_SESSION['userGithub']);
     $directory = array();
+    if($dir) {
+        array_push($directory, array("type"=> "back", "name" => "", "path" => substr($dir, 0, strrpos($dir, '/'))));
+    }
     foreach(jsonToArray(curlGet($url, $fields)) as $key => $value) {
-        array_push($directory, array("type"=>$value['type'], "name" => $value['name']));
+        array_push($directory, array("type"=> $value['type'], "name" => $value['name'], "path" => $value['path']));
     }
     return json_encode($directory);
 }

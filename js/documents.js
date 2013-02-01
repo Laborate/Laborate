@@ -41,7 +41,7 @@ function popUpClose() {
 
 //SideBar Menu System
 $(window).ready(function() {
-    $("#locations").css("height", ($(window).height() - 95) + "px");
+    $("#locations").css("height", ($(document).height() - 95) + "px");
     $("#locations #online").addClass("selected");
     $("#location_online").show();
     window.sidebar = "online";
@@ -49,7 +49,7 @@ $(window).ready(function() {
 
 //Set Location Height On Resize
 $(window).resize(function() {
-    $("#locations").css("height", ($(window).height() - 95) + "px");
+    $("#locations").css("height", ($(document).height() - 95) + "px");
 });
 
 //Change File Library Based Off Of Location
@@ -70,17 +70,19 @@ $("#locations:not(.remove) ul li:not(.selected)").live("click", function() {
 });
 
 function updateFiles(id, path) {
-    $("#files #location_template #location_template_loading").show();
+    $("#files #location_template #location_template_loading").text("loading").hAlign().show();
     $.post("server/php/locations/github_directories.php", { location_id: id, dir: path },
         function(json) {
             var files = "";
             $.each(JSON.parse(json), function(i, item) {
-                if(item["type"] == "file") { var type = "file"; var icon = "open"; }
-                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; }
+                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
+                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
+                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
+
                 var title = nameToTitle(item["name"]);
 
-                var template = '<div id="github_' + item["name"] + '" class="file" data="' + item["name"] + '">';
-                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type + '</div>';
+                var template = '<div id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
+                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
                 template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
                 template += '</div>';
                 files += template;
@@ -247,6 +249,32 @@ $(".online.file .file_attributes").live("click", function() {
     return false;
 });
 
+$(".github.file .file_attributes").live("click", function() {
+    var file = $(this);
+    var type = file.attr("data");
+    var path = file.parent().attr("data");
+
+    if(type == "folder") {
+        updateFiles(window.sidebar, path);
+    }
+
+    if(type == "file") {
+        $("#files #location_template #location_template_loading").text("downloading").hAlign().show();
+        $.post("server/php/locations/github_files.php", { location_id: window.sidebar, file: path },
+            function(contents) {
+                $.post("server/php/session/new.php",
+                    { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(contents.split('\n')),
+                      session_type: "github", session_external_path:  path },
+                    function(id) {
+                        window.location.href = "editor?i=" + id;
+                    }
+                );
+            }
+        );
+    }
+    return false;
+});
+
 $('.file').live("hover", function() {
     $(this).find(".title").text($(this).find(".title").attr("data"));
     return false;
@@ -266,7 +294,7 @@ function nameToTitle(name) {
 }
 
 //Context Menu System (Right Click Menu)
-$('.file').live("contextmenu", function(e) {
+$('.online.file').live("contextmenu", function(e) {
     if($.trim($(this).find(".file_attributes").text()) == "owner") { var action  = "Delete"; }
     else { var action = "Forget"; }
 

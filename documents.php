@@ -59,7 +59,7 @@ require("server/php/template/documents.php");
                 <a href="/editor" class="button green right">New File</a>
                 <div class="clear"></div>
             </form>
-            <div id="location_template_loading">Loading</div>
+            <div id="location_template_loading"></div>
             <div id="file_library"></div>
         </div>
     </div>

@@ -16,7 +16,7 @@ if(isset($_GET['i'])) {
         if($row_Sessions['session_id'] == $_GET['i']) {
             if(is_null($row_Sessions['session_password'])) { $passwordRequired = false; }
             else { $passwordRequired = true; }
-            $initalize = array($passwordRequired, $row_Sessions['session_name']);
+            $initalize = array($passwordRequired, $row_Sessions['session_name'], $row_Sessions['session_type']);
 
             if($row_Sessions['session_owner'] == $_SESSION['userId']) {
                 if(!in_array($_GET['i'], $_SESSION['file_owner'])) {
