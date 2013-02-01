@@ -82,6 +82,10 @@
     display: none;
 }
 
+#locations.remove .icon::before {
+    content: "\e0a8" !important;
+}
+
 #locations.remove #finished_remove_location {
     display: inline-block;
 }
@@ -167,7 +171,7 @@
     font-family: "Not Just Groovy";
     letter-spacing: 1px;
     cursor: pointer;
-    background-position: center 10px;
+    background-position: 16px 10px;
     background-repeat: no-repeat;
     text-align: center;
     margin: 0px auto 5px auto;
@@ -179,6 +183,7 @@
 #files .file .file_attributes.open { background-image: url("/img/document_open.png"); }
 #files .file .file_attributes.password { background-image: url("/img/document_password.png"); }
 #files .file .file_attributes.employee { background-image: url("/img/document_employees.png"); }
+#files .file .file_attributes.folder { background-image: url("/img/document_folder.png"); }
 
 #files .notFound { display: none; }
 

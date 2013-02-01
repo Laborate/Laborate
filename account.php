@@ -15,5 +15,6 @@ getDependencies(["core", "header"]);
 
 <body>
     <?php $title = "My Account"; include("includes/header.php"); ?>
+    <a href="https://github.com/login/oauth/authorize?client_id=<?php echo $_SESSION['github_id']; ?>&scope=<?php echo $_SESSION['github_scope']; ?>&state=<?php echo $_SESSION['userId']; ?>">Github</a>
 </body>
 </html>

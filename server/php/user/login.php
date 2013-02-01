@@ -10,12 +10,12 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     $totalRows_Sessions = mysql_num_rows($Sessions);
 
     if($row_Sessions['user_email'] == $_POST['user_email']) {
-        if($row_Sessions['user_password'] == $_POST['user_password']) {
+        if($row_Sessions['user_password'] == crypt($_POST['user_password'], '$2a$07$usesomesillystringforsalt$')) {
             $_SESSION['userId'] = $row_Sessions['user_id'];
             $_SESSION['userName'] = $row_Sessions['user_name'];
             $_SESSION['userEmail'] = $row_Sessions['user_email'];
             $_SESSION['userLevel'] = $row_Sessions['user_level'];
-            $_SESSION['userGithub'] = objectToArray(json_decode($row_Sessions['user_github']));
+            $_SESSION['userGithub'] = $row_Sessions['user_github'];
         }
         else {
             echo "User Login: Failed";

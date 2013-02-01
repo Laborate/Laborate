@@ -4,7 +4,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
 
-if(isset($_POST['session_id'])){
+if(isset($_POST['session_id'])) {
     $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".$_POST['session_id']."'";
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);

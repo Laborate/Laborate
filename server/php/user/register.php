@@ -19,13 +19,12 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
 
     $id = createId();
     $insertSQL = sprintf("INSERT INTO users (user_id, user_name, user_email, user_password, user_activated,
-                                            user_locations, user_github, user_screen_name) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                                            user_locations, user_screen_name) VALUES (%s, %s, %s, %s, %s, %s, %s)",
     				   $id,
     				   GetSQLValueString($_POST['user_name'], "text"),
     				   GetSQLValueString($_POST['user_email'], "text"),
-    				   GetSQLValueString($_POST['user_password'], "text"),
+    				   GetSQLValueString(crypt($_POST['user_password'], '$2a$07$usesomesillystringforsalt$'), "text"),
     				   rand(101, 99999999),
-    				   GetSQLValueString("[]", "text"),
     				   GetSQLValueString("[]", "text"),
     				   GetSQLValueString(explode(" ", $_POST['user_name'])[0], "text"));
 

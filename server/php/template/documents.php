@@ -3,6 +3,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/server/php/locations/github_core.php');
 
 //Check for Delete or Forget
 $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".$GLOBALS['getVars']['i']."'";
@@ -51,7 +52,7 @@ function echoDocuments() {
             $title = $GLOBALS['row_Sessions']['session_name'];
         }
         ?>
-        <div id="file_<?php echo $GLOBALS['row_Sessions']['session_id']; ?>" class="file" data="<?php echo $GLOBALS['row_Sessions']['session_id']; ?>">
+        <div id="file_<?php echo $GLOBALS['row_Sessions']['session_id']; ?>" class="file online" data="<?php echo $GLOBALS['row_Sessions']['session_id']; ?>">
             <div class="file_attributes <?php echo $protected; ?>" data="<?php echo $protected; ?>">
                 <?php echo $ownership; ?>
             </div>
@@ -63,7 +64,7 @@ function echoDocuments() {
 }
 
 function echoLocations() {
-    $locations = objectToArray(json_decode($GLOBALS['row_Users']['user_locations']));
+    $locations = jsonToarray($GLOBALS['row_Users']['user_locations']);
 
     foreach ($locations as $key => $value) {
         if($value["type"] == "github") { $icon = "icon-github"; }
@@ -73,5 +74,14 @@ function echoLocations() {
     ?>
         <li id="<?php echo $key; ?>"><span class="icon <?php echo $icon; ?>"></span><?php echo $value["name"]; ?></li>
     <?php }
+}
+
+function echoRepositories() {
+
+    foreach (getRepositories() as $key => $value) {
+        $repo_name = explode("/", $value);
+    ?>
+        <li><?php echo $repo_name[0];?>/<span class="bold"><?php echo $repo_name[1];?></span></li>
+    <? }
 }
 ?>

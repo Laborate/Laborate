@@ -57,16 +57,40 @@ $("#locations:not(.remove) ul li:not(.selected)").live("click", function() {
     $(".location").hide();
     $("#locations ul li").removeClass("selected");
     $(this).addClass("selected");
-    window.sidebar = $(this).attr("id");
 
     if($(this).attr("id") == "online") {
         $("#files #location_online").show();
     }
     else {
+        $("#files #location_template #file_library").html("");
         $("#files #location_template").show();
         updateFiles($(this).attr("id"));
     }
+    window.sidebar = $(this).attr("id");
 });
+
+function updateFiles(id, path) {
+    $("#files #location_template #location_template_loading").show();
+    $.post("server/php/locations/github_directories.php", { location_id: id, dir: path },
+        function(json) {
+            var files = "";
+            $.each(JSON.parse(json), function(i, item) {
+                if(item["type"] == "file") { var type = "file"; var icon = "open"; }
+                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; }
+                var title = nameToTitle(item["name"]);
+
+                var template = '<div id="github_' + item["name"] + '" class="file" data="' + item["name"] + '">';
+                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type + '</div>';
+                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                template += '</div>';
+                files += template;
+            });
+            $("#files #location_template #file_library").html(files);
+
+            $("#files #location_template #location_template_loading").hide();
+        }
+    );
+}
 
 //Remove Location
 $("#locations.remove ul li").live("click", function() {
@@ -115,8 +139,10 @@ $("#locations #add_location").live("click", function() {
 
     $("#popup .presets form").live("submit", function() {
         var type = $("#popup #popup_location_type").val();
+        var type_icon = type;
         var passed = true;
         var items = {"type": type};
+        if(type == "sftp") { type = "ftp"; }
 
         if($("#popup #popup_location_name").val() == "") {
             $("#popup #popup_location_name").css({"border":"solid thin #CC352D"});
@@ -138,6 +164,11 @@ $("#locations #add_location").live("click", function() {
             }
         });
 
+        if($("#popup_location_" + type).find("input[type=password]").clone() != "") {
+            var pass = $("#popup_location_" + type).find("input[type=password]");
+            items[pass.attr("name")] = pass.val();
+        }
+
         if(type == "github") {
             if($("#popup_location_" + type + " .selected").text() == "") {
                 $("#popup_location_" + type).css({"border": "solid thin #CC352D"});
@@ -150,9 +181,9 @@ $("#locations #add_location").live("click", function() {
         }
 
         if(passed) {
-            if(type == "github") { var icon = "icon-github"; }
-            else if(type == "ftp") { var icon = "icon-drawer-2"; }
-            else if(type == "sftp") { var icon = "icon-locked"; }
+            if(type_icon == "github") { var icon = "icon-github"; }
+            else if(type_icon == "ftp") { var icon = "icon-drawer-2"; }
+            else if(type_icon == "sftp") { var icon = "icon-locked"; }
             else { var icon = "icon-storage"; }
             var key = Math.floor((Math.random()*10000)+1);
             var li = '<li id="' + key +'"><span class="icon ' + icon +'"></span>' + $("#popup #popup_location_name").val() + '</li>';
@@ -169,10 +200,6 @@ $("#locations #remove_location, #locations #finished_remove_location").live("cli
     $("#locations").toggleClass("remove");
     $("#locations #online").toggle();
 });
-
-function updateFiles(id) {
-    //$("#location_template_loading").hide();
-}
 
 //Search
 $(".file_search select").live("change", function() { $(this).parent("form").submit(); });
@@ -215,7 +242,7 @@ $(".file_search").live("submit", function() {
 });
 
 //File System
-$(".file .file_attributes").live("click", function() {
+$(".online.file .file_attributes").live("click", function() {
     window.location.href = "editor?i=" + $(this).parent().attr("data");
     return false;
 });
@@ -227,11 +254,16 @@ $('.file').live("hover", function() {
 
 $('.file').live("mouseleave",function() {
     var name = $(this).find(".title").attr("data");
-    if(name.length > 12) { var title = name.substring(0, 10) + "..."; }
-    else { var title = name; }
+    var title = nameToTitle(name);
     $(this).find(".title").text(title);
     return false;
 });
+
+function nameToTitle(name) {
+    if(name.length > 12) { var title = name.substring(0, 10) + "..."; }
+    else { var title = name; }
+    return title;
+}
 
 //Context Menu System (Right Click Menu)
 $('.file').live("contextmenu", function(e) {
@@ -260,9 +292,7 @@ $("#menu li").live("click", function() {
         if(id == "rename") {
             var name = prompt("File Name", $("#file_" + reference + " .title").attr("data"));
             if (name != null && name != "") {
-                if(name.length > 12) { var title = name.substring(0, 10) + "..."; }
-                else { var title = name; }
-
+                var title = nameToTitle(name);
                 $("#file_"+reference+" .title").attr("data", name);
                 $("#file_"+reference+" .title").text(title);
 

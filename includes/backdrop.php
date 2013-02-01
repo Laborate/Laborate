@@ -17,7 +17,7 @@
                         <div class="backdropInitalWelcome seperatorRequired">Upload or Create<br/>A New Code Document</div>
                         <div id="backdropDataInput">
                             <input type="text" id="backdropScreenName" placeholder="Screen Name" style="margin-bottom: 10px;"/>
-                            <input type="text" class="left" id="backdropDocTitle" placeholder="File Name"/>
+                            <input type="text" autofocus="on" class="left" id="backdropDocTitle" placeholder="File Name"/>
                             <div id="backdropUpload" class="left">Upload</div>
                             <div class="clear"></div>
                             <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding" />
@@ -48,10 +48,10 @@
                         <div id="backdropDataInput">
                             <input type="hidden" id="backdropDocTitle" value="<?php echo $initalize[1] ?>"/>
                             <?php if($initalize[0] == true) { ?>
-                                <input type="text" id="backdropScreenName" placeholder="Screen Name" style="margin-bottom: 10px;"/>
+                                <input type="text" autofocus="on" id="backdropScreenName" placeholder="Screen Name" style="margin-bottom: 10px;"/>
                                 <input type="password" id="backdropPassword" placeholder="Password"/>
                             <?php } else { ?>
-                                <input type="text" id="backdropScreenName" placeholder="Screen Name"/>
+                                <input type="text" autofocus="on" id="backdropScreenName" placeholder="Screen Name"/>
                                 <input type="hidden" id="backdropPassword" value=""/>
                             <?php } ?>
                             <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding"/>
@@ -70,7 +70,7 @@
                     <div class="backdropInitalWelcome seperatorRequired">Collaborative software<br>development made easy!</div>
                     <div class="seperatorRequired">
                         <form id="backdropSigIn">
-                            <input type="text" id="backdropSigInEmail" placeholder="Email"/>
+                            <input type="text" autofocus="on" id="backdropSigInEmail" placeholder="Email"/>
                             <input type="password" id="backdropSigInPassword" placeholder="Password"/>
                             <input type="submit" class="backdropButton button full blue" value="Sign In"/>
                         </form>
@@ -90,7 +90,7 @@
                     <div class="backdropInitalWelcome seperatorRequired">Collaborative software<br>development made easy!</div>
                     <div class="seperatorRequired">
                         <form id="backdropRegister">
-                            <input type="text" id="backdropRegisterName" placeholder="Name"/>
+                            <input type="text" autofocus="on" id="backdropRegisterName" placeholder="Name"/>
                             <input type="text" id="backdropRegisterEmail" placeholder="Email"/>
                             <input type="password" id="backdropRegisterPassword" placeholder="Password"/>
                             <input type="password" id="backdropRegisterConfirm" placeholder="Confirm Password"/>

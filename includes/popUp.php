@@ -17,7 +17,7 @@
                         <select id="popup_location_type" class="select full">
                             <option value="ftp">FTP</option>
                             <option value="sftp">SFTP</option>
-                            <?php if(!empty($_SESSION['userGithub'])) { ?>
+                            <?php if(!is_null($_SESSION['userGithub'])) { ?>
                                 <option value="github">Github Repository</option>
                             <?php } ?>
                         </select>
@@ -40,18 +40,15 @@
                     </tr>
                 </table>
             </div>
-            <?php if(!empty($_SESSION['userGithub'])) { ?>
+            <?php if(!is_null($_SESSION['userGithub'])) { ?>
                 <div id="popup_location_github" class="hidden selection scroll">
-                    <ul>
-                        <li>bvallelunga/<span class="bold">technologic</span></li>
-                        <li>ParkMeInc/<span class="bold">middleware</span></li>
-                        <li>ParkMeInc/<span class="bold">homepage</span></li>
-                        <li>ParkMeInc/<span class="bold">AndroidAttendant</span></li>
-                        <li>ParkMeInc/<span class="bold">AndroidConsumer</span></li>
-                        <li>ParkMeInc/<span class="bold">AndroidLibs</span></li>
-                        <li>ParkMeInc/<span class="bold">iphone</span></li>
-                        <li>ParkMeInc/<span class="bold">iphonewebapp</span></li>
-                    </ul>
+                    <?php if($_SESSION['userGithub'] != "") { ?>
+                        <ul>
+                            <?php echoRepositories(); ?>
+                        </ul>
+                    <?php } else { ?>
+                        <center style="margin-top: 50px; color:red;"><strong>You Do Not Have<br>Any Github Repositories</strong></center>
+                    <?php } ?>
                 </div>
             <?php } ?>
             <input type="submit" class="button blue full" value="Add Location" />

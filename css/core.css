@@ -61,3 +61,14 @@ a {
 .scroll {
     overflow: scroll;
 }
+
+@font-face {
+	font-family: 'Not Just Groovy';
+	src:url('/fonts/not_just_groovy.eot');
+	src:url('/fonts/not_just_groovy.eot') format('embedded-opentype'),
+		url('/fonts/not_just_groovy.woff') format('woff'),
+		url('/fonts/not_just_groovy.ttf') format('truetype'),
+		url('/fonts/not_just_groovy.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
