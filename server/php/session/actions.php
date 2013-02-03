@@ -1,5 +1,6 @@
 <?php
 $GLOBALS['ajax_message'] = "0";
+$GLOBALS['ajax_only'] = true;
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');

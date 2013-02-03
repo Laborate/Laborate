@@ -5,7 +5,7 @@
     left: 20px;
     border-radius: 5px;
     -moz-border-radius: 5px;
-    overflow: scroll;
+    overflow: hidden;
     background: #f8fafb;
     border: solid 1px #dadcde;
 }

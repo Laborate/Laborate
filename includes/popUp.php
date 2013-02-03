@@ -11,19 +11,19 @@
                     <td width="85">Name:</td>
                     <td><input autocomplete="off" type="text" class="input full" id="popup_location_name" name="location_name" placeholder="Dev Site"/></td>
                 </tr>
-                <tr>
-                    <td width="85">Type:</td>
-                    <td>
-                        <?php if(!is_null($_SESSION['userGithub'])) { ?>
+                <?php if(!is_null($_SESSION['userGithub'])) { ?>
+                    <tr>
+                        <td width="85">Type:</td>
+                        <td>
                             <select id="popup_location_type" class="select full">
                                 <option value="sftp">SFTP</option>
                                 <option value="github">Github Repository</option>
                             </select>
-                        <?php } else { ?>
-                            <input type="hidden" id="popup_location_type" value="sftp" />
-                        <?php } ?>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                <?php } else { ?>
+                    <input type="hidden" id="popup_location_type" value="sftp" />
+                <?php } ?>
             </table>
             <div id="popup_location_sftp" class="selection">
                 <table width="100%" cellpadding="0px" cellspacing="0px">

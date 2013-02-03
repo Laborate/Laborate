@@ -28,7 +28,7 @@ function getSftpClient($credentials) {
     return $sftp;
 }
 
-function getDirectories($credentials, $dir="") {
+function getDirectory($credentials, $dir="") {
     $sftp = getSftpClient($credentials);
     $sftp->chdir('..');
     $sftp->chdir($dir);

@@ -17,6 +17,7 @@
 }
 
 .green {
+    text-shadow: 0 -1px 0 #009d00;
     color: #fff !important;
     border: solid 1px #006e00 !important;
     box-shadow: inset 0px 1px 0px #80db80 !important;
@@ -27,6 +28,7 @@
 }
 
 .blue {
+    text-shadow: 0 -1px 0 #07C;
     color: #fff !important;
     border: solid 1px #0471ed !important;
     box-shadow: inset 0px 1px 0px #80d6ff !important;
@@ -68,6 +70,7 @@
 }
 
 .red {
+    text-shadow: 0 -1px 0 #dd0000;
     color: #fff !important;
     border: solid 1px #f00000 !important;
     box-shadow: inset 0px 1px 0px #e84949 !important;
@@ -78,6 +81,7 @@
 }
 
 .red_harsh {
+    text-shadow: 0 -1px 0 #dd0000;
     color: #fff !important;
     border: solid 1px #f00000 !important;
     box-shadow: inset 0px 1px 0px #e84949 !important;
