@@ -1,5 +1,5 @@
 #locations {
-    position: absolute;
+    position: fixed;
     width: 300px;
     top: 70px;
     left: 20px;
@@ -94,12 +94,13 @@
     position: relative;
 }
 
-#location_template #location_template_loading {
+.notification {
     color: #5e5134;
     background: #fce4a6;
-    padding: 5px 10px;
+    padding: 5px 20px;
     text-align: center;
-    width: 100px;
+    float: left;
+    clear: both;
     border: solid 1px #e9ba45;
     border-radius: 3px;
     -moz-border-radius: 3px;
@@ -112,13 +113,24 @@
     -o-box-shadow: 0px 1px 3px #c9ae6a;
     position: absolute;
     z-index: 10000;
-    top: 30px;
+    top: 32px;
+    display: none;
+}
+
+.notification a {
+    color: #666 !important;
+    text-decoration: underline !important;
+}
+
+.notification a:hover {
+    color: #333 !important;
 }
 
 #files {
     margin-left: 350px;
     margin-top: 15px;
     min-width: 630px;
+    position: relative;
 }
 
 .file_search {

@@ -4,9 +4,6 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 getDependencies(["core", "header", "documents", "icons"]);
-global $getVars;
-$getVars = $_GET;
-require("server/php/template/documents.php");
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -26,10 +23,10 @@ require("server/php/template/documents.php");
         </div>
         <ul>
             <li id="online"><span class="icon icon-briefcase"></span>Online Files</li>
-            <?php echoLocations(); ?>
         </ul>
     </div>
     <div id="files">
+        <div class="notification"></div>
         <div id="location_online" class="location">
             <form class="file_search">
                 <input type="text" class="input left search_input" autocomplete="off" name="s" placeholder="Search For Files"/>
@@ -49,7 +46,7 @@ require("server/php/template/documents.php");
                 <a href="/editor" class="button green right" id="newFile">New File</a>
                 <div class="clear"></div>
             </form>
-            <div id="file_library"><?php echoDocuments(); ?></div>
+            <div id="file_library"></div>
             <div class="notFound">Sorry, no documents were found.</div>
         </div>
         <div id="location_template" class="location" data="">
@@ -59,7 +56,6 @@ require("server/php/template/documents.php");
                 <a href="/editor" class="button green right">New File</a>
                 <div class="clear"></div>
             </form>
-            <div id="location_template_loading"></div>
             <div id="file_library"></div>
         </div>
     </div>

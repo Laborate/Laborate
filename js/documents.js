@@ -39,13 +39,6 @@ function popUpClose() {
     $("#popup_backdrop").hide();
 }
 
-//SideBar Menu System
-$(window).ready(function() {
-    $("#locations").css("height", ($(document).height() - 95) + "px");
-    $("#locations #online").addClass("selected");
-    $("#location_online").show();
-    window.sidebar = "online";
-});
 
 //Set Location Height On Resize
 $(window).resize(function() {
@@ -59,63 +52,16 @@ $("#locations:not(.remove) ul li:not(.selected)").live("click", function() {
     $(this).addClass("selected");
 
     if($(this).attr("id") == "online") {
+        $("#files .notification").hide();
         $("#files #location_online").show();
+        history.pushState(null, null, "/");
     }
     else {
         $("#files #location_template #file_library").html("");
         $("#files #location_template").show();
-        updateFiles($(this).attr("id"));
+        updateGithubFiles($(this).attr("id"));
     }
     window.sidebar = $(this).attr("id");
-});
-
-function updateFiles(id, path) {
-    $("#files #location_template #location_template_loading").text("loading").hAlign().show();
-    $.post("server/php/locations/github_directories.php", { location_id: id, dir: path },
-        function(json) {
-            var files = "";
-            $.each(JSON.parse(json), function(i, item) {
-                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
-                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
-                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
-
-                var title = nameToTitle(item["name"]);
-
-                var template = '<div id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
-                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
-                template += '</div>';
-                files += template;
-            });
-            $("#files #location_template #file_library").html(files);
-
-            $("#files #location_template #location_template_loading").hide();
-        }
-    );
-}
-
-//Remove Location
-$("#locations.remove ul li").live("click", function() {
-    var li = $(this);
-    var id = li.attr("id");
-    popUp("location_delete");
-
-    $("#popup #location_remove input[type=button]").live("click", function() {
-        li.remove();
-
-        if(window.sidebar == id) {
-            $(".location").hide();
-            $("#files #location_online").show();
-            window.sidebar = "online";
-        }
-
-        $.post("server/php/user/update.php", { locations_remove: id });
-
-        if($("#locations.remove ul li").size() == 1) {
-            $("#locations").toggleClass("remove");
-            $("#locations #online").toggle().addClass("selected");
-        }
-    });
 });
 
 //Add Location
@@ -197,11 +143,86 @@ $("#locations #add_location").live("click", function() {
     });
 });
 
+//Remove Location
+$("#locations.remove ul li").live("click", function() {
+    var li = $(this);
+    var id = li.attr("id");
+    popUp("location_delete");
+
+    $("#popup #location_remove input[type=button]").live("click", function() {
+        li.remove();
+
+        if(window.sidebar == id) {
+            $(".location").hide();
+            $("#files #location_online").show();
+            $("#locations #online").addClass("selected");
+            window.sidebar = "online";
+        }
+
+        $.post("server/php/user/update.php", { locations_remove: id });
+
+        if($("#locations.remove ul li").size() == 1) {
+            $("#locations").removeClass("remove");
+            $("#locations #online").toggle().addClass("selected");
+        }
+    });
+});
+
 //Set Toggle Remove Class
 $("#locations #remove_location, #locations #finished_remove_location").live("click", function() {
     $("#locations").toggleClass("remove");
     $("#locations #online").toggle();
 });
+
+//Pull In New Github Directories
+function updateGithubFiles(id, path) {
+    $("#files .notification").text("loading...").hAlign().show();
+    $.post("server/php/locations/github_directories.php", { location_id: id, dir: path },
+        function(json) {
+            if(json == "Bad Token") {
+                badToken();
+                return false;
+            }
+
+            if(json == "Bad Location") {
+                $("#files .notification").text("Location Does Not Exist").hAlign().show();
+                return false;
+            }
+
+            if(json == "Not Github Location") {
+                $("#files .notification").text("ftp and sftp are not available").hAlign().show();
+                return false;
+            }
+
+            var files = "";
+            $.each(JSON.parse(json), function(i, item) {
+                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
+                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
+                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
+
+                var title = nameToTitle(item["name"]);
+
+                var template = '<div id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
+                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
+                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                template += '</div>';
+                files += template;
+            });
+            $("#files #location_template #file_library").html(files);
+            $("#files .notification").hide();
+
+            if(path != undefined && path != "") { var dir = "&dir=" + path; }
+            else { var dir = ""; }
+            history.pushState(null, null, "?type=github&loc=" + id + dir);
+        }
+    );
+}
+
+//Show Reauthorization Pop Up If Github Token Is Invaild
+function badToken() {
+    var html = "Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>";
+    $("#files .notification").html(html).hAlign().show();
+}
 
 //Search
 $(".file_search select").live("change", function() { $(this).parent("form").submit(); });
@@ -255,13 +276,23 @@ $(".github.file .file_attributes").live("click", function() {
     var path = file.parent().attr("data");
 
     if(type == "folder") {
-        updateFiles(window.sidebar, path);
+        updateGithubFiles(window.sidebar, path);
     }
 
     if(type == "file") {
-        $("#files #location_template #location_template_loading").text("downloading").hAlign().show();
+        $("#files .notification").text("downloading").hAlign().show();
         $.post("server/php/locations/github_files.php", { location_id: window.sidebar, file: path },
             function(contents) {
+                if(contents == "Bad Location") {
+                    $("#files .notification").text("Location Does Not Exist").hAlign().show();
+                    return false;
+                }
+
+                if(contents == "Not Github Location") {
+                    $("#files .notification").text("ftp and sftp are not available").hAlign().show();
+                    return false;
+                }
+
                 $.post("server/php/session/new.php",
                     { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(contents.split('\n')),
                       session_type: "github", session_external_path:  path },
@@ -287,6 +318,7 @@ $('.file').live("mouseleave",function() {
     return false;
 });
 
+//Convert Name to Title
 function nameToTitle(name) {
     if(name.length > 12) { var title = name.substring(0, 10) + "..."; }
     else { var title = name; }
@@ -307,6 +339,7 @@ $('.online.file').live("contextmenu", function(e) {
     return false;
 });
 
+//Menu Item Click
 $("#menu li").live("click", function() {
     $("#menu").hide();
     var id = $(this).attr("id");

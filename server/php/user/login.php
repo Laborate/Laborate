@@ -10,7 +10,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     $totalRows_Sessions = mysql_num_rows($Sessions);
 
     if($row_Sessions['user_email'] == $_POST['user_email']) {
-        if($row_Sessions['user_password'] == crypt($_POST['user_password'], '$2a$07$usesomesillystringforsalt$')) {
+        if($row_Sessions['user_password'] == crypt($_POST['user_password'], $_SESSION['cryptSalt'])) {
             $_SESSION['userId'] = $row_Sessions['user_id'];
             $_SESSION['userName'] = $row_Sessions['user_name'];
             $_SESSION['userEmail'] = $row_Sessions['user_email'];

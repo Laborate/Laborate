@@ -33,8 +33,14 @@ else {
     $_SESSION['cache'] = false;
 }
 
+//Crypt Salt
+$_SESSION['cryptSalt'] = '$2a$07$aydsaqvpodfwrtdmdnbohnytk$';
+
 //Github Authentication
 $_SESSION['github_id'] = "c2e5cbcb1b5508040583";
 $_SESSION['github_secret'] = "7bdb5baf916de59c12464c82982a62494a11bfb6";
 $_SESSION['github_scope'] = "repo";
+$_SESSION['github_state'] = crypt($_SESSION['userId'], $_SESSION['cryptSalt']);
+$_SESSION['github_auth_url'] = "https://github.com/login/oauth/authorize?client_id=";
+$_SESSION['github_auth_url'] .= $_SESSION['github_id']."&scope=".$_SESSION['github_scope']."&state=".$_SESSION['github_state'];
 ?>

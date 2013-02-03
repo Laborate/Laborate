@@ -5,13 +5,13 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
 
 if(isset($_GET['code'])) {
-    if($_GET['state'] == $_SESSION['userId']) {
+    if(urldecode($_GET['state']) == $_SESSION['github_state']) {
         $url = 'https://github.com/login/oauth/access_token';
         $fields = array(
                     'client_id' => urlencode($_SESSION['github_id']),
                     'client_secret' => urlencode($_SESSION['github_secret']),
-                    'code' => urlencode($_GET['code']),
-                    'state' => urlencode($_SESSION['userId'])
+                    'code' => $_GET['code'],
+                    'state' => urlencode($_SESSION['github_state'])
                 );
 
         $json  = jsonToarray(curlPost($url, $fields));

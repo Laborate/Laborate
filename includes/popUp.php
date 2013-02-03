@@ -42,13 +42,9 @@
             </div>
             <?php if(!is_null($_SESSION['userGithub'])) { ?>
                 <div id="popup_location_github" class="hidden selection scroll">
-                    <?php if($_SESSION['userGithub'] != "") { ?>
-                        <ul>
-                            <?php echoRepositories(); ?>
-                        </ul>
-                    <?php } else { ?>
-                        <center style="margin-top: 50px; color:red;"><strong>You Do Not Have<br>Any Github Repositories</strong></center>
-                    <?php } ?>
+                    <center id="github_empty" class="hidden" style="margin-top: 50px; color:red;">
+                        <strong>You Do Not Have<br>Any Github Repositories</strong>
+                    </center>
                 </div>
             <?php } ?>
             <input type="submit" class="button blue full" value="Add Location" />

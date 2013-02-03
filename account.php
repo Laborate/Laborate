@@ -5,6 +5,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 getDependencies(["core", "header"]);
+if($_GET['github'] == 2) { echo "<script type='text/javascript'>window.location.href = '".$_SESSION['github_auth_url']."'</script>"; }
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -15,6 +16,6 @@ getDependencies(["core", "header"]);
 
 <body>
     <?php $title = "My Account"; include("includes/header.php"); ?>
-    <a href="https://github.com/login/oauth/authorize?client_id=<?php echo $_SESSION['github_id']; ?>&scope=<?php echo $_SESSION['github_scope']; ?>&state=<?php echo $_SESSION['userId']; ?>">Github</a>
+    <a href="<?php echo $_SESSION['github_auth_url']; ?>">Github</a>
 </body>
 </html>

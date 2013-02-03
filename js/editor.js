@@ -78,7 +78,7 @@ function setEditorMode(mode) {
     languageExtentsion =  { "js":"javascript",
                             "php":"php",
                             "css":"css",
-                            "h":"clike", "c":"clike", "cc":"clike", "cpp":"clike", "cxx":"clike", "cxx":"clike",
+                            "h":"clike", "c":"clike", "cc":"clike", "cpp":"clike", "cxx":"clike", "cxx":"clike","java":"clike",
                             "jar":"clike","scala":"clike","m":"clike", "pch":"clike",
                             "coffee":"coffeescript",
                             "lisp":"commonlisp",
