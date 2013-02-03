@@ -3,6 +3,15 @@ input, select, textarea {
     margin: 2px 0px;
 }
 
+input[disabled="disabled"], select[disabled="disabled"],
+textarea[disabled="disabled"], input[disabled="disabled"]:hover,
+select[disabled="disabled"]:hover, textarea[disabled="disabled"]:hover,
+input[disabled="disabled"]:focus, input[disabled="disabled"]:active,
+select[disabled="disabled"]:focus, textarea[disabled="disabled"]:focus {
+    opacity: .4 !important;
+    cursor: default !important;
+}
+
 .button {
     font-size: 14px !important;
     cursor: pointer !important;
