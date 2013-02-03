@@ -46,7 +46,7 @@ $(window).resize(function() {
 });
 
 //Change File Library Based Off Of Location
-$("#locations:not(.remove) ul li:not(.selected)").live("click", function() {
+$("#locations:not(.remove) ul li").live("click", function() {
     $(".location").hide();
     $("#locations ul li").removeClass("selected");
     $(this).addClass("selected");
@@ -71,8 +71,8 @@ $("#locations #add_location").live("click", function() {
     $("#popup #popup_location_type").live("change", function() {
         $("#popup .selection").hide();
 
-        if($(this).val() == "ftp" || $(this).val() == "sftp") {
-            $("#popup_location_ftp").show();
+        if($(this).val() == "sftp") {
+            $("#popup_location_sftp").show();
         }
         else {
             $("#popup_location_" + $(this).val()).show();
@@ -90,7 +90,6 @@ $("#locations #add_location").live("click", function() {
         var type_icon = type;
         var passed = true;
         var items = {"type": type};
-        if(type == "sftp") { type = "ftp"; }
 
         if($("#popup #popup_location_name").val() == "") {
             $("#popup #popup_location_name").css({"border":"solid thin #CC352D"});
@@ -130,8 +129,7 @@ $("#locations #add_location").live("click", function() {
 
         if(passed) {
             if(type_icon == "github") { var icon = "icon-github"; }
-            else if(type_icon == "ftp") { var icon = "icon-drawer-2"; }
-            else if(type_icon == "sftp") { var icon = "icon-locked"; }
+            else if(type_icon == "sftp") { var icon = "icon-drawer-2"; }
             else { var icon = "icon-storage"; }
             var key = Math.floor((Math.random()*10000)+1);
             var li = '<li id="' + key +'"><span class="icon ' + icon +'"></span>' + $("#popup #popup_location_name").val() + '</li>';
@@ -190,7 +188,7 @@ function updateGithubFiles(id, path) {
             }
 
             if(json == "Not Github Location") {
-                $("#files .notification").text("ftp and sftp are not available").hAlign().show();
+                $("#files .notification").text("sftp is not available").hAlign().show();
                 return false;
             }
 
@@ -289,7 +287,7 @@ $(".github.file .file_attributes").live("click", function() {
                 }
 
                 if(contents == "Not Github Location") {
-                    $("#files .notification").text("ftp and sftp are not available").hAlign().show();
+                    $("#files .notification").text("sftp is not available").hAlign().show();
                     return false;
                 }
 

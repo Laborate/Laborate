@@ -9,7 +9,6 @@ if(isset($_POST['download_id'])) {
     $query_Sessions = "SELECT * FROM download, sessions WHERE sessions.session_id = download.session_id AND download.download_id = '".$_POST['download_id']."'";
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
-    $totalRows_Sessions = mysql_num_rows($Sessions);
 
     $deleteSQL = sprintf("DELETE FROM download WHERE download.download_id = '".$_POST['download_id']."'");
     mysql_select_db($database_database, $database);

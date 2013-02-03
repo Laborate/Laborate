@@ -14,29 +14,30 @@
                 <tr>
                     <td width="85">Type:</td>
                     <td>
-                        <select id="popup_location_type" class="select full">
-                            <option value="ftp">FTP</option>
-                            <option value="sftp">SFTP</option>
-                            <?php if(!is_null($_SESSION['userGithub'])) { ?>
+                        <?php if(!is_null($_SESSION['userGithub'])) { ?>
+                            <select id="popup_location_type" class="select full">
+                                <option value="sftp">SFTP</option>
                                 <option value="github">Github Repository</option>
-                            <?php } ?>
-                        </select>
+                            </select>
+                        <?php } else { ?>
+                            <input type="hidden" id="popup_location_type" value="sftp" />
+                        <?php } ?>
                     </td>
                 </tr>
             </table>
-            <div id="popup_location_ftp" class="selection">
+            <div id="popup_location_sftp" class="selection">
                 <table width="100%" cellpadding="0px" cellspacing="0px">
                     <tr>
                         <td width="85">Server:</td>
-                        <td><input autocomplete="off" type="text" class="input full" id="popup_location_server" name="ftp_server" placeholder="192.168.1.1"/></td>
+                        <td><input autocomplete="off" type="text" class="input full" id="popup_location_server" name="sftp_server" placeholder="192.168.1.1"/></td>
                     </tr>
                     <tr>
                         <td width="85">Username:</td>
-                        <td><input autocomplete="off" type="text" class="input full" id="popup_location_username" name="ftp_user_name" placeholder="john"/></td>
+                        <td><input autocomplete="off" type="text" class="input full" id="popup_location_username" name="sftp_user_name" placeholder="john"/></td>
                     </tr>
                     <tr>
                         <td width="85">Password:</td>
-                        <td><input autocomplete="off" type="password" class="input full" id="popup_location_user_password" name="ftp_user_password" placeholder=""/></td>
+                        <td><input autocomplete="off" type="password" class="input full" id="popup_location_user_password" name="sftp_user_password" placeholder=""/></td>
                     </tr>
                 </table>
             </div>

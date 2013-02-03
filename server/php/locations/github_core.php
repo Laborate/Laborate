@@ -23,7 +23,7 @@ function getRepositories() {
         $repos = 'Bad Token';
     }
 
-    return $repos;
+    return json_encode($repos);
 }
 
 function getDirectory($repo, $dir="") {

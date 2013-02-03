@@ -10,8 +10,7 @@ $locations_array = array();
 
 foreach ($locations as $key => $value) {
     if($value["type"] == "github") { $icon = "icon-github"; }
-    elseif($value["type"] == "ftp") { $icon = "icon-drawer-2"; }
-    elseif($value["type"] == "sftp") { $icon = "icon-locked"; }
+    elseif($value["type"] == "sftp") { $icon = "icon-drawer-2"; }
     else { $icon = "icon-storage"; }
     array_push($locations_array, array("key" => $key, "icon" => $icon, "name" => $value["name"]));
 }

@@ -13,7 +13,7 @@ if(isset($_POST['session_id'])) {
     if($row_Sessions['session_id'] == $_POST['session_id']) {
 
         if($_POST['session_password'] == "") { $pass = NULL; }
-        else { $pass = $_POST['session_password']; }
+        else { $pass = crypt($_POST['session_password'], $_SESSION['cryptSalt']); }
 
         if($row_Sessions['session_password'] == $pass ) {
             function createId() {

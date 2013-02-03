@@ -5,10 +5,10 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
 <div id="sidebar_download" class="sidebar_content_inner">
     <script type="text/javascript">
         $("#downloadFile").live("click", function() {
-            $.post("server/php/session_password_check.php", { session_id: getUrlVars()['i'], session_password: $("#backdropPassword").val() },
+            $.post("server/php/session/password_check.php", { session_id: getUrlVars()['i'], session_password: $("#backdropPassword").val() },
                 function(password_response){
                     if(password_response != "Password Authentication: Failed") {
-                        window.location.href = "server/php/session_download_file.php?i=" + password_response;
+                        window.location.href = "server/php/session/download_file.php?i=" + password_response;
                         $("#downloadFile").removeClass("red_harsh");
                     }
                     else {
