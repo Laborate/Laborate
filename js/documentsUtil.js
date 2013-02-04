@@ -48,7 +48,7 @@ window.documents = {
     notificationClose: function() {
         $("#files .notification").hide();
     },
-    contextMenu: function(element) {
+    contextMenu: function(element, e) {
         if($.trim(element.find(".file_attributes").text()) == "owner") { var action  = "Delete"; }
         else { var action = "Forget"; }
 
@@ -58,7 +58,6 @@ window.documents = {
         else { var left = e.pageX + 4; }
 
         $("#menu").css({"top": e.pageY + 16, "left": left}).attr("data", element.attr("data")).show();
-        return false;
     },
     contextMenuItem: function(element) {
         window.documents.contextMenuClose();
@@ -107,6 +106,7 @@ window.documents = {
         $("#locations").css("height", ($(document).height() - 95) + "px");
     },
     locationChange: function(location_id, initializing) {
+        $("#files .location").hide();
         $("#locations ul li").removeClass("selected");
         $("#" + location_id).addClass("selected");
 
@@ -118,7 +118,7 @@ window.documents = {
            $("#files #location_template #file_library").html("");
            $("#files #location_template").show();
            if(!initializing) {
-               window.documents.getGithubDirectory(location_id);
+               window.documents.githubDirectory(location_id);
             }
         }
 
@@ -333,10 +333,11 @@ window.documents = {
             }
         );
     },
-    githubFile: function(location_id, path) {
+    githubFile: function(location_id, file) {
+        var path = file.parent().attr("data");
         window.documents.notification("downloading");
 
-        $.post("server/php/locations/github_file.php", { location_id: window.sidebar, file: path },
+        $.post("server/php/locations/github_file.php", { location_id: location_id, file: path },
             function(contents) {
                 if(contents == "Bad Location") {
                     window.documents.notification("Location Does Not Exist");
@@ -385,8 +386,6 @@ window.documents = {
                 form.find("#newFile").show();
             }
         }
-
-        return false;
     },
     fileSearchClear: function(element) {
         element.parent("form").find('input:text, select').val('');
