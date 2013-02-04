@@ -72,7 +72,7 @@ window.documents = {
             if(id == "rename") {
                 var name = prompt("File Name", $("#file_" + reference + " .title").attr("data"));
                 if (name != null && name != "") {
-                    var title = nameToTitle(name);
+                    var title = window.documents.nameToTitle(name);
                     $("#file_"+reference+" .title").attr("data", name);
                     $("#file_"+reference+" .title").text(title);
 
@@ -105,7 +105,7 @@ window.documents = {
     locationsHeight: function() {
         $("#locations").css("height", ($(document).height() - 95) + "px");
     },
-    locationChange: function(location_id, initializing) {
+    locationChange: function(location_id, dont_pull_content) {
         $("#files .location").hide();
         $("#locations ul li").removeClass("selected");
         $("#" + location_id).addClass("selected");
@@ -117,8 +117,12 @@ window.documents = {
         } else {
            $("#files #location_template #file_library").html("");
            $("#files #location_template").show();
-           if(!initializing) {
-               window.documents.githubDirectory(location_id);
+           if(!dont_pull_content) {
+               var location_type = window.documents.locationTypeCheck(location_id);
+
+               if(location_type == "github") {
+                   window.documents.githubDirectory(location_id);
+                }
             }
         }
 
@@ -231,7 +235,7 @@ window.documents = {
         $("#locations #online").toggle();
     },
     locationTypeCheck: function(location_id) {
-        alert("Needs To Be Done");
+        return "github";
     },
     locationListing: function(callback) {
         $.post("server/php/locations/locations_listing.php",
@@ -241,6 +245,9 @@ window.documents = {
                     locations += '<li id="' + item['key'] + '"><span class="icon ' + item['icon'] + '"></span>' + item['name'] + '</li>';
                 });
                 $("#locations ul").append(locations);
+                if(callback == undefined) {
+                    callback = function(){}
+                }
                 callback(true);
             }
         );
@@ -255,11 +262,14 @@ window.documents = {
                     file += item['ownership'];
                     file += '</div>';
                     file += '<div class="title" data="' + item['title'] + '">';
-                    file += nameToTitle(item['title']);
+                    file += window.documents.nameToTitle(item['title']);
                     file += '</div></div>';
                     files += file;
                 });
                 $("#files #location_online #file_library").append(files);
+                if(callback == undefined) {
+                    callback = function(){}
+                }
                 callback(true);
             }
         );
@@ -281,6 +291,9 @@ window.documents = {
                     $("#popup_location_github").append("<ul>" + repos + "</ul>");
                 } else {
                     $("#popup_location_github #github_empty").show();
+                }
+                if(callback == undefined) {
+                    callback = function(){}
                 }
                 callback(true);
             }
@@ -329,13 +342,16 @@ window.documents = {
                     var dir = "";
                 }
                 history.pushState(null, null, "?type=github&loc=" + location_id + dir);
+                if(callback == undefined) {
+                    callback = function(){}
+                }
                 callback(true);
             }
         );
     },
     githubFile: function(location_id, file) {
         var path = file.parent().attr("data");
-        window.documents.notification("downloading");
+        window.documents.notification("downloading...");
 
         $.post("server/php/locations/github_file.php", { location_id: location_id, file: path },
             function(contents) {
@@ -361,30 +377,30 @@ window.documents = {
     },
     fileSearch: function(form) {
         var search = form.find("input[name=s]").val();
+        var protection = form.find("select[name=p]").val();
+        var relation = form.find("select[name=r]").val();
+        var parent_location = form.parent(".location");
 
-        if(window.sidebar == "online") {
-            var protection = form.find("select[name=p]").val();
-            var relation = form.find("select[name=r]").val();
-
-            $("#location_" + window.sidebar + " .file").each(function() {
-                var show = true;
-                if($(this).find(".title").text().toLowerCase().indexOf(search) < 0) { show = false; }
+        parent_location.find(".file").each(function() {
+            var show = true;
+            if($(this).find(".title").text().toLowerCase().indexOf(search) < 0) { show = false; }
+            if(window.sidebar == "online") {
                 if(protection != $(this).find(".file_attributes").attr("data")[0] && protection != "") { show = false; }
                 if(relation != $.trim($(this).find(".file_attributes").text())[0] && relation != "") { show = false; }
-                if(show) { $(this).show(); } else { $(this).hide(); }
-            });
-
-            if($("#location_" + window.sidebar + " .file:visible").length == 0) {
-                $("#location_" + window.sidebar + " .notFound").show();
-                form.find("#clearSearch").show();
-                if($(window).width() < 980) { form.find("#newFile").hide(); }
-                else { form.find("#newFile").show(); }
-
-            } else {
-                $("#location_" + window.sidebar + " .notFound").hide();
-                form.find("#clearSearch").hide();
-                form.find("#newFile").show();
             }
+            if(show) { $(this).show(); } else { $(this).hide(); }
+        });
+
+        if(parent_location.find(".file:visible").length == 0) {
+            $(".location:visible .notFound").show();
+            form.find("#clearSearch").show();
+            if($(window).width() < 980) { form.find("#newFile").hide(); }
+            else { form.find("#newFile").show(); }
+
+        } else {
+            parent_location.find(".notFound").hide();
+            form.find("#clearSearch").hide();
+            form.find("#newFile").show();
         }
     },
     fileSearchClear: function(element) {

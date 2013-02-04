@@ -1,3 +1,9 @@
+//Close Pop Up
+$("#popup_header_exit, #popup_backdrop").live("click", function() {
+    window.documents.popUpClose();
+});
+
+
 //Set Location Height On Resize
 $(window).resize(function() {
     window.documents.locationsHeight();
@@ -66,13 +72,6 @@ $('.file').live("mouseleave",function() {
     $(this).find(".title").text(title);
     return false;
 });
-
-//Convert Name to Title
-function nameToTitle(name) {
-    if(name.length > 12) { var title = name.substring(0, 10) + "..."; }
-    else { var title = name; }
-    return title;
-}
 
 //Context Menu System (Right Click Menu)
 $('.online.file').live("contextmenu", function(e) {

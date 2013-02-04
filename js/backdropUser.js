@@ -24,7 +24,7 @@ $("#backdropSigIn").live("submit", function() {
                 }
                 else {
                     var urlContinue = getUrlVars()['continue'];
-                    if(urlContinue == null || urlContinue == "") { window.location.href = "../documents"; }
+                    if(urlContinue == null || urlContinue == "") { window.location.href = "documents"; }
                     else { window.location.href = urlContinue; }
                 }
             }
@@ -96,7 +96,7 @@ $("#backdropRegister").live("submit", function() {
                                             },
                 function(result){
                     if(result == 1) {
-                        window.location.href = "account.php";
+                        window.location.href = "documents";
                     }
                     else {
                        $("#backdropInital .textError").text("User Registration Failed").fadeIn();

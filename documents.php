@@ -53,6 +53,7 @@ getDependencies(["core", "header", "documents", "icons"]);
             <form class="file_search">
                 <input type="text" class="input left search_input_full" name="s" autocomplete="off" placeholder="Search For Files"/>
                 <input type="submit" class="button blue left search_submit" value="Search" />
+                <input type="button" class="button red left search_submit" id="clearSearch" value="Clear" />
                 <a href="/editor" class="button green right">New File</a>
                 <div class="clear"></div>
             </form>
