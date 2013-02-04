@@ -1,5 +1,5 @@
 //Pop Up
-function popUp(preset, data) {
+function popUp(preset) {
     $("#popup .presets").hide();
     if(preset == "location_add") {
         $("#popup #location_add").show();
@@ -59,10 +59,54 @@ $("#locations:not(.remove) ul li").live("click", function() {
     else {
         $("#files #location_template #file_library").html("");
         $("#files #location_template").show();
-        updateGithubFiles($(this).attr("id"));
+        updateGithubDirectory($(this).attr("id"));
     }
     window.sidebar = $(this).attr("id");
 });
+
+//Pull In New Github Directories
+function updateGithubDirectory(id, path) {
+    $("#files .notification").text("loading...").hAlign().show();
+    $.post("server/php/locations/github_directory.php", { location_id: id, dir: path },
+        function(json) {
+            if(json == "Bad Token") {
+                badToken();
+                return false;
+            }
+
+            if(json == "Bad Location") {
+                $("#files .notification").text("Location Does Not Exist").hAlign().show();
+                return false;
+            }
+
+            if(json == "Not Github Location") {
+                $("#files .notification").text("sftp is not available").hAlign().show();
+                return false;
+            }
+
+            var files = "";
+            $.each(JSON.parse(json), function(i, item) {
+                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
+                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
+                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
+
+                var title = nameToTitle(item["name"]);
+
+                var template = '<div id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
+                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
+                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                template += '</div>';
+                files += template;
+            });
+            $("#files #location_template #file_library").html(files);
+            $("#files .notification").hide();
+
+            if(path != undefined && path != "") { var dir = "&dir=" + path; }
+            else { var dir = ""; }
+            history.pushState(null, null, "?type=github&loc=" + id + dir);
+        }
+    );
+}
 
 //Add Location
 $("#locations #add_location").live("click", function() {
@@ -172,50 +216,6 @@ $("#locations #remove_location, #locations #finished_remove_location").live("cli
     $("#locations #online").toggle();
 });
 
-//Pull In New Github Directories
-function updateGithubFiles(id, path) {
-    $("#files .notification").text("loading...").hAlign().show();
-    $.post("server/php/locations/github_directories.php", { location_id: id, dir: path },
-        function(json) {
-            if(json == "Bad Token") {
-                badToken();
-                return false;
-            }
-
-            if(json == "Bad Location") {
-                $("#files .notification").text("Location Does Not Exist").hAlign().show();
-                return false;
-            }
-
-            if(json == "Not Github Location") {
-                $("#files .notification").text("sftp is not available").hAlign().show();
-                return false;
-            }
-
-            var files = "";
-            $.each(JSON.parse(json), function(i, item) {
-                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
-                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
-                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
-
-                var title = nameToTitle(item["name"]);
-
-                var template = '<div id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
-                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
-                template += '</div>';
-                files += template;
-            });
-            $("#files #location_template #file_library").html(files);
-            $("#files .notification").hide();
-
-            if(path != undefined && path != "") { var dir = "&dir=" + path; }
-            else { var dir = ""; }
-            history.pushState(null, null, "?type=github&loc=" + id + dir);
-        }
-    );
-}
-
 //Show Reauthorization Pop Up If Github Token Is Invaild
 function badToken() {
     var html = "Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>";
@@ -274,12 +274,12 @@ $(".github.file .file_attributes").live("click", function() {
     var path = file.parent().attr("data");
 
     if(type == "folder") {
-        updateGithubFiles(window.sidebar, path);
+        updateGithubDirectory(window.sidebar, path);
     }
 
     if(type == "file") {
         $("#files .notification").text("downloading").hAlign().show();
-        $.post("server/php/locations/github_files.php", { location_id: window.sidebar, file: path },
+        $.post("server/php/locations/github_file.php", { location_id: window.sidebar, file: path },
             function(contents) {
                 if(contents == "Bad Location") {
                     $("#files .notification").text("Location Does Not Exist").hAlign().show();

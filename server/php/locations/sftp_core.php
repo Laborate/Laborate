@@ -5,22 +5,22 @@ set_include_path($_SERVER['DOCUMENT_ROOT'].'/server/php/vendor/phpseclib/');
 include('Net/SFTP.php');
 
 function getSftpClient($credentials) {
-    $sftp = new Net_SFTP($credentials['host']);
+    $sftp = new Net_SFTP($credentials['sftp_server']);
 
     if(isset($credentials['key_file'])) {
         include('Crypt/RSA.php');
         $key = new Crypt_RSA();
 
-        if(isset($credentials['password'])) {
-            $key->setPassword($credentials['password']);
+        if(isset($credentials['sftp_user_password'])) {
+            $key->setPassword($credentials['sftp_user_password']);
         }
 
         $key->loadKey($credentials['key_file']);
-        if (!$sftp->login($credentials['username'], $credentials['key_file'])) {
+        if (!$sftp->login($credentials['sftp_user_name'], $credentials['key_file'])) {
             exit('RSA Login Failed');
         }
     } else {
-        if (!$sftp->login($credentials['username'], $credentials['password'])) {
+        if (!$sftp->login($credentials['sftp_user_name'], $credentials['sftp_user_password'])) {
             exit('Login Failed');
         }
     }

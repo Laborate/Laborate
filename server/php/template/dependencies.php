@@ -62,7 +62,7 @@ function getDependencies($dependencies) {
 
     if(in_array("documents", $dependencies)) {
         array_push($GLOBALS['css'], "documents.css");
-        array_push($GLOBALS['js'], "documents.js", "documentsInit.js");
+        array_push($GLOBALS['js'], "documents.js", "documentsInit.js", "documentsUtil.js");
     }
 }
 
