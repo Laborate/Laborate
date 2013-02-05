@@ -11,6 +11,7 @@ window.chatRoom = {
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:c = clear screen</div>');
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:h = console commands</div>');
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>');
+    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:s = toggle sidebar visibilty</div>');
     	$(".jspPane").append('<div class="chatRoomStatus">*1 command per message*</div>');
     	$(".jspPane").append('<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline;">Message References</div></strong>');
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>');
@@ -31,6 +32,14 @@ window.chatRoom = {
         window.chatRoom.resize();
         window.chatRoom._scrollToBottom();
 
+    },
+    sidebar: function() {
+        if($("#sidebar").is(":visible")) {
+            $("#editorCodeMirror").css("margin-left", "0");
+        } else {
+            $("#editorCodeMirror").css("margin-left", "");
+        }
+        $("#sidebar").toggle();
     },
     message: function(from, name, message, direction) {
         if(window.activated) {
@@ -76,8 +85,9 @@ window.chatRoom = {
     _check: function(message, type, name) {
         if(type == "commands") {
             commands = {":c": "clear",
-				":h": "help",
-				":n": "toggle",
+				        ":h": "help",
+				        ":n": "toggle",
+				        ":s": "sidebar"
 				}
 
         	for(var command in commands) {
