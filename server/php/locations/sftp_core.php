@@ -7,7 +7,7 @@ include('Net/SFTP.php');
 function getSftpClient($credentials) {
     $sftp = new Net_SFTP($credentials['sftp_server']);
 
-    if(isset($credentials['key_file'])) {
+    if(isset($credentials['sftp_key_file'])) {
         include('Crypt/RSA.php');
         $key = new Crypt_RSA();
 
@@ -15,8 +15,8 @@ function getSftpClient($credentials) {
             $key->setPassword($credentials['sftp_user_password']);
         }
 
-        $key->loadKey($credentials['key_file']);
-        if (!$sftp->login($credentials['sftp_user_name'], $credentials['key_file'])) {
+        $key->loadKey($credentials['sftp_key_file']);
+        if (!$sftp->login($credentials['sftp_user_name'], $key)) {
             exit('Bad Credentials');
         }
     } else {
@@ -29,12 +29,18 @@ function getSftpClient($credentials) {
 }
 
 function getDirectory($credentials, $dir="") {
+    $directory = array();
     $sftp = getSftpClient($credentials);
     $sftp->chdir('..');
-    $sftp->chdir($dir);
-    $directory = array();
 
-    if($dir) {
+    if($dir != "") {
+        $sftp->chdir($dir);
+    } else {
+        $dir = $credentials['sftp_server_default'];
+        $sftp->chdir($credentials['sftp_server_default']);
+    }
+
+    if($dir != "" && $dir != "/") {
         $back_dir = substr($dir, 0, strrpos($dir, '/'));
         array_push($directory, array("type"=> "back", "name" => "", "path" => substr($back_dir, 0, strrpos($back_dir, '/'))."/"));
     }

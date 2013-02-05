@@ -32,6 +32,10 @@
                         <td><input autocomplete="off" type="text" class="input full" id="popup_location_server" name="sftp_server" placeholder="192.168.1.1"/></td>
                     </tr>
                     <tr>
+                        <td width="85">Folder:</td>
+                        <td><input autocomplete="off" type="text" class="input full" id="popup_location_default" name="sftp_server_default" placeholder="/var/www/"/></td>
+                    </tr>
+                    <tr>
                         <td width="85">Username:</td>
                         <td><input autocomplete="off" type="text" class="input full" id="popup_location_username" name="sftp_user_name" placeholder="john"/></td>
                     </tr>

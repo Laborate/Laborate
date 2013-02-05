@@ -162,6 +162,7 @@ window.documents = {
             var type_icon = type;
             var passed = true;
             var items = {"type": type};
+            var exceptions = ['popup_location_default', 'popup_location_username'];
 
             //Check If Inputs Have Values
             if($("#popup #popup_location_name").val() == "") {
@@ -174,7 +175,7 @@ window.documents = {
             }
 
             $("#popup_location_" + type).find("input[type=text], select").each(function() {
-                if($(this).val() == "") {
+                if($(this).val() == "" && $.inArray($(this).attr("id"), exceptions) == -1) {
                     $(this).css({"border": "solid thin #CC352D"});
                     passed = false;
                 }
