@@ -61,6 +61,19 @@ $(".github.file .file_attributes").live("click", function() {
     return false;
 });
 
+$(".sftp.file .file_attributes").live("click", function() {
+    var type = $(this).attr("data");
+
+    if(type == "folder") {
+        window.documents.sftpDirectory(window.sidebar, $(this).parent().attr("data"));
+    }
+
+    if(type == "file") {
+        //window.documents.githubFile(window.sidebar, $(this));
+    }
+    return false;
+});
+
 $('.file').live("hover", function() {
     $(this).find(".title").text($(this).find(".title").attr("data"));
     return false;

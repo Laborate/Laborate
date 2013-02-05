@@ -4,7 +4,11 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/vendor/autoload.php');
 
 function startGithubClient() {
-    $client = new Github\Client(new Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
+    //Cached Version (Has Problems)
+    //$client = new Github\Client(new Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
+
+    //Regular Version
+    $client = new Github\Client();
     $client->authenticate($_SESSION['userGithub'], "", "http_token");
     $client->getHttpClient()->setOption('auth_method', "AUTH_HTTP_TOKEN");
     $client->getHttpClient()->setOption('secret', $_SESSION['userGithub']);

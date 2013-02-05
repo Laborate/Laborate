@@ -23,7 +23,7 @@ window.documents = {
             $("#popup").css({"width": "250"});
 
             $("#popup #location_remove input[type=button]").live("click", function() {
-                popUpClose();
+                window.documents.popUpClose();
             });
         }
 
@@ -109,19 +109,24 @@ window.documents = {
         $("#files .location").hide();
         $("#locations ul li").removeClass("selected");
         $("#" + location_id).addClass("selected");
+        var type = $("#" + location_id).attr("data");
 
         if(location_id == "online" || location_id == undefined) {
             $("#files #location_online").show();
             history.pushState(null, null, "/documents");
             location_id = "online";
+            if(!dont_pull_content) {
+                window.documents.notificationClose();
+            }
         } else {
            $("#files #location_template #file_library").html("");
            $("#files #location_template").show();
            if(!dont_pull_content) {
-               var location_type = window.documents.locationTypeCheck(location_id);
-
-               if(location_type == "github") {
+                if(type == "github") {
                    window.documents.githubDirectory(location_id);
+                }
+                else if(type == "sftp") {
+                   window.documents.sftpDirectory(location_id);
                 }
             }
         }
@@ -200,7 +205,9 @@ window.documents = {
                 else if(type_icon == "sftp") { var icon = "icon-drawer-2"; }
                 else { var icon = "icon-storage"; }
                 var key = Math.floor((Math.random()*10000)+1);
-                var li = '<li id="' + key +'"><span class="icon ' + icon +'"></span>' + $("#popup #popup_location_name").val() + '</li>';
+                var li = '<li id="' + key +'" data="' + type_icon + '">';
+                li += '<span class="icon ' + icon + '">';
+                li += '</span>' + $("#popup #popup_location_name").val() + '</li>';
                 $("#locations ul").append(li);
                 window.documents.popUpClose();
                 $.post("server/php/user/update.php", { locations_add: [key, items] });
@@ -208,12 +215,12 @@ window.documents = {
             return false;
         });
     },
-    removeLocation: function(elment) {
-        var id = elment.attr("id");
-        popUp("location_delete");
+    removeLocation: function(element) {
+        var id = element.attr("id");
+        window.documents.popUp("location_delete");
 
         $("#popup #location_remove input[type=button]").live("click", function() {
-            li.remove();
+            element.remove();
 
             if(window.sidebar == id) {
                 $(".location").hide();
@@ -234,20 +241,19 @@ window.documents = {
         $("#locations").toggleClass("remove");
         $("#locations #online").toggle();
     },
-    locationTypeCheck: function(location_id) {
-        return "github";
-    },
     locationListing: function(callback) {
         $.post("server/php/locations/locations_listing.php",
             function(json) {
                 var locations = "";
                 $.each(JSON.parse(json), function(i, item) {
-                    locations += '<li id="' + item['key'] + '"><span class="icon ' + item['icon'] + '"></span>' + item['name'] + '</li>';
+                    locations += '<li id="' + item['key'] + '" data="' + item['type'] + '"><span class="icon ' + item['icon'] + '"></span>' + item['name'] + '</li>';
                 });
                 $("#locations ul").append(locations);
+
                 if(callback == undefined) {
                     callback = function(){}
                 }
+
                 callback(true);
             }
         );
@@ -267,9 +273,11 @@ window.documents = {
                     files += file;
                 });
                 $("#files #location_online #file_library").append(files);
+
                 if(callback == undefined) {
                     callback = function(){}
                 }
+
                 callback(true);
             }
         );
@@ -292,9 +300,11 @@ window.documents = {
                 } else {
                     $("#popup_location_github #github_empty").show();
                 }
+
                 if(callback == undefined) {
                     callback = function(){}
                 }
+
                 callback(true);
             }
         );
@@ -335,13 +345,15 @@ window.documents = {
                 $("#files #location_template #file_library").html(files);
                 window.documents.notificationClose();
 
-                if(path != undefined && path != "") {
-                    var dir = "&dir=" + path;
-                }
-                else {
+                if(path == undefined || path == "" || path == "/") {
                     var dir = "";
                 }
+                else {
+                    var dir = "&dir=" + path;
+                }
+
                 history.pushState(null, null, "?type=github&loc=" + location_id + dir);
+
                 if(callback == undefined) {
                     callback = function(){}
                 }
@@ -375,6 +387,60 @@ window.documents = {
             }
         );
     },
+    sftpDirectory: function(location_id, path, callback) {
+        window.documents.notification("loading...");
+
+        $.post("server/php/locations/sftp_directory.php", { location_id: location_id, dir: path },
+            function(json) {
+                if(json == "Bad Credentials") {
+                    window.documents.notification("Bad SFTP Credentials");
+                    return false;
+                }
+
+                if(json == "Bad Location") {
+                    window.documents.notification("Location Does Not Exist");
+                    return false;
+                }
+
+                if(json == "Not SFTP Location") {
+                    window.documents.notification("This Is Not A SFTP Location");
+                    return false;
+                }
+
+                var files = "";
+                $.each(JSON.parse(json), function(i, item) {
+                    if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
+                    if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
+                    if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
+
+                    var title = window.documents.nameToTitle(item["name"]);
+
+                    var template = '<div location_id="sftp_' + item["path"] + '" class="file sftp" data="' + item["path"] + '">';
+                    template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
+                    template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                    template += '</div>';
+                    files += template;
+                });
+                $("#files #location_template #file_library").html(files);
+                window.documents.notificationClose();
+
+                if(path == undefined || path == "" || path == "/") {
+                    var dir = "";
+                }
+                else {
+                    var dir = "&dir=" + path;
+                }
+
+                history.pushState(null, null, "?type=sftp&loc=" + location_id + dir);
+
+                if(callback == undefined) {
+                    callback = function(){}
+                }
+
+                callback(true);
+            }
+        );
+    },
     fileSearch: function(form) {
         var search = form.find("input[name=s]").val();
         var protection = form.find("select[name=p]").val();
@@ -393,14 +459,21 @@ window.documents = {
 
         if(parent_location.find(".file:visible").length == 0) {
             $(".location:visible .notFound").show();
-            form.find("#clearSearch").show();
-            if($(window).width() < 980) { form.find("#newFile").hide(); }
-            else { form.find("#newFile").show(); }
+            if($(window).width() < 980) {
+                parent_location.find("#newFile").hide();
+                parent_location.find("#clearSearch").css("float","right");
+            }
+            else {
+                parent_location.find("#newFile").show();
+                parent_location.find("#clearSearch").css("float","left");
+            }
+
+            parent_location.find("#clearSearch").show();
 
         } else {
             parent_location.find(".notFound").hide();
-            form.find("#clearSearch").hide();
-            form.find("#newFile").show();
+            parent_location.find("#clearSearch").hide();
+            parent_location.find("#newFile").show();
         }
     },
     fileSearchClear: function(element) {

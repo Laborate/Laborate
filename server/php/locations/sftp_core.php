@@ -17,11 +17,11 @@ function getSftpClient($credentials) {
 
         $key->loadKey($credentials['key_file']);
         if (!$sftp->login($credentials['sftp_user_name'], $credentials['key_file'])) {
-            exit('RSA Login Failed');
+            exit('Bad Credentials');
         }
     } else {
         if (!$sftp->login($credentials['sftp_user_name'], $credentials['sftp_user_password'])) {
-            exit('Login Failed');
+            exit('Bad Credentials');
         }
     }
 
@@ -32,7 +32,22 @@ function getDirectory($credentials, $dir="") {
     $sftp = getSftpClient($credentials);
     $sftp->chdir('..');
     $sftp->chdir($dir);
-    return json_encode($sftp->nlist());
+    $directory = array();
+
+    if($dir) {
+        $back_dir = substr($dir, 0, strrpos($dir, '/'));
+        array_push($directory, array("type"=> "back", "name" => "", "path" => substr($back_dir, 0, strrpos($back_dir, '/'))."/"));
+    }
+
+    foreach($sftp->rawlist() as $key => $value) {
+        if($key != "." && $key != "..") {
+            if($value['type'] == "1") { $type = "file"; $path = $dir.$key; }
+            else if($value['type'] == "2") { $type = "dir"; $path = $dir.$key."/"; }
+            array_push($directory, array("type"=> $type, "name" => $key, "path" => $path));
+        }
+    }
+
+    return json_encode($directory);
 }
 
 function getFile($credentials, $path) {

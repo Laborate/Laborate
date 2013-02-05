@@ -13,7 +13,7 @@ foreach ($locations as $key => $value) {
     if($value["type"] == "github") { $icon = "icon-github"; }
     elseif($value["type"] == "sftp") { $icon = "icon-drawer-2"; }
     else { $icon = "icon-storage"; }
-    array_push($locations_array, array("key" => $key, "icon" => $icon, "name" => $value["name"]));
+    array_push($locations_array, array("key" => $key, "icon" => $icon, "name" => $value["name"], "type" => $value["type"]));
 }
 
 echo json_encode($locations_array);
