@@ -442,6 +442,37 @@ window.documents = {
             }
         );
     },
+    sftpFile: function(location_id, file) {
+        var path = file.parent(".file").attr("data");
+        window.documents.notification("downloading...");
+
+        $.post("server/php/locations/sftp_file.php", { location_id: location_id, file: path },
+            function(json) {
+                if(json == "Bad Credentials") {
+                    window.documents.notification("Bad SFTP Credentials");
+                    return false;
+                }
+
+                if(json == "Bad Location") {
+                    window.documents.notification("Location Does Not Exist");
+                    return false;
+                }
+
+                if(json == "Not SFTP Location") {
+                    window.documents.notification("This Is Not A SFTP Location");
+                    return false;
+                }
+
+                $.post("server/php/session/new.php",
+                    { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(json.split('\n')),
+                      session_type: "sftp", session_external_path:  path },
+                    function(id) {
+                        window.location.href = "editor?i=" + id;
+                    }
+                );
+            }
+        );
+    },
     fileSearch: function(form) {
         var search = form.find("input[name=s]").val();
         var protection = form.find("select[name=p]").val();
@@ -458,7 +489,7 @@ window.documents = {
             if(show) { $(this).show(); } else { $(this).hide(); }
         });
 
-        if(parent_location.find(".file:visible").length == 0) {
+        if(parent_location.find(".file:visible").length == 0 && parent_location.find(".file").length != 0) {
             $(".location:visible .notFound").show();
             if($(window).width() < 980) {
                 parent_location.find("#newFile").hide();

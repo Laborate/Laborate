@@ -69,7 +69,7 @@ $(".sftp.file .file_attributes").live("click", function() {
     }
 
     if(type == "file") {
-        //window.documents.githubFile(window.sidebar, $(this));
+        window.documents.sftpFile(window.sidebar, $(this));
     }
     return false;
 });
