@@ -39,3 +39,27 @@ shell/server/start.sh
 ```bash
 shell/server/stop.sh
 ```
+
+PHP Github Wrapper Requirements
+--------------------------------
+The new version of `php-github-api` using [Composer](http://getcomposer.org).
+The first step to use `php-github-api` is to download composer:
+
+```bash
+$ curl -s http://getcomposer.org/installer | php
+```
+
+Then we have to install our dependencies using:
+```bash
+$ php composer.phar install
+```
+Now we can use autoloader from Composer by:
+
+```yaml
+{
+    "require": {
+        "knplabs/github-api": "*"
+    },
+    "minimum-stability": "dev"
+}
+```
