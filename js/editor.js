@@ -101,7 +101,7 @@ function setEditorMode(mode) {
                             "ocaml":"ocaml", "ml":"ocaml", "mli":"ocaml",
                             "p":"pascal", "pl":"pascal", "pas":"pascal", "pascal":"pascal",
                             "pl":"perl", "pm":"perl", "pig":"pig",
-                            "sql":"plsql",
+                            "sql":"mysql",
                             "properties":"properties",
                             "r":"r",
                             "spec":"spec",
