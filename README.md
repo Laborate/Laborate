@@ -14,32 +14,6 @@ Clone To Existing Directory
 git clone git@github.com:bvallelunga/Codelaborate.git tmp; mv tmp/* tmp/.git* .; rm -R tmp/
 ```
 
-
-Locally
----------
-**start node**
-```bash
-shell/local/start.sh
-```
-
-**stop node**
-```bash
-shell/local/start.sh
-```
-
-
-Server
------------
-**start server**
-```bash
-shell/server/start.sh
-```
-
-**stop server**
-```bash
-shell/server/stop.sh
-```
-
 PHP Github Wrapper Requirements
 --------------------------------
 The new version of `php-github-api` using [Composer](http://getcomposer.org).
@@ -62,4 +36,30 @@ Now we can use autoloader from Composer by:
     },
     "minimum-stability": "dev"
 }
+```
+
+
+Locally
+---------
+**start node**
+```bash
+shell/local/start.sh
+```
+
+**stop node**
+```bash
+shell/local/start.sh
+```
+
+
+Server
+-----------
+**start servers**
+```bash
+shell/server/start.sh
+```
+
+**stop servers**
+```bash
+shell/server/stop.sh
 ```
