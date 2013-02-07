@@ -11,7 +11,7 @@ window.chatRoom = {
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:c = clear screen</div>');
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:h = console commands</div>');
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:s = toggle sidebar visibilty</div>');
+    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:s = toggle sidebar visibility</div>');
     	$(".jspPane").append('<div class="chatRoomStatus">*1 command per message*</div>');
     	$(".jspPane").append('<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline;">Message References</div></strong>');
     	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>');
@@ -35,7 +35,7 @@ window.chatRoom = {
     },
     sidebar: function() {
         if($("#sidebar").is(":visible")) {
-            $("#editorCodeMirror").css("margin-left", "0");
+            $("#editorCodeMirror").css("margin-left", "5px");
         } else {
             $("#editorCodeMirror").css("margin-left", "");
         }

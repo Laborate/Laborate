@@ -8,7 +8,7 @@ if(isset($_GET['i'])) { getDependencies(["print"]); }
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><?php echo $_GET['t']; ?> · Code-Laborate</title>
+    <title><?php echo $_GET['t']; ?> · code-laborate</title>
     <script type="text/javascript">
         <?php if(!isset($_GET['i'])) { ?>
             window.close();

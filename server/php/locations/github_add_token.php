@@ -24,7 +24,14 @@ if(isset($_GET['code'])) {
 
             $_SESSION['userGithub'] = $json['access_token'];
 
-            header("Location: /account?github=1");
+            if(isset($_SESSION['github_redirect']) && !is_null($_SESSION['github_redirect'])) {
+                $redirect = $_SESSION['github_redirect'];
+                $_SESSION['github_redirect'] = null;
+                unset($_SESSION['github_redirect']);
+                header("Location: ".$redirect);
+            } else {
+                header("Location: /account?github=1");
+            }
         }
         else {
             header("Location: /account?github=0");

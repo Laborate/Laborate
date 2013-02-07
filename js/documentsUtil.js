@@ -258,6 +258,28 @@ window.documents = {
             }
         );
     },
+    cachedLocations: function(location_id) {
+        if(window.cachedLocations == undefined) {
+           window.cachedLocations = new Array();
+        }
+
+        if(window.cachedLocations["location_" + location_id] == undefined) {
+            window.cachedLocations["location_" + location_id] = new Array();
+        }
+
+        return window.cachedLocations["location_" + location_id];
+    },
+    addcachedLocation: function(location_id, path, json) {
+        if(window.cachedLocations["location_" + location_id] == undefined) {
+            window.cachedLocations["location_" + location_id] = {}
+        }
+
+        if(path == "" || path == undefined) {
+            path = "";
+        }
+
+        window.cachedLocations["location_" + location_id][path] = json;
+    },
     onlineDirectory: function(callback) {
         $.post("server/php/locations/online_directory.php",
             function(json) {
@@ -311,55 +333,68 @@ window.documents = {
     },
     githubDirectory: function(location_id, path, callback) {
         window.documents.notification("loading...");
-        $.post("server/php/locations/github_directory.php", { location_id: location_id, dir: path },
-            function(json) {
-                if(json == "Bad Token") {
-                    window.documents.notification("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
-                    return false;
+        var response = window.documents.cachedLocations(location_id);
+        var files = "";
+
+        if(path == undefined || path == "" || path == "/") {
+            var dir = "";
+            path = "";
+        }
+        else {
+            var dir = "&dir=" + path;
+        }
+
+        if(response[path] != undefined) {
+            finish(response[path]);
+        } else {
+            $.post("server/php/locations/github_directory.php", { location_id: location_id, dir: path },
+                function(json) {
+                    if(json == "Bad Token") {
+                        window.documents.notification("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
+                        return false;
+                    }
+
+                    if(json == "Bad Location") {
+                        window.documents.notification("Location Does Not Exist");
+                        return false;
+                    }
+
+                    if(json == "Not Github Location") {
+                        window.documents.notification("This Is Not A Github Location");
+                        return false;
+                    }
+
+                    window.documents.addcachedLocation(location_id, path, json);
+                    finish(json);
                 }
+            );
+        }
 
-                if(json == "Bad Location") {
-                    window.documents.notification("Location Does Not Exist");
-                    return false;
-                }
+        function finish(response) {
+            $.each(JSON.parse(response), function(i, item) {
+                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
+                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
+                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
 
-                if(json == "Not Github Location") {
-                    window.documents.notification("This Is Not A Github Location");
-                    return false;
-                }
+                var title = window.documents.nameToTitle(item["name"]);
 
-                var files = "";
-                $.each(JSON.parse(json), function(i, item) {
-                    if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
-                    if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
-                    if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
+                var template = '<div location_id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
+                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
+                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                template += '</div>';
+                files += template;
+            });
+            $("#files #location_template #file_library").html(files);
+            window.documents.notificationClose();
 
-                    var title = window.documents.nameToTitle(item["name"]);
+            history.pushState(null, null, "?type=github&loc=" + location_id + dir);
 
-                    var template = '<div location_id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
-                    template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                    template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
-                    template += '</div>';
-                    files += template;
-                });
-                $("#files #location_template #file_library").html(files);
-                window.documents.notificationClose();
-
-                if(path == undefined || path == "" || path == "/") {
-                    var dir = "";
-                }
-                else {
-                    var dir = "&dir=" + path;
-                }
-
-                history.pushState(null, null, "?type=github&loc=" + location_id + dir);
-
-                if(callback == undefined) {
-                    callback = function(){}
-                }
-                callback(true);
+            if(callback == undefined) {
+                callback = function(){}
             }
-        );
+
+            callback(true);
+        }
     },
     githubFile: function(location_id, file) {
         var path = file.parent().attr("data");
@@ -389,57 +424,67 @@ window.documents = {
     },
     sftpDirectory: function(location_id, path, callback) {
         window.documents.notification("loading...");
+        var response = window.documents.cachedLocations(location_id);
+        var files = "";
 
-        $.post("server/php/locations/sftp_directory.php", { location_id: location_id, dir: path },
-            function(json) {
-                if(json == "Bad Credentials") {
-                    window.documents.notification("Bad SFTP Credentials");
-                    return false;
+        if(path == undefined || path == "") {
+            var dir = "";
+            path = "";
+        }
+        else {
+            var dir = "&dir=" + path;
+        }
+
+        if(response[path] != undefined) {
+            finish(response[path]);
+        } else {
+            $.post("server/php/locations/sftp_directory.php", { location_id: location_id, dir: path },
+                function(json) {
+                    if(json == "Bad Credentials") {
+                        window.documents.notification("Bad SFTP Credentials");
+                        return false;
+                    }
+
+                    if(json == "Bad Location") {
+                        window.documents.notification("Location Does Not Exist");
+                        return false;
+                    }
+
+                    if(json == "Not SFTP Location") {
+                        window.documents.notification("This Is Not A SFTP Location");
+                        return false;
+                    }
+
+                    window.documents.addcachedLocation(location_id, path, json);
+                    finish(json);
                 }
+            );
+        }
 
-                if(json == "Bad Location") {
-                    window.documents.notification("Location Does Not Exist");
-                    return false;
-                }
+        function finish(response) {
+            $.each(JSON.parse(response), function(i, item) {
+                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
+                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
+                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
 
-                if(json == "Not SFTP Location") {
-                    window.documents.notification("This Is Not A SFTP Location");
-                    return false;
-                }
+                var title = window.documents.nameToTitle(item["name"]);
 
-                var files = "";
-                $.each(JSON.parse(json), function(i, item) {
-                    if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
-                    if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
-                    if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
+                var template = '<div location_id="sftp_' + item["path"] + '" class="file sftp" data="' + item["path"] + '">';
+                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
+                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                template += '</div>';
+                files += template;
+            });
+            $("#files #location_template #file_library").html(files);
+            window.documents.notificationClose();
+            history.pushState(null, null, "?type=sftp&loc=" + location_id + dir);
 
-                    var title = window.documents.nameToTitle(item["name"]);
-
-                    var template = '<div location_id="sftp_' + item["path"] + '" class="file sftp" data="' + item["path"] + '">';
-                    template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                    template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
-                    template += '</div>';
-                    files += template;
-                });
-                $("#files #location_template #file_library").html(files);
-                window.documents.notificationClose();
-
-                if(path == undefined || path == "" || path == "/") {
-                    var dir = "";
-                }
-                else {
-                    var dir = "&dir=" + path;
-                }
-
-                history.pushState(null, null, "?type=sftp&loc=" + location_id + dir);
-
-                if(callback == undefined) {
-                    callback = function(){}
-                }
-
-                callback(true);
+            if(callback == undefined) {
+                callback = function(){}
             }
-        );
+
+            callback(true);
+        }
     },
     sftpFile: function(location_id, file) {
         var path = file.parent(".file").attr("data");
