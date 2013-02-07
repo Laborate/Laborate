@@ -8,7 +8,7 @@ $(window).ready(function() {
             height: "100%",
             tabMode: "indent",
             dragDrop: false,
-            theme: "neat",
+            theme: "codelaborate",
             onBlur: function(cm) {
                 if(window.activated) {
                     window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line, "isOff":true} );

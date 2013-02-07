@@ -40,6 +40,7 @@ window.chatRoom = {
             $("#editorCodeMirror").css("margin-left", "");
         }
         $("#sidebar").toggle();
+        window.editor.refresh();
     },
     message: function(from, name, message, direction) {
         if(window.activated) {
