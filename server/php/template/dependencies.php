@@ -3,13 +3,14 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 
 function getDependencies($dependencies) {
     if(in_array("core", $dependencies)) {
-        array_push($GLOBALS['js'],  "center.js", "core.js", "cookie.js", "colors.js");
-        array_push($GLOBALS['css'], "core.css", "form.css", "colors.css");
+        array_push($GLOBALS['js'],  "core/center.js", "core/core.js", "core/cookie.js", "core/colors.js");
+        array_push($GLOBALS['css'], "core/core.css", "core/form.css", "core/colors.css");
     }
 
     if(in_array("editor", $dependencies)) {
-        array_push($GLOBALS['js'],  "editorInit.js", "editor.js", "editorUtil.js", "sidebar.js", "users.js", "colors.js");
-        array_push($GLOBALS['css'], "editor.css", "sidebar.css");
+        array_push($GLOBALS['js'],  "editor/editorInit.js", "editor/editor.js", "editor/editorUtil.js");
+        array_push($GLOBALS['js'],  "editor/sidebar.js", "editor/users.js", "core/colors.js");
+        array_push($GLOBALS['css'], "editor/editor.css", "editor/sidebar.css");
         array_push($GLOBALS['codeMirror_js'], "codemirror.js", "util/match-highlighter.js", "util/loadmode.js");
         array_push($GLOBALS['codeMirror_js'], "util/formatting.js", "util/search.js", "util/searchcursor.js");
         array_push($GLOBALS['codeMirror_css'], "codemirror.css", "codelaborate.css");
@@ -17,24 +18,24 @@ function getDependencies($dependencies) {
     }
 
     if(in_array("header", $dependencies)) {
-        array_push($GLOBALS['css'], "header.css");
-        array_push($GLOBALS['js'], "header.js");
+        array_push($GLOBALS['css'], "core/header.css");
+        array_push($GLOBALS['js'], "core/header.js");
     }
 
     if(in_array("chatroom", $dependencies)) {
-        array_push($GLOBALS['js'], "chatRoom.js");
-        array_push($GLOBALS['css'], "chatRoom.css");
+        array_push($GLOBALS['js'], "editor/chatRoom.js");
+        array_push($GLOBALS['css'], "editor/chatRoom.css");
         getDependencies(["jScroll"]);
     }
 
     if(in_array("jScroll", $dependencies)) {
-        array_push($GLOBALS['js'],  "jscrollpane.js", "mousewheel.js");
-        array_push($GLOBALS['css'], "jscrollpane.css");
+        array_push($GLOBALS['js'],  "core/jscrollpane.js", "core/mousewheel.js");
+        array_push($GLOBALS['css'], "core/jscrollpane.css");
     }
 
     if(in_array("print", $dependencies)) {
-        array_push($GLOBALS['js'],  "print.js");
-        array_push($GLOBALS['css'], "print.css");
+        array_push($GLOBALS['js'],  "editor/print.js");
+        array_push($GLOBALS['css'], "editor/print.css");
         getDependencies(["codeMirror"]);
     }
 
@@ -44,25 +45,30 @@ function getDependencies($dependencies) {
     }
 
     if(in_array("backdrop", $dependencies)) {
-        array_push($GLOBALS['js'], "backdrop.js", "cookie.js", "center.js", "core.js");
-        array_push($GLOBALS['css'], "backdrop.css");
+        array_push($GLOBALS['js'], "backdrop/backdrop.js", "core/cookie.js", "core/center.js", "core/core.js");
+        array_push($GLOBALS['css'], "backdrop/backdrop.css");
 
         if($GLOBALS['backdropMode'] == "editor") {
-            array_push($GLOBALS['js'], "upload_file.js", "form.js");
+            array_push($GLOBALS['js'], "backdrop/upload_file.js", "/backdrop/form.js");
         }
 
         if($GLOBALS['backdropMode'] == "login" || $GLOBALS['backdropMode'] == "register") {
-            array_push($GLOBALS['js'], "backdropUser.js");
+            array_push($GLOBALS['js'], "backdrop/backdropUser.js");
         }
     }
 
     if(in_array("icons", $dependencies)) {
-        array_push($GLOBALS['css'], "icons.css");
+        array_push($GLOBALS['css'], "core/icons.css");
     }
 
     if(in_array("documents", $dependencies)) {
-        array_push($GLOBALS['css'], "documents.css");
-        array_push($GLOBALS['js'], "documents.js", "documentsInit.js", "documentsUtil.js");
+        array_push($GLOBALS['css'], "documents/documents.css");
+        array_push($GLOBALS['js'], "documents/documents.js", "documents/documentsInit.js", "documents/documentsUtil.js");
+    }
+
+    if(in_array("account", $dependencies)) {
+        array_push($GLOBALS['css'], "account/account.css");
+        array_push($GLOBALS['js'], "account/account.js");
     }
 }
 
@@ -91,7 +97,7 @@ function placeDependencies() {
     }
 
     if($GLOBALS['js'] || $GLOBALS['codeMirror_js']) {
-        echo '<script src="/js/jquery.js" type="text/javascript"></script>';
+        echo '<script src="/js/core/jquery.js" type="text/javascript"></script>';
     }
 
     if($GLOBALS['js']) {

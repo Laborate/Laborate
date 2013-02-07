@@ -1,0 +1,75 @@
+#navigation {
+    position: fixed;
+    width: 225px;
+    top: 70px;
+    left: 20px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    overflow: hidden;
+    background: #f8fafb;
+    border: solid 1px #dadcde;
+    overflow: hidden;
+}
+
+#navigation #navigation_header {
+    font-weight: bold;
+    font-size: 18px;
+    position: relative;
+    border-bottom: solid 1px #ccc;
+    padding: 10px 10px 13px 10px;
+    margin-bottom: 15px;
+    background: -webkit-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    color: #52595d;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+#navigation ul {
+    padding: 0px 10px;
+}
+
+#navigation ul li {
+    padding-left: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    color: #555;
+}
+
+#navigation ul li .icon {
+    margin-left: 10px;
+    font-size: 18px !important;
+    opacity: .5;
+    display: none;
+}
+
+#navigation ul li:hover {
+    color: #333;
+}
+
+#navigation ul li:hover > .icon {
+    display: inline-block;
+}
+
+#navigation ul li.selected {
+    color: #006296;
+}
+
+#navigation ul li.selected > .icon {
+    display: none;
+}
+
+#setting_pane {
+    margin-left: 280px;
+    margin-top: 29px;
+    min-width: 530px;
+    position: relative;
+}
+
+#setting_pane .settings .settings_header {
+    border-bottom: solid 1px #ccc;
+    padding-bottom: 15px;
+    margin: 0px 20px 20px 0px;
+    font-weight: bold;
+}
