@@ -223,10 +223,7 @@ window.documents = {
             element.remove();
 
             if(window.sidebar == id) {
-                $(".location").hide();
-                $("#files #location_online").show();
-                $("#locations #online").addClass("selected");
-                window.sidebar = "online";
+                window.documents.locationChange("online");
             }
 
             $.post("server/php/user/update.php", { locations_remove: id });
@@ -469,11 +466,13 @@ window.documents = {
 
                 var title = window.documents.nameToTitle(item["name"]);
 
-                var template = '<div location_id="sftp_' + item["path"] + '" class="file sftp" data="' + item["path"] + '">';
-                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
-                template += '</div>';
-                files += template;
+                if(item["path"] != null) {
+                    var template = '<div location_id="sftp_' + item["path"] + '" class="file sftp" data="' + item["path"] + '">';
+                    template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
+                    template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                    template += '</div>';
+                    files += template;
+                }
             });
             $("#files #location_template #file_library").html(files);
             window.documents.notificationClose();
@@ -535,7 +534,7 @@ window.documents = {
 
         if(parent_location.find(".file:visible").length == 0 && parent_location.find(".file").length != 0) {
             $(".location:visible .notFound").show();
-            if($(window).width() < 980) {
+            if($(window).width() < 950) {
                 parent_location.find("#newFile").hide();
                 parent_location.find("#clearSearch").css("float","right");
             }

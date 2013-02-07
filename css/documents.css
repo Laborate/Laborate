@@ -129,7 +129,7 @@
 #files {
     margin-left: 350px;
     margin-top: 15px;
-    min-width: 630px;
+    min-width: 530px;
     position: relative;
 }
 
@@ -141,12 +141,12 @@
 
 .file_search .search_input {
     padding: 6px 10px;
-    width: 25%;
+    width: 15%;
 }
 
 .file_search .search_input_full {
     padding: 6px 10px;
-    width: 416px;
+    width: 350px;
 }
 
 .file_search select {
@@ -252,10 +252,17 @@
 }
 
 #popup {
-    padding: 10px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
     z-index: 1000000000000000000;
+    padding: 15px;
+    background: #f8f8f8;
+    width: 250px;
+    margin: 0px auto;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: solid 1px #ccc;
+    -webkit-box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
+    -moz-box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
+    box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
 }
 
 #popup #popup_header {

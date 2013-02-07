@@ -1,4 +1,4 @@
-<div id="popup" class="light_grey hidden">
+<div id="popup" class="hidden">
     <div id="popup_header">
         <div id="popup_header_name" class="left"></div>
         <div id="popup_header_exit" class="right">X</div>
