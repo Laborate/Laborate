@@ -7,7 +7,7 @@
     left: 0px;
     font-family: "Helvetica Neue";
     background-color: #F0F1F1;
-    background-image: url("../img/bg.png");
+    background-image: url("/img/bg.png");
 	background-repeat: repeat;
 }
 
@@ -195,7 +195,7 @@
     font-size: 16px;
     padding: 5px;
     border: thin solid #999;
-    background: url(../img/tshadow.png) #FFF;
+    background: url("/img/tshadow.png") #FFF;
     background-repeat: repeat-x;
     background-position: 0px -4px;
     -moz-border-radius: 3px;

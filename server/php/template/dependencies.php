@@ -49,7 +49,7 @@ function getDependencies($dependencies) {
         array_push($GLOBALS['css'], "backdrop/backdrop.css");
 
         if($GLOBALS['backdropMode'] == "editor") {
-            array_push($GLOBALS['js'], "backdrop/upload_file.js", "/backdrop/form.js");
+            array_push($GLOBALS['js'], "backdrop/upload_file.js", "core/form.js");
         }
 
         if($GLOBALS['backdropMode'] == "login" || $GLOBALS['backdropMode'] == "register") {

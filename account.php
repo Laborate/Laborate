@@ -22,36 +22,12 @@ if($_GET['github'] == 2) {
     <div id="navigation">
         <div id="navigation_header"><?php echo $_SESSION['userName']; ?></div>
         <ul>
-            <li id="nav_online">
-                <span class="left">Public Profile</span>
-                <span class="icon icon-pencil left"></span>
-                <div class="clear"></div>
-            </li>
-            <li id="nav_account_settings" class="selected">
-                <span class="left">Account Settings</span>
-                <span class="icon icon-pencil left"></span>
-                <div class="clear"></div>
-            </li>
-            <li id="nav_github_locations">
-                <span class="left">Github Locations</span>
-                <span class="icon icon-pencil left"></span>
-                <div class="clear"></div>
-            </li>
-            <li id="nav_sftp_locations">
-                <span class="left">SFTP Locations</span>
-                <span class="icon icon-pencil left"></span>
-                <div class="clear"></div>
-            </li>
-            <li id="nav_billing">
-                <span class="left">Billing Options</span>
-                <span class="icon icon-pencil left"></span>
-                <div class="clear"></div>
-            </li>
-            <li id="nav_payment_history">
-                <span class="left">Payment History</span>
-                <span class="icon icon-pencil left"></span>
-                <div class="clear"></div>
-            </li>
+            <li id="nav_online">Public Profile</li>
+            <li id="nav_account_settings" class="selected">Account Settings</li>
+            <li id="nav_github_locations">Github Locations</li>
+            <li id="nav_sftp_locations">SFTP Locations</li>
+            <li id="nav_billing">Billing Options</li>
+            <li id="nav_payment_history">Payment History</li>
         </ul>
     </div>
     <div id="setting_pane">

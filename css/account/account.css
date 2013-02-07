@@ -37,27 +37,12 @@
     color: #555;
 }
 
-#navigation ul li .icon {
-    margin-left: 10px;
-    font-size: 18px !important;
-    opacity: .5;
-    display: none;
-}
-
 #navigation ul li:hover {
     color: #333;
 }
 
-#navigation ul li:hover > .icon {
-    display: inline-block;
-}
-
 #navigation ul li.selected {
     color: #006296;
-}
-
-#navigation ul li.selected > .icon {
-    display: none;
 }
 
 #setting_pane {
