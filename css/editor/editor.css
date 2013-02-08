@@ -5,6 +5,7 @@ html, body { overflow: hidden; }
 	clear: none;
 	margin: 0px 230px 0px 211px;
     padding: 0px 5px 0px 0px;
+    position: relative;
 }
 
 #editorCodeMirror .CodeMirror-scroll {
@@ -35,4 +36,15 @@ span.CodeMirror-matchhighlight { background: #adfab4 }
 
 #editorCodeMirror .CodeMirror-gutter-text {
     color: #666;
+}
+
+#full_screen {
+    opacity: .5;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+}
+
+#full_screen:hover {
+    opacity: 1;
 }

@@ -2,14 +2,24 @@ $(window).resize(function() {
     //Set ChatRoom Message Height
     var header = parseInt($("#header").height());
     var window_height = parseInt($(window).height());
-    $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 38) + "px");
+
+    if($("#header").is(":visible")) {
+        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 38) + "px");
+    } else {
+        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 60) + "px");
+    }
 });
 
 setInterval(function(){
     //Set ChatRoom Message Height
     var header = parseInt($("#header").height());
     var window_height = parseInt($(window).height());
-    $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 38) + "px");
+
+    if($("#header").is(":visible")) {
+        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 38) + "px");
+    } else {
+        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 60) + "px");
+    }
 }, 1000);
 
 function formatCode(whole_document) {
@@ -137,3 +147,20 @@ function setTitle(title, emit) {
         window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"docName": $("#documentTitle").val()}} );
     }
 }
+
+$("#full_screen").live("click", function() {
+    if($("#header").is(":visible")) {
+        $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%"});
+        $("#full_screen").addClass("icon-contract");
+        $("#full_screen").removeClass("icon-expand");
+        $(this).css({"font-size": "24px", "margin": "0 0 0 30px"});
+        $("#sidebar, #header, #chatRoom").hide();
+    } else {
+        $("#editorCodeMirror").css({"margin": "", "width": ""});
+        $("#full_screen").addClass("icon-expand");
+        $("#full_screen").removeClass("icon-contract");
+        $(this).css({"font-size": "", "margin": ""});
+        $("#sidebar, #header, #chatRoom").show();
+    }
+    window.editor.refresh();
+});

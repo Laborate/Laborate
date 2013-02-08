@@ -6,7 +6,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/session/initialize.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 $GLOBALS['backdropMode'] = "editor";
-getDependencies(["core", "editor", "chatroom", "header", "backdrop"]);
+getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -32,6 +32,7 @@ getDependencies(["core", "editor", "chatroom", "header", "backdrop"]);
         <div id="sidebar_content"></div>
     </div>
     <div id="editorCodeMirror">
+        <div id="full_screen" class="icon-expand right"></div>
         <textarea id="code" name="code" runnable="true" style="display:none"></textarea>
     </div>
     <?php include("includes/chat_room.php"); ?>

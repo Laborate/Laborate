@@ -202,7 +202,7 @@ window.documents = {
 
             if(passed) {
                 if(type_icon == "github") { var icon = "icon-github"; }
-                else if(type_icon == "sftp") { var icon = "icon-drawer-2"; }
+                else if(type_icon == "sftp") { var icon = "icon-drawer"; }
                 else { var icon = "icon-storage"; }
                 var key = Math.floor((Math.random()*10000)+1);
                 var li = '<li id="' + key +'" data="' + type_icon + '">';
@@ -243,7 +243,8 @@ window.documents = {
             function(json) {
                 var locations = "";
                 $.each(JSON.parse(json), function(i, item) {
-                    locations += '<li id="' + item['key'] + '" data="' + item['type'] + '"><span class="icon ' + item['icon'] + '"></span>' + item['name'] + '</li>';
+                    locations += '<li id="' + item['key'] + '" data="' + item['type'] + '">';
+                    locations += '<span class="icon ' + item['icon'] + '"></span>' + item['name'] + '</li>';
                 });
                 $("#locations ul").append(locations);
 
