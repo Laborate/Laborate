@@ -33,16 +33,7 @@ if(isset($_POST['download_id'])) {
     				   $row_Sessions['session_id']);
             $UpdateSessions = mysql_query($updateSQL , $database) or die(mysql_error());
 
-            $code = "(";
-            foreach ($json as $line_num => $line) {
-              if($line_num != count(json_decode($row_Sessions['session_document'])) - 1) {
-                $code = $code.$line."\n";
-              }
-              else {
-                $code = $code.$line;
-              }
-            }
-            echo $code.")";
+            echo $row_Sessions['session_document'];
         } else { echo $GLOBALS['ajax_message']; }
 
     } else { echo $GLOBALS['ajax_message']; }

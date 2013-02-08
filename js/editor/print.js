@@ -4,7 +4,7 @@ $(window).ready(function() {
         lineWrapping: true,
         tabMode: "indent",
         readOnly: true,
-        theme: "neat"
+        theme: "codelaborate"
     });
 
     if($("#mode").text() == "") { window.close(); }
@@ -19,7 +19,11 @@ $(window).ready(function() {
                         $.post("server/php/session/download.php", { download_id: "" + password_response },
                             function(dowload_response){
                                 if(dowload_response != "Download: Failed") {
-                                    window.editor.setValue(dowload_response.substr(1, dowload_response.length - 2));
+                                    proccessedDocuemt = "";
+                                    $.each(JSON.parse(dowload_response), function(i, item) {
+                                        proccessedDocuemt += item + "\n";
+                                    });
+                                    window.editor.setValue(proccessedDocuemt);
                                     finish();
                                 }
                                 else { failed(); }

@@ -1,26 +1,17 @@
-$(window).resize(function() {
-    //Set ChatRoom Message Height
+$(window).resize(function() { editorHeight(); });
+
+setInterval(function(){ editorHeight(); }, 1000);
+
+function editorHeight() {
     var header = parseInt($("#header").height());
     var window_height = parseInt($(window).height());
 
     if($("#header").is(":visible")) {
         $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 38) + "px");
     } else {
-        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 60) + "px");
+        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 68) + "px");
     }
-});
-
-setInterval(function(){
-    //Set ChatRoom Message Height
-    var header = parseInt($("#header").height());
-    var window_height = parseInt($(window).height());
-
-    if($("#header").is(":visible")) {
-        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 38) + "px");
-    } else {
-        $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 60) + "px");
-    }
-}, 1000);
+}
 
 function formatCode(whole_document) {
     if(whole_document) {
@@ -162,5 +153,7 @@ $("#full_screen").live("click", function() {
         $(this).css({"font-size": "", "margin": ""});
         $("#sidebar, #header, #chatRoom").show();
     }
+
+    editorHeight();
     window.editor.refresh();
 });

@@ -90,7 +90,13 @@ $("#backdropExistingFileForm").live("submit", function() {
                             function(dowload_response){
                                 if(dowload_response != "Download: Failed") {
                                     window.passTemplate = $("#backdropPassword").val();
-                                    window.editor.setValue(dowload_response.substr(1, dowload_response.length - 2));
+                                    proccessedDocuemt = "";
+
+                                    $.each(JSON.parse(dowload_response), function(i, item) {
+                                        proccessedDocuemt += item + "\n";
+                                    });
+
+                                    window.editor.setValue(proccessedDocuemt);
                                     setTimeout(function() {
                                         finishBackdrop($("#backdropExistingFileForm #backdropDocTitle").val());
                                     }, 500);
