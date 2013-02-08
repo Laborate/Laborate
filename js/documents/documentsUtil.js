@@ -65,7 +65,7 @@ window.documents = {
 
         setTimeout(function() {
             if(id == "new") {
-                window.location.href = "/editor";
+                window.documents.gotToTab("/editor");
             }
 
             if(id == "tab") {

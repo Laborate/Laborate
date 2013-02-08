@@ -43,7 +43,7 @@ getDependencies(["core", "header", "documents", "icons"]);
                                 </select>
                 <input type="submit" class="button blue left search_submit" value="Search" />
                 <input type="button" class="button red search_submit" id="clearSearch" value="Clear" />
-                <a href="/editor" class="button green right" id="newFile">New File</a>
+                <a href="/editor" target="_blank"  class="button green right" id="newFile">New File</a>
                 <div class="clear"></div>
             </form>
             <div id="file_library"></div>
@@ -54,7 +54,7 @@ getDependencies(["core", "header", "documents", "icons"]);
                 <input type="text" class="input left search_input_full" name="s" autocomplete="off" placeholder="Search For Files"/>
                 <input type="submit" class="button blue left search_submit" value="Search" />
                 <input type="button" class="button red search_submit" id="clearSearch" value="Clear" />
-                <a href="/editor" class="button green right" id="newFile">New File</a>
+                <a href="/editor" target="_blank" class="button green right" id="newFile">New File</a>
                 <div class="clear"></div>
             </form>
             <div id="file_library"></div>
