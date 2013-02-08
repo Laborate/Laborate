@@ -68,6 +68,10 @@ window.documents = {
                 window.location.href = "/editor";
             }
 
+            if(id == "tab") {
+                window.documents.gotToTab("/editor?i=" + reference);
+            }
+
             if(id == "rename") {
                 var name = prompt("File Name", $("#file_" + reference + " .title").attr("data"));
                 if (name != null && name != "") {
@@ -279,8 +283,10 @@ window.documents = {
         window.cachedLocations["location_" + location_id][path] = json;
     },
     gotToLink: function(link) {
+        window.location.href = link;
+    },
+    gotToTab: function(link) {
         var tab = window.open(link);
-        console.log(tab);
         if (tab == null || typeof(tab)== 'undefined') {
             window.location.href = link;
         }
@@ -421,7 +427,7 @@ window.documents = {
                     { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(contents.split('\n')),
                       session_type: "github", session_external_path:  path },
                     function(id) {
-                        window.documents.gotToLink("editor?i=" + id);
+                        window.documents.gotToTab("editor?i=" + id);
                         window.documents.notificationClose();
                     }
                 );
@@ -519,7 +525,7 @@ window.documents = {
                     { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(json.split('\n')),
                       session_type: "sftp", session_external_path:  path },
                     function(id) {
-                        window.documents.gotToLink("editor?i=" + id);
+                        window.documents.gotToTab("editor?i=" + id);
                         window.documents.notificationClose();
                     }
                 );

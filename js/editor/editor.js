@@ -20,7 +20,7 @@ $(window).ready(function() {
                 }
                 editor.matchHighlight("CodeMirror-matchhighlight");
                 $("#editorCodeMirror .CodeMirror-gutter-text pre").css({"font-weight":"", "color":""});
-                $("#editorCodeMirror .CodeMirror-gutter-text pre").eq(cm.getCursor().line).css({"font-weight":"bold", "color":"#000"});
+                $("#editorCodeMirror .CodeMirror-gutter-text pre").eq(cm.getCursor().line).css({"font-weight":"bold", "color":"#09f"});
             },
             onChange: function(cm) {
                 if(window.bounceBack == true) {
