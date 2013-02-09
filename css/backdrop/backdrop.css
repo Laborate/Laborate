@@ -38,28 +38,15 @@
 }
 
 #backdrop #backdropDocTitle {
-    -moz-border-radius-topleft: : 5px;
-    -moz-border-radius-bottomleft: : 5px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    -moz-border-radius-topright: 0px;
-    -moz-border-radius-bottomright: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    width: 170px;
+    padding-right: 80px;
 }
 
 #backdrop #backdropUpload {
-    padding: 6px 0px;
-    width: 79px;
+    padding: 3px 5px;
     text-align: center;
     color: #fff;
-    -moz-border-radius-topright: 3px;
-    -moz-border-radius-bottomright: 3px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-radius: 2px;
     border: 1px solid #999;
-    border-left: none;
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -68,17 +55,22 @@
     background: -moz-linear-gradient(#B5B5B5 0%, #9A9A9A 100%);
     background: -ms-linear-gradient(#B5B5B5 0%, #9A9A9A 100%);
     background: -o-linear-gradient(#B5B5B5 0%, #9A9A9A 100%);
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    opacity: .8;
 }
 
 #backdrop #backdropUpload:hover {
-    background: -webkit-linear-gradient(#A3A3A3 0%, #8B8B8B 100%);
-    background: -moz-linear-gradient(#A3A3A3 0%, #8B8B8B 100%);
-    background: -ms-linear-gradient(#A3A3A3 0%, #8B8B8B 100%);
-    background: -o-linear-gradient(#A3A3A3 0%, #8B8B8B 100%);
+    opacity: 1;
 }
 
 #backdrop #backdropUpload:active {
-    background: #8B8B8B;
+    -moz-box-shadow: inset 0px 2px 3px rgba(51,51,51,0.3) !important;
+    -webkit-box-shadow: inset 0px 2px 3px rgba(51,51,51,0.3) !important;
+    -ms-box-shadow: inset 0px 2px 3px rgba(51,51,51,0.3) !important;
+    -o-box-shadow: inset 0px 2px 3px rgba(51,51,51,0.3) !important;
+    box-shadow: inset 0px 2px 3px rgba(51,51,51,0.3) !important;
 }
 
 #backdrop #upload_section {

@@ -17,8 +17,10 @@
                         <div class="backdropInitalWelcome seperatorRequired">Upload or Create<br/>A New Code Document</div>
                         <div id="backdropDataInput">
                             <input type="text" id="backdropScreenName" placeholder="Screen Name" style="margin-bottom: 10px;"/>
-                            <input type="text" autofocus="on" class="left" id="backdropDocTitle" placeholder="File Name"/>
-                            <div id="backdropUpload" class="left">Upload</div>
+                            <div style="position: relative">
+                                <input type="text" autofocus="on" class="left" id="backdropDocTitle" placeholder="File Name"/>
+                                <div id="backdropUpload" class="left">Upload</div>
+                            </div>
                             <div class="clear"></div>
                             <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding" />
                         </div>

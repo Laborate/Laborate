@@ -12,6 +12,10 @@ html, body { overflow: hidden; }
     width: 100%;
 }
 
+#editorCodeMirror * {
+    outline: none;
+}
+
 span.CodeMirror-matchhighlight { background: #adfab4 }
 .CodeMirror-focused span.CodeMirror-matchhighlight { background: #adfab4; }
 
