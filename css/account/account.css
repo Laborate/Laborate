@@ -57,4 +57,11 @@
     padding-bottom: 15px;
     margin: 0px 20px 20px 0px;
     font-weight: bold;
+    position: relative;
+}
+
+#setting_pane .settings .settings_header .button {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
 }

@@ -23,8 +23,8 @@ if($_GET['github'] == 2) {
         <div id="navigation_header"><?php echo $_SESSION['userName']; ?></div>
         <ul>
             <li id="nav_online">Public Profile</li>
-            <li id="nav_account_settings" class="selected">Account Settings</li>
-            <li id="nav_github_locations">Github Locations</li>
+            <li id="nav_account_settings">Account Settings</li>
+            <li id="nav_github_locations" class="selected">Github Locations</li>
             <li id="nav_sftp_locations">SFTP Locations</li>
             <li id="nav_billing">Billing Options</li>
             <li id="nav_payment_history">Payment History</li>
@@ -32,13 +32,16 @@ if($_GET['github'] == 2) {
     </div>
     <div id="setting_pane">
         <div class="settings">
-            <div class="settings_header">Account Settings</div>
-            <div class="settings_content">
+            <div class="settings_header">
+                <div class="left">Github Locations</div>
                 <?php if(is_null($_SESSION['userGithub'])) { ?>
-                    <a class="button green" href="<?php echo $_SESSION['github_auth_url']; ?>">Connect To Github</a>
+                    <a class="button green right" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
                 <?php } else { ?>
-                    <a class="button red" href="#">Disconnect From Github</a>
+                    <a class="button red right" href="/server/php/locations/github_remove_token.php">Deauthorize With Github</a>
                 <?php } ?>
+                <div class="clear"></div>
+            </div>
+            <div class="settings_content">
             </div>
         </div>
     </div>

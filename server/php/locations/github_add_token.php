@@ -40,5 +40,7 @@ if(isset($_GET['code'])) {
     else {
         header("Location: /account?github=0");
     }
+} else {
+    header("Location: /account?github=0");
 }
 ?>
