@@ -1,4 +1,4 @@
-Set Up Server For Default Preferences
+Set Up Server For Default
 -------------------------------------
 ```bash
 git config --global color.ui auto
