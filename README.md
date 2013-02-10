@@ -1,5 +1,5 @@
-Set Up Server For Defaults
------------------------------
+Set Up Server For Default Preferences
+-------------------------------------
 ```bash
 git config --global color.ui auto
 git config --global core.editor "vim"
@@ -63,3 +63,4 @@ shell/server/start.sh
 ```bash
 shell/server/stop.sh
 ```
+
