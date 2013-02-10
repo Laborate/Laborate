@@ -1,6 +1,7 @@
 html, body { margin: 0px !important; padding: 0px !important; }
 .CodeMirror, .CodeMirror-scroll { width: 100% !important; height: auto !important; margin-bottom: 10px; }
 .CodeMirror-scroll { overflow-y: hidden !important; overflow-x: auto !important; }
+.CodeMirror-gutter { background: none !important; padding-right: 10px !important; }
 .CodeMirror-gutter-text { color: #333 !important; }
 
 #title {
