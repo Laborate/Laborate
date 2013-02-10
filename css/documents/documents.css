@@ -18,6 +18,9 @@
     padding: 10px 10px 13px 10px;
     margin-bottom: 15px;
     background: -webkit-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    background: -moz-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    background: -ms-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    background: -o-linear-gradient(#F9F9F9 0%, #efefef 100%);
     color: #52595d;
 }
 
@@ -80,10 +83,6 @@
 
 #locations.remove #add_location, #locations.remove #remove_location {
     display: none;
-}
-
-#locations.remove .icon::before {
-    content: "\e0a8" !important;
 }
 
 #locations.remove #finished_remove_location {

@@ -1,5 +1,5 @@
 <div id="sidebar_share" class="sidebar_content_inner">
-	<script type="text/javascript" src="/js/copy.js"></script>
+	<script type="text/javascript" src="/js/core/copy.js"></script>
 	<script type="text/javascript">
 		function initialize_share() {
     		$("#shareUrl").val(window.location.href);
