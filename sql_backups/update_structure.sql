@@ -1,5 +1,5 @@
 # ************************************************************
-# Sequel Pro SQL dump
+# Sequel Pro SQL dump Brian Edit
 # Version 4004
 #
 # http://www.sequelpro.com/
