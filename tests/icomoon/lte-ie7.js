@@ -5,6 +5,7 @@ window.onload = function() {
 		var html = el.innerHTML;
 		el.innerHTML = '<span style="font-family: \'icomoon\'">' + entity + '</span>' + html;
 	}
+  
 	var icons = {
 			'icon-file' : '&#xe001;',
 			'icon-print' : '&#xe002;',
