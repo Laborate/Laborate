@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.25)
 # Database: Codelaborate
-# Generation Time: 2013-02-09 22:36:41 +0000
+# Generation Time: 2013-02-10 11:14:18 +0000
 # ************************************************************
 
 
@@ -62,6 +62,7 @@ CREATE TABLE `sessions` (
   `session_breakpoints` longblob NOT NULL,
   `session_external_path` text,
   `session_type` text,
+  `session_location_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -82,7 +83,6 @@ CREATE TABLE `users` (
   `user_activated` int(11) DEFAULT NULL,
   `user_locations` longblob NOT NULL,
   `user_github` text,
-  `user_external_files` longblob NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_activated` (`user_activated`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
