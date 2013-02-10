@@ -21,10 +21,12 @@ if(isset($_POST['session_name']) && isset($_POST['session_document'])) {
     $id = createId();
     if(!isset($_POST['session_type'])) { $type = null; } else { $type = $_POST['session_type']; }
     if(!isset($_POST['session_external_path'])) { $path = null; } else { $path = $_POST['session_external_path']; }
+    if(!isset($_POST['session_location_id'])) { $location_id = null; } else { $location_id = $_POST['session_location_id']; }
 
     $insertSQL = sprintf("INSERT INTO sessions (session_id, session_name, session_document,
-                          session_owner, session_editors, session_breakpoints, session_type, session_external_path)
-                          VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                          session_owner, session_editors, session_breakpoints, session_type,
+                          session_external_path, session_location_id)
+                          VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
 
     				   $id,
     				   GetSQLValueString($_POST['session_name'], "text"),
@@ -33,7 +35,8 @@ if(isset($_POST['session_name']) && isset($_POST['session_document'])) {
     				   GetSQLValueString(json_encode(array()), "text"),
     				   GetSQLValueString(json_encode(array()), "text"),
     				   GetSQLValueString($type, "text"),
-    				   GetSQLValueString($path, "text"));
+    				   GetSQLValueString($path, "text"),
+    				   GetSQLValueString($location_id, "text"));
 
     $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
     array_push($_SESSION['file_owner'], $id);

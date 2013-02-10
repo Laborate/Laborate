@@ -21,6 +21,39 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
             );
         });
 
+        $("#githubCommit").live("click", function() {
+            $.post("server/php/session/password_check.php", { session_id: getUrlVars()['i'], session_password: $("#backdropPassword").val() },
+                function(password_response){
+                    if(password_response != "Password Authentication: Failed") {
+                        $("#githubCommit").removeClass("red_harsh").val("Commiting File...");
+                        if($("#githubReference").val() != "") { var related = "\n\nRelated: #" + $("#githubReference").val(); }
+                        else { var related = ""; }
+                        $.post("server/php/locations/github_commit.php", {
+                                                                commit_id: password_response,
+                                                                session_document: window.editor.getValue(),
+                                                                message: $("#githubMessage").val() + related
+                                                },
+                            function(result){
+                                if(result == "Commit Succeeded") {
+                                    $("#githubCommit").val("File Commited").removeClass("red_harsh");
+                                }
+                                else {
+                                    $("#githubCommit").addClass("red_harsh").val("Commit Failed");
+                                }
+                            }
+                        );
+                    }
+                    else {
+                       $("#githubCommit").addClass("red_harsh").val("Commit Failed");
+                    }
+
+                    setTimeout(function() {
+                		$("#githubCommit").removeClass("red_harsh").val("Commit File");
+            		}, 5000);
+                }
+            );
+        });
+
         $("#printButton").live("click", function() {
             var url = "print.php?i="+ getUrlVars()['i'] + "&p="+ window.passTemplate + "&t=" + $("#document_title").text();
             printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');

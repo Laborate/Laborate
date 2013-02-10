@@ -425,7 +425,7 @@ window.documents = {
 
                 $.post("server/php/session/new.php",
                     { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(contents.split('\n')),
-                      session_type: "github", session_external_path:  path },
+                      session_type: "github", session_external_path:  path, session_location_id: location_id },
                     function(id) {
                         window.documents.gotToTab("editor?i=" + id);
                         window.documents.notificationClose();
@@ -523,7 +523,7 @@ window.documents = {
 
                 $.post("server/php/session/new.php",
                     { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(json.split('\n')),
-                      session_type: "sftp", session_external_path:  path },
+                      session_type: "sftp", session_external_path:  path, session_location_id: location_id },
                     function(id) {
                         window.documents.gotToTab("editor?i=" + id);
                         window.documents.notificationClose();

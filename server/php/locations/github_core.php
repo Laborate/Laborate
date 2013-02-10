@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/vendor/autoload.php');
 
 function startGithubClient() {
@@ -58,6 +59,26 @@ function getFile($repo, $path) {
     } catch(Github\Exception\RuntimeException $e) {
         $decoded_file = 'Bad Token';
     }
+
     return $decoded_file;
+}
+
+function getCommit($repo, $path, $file, $message) {
+    try {
+        $client = startGithubClient();
+        $sha_latest = $client->getHttpClient()->get("repos/".$repo."/branches")->getContent()[0]['commit']['sha'];
+        $tree_base = $client->getHttpClient()->get("repos/".$repo."/git/commits/".$sha_latest)->getContent()['tree']['sha'];
+        $sha_new_parameters = array("base_tree" => $tree_base,"tree" => array(array("path" => $path, "content" => $file)));
+        $sha_new = $client->getHttpClient()->post("repos/".$repo."/git/trees/", $sha_new_parameters)->getContent()['sha'];
+        $sha_commit_parameters = array("message" => $message, "parents" => array($sha_latest), "tree" => $sha_new);
+        $sha_commit = $client->getHttpClient()->post("repos/".$repo."/git/commits/", $sha_commit_parameters)->getContent()['sha'];
+        $master_parameters = array("sha" => $sha_commit, "force" => true);
+        $master = $client->getHttpClient()->post("repos/".$repo."/git/refs/heads/master/", $master_parameters)->getContent();
+        $response_code = "Commit Succeeded";
+    } catch(Github\Exception\RuntimeException $e) {
+        $response_code = "Bad Token";
+    }
+
+    return $response_code;
 }
 ?>
