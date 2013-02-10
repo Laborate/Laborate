@@ -40,17 +40,19 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
                                 }
                                 else {
                                     $("#githubCommit").addClass("red_harsh").val("Commit Failed");
+                                    setTimeout(function() {
+                                		$("#githubCommit").removeClass("red_harsh").val("Commit File");
+                            		}, 5000);
                                 }
                             }
                         );
                     }
                     else {
                        $("#githubCommit").addClass("red_harsh").val("Commit Failed");
-                    }
-
-                    setTimeout(function() {
+                       setTimeout(function() {
                 		$("#githubCommit").removeClass("red_harsh").val("Commit File");
             		}, 5000);
+                    }
                 }
             );
         });
@@ -60,7 +62,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
             printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
         });
     </script>
-    <?php if($GLOBALS['row_Sessions_id']['session_type'] == "github") { ?>
+    <?php if($GLOBALS['row_Sessions_id']['session_type'] == "github" && !is_null($_SESSION['userGithub'])) { ?>
         <div>
             <div class="header">Commit File</div>
             <div><input id="githubMessage" type="text" placeholder="Commit Message" spellcheck="false" class="input"/></div>
