@@ -4,6 +4,9 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/vendor/autoload.php');
 
 function startGithubClient() {
+    //Cached Version (Has Problems)
+    //$client = new Github\Client(new Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
+
     //Regular Version
     $client = new Github\Client();
     $client->authenticate($_SESSION['userGithub'], "", "http_token");
@@ -18,13 +21,17 @@ function getRepositories() {
         $repos = array();
         $response = $client->getHttpClient()->get("user/subscriptions")->getContent();
         foreach ($response as $key => $value) {
-            array_push($repos, str_replace("https://api.github.com/repos/", "", $value['url']));
+            array_push($repos, array("repo" => str_replace("https://api.github.com/repos/", "", $value['url']), "private" => $value['private']));
         }
+        $repos = json_encode($repos);
     } catch(Github\Exception\RuntimeException $e) {
         $repos = 'Bad Token';
+
+    } catch(Github\Exception\InvalidArgumentException $e) {
+        $repos = 'Login Required';
     }
 
-    return json_encode($repos);
+    return $repos;
 }
 
 function getDirectory($repo, $dir="") {
@@ -39,7 +46,7 @@ function getDirectory($repo, $dir="") {
             array_push($directory, array("type"=> $value['type'], "name" => $value['name'], "path" => $value['path']));
         }
         $json = json_encode($directory);
-    } catch(Github\Exception\RuntimeException $e) {
+    } catch(Exception $e) {
         $json = 'Bad Token';
     }
 
@@ -52,7 +59,7 @@ function getFile($repo, $path) {
         $response = $client->getHttpClient()->get("repos/".$repo."/contents/".$path)->getContent();
         $file = $response['content'];
         $decoded_file = base64_decode($file);
-    } catch(Github\Exception\RuntimeException $e) {
+    } catch(Exception $e) {
         $decoded_file = 'Bad Token';
     }
 
@@ -71,7 +78,7 @@ function getCommit($repo, $path, $file, $message) {
         $master_parameters = array("sha" => $sha_commit, "force" => true);
         $master = $client->getHttpClient()->post("repos/".$repo."/git/refs/heads/master/", $master_parameters)->getContent();
         $response_code = "Commit Succeeded";
-    } catch(Github\Exception\RuntimeException $e) {
+    } catch(Exception $e) {
         $response_code = "Bad Token";
     }
 
