@@ -1,3 +1,7 @@
+.notification {
+    top: 20px;
+}
+
 #navigation {
     position: fixed;
     width: 225px;
@@ -46,16 +50,18 @@
 }
 
 #setting_pane {
-    margin-left: 280px;
-    margin-top: 29px;
+    margin: 29px 20px 0 280px;
     min-width: 530px;
     position: relative;
+}
+
+#setting_pane .settings {
+    display: none;
 }
 
 #setting_pane .settings .settings_header {
     border-bottom: solid 1px #ccc;
     padding-bottom: 15px;
-    margin: 0px 20px 20px 0px;
     font-weight: bold;
     position: relative;
 }
@@ -64,4 +70,43 @@
     position: absolute;
     right: 0;
     bottom: 10px;
+}
+
+#settings_github .settings_content #need_github_login {
+    margin: 50px auto;
+    text-align: center;
+}
+
+#setting_pane .settings_content .icon_big {
+    color: #0376c3;
+    font-size: 150px;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 1px #ccc;
+}
+
+#setting_pane .settings_content .icon {
+    font-size: 24px;
+    margin-right: 20px;
+}
+
+#setting_pane .settings_content .icon-unlocked {
+    color: #0376c3;
+}
+
+#setting_pane .settings_content .table {
+    width: 100%;
+}
+
+#setting_pane .settings_content .table .tr {
+    padding: 10px 0 10px 10px;
+    border-bottom: dashed 1px #ccc;
+}
+
+#setting_pane .settings_content .table .tr:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+#setting_pane .settings_content .table .tr:hover {
+    background: #e1f9ff;
 }

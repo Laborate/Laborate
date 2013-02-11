@@ -5,8 +5,11 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 getDependencies(["core", "header", "account", "icons"]);
-if($_GET['github'] == 2) {
-    $_SESSION['github_redirect'] = "/documents";
+if($_GET['github'] > 1) {
+    if($_GET['github'] == 2) {
+        $_SESSION['github_redirect'] = "/documents";
+    }
+
     echo "<script type='text/javascript'>window.location.href = '".$_SESSION['github_auth_url']."'</script>";
 }
 ?>
@@ -22,18 +25,19 @@ if($_GET['github'] == 2) {
     <div id="navigation">
         <div id="navigation_header"><?php echo $_SESSION['userName']; ?></div>
         <ul>
-            <li id="nav_online">Public Profile</li>
-            <li id="nav_account_settings">Account Settings</li>
-            <li id="nav_github_locations" class="selected">Github Locations</li>
-            <li id="nav_sftp_locations">SFTP Locations</li>
-            <li id="nav_billing">Billing Options</li>
-            <li id="nav_payment_history">Payment History</li>
+            <li id="profile">Public Profile</li>
+            <li id="account">Account Settings</li>
+            <li id="github">Github Locations</li>
+            <li id="sftp">SFTP Locations</li>
+            <li id="billing">Billing Options</li>
+            <li id="payments">Payment History</li>
         </ul>
     </div>
     <div id="setting_pane">
-        <div class="settings">
+        <div class="notification"></div>
+        <div id="settings_github" class="settings">
             <div class="settings_header">
-                <div class="left">Github Locations</div>
+                <div class="left">Github Repositories</div>
                 <?php if(is_null($_SESSION['userGithub'])) { ?>
                     <a class="button green right" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
                 <?php } else { ?>
@@ -42,6 +46,11 @@ if($_GET['github'] == 2) {
                 <div class="clear"></div>
             </div>
             <div class="settings_content">
+                <ul class="table"></ul>
+                <div id="need_github_login" class="hidden">
+                    <div class="icon_big icon-github"></div>
+                    <div class="bold">You Need To Be Authorized<br>With Github To View You Repositories</div>
+                </div>
             </div>
         </div>
     </div>

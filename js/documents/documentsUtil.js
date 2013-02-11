@@ -41,12 +41,6 @@ window.documents = {
         $("#popup").hide();
         $("#popup_backdrop").hide();
     },
-    notification: function(html) {
-        $("#files .notification").html(html).hAlign().show();
-    },
-    notificationClose: function() {
-        $("#files .notification").hide();
-    },
     contextMenu: function(element, e) {
         if($.trim(element.find(".file_attributes").text()) == "owner") { var action  = "Delete"; }
         else { var action = "Forget"; }
@@ -119,7 +113,7 @@ window.documents = {
             history.pushState(null, null, "/documents");
             location_id = "online";
             if(!dont_pull_content) {
-                window.documents.notificationClose();
+                window.notification.close();
             }
         } else {
            $("#files #location_template #file_library").html("");
@@ -319,7 +313,7 @@ window.documents = {
         $.post("server/php/locations/github_repos.php",
             function(json) {
                 if(json == "Bad Token") {
-                    window.documents.notification("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
+                    window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
                     return false;
                 }
 
@@ -343,7 +337,7 @@ window.documents = {
         );
     },
     githubDirectory: function(location_id, path, callback) {
-        window.documents.notification("loading...");
+        window.notification.open("loading...");
         var response = window.documents.cachedLocations(location_id);
         var files = "";
 
@@ -361,17 +355,17 @@ window.documents = {
             $.post("server/php/locations/github_directory.php", { location_id: location_id, dir: path },
                 function(json) {
                     if(json == "Bad Token") {
-                        window.documents.notification("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
+                        window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
                         return false;
                     }
 
                     if(json == "Bad Location") {
-                        window.documents.notification("Location Does Not Exist");
+                        window.notification.open("Location Does Not Exist");
                         return false;
                     }
 
                     if(json == "Not Github Location") {
-                        window.documents.notification("This Is Not A Github Location");
+                        window.notification.open("This Is Not A Github Location");
                         return false;
                     }
 
@@ -396,7 +390,7 @@ window.documents = {
                 files += template;
             });
             $("#files #location_template #file_library").html(files);
-            window.documents.notificationClose();
+            window.notification.close();
 
             history.pushState(null, null, "?type=github&loc=" + location_id + dir);
 
@@ -409,17 +403,17 @@ window.documents = {
     },
     githubFile: function(location_id, file) {
         var path = file.parent().attr("data");
-        window.documents.notification("downloading...");
+        window.notification.open("downloading...");
 
         $.post("server/php/locations/github_file.php", { location_id: location_id, file: path },
             function(contents) {
                 if(contents == "Bad Location") {
-                    window.documents.notification("Location Does Not Exist");
+                    window.notification.open("Location Does Not Exist");
                     return false;
                 }
 
                 if(contents == "Not Github Location") {
-                    window.documents.notification("This Is Not A Github Location");
+                    window.notification.open("This Is Not A Github Location");
                     return false;
                 }
 
@@ -428,14 +422,14 @@ window.documents = {
                       session_type: "github", session_external_path:  path, session_location_id: location_id },
                     function(id) {
                         window.documents.gotToTab("editor?i=" + id);
-                        window.documents.notificationClose();
+                        window.notification.close();
                     }
                 );
             }
         );
     },
     sftpDirectory: function(location_id, path, callback) {
-        window.documents.notification("loading...");
+        window.notification.open("loading...");
         var response = window.documents.cachedLocations(location_id);
         var files = "";
 
@@ -453,17 +447,17 @@ window.documents = {
             $.post("server/php/locations/sftp_directory.php", { location_id: location_id, dir: path },
                 function(json) {
                     if(json == "Bad Credentials") {
-                        window.documents.notification("Bad SFTP Credentials");
+                        window.notification.open("Bad SFTP Credentials");
                         return false;
                     }
 
                     if(json == "Bad Location") {
-                        window.documents.notification("Location Does Not Exist");
+                        window.notification.open("Location Does Not Exist");
                         return false;
                     }
 
                     if(json == "Not SFTP Location") {
-                        window.documents.notification("This Is Not A SFTP Location");
+                        window.notification.open("This Is Not A SFTP Location");
                         return false;
                     }
 
@@ -490,7 +484,7 @@ window.documents = {
                 }
             });
             $("#files #location_template #file_library").html(files);
-            window.documents.notificationClose();
+            window.notification.close();
             history.pushState(null, null, "?type=sftp&loc=" + location_id + dir);
 
             if(callback == undefined) {
@@ -502,22 +496,22 @@ window.documents = {
     },
     sftpFile: function(location_id, file) {
         var path = file.parent(".file").attr("data");
-        window.documents.notification("downloading...");
+        window.notification.open("downloading...");
 
         $.post("server/php/locations/sftp_file.php", { location_id: location_id, file: path },
             function(json) {
                 if(json == "Bad Credentials") {
-                    window.documents.notification("Bad SFTP Credentials");
+                    window.notification.open("Bad SFTP Credentials");
                     return false;
                 }
 
                 if(json == "Bad Location") {
-                    window.documents.notification("Location Does Not Exist");
+                    window.notification.open("Location Does Not Exist");
                     return false;
                 }
 
                 if(json == "Not SFTP Location") {
-                    window.documents.notification("This Is Not A SFTP Location");
+                    window.notification.open("This Is Not A SFTP Location");
                     return false;
                 }
 
@@ -526,7 +520,7 @@ window.documents = {
                       session_type: "sftp", session_external_path:  path, session_location_id: location_id },
                     function(id) {
                         window.documents.gotToTab("editor?i=" + id);
-                        window.documents.notificationClose();
+                        window.notification.close();
                     }
                 );
             }

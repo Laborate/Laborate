@@ -1,9 +1,8 @@
 //Set Location Height On Resize
-$(window).ready(function() {
-    $("#navigation").css("height", ($(document).height() - 95) + "px");
+$(window).resize(function() {
+    window.account.navigationResize();
 });
 
-//Set Location Height On Resize
-$(window).resize(function() {
-    $("#navigation").css("height", ($(document).height() - 95) + "px");
+$("#navigation ul li").live("click", function() {
+    window.account.navigationChange($(this).attr("id"));
 });

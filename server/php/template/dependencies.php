@@ -3,8 +3,8 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 
 function getDependencies($dependencies) {
     if(in_array("core", $dependencies)) {
-        array_push($GLOBALS['js'],  "core/center.js", "core/core.js", "core/cookie.js", "core/colors.js");
-        array_push($GLOBALS['css'], "core/core.css", "core/form.css", "core/colors.css");
+        array_push($GLOBALS['js'],  "core/center.js", "core/core.js", "core/cookie.js", "core/colors.js", "core/notification.js");
+        array_push($GLOBALS['css'], "core/core.css", "core/form.css", "core/colors.css", "core/notification.css");
     }
 
     if(in_array("editor", $dependencies)) {
@@ -68,7 +68,7 @@ function getDependencies($dependencies) {
 
     if(in_array("account", $dependencies)) {
         array_push($GLOBALS['css'], "account/account.css");
-        array_push($GLOBALS['js'], "account/account.js");
+        array_push($GLOBALS['js'], "account/account.js", "account/accountInit.js", "account/accountUtil.js");
     }
 }
 

@@ -7,7 +7,7 @@ var initialCheckList = {
 };
 
 $(window).ready(function() {
-    window.documents.notification("loading...");
+    window.notification.open("loading...");
     window.documents.locationsHeight();
     window.documents.locationChange(getUrlVars()['loc'], true);
 
@@ -58,7 +58,7 @@ var initFinished = setInterval(function(){
 
     if(passed) {
         $("#locations #" + window.sidebar).addClass("selected");
-        window.documents.notificationClose();
+        window.notification.close();
         clearInterval(initFinished);
     }
 }, 100);

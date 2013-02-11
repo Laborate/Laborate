@@ -37,6 +37,9 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
                                 if(result == "Commit Succeeded") {
                                     $("#githubCommit").val("File Commited").removeClass("red_harsh");
                                     $("#githubMessage, #githubReference").val("");
+                                    setTimeout(function() {
+                                		$("#githubCommit").removeClass("red_harsh").val("Commit File");
+                            		}, 5000);
                                 }
                                 else {
                                     $("#githubCommit").addClass("red_harsh").val("Commit Failed");
