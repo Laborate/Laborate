@@ -60,6 +60,43 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
             );
         });
 
+        $("#saveToServer").live("click", function() {
+            $.post("server/php/session/password_check.php", { session_id: getUrlVars()['i'], session_password: $("#backdropPassword").val() },
+                function(password_response){
+                    if(password_response != "Password Authentication: Failed") {
+                        $("#saveToServer").removeClass("red_harsh").val("Saving File...");
+                        if($("#githubReference").val() != "") { var related = "\n\nRelated: #" + $("#githubReference").val(); }
+                        else { var related = ""; }
+                        $.post("server/php/locations/sftp_push.php", {
+                                                                commit_id: password_response,
+                                                                session_document: window.editor.getValue(),
+                                                },
+                            function(result){
+                                if(result == "File Pushed") {
+                                    $("#saveToServer").val("File Saved").removeClass("red_harsh");
+                                    setTimeout(function() {
+                                		$("#saveToServer").removeClass("red_harsh").val("Save To Server");
+                            		}, 5000);
+                                }
+                                else {
+                                    $("#saveToServer").addClass("red_harsh").val("Save Failed");
+                                    setTimeout(function() {
+                                		$("#saveToServer").removeClass("red_harsh").val("Save To Server");
+                            		}, 5000);
+                                }
+                            }
+                        );
+                    }
+                    else {
+                       $("#saveToServer").addClass("red_harsh").val("Save Failed");
+                       setTimeout(function() {
+                		$("#saveToServer").removeClass("red_harsh").val("Save To Server");
+            		}, 5000);
+                    }
+                }
+            );
+        });
+
         $("#printButton").live("click", function() {
             var url = "print.php?i="+ getUrlVars()['i'] + "&p="+ window.passTemplate + "&t=" + $("#document_title").text();
             printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
