@@ -9,6 +9,10 @@ $(window).ready(function() {
             tabMode: "indent",
             dragDrop: false,
             theme: "codelaborate",
+            indentUnit: 4,
+            indentWithTabs: true,
+            enterMode: "keep",
+            tabMode: "shift",
             onBlur: function(cm) {
                 if(window.activated) {
                     window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line, "isOff":true} );

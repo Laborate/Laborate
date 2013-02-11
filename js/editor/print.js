@@ -22,9 +22,8 @@ $(window).ready(function() {
                                     proccessedDocuemt = "";
                                     var json = JSON.parse(dowload_response);
                                     $.each(json, function(i, item) {
-                                        if(i+1 != json.length) {
-                                            var new_line = "\n";
-                                        }
+                                        if(i+1 != json.length) { var new_line = "\n"; }
+                                        else { var new_line = ""; }
                                         proccessedDocuemt += item + new_line;
                                     });
                                     window.editor.setValue(proccessedDocuemt);
