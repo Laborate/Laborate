@@ -4,9 +4,6 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/vendor/autoload.php');
 
 function startGithubClient() {
-    //Cached Version (Has Problems)
-    //$client = new Github\Client(new Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
-
     //Regular Version
     $client = new Github\Client();
     $client->authenticate($_SESSION['userGithub'], "", "http_token");
