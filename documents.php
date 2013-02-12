@@ -1,4 +1,4 @@
-<?php echo 1;
+<?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
