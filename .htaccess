@@ -4,6 +4,18 @@
 #AuthUserFile /home/brian/.htpasswd
 #require valid-user
 
+# Set All Code To UTF-8
+AddDefaultCharset utf-8
+
+# Prevent Directory Listing
+Options -Indexes
+
+# Prevent viewing of .htaccess file
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
 # GZIP All HTTP Responses
 <ifmodule mod_deflate.c>
 AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
@@ -20,23 +32,20 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.php
 RewriteRule (.*)\.php$ /$1 [L,R=301]
 RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.php/
-RewriteRule (.*)\.php/$ /$1 [L,R=301]
+RewriteRule (.*)\.php$ /$1 [L,R=301]
 RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.html
 RewriteRule (.*)\.html$ /$1 [L,R=301]
 RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.html/
 RewriteRule (.*)\.html/$ /$1 [L,R=301]
 
-# Set All Code To UTF-8
-AddDefaultCharset utf-8
-
 # Apache Error Code Handling
 ErrorDocument 204 /errors/base.php
-ErrorDocument 400 /errors/base.php
-ErrorDocument 403 /errors/base.php
+ErrorDocument 400 /errors/notfound.php
+ErrorDocument 403 /errors/notfound.php
 ErrorDocument 404 /errors/notfound.php
-ErrorDocument 406 /errors/base.php
-ErrorDocument 408 /errors/base.php
-ErrorDocument 410 /errors/base.php
+ErrorDocument 406 /errors/notfound.php
+ErrorDocument 408 /errors/notfound.php
+ErrorDocument 410 /errors/notfound.php
 ErrorDocument 412 /errors/base.php
 ErrorDocument 413 /errors/base.php
 ErrorDocument 414 /errors/base.php
@@ -126,9 +135,3 @@ RewriteCond %{HTTP_USER_AGENT} ^WWWOFFLE [OR]
 RewriteCond %{HTTP_USER_AGENT} ^Xaldon\ WebSpider [OR]
 RewriteCond %{HTTP_USER_AGENT} ^Zeus
 RewriteRule ^.* - [F,L]
-
-# Prevent viewing of .htaccess file
-<Files .htaccess>
-order allow,deny
-deny from all
-</Files>

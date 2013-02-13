@@ -106,12 +106,14 @@ function searchCode(pattern) {
             window.searchList[key].push(marked);
             getSearchState().marked.push(marked);
         }
-        part1 = "<div class='header clear'>";
-        part2 = "<div class='listColor' style='background:" + color + "'></div>";
-        part3 = "<div class='left'>";
-        part4 = "</div><div class='listX right' data='" + key + "'></div>";
-        part5 = "<div class='clear'></div>";
-        $("#findList").append(part1 + part2 + part3 + "<span class='listContent'>" + pattern + "</span>" + part4 + part5);
+
+        var li = "<div class='header clear " + key + "'>";
+        li += "<div class='listColor' style='background:" + color + "'></div>";
+        li += "<div class='listContent left'></div>" ;
+        li += "<div class='listX right' data='" + key + "'></div>";
+        li += "<div class='clear'></div>";
+        $("#findList").append(li).find("." + key + " .listContent").text(pattern);
+        $("#findList").find("." + key).removeClass(key + "");
         var state = getSearchState();
         state.query = null;
         state.marked.length = 0;

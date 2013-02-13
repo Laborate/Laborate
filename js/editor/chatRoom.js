@@ -45,13 +45,11 @@ window.chatRoom = {
     message: function(from, name, message, direction) {
         if(window.activated) {
             if(window.chatRoom._check(message, "commands", from) != true) {
-                if(window.chatRoom._check(message, "js")) {
-                    if(direction == "out") { window.chatRoom._pushMessage(message); }
-                    var lineContent = window.chatRoom._check(message, "line");
-                    var searchContent = window.chatRoom._check(lineContent, "search");
-                    var scrollContent = window.chatRoom._check(searchContent, "scroll");
-                    window.chatRoom._inputMessage(name, scrollContent, direction);
-                }
+                if(direction == "out") { window.chatRoom._pushMessage(message); }
+                var lineContent = window.chatRoom._check(message, "line");
+                var searchContent = window.chatRoom._check(lineContent, "search");
+                var scrollContent = window.chatRoom._check(searchContent, "scroll");
+                window.chatRoom._inputMessage(name, scrollContent, direction);
             }
             window.chatRoom.resize();
             window.chatRoom._scrollToBottom();
@@ -99,9 +97,6 @@ window.chatRoom = {
                     return true
         		}
         	}
-        } else if(type == "js") {
-            if(message.search(/.*<script.*/ig)) { return true; }
-            else { return false; }
         } else {
             types = { "search": [/.*@.*/ig, "@", "searchCode"],
                       "line": [/.*#\d.*/ig, "#", "highLightLine"],
@@ -124,8 +119,11 @@ window.chatRoom = {
         }
     },
     _inputMessage: function(name, message, direction) {
-        var html = '<div class="chatRoomMessage ' + direction + '"><div class="chatRoomName">' + name +'</div><div class="chatRoomBubble">' + message +'</div></div>';
-        $(".jspPane").append(html);
+        var key = Math.floor((Math.random()*10000)+1);
+        var html = '<div class="chatRoomMessage ' + direction + ' ' + key + '">'
+        html += '<div class="chatRoomName">' + name +'</div><div class="chatRoomBubble"></div></div>';
+        $(".jspPane").append(html).find("." + key + " .chatRoomBubble").text(message);
+        $(".jspPane *").removeClass(key + "");
     },
     _inputStatus: function(status) {
         if(window.notifications != false) {

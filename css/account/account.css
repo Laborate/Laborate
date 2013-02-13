@@ -80,8 +80,8 @@
 #setting_pane .settings_content .icon_big {
     color: #0376c3;
     font-size: 150px;
-    margin-bottom: 30px;
-    text-shadow: 1px 1px 1px #ccc;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #ccc, -1px 1px 2px #ccc, 1px -1px 2px #ccc, -1px -1px 2px #ccc;
 }
 
 #setting_pane .settings_content .icon {

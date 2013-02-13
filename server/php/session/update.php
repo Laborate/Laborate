@@ -18,7 +18,12 @@ if(isset($_POST['session_id'])){
             else {
                $response = json_encode([1,1]);
             }
-            $password = crypt($_POST['session_password'], $_SESSION['cryptSalt']);
+
+            if($_POST['session_password'] != "") {
+                $password = crypt($_POST['session_password'], $_SESSION['cryptSalt']);
+            } else {
+                $password = NULL;
+            }
         }
         else {
             $response = json_encode([1,0]);
