@@ -1,8 +1,8 @@
 <div id="sidebar_find" class="sidebar_content_inner">
     <script type="text/javascript">
-        $("#lineNumberScrollForm").live("submit", function() { scrollToLine($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
-        $("#lineNumberForm").live("submit", function() { highLightLine($("#lineNumber").val()); $("#lineNumber").val(""); });
-        $("#findWordsForm").live("submit", function() { searchCode($("#findWords").val()); $("#findWords").val(""); });
+        $("#lineNumberScrollForm").live("submit", function() { window.editorUtil.scroll($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
+        $("#lineNumberForm").live("submit", function() { window.editorUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
+        $("#findWordsForm").live("submit", function() { window.editorUtil.search($("#findWords").val()); $("#findWords").val(""); });
         $("#findRegexForm").live("submit", function() { alert("havent started yet") });
     </script>
 	<div>

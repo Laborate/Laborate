@@ -26,11 +26,12 @@ if(isset($_SESSION['userId'])) {
     }
 }
 
+//Development vs. Production Config
 if($_SERVER['REMOTE_ADDR'] == "127.0.0.1") {
-    $_SESSION['cache'] = true;
+    $_SESSION['no_cache'] = true;
 }
 else {
-    $_SESSION['cache'] = false;
+    $_SESSION['no_cache'] = false;
 }
 
 //Crypt Salt

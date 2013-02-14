@@ -3,7 +3,6 @@ $("#popup_header_exit, #popup_backdrop").live("click", function() {
     window.documents.popUpClose();
 });
 
-
 //Set Location Height On Resize
 $(window).resize(function() {
     window.documents.locationsHeight();
@@ -28,7 +27,6 @@ $("#locations.remove ul li").live("click", function() {
 $("#locations #remove_location, #locations #finished_remove_location").live("click", function() {
     window.documents.toggleRemoveMode();
 });
-
 
 //Search
 $(".file_search select").live("change", function() { $(this).parent("form").submit(); });

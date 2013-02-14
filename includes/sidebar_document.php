@@ -10,8 +10,8 @@
     <hr/>
     <div>
         <div class="header">Auto Format</div>
-        <input type="button" value="Selection" onclick="formatCode();" class="button blue pull_left"/>
-        <input type="button" value="All" onclick="formatCode(true);" class="button blue pull_right"/>
+        <input type="button" value="Selection" onclick="window.editorUtil.format();" class="button blue pull_left"/>
+        <input type="button" value="All" onclick="window.editorUtil.format(true);" class="button blue pull_right"/>
         <div class="clear"></div>
     </div>
 </div>

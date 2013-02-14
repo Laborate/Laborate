@@ -6,7 +6,7 @@ getDependencies(["core", "backdrop"]);
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Codelaborate - Server Error</title>
+	<title>Codelaborate - Realtime Server Error</title>
 	<script src="http://<?php echo $_SERVER['SERVER_ADDR']; ?>:8000/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         try {

@@ -8,8 +8,7 @@ function getDependencies($dependencies) {
     }
 
     if(in_array("editor", $dependencies)) {
-        array_push($GLOBALS['js'],  "editor/editorInit.js", "editor/editor.js", "editor/editorUtil.js");
-        array_push($GLOBALS['js'],  "editor/sidebar.js", "editor/users.js", "core/colors.js");
+        array_push($GLOBALS['js'],  "editor/editorInit.js", "editor/editor.js", "editor/editorUtil.js", "editor/sidebar.js");
         array_push($GLOBALS['css'], "editor/editor.css", "editor/sidebar.css");
         array_push($GLOBALS['codeMirror_js'], "codemirror.js", "util/match-highlighter.js", "util/loadmode.js");
         array_push($GLOBALS['codeMirror_js'], "util/formatting.js", "util/search.js", "util/searchcursor.js");
@@ -74,7 +73,7 @@ function getDependencies($dependencies) {
 
 function placeDependencies() {
 
-    if($_SESSION['cache'] == true) { $cache = '&nc='.rand(0, 1000000000); }
+    if($_SESSION['no_cache'] == true) { $cache = '&nc='.rand(0, 1000000000); }
     else { $cache = ""; }
 
     echo ('<!-- Opera Speed Dial Favicon -->

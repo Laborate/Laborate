@@ -5,6 +5,18 @@ io.configure(function(){
     io.enable('browser client gzip');          // gzip the file
     io.set('log level', 1);                    // reduce logging
     io.set('transports', [ 'websocket', 'flashsocket', 'htmlfile', 'xhr-polling', 'jsonp-polling']);
+    io.set('log colors', true);
+});
+
+io.on('error', function(err) {
+    console.log('Socket IO Error: ' + err.stack);
+    require('socket.io').listen(8000);
+    return false;
+});
+
+process.on('uncaughtException', function(err) {
+  console.log("Uncaught Error: " + err);
+  return false;
 });
 
 var mysql = require('mysql');
@@ -16,10 +28,9 @@ var connection = mysql.createConnection({
 });
 
 connection.on('error', function(err) {
-    if (!err.fatal) { return; }
-    if (err.code !== 'PROTOCOL_CONNECTION_LOST') { throw err; }
-    console.log('Re-connecting lost connection: ' + err.stack);
+    console.log('MYSQL Error: ' + err.stack);
     connection = mysql.createConnection(connection.config);
+    return false;
 });
 
 var queues = require('mysql-queues');
@@ -36,10 +47,14 @@ io.sockets.on( 'connection', function (socket) {
           socket.set('session_id', new_id, function() {
             socket.join(new_id);
             console.log('info:', "joined document: " + new_id);
-            console.log('info:', "Pulled");
-            connection.query('SELECT * FROM sessions WHERE sessions.session_id = ?', [new_id + ""], function(err, pull_results) {
-                if(!err) { socket.set('session_document', JSON.parse(pull_results[0]['session_document'])); }
-            });
+            console.log('info:', "pulled document code: " + new_id);
+            connection.query('SELECT * FROM sessions WHERE sessions.session_id = ?', [new_id + ""],
+                function(err, pull_results) {
+                    if(!err) {
+                        socket.set('session_document', JSON.parse(pull_results[0]['session_document']));
+                    }
+                }
+            );
           });
         });
     })
@@ -50,9 +65,14 @@ io.sockets.on( 'connection', function (socket) {
             else if (session_id) {
                 socket.broadcast.to(session_id).emit( 'editor' , data );
                 socket.get('session_document', function(err, document) {
-                    document[parseInt(data['line'])] = data['code'];
-                    connection.query("UPDATE sessions SET session_document=? WHERE session_id = ?", [JSON.stringify(document), session_id + ""]);
-                    socket.set('session_document', document);
+                    try {
+                        document[parseInt(data['line'])] = data['code'];
+                        connection.query("UPDATE sessions SET session_document=? WHERE session_id = ?", [JSON.stringify(document), session_id + ""]);
+                        socket.set('session_document', document);
+                    } catch (TypeError) {
+                        socket.to(session_id).emit( 'editor' , {"extras": {"passChange": "true"}} );
+                        console.log("Document: " + session_id + " failed to save to database")
+                    }
                 });
             }
         });

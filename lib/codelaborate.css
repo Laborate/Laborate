@@ -10,6 +10,7 @@
 .cm-s-codelaborate span.cm-number {color: #006ab5;}
 .cm-s-codelaborate span.cm-meta {color: #E42040;}
 .cm-s-codelaborate span.cm-qualifier {color: #b76000;}
+.cm-s-codelaborate span.cm-operator { color: #4042c2; }
 
 .cm-s-codelaborate span.cm-attribute {color: #AB5800;}
 .cm-s-codelaborate span.cm-property {color: #000;}

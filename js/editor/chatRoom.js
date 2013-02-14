@@ -43,24 +43,22 @@ window.chatRoom = {
         window.editor.refresh();
     },
     message: function(from, name, message, direction) {
-        if(window.activated) {
-            if(window.chatRoom._check(message, "commands", from) != true) {
+        if(window.chatRoom._check(message, "commands", from) != true) {
+            if(window.chatRoom._check(message, "js")) {
                 if(direction == "out") { window.chatRoom._pushMessage(message); }
                 var lineContent = window.chatRoom._check(message, "line");
                 var searchContent = window.chatRoom._check(lineContent, "search");
                 var scrollContent = window.chatRoom._check(searchContent, "scroll");
                 window.chatRoom._inputMessage(name, scrollContent, direction);
             }
-            window.chatRoom.resize();
-            window.chatRoom._scrollToBottom();
-    	}
+        }
+        window.chatRoom.resize();
+        window.chatRoom._scrollToBottom();
     },
     status: function(message) {
-        if(window.activated) {
-            window.chatRoom._inputStatus(message);
-            window.chatRoom.resize();
-            window.chatRoom._scrollToBottom();
-    	}
+        window.chatRoom._inputStatus(message);
+        window.chatRoom.resize();
+        window.chatRoom._scrollToBottom();
     },
     resize: function() {
         var header = parseInt($("#header").height());
@@ -74,11 +72,9 @@ window.chatRoom = {
     },
     screenNameChange: function(oldScreenName, newScreenName) {
         $.cookie("screenName", newScreenName);
-        if(window.activated) {
-            if(oldScreenName != "undefined" && newScreenName != "undefined") {
-                window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "name":newScreenName, "message":oldScreenName + " new screen name: " + newScreenName, "isStatus": true} );
-                $(".out .chatRoomName").text($.cookie("screenName"));
-            }
+        if(oldScreenName != "undefined" && newScreenName != "undefined") {
+            window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "name":newScreenName, "message":oldScreenName + " new screen name: " + newScreenName, "isStatus": true} );
+            $(".out .chatRoomName").text($.cookie("screenName"));
         }
     },
     _check: function(message, type, name) {
@@ -97,10 +93,13 @@ window.chatRoom = {
                     return true
         		}
         	}
+        } else if(type == "js") {
+            if(message.search(/.*<script.*/ig)) { return true; }
+            else { return false; }
         } else {
-            types = { "search": [/.*@.*/ig, "@", "searchCode"],
-                      "line": [/.*#\d.*/ig, "#", "highLightLine"],
-                      "scroll": [/.*&.*/ig, "&", "scrollToLine"] }
+            types = { "search": [/.*@.*/ig, "@", "window.editorUtil.search"],
+                      "line": [/.*#\d.*/ig, "#", "window.editorUtil.highlight"],
+                      "scroll": [/.*&.*/ig, "&", "window.editorUtil.scroll"] }
 
             if(!message.search(types[type][0])) {
         		var splits = (" " + message + " ").split(types[type][1]);
@@ -119,11 +118,8 @@ window.chatRoom = {
         }
     },
     _inputMessage: function(name, message, direction) {
-        var key = Math.floor((Math.random()*10000)+1);
-        var html = '<div class="chatRoomMessage ' + direction + ' ' + key + '">'
-        html += '<div class="chatRoomName">' + name +'</div><div class="chatRoomBubble"></div></div>';
-        $(".jspPane").append(html).find("." + key + " .chatRoomBubble").text(message);
-        $(".jspPane *").removeClass(key + "");
+        var html = '<div class="chatRoomMessage ' + direction + '"><div class="chatRoomName">' + name +'</div><div class="chatRoomBubble">' + message +'</div></div>';
+        $(".jspPane").append(html);
     },
     _inputStatus: function(status) {
         if(window.notifications != false) {
@@ -135,19 +131,23 @@ window.chatRoom = {
         setTimeout(function() { $("#messenger").val('').focus() }, 05);
     },
     _signIn: function() {
-        if(window.activated) {
-            window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "name":$.cookie("screenName"), "message":$.cookie("screenName") + " has signed in", "isStatus": true} );
-         }
+        window.nodeSocket.emit( 'chatRoom' , {"from":window.userId,
+                                              "name":$.cookie("screenName"),
+                                              "message":$.cookie("screenName") + " has signed in",
+                                               "isStatus": true} );
     },
     _signOut: function() {
-        if(window.activated) {
-            window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "name":$.cookie("screenName"), "message":$.cookie("screenName") + " has signed out", "isStatus": true, "isLeave":true} );
-        }
+        window.nodeSocket.emit( 'chatRoom' , {"from":window.userId,
+                                              "name":$.cookie("screenName"),
+                                              "message":$.cookie("screenName") + " has signed out",
+                                              "isStatus": true,
+                                              "isLeave":true} );
     },
     _pushMessage: function(message) {
-        if(window.activated) {
-            window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "name":$.cookie("screenName"), "message": message, "isStatus": false} );
-        }
+        window.nodeSocket.emit( 'chatRoom' , {"from":window.userId,
+                                              "name":$.cookie("screenName"),
+                                              "message": message,
+                                              "isStatus": false} );
     }
 }
 
@@ -189,22 +189,20 @@ $("#messenger").live('keydown', function(e) {
 
 //Pull Message
 window.nodeSocket.on('chatRoom', function (data) {
-    if(window.activated) {
-        if(data['from'] != window.userId && (""+data['from']) != "null") {
-            if(data['isStatus']) {
-                window.chatRoom.status(data['message']);
-            }
-            else {
-                window.chatRoom.message(data['from'], data['name'], data['message'], "in");
-            }
-        }
-
-        if(data["isLeave"]) {
-            userBlock(data['from'], data['name'], true);
-            usersCursors(data['from'], true)
+    if(data['from'] != window.userId && (""+data['from']) != "null") {
+        if(data['isStatus']) {
+            window.chatRoom.status(data['message']);
         }
         else {
-            userBlock(data['from'], data['name']);
+            window.chatRoom.message(data['from'], data['name'], data['message'], "in");
         }
+    }
+
+    if(data["isLeave"]) {
+        window.editorUtil.users(data['from'], data['name'], true);
+        window.editorUtil.userCursor(data['from'], true)
+    }
+    else {
+        window.editorUtil.users(data['from'], data['name']);
     }
 });

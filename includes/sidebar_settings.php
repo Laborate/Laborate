@@ -60,7 +60,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
     			}
 
     			$.cookie("keyMapping", $("#keyMapping").val());
-    			setTitle($("#documentTitle").val(), true)
+    			window.editorUtil.setTitle($("#documentTitle").val(), true)
                 <?php if(in_array($_GET['i'], $_SESSION['file_owner'])) { ?>
     			    $("#backdropPassword").val($("#documentPassword").val());
     			    window.passTemplate = $("#documentPassword").val();

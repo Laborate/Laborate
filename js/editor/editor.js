@@ -1,5 +1,4 @@
 $(window).ready(function() {
-
      window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             lineNumbers: true,
             lineWrapping: true,
@@ -14,14 +13,10 @@ $(window).ready(function() {
             enterMode: "keep",
             tabMode: "shift",
             onBlur: function(cm) {
-                if(window.activated) {
-                    window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line, "isOff":true} );
-                }
+                window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line, "isOff":true} );
             },
             onCursorActivity: function(cm) {
-                if(window.activated) {
-                    window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line} );
-                }
+                window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line} );
                 editor.matchHighlight("CodeMirror-matchhighlight");
                 $("#editorCodeMirror .CodeMirror-gutter-text pre").css({"font-weight":"", "color":""});
                 $("#editorCodeMirror .CodeMirror-gutter-text pre").eq(cm.getCursor().line).css({"font-weight":"bold", "color":"#09f"});
@@ -32,42 +27,31 @@ $(window).ready(function() {
                 }
                 else {
                     window.editor.onDeleteLine(cm.getCursor().line, function(){
-                        if(window.activated) {
-                            window.nodeSocket.emit( 'editor' , {"from": window.userId, "delete": cm.getCursor().line} )
-                        }
+                        window.nodeSocket.emit( 'editor' , {"from": window.userId, "delete": cm.getCursor().line} )
                     });
 
-                    if(window.activated) {
-                        window.nodeSocket.emit( 'editor' , {"from": window.userId,
+                    window.nodeSocket.emit( 'editor' , {"from": window.userId,
                                                             "line": cm.getCursor().line,
                                                             "code": editor.getLine(cm.getCursor().line)
                                                             } );
-                    }
-
                 }
             },
             onGutterClick: function(cm, n) {
                 var info = cm.lineInfo(n);
                 if (info.markerText){
                     cm.clearMarker(n);
-                    if(window.activated) {
-                        window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [n, true]}} );
-                    }
+                    window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [n, true]}} );
                 }
                 else {
                     cm.setMarker(n, '<span style="color: #56606E">●</span> %N%');
-                    if(window.activated) {
-                        window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [n, false]}} );
-                    }
+                    window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [n, false]}} );
                 }
             }
     });
 
     for (var i = 0; i < window.editor.lineCount() - 1; i++) {
         window.editor.onDeleteLine((i), function(){
-            if(window.activated) {
-                window.nodeSocket.emit( 'editor' , {"from": window.userId, "delete": i} );
-            }
+            window.nodeSocket.emit( 'editor' , {"from": window.userId, "delete": i} );
         });
     }
 
@@ -143,41 +127,39 @@ function setEditorMode(mode) {
 
 //Pull New Code
 window.nodeSocket.on('editor', function (data) {
-    if(window.activated) {
-        if(data["from"] != window.userId) {
-            if(data["extras"] == null || data["extras"] == "undefined") {
-                if(data["delete"] == null || data["delete"] == "undefined") {
-                    if(window.editor.lineInfo(data['line']) == null) {
-                        window.editor.replaceRange("\n" + data['code'], {"line":data['line'], "ch": 0});
-                    }
-                    window.editor.setLine(data['line'], data['code']);
-                    window.bounceBack = true;
+    if(data["from"] != window.userId) {
+        if(data["extras"] == null || data["extras"] == "undefined") {
+            if(data["delete"] == null || data["delete"] == "undefined") {
+                if(window.editor.lineInfo(data['line']) == null) {
+                    window.editor.replaceRange("\n" + data['code'], {"line":data['line'], "ch": 0});
                 }
-                else {
-                    window.editor.removeLine(data["delete"]);
-                }
+                window.editor.setLine(data['line'], data['code']);
+                window.bounceBack = true;
             }
             else {
-                if(data["extras"]["docName"] != null && data["extras"]["docName"] != "") {
-                    setTitle(data["extras"]["docName"]);
-                }
+                window.editor.removeLine(data["delete"]);
+            }
+        }
+        else {
+            if(data["extras"]["docName"] != null && data["extras"]["docName"] != "") {
+                setTitle(data["extras"]["docName"]);
+            }
 
-                if(data["extras"]["initialCode"] != null && data["extras"]["initialCode"] != "") {
-                    window.editor.setValue(data["extras"]["initialCode"]);
-                }
+            if(data["extras"]["initialCode"] != null && data["extras"]["initialCode"] != "") {
+                window.editor.setValue(data["extras"]["initialCode"]);
+            }
 
-                if(data["extras"]["passChange"] != null && data["extras"]["passChange"] != "") {
-                    window.location.reload(true);
-                }
+            if(data["extras"]["passChange"] != null && data["extras"]["passChange"] != "") {
+                window.location.reload(true);
+            }
 
-                if(data["extras"]["lineMarker"] != null && data["extras"]["lineMarker"] != "") {
-                    var n  = data["extras"]["lineMarker"][0]
-                    if (data["extras"]["lineMarker"][1]){
-                        window.editor.clearMarker(n);
-                    }
-                    else {
-                        window.editor.setMarker(n, '<span style="color: #56606E">●</span> %N%');
-                    }
+            if(data["extras"]["lineMarker"] != null && data["extras"]["lineMarker"] != "") {
+                var n  = data["extras"]["lineMarker"][0]
+                if (data["extras"]["lineMarker"][1]){
+                    window.editor.clearMarker(n);
+                }
+                else {
+                    window.editor.setMarker(n, '<span style="color: #56606E">●</span> %N%');
                 }
             }
         }
@@ -187,22 +169,18 @@ window.nodeSocket.on('editor', function (data) {
 
 //Broadcast User Info
 setInterval(function() {
-    if(window.activated) {
-        window.nodeSocket.emit('users' , {"from":window.userId, "name":$.cookie("screenName")} );
-    }
+    window.nodeSocket.emit('users' , {"from":window.userId, "name":$.cookie("screenName")} );
 }, 1000);
 
 
 //Pull User Info
 window.nodeSocket.on('users', function (data) {
-    if(window.activated) {
-        if(data['from'] != window.userId && (""+data['from']) != "null") {
-            if(data["isLeave"]) {
-                userBlock(data['from'], data['name'], true);
-            }
-            else {
-                userBlock(data['from'], data['name']);
-            }
+    if(data['from'] != window.userId && (""+data['from']) != "null") {
+        if(data["isLeave"]) {
+            window.editorUtil.users(data['from'], data['name'], true);
+        }
+        else {
+            window.editorUtil.users(data['from'], data['name']);
         }
     }
 });
@@ -210,14 +188,41 @@ window.nodeSocket.on('users', function (data) {
 
 //Pull Cursor Info
 window.nodeSocket.on('cursors', function (data) {
-    if(window.activated) {
-        if(data['from'] != window.userId && (""+data['from']) != "null") {
-            if(data['isOff']) {
-                usersCursors(data['from'], data['line'], true);
-            }
-            else {
-                usersCursors(data['from'], data['line']);
-            }
+    if(data['from'] != window.userId && (""+data['from']) != "null") {
+        if(data['isOff']) {
+            window.editorUtil.userCursor(data['from'], data['line'], true);
+        }
+        else {
+            window.editorUtil.userCursor(data['from'], data['line']);
         }
     }
+});
+
+$(window).resize(function() {
+    window.editorUtil.refresh();
+});
+
+setInterval(function(){
+    window.editorUtil.refresh();
+}, 1000);
+
+$("#lineNumberList .listX").live("click", function() {
+    window.editorUtil.highlightRemove($(this).parent());
+});
+
+
+$("#findList .listX").live("click", function() {
+    window.editorUtil.searchRemove($(this));
+});
+
+$("#full_screen").live("click", function() {
+    window.editorUtil.fullScreen();
+});
+
+$(".contributor").live("hover", function(){
+    window.editorUtil.userHover($(this));
+});
+
+$(".contributor").live("mouseout", function(){
+    window.editorUtil.userLeave();
 });
