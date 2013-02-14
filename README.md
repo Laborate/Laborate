@@ -1,5 +1,6 @@
 Set Up Server For Default
 --------------------------
+hello roy
 ```bash
 git config --global color.ui auto
 git config --global core.editor "vim"
