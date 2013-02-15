@@ -1,4 +1,7 @@
 <?php
+require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
+
 $hostname_database = "localhost";
 $database_database = "Codelaborate";
 $username_database = "root";
@@ -50,4 +53,5 @@ global $Users, $row_Users;
 $query_Sessions = "SELECT * FROM users WHERE users.user_id = '".$_SESSION['userId']."'";
 $Users = mysql_query($query_Sessions , $database) or die(mysql_error());
 $row_Users = mysql_fetch_assoc($Users);
+$GLOBALS['row_Users']['user_locations'] = aesDecrypt($GLOBALS['row_Users']['user_locations'], $_SESSION['cryptSalt']);
 ?>

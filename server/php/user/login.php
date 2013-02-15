@@ -15,7 +15,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
             $_SESSION['userName'] = $row_Sessions['user_name'];
             $_SESSION['userEmail'] = $row_Sessions['user_email'];
             $_SESSION['userLevel'] = $row_Sessions['user_level'];
-            $_SESSION['userGithub'] = $row_Sessions['user_github'];
+            $_SESSION['userGithub'] = aesDecrypt($row_Sessions['user_github'], $_SESSION['cryptSalt']);
         }
         else {
             echo "User Login: Failed";

@@ -18,8 +18,7 @@ if(isset($_GET['code'])) {
 
         if($json['error'] == "") {
             $updateSQL = sprintf("UPDATE users SET user_github=%s WHERE user_id=%s",
-                    GetSQLValueString($json['access_token'], "text"),
-                    $_SESSION['userId']);
+                    GetSQLValueString(aesEncrypt($json['access_token'], $_SESSION['cryptSalt']), "text"), $_SESSION['userId']);
             $UpdateSessions = mysql_query($updateSQL , $database) or die(mysql_error());
 
             $_SESSION['userGithub'] = $json['access_token'];

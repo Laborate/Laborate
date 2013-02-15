@@ -35,12 +35,12 @@ function curlGet($url, $fields) {
     return $response;
 }
 
-function aesEncrypt($sValue, $sSecretKey) {
+function aesEncrypt($value, $secretKey) {
     return trim(
         base64_encode(
             mcrypt_encrypt(
                 MCRYPT_RIJNDAEL_256,
-                $sSecretKey, $sValue,
+                $secretKey, $value,
                 MCRYPT_MODE_ECB,
                 mcrypt_create_iv(
                     mcrypt_get_iv_size(
@@ -53,12 +53,12 @@ function aesEncrypt($sValue, $sSecretKey) {
         );
 }
 
-function aesDecrypt($sValue, $sSecretKey) {
+function aesDecrypt($value, $secretKey) {
     return trim(
         mcrypt_decrypt(
             MCRYPT_RIJNDAEL_256,
-            $sSecretKey,
-            base64_decode($sValue),
+            $secretKey,
+            base64_decode($value),
             MCRYPT_MODE_ECB,
             mcrypt_create_iv(
                 mcrypt_get_iv_size(

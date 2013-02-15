@@ -24,8 +24,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     				   GetSQLValueString($_POST['user_name'], "text"),
     				   GetSQLValueString($_POST['user_email'], "text"),
     				   GetSQLValueString(crypt($_POST['user_password'], $_SESSION['cryptSalt']), "text"),
-    				   rand(101, 99999999),
-    				   GetSQLValueString("[]", "text"),
+    				   rand(101, 99999999), 'NULL',
     				   GetSQLValueString(explode(" ", $_POST['user_name'])[0], "text"));
 
     $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
