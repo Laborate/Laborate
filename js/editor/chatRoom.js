@@ -71,10 +71,13 @@ window.chatRoom = {
         window.jscrollData.scrollToPercentY("100");
     },
     screenNameChange: function(oldScreenName, newScreenName) {
+        window.screenName = newScreenName;
         $.cookie("screenName", newScreenName);
-        if(oldScreenName != "undefined" && newScreenName != "undefined") {
-            window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "name":newScreenName, "message":oldScreenName + " new screen name: " + newScreenName, "isStatus": true} );
-            $(".out .chatRoomName").text($.cookie("screenName"));
+        if(oldScreenName != "" && oldScreenName != "undefined" && newScreenName != "undefined") {
+            window.nodeSocket.emit( 'chatRoom' ,
+                {"from":window.userId, "name":newScreenName, "message":oldScreenName + " new screen name: " + newScreenName, "isStatus": true}
+            );
+            $(".out .chatRoomName").text(window.screenName);
         }
     },
     _check: function(message, type, name) {
@@ -130,22 +133,22 @@ window.chatRoom = {
         $("#messenger").blur();
         setTimeout(function() { $("#messenger").val('').focus() }, 05);
     },
-    _signIn: function() {
+    signIn: function() {
         window.nodeSocket.emit( 'chatRoom' , {"from":window.userId,
-                                              "name":$.cookie("screenName"),
-                                              "message":$.cookie("screenName") + " has signed in",
+                                              "name":window.screenName,
+                                              "message":window.screenName + " has signed in",
                                                "isStatus": true} );
     },
     _signOut: function() {
         window.nodeSocket.emit( 'chatRoom' , {"from":window.userId,
-                                              "name":$.cookie("screenName"),
-                                              "message":$.cookie("screenName") + " has signed out",
+                                              "name":window.screenName,
+                                              "message":window.screenName + " has signed out",
                                               "isStatus": true,
                                               "isLeave":true} );
     },
     _pushMessage: function(message) {
         window.nodeSocket.emit( 'chatRoom' , {"from":window.userId,
-                                              "name":$.cookie("screenName"),
+                                              "name":window.screenName,
                                               "message": message,
                                               "isStatus": false} );
     }
@@ -174,13 +177,13 @@ $("#messenger").live('keydown', function(e) {
     //Checks if enter key is pressed
     if(e.which == 13) {
     	if($.trim($(this).val()) != "") {
-    		if($.cookie("screenName") == "" || $.cookie("screenName") == null) {
+    		if(window.screenName == "" || window.screenName == null) {
     		   window.chatRoom.status("Please Enter Your Screen Name");
     		   window.chatRoom.status("in the sidebar to the left");
     		   sidebar('settings', 'screenName');
             }
     		else {
-        		window.chatRoom.message(window.userId, $.cookie("screenName"), $.trim($(this).val()), "out");
+        		window.chatRoom.message(window.userId, window.screenName, $.trim($(this).val()), "out");
     		}
     	}
     	window.chatRoom._reset();

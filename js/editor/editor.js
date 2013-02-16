@@ -169,7 +169,7 @@ window.nodeSocket.on('editor', function (data) {
 
 //Broadcast User Info
 setInterval(function() {
-    window.nodeSocket.emit('users' , {"from":window.userId, "name":$.cookie("screenName")} );
+    window.nodeSocket.emit('users' , {"from":window.userId, "name":window.screenName} );
 }, 1000);
 
 

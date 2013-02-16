@@ -14,7 +14,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
 		function initialize_settings() {
     		$("#documentPassword").val(window.passTemplate);
 			$("#documentTitle").val($("#document_title").text());
-			$("#screenName").val($.cookie("screenName"));
+			$("#screenName").val(window.screenName);
 			$("#keyMapping" + $.cookie("keyMapping")).attr("selected", "selected");
 		}
 
@@ -52,11 +52,11 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
 
 		$("#settingsSave").live("click", function() {
 		    if($("#documentTitle").val() != "") {
-        		if($.cookie("screenName") != $("#screenName").val() && $("#screenName").val() != "") {
-        			window.chatRoom.screenNameChange($.cookie("screenName"), $("#screenName").val());
+        		if(window.screenName != $("#screenName").val() && $("#screenName").val() != "") {
+        			window.chatRoom.screenNameChange(window.screenName, $("#screenName").val());
     			}
     			else {
-        			$("#screenName").val($.cookie("screenName"));
+        			$("#screenName").val(window.screenName);
     			}
 
     			$.cookie("keyMapping", $("#keyMapping").val());

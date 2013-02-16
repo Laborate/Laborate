@@ -144,9 +144,9 @@ $(window).ready(function() {
 function finishBackdrop(title) {
     window.nodeSocket.emit('join', getUrlVars()['i']);
     setTimeout(function(){
-    	$.cookie("screenName", $("#backdropScreenName").val());
         window.editorUtil.setTitle(title);
-        window.chatRoom._signIn();
+        window.chatRoom.screenNameChange("", $("#backdropScreenName").val());
+        window.chatRoom.signIn();
         $("#backdrop, #backdrop div").hide();
         $("body div").not("#backdrop, #backdrop div, #contributor_info").show();
         $("#header #logo").hAlign().vAlign();
