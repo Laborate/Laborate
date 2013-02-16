@@ -43,8 +43,7 @@ $("#backdropNewFileForm").live("submit", function() {
                                             },
                 function(result){
                     window.passTemplate = "";
-                    $("title").text("Codelaborate - " + $("#backdropNewFileForm #backdropDocTitle").val());
-                    history.replaceState({}, ("Codelaborate - " + $("#backdropNewFileForm #backdropDocTitle").val()),  "?i=" + result);
+                    history.replaceState({}, null,  "?i=" + result);
                     finishBackdrop($("#backdropNewFileForm #backdropDocTitle").val());
                 }
             );

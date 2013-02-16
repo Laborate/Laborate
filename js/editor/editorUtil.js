@@ -123,7 +123,7 @@ window.editorUtil = {
         $("#documentTitle").val(title);
         $("#document_title").text(title);
         setEditorMode(title.split(".")[title.split(".").length - 1]);
-        $("title").text("Codelaborate - " + title);
+        $("title").text(title + " · code-laborate");
         window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"docName": $("#documentTitle").val()}} );
     },
     fullScreen: function() {

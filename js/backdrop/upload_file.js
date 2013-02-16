@@ -28,7 +28,7 @@ function UpdateSlider (percent) {
 		function finishCheck() {
 			if(new_val == 100) {
 				 $("#upload_section").slideUp("slow");
-				 $("#initialForm").slideDown("slow");
+				 $("#initialForm").slideDown("slow", function() { $("#backdropDocTitle").focus(); });
 				 slider.css({"visibility" : "hidden"});
 			}
 		}
@@ -57,7 +57,7 @@ $("#backdropUploadFile").live('change', function(){
 	$("#backdropDocTitle").css("border", "thin solid #999");
 	$("#backdropDocTitle").val($(this).val().replace(/C:\\fakepath\\/i, ''));
 	UpdateSlider(0);
-	setTimeout(function(){UpdateSlider(25); $('#file_upload').submit();}, 1500)
+	setTimeout(function(){UpdateSlider(25); $('#file_upload').submit();}, 1500);
 });
 
 function upload_file(responseText) {
