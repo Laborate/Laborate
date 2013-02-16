@@ -17,9 +17,9 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
             <div class="header">Commit File</div>
             <div><input id="githubMessage" type="text" placeholder="Commit Message" spellcheck="false" class="input"/></div>
             <div>
-                <div class="left" style="margin-top: 6px">Reference</div>
+                <div class="left" style="margin-top: 6px">Reference Issue</div>
                 <div class="left" style="color:#666; margin:6px 2px 0px 5px">#</div>
-                <input id="githubReference" type="text" placeholder="22" spellcheck="false" style="width:99px" class="input left"/>
+                <input id="githubReference" type="text" placeholder="22" spellcheck="false" style="width:50px" class="input right"/>
                 <div class="clear"></div>
             </div>
         </div>

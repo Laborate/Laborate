@@ -19,11 +19,17 @@ if($_GET['github'] > 1) {
 	<title>My Account · code-laborate</title>
 	<?php placeDependencies(); ?>
 </head>
-
 <body>
     <?php $title = "My Account"; include("includes/header.php"); ?>
     <div id="navigation">
         <div id="navigation_header"><?php echo $_SESSION['userName']; ?></div>
+        <?php if($_SESSION['userLevel'] > 0 && $_SESSION['userLevel'] < 3) { ?>
+        <div id="navigation_password_file">
+            <div id="navigation_password_header" class="left">PRIVATE DOCUMENTS</div>
+            <div id="navigation_password_header_light" class="right">2 of 5,000</div>
+            <div class="clear"></div>
+        </div>
+        <?php } ?>
         <ul>
             <li id="profile">Public Profile</li>
             <li id="account">Account Settings</li>

@@ -34,7 +34,9 @@ getDependencies(["core", "header", "documents", "icons"]);
                     <option value="">Protection</option>
                     <option value="o" <?php if($_GET['p'] == "o") { echo "selected"; } ?>>Protection: Open</option>
                     <option value="p" <?php if($_GET['p'] == "p") { echo "selected"; } ?>>Protection: Password</option>
-                    <option value="e" <?php if($_GET['p'] == "e") { echo "selected"; } ?>>Protection: Employee</option>
+                    <?php if($_SESSION['userLevel'] == 3) { ?>
+                        <option value="e" <?php if($_GET['p'] == "e") { echo "selected"; } ?>>Protection: Employee</option>
+                    <?php } ?>
                 </select>
                 <select name="r" class="select left">
                     <option value="">Relation</option>

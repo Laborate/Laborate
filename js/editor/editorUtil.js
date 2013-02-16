@@ -225,7 +225,7 @@ window.editorUtil = {
         window.editorUtil.passwordCheck(function(callback) {
             if(callback) {
                 $("#githubCommit").removeClass("red_harsh").val("Commiting File...");
-                if($("#githubReference").val() != "") { var related = "\n\nRelated: #" + $("#githubReference").val(); }
+                if($("#githubReference").val() != "") { var related = "\n\Issue: #" + $("#githubReference").val(); }
                 else { var related = ""; }
                 $.post("server/php/locations/github_commit.php", { commit_id: callback,
                                                                    session_document: window.editor.getValue(),

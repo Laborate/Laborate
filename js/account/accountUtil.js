@@ -2,9 +2,6 @@
 //          Account Instances
 /////////////////////////////////////////////////
 window.account = {
-    navigationResize: function() {
-       $("#navigation").css("height", ($(document).height() - 95) + "px");
-    },
     navigationChange: function(settings_id, initialize) {
         $(".settings").hide();
         $("#navigation ul li").removeClass("selected");

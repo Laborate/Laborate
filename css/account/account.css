@@ -21,11 +21,31 @@
     position: relative;
     border-bottom: solid 1px #ccc;
     padding: 10px 10px 13px 10px;
-    margin-bottom: 15px;
     background: -webkit-linear-gradient(#F9F9F9 0%, #efefef 100%);
     color: #52595d;
     word-break: break-all;
     word-wrap: break-word;
+}
+
+#navigation #navigation_password_file {
+    border-bottom: solid 1px #e4e6e8;
+    padding: 10px;
+    background: #f3f3f3;
+    background-image: url("/img/tshadow");
+    background-repeat: repeat-x;
+    background-position: 0px -5px;
+}
+
+#navigation #navigation_password_header {
+    font-size: 11px;
+    color: #666;
+    font-weight: bold;
+}
+
+#navigation #navigation_password_header_light {
+    font-size: 11px;
+    color: #999;
+    font-weight: bold;
 }
 
 #navigation ul {
@@ -34,11 +54,15 @@
 
 #navigation ul li {
     padding-left: 5px;
-    margin-bottom: 15px;
+    margin-top: 15px;
     cursor: pointer;
     font-size: 15px;
     font-weight: bold;
     color: #555;
+}
+
+#navigation ul li:last-child {
+    margin-bottom: 15px;
 }
 
 #navigation ul li:hover {
