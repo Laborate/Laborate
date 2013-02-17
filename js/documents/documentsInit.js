@@ -8,7 +8,6 @@ var initialCheckList = {
 
 $(window).ready(function() {
     window.notification.open("loading...");
-    window.documents.locationsHeight();
     window.documents.locationChange(getUrlVars()['loc'], true);
 
     window.documents.onlineDirectory(function(callback) {

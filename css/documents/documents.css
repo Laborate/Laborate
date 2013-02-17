@@ -1,6 +1,6 @@
 #locations {
     position: fixed;
-    width: 300px;
+    width: 225px;
     top: 70px;
     left: 20px;
     border-radius: 5px;
@@ -8,6 +8,7 @@
     overflow: hidden;
     background: #f8fafb;
     border: solid 1px #dadcde;
+    min-height: 300px;
 }
 
 #locations #locations_header {
@@ -47,6 +48,14 @@
     padding-top: 2px !important;
 }
 
+#locations.remove #add_location, #locations.remove #remove_location {
+    display: none;
+}
+
+#locations.remove #finished_remove_location {
+    display: inline-block;
+}
+
 #locations ul {
     padding: 0px 10px;
 }
@@ -81,22 +90,15 @@
     color: #800000;
 }
 
-#locations.remove #add_location, #locations.remove #remove_location {
-    display: none;
-}
-
-#locations.remove #finished_remove_location {
-    display: inline-block;
-}
-
-#location_template {
+#files {
+    margin-left: 280px;
+    margin-top: 17px;
+    min-width: 530px;
     position: relative;
 }
 
-#files {
-    margin-left: 350px;
-    margin-top: 17px;
-    min-width: 530px;
+
+#files #location_template {
     position: relative;
 }
 

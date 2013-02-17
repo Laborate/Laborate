@@ -3,11 +3,6 @@ $("#popup_header_exit, #popup_backdrop").live("click", function() {
     window.documents.popUpClose();
 });
 
-//Set Location Height On Resize
-$(window).resize(function() {
-    window.documents.locationsHeight();
-});
-
 //Change File Library Based Off Of Location
 $("#locations:not(.remove) ul li").live("click", function() {
     window.documents.locationChange($(this).attr("id"));

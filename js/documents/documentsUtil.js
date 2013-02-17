@@ -99,9 +99,6 @@ window.documents = {
         else { var title = name; }
         return title;
     },
-    locationsHeight: function() {
-        $("#locations").css("height", ($(document).height() - 95) + "px");
-    },
     locationChange: function(location_id, dont_pull_content) {
         $("#files .location").hide();
         $("#locations ul li").removeClass("selected");

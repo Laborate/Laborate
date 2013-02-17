@@ -41,6 +41,14 @@ if($_GET['github'] > 1) {
     </div>
     <div id="setting_pane">
         <div class="notification"></div>
+
+        <div id="settings_profile" class="settings">
+            <div class="settings_header">Public Profile</div>
+            <div class="settings_content">
+                asdfasdfasdf
+            </div>
+        </div>
+
         <div id="settings_github" class="settings">
             <div class="settings_header">
                 <div class="left">Github Repositories</div>
@@ -59,6 +67,7 @@ if($_GET['github'] > 1) {
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 </html>
