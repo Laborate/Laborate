@@ -3,7 +3,7 @@
             <a href="http://codelaborate:8888"><div id="backDropLogo">code-laborate</div></a>
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="userNavigation">
-                    <div><a href="server/php/user/logout">Log Out</a></div>
+                    <div><a href="server/php/user/logout">Sign Out</a></div>
                     <div>|</div>
                     <div><a href="documents">Documents</a></div>
                     <div>|</div>

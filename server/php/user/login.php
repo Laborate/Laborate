@@ -15,9 +15,13 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
             $_SESSION['userName'] = $row_Sessions['user_name'];
             $_SESSION['userEmail'] = $row_Sessions['user_email'];
             $_SESSION['userLevel'] = $row_Sessions['user_level'];
-            $_SESSION['userGithub'] = aesDecrypt($row_Sessions['user_github'], $_SESSION['cryptSalt']);
+            if(!is_null($row_Sessions['user_github'])) {
+                $_SESSION['userGithub'] = aesDecrypt($row_Sessions['user_github'], $_SESSION['cryptSalt']);
+            } else {
+                $_SESSION['userGithub'] = $row_Sessions['user_github'];
+            }
 
-            $hash = md5($row_Sessions['user_id'] + $row_Sessions['user_email']);
+            $hash = md5($row_Login['user_id'] + $row_Login['user_email'] + rand(0, 1000000000000000000000000));
             setcookie('userLogin', $hash, time()+1209600, "/");
 
             $insertSQL = sprintf("INSERT INTO login ( login_hash, login_user_id ) VALUES (%s, %s)",

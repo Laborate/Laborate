@@ -13,7 +13,7 @@
 
 #locations #locations_header {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
     position: relative;
     border-bottom: solid 1px #ccc;
     padding: 10px 10px 13px 10px;
@@ -22,31 +22,46 @@
     background: -moz-linear-gradient(#F9F9F9 0%, #efefef 100%);
     background: -ms-linear-gradient(#F9F9F9 0%, #efefef 100%);
     background: -o-linear-gradient(#F9F9F9 0%, #efefef 100%);
-    color: #52595d;
+    color: #000;
 }
 
 #locations #locations_header .location_button {
     cursor: pointer;
-    font-size: 18px;
-    padding: 0px 5px 3px 5px !important;
-    line-height: 15px;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    position: absolute;
-    top: 10px;
+    float: right;
+    padding: 4px 10px 9px 10px;
+    position: relative;
+    line-height: 5px;
+    margin-bottom: -4px;
+    background: -webkit-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    background: -moz-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    background: -ms-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    background: -o-linear-gradient(#F9F9F9 0%, #efefef 100%);
+    border: solid 1px #d9d9d9;
 }
 
-#locations #locations_header #add_location {
-    right: 40px;
+#locations #locations_header .location_button:hover {
+    border: solid 1px #b5b5b5;
 }
 
-#locations #locations_header #remove_location, #locations #locations_header #finished_remove_location {
-    right: 10px;
+#locations #locations_header .location_button:active {
+    -webkit-box-shadow:  inset 0px 1px 3px #dfdfdf !important;
+    -moz-box-shadow: inset 0px 1px 3px #dfdfdf !important;
+    -ms-box-shadow: inset 0px 1px 3px #dfdfdf !important;
+    -o-box-shadow: inset 0px 1px 3px #dfdfdf !important;
+    box-shadow: inset 0px 1px 3px #dfdfdf !important;
 }
 
-#locations.remove #finished_remove_location {
-    padding-top: 2px !important;
+#locations #add_location {
+    border-right: none !important;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
 }
+
+#locations #remove_location {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
 
 #locations.remove #add_location, #locations.remove #remove_location {
     display: none;
@@ -54,6 +69,10 @@
 
 #locations.remove #finished_remove_location {
     display: inline-block;
+    font-size: 11px;
+    line-height: 8px;
+    padding-bottom: 6px;
+    border-radius: 2px;
 }
 
 #locations ul {
