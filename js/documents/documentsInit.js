@@ -10,9 +10,14 @@ $(window).ready(function() {
     window.notification.open("loading...");
     window.documents.locationChange(getUrlVars()['loc'], true);
 
-    window.documents.onlineDirectory(function(callback) {
-        initialCheckList['online_directory'] = callback;
-    });
+
+    if(getUrlVars()['type'] == undefined) {
+        window.documents.onlineDirectory(function(callback) {
+            initialCheckList['online_directory'] = callback;
+        });
+    } else {
+        initialCheckList['online_directory'] = true;
+    }
 
     window.documents.locationListing(function(callback) {
         initialCheckList['location_listings'] = callback;

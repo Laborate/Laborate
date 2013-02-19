@@ -106,10 +106,11 @@ window.documents = {
         var type = $("#" + location_id).attr("data");
 
         if(location_id == "online" || location_id == undefined) {
+            $("#files #location_online #file_library").html("");
             $("#files #location_online").show();
-            history.pushState(null, null, "/documents");
             location_id = "online";
             if(!dont_pull_content) {
+                window.documents.onlineDirectory();
                 window.notification.close();
             }
         } else {
@@ -283,6 +284,7 @@ window.documents = {
         }
     },
     onlineDirectory: function(callback) {
+        window.notification.open("loading...");
         $.post("server/php/locations/online_directory.php",
             function(json) {
                 var files = "";
@@ -296,12 +298,15 @@ window.documents = {
                     file += '</div></div>';
                     files += file;
                 });
+
                 $("#files #location_online #file_library").append(files);
 
                 if(callback == undefined) {
                     callback = function(){}
                 }
 
+                window.notification.close();
+                history.pushState(null, null, "/documents");
                 callback(true);
             }
         );
