@@ -16,6 +16,13 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
             $_SESSION['userEmail'] = $row_Sessions['user_email'];
             $_SESSION['userLevel'] = $row_Sessions['user_level'];
             $_SESSION['userGithub'] = aesDecrypt($row_Sessions['user_github'], $_SESSION['cryptSalt']);
+
+            $hash = md5($row_Sessions['user_id'] + $row_Sessions['user_email']);
+            setcookie('userLogin', $hash, time()+1209600, "/");
+
+            $insertSQL = sprintf("INSERT INTO login ( login_hash, login_user_id ) VALUES (%s, %s)",
+            GetSQLValueString($hash, "text"), $row_Sessions['user_id']);
+            $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
         }
         else {
             echo "User Login: Failed";
