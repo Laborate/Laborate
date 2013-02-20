@@ -64,16 +64,18 @@ io.sockets.on( 'connection', function (socket) {
             if (err) { console.log('error', err); }
             else if (session_id) {
                 socket.broadcast.to(session_id).emit( 'editor' , data );
-                socket.get('session_document', function(err, document) {
-                    try {
-                        document[parseInt(data['line'])] = data['code'];
-                        connection.query("UPDATE sessions SET session_document=? WHERE session_id = ?", [JSON.stringify(document), session_id + ""]);
-                        socket.set('session_document', document);
-                    } catch (TypeError) {
-                        socket.to(session_id).emit( 'editor' , {"extras": {"passChange": "true"}} );
-                        console.log("Document: " + session_id + " failed to save to database")
-                    }
-                });
+                if(data['line'] != undefined) {
+                    socket.get('session_document', function(err, document) {
+                        try {
+                            document[parseInt(data['line'])] = data['code'];
+                            connection.query("UPDATE sessions SET session_document=? WHERE session_id = ?", [JSON.stringify(document), session_id + ""]);
+                            socket.set('session_document', document);
+                        } catch (TypeError) {
+                            socket.to(session_id).emit( 'editor' , {"extras": {"passChange": "true"}} );
+                            console.log("Document: " + session_id + " failed to save to database")
+                        }
+                    });
+                }
             }
         });
     });

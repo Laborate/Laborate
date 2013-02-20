@@ -142,7 +142,7 @@ window.nodeSocket.on('editor', function (data) {
         }
         else {
             if(data["extras"]["docName"] != null && data["extras"]["docName"] != "") {
-                setTitle(data["extras"]["docName"]);
+                window.editorUtil.setTitle(data["extras"]["docName"]);
             }
 
             if(data["extras"]["initialCode"] != null && data["extras"]["initialCode"] != "") {
