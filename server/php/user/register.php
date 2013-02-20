@@ -30,6 +30,13 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
     $_SESSION['userId'] = $id;
     $_SESSION['userName'] = $_POST['user_name'];
+
+    $hash = md5($id + $_POST['user_email'] + rand(0, 1000000000000000000000000));
+    setcookie('userLogin', $hash, time()+1209600, "/");
+
+    $insertSQL = sprintf("INSERT INTO login ( login_hash, login_user_id ) VALUES (%s, %s)",
+    GetSQLValueString($hash, "text"), $id);
+    $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
     echo 1;
 }
 ?>
