@@ -16,9 +16,9 @@ getDependencies(["core", "header", "documents", "icons"]);
     <div id="locations">
         <div id="locations_header">
             <div class="left">Locations</div>
-            <div id="remove_location" class="location_button right">-</div>
-            <div id="add_location" class="location_button right">+</div>
-            <div id="finished_remove_location" class="location_button hidden right">finished</div>
+            <button id="remove_location" class="location_button right">-</button>
+            <button id="add_location" class="location_button right">+</button>
+            <button id="finished_remove_location" class="location_button hidden right">finished</button>
             <div class="clear"></div>
         </div>
         <ul>
