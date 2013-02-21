@@ -43,7 +43,7 @@
     border: solid 1px #b5b5b5;
 }
 
-#locations #locations_header .location_button:active {
+#locations #locations_header .location_button:hover:active {
     -webkit-box-shadow:  inset 0px 1px 3px #dfdfdf !important;
     -moz-box-shadow: inset 0px 1px 3px #dfdfdf !important;
     -ms-box-shadow: inset 0px 1px 3px #dfdfdf !important;
