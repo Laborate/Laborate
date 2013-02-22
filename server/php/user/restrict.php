@@ -1,6 +1,7 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/cookie_check.php');
 
 if(!function_exists('redirect')) {
     function redirect($logout) {
@@ -12,13 +13,13 @@ if(!function_exists('redirect')) {
                 include($_SERVER['DOCUMENT_ROOT'].'/errors/notfound.php');
                 exit();
             } else {
-                require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/cookie_check.php');
-
-                if($logout) {
-                    header("Location: /server/php/user/logout?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
-                }
-                else {
-                    header("Location: /login?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+                if(cookieCheck() != true) {
+                    if($logout) {
+                        header("Location: /server/php/user/logout?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+                    }
+                    else {
+                        header("Location: /login?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+                    }
                 }
             }
         }

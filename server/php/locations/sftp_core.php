@@ -20,11 +20,16 @@ function getSftpClient($credentials) {
             exit('Bad Credentials');
         }
     } else {
-        if (!$sftp->login($credentials['sftp_user_name'], $credentials['sftp_user_password'])) {
-            exit('Bad Credentials');
+        if(isset($credentials['sftp_user_password'])) {
+            if (!$sftp->login($credentials['sftp_user_name'], $credentials['sftp_user_password'])) {
+                exit('Bad Credentials');
+            }
+        } else {
+           if (!$sftp->login()) {
+                exit('Bad Credentials');
+            }
         }
     }
-
     return $sftp;
 }
 
