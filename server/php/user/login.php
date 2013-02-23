@@ -22,7 +22,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
             }
 
             $uuid = gen_uuid();
-            setcookie('userLogin', $uuid, time()+1209600, "/");
+            setcookie('USRRC', $uuid, time()+1209600, "/");
 
             $insertSQL = sprintf("INSERT INTO login ( login_uuid, login_user_id ) VALUES (%s, %s)",
             GetSQLValueString($uuid, "text"), $row_Sessions['user_id']);

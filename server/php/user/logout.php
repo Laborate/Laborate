@@ -1,6 +1,6 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-setcookie('userLogin', null, time()-2419200, "/");
+setcookie('USRRC', null, time()-2419200, "/");
 $_SESSION = array();
 session_destroy();
 if(isset($_GET["continue"])) {
