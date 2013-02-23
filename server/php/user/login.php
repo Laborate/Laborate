@@ -21,11 +21,11 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
                 $_SESSION['userGithub'] = $row_Sessions['user_github'];
             }
 
-            $hash = md5($row_Login['user_id'] + $row_Login['user_email'] + rand(0, 1000000000000000000000000));
-            setcookie('userLogin', $hash, time()+1209600, "/");
+            $uuid = gen_uuid();
+            setcookie('userLogin', $uuid, time()+1209600, "/");
 
-            $insertSQL = sprintf("INSERT INTO login ( login_hash, login_user_id ) VALUES (%s, %s)",
-            GetSQLValueString($hash, "text"), $row_Sessions['user_id']);
+            $insertSQL = sprintf("INSERT INTO login ( login_uuid, login_user_id ) VALUES (%s, %s)",
+            GetSQLValueString($uuid, "text"), $row_Sessions['user_id']);
             $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
         }
         else {

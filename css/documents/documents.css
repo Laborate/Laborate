@@ -138,17 +138,14 @@
     width: 350px;
 }
 
-.file_search select {
+.file_search select,
+.file_search .search_submit {
     margin-left: 10px;
 }
 
 .file_search .button {
     padding: 4px 10px !important;
-    margin-top: 1px;
-}
-
-.file_search .search_submit {
-    margin-left: 10px;
+    margin-top: 2px;
 }
 
 .file_search #clearSearch { display: none; }

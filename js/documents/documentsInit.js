@@ -8,13 +8,15 @@ var initialCheckList = {
 
 $(window).ready(function() {
     window.notification.open("loading...");
-    window.documents.locationChange(getUrlVars()['loc'], false);
+    window.documents.locationChange(getUrlVars()['loc'], true);
 
 
     if(getUrlVars()['type'] == undefined) {
-        window.documents.onlineDirectory(true, function(callback) {
-            initialCheckList['online_directory'] = callback;
-        });
+        window.documents.onlineDirectory(false,
+            function(callback) {
+                initialCheckList['online_directory'] = callback;
+            }
+        );
     } else {
         initialCheckList['online_directory'] = true;
     }

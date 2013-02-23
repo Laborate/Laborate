@@ -1,12 +1,21 @@
 //History Change
 window.onpopstate = function() {
-    window.documents.locationChange(getUrlVars()['loc'], true);
-    if(getUrlVars()['type'] == undefined) {
-        window.documents.onlineDirectory(true);
-    } else if(getUrlVars()['type'] == "github") {
-        window.documents.githubDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
-    } if(getUrlVars()['type'] == "sftp") {
-        window.documents.sftpDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
+   var passed = true;
+    $.each(initialCheckList, function( key, value ) {
+        if(value != true) {
+            passed = false;
+        }
+    });
+
+    if(passed) {
+        window.documents.locationChange(getUrlVars()['loc'], true);
+        if(getUrlVars()['type'] == undefined) {
+            window.documents.onlineDirectory(true);
+        } else if(getUrlVars()['type'] == "github") {
+            window.documents.githubDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
+        } if(getUrlVars()['type'] == "sftp") {
+            window.documents.sftpDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
+        }
     }
 };
 
