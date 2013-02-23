@@ -34,7 +34,9 @@ window.account = {
                     else { var icon = "icon-unlocked"; }
                     repos += '<li class="tr">';
                     repos += '<span class="icon ' + icon + '"></span>';
+                    repos += '<a href="https://github.com/' + item['user'] + '/' + item['repo'] + '">';
                     repos += item['user'] + '/<span class="bold">' + item['repo'] + '</span>';
+                    repos += '</a>';
                     repos += '</li>';
                 });
 
