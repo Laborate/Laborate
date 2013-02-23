@@ -1,3 +1,15 @@
+//History Change
+window.onpopstate = function() {
+    window.documents.locationChange(getUrlVars()['loc'], true);
+    if(getUrlVars()['type'] == undefined) {
+        window.documents.onlineDirectory(true);
+    } else if(getUrlVars()['type'] == "github") {
+        window.documents.githubDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
+    } if(getUrlVars()['type'] == "sftp") {
+        window.documents.sftpDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
+    }
+};
+
 $("#locations #add_location").live("hover", function() {
     $("#locations #remove_location").css("border-left", "solid 1px #b5b5b5");
 });

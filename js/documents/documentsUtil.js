@@ -106,6 +106,7 @@ window.documents = {
         var type = $("#" + location_id).attr("data");
 
         if(location_id == "online" || location_id == undefined) {
+            $("#online").addClass("selected");
             $("#files #location_online #file_library").html("");
             $("#files #location_online").show();
             location_id = "online";
@@ -283,7 +284,7 @@ window.documents = {
             window.location.href = link;
         }
     },
-    onlineDirectory: function(callback) {
+    onlineDirectory: function(no_history, callback) {
         window.notification.open("loading...");
         $.post("server/php/locations/online_directory.php",
             function(json) {
@@ -306,7 +307,9 @@ window.documents = {
                 }
 
                 window.notification.close();
-                history.pushState(null, null, "/documents");
+                if(!no_history) {
+                    history.pushState(null, null, "/documents");
+                }
                 callback(true);
             }
         );
@@ -338,7 +341,7 @@ window.documents = {
             }
         );
     },
-    githubDirectory: function(location_id, path, callback) {
+    githubDirectory: function(location_id, path, no_history, callback) {
         window.notification.open("loading...");
         var response = window.documents.cachedLocations(location_id);
         var files = "";
@@ -394,7 +397,9 @@ window.documents = {
             $("#files #location_template #file_library").html(files);
             window.notification.close();
 
-            history.pushState(null, null, "?type=github&loc=" + location_id + dir);
+            if(no_history != true) {
+                history.pushState(null, null, "?type=github&loc=" + location_id + dir);
+            }
 
             if(callback == undefined) {
                 callback = function(){}
@@ -430,7 +435,7 @@ window.documents = {
             }
         );
     },
-    sftpDirectory: function(location_id, path, callback) {
+    sftpDirectory: function(location_id, path, no_history, callback) {
         window.notification.open("loading...");
         var response = window.documents.cachedLocations(location_id);
         var files = "";
@@ -487,7 +492,10 @@ window.documents = {
             });
             $("#files #location_template #file_library").html(files);
             window.notification.close();
-            history.pushState(null, null, "?type=sftp&loc=" + location_id + dir);
+
+            if(!no_history) {
+                history.pushState(null, null, "?type=sftp&loc=" + location_id + dir);
+            }
 
             if(callback == undefined) {
                 callback = function(){}
