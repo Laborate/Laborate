@@ -2,7 +2,7 @@
 //          Document Instances
 /////////////////////////////////////////////////
 window.documents = {
-    popUp: function(preset) {
+    popUp: function(preset, data) {
         //Inital Clean Up
         $("#popup .presets").hide();
         $("#popup .selection").hide().eq(0).show();
@@ -24,6 +24,13 @@ window.documents = {
             $("#popup #location_remove input[type=button]").live("click", function() {
                 window.documents.popUpClose();
             });
+        }
+
+        if(preset == "share_url") {
+            $("#popup #share_url input[type=text]").val(data);
+            $("#popup #share_url").show();
+            $("#popup #popup_header #popup_header_name").text("Document Url");
+            $("#popup").css({"width": "250"});
         }
 
         //Auto Center And Show
@@ -86,7 +93,7 @@ window.documents = {
             }
 
             if(id == "share") {
-                prompt("Share Url", location.protocol + '//' + location.host+ "/editor?i=" + reference);
+                window.documents.popUp("share_url", location.protocol + '//' + location.host+ "/editor?i=" + reference);
             }
 
         }, 100);

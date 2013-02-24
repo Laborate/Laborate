@@ -58,5 +58,8 @@
     <div class="presets" id="location_remove">
         <input type="button" class="button blue full" value="Yes, I am sure" />
     </div>
+    <div class="presets" id="share_url">
+        <input type="text" class="input full"/>
+    </div>
 </div>
 <div id="popup_backdrop" class="hidden"></div>
