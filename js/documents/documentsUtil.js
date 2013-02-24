@@ -95,7 +95,7 @@ window.documents = {
        $("#menu").hide();
     },
     nameToTitle: function(name) {
-        if(name.length > 12) { var title = name.substring(0, 10) + "..."; }
+        if(name.length > 11) { var title = name.substring(0, 10) + "..."; }
         else { var title = name; }
         return title;
     },
