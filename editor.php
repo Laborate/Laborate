@@ -10,7 +10,11 @@ getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><?php if(isset($_GET['i'])) { echo $initalize[1]." · "; } ?>code-laborate</title>
+    <?php if(isset($_GET['i'])) { ?>
+        <title><?php echo $initalize[1].$_SESSION['webSiteTitle']; ?></title>
+    <?php } else { ?>
+        <title>Editor<?php echo $_SESSION['webSiteTitle']; ?></title>
+    <?php } ?>
     <script src="http://test:8000/socket.io/socket.io.js"></script>
   	<script type="text/javascript">
   	    try {

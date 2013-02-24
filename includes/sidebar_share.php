@@ -15,10 +15,6 @@
             });
         };
 
-        setInterval(function(){
-          $("#shareUrl").val(window.location.href);
-        }, 10000)
-
         $("#emailSend").live("click", function() {
             if($("#emailAddresses").val() != "") {
                 $.post("server/php/email/invite.php", {   session_id: getUrlVars()['i'],
@@ -58,11 +54,6 @@
        <div><textarea id="emailMessage" spellcheck="false" class="input textarea" placeholder="Welcome to the team!"></textarea></div>
     </div>
     <input type="button" value="Send Email" id="emailSend" class="button green full"/>
-    <hr/>
-    <div>
-        <div class="header">Invite Url</div>
-        <input type="text" id="shareUrl" class="input" placeholder="Invite Url" spellcheck="false"/>
-    </div>
     <hr/>
     <input type="button" value="Copy Invite Url" id="shareCopy" class="button blue full"/>
 </div>

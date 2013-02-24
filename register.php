@@ -9,7 +9,7 @@ getDependencies(["backdrop", "core"]);
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Register · code-laborate</title>
+    <title>Register<?php echo $_SESSION['webSiteTitle']; ?></title>
     <?php placeDependencies(); ?>
 </head>
 <body>

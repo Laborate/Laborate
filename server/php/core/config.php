@@ -34,6 +34,10 @@ else {
     $_SESSION['no_cache'] = false;
 }
 
+
+//Website Title
+$_SESSION['webSiteTitle'] = " · Code-Laborate";
+
 //Crypt Salt
 $_SESSION['cryptSalt'] = '$2a$07$aydsaqvpodfwrtdmdnbohnytk$';
 
