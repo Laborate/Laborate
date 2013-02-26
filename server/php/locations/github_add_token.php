@@ -14,7 +14,7 @@ if(isset($_GET['code'])) {
                     'state' => urlencode($_SESSION['github_state'])
                 );
 
-        $json  = jsonToarray(curlPost($url, $fields));
+        $json  = jsonToArray(curlPost($url, $fields));
 
         if($json['error'] == "") {
             $updateSQL = sprintf("UPDATE users SET user_github=%s WHERE user_id=%s",

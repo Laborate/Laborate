@@ -20,8 +20,17 @@ if(isset($_POST['session_name']) && isset($_POST['session_document'])) {
 
     $id = createId();
     if(!isset($_POST['session_type'])) { $type = null; } else { $type = $_POST['session_type']; }
-    if(!isset($_POST['session_external_path'])) { $path = null; } else { $path = $_POST['session_external_path']; }
     if(!isset($_POST['session_location_id'])) { $location_id = null; } else { $location_id = $_POST['session_location_id']; }
+    if(!isset($_POST['session_external_path'])) {
+        $path = null;
+    } else {
+        if($_POST['session_type'] == "sftp" && $_POST['session_external_path'] == "") {
+            $location = jsonToArray($GLOBALS['row_Users']['user_locations'])[$_POST['session_location_id']];
+            $path = $location["sftp_server_default"].$_POST['session_name'];
+        } else {
+            $path = $_POST['session_external_path'];
+        }
+    }
 
     $insertSQL = sprintf("INSERT INTO sessions (session_id, session_name, session_document,
                           session_owner, session_editors, session_breakpoints, session_type,

@@ -17,7 +17,7 @@ if(isset($_POST['commit_id']) && isset($_POST['session_document'])) {
     $Result1 = mysql_query($deleteSQL, $database) or die(mysql_error());
 
     if($row_Sessions['download_id'] == $_POST['commit_id']) {
-        $locations = jsonToarray($GLOBALS['row_Users']['user_locations']);
+        $locations = jsonToArray($GLOBALS['row_Users']['user_locations']);
         echo pushFile($locations[$row_Sessions['session_location_id']], $row_Sessions['session_external_path'], $_POST['session_document']);
     }
 }

@@ -291,6 +291,16 @@ window.documents = {
             window.location.href = link;
         }
     },
+    newFile: function(name, data, type, path, location_id, callback) {
+        $.post("server/php/session/new.php",
+            {   session_name: name, session_document: data,
+                session_type: type, session_external_path:  path,
+                session_location_id: location_id },
+            function(id) {
+                callback(id);
+            }
+        );
+    },
     onlineDirectory: function(no_history, callback) {
         window.notification.open("loading...");
         $.post("server/php/locations/online_directory.php",
@@ -431,13 +441,13 @@ window.documents = {
                     return false;
                 }
 
-                $.post("server/php/session/new.php",
-                    { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(contents.split('\n')),
-                      session_type: "github", session_external_path:  path, session_location_id: location_id },
-                    function(id) {
-                        window.documents.gotToTab("editor?i=" + id);
-                        window.notification.close();
-                    }
+                window.documents.newFile(file.parent().find(".title").attr("data"),
+                                         JSON.stringify(contents.split('\n')),
+                                         "github", path, location_id,
+                     function(id) {
+                         window.documents.gotToTab("editor?i=" + id);
+                         window.notification.close();
+                     }
                 );
             }
         );
@@ -532,13 +542,13 @@ window.documents = {
                     return false;
                 }
 
-                $.post("server/php/session/new.php",
-                    { session_name: file.parent().find(".title").attr("data"), session_document: JSON.stringify(json.split('\n')),
-                      session_type: "sftp", session_external_path:  path, session_location_id: location_id },
-                    function(id) {
-                        window.documents.gotToTab("editor?i=" + id);
-                        window.notification.close();
-                    }
+                window.documents.newFile(file.parent().find(".title").attr("data"),
+                                         JSON.stringify(json.split('\n')),
+                                         "sftp", path, location_id,
+                     function(id) {
+                         window.documents.gotToTab("editor?i=" + id);
+                         window.notification.close();
+                     }
                 );
             }
         );

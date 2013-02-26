@@ -67,7 +67,11 @@ io.sockets.on( 'connection', function (socket) {
                 if(data['line'] != undefined) {
                     socket.get('session_document', function(err, document) {
                         try {
-                            document[parseInt(data['line'])] = data['code'];
+                            if(data['code'] != "") {
+                                document[parseInt(data['line'])] = data['code'];
+                            } else {
+                                document[parseInt(data['line'])] = "";
+                            }
                             connection.query("UPDATE sessions SET session_document=? WHERE session_id = ?", [JSON.stringify(document), session_id + ""]);
                             socket.set('session_document', document);
                         } catch (TypeError) {

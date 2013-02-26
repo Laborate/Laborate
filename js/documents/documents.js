@@ -19,6 +19,23 @@ window.onpopstate = function() {
     }
 };
 
+$(".newFile").live("click", function() {
+    window.notification.open("creating file in current directory...");
+    if(getUrlVars()['dir'] != undefined) {
+        var path = getUrlVars()['dir'] + "Untitled Document".replace("//", "/");
+    } else {
+        var path = "";
+    }
+
+    window.documents.newFile("Untitled Document", JSON.stringify([""]), $("#" + window.sidebar).attr("data"),
+                             path, window.sidebar,
+         function(id) {
+             window.documents.gotToTab("editor?i=" + id);
+             window.notification.close();
+         }
+    );
+});
+
 $("#locations #add_location").live("hover", function() {
     $("#locations #remove_location").css("border-left", "solid 1px #b5b5b5");
 });

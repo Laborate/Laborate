@@ -6,7 +6,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
 
-$locations = jsonToarray($GLOBALS['row_Users']['user_locations']);
+$locations = jsonToArray($GLOBALS['row_Users']['user_locations']);
 $locations_array = array();
 
 foreach ($locations as $key => $value) {

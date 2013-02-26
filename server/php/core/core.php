@@ -7,8 +7,8 @@ if(!function_exists('objectToArray')) {
     }
 }
 
-if(!function_exists('jsonToarray')) {
-    function jsonToarray($json) {
+if(!function_exists('jsonToArray')) {
+    function jsonToArray($json) {
         return objectToArray(json_decode($json));
     }
 }

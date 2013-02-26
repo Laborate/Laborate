@@ -15,8 +15,7 @@ if(isset($_POST['session_id'])) {
     	mysql_select_db($database_database, $database);
     	$delete_results = mysql_query($Delete, $database) or die(mysql_error());
     	echo "1";
-    }
-    else {
+    } else {
         if(in_array($_SESSION['userId'], json_decode($row_Sessions['session_editors']))) {
             $editors = json_decode($row_Sessions['session_editors']);
             if($editors == null || $editors[0] == "") { $editors = array(); }
@@ -29,8 +28,7 @@ if(isset($_POST['session_id'])) {
     				   $row_Sessions['session_id']);
             $UpdateSessions = mysql_query($updateSQL , $database) or die(mysql_error());
             echo "1";
-        }
-        else {
+        } else {
             echo $GLOBALS['ajax_message'];
         }
     }
