@@ -20,7 +20,7 @@ if(isset($_GET['i'])) {
             }
         }
         else {
-            echo "<script type='text/javascript'>window.location.href = '/editor'</script>";
+            header("Location: /editor");
         }
     }
 }

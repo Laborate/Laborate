@@ -431,6 +431,11 @@ window.documents = {
 
         $.post("server/php/locations/github_file.php", { location_id: location_id, file: path },
             function(contents) {
+                if(contents == "Bad Token") {
+                    window.notification.open("File Does Not Exist");
+                    return false;
+                }
+
                 if(contents == "Bad Location") {
                     window.notification.open("Location Does Not Exist");
                     return false;
