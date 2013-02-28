@@ -13,28 +13,28 @@
                 <!-- Start: Backdrop New File -->
                 <div id="backdropNewFile">
                     <form id="backdropNewFileForm" class="backdropContainer">
-                    <div id="initialForm">
-                        <div class="backdropInitalWelcome seperatorRequired">Upload or Create<br/>A New Code Document</div>
-                        <div id="backdropDataInput">
-                            <input type="text" id="backdropScreenName" placeholder="Screen Name" style="margin-bottom: 10px;"/>
-                            <div style="position: relative">
-                                <input type="text" autofocus="on" class="left" id="backdropDocTitle" placeholder="File Name"/>
-                                <div id="backdropUpload" class="left">Upload</div>
+                        <div id="initialForm">
+                            <div class="backdropInitalWelcome seperatorRequired">Upload or Create<br/>A New Code Document</div>
+                            <div id="backdropDataInput">
+                                <input type="text" id="backdropScreenName" placeholder="Screen Name" style="margin-bottom: 10px;"/>
+                                <div style="position: relative">
+                                    <input type="text" autofocus="on" class="left" id="backdropDocTitle" placeholder="File Name"/>
+                                    <div id="backdropUpload" class="left">Upload</div>
+                                </div>
+                                <div class="clear"></div>
+                                <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding" />
                             </div>
-                            <div class="clear"></div>
-                            <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding" />
                         </div>
-                    </div>
-                    <div id="upload_section">
-                        <div class="backdropInitalWelcome seperatorRequired"></div>
-                        <div id="upload_slider_box">
-                            <div id="upload_slider" class="blue" style="border:none !important;"></div>
-                            <div id="upload_text"></div>
-                            <div class="clear"></div>
+                        <div id="upload_section">
+                            <div class="backdropInitalWelcome seperatorRequired"></div>
+                            <div id="upload_slider_box">
+                                <div id="upload_slider" class="blue" style="border:none !important;"></div>
+                                <div id="upload_text"></div>
+                                <div class="clear"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div style="text-align: center;" id="backdropLoaderImg"><img src="img/loader.gif" width="220" height="19"/></div>
-                    <div class="clear"></div>
+                        <div style="text-align: center;" id="backdropLoaderImg"><img src="img/loader.gif" width="220" height="19"/></div>
+                        <div class="clear"></div>
                     </form>
                     <form action="server/php/template/upload.php" method="post" enctype="multipart/form-data" id="file_upload">
                         <input type="file" id="backdropUploadFile" name="backdropUploadFile" style="display:none"/>

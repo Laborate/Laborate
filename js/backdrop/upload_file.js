@@ -22,7 +22,9 @@ function UpdateSlider (percent) {
 				slider.animate({width : new_val + "%"}).text(new_val + "%")
 			}
 
-			setTimeout(function(){finishCheck();}, 1000)
+            setTimeout(function(){
+                finishCheck();
+            }, 1000);
 		}
 
 		function finishCheck() {

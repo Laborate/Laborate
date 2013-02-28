@@ -1,2 +1,4 @@
 server/node/logs/
 .DS_Store
+node_modules
+server/php/vendor
