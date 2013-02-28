@@ -4,7 +4,7 @@ Fresh Install On New Server
 ```bash
 cd ~/.ssh
 ssh-keygen -t rsa -C "your_email@example.com"
-pbcopy < ~/.ssh/id_rsa.pub
+cat ~/.ssh/id_rsa.pub
 ```
 
 **Paste Oneliner in ```www``` Folder**
