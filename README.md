@@ -9,7 +9,7 @@ cat ~/.ssh/id_rsa.pub
 
 **Paste Oneliner in ```www``` Folder**
 ```bash
-sudo apt-get install git; git clone git@github.com:bvallelunga/Codelaborate.git tmp; mv tmp/* tmp/.git* .; rm -R tmp/; sudo bash init.sh;
+sudo apt-get -y install git; git clone git@github.com:bvallelunga/Codelaborate.git tmp; mv tmp/* tmp/.git* .; rm -R tmp/; sudo bash init.sh;
 ```
 
 Control Locally
