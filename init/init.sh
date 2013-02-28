@@ -97,7 +97,8 @@ git update-index --assume-unchanged composer.json
 rm composer.json
 cd $BASE
 git checkout .htaccess
-git update-index --assume-unchanged init/*
+git update-index --assume-unchanged init/init.sh
+git update-index --assume-unchanged init/vsftpd.conf
 rm -r init/
 echo -e '\033[32mInstaller Finished \033[m'
 exit
