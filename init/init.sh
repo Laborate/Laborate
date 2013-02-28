@@ -81,9 +81,9 @@ echo -e '\033[32mConfigured User Preferences \033[m'
 echo -e '\033[32mUpdating Database \033[m'
 cd $BASE
 mysql -p -e "CREATE DATABASE Codelaborate"
-cp $BASE/sql_backups/update_structure.sql.bz2 ./sql_backups/update_structure2.sql.bz2
+cp $BASE/sql_backups/update_structure.sql.bz2 $BASE/sql_backups/update_structure2.sql.bz2
 bunzip2 $BASE/sql_backups/update_structure.sql.bz2
-mysql -p Codelaborate < $BASE/sql_backups/update_structure.sql.bz2
+mysql -p Codelaborate < $BASE/sql_backups/update_structure.sql
 mv $BASE/sql_backups/update_structure2.sql.bz2 $BASE/sql_backups/update_structure.sql.bz2
 rm $BASE/sql_backups/update_structure.sql
 echo -e '\033[32mDatabase Updated \033[m'
