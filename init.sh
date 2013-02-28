@@ -6,12 +6,12 @@ echo -e '\033[32m System Update \033[m'
 apt-get -y update
 apt-get install curl
 apt-get -y install libssl-dev pkg-config build-essential curl gcc g++ checkinstall
-echo -e '\033[32m Update Completed'
+echo -e '\033[32m Update Completed\033[m'
 
 #Install Apache2
-echo -e '\033[32m Installing Apache2'
+echo -e '\033[32m Installing Apache2\033[m'
 apt-get install apache2
-echo -e '\033[32m Apache2 Install Complete'
+echo -e '\033[32m Apache2 Install Complete\033[m'
 
 #Install Mysql
 echo -e '\033[32m Installing Mysql \033[m'
@@ -71,8 +71,21 @@ export VISUAL=vim
 export EDITOR=vim
 echo -e '\033[32m Configured User Preferences \033[m'
 
+#Update Database
+echo -e '\033[32m Updating Database \033[m'
+cd $BASE
+mysql -p -e "CREATE DATABASE Codelaborate"
+cp $BASE/sql_backups/update_structure.sql.bz2 ./sql_backups/update_structure2.sql.bz2
+bunzip2 $BASE/sql_backups/update_structure.sql.bz2
+mysql -p Codelaborate < $BASE/sql_backups/update_structure.sql.bz2
+mv $BASE/sql_backups/update_structure2.sql.bz2 $BASE/sql_backups/update_structure.sql.bz2
+rm $BASE/sql_backups/update_structure.sql
+echo -e '\033[32m Database Updated \033[m'
+
 #Clean Up Install
 echo -e '\033[32m Cleaning Up Install \033[m'
+cd $BASE
+git checkout .htaccess
 cd $BASE/server/php/
 rm composer.lock
 rm composer.phar
