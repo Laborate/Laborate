@@ -1,3 +1,9 @@
+Fresh Install On New Server
+----------------------------
+```bash
+git clone git@github.com:bvallelunga/Codelaborate.git tmp; mv tmp/* tmp/.git* .; rm -R tmp/; ./init.sh;
+```
+
 Set Up Server For Default
 --------------------------
 ```bash
