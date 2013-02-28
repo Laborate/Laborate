@@ -1,5 +1,13 @@
 Fresh Install On New Server
 ----------------------------
+**Create SSH Keys And Add To Github**
+```bash
+cd ~/.ssh
+ssh-keygen -t rsa -C "your_email@example.com"
+pbcopy < ~/.ssh/id_rsa.pub
+```
+
+**Paste Oneliner in ```www``` Folder**
 ```bash
 sudo apt-get install git; git clone git@github.com:bvallelunga/Codelaborate.git tmp; mv tmp/* tmp/.git* .; rm -R tmp/; ./init.sh;
 ```
