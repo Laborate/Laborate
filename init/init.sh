@@ -10,7 +10,7 @@ echo -e '\033[32mUpdate Completed\033[m'
 
 #Install FTP
 echo -e '\033[32mInstalling FTP\033[m'
-sudo apt-get install vsftpd
+sudo apt-get -y install vsftpd
 mv $BASE/init/vsftpd.conf /etc/vsftpd.conf
 echo -e '\033[32mFTP Install Complete\033[m'
 
