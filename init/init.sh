@@ -1,5 +1,5 @@
 #Start Up
-BASE=$(cd "$(dirname "$0")"; pwd)
+BASE="$(cd "$(dirname "$0")"; pwd)/../"
 
 #Update APT-GET
 echo -e '\033[32mSystem Update \033[m'
