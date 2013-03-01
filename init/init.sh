@@ -121,7 +121,6 @@ rm $BASE/server/php/composer.lock
 rm $BASE/server/php/composer.phar
 rm $BASE/server/php/composer.json
 git checkout $BASE/.htaccess
-$BASE/shell/server/stop.sh
 echo -e '\033[32mInstaller Finished \033[m'
 cd $BASE
 exit
