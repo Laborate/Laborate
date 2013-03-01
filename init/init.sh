@@ -11,7 +11,7 @@ echo -e '\033[32mUpdate Completed\033[m'
 #Install FTP
 echo -e '\033[32mInstalling FTP\033[m'
 sudo apt-get -y install vsftpd
-mv $BASE/init/vsftpd.conf /etc/vsftpd.conf
+cp $BASE/init/vsftpd.conf /etc/vsftpd.conf
 echo -e '\033[32mFTP Install Complete\033[m'
 
 #Install Apache2
@@ -45,7 +45,6 @@ wget http://nodejs.org/dist/v0.8.19/node-v0.8.19.tar.gz
 tar -zxf node-v0.8.19.tar.gz
 cd node-v0.8.19
 ./configure && make && checkinstall --install=yes --pkgname=nodejs --pkgversion "0.8.19" --default
-cd $BASE
 echo -e '\033[32mNode Install Complete \033[m'
 
 #Install Node Modules
@@ -58,9 +57,9 @@ echo -e '\033[32mNode Modules Install Complete' \033[m
 #Install Vendor Modules
 echo -e '\033[32mInstalling Vendor Modules \033[m'
 cd $BASE/server/php/
+cp $BASE/init/composer.json composer.json
 curl -s http://getcomposer.org/installer | php
 php composer.phar install
-cd $BASE
 echo -e '\033[32mVendor Modules Install Complete \033[m'
 
 #Install Vim
@@ -79,7 +78,6 @@ echo -e '\033[32mConfigured User Preferences \033[m'
 
 #Update Database
 echo -e '\033[32mUpdating Database \033[m'
-cd $BASE
 mysql -p -e "CREATE DATABASE Codelaborate"
 cp $BASE/sql_backups/update_structure.sql.bz2 $BASE/sql_backups/update_structure2.sql.bz2
 bunzip2 $BASE/sql_backups/update_structure.sql.bz2
@@ -90,15 +88,10 @@ echo -e '\033[32mDatabase Updated \033[m'
 
 #Clean Up Install
 echo -e '\033[32mCleaning Up Install \033[m'
-cd $BASE/server/php/
-rm composer.lock
-rm composer.phar
-git update-index --assume-unchanged composer.json
-rm composer.json
-cd $BASE
-git checkout .htaccess
-git update-index --assume-unchanged init/init.sh
-git update-index --assume-unchanged init/vsftpd.conf
-rm -r init/
+rm $BASE/server/php/composer.lock
+rm $BASE/server/php/composer.phar
+rm $BASE/server/php/composer.json
+git checkout $BASE/.htaccess
 echo -e '\033[32mInstaller Finished \033[m'
+cd $BASE
 exit
