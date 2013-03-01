@@ -65,6 +65,7 @@ echo -e '\033[32mApache2 Install Complete\033[m'
 
 #Install Apache2 Modules
 echo -e '\033[32mInstalling Apache2 Modules\033[m'
+apt-get -y remove libapache2-mod-php5
 apt-get -y install libapache2-mod-php5
 apt-get -y install libapache2-mod-auth-plain
 apt-get -y install libapache2-mod-proxy-html
@@ -119,11 +120,7 @@ echo -e '\033[32mCleaning Up Install \033[m'
 rm $BASE/server/php/composer.lock
 rm $BASE/server/php/composer.phar
 rm $BASE/server/php/composer.json
-cd $BASE
-git checkout *
-git checkout .htaccess
-chown -R $USER:$USER $BASE
-chmod -R 755 $BASE
+git checkout $BASE/.htaccess
 $BASE/shell/server/stop.sh
 echo -e '\033[32mInstaller Finished \033[m'
 cd $BASE
