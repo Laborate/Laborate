@@ -4,8 +4,13 @@ BASE="$(cd "$(dirname "$0")"; pwd)/../"
 #Update APT-GET
 echo -e '\033[32mSystem Update \033[m'
 apt-get -y update
+sudo apt-get upgrade
 apt-get -y install curl
 apt-get -y install libssl-dev pkg-config build-essential curl gcc g++ checkinstall
+apt-get -y install python-software-properties
+add-apt-repository ppa:ondrej/php5
+apt-get -y update
+sudo apt-get upgrade
 echo -e '\033[32mUpdate Completed\033[m'
 
 #Install FTP
@@ -22,8 +27,7 @@ echo -e '\033[32mMysql Install Complete \033[m'
 
 #Install PHP
 echo -e '\033[32mInstalling PHP \033[m'
-apt-get -y install php5 php5-cgi binfmt-support
-update-binfmts --install PHP /usr/bin/php5-cgi --extension php
+apt-get -y install php5
 echo -e '\033[32mPHP Install Complete \033[m'
 
 #Install PHP Modules
@@ -44,6 +48,9 @@ echo -e '\033[32mPHP Vendor Modules Install Complete \033[m'
 #Install Apache2
 echo -e '\033[32mInstalling Apache2\033[m'
 apt-get -y install apache2
+cp $BASE/init/208.68.39.56 /etc/apache2/sites-available/208.68.39.56 -fr
+cp $BASE/init/php.ini /etc/php5/apache2/php.ini -fr
+a2ensite 208.68.39.56
 echo -e '\033[32mApache2 Install Complete\033[m'
 
 #Install Apache2 Modules
@@ -53,7 +60,6 @@ apt-get -y install libapache2-mod-auth-plain
 apt-get -y install libapache2-mod-proxy-html
 apt-get -y install libapache2-mod-php5filter
 apt-get -y install libapache2-mod-uwsgi
-apt-get -y install libapache2-mod-ruwsgi
 apt-get -y install libapache2-mod-vhost-hash-alias
 apt-get -y install libapache2-webauth
 apt-get -y install libapr-memcache0
@@ -98,12 +104,12 @@ export VISUAL=vim
 export EDITOR=vim
 echo -e '\033[32mConfigured User Preferences \033[m'
 
-#Update Database
+#Populate Database
 echo -e '\033[32mUpdating Database \033[m'
-mysql -p -e "CREATE DATABASE Codelaborate"
+mysql --user="root" --password="bjv0623" -e "CREATE DATABASE Codelaborate"
 cp $BASE/sql_backups/update_structure.sql.bz2 $BASE/sql_backups/update_structure2.sql.bz2
 bunzip2 $BASE/sql_backups/update_structure.sql.bz2
-mysql -p Codelaborate < $BASE/sql_backups/update_structure.sql
+mysql --user="root" --password="bjv0623" Codelaborate < $BASE/sql_backups/update_structure.sql
 mv $BASE/sql_backups/update_structure2.sql.bz2 $BASE/sql_backups/update_structure.sql.bz2
 rm $BASE/sql_backups/update_structure.sql
 echo -e '\033[32mDatabase Updated \033[m'
@@ -114,6 +120,8 @@ rm $BASE/server/php/composer.lock
 rm $BASE/server/php/composer.phar
 rm $BASE/server/php/composer.json
 git checkout $BASE/.htaccess
+chown -R $USER:$USER $BASE
+chmod -R 755 $BASE
 echo -e '\033[32mInstaller Finished \033[m'
 cd $BASE
 exit
