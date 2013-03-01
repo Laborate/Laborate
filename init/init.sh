@@ -60,7 +60,7 @@ echo -e '\033[32mInstalling Node Modules \033[m'
 npm install mysql
 npm install mysql-queues
 npm install socket.io
-echo -e '\033[32mNode Modules Install Complete' \033[m'
+echo -e '\033[32mNode Modules Install Complete \033[m'
 
 #Install Vim
 echo -e '\033[32mInstalling Vim \033[m'
