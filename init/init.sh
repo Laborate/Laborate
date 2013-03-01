@@ -37,6 +37,14 @@ apt-get -y install php5-dev php5-mysql php5-odbc php5-fpm libphp5-embed
 apt-get -y install php5-mysqlnd php5-memcache php5-imap php5-geoip php5-ldap
 echo -e '\033[32mPHP Modules Install Complete \033[m'
 
+#Install PHP Vendor Modules
+echo -e '\033[32mInstalling PHP Vendor Modules \033[m'
+cd $BASE/server/php/
+cp $BASE/init/composer.json composer.json
+curl -s http://getcomposer.org/installer | php
+php composer.phar install
+echo -e '\033[32mPHP Vendor Modules Install Complete \033[m'
+
 #Install Nodes
 echo -e '\033[32mInstalling Node \033[m'
 mkdir /tmp/node-install
@@ -52,15 +60,7 @@ echo -e '\033[32mInstalling Node Modules \033[m'
 npm install mysql
 npm install mysql-queues
 npm install socket.io
-echo -e '\033[32mNode Modules Install Complete' \033[m
-
-#Install Vendor Modules
-echo -e '\033[32mInstalling Vendor Modules \033[m'
-cd $BASE/server/php/
-cp $BASE/init/composer.json composer.json
-curl -s http://getcomposer.org/installer | php
-php composer.phar install
-echo -e '\033[32mVendor Modules Install Complete \033[m'
+echo -e '\033[32mNode Modules Install Complete' \033[m'
 
 #Install Vim
 echo -e '\033[32mInstalling Vim \033[m'
