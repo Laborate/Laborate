@@ -14,26 +14,22 @@ sudo apt-get -y install vsftpd
 cp $BASE/init/vsftpd.conf /etc/vsftpd.conf
 echo -e '\033[32mFTP Install Complete\033[m'
 
-#Install Apache2
-echo -e '\033[32mInstalling Apache2\033[m'
-apt-get -y install apache2
-echo -e '\033[32mApache2 Install Complete\033[m'
-
 #Install Mysql
 echo -e '\033[32mInstalling Mysql \033[m'
-apt-get -y -y install mysql-server libapache2-mod-auth-mysql php5-mysql
+apt-get -y -y install mysql-server
 mysql_install_db
 echo -e '\033[32mMysql Install Complete \033[m'
 
 #Install PHP
 echo -e '\033[32mInstalling PHP \033[m'
-apt-get -y install php5 libapache2-mod-php5
+apt-get -y install php5 php5-cgi binfmt-support
+update-binfmts --install PHP /usr/bin/php5-cgi --extension php
 echo -e '\033[32mPHP Install Complete \033[m'
 
 #Install PHP Modules
 echo -e '\033[32mInstalling PHP Modules \033[m'
 apt-get -y install php5-cgi php5-cli php5-common php5-curl php5-dbg php5-mcrypt
-apt-get -y install php5-dev php5-mysql php5-odbc php5-fpm libphp5-embed
+apt-get -y install php5-dev php5-mysql php5-odbc php5-fpm libphp5-embed php5-mysql
 apt-get -y install php5-mysqlnd php5-memcache php5-imap php5-geoip php5-ldap
 echo -e '\033[32mPHP Modules Install Complete \033[m'
 
@@ -44,6 +40,32 @@ cp $BASE/init/composer.json composer.json
 curl -s http://getcomposer.org/installer | php
 php composer.phar install
 echo -e '\033[32mPHP Vendor Modules Install Complete \033[m'
+
+#Install Apache2
+echo -e '\033[32mInstalling Apache2\033[m'
+apt-get -y install apache2
+echo -e '\033[32mApache2 Install Complete\033[m'
+
+#Install Apache2 Modules
+echo -e '\033[32mInstalling Apache2 Modules\033[m'
+apt-get -y install libapache2-mod-php5
+apt-get -y install libapache2-mod-auth-plain
+apt-get -y install libapache2-mod-proxy-html
+apt-get -y install libapache2-mod-php5filter
+apt-get -y install libapache2-mod-uwsgi
+apt-get -y install libapache2-mod-ruwsgi
+apt-get -y install libapache2-mod-vhost-hash-alias
+apt-get -y install libapache2-webauth
+apt-get -y install libapr-memcache0
+apt-get -y install libapr-memcache-dev
+apt-get -y install libapache2-mod-auth-mysql
+a2enmod php5
+a2enmod rewrite
+a2enmod suexec
+a2enmod include
+a2enmod userdir
+a2enmod deflate
+echo -e '\033[32mApache2 Modules Install Complete\033[m'
 
 #Install Nodes
 echo -e '\033[32mInstalling Node \033[m'
