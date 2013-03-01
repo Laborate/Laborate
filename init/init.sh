@@ -4,26 +4,36 @@ BASE="$(cd "$(dirname "$0")"; pwd)/../"
 #Update APT-GET
 echo -e '\033[32mSystem Update \033[m'
 apt-get -y update
-sudo apt-get upgrade
+apt-get -y upgrade
 apt-get -y install curl
 apt-get -y install libssl-dev pkg-config build-essential curl gcc g++ checkinstall
 apt-get -y install python-software-properties
 add-apt-repository ppa:ondrej/php5
 apt-get -y update
-sudo apt-get upgrade
+apt-get -y upgrade
 echo -e '\033[32mUpdate Completed\033[m'
 
 #Install FTP
 echo -e '\033[32mInstalling FTP\033[m'
 sudo apt-get -y install vsftpd
-cp $BASE/init/vsftpd.conf /etc/vsftpd.conf
+cp $BASE/init/vsftpd.conf /etc/vsftpd.conf -fr
 echo -e '\033[32mFTP Install Complete\033[m'
 
 #Install Mysql
 echo -e '\033[32mInstalling Mysql \033[m'
-apt-get -y -y install mysql-server
+apt-get -y install mysql-server
 mysql_install_db
 echo -e '\033[32mMysql Install Complete \033[m'
+
+#Populate Database
+echo -e '\033[32mUpdating Database \033[m'
+mysql --user="root" --password="bjv0623" -e "CREATE DATABASE Codelaborate"
+cp $BASE/sql_backups/update_structure.sql.bz2 $BASE/sql_backups/update_structure2.sql.bz2
+bunzip2 $BASE/sql_backups/update_structure.sql.bz2
+mysql --user="root" --password="bjv0623" Codelaborate < $BASE/sql_backups/update_structure.sql
+mv $BASE/sql_backups/update_structure2.sql.bz2 $BASE/sql_backups/update_structure.sql.bz2
+rm $BASE/sql_backups/update_structure.sql
+echo -e '\033[32mDatabase Updated \033[m'
 
 #Install PHP
 echo -e '\033[32mInstalling PHP \033[m'
@@ -104,24 +114,17 @@ export VISUAL=vim
 export EDITOR=vim
 echo -e '\033[32mConfigured User Preferences \033[m'
 
-#Populate Database
-echo -e '\033[32mUpdating Database \033[m'
-mysql --user="root" --password="bjv0623" -e "CREATE DATABASE Codelaborate"
-cp $BASE/sql_backups/update_structure.sql.bz2 $BASE/sql_backups/update_structure2.sql.bz2
-bunzip2 $BASE/sql_backups/update_structure.sql.bz2
-mysql --user="root" --password="bjv0623" Codelaborate < $BASE/sql_backups/update_structure.sql
-mv $BASE/sql_backups/update_structure2.sql.bz2 $BASE/sql_backups/update_structure.sql.bz2
-rm $BASE/sql_backups/update_structure.sql
-echo -e '\033[32mDatabase Updated \033[m'
-
 #Clean Up Install
 echo -e '\033[32mCleaning Up Install \033[m'
 rm $BASE/server/php/composer.lock
 rm $BASE/server/php/composer.phar
 rm $BASE/server/php/composer.json
-git checkout $BASE/.htaccess
+cd $BASE
+git checkout *
+git checkout .htaccess
 chown -R $USER:$USER $BASE
 chmod -R 755 $BASE
+$BASE/shell/server/stop.sh
 echo -e '\033[32mInstaller Finished \033[m'
 cd $BASE
 exit
