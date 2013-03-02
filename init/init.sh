@@ -53,11 +53,11 @@ echo -e '\033[32mMysql Install Complete \033[m'
 #Populate Database
 echo -e '\033[32mPopulating Database \033[m'
 mysql --user="root" --password="bjv0623" -e "CREATE DATABASE Codelaborate"
-cp $BASE/sql_backups/update_structure.sql.bz2 $BASE/sql_backups/update_structure2.sql.bz2
-bunzip2 $BASE/sql_backups/update_structure.sql.bz2
-mysql --user="root" --password="bjv0623" Codelaborate < $BASE/sql_backups/update_structure.sql
-mv $BASE/sql_backups/update_structure2.sql.bz2 $BASE/sql_backups/update_structure.sql.bz2
-rm $BASE/sql_backups/update_structure.sql
+cp $BASE/sql_backups/update_content.sql.bz2 $BASE/sql_backups/update_content2.sql.bz2
+bunzip2 $BASE/sql_backups/update_content.sql.bz2
+mysql --user="root" --password="bjv0623" Codelaborate < $BASE/sql_backups/update_content.sql
+mv $BASE/sql_backups/update_content2.sql.bz2 $BASE/sql_backups/update_content.sql.bz2
+rm $BASE/sql_backups/update_content.sql
 echo -e '\033[32mDatabase Populated \033[m'
 
 #Install PHP
