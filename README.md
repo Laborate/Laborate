@@ -1,18 +1,9 @@
-Fresh Install On New Server
-----------------------------
-**Create SSH Keys And Add To Github**
-```bash
-cd ~/.ssh
-ssh-keygen -t rsa -C "your_email@example.com"
-cat ~/.ssh/id_rsa.pub
-```
-
+Install On New Server (After base-install)
+------------------------------------------
 **Paste Installer Script in ```www``` Folder**
 ```bash
-sudo apt-get -y install git
 git clone git@github.com:Laborate/code.git
-cd code
-sudo bash init/init.sh
+sudo bash code/init/init.sh
 ```
 
 Control Server
