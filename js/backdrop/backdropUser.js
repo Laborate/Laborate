@@ -47,24 +47,27 @@ $("#backdropRegister").live("submit", function() {
     if($("#backdropRegister #backdropRegisterEmail").val() == "") {
         $("#backdropRegister #backdropRegisterEmail").css({"border":"solid thin #CC352D"});
         passed = false;
+        finishRegister();
     }
     else {
          $.post("server/php/user/email_check.php", { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
             function(result){
                 if(result == "1") {
                     $("#backdropRegister #backdropRegisterEmail").css({"border":""});
+                    finishRegister();
                 }
                 else {
                     $("#backdropRegister #backdropRegisterEmail").css({"border":"solid thin #CC352D"});
                     $("#backdropInital .textError").text("Email Already Exists").fadeIn();
                     passed = false;
+                    finishRegister();
                 }
 
             }
         );
     }
 
-    setTimeout(function() {
+    function finishRegister() {
         if($("#backdropRegister #backdropRegisterPassword").val() == "") {
             $("#backdropRegister #backdropRegisterPassword").css({"border":"solid thin #CC352D"});
             passed = false;
@@ -105,5 +108,5 @@ $("#backdropRegister").live("submit", function() {
                 }
             );
         }
-    }, 100);
+    }
 });
