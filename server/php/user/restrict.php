@@ -7,19 +7,18 @@ if(!function_exists('redirect')) {
     function redirect($logout) {
         if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' ) {
             echo $GLOBALS['ajax_message'];
+            exit();
         } else {
             if($GLOBALS['ajax_only']) {
                 header('HTTP/1.0 404 Not Found');
                 include($_SERVER['DOCUMENT_ROOT'].'/errors/notfound.php');
                 exit();
             } else {
-                if(cookieCheck() != true) {
-                    if($logout) {
-                        header("Location: /server/php/user/logout?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
-                    }
-                    else {
-                        header("Location: /login?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
-                    }
+                if($logout) {
+                    header("Location: /server/php/user/logout?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+                }
+                else {
+                    header("Location: /login?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
                 }
             }
         }
@@ -27,14 +26,18 @@ if(!function_exists('redirect')) {
 }
 
 if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' && $GLOBALS['ajax_only']) {
-    redirect();
+    redirect(false);
 } else {
     if(isset($_SESSION['userId'])) {
         if($GLOBALS['row_Users']['user_id'] != $_SESSION['userId']) {
-            redirect(true);
+            if(cookieCheck() != true) {
+                redirect(true);
+            }
         }
     } else {
-        redirect(false);
+        if(cookieCheck() != true) {
+            redirect(false);
+        }
     }
 }
 ?>
