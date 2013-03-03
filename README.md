@@ -13,7 +13,7 @@ sudo apt-get -y install git
 git clone git@github.com:Laborate/code.git tmp
 mv tmp/* tmp/.git* .
 rm -R tmp/
-sudo bash init/init.sh 
+sudo bash init/init.sh
 git checkout .htaccess
 ```
 
@@ -29,6 +29,9 @@ shell/<location>/stop.sh
 
 //sql update: content or structure (required)
 shell/<location>/sql_update.sh <option>
+
+//git stash and pull w/rebase
+shell/<location>/git_pull.sh
 
 //clear node logs
 shell/<location>/clear_logs.sh
