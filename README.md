@@ -17,27 +17,22 @@ sudo bash init/init.sh
 git checkout .htaccess
 ```
 
-Control Local
----------
-**start node**
-```bash
-shell/local/start.sh
-```
-
-**stop node**
-```bash
-shell/local/start.sh
-```
-
-
 Control Server
------------
-**start servers**
+--------------
+**Location: ```local``` or ```server```**
 ```bash
-shell/server/start.sh
-```
+//start servers
+shell/<location>/start.sh
 
-**stop servers**
-```bash
-shell/server/stop.sh
+//stop servers
+shell/<location>/stop.sh
+
+//sql update: content or structure (required)
+shell/<location>/sql_update.sh <option>
+
+//clear node logs
+shell/<location>/clear_logs.sh
+
+//server memory status
+shell/server/memory.sh
 ```
