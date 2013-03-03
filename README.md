@@ -1,4 +1,4 @@
-Install On New Server (After base-install)
+Install On New Server (After [base-init](https://github.com/Laborate/base-init))
 ------------------------------------------
 **Paste Installer Script in ```www``` Folder**
 ```bash
