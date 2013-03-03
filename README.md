@@ -12,7 +12,7 @@ cat ~/.ssh/id_rsa.pub
 sudo apt-get -y install git; git clone git@github.com:bvallelunga/Codelaborate.git tmp; mv tmp/* tmp/.git* .; rm -R tmp/; sudo bash init/init.sh; git checkout .htaccess;
 ```
 
-Control Locally
+Control Local
 ---------
 **start node**
 ```bash
@@ -25,7 +25,7 @@ shell/local/start.sh
 ```
 
 
-Control on Server
+Control Server
 -----------
 **start servers**
 ```bash
