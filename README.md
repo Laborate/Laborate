@@ -10,11 +10,9 @@ cat ~/.ssh/id_rsa.pub
 **Paste Installer Script in ```www``` Folder**
 ```bash
 sudo apt-get -y install git
-git clone git@github.com:Laborate/code.git tmp
-mv tmp/* tmp/.git* .
-rm -R tmp/
+git clone git@github.com:Laborate/code.git
+cd code
 sudo bash init/init.sh
-git checkout .htaccess
 ```
 
 Control Server
