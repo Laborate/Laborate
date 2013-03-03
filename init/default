@@ -1,8 +1,8 @@
 <VirtualHost *:80>
         ServerAdmin webmaster@localhost
         ServerName 208.68.39.56
-
         DocumentRoot /var/www
+
         <Directory />
                 Options FollowSymLinks
                 AllowOverride None

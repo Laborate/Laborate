@@ -22,8 +22,7 @@ echo -e '\033[32mFTP Install Complete\033[m'
 #Install Apache2
 echo -e '\033[32mInstalling Apache2\033[m'
 apt-get -y install apache2
-cp $BASE/init/208.68.39.56 /etc/apache2/sites-available/208.68.39.56 -fr
-a2ensite 208.68.39.56
+cp $BASE/init/default /etc/apache2/sites-available/default -fr
 echo -e '\033[32mApache2 Install Complete\033[m'
 
 #Install Apache2 Modules
@@ -117,6 +116,7 @@ echo -e '\033[32mCleaning Up Install \033[m'
 rm $BASE/server/php/composer.lock
 rm $BASE/server/php/composer.phar
 rm $BASE/server/php/composer.json
+shell/server/restart.sh
 echo -e '\033[32mInstaller Finished \033[m'
 cd $BASE
 exit
