@@ -1,6 +1,6 @@
 <div id="backdrop">
     <div id="backdropCore">
-            <a href="http://codelaborate:8888"><div id="backDropLogo">code-laborate</div></a>
+            <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>"><div id="backDropLogo">code-laborate</div></a>
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="userNavigation">
                     <div><a href="server/php/user/logout">Sign Out</a></div>
