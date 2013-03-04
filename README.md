@@ -2,7 +2,7 @@ Install After [base-init](https://github.com/Laborate/base-init)
 ------------------------------------------
 **Paste Installer Script in ```www``` Folder**
 ```bash
-git clone git@github.com:Laborate/code.git; sudo bash code/init/init.sh;
+cd /var/www/; git clone git@github.com:Laborate/code.git; sudo bash code/init/init.sh;
 ```
 
 Control Server
