@@ -1,4 +1,4 @@
-server/node/logs/
+.log
 .DS_Store
 node_modules
 server/php/vendor
