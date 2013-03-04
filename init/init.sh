@@ -6,7 +6,7 @@ echo -e '\033[32mInstalling Apache2 Site\033[m'
 cp $BASE/init/code /etc/apache2/sites-available/code
 a2ensite code
 $BASE/shell/server/restart.sh
-echo -e '\033[32mApache2 Install Complete\033[m'
+echo -e '\033[32mApache2 Site Install Complete\033[m'
 
 #Populate Database
 echo -e '\033[32mPopulating Database \033[m'

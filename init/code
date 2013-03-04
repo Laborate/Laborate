@@ -1,6 +1,6 @@
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
-    ServerName code.laborate.io
+    ServerName code.dev.laborate.io
     DocumentRoot /var/www/code
     <Directory />
             Options FollowSymLinks

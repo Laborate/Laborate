@@ -3,7 +3,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
 
 $hostname_database = "localhost";
-$database_database = "Codelaborate";
+$database_database = "code";
 $username_database = "root";
 $password_database = "bjv0623";
 $database = mysql_pconnect($hostname_database, $username_database, $password_database) or trigger_error(mysql_error(),E_USER_ERROR);
