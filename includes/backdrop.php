@@ -3,11 +3,11 @@
             <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>"><div id="backDropLogo">code-laborate</div></a>
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="userNavigation">
-                    <div><a href="server/php/user/logout">Sign Out</a></div>
+                    <div><a href="/server/php/user/logout">Sign Out</a></div>
                     <div>|</div>
-                    <div><a href="documents">Documents</a></div>
+                    <div><a href="/documents">Documents</a></div>
                     <div>|</div>
-                    <div><a href="account" id="userNavigationName"><?php echo $_SESSION['userName']; ?></a></div>
+                    <div><a href="/account" id="userNavigationName"><?php echo $_SESSION['userName']; ?></a></div>
                 </div>
                 <?php if(!isset($_GET['i'])) { ?>
                 <!-- Start: Backdrop New File -->
