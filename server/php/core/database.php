@@ -45,7 +45,7 @@ $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
 $row_Sessions = mysql_fetch_assoc($Sessions);
 
 global $Sessions_id, $row_Sessions_id;
-$query_Sessions_id = 'SELECT * FROM sessions WHERE session_id = "'.GetSQLValueString($_GET['i'], "int").'"';
+$query_Sessions_id = 'SELECT * FROM sessions WHERE session_id = '.GetSQLValueString($_GET['i'], "text");
 $Sessions_id = mysql_query($query_Sessions_id , $database) or die(mysql_error());
 $row_Sessions_id = mysql_fetch_assoc($Sessions_id);
 
