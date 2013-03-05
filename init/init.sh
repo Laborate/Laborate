@@ -27,8 +27,8 @@ php composer.phar install
 cd $BASE/server/php/vendor/
 git clone https://github.com/phpseclib/phpseclib.git
 cp -r $BASE/server/php/vendor/phpseclib/phpseclib $BASE/server/php/vendor/phpseclib2
-rm -r $BASE/server/php/vendor/phpseclib2
-mv -r $BASE/server/php/vendor/phpseclib2 $BASE/server/php/vendor/phpseclib
+sudo rm -r $BASE/server/php/vendor/phpseclib2
+mv $BASE/server/php/vendor/phpseclib2 $BASE/server/php/vendor/phpseclib
 echo -e '\033[32mPHP Vendor Modules Install Complete \033[m'
 
 #Clean Up Install
