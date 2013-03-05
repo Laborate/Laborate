@@ -13,9 +13,9 @@
         </div>
     </div>
     <div id="user">
-        <div><a href="server/php/user/logout">Sign Out</a></div>
-        <div><a href="documents">Documents</a></div>
-        <div><a href="account"><?php echo $_SESSION['userName']; ?></a></div>
+        <div><a href="/server/php/user/logout">Sign Out</a></div>
+        <div><a href="/documents">Documents</a></div>
+        <div><a href="/account"><?php echo $_SESSION['userName']; ?></a></div>
     </div>
     <div class="clear"></div>
 </div>

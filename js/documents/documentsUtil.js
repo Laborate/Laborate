@@ -80,12 +80,12 @@ window.documents = {
                     $("#file_"+reference+" .title").attr("data", name);
                     $("#file_"+reference+" .title").text(title);
 
-                    $.post("server/php/session/rename.php", { session_id: reference, session_name: name});
+                    $.post("/server/php/session/rename.php", { session_id: reference, session_name: name});
                 }
             }
 
             if(id == "action") {
-                $.post("server/php/session/actions.php", { session_id: reference});
+                $.post("//server/php/session/actions.php", { session_id: reference});
                 $("#file_" + reference).animate({"opacity": 0}, 500);
                 setTimeout(function() {
                     $("#file_" + reference).remove();
@@ -214,7 +214,7 @@ window.documents = {
                 li += '</span>' + $("#popup #popup_location_name").val() + '</li>';
                 $("#locations ul").append(li);
                 window.documents.popUpClose();
-                $.post("server/php/user/update.php", { locations_add: [key, items] });
+                $.post("/server/php/user/update.php", { locations_add: [key, items] });
             }
             return false;
         });
@@ -230,7 +230,7 @@ window.documents = {
                 window.documents.locationChange("online");
             }
 
-            $.post("server/php/user/update.php", { locations_remove: id });
+            $.post("/server/php/user/update.php", { locations_remove: id });
 
             if($("#locations.remove ul li").size() == 1) {
                 $("#locations").removeClass("remove");
@@ -243,7 +243,7 @@ window.documents = {
         $("#locations #online").toggle();
     },
     locationListing: function(callback) {
-        $.post("server/php/locations/locations_listing.php",
+        $.post("/server/php/locations/locations_listing.php",
             function(json) {
                 var locations = "";
                 $.each(JSON.parse(json), function(i, item) {
@@ -292,7 +292,7 @@ window.documents = {
         }
     },
     newFile: function(name, data, type, path, location_id, callback) {
-        $.post("server/php/session/new.php",
+        $.post("/server/php/session/new.php",
             {   session_name: name, session_document: data,
                 session_type: type, session_external_path:  path,
                 session_location_id: location_id },
@@ -303,7 +303,7 @@ window.documents = {
     },
     onlineDirectory: function(no_history, callback) {
         window.notification.open("loading...");
-        $.post("server/php/locations/online_directory.php",
+        $.post("/server/php/locations/online_directory.php",
             function(json) {
                 var files = "";
                 $.each(JSON.parse(json), function(i, item) {
@@ -332,7 +332,7 @@ window.documents = {
         );
     },
     githubRepos: function(callback) {
-        $.post("server/php/locations/github_repos.php",
+        $.post("/server/php/locations/github_repos.php",
             function(json) {
                 if(json == "Bad Token") {
                     window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
@@ -374,7 +374,7 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            $.post("server/php/locations/github_directory.php", { location_id: location_id, dir: path },
+            $.post("/server/php/locations/github_directory.php", { location_id: location_id, dir: path },
                 function(json) {
                     if(json == "Bad Token") {
                         window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
@@ -429,7 +429,7 @@ window.documents = {
         var path = file.parent().attr("data");
         window.notification.open("downloading...");
 
-        $.post("server/php/locations/github_file.php", { location_id: location_id, file: path },
+        $.post("/server/php/locations/github_file.php", { location_id: location_id, file: path },
             function(contents) {
                 if(contents == "Bad Token") {
                     window.notification.open("File Does Not Exist");
@@ -473,7 +473,7 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            $.post("server/php/locations/sftp_directory.php", { location_id: location_id, dir: path },
+            $.post("/server/php/locations/sftp_directory.php", { location_id: location_id, dir: path },
                 function(json) {
                     if(json == "Bad Credentials") {
                         window.notification.open("Bad SFTP Credentials");
@@ -530,7 +530,7 @@ window.documents = {
         var path = file.parent(".file").attr("data");
         window.notification.open("downloading...");
 
-        $.post("server/php/locations/sftp_file.php", { location_id: location_id, file: path },
+        $.post("/server/php/locations/sftp_file.php", { location_id: location_id, file: path },
             function(json) {
                 if(json == "Bad Credentials") {
                     window.notification.open("Bad SFTP Credentials");

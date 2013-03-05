@@ -10,13 +10,13 @@ $(window).ready(function() {
     if($("#mode").text() == "") { window.close(); }
     setMode($("#mode").text());
 
-    $.post("server/php/session/password_check.php", { session_id: $("#session_id").text(),
+    $.post("/server/php/session/password_check.php", { session_id: $("#session_id").text(),
                                                session_password: $("#password").text()
                                         },
             function(password_response){
                 if(password_response != "Password Authentication: Failed") {
                     setTimeout(function() {
-                        $.post("server/php/session/download.php", { download_id: "" + password_response },
+                        $.post("/server/php/session/download.php", { download_id: "" + password_response },
                             function(dowload_response){
                                 if(dowload_response != "Download: Failed") {
                                     proccessedDocuemt = "";

@@ -4,9 +4,6 @@
 #AuthUserFile /home/brian/.htpasswd
 #require valid-user
 
-# Set All Code To UTF-8
-AddDefaultCharset utf-8
-
 # Prevent Directory Listing
 Options -Indexes
 
@@ -16,22 +13,17 @@ order allow,deny
 deny from all
 </Files>
 
-# GZIP All HTTP Responses
-<ifmodule mod_deflate.c>
-AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
-</ifmodule>
-
 # Url Rewrites
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.php
-RewriteRule (.*)\.php$ /$1 [L,R=301]
-RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.php/
-RewriteRule (.*)\.php$ /$1 [L,R=301]
-RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.html
-RewriteRule (.*)\.html$ /$1 [L,R=301]
-RewriteCond %{THE_REQUEST} ^GET\ /[^?\s]+\.html/
-RewriteRule (.*)\.html/$ /$1 [L,R=301]
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^([^/]+)/$ $1.html
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^([^/]+)/$ $1.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{1,5}|/)$
+RewriteRule (.*)$ /$1/ [R=301,L]
 
 # Apache Error Code Handling
 ErrorDocument 204 /errors/base.php

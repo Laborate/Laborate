@@ -17,7 +17,7 @@
 
         $("#emailSend").live("click", function() {
             if($("#emailAddresses").val() != "") {
-                $.post("server/php/email/invite.php", {   session_id: getUrlVars()['i'],
+                $.post("/server/php/email/invite.php", {   session_id: getUrlVars()['i'],
                                                             session_name: $("#document_title").text(),
                                                             email_addresses: $("#emailAddresses").val(),
                                                             email_message: $("#emailMessage").val() },
