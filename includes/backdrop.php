@@ -33,10 +33,10 @@
                                 <div class="clear"></div>
                             </div>
                         </div>
-                        <div style="text-align: center;" id="backdropLoaderImg"><img src="img/loader.gif" width="220" height="19"/></div>
+                        <div style="text-align: center;" id="backdropLoaderImg"><img src="/img/loader.gif" width="220" height="19"/></div>
                         <div class="clear"></div>
                     </form>
-                    <form action="server/php/template/upload.php" method="post" enctype="multipart/form-data" id="file_upload">
+                    <form action="/server/php/template/upload.php" method="post" enctype="multipart/form-data" id="file_upload">
                         <input type="file" id="backdropUploadFile" name="backdropUploadFile" style="display:none"/>
                     </form>
                     <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;">File Name Requires An Extension</div>
@@ -58,7 +58,7 @@
                             <?php } ?>
                             <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding"/>
                         </div>
-                        <div style="text-align: center;" id="backdropLoaderImg"><img src="img/loader.gif" width="220" height="19"/></div>
+                        <div style="text-align: center;" id="backdropLoaderImg"><img src="/img/loader.gif" width="220" height="19"/></div>
                     </form>
                     <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;">Password Incorrect</div>
                 </div>
@@ -78,7 +78,7 @@
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
-                        Don't Have An Account? <a href="../register">Register!</a>
+                        Don't Have An Account? <a href="/register">Register!</a>
                     </div>
                 </div>
                 <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>
@@ -100,7 +100,7 @@
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
-                       Have An Account? <a href="../login">Sign In!</a>
+                       Have An Account? <a href="/login">Sign In!</a>
                     </div>
                 </div>
                 <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>
