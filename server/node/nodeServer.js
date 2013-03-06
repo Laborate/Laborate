@@ -24,7 +24,7 @@ var connection = mysql.createConnection({
     socketPath : '/Applications/MAMP/tmp/mysql/mysql.sock',
     user     : 'root',
     password : 'bjv0623',
-    database : 'Codelaborate',
+    database : 'code',
 });
 
 connection.on('error', function(err) {
@@ -75,8 +75,9 @@ io.sockets.on( 'connection', function (socket) {
                             connection.query("UPDATE sessions SET session_document=? WHERE session_id = ?", [JSON.stringify(document), session_id + ""]);
                             socket.set('session_document', document);
                         } catch (TypeError) {
+                            console.log("Document: " + document)
                             socket.to(session_id).emit( 'editor' , {"extras": {"passChange": "true"}} );
-                            console.log("Document: " + session_id + " failed to save to database")
+                            console.log("Document: " + session_id + " failed to save to database");
                         }
                     });
                 }
