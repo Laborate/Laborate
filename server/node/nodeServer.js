@@ -21,7 +21,7 @@ process.on('uncaughtException', function(err) {
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    socketPath : '/Applications/MAMP/tmp/mysql/mysql.sock',
+    //socketPath : '/Applications/MAMP/tmp/mysql/mysql.sock',
     user     : 'root',
     password : 'bjv0623',
     database : 'code',
