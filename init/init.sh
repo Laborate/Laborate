@@ -18,6 +18,14 @@ mv $BASE/sql_backups/update_content2.sql.bz2 $BASE/sql_backups/update_content.sq
 rm $BASE/sql_backups/update_content.sql
 echo -e '\033[32mDatabase Populated \033[m'
 
+#Link Up Node Modules
+echo -e '\033[32mLinking Node Modules \033[m'
+cd $BASE
+npm link mysql
+npm link mysql-queues
+npm link socket.io
+echo -e '\033[32mLinked Node Modules \033[m'
+
 #Install PHP Vendor Modules
 echo -e '\033[32mInstalling PHP Vendor Modules \033[m'
 cd $BASE/server/php/
