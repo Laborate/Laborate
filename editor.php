@@ -23,7 +23,7 @@ getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);
   	 </script>
   	 <?php placeDependencies(); ?>
 </head>
-<body style="display:none;">
+<body style="display:none">
     <?php include("includes/header.php"); ?>
     <div id="sidebar">
         <div id="sidebar_header">
