@@ -4,7 +4,7 @@ NameVirtualHost *:80
     ServerAdmin webmaster@localhost
     ServerName code.dev.laborate.io
     DocumentRoot /var/www/code
-    ErrorLog /var/www/code/error.log
+    ErrorLog /var/www/code/server/apache/error.log
     LogLevel debug
-    CustomLog /var/www/code/access.log combined
+    CustomLog /var/www/code/server/apache/access.log combined
 </VirtualHost>
