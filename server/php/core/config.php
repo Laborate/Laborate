@@ -34,6 +34,12 @@ else {
     $_SESSION['no_cache'] = false;
 }
 
+//Server Box
+$_SESSION['box'] = "";
+
+if($_SESSION['box'] != "") {
+   $_SESSION['box'] .= ".";
+}
 
 //Website Title
 $_SESSION['webSiteTitle'] = " · Code-Laborate";

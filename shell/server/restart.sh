@@ -6,6 +6,3 @@ pkill node
 #Start and Preserve Node Server
 #Send STDOUT to date coded log
 nohup node server/node/nodeServer.js 1> "./server/node/logs/`(date +"%T_%m_%d_%Y")`.log" &
-
-#Restart Apache
-sudo /etc/init.d/apache2 restart

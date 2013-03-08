@@ -1,7 +1,4 @@
-access.log
-error.log
+*.log
 .DS_Store
 node_modules
 server/php/vendor
-server/apache/
-server/node/log
