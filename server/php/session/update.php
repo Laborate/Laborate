@@ -1,9 +1,9 @@
 <?php
 $GLOBALS['ajax_message'] = json_encode([0,0]);
 $GLOBALS['ajax_only'] = true;
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_id'])){
     $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".$_POST['session_id']."'";

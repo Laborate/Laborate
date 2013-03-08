@@ -3,7 +3,7 @@
             <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>"><div id="backDropLogo">code-laborate</div></a>
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="userNavigation">
-                    <div><a href="/server/php/user/logout">Sign Out</a></div>
+                    <div><a href="/php/user/logout">Sign Out</a></div>
                     <div>|</div>
                     <div><a href="/documents">Documents</a></div>
                     <div>|</div>
@@ -36,7 +36,7 @@
                         <div style="text-align: center;" id="backdropLoaderImg"><img src="/img/loader.gif" width="220" height="19"/></div>
                         <div class="clear"></div>
                     </form>
-                    <form action="/server/php/template/upload.php" method="post" enctype="multipart/form-data" id="file_upload">
+                    <form action="/php/template/upload.php" method="post" enctype="multipart/form-data" id="file_upload">
                         <input type="file" id="backdropUploadFile" name="backdropUploadFile" style="display:none"/>
                     </form>
                     <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;">File Name Requires An Extension</div>

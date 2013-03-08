@@ -1,6 +1,6 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 
 if(isset($_POST['session_id'])) {
     $to  = 'To: '.$_POST['email_addresses'];

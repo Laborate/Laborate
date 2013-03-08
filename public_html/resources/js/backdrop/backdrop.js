@@ -38,7 +38,7 @@ $("#backdropNewFileForm").live("submit", function() {
         $("#backdropDataInput").slideUp(500);
         $("#backdropLoaderImg").slideDown(500);
         setTimeout(function() {
-            $.post("/server/php/session/new.php", { session_name: $("#backdropNewFileForm #backdropDocTitle").val(),
+            $.post("/php/session/new.php", { session_name: $("#backdropNewFileForm #backdropDocTitle").val(),
                                                    session_document: JSON.stringify(window.editor.getValue().split('\n'))
                                             },
                 function(result){
@@ -76,7 +76,7 @@ $("#backdropExistingFileForm").live("submit", function() {
     }
 
    if(passed == true) {
-        $.post("/server/php/session/password_check.php", { session_id: getUrlVars()['i'],
+        $.post("/php/session/password_check.php", { session_id: getUrlVars()['i'],
                                                session_password: $("#backdropPassword").val()
                                         },
             function(password_response){
@@ -85,7 +85,7 @@ $("#backdropExistingFileForm").live("submit", function() {
                     $("#backdropDataInput").slideUp(500);
                     $("#backdropLoaderImg").slideDown(500);
                     setTimeout(function() {
-                        $.post("/server/php/session/download.php", { download_id: "" + password_response },
+                        $.post("/php/session/download.php", { download_id: "" + password_response },
                             function(dowload_response){
                                 if(dowload_response != "Download: Failed") {
                                     window.passTemplate = $("#backdropPassword").val();

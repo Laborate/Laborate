@@ -1,10 +1,10 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
 
 if(!function_exists('cookieCheck')) {
     function cookieCheck() {
-        require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+        require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
         if(isset($_COOKIE['USRRC'])) {
             $query_Login = sprintf("SELECT * FROM users, login WHERE login.login_user_id = users.user_id AND login.login_uuid = ".GetSQLValueString($_COOKIE['USRRC'], "text"));

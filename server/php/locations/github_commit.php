@@ -1,11 +1,11 @@
 <?php
 $GLOBALS['ajax_message'] = "";
 $GLOBALS['ajax_only'] = true;
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/locations/github_core.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/locations/github_core.php');
 
 if(isset($_POST['commit_id']) && isset($_POST['session_document'])) {
    $query_Sessions = "SELECT * FROM download, sessions WHERE sessions.session_id = download.session_id AND download.download_id = '".$_POST['commit_id']."'";

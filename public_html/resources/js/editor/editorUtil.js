@@ -193,7 +193,7 @@ window.editorUtil = {
         }
     },
     passwordCheck: function(callback) {
-        $.post("/server/php/session/password_check.php", { session_id: getUrlVars()['i'], session_password: $("#backdropPassword").val() },
+        $.post("/php/session/password_check.php", { session_id: getUrlVars()['i'], session_password: $("#backdropPassword").val() },
             function(password_response){
                 if(password_response != "Password Authentication: Failed") {
                     callback(password_response);
@@ -207,7 +207,7 @@ window.editorUtil = {
     downloadFile: function() {
         window.editorUtil.passwordCheck(function(callback) {
             if(callback) {
-                window.location.href = "/server/php/session/download_file.php?i=" + callback;
+                window.location.href = "/php/session/download_file.php?i=" + callback;
             }
             else {
                 $("#downloadFile").addClass("red_harsh").val("Download Failed");
@@ -227,7 +227,7 @@ window.editorUtil = {
                 $("#githubCommit").removeClass("red_harsh").val("Commiting File...");
                 if($("#githubReference").val() != "") { var related = "\n\Issue: #" + $("#githubReference").val(); }
                 else { var related = ""; }
-                $.post("/server/php/locations/github_commit.php", { commit_id: callback,
+                $.post("/php/locations/github_commit.php", { commit_id: callback,
                                                                    session_document: window.editor.getValue(),
                                                                    message: $("#githubMessage").val() + related },
                     function(result){
@@ -259,7 +259,7 @@ window.editorUtil = {
         window.editorUtil.passwordCheck(function(callback) {
             if(callback) {
                 $("#saveToServer").removeClass("red_harsh").val("Saving File...");
-                $.post("/server/php/locations/sftp_push.php", {
+                $.post("/php/locations/sftp_push.php", {
                                                         commit_id: callback,
                                                         session_document: window.editor.getValue(),
                                         },

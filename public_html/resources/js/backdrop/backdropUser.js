@@ -15,7 +15,7 @@ $("#backdropSigIn").live("submit", function() {
     else { $("#backdropSigIn #backdropSigInPassword").css({"border":""}); }
 
     if(passed == true) {
-        $.post("/server/php/user/login.php", { user_email: $("#backdropSigIn #backdropSigInEmail").val(),
+        $.post("/php/user/login.php", { user_email: $("#backdropSigIn #backdropSigInEmail").val(),
                                                user_password:$("#backdropSigIn #backdropSigInPassword").val()
                                         },
             function(result){
@@ -50,7 +50,7 @@ $("#backdropRegister").live("submit", function() {
         finishRegister();
     }
     else {
-         $.post("/server/php/user/email_check.php", { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
+         $.post("/php/user/email_check.php", { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
             function(result){
                 if(result == "1") {
                     $("#backdropRegister #backdropRegisterEmail").css({"border":""});
@@ -93,7 +93,7 @@ $("#backdropRegister").live("submit", function() {
         }
 
         if(passed == true) {
-            $.post("/server/php/user/register.php", { user_name: $("#backdropRegister #backdropRegisterName").val(),
+            $.post("/php/user/register.php", { user_name: $("#backdropRegister #backdropRegisterName").val(),
                                                      user_email: $("#backdropRegister #backdropRegisterEmail").val(),
                                                      user_password: $("#backdropRegister #backdropRegisterPassword").val()
                                             },

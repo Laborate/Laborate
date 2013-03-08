@@ -1,5 +1,5 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 setcookie('USRRC', null, time()-2419200, "/");
 $_SESSION = array();
 session_destroy();

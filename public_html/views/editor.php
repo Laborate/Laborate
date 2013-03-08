@@ -1,9 +1,9 @@
 <?php
 //Requires & Config
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/session/initialize.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/template/dependencies.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/session/initialize.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 $GLOBALS['backdropMode'] = "editor";
 getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);

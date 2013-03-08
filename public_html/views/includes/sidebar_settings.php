@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 
 if(in_array($_GET['i'], $_SESSION['file_owner'])) {
     $action = "Delete";
@@ -24,7 +24,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
 		$("#actionConfirmClick").live("click", function() {
     		var returnUrl = "http://<?php echo $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]; ?>";
 
-    		$.post("/server/php/session/actions.php", { session_id: getUrlVars()['i'],
+    		$.post("/php/session/actions.php", { session_id: getUrlVars()['i'],
     			                                       session_name: $("#documentTitle").val(),
     			                                       session_password: $("#documentPassword").val()
     			                                     },
@@ -65,7 +65,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
     			    $("#backdropPassword").val($("#documentPassword").val());
     			    window.passTemplate = $("#documentPassword").val();
     			<? } ?>
-    			$.post("/server/php/session/update.php", { session_id: getUrlVars()['i'],
+    			$.post("/php/session/update.php", { session_id: getUrlVars()['i'],
     			                                           session_name: $("#documentTitle").val(),
     			                                           <?php if(in_array($_GET['i'], $_SESSION['file_owner'])) { ?>
                                                            session_password: $("#documentPassword").val()

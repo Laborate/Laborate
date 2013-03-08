@@ -1,12 +1,12 @@
 <?php
 $GLOBALS['ajax_only'] = true;
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_name']) && isset($_POST['session_document'])) {
     function createId() {
-        require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+        require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
         $continue = true;
         while($continue == true) {
             $id = rand(101, 999999999999999999) - rand(1, 100);

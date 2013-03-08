@@ -1,8 +1,8 @@
 <?php
 //Requires & Config
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/user/redirect.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/user/redirect.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 $GLOBALS['backdropMode'] = "register";
 getDependencies(["backdrop", "core"]);

@@ -15,7 +15,7 @@ window.account = {
     githubRepos: function(callback) {
         window.notification.open("loading...");
 
-        $.post("/server/php/locations/github_repos.php",
+        $.post("/php/locations/github_repos.php",
             function(json) {
                 if(json == "Login Required") {
                     $("#settings_github .settings_content #need_github_login").hAlign().show();

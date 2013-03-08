@@ -1,8 +1,8 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/template/dependencies.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/template/dependencies.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 getDependencies(["core", "header", "account", "icons"]);
 if($_GET['github'] > 1) {
@@ -55,7 +55,7 @@ if($_GET['github'] > 1) {
                 <?php if(is_null($_SESSION['userGithub'])) { ?>
                     <a class="button green right" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
                 <?php } else { ?>
-                    <a class="button red right" href="/server/php/locations/github_remove_token.php">Deauthorize With Github</a>
+                    <a class="button red right" href="/php/locations/github_remove_token.php">Deauthorize With Github</a>
                 <?php } ?>
                 <div class="clear"></div>
             </div>

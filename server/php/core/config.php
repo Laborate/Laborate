@@ -35,7 +35,7 @@ else {
 }
 
 //Server Box
-$_SESSION['box'] = "";
+$_SESSION['box'] = "dev";
 
 if($_SESSION['box'] != "") {
    $_SESSION['box'] .= ".";

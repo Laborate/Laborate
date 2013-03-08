@@ -1,6 +1,6 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 ?>
 <div id="sidebar_download" class="sidebar_content_inner">
     <script type="text/javascript">

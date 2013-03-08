@@ -1,7 +1,7 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-set_include_path($_SERVER['DOCUMENT_ROOT'].'/server/php/vendor/phpseclib/');
+require_once($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+set_include_path($_SERVER['DOCUMENT_ROOT'].'/php/vendor/phpseclib/');
 include('Net/SFTP.php');
 
 function getSftpClient($credentials) {
