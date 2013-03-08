@@ -48,8 +48,8 @@ $_SESSION['webSiteTitle'] = " · Code-Laborate";
 $_SESSION['cryptSalt'] = '$2a$07$aydsaqvpodfwrtdmdnbohnytk$';
 
 //Github Authentication
-$_SESSION['github_id'] = "ee64faf165b2893ad110";
-$_SESSION['github_secret'] = "89348434028c7b34505ec3457ded160765c89592";
+$_SESSION['github_id'] = "310d8a45f13df3dfbf95";
+$_SESSION['github_secret'] = "0be78393c4533047b1e1e230cd3f8039e82879d5";
 $_SESSION['github_scope'] = "repo";
 $_SESSION['github_state'] = crypt($_SESSION['userId'], $_SESSION['cryptSalt']);
 $_SESSION['github_auth_url'] = "https://github.com/login/oauth/authorize?client_id=";

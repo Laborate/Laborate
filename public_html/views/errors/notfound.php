@@ -6,18 +6,18 @@ getDependencies(["core", "backdrop"]);
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Codelaborate - Not Found</title>
+	<title>Not Found<?php echo $_SESSION['webSiteTitle']; ?></title>
     <?php placeDependencies(); ?>
 </head>
 <body>
     <div id="backdrop">
         <div id="backdropCore">
-            <a href="http://codelaborate:8888"><div id="backDropLogo">code-laborate</div></a>
+            <a href="http://code.<?php echo $_SESSION['box']; ?>laborate.io/"><div id="backDropLogo">code-laborate</div></a>
             <!-- Start: Backdrop Error -->
             <div id="backdropInital">
                 <div class="backdropContainer">
                     <div class="seperatorRequired" style="text-align: center;">
-                        <img src="/img/error_big.png" width="100px" height="125px"/>
+                        <img src="http://resources.code.<?php echo $_SESSION['box']; ?>laborate.io/img/error_big.png" width="100px" height="125px"/>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 16px;">
                         Sorry, this page is not available.<br/>Please continue back <a href="/">home</a>.
