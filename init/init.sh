@@ -48,7 +48,7 @@ mkdir $BASE/server/apache
 mkdir $BASE/server/node/logs
 ln -s $BASE/server/php/core/config.php $BASE/public_html/resources/config.php
 ln -s $BASE/server/php/min $BASE/public_html/resources/min
-ln -s $BASE/server/php $BASE/public_html/views/server/php
+ln -s $BASE/server/php $BASE/public_html/views/php
 echo -e '\033[32mInstaller Finished \033[m'
 cd $BASE/../
 exit
