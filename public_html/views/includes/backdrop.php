@@ -33,7 +33,7 @@
                                 <div class="clear"></div>
                             </div>
                         </div>
-                        <div style="text-align: center;" id="backdropLoaderImg"><img src="/img/loader.gif" width="220" height="19"/></div>
+                        <div style="text-align: center;" id="backdropLoaderImg"><img src="http://resources.code.dev.laborate.io/img/loader.gif" width="220" height="19"/></div>
                         <div class="clear"></div>
                     </form>
                     <form action="/php/template/upload.php" method="post" enctype="multipart/form-data" id="file_upload">
@@ -58,7 +58,7 @@
                             <?php } ?>
                             <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding"/>
                         </div>
-                        <div style="text-align: center;" id="backdropLoaderImg"><img src="/img/loader.gif" width="220" height="19"/></div>
+                        <div style="text-align: center;" id="backdropLoaderImg"><img src="http://resources.code.dev.laborate.io/img/loader.gif" width="220" height="19"/></div>
                     </form>
                     <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;">Password Incorrect</div>
                 </div>
