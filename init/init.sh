@@ -5,7 +5,8 @@ BASE="$(cd "$(dirname "$0")"; pwd)/../"
 echo -e '\033[32mInstalling Apache2 Site\033[m'
 cp $BASE/init/code /etc/apache2/sites-available/code
 a2ensite code
-$BASE/shell/server/restart.sh
+service apache2 reload
+service apache2 restart
 echo -e '\033[32mApache2 Site Install Complete\033[m'
 
 #Populate Database
