@@ -3,10 +3,8 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 
 if(in_array($_GET['i'], $_SESSION['file_owner'])) {
     $action = "Delete";
-    $get_var = "d=1";
 } else {
     $action = "Forget";
-    $get_var = "f=1";
 }
 ?>
 <div id="sidebar_settings" class="sidebar_content_inner">
@@ -35,7 +33,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
         			                             <?php } ?>
         			                             setTimeout(function() {
             			                             window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "isLeave":true} );
-            			                             window.location.href = "/documents?<?php echo $get_var; ?>";
+            			                             window.location.href = "/documents/";
         			                             }, 100);
         			                         }
         			                         else {

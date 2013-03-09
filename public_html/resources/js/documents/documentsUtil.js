@@ -66,11 +66,11 @@ window.documents = {
 
         setTimeout(function() {
             if(id == "new") {
-                window.documents.gotToTab("/editor");
+                window.documents.gotToTab("/editor/");
             }
 
             if(id == "tab") {
-                window.documents.gotToTab("/editor?i=" + reference);
+                window.documents.gotToTab("/editor/?i=" + reference);
             }
 
             if(id == "rename") {
@@ -325,7 +325,7 @@ window.documents = {
 
                 window.notification.close();
                 if(!no_history) {
-                    history.pushState(null, null, "/documents");
+                    history.pushState(null, null, "/documents/");
                 }
                 callback(true);
             }
@@ -450,7 +450,7 @@ window.documents = {
                                          JSON.stringify(contents.split('\n')),
                                          "github", path, location_id,
                      function(id) {
-                         window.documents.gotToTab("editor?i=" + id);
+                         window.documents.gotToTab("editor/?i=" + id);
                          window.notification.close();
                      }
                 );
@@ -551,7 +551,7 @@ window.documents = {
                                          JSON.stringify(json.split('\n')),
                                          "sftp", path, location_id,
                      function(id) {
-                         window.documents.gotToTab("editor?i=" + id);
+                         window.documents.gotToTab("editor/?i=" + id);
                          window.notification.close();
                      }
                 );

@@ -23,7 +23,7 @@ RewriteRule ^([^/]+)/$ $1.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{1,5}|/)$
-RewriteRule (.*)$ /$1/ [R=301,L]
+RewriteRule (.*?)$ /$1/ [R=301,L]
 
 # Apache Error Code Handling
 ErrorDocument 204 /errors/base.php

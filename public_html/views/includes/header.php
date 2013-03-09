@@ -1,5 +1,5 @@
 <div id="header">
-    <a href="../editor" id="logo">code-laborate</a>
+    <a href="/editor/" id="logo">code-laborate</a>
     <div id="document_info">
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="document_title" class="hover" onclick="sidebar('settings', 'documentTitle');"><?php echo $title; ?></div>
@@ -13,9 +13,9 @@
         </div>
     </div>
     <div id="user">
-        <div><a href="/logout">Sign Out</a></div>
-        <div><a href="/documents">Documents</a></div>
-        <div><a href="/account"><?php echo $_SESSION['userName']; ?></a></div>
+        <div><a href="/logout/">Sign Out</a></div>
+        <div><a href="/documents/">Documents</a></div>
+        <div><a href="/account/"><?php echo $_SESSION['userName']; ?></a></div>
     </div>
     <div class="clear"></div>
 </div>

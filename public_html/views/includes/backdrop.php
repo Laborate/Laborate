@@ -1,13 +1,13 @@
 <div id="backdrop">
     <div id="backdropCore">
-            <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>"><div id="backDropLogo">code-laborate</div></a>
+            <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/"><div id="backDropLogo">code-laborate</div></a>
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="userNavigation">
-                    <div><a href="/php/user/logout">Sign Out</a></div>
+                    <div><a href="/php/user/logout/">Sign Out</a></div>
                     <div>|</div>
-                    <div><a href="/documents">Documents</a></div>
+                    <div><a href="/documents/">Documents</a></div>
                     <div>|</div>
-                    <div><a href="/account" id="userNavigationName"><?php echo $_SESSION['userName']; ?></a></div>
+                    <div><a href="/account/" id="userNavigationName"><?php echo $_SESSION['userName']; ?></a></div>
                 </div>
                 <?php if(!isset($_GET['i'])) { ?>
                 <!-- Start: Backdrop New File -->
@@ -33,7 +33,7 @@
                                 <div class="clear"></div>
                             </div>
                         </div>
-                        <div style="text-align: center;" id="backdropLoaderImg"><img src="http://resources.code.dev.laborate.io/img/loader.gif" width="220" height="19"/></div>
+                        <div style="text-align: center;" id="backdropLoaderImg"><img src="http://resources.<?php echo $_SERVER["HTTP_HOST"]; ?>/img/loader.gif" width="220" height="19"/></div>
                         <div class="clear"></div>
                     </form>
                     <form action="/php/template/upload.php" method="post" enctype="multipart/form-data" id="file_upload">
@@ -58,7 +58,7 @@
                             <?php } ?>
                             <input type="submit" class="backdropButton button full blue" id="backdropGo" value="Start Coding"/>
                         </div>
-                        <div style="text-align: center;" id="backdropLoaderImg"><img src="http://resources.code.dev.laborate.io/img/loader.gif" width="220" height="19"/></div>
+                        <div style="text-align: center;" id="backdropLoaderImg"><img src="http://resources.<?php echo $_SERVER["HTTP_HOST"]; ?>/img/loader.gif" width="220" height="19"/></div>
                     </form>
                     <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;">Password Incorrect</div>
                 </div>
@@ -78,7 +78,7 @@
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
-                        Don't Have An Account? <a href="/register">Register!</a>
+                        Don't Have An Account? <a href="/register/">Register!</a>
                     </div>
                 </div>
                 <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>
@@ -100,7 +100,7 @@
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
-                       Have An Account? <a href="/login">Sign In!</a>
+                       Have An Account? <a href="/login/">Sign In!</a>
                     </div>
                 </div>
                 <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>

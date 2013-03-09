@@ -1,4 +1,5 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/config.php');
-header("Location: http://code.".$_SESSION['box']."laborate.io/");
+$request = explode(".", $_SERVER["HTTP_HOST"]);
+array_shift($request);
+header("Location: http://".implode(".", $request)."/");
 ?>

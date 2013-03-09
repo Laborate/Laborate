@@ -218,7 +218,7 @@ window.editorUtil = {
         });
     },
     printFile: function() {
-        var url = "/print.php?i="+ getUrlVars()['i'] + "&p="+ window.passTemplate + "&t=" + $("#document_title").text();
+        var url = "/print/?i="+ getUrlVars()['i'] + "&p="+ window.passTemplate + "&t=" + $("#document_title").text();
         printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
     },
     commitFile: function() {

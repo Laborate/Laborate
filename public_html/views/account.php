@@ -7,7 +7,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 getDependencies(["core", "header", "account", "icons"]);
 if($_GET['github'] > 1) {
     if($_GET['github'] == 2) {
-        $_SESSION['github_redirect'] = "/documents";
+        $_SESSION['github_redirect'] = "/documents/";
     }
 
     echo "<script type='text/javascript'>window.location.href = '".$_SESSION['github_auth_url']."'</script>";

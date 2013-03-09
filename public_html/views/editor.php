@@ -15,11 +15,11 @@ getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);
     <?php } else { ?>
         <title>Editor<?php echo $_SESSION['webSiteTitle']; ?></title>
     <?php } ?>
-    <script src="http://<?php echo $_SERVER['SERVER_ADDR']; ?>:8000/socket.io/socket.io.js"></script>
+    <script src="http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000/socket.io/socket.io.js"></script>
   	<script type="text/javascript">
   	    try {
-  	        window.nodeSocket = io.connect('http://<?php echo $_SERVER['SERVER_ADDR']; ?>:8000');
-  	    } catch(err) { window.location.href = "/errors/node.php" }
+  	        window.nodeSocket = io.connect('http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000');
+  	    } catch(err) { window.location.href = "/errors/node/" }
   	 </script>
   	 <?php placeDependencies(); ?>
 </head>

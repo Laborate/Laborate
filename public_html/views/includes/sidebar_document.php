@@ -1,5 +1,5 @@
 <div id="sidebar_document" class="sidebar_content_inner">
-    <a href="/editor" class="button green full" style="display:block">New Document</a>
+    <a href="/editor/" class="button green full" style="display:block">New Document</a>
     <hr/>
     <div>
         <div class="header">Document History</div>

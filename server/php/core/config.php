@@ -34,13 +34,6 @@ else {
     $_SESSION['no_cache'] = false;
 }
 
-//Server Box
-$_SESSION['box'] = "dev";
-
-if($_SESSION['box'] != "") {
-   $_SESSION['box'] .= ".";
-}
-
 //Website Title
 $_SESSION['webSiteTitle'] = " · Code-Laborate";
 

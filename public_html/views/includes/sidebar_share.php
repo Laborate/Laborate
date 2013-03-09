@@ -4,7 +4,7 @@
 		function initialize_share() {
     		$("#shareUrl").val(window.location.href);
             $("#shareCopy").zclip({
-                path:'../flash/copy.swf',
+                path:'/flash/copy.swf',
                 copy: window.location.href,
                 afterCopy: function(){
                     $("#shareCopy").val("Copied");

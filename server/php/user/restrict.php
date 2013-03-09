@@ -15,10 +15,10 @@ if(!function_exists('redirect')) {
                 exit();
             } else {
                 if($logout) {
-                    header("Location: /php/user/logout?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+                    header("Location: /logout/?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
                 }
                 else {
-                    header("Location: /login?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
+                    header("Location: /login/?continue=http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]);
                 }
             }
         }

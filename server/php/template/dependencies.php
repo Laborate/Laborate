@@ -48,7 +48,7 @@ function getDependencies($dependencies) {
         array_push($GLOBALS['css'], "backdrop/backdrop.css");
 
         if($GLOBALS['backdropMode'] == "editor") {
-            array_push($GLOBALS['js'], "backdrop/upload_file.js", "core/form.js");
+            array_push($GLOBALS['js'], "backdrop/backdropEditor.js", "backdrop/upload_file.js", "core/form.js");
         }
 
         if($GLOBALS['backdropMode'] == "login" || $GLOBALS['backdropMode'] == "register") {
@@ -88,23 +88,23 @@ function placeDependencies() {
     <link rel="apple-touch-icon-precomposed" href="http://resources.code.'.$_SESSION['box'].'laborate.io/favicon/57.png">%1$s', PHP_EOL);
 
     if($GLOBALS['css']) {
-        printf('<link href="http://resources.code.'.$_SESSION['box'].'laborate.io/min/?b=css&amp;f='.implode(",", array_unique($GLOBALS['css'])).$cache.'" rel="stylesheet" type="text/css">%1$s', PHP_EOL);
+        printf('<link href="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=css&amp;f='.implode(",", array_unique($GLOBALS['css'])).$cache.'" rel="stylesheet" type="text/css">%1$s', PHP_EOL);
     }
 
     if($GLOBALS['codeMirror_css']) {
-        printf('<link href="http://resources.code.'.$_SESSION['box'].'laborate.io/min/?b=lib&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_css'])).$cache.'" rel="stylesheet" type="text/css">%1$s', PHP_EOL);
+        printf('<link href="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=lib&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_css'])).$cache.'" rel="stylesheet" type="text/css">%1$s', PHP_EOL);
     }
 
     if($GLOBALS['js'] || $GLOBALS['codeMirror_js']) {
-        printf('<script src="http://resources.code.'.$_SESSION['box'].'laborate.io/js/core/jquery.js" type="text/javascript"></script>%1$s', PHP_EOL);
+        printf('<script src="http://resources.'.$_SERVER["HTTP_HOST"].'/js/core/jquery.js" type="text/javascript"></script>%1$s', PHP_EOL);
     }
 
     if($GLOBALS['js']) {
-        printf('<script src="http://resources.code.'.$_SESSION['box'].'laborate.io/min/?b=js&amp;f='.implode(",", array_unique($GLOBALS['js'])).$cache.'" type="text/javascript"></script>%1$s', PHP_EOL);
+        printf('<script src="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=js&amp;f='.implode(",", array_unique($GLOBALS['js'])).$cache.'" type="text/javascript"></script>%1$s', PHP_EOL);
     }
 
     if($GLOBALS['codeMirror_js']) {
-        printf('<script src="http://resources.code.'.$_SESSION['box'].'laborate.io/min/?b=lib&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_js'])).$cache.'" type="text/javascript"></script>%1$s', PHP_EOL);
+        printf('<script src="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=lib&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_js'])).$cache.'" type="text/javascript"></script>%1$s', PHP_EOL);
     }
 }
 
