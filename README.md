@@ -1,6 +1,6 @@
 Install After [base-init](https://github.com/Laborate/base-init)
 ------------------------------------------
-**Paste Installer Script in ```www``` Folder**
+**Run Installer Script**
 ```bash
 cd /var/www/; git clone -b new git@github.com:Laborate/code.git; sudo bash code/init/init.sh;
 ```
