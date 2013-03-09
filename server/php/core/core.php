@@ -13,6 +13,24 @@ if(!function_exists('jsonToArray')) {
     }
 }
 
+if(!function_exists('array_orderby')) {
+    function array_orderby() {
+        $args = func_get_args();
+        $data = array_shift($args);
+        foreach ($args as $n => $field) {
+            if (is_string($field)) {
+                $tmp = array();
+                foreach ($data as $key => $row)
+                    $tmp[$key] = $row[$field];
+                $args[$n] = $tmp;
+                }
+        }
+        $args[] = &$data;
+        call_user_func_array('array_multisort', $args);
+        return array_pop($args);
+    }
+}
+
 if(!function_exists('curlPost')) {
     function curlPost($url, $fields) {
         foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }

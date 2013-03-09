@@ -311,8 +311,8 @@ window.documents = {
                     file += '<div class="file_attributes ' + item['protection'] + '" data="' + item['protection'] + '">';
                     file += item['ownership'];
                     file += '</div>';
-                    file += '<div class="title" data="' + item['title'] + '">';
-                    file += window.documents.nameToTitle(item['title']);
+                    file += '<div class="title" data="' + item['name'] + '">';
+                    file += window.documents.nameToTitle(item['name']);
                     file += '</div></div>';
                     files += file;
                 });

@@ -5,32 +5,36 @@ set_include_path($_SERVER['DOCUMENT_ROOT'].'/php/vendor/phpseclib/');
 include('Net/SFTP.php');
 
 function getSftpClient($credentials) {
-    $sftp = new Net_SFTP($credentials['sftp_server']);
+    if(!preg_match("/localhost/", $credentials['sftp_server'])) {
+        $sftp = new Net_SFTP($credentials['sftp_server']);
 
-    if(isset($credentials['sftp_key_file'])) {
-        include('Crypt/RSA.php');
-        $key = new Crypt_RSA();
+        if(isset($credentials['sftp_key_file'])) {
+            include('Crypt/RSA.php');
+            $key = new Crypt_RSA();
 
-        if(isset($credentials['sftp_user_password'])) {
-            $key->setPassword($credentials['sftp_user_password']);
-        }
+            if(isset($credentials['sftp_user_password'])) {
+                $key->setPassword($credentials['sftp_user_password']);
+            }
 
-        $key->loadKey($credentials['sftp_key_file']);
-        if (!$sftp->login($credentials['sftp_user_name'], $key)) {
-            exit('Bad Credentials');
-        }
-    } else {
-        if(isset($credentials['sftp_user_password'])) {
-            if (!$sftp->login($credentials['sftp_user_name'], $credentials['sftp_user_password'])) {
+            $key->loadKey($credentials['sftp_key_file']);
+            if (!$sftp->login($credentials['sftp_user_name'], $key)) {
                 exit('Bad Credentials');
             }
         } else {
-           if (!$sftp->login()) {
-                exit('Bad Credentials');
+            if(isset($credentials['sftp_user_password'])) {
+                if (!$sftp->login($credentials['sftp_user_name'], $credentials['sftp_user_password'])) {
+                    exit('Bad Credentials');
+                }
+            } else {
+               if (!$sftp->login()) {
+                    exit('Bad Credentials');
+                }
             }
         }
+        return $sftp;
+    } else {
+        exit('Bad Credentials');
     }
-    return $sftp;
 }
 
 function getDirectory($credentials, $dir="") {
@@ -58,7 +62,7 @@ function getDirectory($credentials, $dir="") {
         }
     }
 
-    return json_encode($directory);
+    return $directory;
 }
 
 function getFile($credentials, $path) {

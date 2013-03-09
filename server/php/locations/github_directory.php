@@ -11,7 +11,8 @@ if(isset($_POST['location_id'])) {
     $locations = jsonToArray($GLOBALS['row_Users']['user_locations']);
     if(array_key_exists($_POST['location_id'], $locations)) {
         if(array_key_exists('github_repository', $locations[$_POST['location_id']])) {
-            echo getDirectory($locations[$_POST['location_id']]['github_repository'], $_POST['dir']);
+            $files_array = getDirectory($locations[$_POST['location_id']]['github_repository'], $_POST['dir']);
+            echo json_encode(array_orderby($files_array, 'name', SORT_ASC));
         } else {
             echo "Not Github Location";
         }

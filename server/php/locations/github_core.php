@@ -20,7 +20,7 @@ function getRepositories() {
         foreach ($response as $key => $value) {
             array_push($repos, array("repo" => str_replace("https://api.github.com/repos/", "", $value['url']), "private" => $value['private']));
         }
-        $repos = json_encode($repos);
+        $repos = $repos;
     } catch(Github\Exception\RuntimeException $e) {
         $repos = 'Bad Token';
 
@@ -42,7 +42,7 @@ function getDirectory($repo, $dir="") {
         foreach($response as $key => $value) {
             array_push($directory, array("type"=> $value['type'], "name" => $value['name'], "path" => $value['path']));
         }
-        $json = json_encode($directory);
+        $json = $directory;
     } catch(Exception $e) {
         $json = 'Bad Token';
     }
