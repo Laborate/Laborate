@@ -4,15 +4,15 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 getDependencies(["core", "header", "documents", "icons"]);
+$title = "My Documents";
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>My Documents<?php echo $_SESSION['webSiteTitle']; ?></title>
+<head>
+	<?php include($_SERVER['DOCUMENT_ROOT']."/includes/meta_tags.php"); ?>
 	<?php placeDependencies(); ?>
 </head>
 <body>
-    <?php $title = "My Documents"; include("includes/header.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
     <div id="locations">
         <div id="locations_header">
             <div class="left">Locations</div>
@@ -62,7 +62,7 @@ getDependencies(["core", "header", "documents", "icons"]);
             <div id="file_library"></div>
         </div>
     </div>
-    <?php include("includes/mouseMenu.php"); ?>
-    <?php include("includes/popUp.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/mouseMenu.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/popUp.php"); ?>
 </body>
 </html>

@@ -3,10 +3,11 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 getDependencies(["core", "backdrop"]);
+$title = "Not Found";
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Not Found<?php echo $_SESSION['webSiteTitle']; ?></title>
+	<?php include($_SERVER['DOCUMENT_ROOT']."/includes/meta_tags.php"); ?>
     <?php placeDependencies(); ?>
 </head>
 <body>

@@ -6,13 +6,14 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/php/template/dependencies.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 $GLOBALS['backdropMode'] = "register";
 getDependencies(["backdrop", "core"]);
+$title = "Register";
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Register<?php echo $_SESSION['webSiteTitle']; ?></title>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/meta_tags.php"); ?>
     <?php placeDependencies(); ?>
 </head>
 <body>
-    <?php include("includes/backdrop.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/backdrop.php"); ?>
 </body>
 </html>

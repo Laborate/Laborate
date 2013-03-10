@@ -5,10 +5,11 @@ require("server/php/core/config.php");
 require("server/php/template/dependencies.php");
 require_once("includes/signature.php");
 if(isset($_GET['i'])) { getDependencies(["print"]); }
+$title = $_GET['t'];
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><?php echo $_GET['t'].$_SESSION['webSiteTitle']; ?></title>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/meta_tags.php"); ?>
     <script type="text/javascript">
         <?php if(!isset($_GET['i'])) { ?>
             window.close();

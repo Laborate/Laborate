@@ -76,17 +76,6 @@ function placeDependencies() {
     if($_SESSION['no_cache'] == true) { $cache = '&nc='.rand(0, 1000000000); }
     else { $cache = ""; }
 
-    printf('<!-- Opera Speed Dial Favicon -->
-    <link rel="icon" type="image/png" href="http://resources.code.'.$_SESSION['box'].'laborate.io/favicon/160.png" >
-    <!-- Standard Favicon -->
-    <link rel="icon" type="image/png" href="http://resources.code.'.$_SESSION['box'].'laborate.io/favicon/16.png" >
-    <!-- For iPhone 4 Retina display: -->
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://resources.code.'.$_SESSION['box'].'laborate.io/favicon/114.png">
-    <!-- For iPad: -->
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://resources.code.'.$_SESSION['box'].'laborate.io/favicon/72.png">
-    <!-- For iPhone: -->
-    <link rel="apple-touch-icon-precomposed" href="http://resources.code.'.$_SESSION['box'].'laborate.io/favicon/57.png">%1$s', PHP_EOL);
-
     if($GLOBALS['css']) {
         printf('<link href="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=css&amp;f='.implode(",", array_unique($GLOBALS['css'])).$cache.'" rel="stylesheet" type="text/css">%1$s', PHP_EOL);
     }

@@ -7,15 +7,16 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/php/session/initialize.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/includes/signature.php');
 $GLOBALS['backdropMode'] = "editor";
 getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);
+
+if(isset($_GET['i'])) {
+    $title = $initalize[1];
+} else {
+    $title = "Editor";
+}
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <?php if(isset($_GET['i'])) { ?>
-        <title><?php echo $initalize[1].$_SESSION['webSiteTitle']; ?></title>
-    <?php } else { ?>
-        <title>Editor<?php echo $_SESSION['webSiteTitle']; ?></title>
-    <?php } ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/meta_tags.php"); ?>
     <script src="http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000/socket.io/socket.io.js"></script>
   	<script type="text/javascript">
   	    try {
@@ -25,7 +26,7 @@ getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);
   	 <?php placeDependencies(); ?>
 </head>
 <body style="display:none;">
-    <?php include("includes/header.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
     <div id="sidebar">
         <div id="sidebar_header">
             <img id="document" onClick="sidebar('document')" src="http://resources.code.dev.laborate.io/img/document.png"/>
@@ -40,7 +41,7 @@ getDependencies(["core", "icons", "editor", "chatroom", "header", "backdrop"]);
         <div id="full_screen" class="icon-expand right"></div>
         <textarea id="code" name="code" runnable="true" style="display:none"></textarea>
     </div>
-    <?php include("includes/chat_room.php"); ?>
-    <?php include("includes/backdrop.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/chat_room.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/backdrop.php"); ?>
 </body>
 </html>

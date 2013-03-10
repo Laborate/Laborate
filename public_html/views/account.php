@@ -12,15 +12,15 @@ if($_GET['github'] > 1) {
 
     echo "<script type='text/javascript'>window.location.href = '".$_SESSION['github_auth_url']."'</script>";
 }
+$title = "My Account";
 ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>My Account<?php echo $_SESSION['webSiteTitle']; ?></title>
+<head>
+	<?php include($_SERVER['DOCUMENT_ROOT']."/includes/meta_tags.php"); ?>
 	<?php placeDependencies(); ?>
 </head>
 <body>
-    <?php $title = "My Account"; include("includes/header.php"); ?>
+    <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
     <div id="navigation">
         <div id="navigation_header"><?php echo $_SESSION['userName']; ?></div>
         <?php if($_SESSION['userLevel'] > 0 && $_SESSION['userLevel'] < 3) { ?>
