@@ -282,13 +282,32 @@ window.documents = {
 
         window.cachedLocations["location_" + location_id][path] = json;
     },
+    hasPopUpBlocker: function(poppedWindow) {
+        var result = false;
+        try {
+            if (typeof poppedWindow == 'undefined') {
+                result = true;
+            }
+            else if (poppedWindow && poppedWindow.closed) {
+                result = false;
+            }
+            else if (poppedWindow && poppedWindow.test) {
+                result = false;
+            }
+            else {
+                result = true;
+            }
+
+        } catch (err) {}
+        return result;
+    },
     gotToLink: function(link) {
         window.location.href = link;
     },
     gotToTab: function(link) {
         var tab = window.open(link);
-        if (tab == null || typeof(tab)== 'undefined') {
-            window.location.href = link;
+        if (!window.documents.hasPopUpBlocke(tab)) {
+            window.documents.gotToTab(link);
         }
     },
     newFile: function(name, data, type, path, location_id, callback) {
@@ -454,7 +473,7 @@ window.documents = {
                                          JSON.stringify(contents.split('\n')),
                                          "github", path, location_id,
                      function(id) {
-                         window.documents.gotToTab("editor/?i=" + id);
+                         window.documents.gotToTab("/editor/?i=" + id);
                          window.notification.close();
                      }
                 );
@@ -555,7 +574,7 @@ window.documents = {
                                          JSON.stringify(json.split('\n')),
                                          "sftp", path, location_id,
                      function(id) {
-                         window.documents.gotToTab("editor/?i=" + id);
+                         window.documents.gotToTab("/editor/?i=" + id);
                          window.notification.close();
                      }
                 );

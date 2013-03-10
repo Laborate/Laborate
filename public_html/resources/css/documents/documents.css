@@ -168,14 +168,16 @@
     background: #e3e3e3;
     color: #333;
     position: absolute;
-    padding: 2px 4px;
+    padding: 5px;
     border-radius: 50%;
     top: -14px;
     right: -9px;
     border: solid 3px #dadada;
     font-size: 16px;
-    font-family: sans-serif;
-    text-transform: uppercase;
+}
+
+#files .file .file_badge.icon-drawer {
+    padding: 4px 5px 6px 5px;
 }
 
 #files .file .file_attributes {
