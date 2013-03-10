@@ -306,9 +306,13 @@ window.documents = {
         $.post("/php/locations/online_directory.php",
             function(json) {
                 var files = "";
+                var type_convert = {"github":"icon-github", "sftp":"icon-drawer"};
                 $.each(JSON.parse(json), function(i, item) {
                     var file = '<div id="file_' + item['id'] + '" class="file online" data="' + item['id'] + '">';
-                    file += '<div class="file_attributes ' + item['protection'] + '" data="' + item['protection'] + '">';
+                    if(item['type'] != "" && item['type'] != undefined) {
+                        file += '<div class="file_badge ' + type_convert[item['type']] + '"></div>';
+                    }
+                    file += '<div class="file_attributes icon ' + item['protection'] + '" data="' + item['protection'] + '">';
                     file += item['ownership'];
                     file += '</div>';
                     file += '<div class="title" data="' + item['name'] + '">';

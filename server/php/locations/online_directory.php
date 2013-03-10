@@ -20,7 +20,8 @@ do {
     else { $protected = "password"; }
 
     $values = array("id" => $GLOBALS['row_Sessions']['session_id'], "protection" => $protected,
-                    "ownership" => $ownership, "name" => $GLOBALS['row_Sessions']['session_name']);
+                    "ownership" => $ownership, "name" => $GLOBALS['row_Sessions']['session_name'],
+                    "type" => $GLOBALS['row_Sessions']['session_type']);
 
     array_push($files_array, $values);
 
