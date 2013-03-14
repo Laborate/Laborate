@@ -115,3 +115,21 @@ $("#backdropExistingFileForm").live("submit", function() {
 
     return false;
 });
+
+$(window).ready(function() {
+    $("#backdropScreenName").val($.cookie("screenName"));
+});
+
+function finishBackdrop(title) {
+    window.nodeSocket.emit('join', getUrlVars()['i']);
+    setTimeout(function(){
+        window.editorUtil.setTitle(title);
+        window.chatRoom.screenNameChange("", $("#backdropScreenName").val());
+        window.chatRoom.signIn();
+        $("#backdrop, #backdrop div").hide();
+        $("body div").not("#backdrop, #backdrop div, #contributor_info").show();
+        $("#header #logo").hAlign().vAlign();
+        window.editor.clearHistory();
+        setTimeout(function(){ window.editor.refresh(); }, 1000);
+    }, 100);
+}
