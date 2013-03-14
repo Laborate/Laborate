@@ -306,8 +306,8 @@ window.documents = {
     },
     gotToTab: function(link) {
         var tab = window.open(link);
-        if (!window.documents.hasPopUpBlocker(tab)) {
-            window.documents.gotToTab(link);
+        if (window.documents.hasPopUpBlocker(tab)) {
+            window.location.href = link;
         }
     },
     newFile: function(name, data, type, path, location_id, callback) {
