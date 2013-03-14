@@ -306,7 +306,7 @@ window.documents = {
     },
     gotToTab: function(link) {
         var tab = window.open(link);
-        if (!window.documents.hasPopUpBlocke(tab)) {
+        if (!window.documents.hasPopUpBlocker(tab)) {
             window.documents.gotToTab(link);
         }
     },
