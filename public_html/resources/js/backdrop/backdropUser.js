@@ -1,5 +1,6 @@
 //User Login
 $("#backdropSigIn").live("submit", function() {
+    $("#backdropSigIn input[type=submit]").val("· · ·").addClass("disabled");
     var passed = true
 
     if($("#backdropSigIn #backdropSigInEmail").val() == "") {
@@ -21,6 +22,7 @@ $("#backdropSigIn").live("submit", function() {
             function(result){
                 if(result == "User Login: Failed") {
                     $("#backdropInital .textError").text("Incorrect Email or Password").fadeIn();
+                    $("#backdropSigIn input[type=submit]").val("Sign In").removeClass("disabled");
                 }
                 else {
                     var urlContinue = getUrlVars()['continue'];
@@ -29,12 +31,15 @@ $("#backdropSigIn").live("submit", function() {
                 }
             }
         );
+    } else {
+        $("#backdropSigIn input[type=submit]").val("Sign In").removeClass("disabled");
     }
 });
 
 
 //User Registration
 $("#backdropRegister").live("submit", function() {
+    $("#backdropRegister input[type=submit]").val("· · ·").addClass("disabled");
     $("#backdropInital .textError").fadeOut();
     var passed = true
 
@@ -103,10 +108,13 @@ $("#backdropRegister").live("submit", function() {
                     }
                     else {
                        $("#backdropInital .textError").text("User Registration Failed").fadeIn();
+                       $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
                     }
 
                 }
             );
+        } else {
+            $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
         }
     }
 });
