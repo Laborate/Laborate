@@ -589,7 +589,7 @@ window.documents = {
 
         parent_location.find(".file").each(function() {
             var show = true;
-            if($(this).find(".title").text().toLowerCase().indexOf(search) < 0) { show = false; }
+            if($(this).find(".title").attr("data").toLowerCase().indexOf(search) < 0) { show = false; }
             if(window.sidebar == "online") {
                 if(protection != $(this).find(".file_attributes").attr("data")[0] && protection != "") { show = false; }
                 if(relation != $.trim($(this).find(".file_attributes").text())[0] && relation != "") { show = false; }
