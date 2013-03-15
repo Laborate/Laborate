@@ -30,7 +30,7 @@ $(".newFile").live("click", function() {
     window.documents.newFile("Untitled Document", JSON.stringify([""]), $("#" + window.sidebar).attr("data"),
                              path, window.sidebar,
          function(id) {
-             window.documents.gotToTab("/editor/?i=" + id);
+             window.documents.goToTab("/editor/?i=" + id);
              window.notification.close();
          }
     );
@@ -83,7 +83,7 @@ $(".file_search").live("submit", function() {
 
 //File System
 $(".online.file .file_attributes").live("click", function() {
-    window.documents.gotToTab("/editor/?i=" + $(this).parent().attr("data"));
+    window.documents.goToTab("/editor/?i=" + $(this).parent().attr("data"));
     return false;
 });
 

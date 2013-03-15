@@ -66,11 +66,11 @@ window.documents = {
 
         setTimeout(function() {
             if(id == "new") {
-                window.documents.gotToTab("/editor/");
+                window.documents.goToTab("/editor/");
             }
 
             if(id == "tab") {
-                window.documents.gotToTab("/editor/?i=" + reference);
+                window.documents.goToTab("/editor/?i=" + reference);
             }
 
             if(id == "rename") {
@@ -282,31 +282,11 @@ window.documents = {
 
         window.cachedLocations["location_" + location_id][path] = json;
     },
-    hasPopUpBlocker: function(poppedWindow) {
-        var result = false;
-        try {
-            if (typeof poppedWindow == 'undefined') {
-                result = true;
-            }
-            else if (poppedWindow && poppedWindow.closed) {
-                result = false;
-            }
-            else if (poppedWindow && poppedWindow.test) {
-                result = false;
-            }
-            else {
-                result = true;
-            }
-
-        } catch (err) {}
-        return result;
-    },
-    gotToLink: function(link) {
+    goToLink: function(link) {
         window.location.href = link;
     },
-    gotToTab: function(link) {
-        var tab = window.open(link);
-        if (window.documents.hasPopUpBlocker(tab)) {
+    goToTab: function(link) {
+        if(!window.open(link)) {
             window.location.href = link;
         }
     },
@@ -473,7 +453,7 @@ window.documents = {
                                          JSON.stringify(contents.split('\n')),
                                          "github", path, location_id,
                      function(id) {
-                         window.documents.gotToTab("/editor/?i=" + id);
+                         window.documents.goToTab("/editor/?i=" + id);
                          window.notification.close();
                      }
                 );
@@ -574,7 +554,7 @@ window.documents = {
                                          JSON.stringify(json.split('\n')),
                                          "sftp", path, location_id,
                      function(id) {
-                         window.documents.gotToTab("/editor/?i=" + id);
+                         window.documents.goToTab("/editor/?i=" + id);
                          window.notification.close();
                      }
                 );
