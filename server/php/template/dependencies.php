@@ -10,10 +10,9 @@ function getDependencies($dependencies) {
     if(in_array("editor", $dependencies)) {
         array_push($GLOBALS['js'],  "editor/editorInit.js", "editor/editor.js", "editor/editorUtil.js", "editor/sidebar.js");
         array_push($GLOBALS['css'], "editor/editor.css", "editor/sidebar.css");
-        array_push($GLOBALS['codeMirror_js'], "codemirror.js", "util/match-highlighter.js", "util/loadmode.js");
-        array_push($GLOBALS['codeMirror_js'], "util/formatting.js", "util/search.js", "util/searchcursor.js");
-        array_push($GLOBALS['codeMirror_css'], "codemirror.css", "codelaborate.css");
-        getDependencies(["icons"]);
+        array_push($GLOBALS['codeMirror_js'], "lib/codemirror.js", "addon/search/match-highlighter.js");
+        array_push($GLOBALS['codeMirror_js'], "addon/format/formatting.js", "addon/search/search.js", "addon/search/searchcursor.js");
+        getDependencies(["icons", "codeMirror"]);
     }
 
     if(in_array("header", $dependencies)) {
@@ -39,8 +38,8 @@ function getDependencies($dependencies) {
     }
 
     if(in_array("codeMirror", $dependencies)) {
-        array_push($GLOBALS['codeMirror_js'], "codemirror.js", "util/loadmode.js");
-        array_push($GLOBALS['codeMirror_css'], "codemirror.css", "codelaborate.css");
+        array_push($GLOBALS['codeMirror_js'], "lib/codemirror.js", "addon/mode/loadmode.js");
+        array_push($GLOBALS['codeMirror_css'], "lib/codemirror.css", "theme/codelaborate.css");
     }
 
     if(in_array("backdrop", $dependencies)) {
@@ -81,7 +80,7 @@ function placeDependencies() {
     }
 
     if($GLOBALS['codeMirror_css']) {
-        printf('<link href="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=lib&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_css'])).$cache.'" rel="stylesheet" type="text/css">%1$s', PHP_EOL);
+        printf('<link href="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=codemirror&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_css'])).$cache.'" rel="stylesheet" type="text/css">%1$s', PHP_EOL);
     }
 
     if($GLOBALS['js'] || $GLOBALS['codeMirror_js']) {
@@ -93,7 +92,7 @@ function placeDependencies() {
     }
 
     if($GLOBALS['codeMirror_js']) {
-        printf('<script src="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=lib&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_js'])).$cache.'" type="text/javascript"></script>%1$s', PHP_EOL);
+        printf('<script src="http://resources.'.$_SERVER["HTTP_HOST"].'/min/?b=codemirror&amp;f='.implode(",", array_unique($GLOBALS['codeMirror_js'])).$cache.'" type="text/javascript"></script>%1$s', PHP_EOL);
     }
 }
 
