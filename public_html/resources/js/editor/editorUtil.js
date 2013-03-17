@@ -7,10 +7,12 @@ window.editorUtil = {
         var window_height = parseInt($(window).height());
 
         if($("#header").is(":visible")) {
-            $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 38) + "px");
+            editor.getWrapperElement().style.height = (window_height - header - 38) + "px";
         } else {
-            $("#editorCodeMirror, .CodeMirror-scroll").height((window_height - header - 68) + "px");
+           editor.getWrapperElement().style.height = (window_height - header - 68) + "px";
         }
+
+        editor.refresh();
     },
     format: function(whole_document) {
         if(whole_document) {

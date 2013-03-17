@@ -1,7 +1,34 @@
+/* Core Editor */
+.CodeMirror-scroll {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+#editorCodeMirror * {
+    outline: none;
+}
+
+span.CodeMirror-matchhighlight { background: #adfab4 }
+.CodeMirror-focused span.CodeMirror-matchhighlight { background: #adfab4; }
+
+#editorCodeMirror .highLightLine {
+    background: rgba(96,180,222,0.4);
+}
+
+.CodeMirror-matchingbracket,
+.CodeMirror-nonmatchingbracket {
+    color: #a62da2;
+}
+
+#editorCodeMirror .CodeMirror-selected {
+    background: #ACCBFA;
+}
+
+/* Color Styling */
 .cm-s-codelaborate {background: #fbfbfe; color: #323231;}
-.cm-s-codelaborate div.CodeMirror-selected {background: #B0CFFE !important;}
-.cm-s-codelaborate .CodeMirror-gutter {background: #e8e8e8; border-right: 0px;}
-.cm-s-codelaborate .CodeMirror-gutter-text {color: #999999;}
+.cm-s-codelaborate div.CodeMirror-selected {background: #b0d0ff !important;}
+.cm-s-codelaborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
 .cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666666 !important;}
 
 .cm-s-codelaborate pre { color: #292929; }

@@ -4,58 +4,14 @@ $(window).ready(function() {
             lineNumbers: true,
             lineWrapping: true,
             matchBrackets: true,
-            width: "100%",
-            height: "100%",
             tabMode: "indent",
-            dragDrop: false,
             theme: "codelaborate",
             indentUnit: 4,
             indentWithTabs: true,
-            enterMode: "keep",
-            tabMode: "shift",
-            onBlur: function(cm) {
-                window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line, "isOff":true} );
-            },
-            onCursorActivity: function(cm) {
-                window.nodeSocket.emit('cursors' , {"from":window.userId, "line":cm.getCursor().line} );
-                editor.matchHighlight("CodeMirror-matchhighlight");
-                $("#editorCodeMirror .CodeMirror-gutter-text pre").css({"font-weight":"", "color":""});
-                $("#editorCodeMirror .CodeMirror-gutter-text pre").eq(cm.getCursor().line).css({"font-weight":"bold", "color":"#09f"});
-            },
-            onChange: function(cm) {
-                if(window.bounceBack == true) {
-                    window.bounceBack = false;
-                }
-                else {
-                    window.editor.onDeleteLine(cm.getCursor().line, function(){
-                        window.nodeSocket.emit( 'editor' , {"from": window.userId, "delete": cm.getCursor().line} )
-                    });
-
-                    window.nodeSocket.emit( 'editor' , {"from": window.userId,
-                                                            "line": cm.getCursor().line,
-                                                            "code": editor.getLine(cm.getCursor().line)
-                                                            } );
-                }
-            },
-            onGutterClick: function(cm, n) {
-                var info = cm.lineInfo(n);
-                if (info.markerText){
-                    cm.clearMarker(n);
-                    window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [n, true]}} );
-                }
-                else {
-                    cm.setMarker(n, '<span style="color: #56606E">●</span> %N%');
-                    window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [n, false]}} );
-                }
-            }
-    });
-
-    for (var i = 0; i < window.editor.lineCount() - 1; i++) {
-        window.editor.onDeleteLine((i), function(){
-            window.nodeSocket.emit( 'editor' , {"from": window.userId, "delete": i} );
-        });
-    }
-
+            smartIndent: true,
+            autofocus: true,
+            dragDrop: true
+    })
 });
 
 $("#editorContainer").live("click", function() {

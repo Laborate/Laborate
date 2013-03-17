@@ -12,6 +12,8 @@ function getDependencies($dependencies) {
         array_push($GLOBALS['css'], "editor/editor.css", "editor/sidebar.css");
         array_push($GLOBALS['codeMirror_js'], "lib/codemirror.js", "addon/search/match-highlighter.js");
         array_push($GLOBALS['codeMirror_js'], "addon/format/formatting.js", "addon/search/search.js", "addon/search/searchcursor.js");
+        array_push($GLOBALS['codeMirror_js'], "edit/matchbrackets.js", "addon/selection/active-line.js", "addon/edit/closebrackets.js");
+        array_push($GLOBALS['codeMirror_js'], "addon/edit/closetag.js");
         getDependencies(["icons", "codeMirror"]);
     }
 
