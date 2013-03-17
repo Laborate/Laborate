@@ -1,8 +1,8 @@
 # User Authentication On Dev Site
-AuthName "Secure Area"
-AuthType Basic
-AuthUserFile /var/www/.htpasswd
-require valid-user
+#AuthName "Secure Area"
+#AuthType Basic
+#AuthUserFile /var/www/.htpasswd
+#require valid-user
 
 # Prevent Directory Listing
 Options -Indexes
