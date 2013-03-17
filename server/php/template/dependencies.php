@@ -10,10 +10,12 @@ function getDependencies($dependencies) {
     if(in_array("editor", $dependencies)) {
         array_push($GLOBALS['js'],  "editor/editorInit.js", "editor/editor.js", "editor/editorUtil.js", "editor/sidebar.js");
         array_push($GLOBALS['css'], "editor/editor.css", "editor/sidebar.css");
-        array_push($GLOBALS['codeMirror_js'], "lib/codemirror.js", "addon/search/match-highlighter.js");
-        array_push($GLOBALS['codeMirror_js'], "addon/format/formatting.js", "addon/search/search.js", "addon/search/searchcursor.js");
-        array_push($GLOBALS['codeMirror_js'], "addon/edit/matchbrackets.js", "addon/selection/active-line.js", "addon/edit/closebrackets.js");
-        array_push($GLOBALS['codeMirror_js'], "addon/edit/closetag.js");
+        array_push($GLOBALS['codeMirror_js'], "lib/codemirror.js", "addon/search/match-highlighter.js",
+                                              "addon/format/formatting.js", "addon/search/search.js",
+                                              "addon/search/searchcursor.js", "addon/edit/matchbrackets.js",
+                                              "addon/selection/active-line.js", "addon/edit/closebrackets.js",
+                                              "addon/edit/closetag.js");
+
         getDependencies(["icons", "codeMirror"]);
     }
 

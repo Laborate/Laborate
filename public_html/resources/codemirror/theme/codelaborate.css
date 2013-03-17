@@ -6,12 +6,12 @@
     overflow-x: auto;
 }
 
-.CodeMirror-matchhighlight {background: #adfab4}
+.CodeMirror-focused .cm-matchhighlight {background: #adfab4}
 .CodeMirror-focused span.CodeMirror-matchhighlight {background: #adfab4;}
 .CodeMirror .highLightLine {background: rgba(96,180,222,0.4);}
 
 .cm-s-codelaborate {background: #fbfbfe; color: #323231;}
-.cm-s-codelaborate div.CodeMirror-selected {background: #b0d0ff !important;}
+.cm-s-codelaborate .CodeMirror-selected {background: #b0d0ff !important;}
 .cm-s-codelaborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
 .cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666666 !important;}
 
@@ -39,6 +39,6 @@
 .cm-s-codelaborate span.cm-header {color: #00a831}
 
 .cm-s-codelaborate .CodeMirror-matchingbracket { color: #a62da2 !important;}
-.cm-s-codelaborate .CodeMirror-nonmatchingbracket {color: #f8f8f0 !important;}
+.cm-s-codelaborate .CodeMirror-nonmatchingbracket {color: #ff0000 !important;}
 .cm-s-codelaborate .acWord {color:black;}
 .cm-s-codelaborate .fileLink::after {border-bottom-color: #fbfbfe !important;}

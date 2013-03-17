@@ -10,7 +10,11 @@ $(window).ready(function() {
             indentWithTabs: true,
             smartIndent: true,
             autofocus: true,
-            dragDrop: true
+            dragDrop: true,
+            autoCloseBrackets: true,
+            autoCloseTags: true,
+            highlightSelectionMatches: true,
+            styleSelectedText: true
     })
 });
 
