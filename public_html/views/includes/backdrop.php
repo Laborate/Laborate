@@ -78,7 +78,7 @@
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
-                        Don't Have An Account? <a href="/register/">Register!</a>
+                        Don't Have An Account? <a href="/register/">Register</a>
                     </div>
                 </div>
                 <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>
@@ -100,7 +100,7 @@
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
-                       Have An Account? <a href="/login/">Sign In!</a>
+                       Have An Account? <a href="/login/">Sign In</a>
                     </div>
                 </div>
                 <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>
