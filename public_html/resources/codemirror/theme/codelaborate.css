@@ -1,43 +1,27 @@
-/* Core Editor */
+#editorCodeMirror * {outline: none;}
+
 .CodeMirror-scroll {
     height: 100%;
     overflow-y: auto;
     overflow-x: auto;
 }
 
-#editorCodeMirror * {
-    outline: none;
-}
+.CodeMirror-matchhighlight {background: #adfab4}
+.CodeMirror-focused span.CodeMirror-matchhighlight {background: #adfab4;}
+.CodeMirror .highLightLine {background: rgba(96,180,222,0.4);}
 
-span.CodeMirror-matchhighlight { background: #adfab4 }
-.CodeMirror-focused span.CodeMirror-matchhighlight { background: #adfab4; }
-
-#editorCodeMirror .highLightLine {
-    background: rgba(96,180,222,0.4);
-}
-
-.CodeMirror-matchingbracket,
-.CodeMirror-nonmatchingbracket {
-    color: #a62da2;
-}
-
-#editorCodeMirror .CodeMirror-selected {
-    background: #ACCBFA;
-}
-
-/* Color Styling */
 .cm-s-codelaborate {background: #fbfbfe; color: #323231;}
 .cm-s-codelaborate div.CodeMirror-selected {background: #b0d0ff !important;}
 .cm-s-codelaborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
 .cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666666 !important;}
 
-.cm-s-codelaborate pre { color: #292929; }
+.cm-s-codelaborate pre {color: #292929;}
 .cm-s-codelaborate span.cm-comment {color: #8E908C;}
 .cm-s-codelaborate span.cm-atom {color: #C82829;}
 .cm-s-codelaborate span.cm-number {color: #006ab5;}
 .cm-s-codelaborate span.cm-meta {color: #E42040;}
 .cm-s-codelaborate span.cm-qualifier {color: #b76000;}
-.cm-s-codelaborate span.cm-operator { color: #4042c2; }
+.cm-s-codelaborate span.cm-operator {color: #4042c2;}
 
 .cm-s-codelaborate span.cm-attribute {color: #AB5800;}
 .cm-s-codelaborate span.cm-property {color: #000;}
@@ -54,6 +38,7 @@ span.CodeMirror-matchhighlight { background: #adfab4 }
 .cm-s-codelaborate span.cm-link {color: #7227ff;}
 .cm-s-codelaborate span.cm-header {color: #00a831}
 
-.cm-s-codelaborate .CodeMirror-matchingbracket { color: #da00cf !important;}
+.cm-s-codelaborate .CodeMirror-matchingbracket { color: #a62da2 !important;}
+.cm-s-codelaborate .CodeMirror-nonmatchingbracket {color: #f8f8f0 !important;}
 .cm-s-codelaborate .acWord {color:black;}
-.theme_codelaborate .fileLink::after { border-bottom-color: #fbfbfe !important; }
+.cm-s-codelaborate .fileLink::after {border-bottom-color: #fbfbfe !important;}
