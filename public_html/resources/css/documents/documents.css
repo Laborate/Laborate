@@ -130,12 +130,12 @@
 
 .file_search .search_input {
     padding: 6px 10px;
-    width: 15%;
+    width: 25%;
 }
 
 .file_search .search_input_full {
     padding: 6px 10px;
-    width: 350px;
+    width: 440px;
 }
 
 .file_search select,

@@ -21,7 +21,7 @@ if(isset($_GET['i'])) {
   	<script type="text/javascript">
   	    try {
   	        window.nodeSocket = io.connect('http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000');
-  	    } catch(err) { window.location.href = "/errors/node/" }
+  	    } catch(err) { window.location.href = "/errors/node.php" }
   	 </script>
   	 <?php placeDependencies(); ?>
 </head>

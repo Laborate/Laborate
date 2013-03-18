@@ -9,7 +9,6 @@ $(window).ready(function() {
             indentUnit: 4,
             indentWithTabs: true,
             smartIndent: true,
-            autofocus: true,
             dragDrop: true,
             autoCloseBrackets: true,
             autoCloseTags: true,
