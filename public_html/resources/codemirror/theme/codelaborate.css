@@ -8,14 +8,15 @@
 
 .CodeMirror-focused .cm-matchhighlight {background: #adfab4}
 .CodeMirror-focused span.CodeMirror-matchhighlight {background: #adfab4;}
-.CodeMirror .highLightLine {background: rgba(96,180,222,0.4);}
+.CodeMirror-activeline-background {background: rgba(96,180,222,0.2);}
 
 .cm-s-codelaborate {background: #fbfbfe; color: #323231;}
 .cm-s-codelaborate .CodeMirror-selected {background: #b0d0ff !important;}
 .cm-s-codelaborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
 .cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666666 !important;}
+.cm-s-codelaborate .CodeMirror-breakpoint {color: #56606E;}
 
-.cm-s-codelaborate pre {color: #292929;}
+.cm-s-codelaborate pre {color: #292929; padding: 0;}
 .cm-s-codelaborate span.cm-comment {color: #8E908C;}
 .cm-s-codelaborate span.cm-atom {color: #C82829;}
 .cm-s-codelaborate span.cm-number {color: #006ab5;}

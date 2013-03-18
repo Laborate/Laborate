@@ -116,10 +116,7 @@ window.editorUtil = {
         element.parent().remove();
     },
     scroll: function(i) {
-        if(i != "" && i != null && /^\d+$/.test(i)) {
-            var l = parseInt(i) - 1;
-            editor.setCursor(l);
-        }
+        window.editor.scrollIntoView({"ch":"0", "line": (i - 1) + ""}, 500)
     },
     setTitle: function(title) {
         $("#documentTitle").val(title);

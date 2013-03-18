@@ -14,7 +14,7 @@ function getDependencies($dependencies) {
                                               "addon/format/formatting.js", "addon/search/search.js",
                                               "addon/search/searchcursor.js", "addon/edit/matchbrackets.js",
                                               "addon/selection/active-line.js", "addon/edit/closebrackets.js",
-                                              "addon/edit/closetag.js");
+                                              "addon/edit/closetag.js", "addon/selection/active-line.js");
 
         getDependencies(["icons", "codeMirror"]);
     }

@@ -17,6 +17,6 @@ if(gettype($response) == "array") {
     echo json_encode(array_orderby($repos, 'user', SORT_DESC, 'repo', SORT_ASC));
 }
 else {
-    echo $call;
+    echo $response;
 }
 ?>

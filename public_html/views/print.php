@@ -1,9 +1,9 @@
 <?php
 //Requires & Config
-require('server/php/user/restrict.php');
-require("server/php/core/config.php");
-require("server/php/template/dependencies.php");
-require_once("includes/signature.php");
+require($_SERVER['DOCUMENT_ROOT']."/php/user/restrict.php");
+require($_SERVER['DOCUMENT_ROOT']."/php/core/config.php");
+require($_SERVER['DOCUMENT_ROOT']."/php/template/dependencies.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/includes/signature.php");
 if(isset($_GET['i'])) { getDependencies(["print"]); }
 $title = $_GET['t'];
 ?>

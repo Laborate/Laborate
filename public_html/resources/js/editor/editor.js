@@ -14,8 +14,24 @@ $(window).ready(function() {
             autoCloseBrackets: true,
             autoCloseTags: true,
             highlightSelectionMatches: true,
-            styleSelectedText: true
-    })
+            styleSelectedText: true,
+            styleActiveLine: true,
+            gutters: ["CodeMirror-linenumbers", "breakpoints"]
+    });
+
+    window.editor.on("change", function(instance, changeObj) {
+        if(changeObj["origin"] != "setValue") {
+            alert(JSON.stringify(changeObj));
+        }
+    });
+
+    editor.on("gutterClick", function(cm, n) {
+      var info = cm.lineInfo(n);
+      var marker = document.createElement("div");
+      marker.className ="CodeMirror-breakpoint";
+      marker.innerHTML = "●";
+      cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : marker);
+    });
 });
 
 $("#editorContainer").live("click", function() {
