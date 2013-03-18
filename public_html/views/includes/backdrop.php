@@ -3,7 +3,7 @@
             <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/"><div id="backDropLogo">code-laborate</div></a>
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="userNavigation">
-                    <div><a href="/php/user/logout/">Sign Out</a></div>
+                    <div><a href="/logout/">Sign Out</a></div>
                     <div>|</div>
                     <div><a href="/documents/">Documents</a></div>
                     <div>|</div>
