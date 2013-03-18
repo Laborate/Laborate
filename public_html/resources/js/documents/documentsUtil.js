@@ -85,7 +85,7 @@ window.documents = {
             }
 
             if(id == "action") {
-                $.post("//php/session/actions.php", { session_id: reference});
+                $.post("/php/session/actions.php", { session_id: reference});
                 $("#file_" + reference).animate({"opacity": 0}, 500);
                 setTimeout(function() {
                     $("#file_" + reference).remove();

@@ -7,8 +7,7 @@
 }
 
 .CodeMirror-focused .cm-matchhighlight {background: #adfab4}
-.CodeMirror-focused span.CodeMirror-matchhighlight {background: #adfab4;}
-.CodeMirror-activeline-background {background: rgba(96,180,222,0.2);}
+.CodeMirror-activeline-background {background: rgba(213,239,251,0.2);}
 
 .cm-s-codelaborate {background: #fbfbfe; color: #323231;}
 .cm-s-codelaborate .CodeMirror-selected {background: #b0d0ff !important;}
