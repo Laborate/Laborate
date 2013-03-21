@@ -24,7 +24,7 @@ $(window).ready(function() {
     });
 
     window.editor.on("gutterClick", function(cm, n) {
-        window.editorUtil.gutterClick(n);
+        window.editorUtil.gutterClick("out", [n]);
     });
 });
 
@@ -116,7 +116,7 @@ window.nodeSocket.on('editor', function (data) {
             }
 
             if(data["extras"]["lineMarker"] != null && data["extras"]["lineMarker"] != "") {
-                window.editorUtil.gutterClick(data["extras"]["lineMarker"]);
+                window.editorUtil.gutterClick("in", data["extras"]["lineMarker"]);
             }
         }
     }

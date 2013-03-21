@@ -23,12 +23,19 @@ window.editorUtil = {
             }
         }
     },
-    gutterClick: function(n) {
-        var info = window.editor.lineInfo(n);
+    gutterClick: function(direction, data) {
+        var info = window.editor.lineInfo(data[0]);
         var marker = document.createElement("div");
         marker.className ="CodeMirror-breakpoint";
         marker.innerHTML = "●";
-        window.editor.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : marker);
+        if(direction == "out") {
+            window.editor.setGutterMarker(data[0], "breakpoints", info.gutterMarkers ? null : marker);
+            window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [data[0], info.gutterMarkers]}} );
+        }
+
+        if(direction == "in") {
+            window.editor.setGutterMarker(data[0], "breakpoints", data[1] ? null : marker);
+        }
     },
     refresh: function() {
         var header = parseInt($("#header").height());
