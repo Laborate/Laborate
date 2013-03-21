@@ -2,6 +2,34 @@
 //          Editor Instances
 /////////////////////////////////////////////////
 window.editorUtil = {
+    clean: true,
+    setChanges: function(direction, changes) {
+        if(changes['origin'] != "setValue") {
+            if(direction == "out") {
+                if(window.editorUtil.clean) {
+                    window.nodeSocket.emit( 'editor' , { "from": window.userId, "changes": changes } );
+                } else {
+                    window.editorUtil.clean = true;
+                }
+            }
+
+            if(direction == "in") {
+                if(window.editorUtil.clean) {
+                    window.editorUtil.clean = false;
+                    window.editor.replaceRange(changes['text'], changes['from'], changes['to']);
+                } else {
+                    window.editorUtil.clean = true;
+                }
+            }
+        }
+    },
+    gutterClick: function(n) {
+        var info = window.editor.lineInfo(n);
+        var marker = document.createElement("div");
+        marker.className ="CodeMirror-breakpoint";
+        marker.innerHTML = "●";
+        window.editor.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : marker);
+    },
     refresh: function() {
         var header = parseInt($("#header").height());
         var window_height = parseInt($(window).height());

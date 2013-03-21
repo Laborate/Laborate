@@ -9,27 +9,22 @@ $(window).ready(function() {
             indentUnit: 4,
             indentWithTabs: true,
             smartIndent: true,
+            autofocus: true,
             dragDrop: true,
             autoCloseBrackets: true,
             autoCloseTags: true,
             highlightSelectionMatches: true,
             styleSelectedText: true,
-            styleActiveLine: true,
+            styleActiveLine: false,
             gutters: ["CodeMirror-linenumbers", "breakpoints"]
     });
 
     window.editor.on("change", function(instance, changeObj) {
-        if(changeObj["origin"] != "setValue") {
-            alert(JSON.stringify(changeObj));
-        }
+        window.editorUtil.setChanges("out", changeObj);
     });
 
-    editor.on("gutterClick", function(cm, n) {
-      var info = cm.lineInfo(n);
-      var marker = document.createElement("div");
-      marker.className ="CodeMirror-breakpoint";
-      marker.innerHTML = "●";
-      cm.setGutterMarker(n, "breakpoints", info.gutterMarkers ? null : marker);
+    window.editor.on("gutterClick", function(cm, n) {
+        window.editorUtil.gutterClick(n);
     });
 });
 
@@ -65,7 +60,7 @@ function setEditorMode(mode) {
                             "ocaml":"ocaml", "ml":"ocaml", "mli":"ocaml",
                             "p":"pascal", "pl":"pascal", "pas":"pascal", "pascal":"pascal",
                             "pl":"perl", "pm":"perl", "pig":"pig",
-                            "sql":"mysql",
+                            "sql":"sql", "psql":"sql", "mysql":"sql", "sqlite3":"sql",
                             "properties":"properties",
                             "r":"r",
                             "spec":"spec",
@@ -105,16 +100,7 @@ function setEditorMode(mode) {
 window.nodeSocket.on('editor', function (data) {
     if(data["from"] != window.userId) {
         if(data["extras"] == null || data["extras"] == "undefined") {
-            if(data["delete"] == null || data["delete"] == "undefined") {
-                if(window.editor.lineInfo(data['line']) == null) {
-                    window.editor.replaceRange("\n" + data['code'], {"line":data['line'], "ch": 0});
-                }
-                window.editor.setLine(data['line'], data['code']);
-                window.bounceBack = true;
-            }
-            else {
-                window.editor.removeLine(data["delete"]);
-            }
+            window.editorUtil.setChanges("in", data["changes"]);
         }
         else {
             if(data["extras"]["docName"] != null && data["extras"]["docName"] != "") {
@@ -130,13 +116,7 @@ window.nodeSocket.on('editor', function (data) {
             }
 
             if(data["extras"]["lineMarker"] != null && data["extras"]["lineMarker"] != "") {
-                var n  = data["extras"]["lineMarker"][0]
-                if (data["extras"]["lineMarker"][1]){
-                    window.editor.clearMarker(n);
-                }
-                else {
-                    window.editor.setMarker(n, '<span style="color: #56606E">●</span> %N%');
-                }
+                window.editorUtil.gutterClick(data["extras"]["lineMarker"]);
             }
         }
     }

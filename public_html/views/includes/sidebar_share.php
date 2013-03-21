@@ -1,10 +1,10 @@
 <div id="sidebar_share" class="sidebar_content_inner">
-	<script type="text/javascript" src="/js/core/copy.js"></script>
+	<script type="text/javascript" src="http://resources.code.dev.laborate.io/js/core/copy.js"></script>
 	<script type="text/javascript">
 		function initialize_share() {
     		$("#shareUrl").val(window.location.href);
             $("#shareCopy").zclip({
-                path:'/flash/copy.swf',
+                path:'http://resources.code.dev.laborate.io/flash/copy.swf',
                 copy: window.location.href,
                 afterCopy: function(){
                     $("#shareCopy").val("Copied");

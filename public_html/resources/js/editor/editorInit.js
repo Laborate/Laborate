@@ -1,7 +1,4 @@
 $(window).ready(function() {
-    //Talk To Node Set To Off
-    window.activated = false;
-
     //Set Tmp User Id
     window.userId = Math.floor((Math.random()*100000000000000000)+1);
 

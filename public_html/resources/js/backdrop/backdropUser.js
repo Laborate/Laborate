@@ -1,6 +1,6 @@
 //User Login
 $("#backdropSigIn").live("submit", function() {
-    $("#backdropSigIn input[type=submit]").val("· · ·").addClass("disabled");
+    $("#backdropSigIn input[type=submit]").val("loading...").addClass("disabled");
     var passed = true
 
     if($("#backdropSigIn #backdropSigInEmail").val() == "") {
@@ -39,7 +39,7 @@ $("#backdropSigIn").live("submit", function() {
 
 //User Registration
 $("#backdropRegister").live("submit", function() {
-    $("#backdropRegister input[type=submit]").val("· · ·").addClass("disabled");
+    $("#backdropRegister input[type=submit]").val("loading...").addClass("disabled");
     $("#backdropInital .textError").fadeOut();
     var passed = true
 
