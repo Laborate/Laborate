@@ -83,7 +83,7 @@ $(".file_search").live("submit", function() {
 
 //File System
 $(".online.file .file_attributes").live("click", function() {
-    window.documents.goToTab("/editor/?i=" + $(this).parent().attr("data"));
+    window.documents.goToLink("/editor/?i=" + $(this).parent().attr("data"));
     return false;
 });
 

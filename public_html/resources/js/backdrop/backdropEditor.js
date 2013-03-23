@@ -127,7 +127,7 @@ function finishBackdrop(title) {
         window.chatRoom.screenNameChange("", $("#backdropScreenName").val());
         window.chatRoom.signIn();
         $("#backdrop, #backdrop div").hide();
-        $("body div").not("#backdrop, #backdrop div, #contributor_info").show();
+        $("body div").not("#backdrop, #backdrop div, #contributor_info, #actionConfirm").show();
         $("#header #logo").hAlign().vAlign();
         window.editor.clearHistory();
         setTimeout(function(){ window.editor.refresh(); }, 1000);

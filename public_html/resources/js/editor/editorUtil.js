@@ -95,9 +95,9 @@ window.editorUtil = {
         var window_height = window.innerHeight;
 
         if($("#header").is(":visible")) {
-            window.editor.setSize("", (window_height - header - 28) + "px")
+            window.editor.setSize("", (window_height - header - 38) + "px")
         } else {
-            window.editor.setSize("", (window_height - header - 58) + "px")
+            window.editor.setSize("", (window_height - header - 68) + "px")
         }
 
         editor.refresh();

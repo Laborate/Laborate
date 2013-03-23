@@ -453,7 +453,7 @@ window.documents = {
                                          JSON.stringify(contents.split('\n')),
                                          "github", path, location_id,
                      function(id) {
-                         window.documents.goToTab("/editor/?i=" + id);
+                         window.documents.goToLink("/editor/?i=" + id);
                          window.notification.close();
                      }
                 );
@@ -554,7 +554,7 @@ window.documents = {
                                          JSON.stringify(json.split('\n')),
                                          "sftp", path, location_id,
                      function(id) {
-                         window.documents.goToTab("/editor/?i=" + id);
+                         window.documents.goToLink("/editor/?i=" + id);
                          window.notification.close();
                      }
                 );
