@@ -24,7 +24,15 @@ $(window).ready(function() {
     });
 
     window.editor.on("gutterClick", function(cm, n) {
-        window.editorUtil.gutterClick("out", [n]);
+        window.editorUtil.gutterClick("out", {"line":n});
+    });
+
+    window.editor.on("cursorActivity", function() {
+        window.editorUtil.userCursors("out", {"line":window.editor.getCursor().line, "remove":false});
+    });
+
+    window.editor.on("blur", function() {
+        window.editorUtil.userCursors("out", {"remove":true});
     });
 });
 
@@ -145,12 +153,7 @@ window.nodeSocket.on('users', function (data) {
 //Pull Cursor Info
 window.nodeSocket.on('cursors', function (data) {
     if(data['from'] != window.userId && (""+data['from']) != "null") {
-        if(data['isOff']) {
-            window.editorUtil.userCursor(data['from'], data['line'], true);
-        }
-        else {
-            window.editorUtil.userCursor(data['from'], data['line']);
-        }
+        window.editorUtil.userCursors("in", data);
     }
 });
 

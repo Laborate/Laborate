@@ -203,7 +203,6 @@ window.nodeSocket.on('chatRoom', function (data) {
 
     if(data["isLeave"]) {
         window.editorUtil.users(data['from'], data['name'], true);
-        window.editorUtil.userCursor(data['from'], true)
     }
     else {
         window.editorUtil.users(data['from'], data['name']);

@@ -10,7 +10,7 @@
 .CodeMirror-activeline-background {background: rgba(213,239,251,0.2);}
 .CodeMirror pre.CodeMirror-placeholder { color: #999; }
 
-.cm-s-codelaborate {background: #fbfbfe; color: #323231;}
+.cm-s-codelaborate {background: #fff;; color: #323231;}
 .cm-s-codelaborate .CodeMirror-selected {background: #b0d0ff !important;}
 .cm-s-codelaborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
 .cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666666 !important;}
