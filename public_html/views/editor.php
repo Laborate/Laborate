@@ -29,11 +29,11 @@ if(isset($_GET['i'])) {
     <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
     <div id="sidebar">
         <div id="sidebar_header">
-            <img id="document" onClick="sidebar('document')" src="http://resources.code.dev.laborate.io/img/document.png"/>
-            <img id="find" onClick="sidebar('find')" src="http://resources.code.dev.laborate.io/img/find.png"/>
-            <img id="share" onClick="sidebar('share')" src="http://resources.code.dev.laborate.io/img/share.png"/>
-            <img id="download" onClick="sidebar('download')" src="http://resources.code.dev.laborate.io/img/download.png"/>
-            <img id="settings" onClick="sidebar('settings')" src="http://resources.code.dev.laborate.io/img/settings.png"/>
+            <img id="document" src="http://resources.code.dev.laborate.io/img/document.png"/>
+            <img id="find" class="default" src="http://resources.code.dev.laborate.io/img/find.png"/>
+            <img id="share" src="http://resources.code.dev.laborate.io/img/share.png"/>
+            <img id="download" src="http://resources.code.dev.laborate.io/img/download.png"/>
+            <img id="settings" src="http://resources.code.dev.laborate.io/img/settings.png"/>
         </div>
         <div id="sidebar_content"></div>
     </div>

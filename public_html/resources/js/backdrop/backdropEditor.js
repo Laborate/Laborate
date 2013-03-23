@@ -131,5 +131,6 @@ function finishBackdrop(title) {
         $("#header #logo").hAlign().vAlign();
         window.editor.clearHistory();
         setTimeout(function(){ window.editor.refresh(); }, 1000);
+        sidebar($("#sidebar_header .default").attr("id"), "");
     }, 100);
 }

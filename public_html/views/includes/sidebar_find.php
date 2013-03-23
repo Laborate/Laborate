@@ -1,5 +1,7 @@
 <div id="sidebar_find" class="sidebar_content_inner">
     <script type="text/javascript">
+        $("#lineNumberList .listX").on("click", function() { window.editorUtil.highlightRemove($(this).parent()); });
+        $("#findList .listX").on("click", function() { window.editorUtil.searchRemove($(this)); });
         $("#lineNumberScrollForm").live("submit", function() { window.editorUtil.scroll($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
         $("#lineNumberForm").live("submit", function() { window.editorUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
         $("#findWordsForm").live("submit", function() { window.editorUtil.search($("#findWords").val()); $("#findWords").val(""); });

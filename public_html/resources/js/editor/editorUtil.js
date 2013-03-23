@@ -24,17 +24,17 @@ window.editorUtil = {
         }
     },
     gutterClick: function(direction, data) {
-        var info = window.editor.lineInfo(data[0]);
+        var info = window.editor.lineInfo(data["line"]);
         var marker = document.createElement("div");
         marker.className ="CodeMirror-breakpoint";
         marker.innerHTML = "●";
         if(direction == "out") {
-            window.editor.setGutterMarker(data[0], "breakpoints", info.gutterMarkers ? null : marker);
-            window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": [data[0], info.gutterMarkers]}} );
+            window.editor.setGutterMarker(data["line"], "breakpoints", info.gutterMarkers ? null : marker);
+            window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": {"line":data["line"], "remove":info.gutterMarkers}}} );
         }
 
         if(direction == "in") {
-            window.editor.setGutterMarker(data[0], "breakpoints", data[1] ? null : marker);
+            window.editor.setGutterMarker(data["line"], "breakpoints", data["remove"] ? null : marker);
         }
     },
     users: function(id, name, remove) {
@@ -91,13 +91,13 @@ window.editorUtil = {
         }
     },
     refresh: function() {
-        var header = parseInt($("#header").height());
-        var window_height = parseInt($(window).height());
+        var header = $("#header").height();
+        var window_height = window.innerHeight;
 
         if($("#header").is(":visible")) {
-            editor.getWrapperElement().style.height = (window_height - header - 38) + "px";
+            window.editor.setSize("", (window_height - header - 28) + "px")
         } else {
-           editor.getWrapperElement().style.height = (window_height - header - 68) + "px";
+            window.editor.setSize("", (window_height - header - 58) + "px")
         }
 
         editor.refresh();
@@ -111,7 +111,7 @@ window.editorUtil = {
             start = editor.getCursor("start");
             end = editor.getCursor();
         }
-        editor.autoFormatRange(start, end);
+        editor.lineNumberFormatter(start, end);
         editor.autoIndentRange(start, end);
         editor.refresh();
         editor.setSelection(editor.getCursor(), editor.getCursor());

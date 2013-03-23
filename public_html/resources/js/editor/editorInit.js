@@ -7,6 +7,4 @@ $(window).ready(function() {
 
     //Set Array of User Lines
     window.cursors = new Array();
-
-	setTimeout(function() { sidebar('find'); }, 100)
 });

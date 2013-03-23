@@ -36,10 +36,6 @@ $(window).ready(function() {
     });
 });
 
-$("#editorContainer").live("click", function() {
-    window.editor.focus()
-});
-
 function setEditorMode(mode) {
 
     languageExtentsion =  { "js":"javascript",
@@ -149,12 +145,15 @@ window.nodeSocket.on('users', function (data) {
     }
 });
 
-
 //Pull Cursor Info
 window.nodeSocket.on('cursors', function (data) {
     if(data['from'] != window.userId && (""+data['from']) != "null") {
         window.editorUtil.userCursors("in", data);
     }
+});
+
+$("#editorContainer").on("click", function() {
+    window.editor.focus();
 });
 
 $(window).resize(function() {
@@ -164,15 +163,6 @@ $(window).resize(function() {
 setInterval(function(){
     window.editorUtil.refresh();
 }, 1000);
-
-$("#lineNumberList .listX").live("click", function() {
-    window.editorUtil.highlightRemove($(this).parent());
-});
-
-
-$("#findList .listX").live("click", function() {
-    window.editorUtil.searchRemove($(this));
-});
 
 $("#full_screen").live("click", function() {
     window.editorUtil.fullScreen();

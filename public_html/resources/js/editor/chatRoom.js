@@ -61,9 +61,9 @@ window.chatRoom = {
         window.chatRoom._scrollToBottom();
     },
     resize: function() {
-        var header = parseInt($("#header").height());
-        var chatroom_messenger = parseInt($("#chatBox").height());
-        var window_height = parseInt($(window).height());
+        var header = $("#header").height();
+        var chatroom_messenger = $("#chatBox").height();
+        var window_height = window.innerHeight;
         $("#chatConversation").height((window_height - (header + chatroom_messenger + 30)) + "px");
     },
     _scrollToBottom: function() {
