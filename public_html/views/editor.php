@@ -20,7 +20,11 @@ if(isset($_GET['i'])) {
     <script src="http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000/socket.io/socket.io.js"></script>
   	<script type="text/javascript">
   	    try {
-  	        window.nodeSocket = io.connect('http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000');
+  	        window.nodeSocket = io.connect('http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000', {
+      	        "max reconnection attempts": "Infinity",
+      	        "sync disconnect on unload": true,
+      	        "try multiple transports": true,
+  	        });
   	    } catch(err) { window.location.href = "/errors/node.php" }
   	 </script>
   	 <?php placeDependencies(); ?>

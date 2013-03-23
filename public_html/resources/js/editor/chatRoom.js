@@ -7,16 +7,17 @@ window.chatRoom = {
          window.chatRoom.resize();
     },
     help: function() {
-        $(".jspPane").append('<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline;">Console Commands</div></strong>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:c = clear screen</div>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:h = console commands</div>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:s = toggle sidebar visibility</div>');
-    	$(".jspPane").append('<div class="chatRoomStatus">*1 command per message*</div>');
-    	$(".jspPane").append('<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline;">Message References</div></strong>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">#number = highlight line</div>');
-    	$(".jspPane").append('<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">@pattern = search for word</div>');
+        help = '<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline; margin: 5px 0px 0px 0px;">Console Commands</div></strong>';
+        help += '<div style="text-align:left; font-size:12px; color:#666; margin: 5px 0px;" class="chatRoomStatus">1 command per message</div>';
+        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:c = clear screen</div>';
+        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:h = console commands</div>';
+        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>';
+        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px; margin-bottom: 30px;">:s = toggle sidebar visibility</div>';
+        help += '<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
+        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
+        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
+        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">@pattern = search for word</div>';
+    	$(".jspPane").append(help);
     	window.chatRoom.resize();
     	window.chatRoom._scrollToBottom();
     },
@@ -82,6 +83,7 @@ window.chatRoom = {
     },
     _check: function(message, type, name) {
         if(type == "commands") {
+            message = message.toLowerCase();
             commands = {":c": "clear",
 				        ":h": "help",
 				        ":n": "toggle",
@@ -97,7 +99,7 @@ window.chatRoom = {
         		}
         	}
         } else if(type == "js") {
-            if(message.search(/.*<script.*/ig)) { return true; }
+            if(message.toLowerCase().search(/.*<script.*/ig)) { return true; }
             else { return false; }
         } else {
             types = { "search": [/.*@.*/ig, "@", "window.editorUtil.search"],
