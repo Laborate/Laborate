@@ -123,7 +123,7 @@ $(window).ready(function() {
 function finishBackdrop(title) {
     window.nodeSocket.emit('join', getUrlVars()['i'], $("#backdropPassword").val());
     setTimeout(function(){
-        window.editorUtil.setTitle(title);
+        window.sidebarUtil.setTitle(title);
         window.chatRoom.screenNameChange("", $("#backdropScreenName").val());
         window.chatRoom.signIn();
         $("#backdrop, #backdrop div").hide();

@@ -9,7 +9,7 @@
 .cm-s-codelaborate .CodeMirror-selected {background: #b0d0ff !important;}
 .cm-s-codelaborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
 .cm-s-codelaborate .CodeMirror-linenumber {cursor: pointer;}
-.cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666666 !important;}
+.cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666;}
 .cm-s-codelaborate .CodeMirror-breakpoint {color: #56606E;}
 
 .cm-s-codelaborate pre {color: #292929; padding: 0;}

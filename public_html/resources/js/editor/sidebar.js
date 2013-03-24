@@ -4,7 +4,7 @@ $(window).ready(function() {
         $.get('/includes/sidebar_' + module + '.php?i=' + getUrlVars()['i'], function(newHtml) {
 			$("#sidebar_content").append(newHtml);
 			if('initialize_' + module in window) {
-    			//window['initialize_' + module]();
+    			window['initialize_' + module]();
             }
          });
     });

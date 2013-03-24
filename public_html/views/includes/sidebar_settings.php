@@ -12,8 +12,9 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
 		function initialize_settings() {
     		$("#documentPassword").val(window.passTemplate);
 			$("#documentTitle").val($("#document_title").text());
-			$("#screenName").val(window.screenName);
-			$("#keyMapping" + $.cookie("keyMapping")).attr("selected", "selected");
+			$("#screenName").val($.cookie("screenName"));
+			$("#keyMap_" + $.cookie("keyMap")).attr("selected", "selected");
+			window.sidebarUtil.keyMap($.cookie("keyMap"));
 		}
 
 		$("#actionDoc").on("click", function() { $("#actionConfirm").slideDown(); });
@@ -54,11 +55,11 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
         			window.chatRoom.screenNameChange(window.screenName, $("#screenName").val());
     			}
     			else {
-        			$("#screenName").val(window.screenName);
+        			$("#screenName").val($.cookie("screenName"));
     			}
 
-    			$.cookie("keyMapping", $("#keyMapping").val());
-    			window.editorUtil.setTitle($("#documentTitle").val(), true)
+    			window.sidebarUtil.keyMap($("#keyMap").val());
+    			window.sidebarUtil.setTitle($("#documentTitle").val(), true);
                 <?php if(in_array($_GET['i'], $_SESSION['file_owner'])) { ?>
     			    $("#backdropPassword").val($("#documentPassword").val());
     			    window.passTemplate = $("#documentPassword").val();
@@ -125,10 +126,10 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
     <div>
     <div class="header">Key Mapping</div>
     <div>
-        <select id="keyMapping" class="select full">
-            <option id="keyMappingNone" value="None">None</option>
-            <option id="keyMappingVim" value="Vim">Vim</option>
-            <option id="keyMappingEmacs" value="Emacs">Emacs</option>
+        <select id="keyMap" class="select full">
+            <option id="keyMap_default" value="default">None</option>
+            <option id="keyMap_vim" value="vim">Vim</option>
+            <option id="keyMap_emacs" value="emacs">Emacs</option>
         </select>
     </div>
     <hr/>
