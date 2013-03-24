@@ -2,11 +2,12 @@
 
 .CodeMirror-scroll {height: 100%; overflow-y: auto; overflow-x: auto;}
 .CodeMirror-focused .cm-matchhighlight {background: #adfab4}
-.CodeMirror-activeline-background {background: rgba(213,239,251,0.2);}
+.CodeMirror-activeline-background {background: rgba(213,238,250,0.2);}
 .CodeMirror pre.CodeMirror-placeholder { color: #999; }
 
 .cm-s-codelaborate {background: #fff;; color: #323231;}
-.cm-s-codelaborate .CodeMirror-selected {background: #b0d0ff !important;}
+.cm-s-codelaborate .CodeMirror-selected {background: rgba(176, 208, 255, 0.61);}
+.cm-s-codelaborate .CodeMirror-highlighted {background: #b0d0ff;}
 .cm-s-codelaborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
 .cm-s-codelaborate .CodeMirror-linenumber {cursor: pointer;}
 .cm-s-codelaborate .CodeMirror-cursor {border-left: 1px solid #666;}

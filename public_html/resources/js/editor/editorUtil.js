@@ -101,5 +101,23 @@ window.editorUtil = {
         }
 
         editor.refresh();
+    },
+    fullScreen: function() {
+        if($("#header").is(":visible")) {
+            $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%"});
+            $("#full_screen").addClass("icon-contract");
+            $("#full_screen").removeClass("icon-expand");
+            $("#full_screen").css({"font-size": "24px", "margin": "0 0 0 30px"});
+            $("#sidebar, #header, #chatRoom").hide();
+        } else {
+            $("#editorCodeMirror").css({"margin": "", "width": ""});
+            $("#full_screen").addClass("icon-expand");
+            $("#full_screen").removeClass("icon-contract");
+            $("#full_screen").css({"font-size": "", "margin": ""});
+            $("#sidebar, #header, #chatRoom").show();
+        }
+
+        window.editor.refresh();
+        window.editorUtil.refresh();
     }
 }

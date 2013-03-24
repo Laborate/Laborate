@@ -2,8 +2,8 @@
     <script type="text/javascript">
         $("#document_undo").on("click", function() { window.editor.undo(); });
         $("#document_redo").on("click", function() { window.editor.redo(); });
-        $("#document_format_selection").on("click", function() { window.editor.format(); });
-        $("#document_format").on("click", function() { window.editor.format(true); });
+        $("#document_format_selection").on("click", function() { window.sidebarUtil.format(); });
+        $("#document_format").on("click", function() { window.sidebarUtil.format(true); });
     </script>
     <a href="/editor/" class="button green full" style="display:block">New Document</a>
     <hr/>
