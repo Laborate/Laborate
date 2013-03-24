@@ -4,20 +4,21 @@ html, body { overflow: hidden; }
 	overflow: hidden;
 	clear: none;
 	margin: 0px 230px 0px 211px;
-    padding: 0px 35px 0px 0px;
+    padding: 0px;
     position: relative;
 }
 
 #full_screen {
-    opacity: .5;
     cursor: pointer;
     font-size: 16px;
     position: absolute;
     top: 5px;
     right: 10px;
     z-index: 10000000;
+    background: #fff;
+    color: #777;
 }
 
 #full_screen:hover {
-    opacity: 1;
+    color: #000;
 }
