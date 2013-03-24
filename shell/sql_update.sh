@@ -1,17 +1,25 @@
-if [ $1 == content ]
+#!/bin/bash
+if [ -z "$1" ]
 then
-    cp ./sql_backups/update_content.sql.bz2 ./sql_backups/update_content2.sql.bz2
-    bunzip2 ./sql_backups/update_content.sql.bz2
-    mysql -p code < ./sql_backups/update_content.sql
-    mv ./sql_backups/update_content2.sql.bz2 ./sql_backups/update_content.sql.bz2
-    rm ./sql_backups/update_content.sql
-    echo "SQL Content and Structure Successfully Updated";
-elif [ $1 == structure ]
-then
-    cp ./sql_backups/update_structure.sql.bz2 ./sql_backups/update_structure2.sql.bz2
-    bunzip2 ./sql_backups/update_structure.sql.bz2
-    mysql -p code < ./sql_backups/update_structure.sql
-    mv ./sql_backups/update_structure2.sql.bz2 ./sql_backups/update_structure.sql.bz2
-    rm ./sql_backups/update_structure.sql
-    echo "SQL Structure Successfully Updated";
+    echo "Arguments: content & structure"
+else
+    if [ $1 == content ]
+    then
+        cp ./sql_backups/update_content.sql.bz2 ./sql_backups/update_content2.sql.bz2
+        bunzip2 ./sql_backups/update_content.sql.bz2
+        mysql -p code < ./sql_backups/update_content.sql
+        mv ./sql_backups/update_content2.sql.bz2 ./sql_backups/update_content.sql.bz2
+        rm ./sql_backups/update_content.sql
+        echo "SQL Content and Structure Successfully Updated";
+    elif [ $1 == structure ]
+    then
+        cp ./sql_backups/update_structure.sql.bz2 ./sql_backups/update_structure2.sql.bz2
+        bunzip2 ./sql_backups/update_structure.sql.bz2
+        mysql -p code < ./sql_backups/update_structure.sql
+        mv ./sql_backups/update_structure2.sql.bz2 ./sql_backups/update_structure.sql.bz2
+        rm ./sql_backups/update_structure.sql
+        echo "SQL Structure Successfully Updated";
+    else
+        echo "Arguments: content & structure"
+    fi
 fi
