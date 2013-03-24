@@ -4,13 +4,10 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 ?>
 <div id="sidebar_download" class="sidebar_content_inner">
     <script type="text/javascript">
-        $("#downloadFile").live("click", function() { window.editorUtil.downloadFile(); });
-
-        $("#printButton").live("click", function() { window.editorUtil.printFile(); });
-
-        $("#githubCommit").live("click", function() { window.editorUtil.commitFile(); });
-
-        $("#saveToServer").live("click", function() { window.editorUtil.pushFile(); });
+        $("#downloadFile").on("click", function() { window.editorUtil.downloadFile(); });
+        $("#printButton").on("click", function() { window.editorUtil.printFile(); });
+        $("#githubCommit").on("click", function() { window.editorUtil.commitFile(); });
+        $("#saveToServer").on("click", function() { window.editorUtil.pushFile(); });
     </script>
     <?php if($GLOBALS['row_Sessions_id']['session_type'] == "github" && !is_null($_SESSION['userGithub'])) { ?>
         <div>

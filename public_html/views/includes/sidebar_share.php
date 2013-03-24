@@ -15,7 +15,7 @@
             });
         };
 
-        $("#emailSend").live("click", function() {
+        $("#emailSend").on("click", function() {
             if($("#emailAddresses").val() != "") {
                 $.post("/php/email/invite.php", {   session_id: getUrlVars()['i'],
                                                             session_name: $("#document_title").text(),

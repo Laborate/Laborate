@@ -21,7 +21,7 @@ if(isset($_POST['session_id'])) {
                     require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
                     $continue = true;
                     while($continue == true) {
-                        $id = rand(101, 999999999999999999) - rand(1, 100);
+                        $id = rand(0, 9999999999999) + rand(0, 999999999);
                         $query_Sessions = "SELECT * FROM download WHERE download.download_id = '".$id."'";
                         $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
                         $row_Sessions = mysql_fetch_assoc($Sessions);

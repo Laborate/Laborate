@@ -8,7 +8,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
         require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
         $continue = true;
         while($continue == true) {
-            $id = rand(101, 999999999999999999) - rand(1, 100);
+            $id = rand(0, 9999999999999) + rand(0, 999999999);
             $query_Sessions = "SELECT * FROM users WHERE users.user_id = '".$id."'";
             $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
             $row_Sessions = mysql_fetch_assoc($Sessions);

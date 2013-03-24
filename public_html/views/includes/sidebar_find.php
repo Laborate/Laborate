@@ -2,10 +2,10 @@
     <script type="text/javascript">
         $("#lineNumberList .listX").on("click", function() { window.editorUtil.highlightRemove($(this).parent()); });
         $("#findList .listX").on("click", function() { window.editorUtil.searchRemove($(this)); });
-        $("#lineNumberScrollForm").live("submit", function() { window.editorUtil.scroll($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
-        $("#lineNumberForm").live("submit", function() { window.editorUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
-        $("#findWordsForm").live("submit", function() { window.editorUtil.search($("#findWords").val()); $("#findWords").val(""); });
-        $("#findRegexForm").live("submit", function() { alert("havent started yet") });
+        $("#lineNumberScrollForm").on("submit", function() { window.editorUtil.scroll($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
+        $("#lineNumberForm").on("submit", function() { window.editorUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
+        $("#findWordsForm").on("submit", function() { window.editorUtil.search($("#findWords").val()); $("#findWords").val(""); });
+        $("#findRegexForm").on("submit", function() { alert("havent started yet") });
     </script>
 	<div>
         <div class="header">Scroll To A Line</div>

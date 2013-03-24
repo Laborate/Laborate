@@ -16,10 +16,10 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
 			$("#keyMapping" + $.cookie("keyMapping")).attr("selected", "selected");
 		}
 
-		$("#actionDoc").live("click", function() { $("#actionConfirm").slideDown(); });
-		$("#actionConfirmCancel").live("click", function() { $("#actionConfirm").slideUp(); });
+		$("#actionDoc").on("click", function() { $("#actionConfirm").slideDown(); });
+		$("#actionConfirmCancel").on("click", function() { $("#actionConfirm").slideUp(); });
 
-		$("#actionConfirmClick").live("click", function() {
+		$("#actionConfirmClick").on("click", function() {
     		var returnUrl = "http://<?php echo $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]; ?>";
 
     		$.post("/php/session/actions.php", { session_id: getUrlVars()['i'],
@@ -48,7 +48,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
 
 
 
-		$("#settingsSave").live("click", function() {
+		$("#settingsSave").on("click", function() {
 		    if($("#documentTitle").val() != "") {
         		if(window.screenName != $("#screenName").val() && $("#screenName").val() != "") {
         			window.chatRoom.screenNameChange(window.screenName, $("#screenName").val());
@@ -101,7 +101,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
             }
 		});
 
-		$("#drawer_settings input").live("focus change", function() {
+		$("#drawer_settings input").on("focus change", function() {
 			$("#settingsSave").val("Save Settings");
 		});
     </script>

@@ -1,1 +1,0 @@
-rm server/node/logs/*
