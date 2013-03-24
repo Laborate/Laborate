@@ -104,13 +104,13 @@ window.editorUtil = {
     },
     fullScreen: function() {
         if($("#header").is(":visible")) {
-            $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%"});
+            $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%", "padding-right": "45px"});
             $("#full_screen").addClass("icon-contract");
             $("#full_screen").removeClass("icon-expand");
             $("#full_screen").css({"font-size": "24px", "margin": "0 0 0 30px"});
             $("#sidebar, #header, #chatRoom").hide();
         } else {
-            $("#editorCodeMirror").css({"margin": "", "width": ""});
+            $("#editorCodeMirror").css({"margin": "", "width": "", "padding-right":""});
             $("#full_screen").addClass("icon-expand");
             $("#full_screen").removeClass("icon-contract");
             $("#full_screen").css({"font-size": "", "margin": ""});

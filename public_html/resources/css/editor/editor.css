@@ -4,7 +4,7 @@ html, body { overflow: hidden; }
 	overflow: hidden;
 	clear: none;
 	margin: 0px 230px 0px 211px;
-    padding: 0px 5px 0px 0px;
+    padding: 0px 35px 0px 0px;
     position: relative;
 }
 
@@ -12,7 +12,10 @@ html, body { overflow: hidden; }
     opacity: .5;
     cursor: pointer;
     font-size: 16px;
-    margin: 5px 5px 20px 5px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    z-index: 10000000;
 }
 
 #full_screen:hover {

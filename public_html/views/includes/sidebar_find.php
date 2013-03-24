@@ -3,9 +3,9 @@
         $("#lineNumberList .listX").live("click", function() { window.sidebarUtil.highlightRemove($(this).parent()); });
         $("#findList .listX").live("click", function() { window.sidebarUtil.searchRemove($(this)); });
         $("#lineNumberScrollForm").on("submit", function() { window.sidebarUtil.scroll($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
-        $("#lineNumberForm").live("submit", function() { window.sidebarUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
-        $("#findWordsForm").live("submit", function() { window.sidebarUtil.search($("#findWords").val()); $("#findWords").val(""); });
-        $("#findRegexForm").live("submit", function() { alert("havent started yet") });
+        $("#lineNumberForm").on("submit", function() { window.sidebarUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
+        $("#findWordsForm").on("submit", function() { window.sidebarUtil.search($("#findWords").val()); $("#findWords").val(""); });
+        $("#findRegexForm").on("submit", function() { alert("havent started yet") });
     </script>
 	<div>
         <div class="header">Scroll To A Line</div>
