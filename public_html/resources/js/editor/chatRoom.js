@@ -80,6 +80,7 @@ window.chatRoom = {
             );
             $(".out .chatRoomName").text(window.screenName);
         }
+        $("#screenName").val(newScreenName);
     },
     _check: function(message, type, name) {
         if(type == "commands") {
@@ -102,9 +103,9 @@ window.chatRoom = {
             if(message.toLowerCase().search(/.*<script.*/ig)) { return true; }
             else { return false; }
         } else {
-            types = { "search": [/.*@.*/ig, "@", "window.editorUtil.search"],
-                      "line": [/.*#\d.*/ig, "#", "window.editorUtil.highlight"],
-                      "scroll": [/.*&.*/ig, "&", "window.editorUtil.scroll"] }
+            types = { "search": [/.*@.*/ig, "@", "window.sidebarUtil.search"],
+                      "line": [/.*#\d.*/ig, "#", "window.sidebarUtil.highlight"],
+                      "scroll": [/.*&.*/ig, "&", "window.sidebarUtil.scroll"] }
 
             if(!message.search(types[type][0])) {
         		var splits = (" " + message + " ").split(types[type][1]);

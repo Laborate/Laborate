@@ -4,11 +4,11 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 
 if(isset($_POST['session_id'])) {
     $to  = 'To: '.$_POST['email_addresses'];
-    $subject = "You Have Been Invited To Work On ".$_POST['session_name']." - Codelaborate";
+    $subject = "You Have Been Invited To Work On ".$_POST['session_name'].$_SESSION['webSiteTitle'];
     ob_start();
         $file_name = $_POST['session_name'];
         $additional_message = $_POST['email_message'];
-        include "templates/invite.php";
+        include($_SERVER['DOCUMENT_ROOT']."/php/templates/invite.php");
         $message = ob_get_contents();
     ob_end_clean();
     $headers  = 'MIME-Version: 1.0' . "\r\n";

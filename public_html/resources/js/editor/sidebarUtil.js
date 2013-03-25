@@ -31,8 +31,15 @@ window.sidebarUtil = {
 
             for (var a = 0; a < lines.length; ++a) {
                 var line = $.trim(lines[a]);
+                var alreadyThere = false;
 
-                if(line.length != 0) {
+                $.each($("#lineNumberList .header"), function() {
+                    if($(this).find(".listContent").text() == line) {
+                        alreadyThere = true;
+                    }
+                });
+
+                if(line.length != 0 && !alreadyThere) {
                     lineSplit = line.split("-");
 
                     if(lineSplit.length == 1) {
@@ -65,7 +72,15 @@ window.sidebarUtil = {
     },
     search: function(pattern) {
         sidebar('find');
-        if(pattern.length != 0 && window.editor.getValue().length != 0) {
+        var alreadyThere = false;
+
+        $.each($("#findList .header"), function() {
+            if($(this).find(".listContent").text() == pattern) {
+                alreadyThere = true;
+            }
+        });
+
+        if(pattern.length != 0 && window.editor.getValue().length != 0 && !alreadyThere) {
             function SearchState() {
                 this.posFrom = this.posTo = this.query = null;
                 this.marked = [];
