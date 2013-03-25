@@ -14,7 +14,7 @@ $title = $_GET['t'];
         <?php if(!isset($_GET['i'])) { ?>
             window.close();
         <?php } ?>
-        history.replaceState({}, ("Codelaborate"),  "print");
+        history.replaceState({}, ("<?php echo $title.$_SESSION['webSiteTitle']; ?>"),  "/print/");
     </script>
     <style type="text/css">
         #loading {
@@ -37,7 +37,7 @@ $title = $_GET['t'];
 <body>
     <!-- Visible Elements -->
     <div id="loading">Loading...</div>
-    <div id="logo">code-laborate</div>
+    <div id="logo"><?php echo substr(strtolower($_SESSION['webSiteTitle']), 3); ?></div>
     <div id="title"><?php echo $_GET['t']; ?></div>
     <div id="date"><?php  $today = getdate(); echo $today['mon']."/".$today['mday']."/".$today['year']; ?></div>
 

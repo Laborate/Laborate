@@ -129,7 +129,7 @@ window.sidebarUtil = {
         );
     },
     downloadFile: function() {
-        window.editorUtil.passwordCheck(function(callback) {
+        window.sidebarUtil.passwordCheck(function(callback) {
             if(callback) {
                 window.location.href = "/php/session/download_file.php?i=" + callback;
             }
@@ -146,7 +146,7 @@ window.sidebarUtil = {
         printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
     },
     commitFile: function() {
-        window.editorUtil.passwordCheck(function(callback) {
+        window.sidebarUtil.passwordCheck(function(callback) {
             if(callback) {
                 $("#githubCommit").removeClass("red_harsh").val("Commiting File...");
                 if($("#githubReference").val() != "") { var related = "\n\Issue: #" + $("#githubReference").val(); }
@@ -180,7 +180,7 @@ window.sidebarUtil = {
         });
     },
     pushFile: function() {
-        window.editorUtil.passwordCheck(function(callback) {
+        window.sidebarUtil.passwordCheck(function(callback) {
             if(callback) {
                 $("#saveToServer").removeClass("red_harsh").val("Saving File...");
                 $.post("/php/locations/sftp_push.php", {

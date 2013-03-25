@@ -1,10 +1,22 @@
 $(window).ready(function() {
+    CodeMirror.modeURL = "http://resources.code.dev.laborate.io/codemirror/mode/%N/%N.js"
     window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
-        lineWrapping: true,
-        tabMode: "indent",
-        readOnly: true,
-        theme: "codelaborate"
+            lineNumbers: true,
+            lineWrapping: true,
+            matchBrackets: true,
+            tabMode: "indent",
+            theme: "codelaborate",
+            indentUnit: 4,
+            indentWithTabs: true,
+            smartIndent: true,
+            autofocus: false,
+            dragDrop: false,
+            autoCloseBrackets: true,
+            autoCloseTags: true,
+            highlightSelectionMatches: true,
+            styleSelectedText: true,
+            styleActiveLine: false,
+            gutters: ["CodeMirror-linenumbers", "breakpoints"]
     });
 
     if($("#mode").text() == "") { window.close(); }
@@ -66,7 +78,7 @@ function setMode(mode) {
                             "ocaml":"ocaml", "ml":"ocaml", "mli":"ocaml",
                             "p":"pascal", "pl":"pascal", "pas":"pascal", "pascal":"pascal",
                             "pl":"perl", "pm":"perl", "pig":"pig",
-                            "sql":"mysql",
+                            "sql":"sql", "psql":"sql", "mysql":"sql", "sqlite3":"sql",
                             "properties":"properties",
                             "r":"r",
                             "spec":"spec",
@@ -92,7 +104,6 @@ function setMode(mode) {
                             "yml":"yaml",
                             "py":"python", "p":"python", "pickle":"python", "pyd":"python", "pyo":"python",  "pyw":"python",
                             "rpy":"python" }
-
 
     if(mode in languageExtentsion) { var modeName = languageExtentsion[mode]; }
     else { var modeName = "changes" }

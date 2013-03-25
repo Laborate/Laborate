@@ -49,3 +49,10 @@
 .cm-s-codelaborate .CodeMirror-nonmatchingbracket {color: #ff0000 !important;}
 .cm-s-codelaborate .acWord {color:black;}
 .cm-s-codelaborate .fileLink::after {border-bottom-color: #fbfbfe !important;}
+
+@media print {
+    .codemirror, .codemirror-scroll {
+        margin-bottom: 0px !important;
+        height: intrinsic !important;
+    }
+}

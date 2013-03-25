@@ -37,7 +37,6 @@ $(window).ready(function() {
 });
 
 function setEditorMode(mode) {
-
     languageExtentsion =  { "js":"javascript",
                             "php":"php",
                             "css":"css",
@@ -90,7 +89,6 @@ function setEditorMode(mode) {
                             "yml":"yaml",
                             "py":"python", "p":"python", "pickle":"python", "pyd":"python", "pyo":"python",  "pyw":"python",
                             "rpy":"python" }
-
 
     if(mode in languageExtentsion) { var modeName = languageExtentsion[mode]; }
     else { var modeName = "changes" }
