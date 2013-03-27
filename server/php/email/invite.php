@@ -4,7 +4,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 
 if(isset($_POST['session_id'])) {
     $to  = 'To: '.$_POST['email_addresses'];
-    $subject = "You Have Been Invited To Work On ".$_POST['session_name'].$_SESSION['webSiteTitle'];
+    $subject = $_SESSION['userName']." Has Invited You To Work On ".$_POST['session_name'].$_SESSION['webSiteTitle'];
     ob_start();
         $file_name = $_POST['session_name'];
         $additional_message = $_POST['email_message'];
