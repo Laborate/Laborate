@@ -45,7 +45,7 @@ function setEditorMode(mode) {
                             "coffee":"coffeescript",
                             "lisp":"commonlisp",
                             "clj":"clojure",
-                            "diff":"diff",
+                            "diff":"diff", "patch":"diff",
                             "ecl":"ecl",
                             "erlc":"erlang",
                             "go":"go",
