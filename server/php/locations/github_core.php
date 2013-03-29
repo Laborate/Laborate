@@ -43,12 +43,12 @@ function getDirectory($repo, $dir="") {
         }
         $json = $directory;
     } catch(Github\Exception\RuntimeException $e) {
-        $repos = 'Bad Token';
+        $json = 'Bad Token';
     } catch(Github\Exception\InvalidArgumentException $e) {
-        $repos = 'Login Required';
+        $json = 'Login Required';
     }
 
-    return $repos;
+    return $json;
 }
 
 function getFile($repo, $path) {
