@@ -22,11 +22,17 @@ $title = "My Account";
 <body>
     <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
     <div id="navigation">
-        <div id="navigation_header"><?php echo $_SESSION['userName']; ?></div>
-        <?php if($_SESSION['userLevel'] > 0 && $_SESSION['userLevel'] < 3) { ?>
+        <div id="navigation_header"><?php echo $GLOBALS['row_Users']['user_name']; ?></div>
+        <?php if(!is_null($GLOBALS['row_Users']['user_pricing'])) { ?>
         <div id="navigation_password_file">
             <div id="navigation_password_header" class="left">PRIVATE DOCUMENTS</div>
-            <div id="navigation_password_header_light" class="right">2 of 5,000</div>
+            <div id="navigation_password_header_light" class="right">
+                <?php if($GLOBALS['row_Users']['pricing_name'] == "Unlimited") {
+                    echo "2";
+                } else {
+                    echo "2 of ".number_format($GLOBALS['row_Users']['pricing_documents']);
+                } ?>
+            </div>
             <div class="clear"></div>
         </div>
         <?php } ?>
@@ -52,7 +58,7 @@ $title = "My Account";
         <div id="settings_github" class="settings">
             <div class="settings_header">
                 <div class="left">Github Repositories</div>
-                <?php if(is_null($_SESSION['userGithub'])) { ?>
+                <?php if(is_null($GLOBALS['row_Users']['user_github'])) { ?>
                     <a class="button green right" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
                 <?php } else { ?>
                     <a class="button red right" href="/php/locations/github_remove_token.php">Deauthorize With Github</a>

@@ -10,16 +10,16 @@ if(isset($_POST['session_id'])) {
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
 
-    if($row_Sessions['session_owner'] == $_SESSION['userId']) {
+    if($row_Sessions['session_owner'] == $_SESSION['user']) {
     	$Delete = "DELETE FROM sessions WHERE session_id='".$_POST['session_id']."'";
     	mysql_select_db($database_database, $database);
     	$delete_results = mysql_query($Delete, $database) or die(mysql_error());
     	echo "1";
     } else {
-        if(in_array($_SESSION['userId'], json_decode($row_Sessions['session_editors']))) {
+        if(in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
             $editors = json_decode($row_Sessions['session_editors']);
             if($editors == null || $editors[0] == "") { $editors = array(); }
-            if(in_array($_SESSION['userId'], $editors)) {
+            if(in_array($_SESSION['user'], $editors)) {
                 unset($editors[key($editors)]);
             }
             $editors = json_encode($editors);

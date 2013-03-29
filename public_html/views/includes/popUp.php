@@ -11,7 +11,7 @@
                     <td width="85">Name:</td>
                     <td><input autocomplete="off" type="text" class="input full" id="popup_location_name" name="location_name" placeholder="Dev Site"/></td>
                 </tr>
-                <?php if(!is_null($_SESSION['userGithub'])) { ?>
+                <?php if(!is_null($GLOBALS['row_Users']['user_github'])) { ?>
                     <tr>
                         <td width="85">Type:</td>
                         <td>
@@ -45,7 +45,7 @@
                     </tr>
                 </table>
             </div>
-            <?php if(!is_null($_SESSION['userGithub'])) { ?>
+            <?php if(!is_null($GLOBALS['row_Users']['user_github'])) { ?>
                 <div id="popup_location_github" class="hidden selection scroll">
                     <center id="github_empty" class="hidden" style="margin-top: 50px; color:red;">
                         <strong>You Do Not Have<br>Any Github Repositories</strong>

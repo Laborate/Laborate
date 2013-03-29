@@ -1,3 +1,4 @@
+<?php require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php'); ?>
 <div id="backdrop">
     <div id="backdropCore">
             <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/"><div id="backDropLogo">code-laborate</div></a>
@@ -7,7 +8,7 @@
                     <div>|</div>
                     <div><a href="/documents/">Documents</a></div>
                     <div>|</div>
-                    <div><a href="/account/" id="userNavigationName"><?php echo $_SESSION['userName']; ?></a></div>
+                    <div><a href="/account/" id="userNavigationName"><?php echo $GLOBALS['row_Users']['user_name']; ?></a></div>
                 </div>
                 <?php if(!isset($_GET['i'])) { ?>
                 <!-- Start: Backdrop New File -->

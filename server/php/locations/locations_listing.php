@@ -10,7 +10,7 @@ $locations = jsonToArray($GLOBALS['row_Users']['user_locations']);
 $locations_array = array();
 
 foreach ($locations as $key => $value) {
-    if($value["type"] == "github") { if(is_null($_SESSION['userGithub'])) { continue; } $icon = "icon-github"; }
+    if($value["type"] == "github") { if(is_null($GLOBALS['row_Users']['user_github'])) { continue; } $icon = "icon-github"; }
     elseif($value["type"] == "sftp") { $icon = "icon-drawer"; }
     else { $icon = "icon-storage"; }
     array_push($locations_array, array("key" => $key, "icon" => $icon, "name" => $value["name"], "type" => $value["type"]));

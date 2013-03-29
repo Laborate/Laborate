@@ -1,5 +1,4 @@
-<?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+<?php require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 
 if(in_array($_GET['i'], $_SESSION['file_owner'])) {
     $action = "Delete";
@@ -116,7 +115,7 @@ if(in_array($_GET['i'], $_SESSION['file_owner'])) {
         <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
     </div>
     <hr/>
-    <?php if(in_array($_GET['i'], $_SESSION['file_owner']) && $_SESSION['userLevel'] > 0) { ?>
+    <?php if(in_array($_GET['i'], $_SESSION['file_owner']) && !is_null($GLOBALS['row_Users']['user_pricing'])) { ?>
     <div>
        <div class="header">Document Password</div>
        <div><input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/></div>

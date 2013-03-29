@@ -13,7 +13,7 @@ if(isset($_GET['i'])) {
             else { $passwordRequired = true; }
             $initalize = array($passwordRequired, $GLOBALS['row_Sessions_id']['session_name']);
 
-            if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['userId']) {
+            if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['user']) {
                 if(!in_array($_GET['i'], $_SESSION['file_owner'])) {
                     array_push($_SESSION['file_owner'], $_GET['i']);
                 }

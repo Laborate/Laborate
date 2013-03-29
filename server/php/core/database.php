@@ -50,8 +50,15 @@ $Sessions_id = mysql_query($query_Sessions_id , $database) or die(mysql_error())
 $row_Sessions_id = mysql_fetch_assoc($Sessions_id);
 
 global $Users, $row_Users;
-$query_Sessions = "SELECT * FROM users WHERE users.user_id = '".$_SESSION['userId']."'";
+$query_Sessions = "SELECT * FROM users, pricing WHERE users.user_pricing = pricing.pricing_id AND users.user_id = '".$_SESSION['user']."'";
 $Users = mysql_query($query_Sessions , $database) or die(mysql_error());
 $row_Users = mysql_fetch_assoc($Users);
-$GLOBALS['row_Users']['user_locations'] = aesDecrypt($GLOBALS['row_Users']['user_locations'], $_SESSION['cryptSalt']);
+
+if(!is_null($GLOBALS['row_Users']['user_locations'])) {
+    $GLOBALS['row_Users']['user_locations'] = aesDecrypt($GLOBALS['row_Users']['user_locations'], $_SESSION['cryptSalt']);
+}
+
+if(!is_null($GLOBALS['row_Users']['user_github'])) {
+    $GLOBALS['row_Users']['user_github'] = aesDecrypt($GLOBALS['row_Users']['user_github'], $_SESSION['cryptSalt']);
+}
 ?>

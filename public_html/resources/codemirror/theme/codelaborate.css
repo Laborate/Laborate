@@ -19,6 +19,7 @@
     border-top: solid 1px #ccc;
     overflow: visible;
     z-index: 100;
+    bottom: 0;
 }
 .cm-s-codelaborate .CodeMirror-dialog input {font-size: 20px;}
 

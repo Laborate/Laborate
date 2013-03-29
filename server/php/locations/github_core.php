@@ -6,9 +6,9 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/vendor/autoload.php');
 function startGithubClient() {
     //Regular Version
     $client = new Github\Client();
-    $client->authenticate($_SESSION['userGithub'], "", "http_token");
+    $client->authenticate($GLOBALS['row_Users']['user_github'], "", "http_token");
     $client->getHttpClient()->setOption('auth_method', "AUTH_HTTP_TOKEN");
-    $client->getHttpClient()->setOption('secret', $_SESSION['userGithub']);
+    $client->getHttpClient()->setOption('secret', $GLOBALS['row_Users']['user_github']);
     return $client;
 }
 
@@ -23,7 +23,6 @@ function getRepositories() {
         $repos = $repos;
     } catch(Github\Exception\RuntimeException $e) {
         $repos = 'Bad Token';
-
     } catch(Github\Exception\InvalidArgumentException $e) {
         $repos = 'Login Required';
     }
@@ -43,11 +42,13 @@ function getDirectory($repo, $dir="") {
             array_push($directory, array("type"=> $value['type'], "name" => $value['name'], "path" => $value['path']));
         }
         $json = $directory;
-    } catch(Exception $e) {
-        $json = 'Bad Token';
+    } catch(Github\Exception\RuntimeException $e) {
+        $repos = 'Bad Token';
+    } catch(Github\Exception\InvalidArgumentException $e) {
+        $repos = 'Login Required';
     }
 
-    return $json;
+    return $repos;
 }
 
 function getFile($repo, $path) {
@@ -56,8 +57,10 @@ function getFile($repo, $path) {
         $response = $client->getHttpClient()->get("repos/".$repo."/contents/".$path)->getContent();
         $file = $response['content'];
         $decoded_file = base64_decode($file);
-    } catch(Exception $e) {
+    } catch(Github\Exception\RuntimeException $e) {
         $decoded_file = 'Bad Token';
+    } catch(Github\Exception\InvalidArgumentException $e) {
+        $decoded_file = 'Login Required';
     }
 
     return $decoded_file;
@@ -75,8 +78,10 @@ function getCommit($repo, $path, $file, $message) {
         $master_parameters = array("sha" => $sha_commit, "force" => true);
         $master = $client->getHttpClient()->post("repos/".$repo."/git/refs/heads/master/", $master_parameters)->getContent();
         $response_code = "Commit Succeeded";
-    } catch(Exception $e) {
-        $response_code = "Bad Token";
+    } catch(Github\Exception\RuntimeException $e) {
+        $response_code = 'Bad Token';
+    } catch(Github\Exception\InvalidArgumentException $e) {
+        $response_code = 'Login Required';
     }
 
     return $response_code;

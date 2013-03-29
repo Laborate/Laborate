@@ -40,7 +40,7 @@ if(isset($_POST['session_name']) && isset($_POST['session_document'])) {
     				   $id,
     				   GetSQLValueString($_POST['session_name'], "text"),
     				   GetSQLValueString($_POST['session_document'], "text"),
-    				   $_SESSION['userId'],
+    				   $_SESSION['user'],
     				   GetSQLValueString(json_encode(array()), "text"),
     				   GetSQLValueString(json_encode(array()), "text"),
     				   GetSQLValueString($type, "text"),

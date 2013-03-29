@@ -12,7 +12,7 @@ if(isset($_POST['session_id'])) {
     $totalRows_Sessions = mysql_num_rows($Sessions);
 
     if($row_Sessions['session_id'] == $_POST['session_id']) {
-        if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['userId'], json_decode($row_Sessions['session_editors']))) {
+        if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
             if($_POST['session_password'] == "") { $pass = NULL; }
             else { $pass = crypt($_POST['session_password'], $_SESSION['cryptSalt']); }
 

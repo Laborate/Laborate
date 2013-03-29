@@ -12,15 +12,7 @@ if(!function_exists('cookieCheck')) {
             $row_Login = mysql_fetch_assoc($Login);
 
             if($row_Login['login_uuid'] == $_COOKIE['USRRC']) {
-                    $_SESSION['userId'] = $row_Login['user_id'];
-                    $_SESSION['userName'] = $row_Login['user_name'];
-                    $_SESSION['userEmail'] = $row_Login['user_email'];
-                    $_SESSION['userLevel'] = $row_Login['user_level'];
-                    if(!is_null($row_Login['user_github'])) {
-                        $_SESSION['userGithub'] = aesDecrypt($row_Login['user_github'], $_SESSION['cryptSalt']);
-                    } else {
-                        $_SESSION['userGithub'] = $row_Login['user_github'];
-                    }
+                    $_SESSION['user'] = $row_Login["user_id"];
 
                     $deleteSQL = sprintf("DELETE FROM login WHERE login.login_uuid = '".$_COOKIE['USRRC']."'");
                     $delete = mysql_query($deleteSQL , $database) or die(mysql_error());

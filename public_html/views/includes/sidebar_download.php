@@ -9,7 +9,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
         $("#githubCommit").on("click", function() { window.sidebarUtil.commitFile(); });
         $("#saveToServer").on("click", function() { window.sidebarUtil.pushFile(); });
     </script>
-    <?php if($GLOBALS['row_Sessions_id']['session_type'] == "github" && !is_null($_SESSION['userGithub'])) { ?>
+    <?php if($GLOBALS['row_Sessions_id']['session_type'] == "github" && !is_null($GLOBALS['row_Users']['user_github'])) { ?>
         <div>
             <div class="header">Commit File</div>
             <div><input id="githubMessage" type="text" placeholder="Commit Message" spellcheck="false" class="input"/></div>

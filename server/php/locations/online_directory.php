@@ -9,11 +9,11 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 $files_array = array();
 
 do {
-    if($GLOBALS['row_Sessions']['session_owner'] != $_SESSION['userId']) {
-        if(!in_array($_SESSION['userId'], json_decode($GLOBALS['row_Sessions']['session_editors']))) { continue; }
+    if($GLOBALS['row_Sessions']['session_owner'] != $_SESSION['user']) {
+        if(!in_array($_SESSION['user'], json_decode($GLOBALS['row_Sessions']['session_editors']))) { continue; }
     }
 
-    if($GLOBALS['row_Sessions']['session_owner'] == $_SESSION['userId']) { $ownership = "owner"; }
+    if($GLOBALS['row_Sessions']['session_owner'] == $_SESSION['user']) { $ownership = "owner"; }
     else { $ownership = "editor"; }
 
     if(is_null($GLOBALS['row_Sessions']['session_password'])) { $protected = "open"; }

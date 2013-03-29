@@ -28,8 +28,8 @@ if(!function_exists('redirect')) {
 if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest' && $GLOBALS['ajax_only']) {
     redirect(false);
 } else {
-    if(isset($_SESSION['userId'])) {
-        if($GLOBALS['row_Users']['user_id'] != $_SESSION['userId']) {
+    if(isset($_SESSION['user'])) {
+        if($GLOBALS['row_Users']['user_id'] != $_SESSION['user']) {
             if(cookieCheck() != true) {
                 redirect(true);
             }

@@ -10,7 +10,7 @@ if(isset($_POST['session_id'])){
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
 
-    if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['userId'], json_decode($row_Sessions['session_editors']))) {
+    if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
         if($_POST['session_name'] == "") {
             $name = $row_Sessions['session_name'];
             $path = $row_Sessions['session_external_path'];

@@ -22,7 +22,7 @@ if(isset($_POST['download_id'])) {
             $editors = json_decode($row_Sessions['session_editors']);
             if($editors == null || $editors[0] == "") { $editors = array(); }
             if($row_Sessions['session_owner'] != $_SESSION['userId']) {
-                if(!in_array($_SESSION['userId'], $editors)) {
+                if(!in_array($_SESSION['user'], $editors)) {
                     array_push($editors, $_SESSION['userId']);
                 }
             }

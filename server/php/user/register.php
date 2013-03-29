@@ -28,8 +28,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     				   GetSQLValueString(explode(" ", $_POST['user_name'])[0], "text"));
 
     $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
-    $_SESSION['userId'] = $id;
-    $_SESSION['userName'] = $_POST['user_name'];
+    $_SESSION['user'] = $id;
 
     $hash = md5($id + $_POST['user_email'] + rand(0, 1000000000000000000000000));
     setcookie('userLogin', $hash, time()+1209600, "/");

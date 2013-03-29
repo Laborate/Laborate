@@ -1,6 +1,7 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_id'])) {
     $to  = 'To: '.$_POST['email_addresses'];
@@ -13,7 +14,7 @@ if(isset($_POST['session_id'])) {
     ob_end_clean();
     $headers  = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= 'From: '.$_SESSION['userName'].' <'.$_SESSION['userEmail'].'>' . "\r\n";
+    $headers .= 'From: '.$GLOBALS['row_Users']['user_name'].' <'.$GLOBALS['row_Users']['user_email'].'>' . "\r\n";
     mail($to, $subject, $message, $headers);
     echo 1;
 }

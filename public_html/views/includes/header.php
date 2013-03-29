@@ -1,3 +1,4 @@
+<?php require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php'); ?>
 <div id="header">
     <a href="/editor/" id="logo">code-laborate</a>
     <div id="document_info">
@@ -15,7 +16,7 @@
     <div id="user">
         <div><a href="/logout/">Sign Out</a></div>
         <div><a href="/documents/">Documents</a></div>
-        <div><a href="/account/"><?php echo $_SESSION['userName']; ?></a></div>
+        <div><a href="/account/"><?php echo $GLOBALS['row_Users']['user_name']; ?></a></div>
     </div>
     <div class="clear"></div>
 </div>
