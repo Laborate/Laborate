@@ -43,7 +43,7 @@ if(isset($_GET['i'])) {
     </div>
     <div id="editorCodeMirror">
         <div id="full_screen" class="icon-expand right"></div>
-        <textarea id="code" name="code" placeholder="Code goes here...">></textarea>
+        <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
     </div>
     <?php include($_SERVER['DOCUMENT_ROOT']."/includes/chat_room.php"); ?>
     <?php include($_SERVER['DOCUMENT_ROOT']."/includes/backdrop.php"); ?>

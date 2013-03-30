@@ -12,7 +12,7 @@ if(isset($_POST['session_id'])){
 
     if($row_Sessions['session_id'] == $_POST['session_id']) {
         if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
-            if(isset($_POST['session_password']) && $_SESSION['userLevel'] > 0) {
+            if(isset($_POST['session_password']) && !is_null($GLOBALS['row_Users']['user_pricing'])) {
                 if($_POST['session_password'] == "") { $pass = NULL; }
                 else { $pass = crypt($_POST['session_password'], $_SESSION['cryptSalt']); }
 

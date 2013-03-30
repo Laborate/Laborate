@@ -9,15 +9,13 @@ if(isset($_GET['i'])) {
     }
     else {
         if($GLOBALS['row_Sessions_id']['session_id'] == $_GET['i']) {
-            if(is_null($GLOBALS['row_Sessions_id']['session_password'])) { $passwordRequired = false; }
-            else { $passwordRequired = true; }
-            $initalize = array($passwordRequired, $GLOBALS['row_Sessions_id']['session_name']);
-
-            if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['user']) {
-                if(!in_array($_GET['i'], $_SESSION['file_owner'])) {
-                    array_push($_SESSION['file_owner'], $_GET['i']);
-                }
+            if(is_null($GLOBALS['row_Sessions_id']['session_password'])) {
+                $passwordRequired = false;
+            } else {
+                $passwordRequired = true;
             }
+
+            $initalize = array($passwordRequired, $GLOBALS['row_Sessions_id']['session_name']);
         }
         else {
             header("Location: /editor");

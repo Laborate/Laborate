@@ -35,7 +35,7 @@ $("#backdropNewFileForm").live("submit", function() {
         $("#backdropLoaderImg").slideDown(500);
         setTimeout(function() {
             $.post("/php/session/new.php", { session_name: $("#backdropNewFileForm #backdropDocTitle").val(),
-                                                   session_document: JSON.stringify(window.editor.getValue().split('\n'))
+                                             session_document: JSON.stringify(window.editor.getValue().split('\n'))
                                             },
                 function(result){
                     window.passTemplate = "";
