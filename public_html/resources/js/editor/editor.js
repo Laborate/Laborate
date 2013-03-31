@@ -91,7 +91,7 @@ function setEditorMode(mode) {
                             "rpy":"python" }
 
     if(mode in languageExtentsion) { var modeName = languageExtentsion[mode]; }
-    else { var modeName = "changes" }
+    else { var modeName = "shell" }
 
     window.editor.setOption("mode", modeName);
     CodeMirror.autoLoadMode(window.editor, modeName);

@@ -14,7 +14,7 @@ html, body { overflow: hidden; }
     position: absolute;
     top: 5px;
     right: 10px;
-    z-index: 10000000;
+    z-index: 100;
     background: #fff;
     color: #777;
 }
