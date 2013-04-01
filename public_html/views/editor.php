@@ -27,6 +27,7 @@ if(isset($_GET['i'])) {
   	        });
 
   	        window.nodeSocket.on("reconnecting", function() {
+  	            $("#editorCodeMirror").css({"opacity": ".5"});
       	        editor.options.readOnly = true;
       	        window.notification.open("Reconnecting...");
   	        });
@@ -35,6 +36,7 @@ if(isset($_GET['i'])) {
       	        window.nodeSocket.emit('join', [getUrlVars()['i'], $("#backdropPassword").val()]);
       	        window.notification.close();
       	        editor.options.readOnly = false;
+      	        $("#editorCodeMirror").css({"opacity": ""});
   	        });
   	    } catch(err) { window.location.href = "/errors/node.php" }
   	 </script>
