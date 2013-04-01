@@ -25,6 +25,10 @@ if(isset($_GET['i'])) {
       	        "sync disconnect on unload": true,
       	        "try multiple transports": true,
   	        });
+
+  	        window.nodeSocket.on("reconnect", function() {
+      	        window.nodeSocket.emit('join', getUrlVars()['i'], $("#backdropPassword").val());
+  	        });
   	    } catch(err) { window.location.href = "/errors/node.php" }
   	 </script>
   	 <?php placeDependencies(); ?>
