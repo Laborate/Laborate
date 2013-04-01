@@ -13,9 +13,11 @@
 #sidebar #sidebar_header {
     margin-top: 49px;
     background: #EDEDED;
-    padding: 10px 0px 10px 0px;
+    padding: 10px 0px 8px 0px;
     background-image: url("/img/tshadowUp.png");
-    background-position: 0 36;
+    background-position: 0px 35px;
+    background-position-x: 0px;
+    background-position-y: 35px;
     background-repeat: repeat-x;
     text-align: center;
 }

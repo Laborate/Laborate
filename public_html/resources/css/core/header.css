@@ -112,6 +112,8 @@
     height: 5px;
     background: url("/img/tshadow.png");
     background-repeat: repeat-x;
-    background-position: 0 -5;
+    background-position: 0px -5px;
+    background-position-x: 0px;
+    background-position-y: -5px;
     z-index: 1000;
 }

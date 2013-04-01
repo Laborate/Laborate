@@ -190,6 +190,8 @@
     background: url("/img/tshadow.png") #FFF;
     background-repeat: repeat-x;
     background-position: 0px -4px;
+    background-position-x: 0px;
+    background-position-y: -4px;
     -moz-border-radius: 3px;
 	border-radius: 3px;
 	margin-top: 0px;
