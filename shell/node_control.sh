@@ -7,7 +7,7 @@ then
 else
     if [ $1 == start ]
     then
-        node $BASE/server/node/nodeServer.js > "$BASE//server/node/logs/`(date +"%T_%m_%d_%Y")`.log" &
+        node $BASE/server/node/server.js > "$BASE//server/node/logs/`(date +"%T_%m_%d_%Y")`.log" &
         echo "Node Server Started"
     elif [ $1 == stop ]
     then
@@ -17,7 +17,7 @@ else
     then
         killall node &
         sleep 1
-        node $BASE/server/node/nodeServer.js > "$BASE//server/node/logs/`(date +"%T_%m_%d_%Y")`.log" &
+        node $BASE/server/node/server.js > "$BASE//server/node/logs/`(date +"%T_%m_%d_%Y")`.log" &
         echo "Node Server Restarted"
     else
         echo "Arguments: start, stop & restart"

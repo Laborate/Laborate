@@ -1,8 +1,10 @@
-var init = require('./config.js');
-var io = init.io;
-var connection = init.connection;
+/* Requires */
+var base = require('./config.js');
+var utils = require('./untils.js');
+var connection = base.connection;
 
-io.sockets.on( 'connection', function (socket) {
+/* Socket Events */
+base.io.sockets.on( 'connection', function (socket) {
     socket.on('join', function (new_id) {
         socket.get('session_id', function(err, old_id) {
           if (old_id) {
