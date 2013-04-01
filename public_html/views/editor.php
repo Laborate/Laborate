@@ -26,8 +26,13 @@ if(isset($_GET['i'])) {
       	        "try multiple transports": true,
   	        });
 
+  	        window.nodeSocket.on("reconnecting", function() {
+      	        window.notification.open("Reconnecting To Server");
+  	        });
+
   	        window.nodeSocket.on("reconnect", function() {
       	        window.nodeSocket.emit('join', getUrlVars()['i'], $("#backdropPassword").val());
+      	        window.notification.close();
   	        });
   	    } catch(err) { window.location.href = "/errors/node.php" }
   	 </script>
@@ -35,6 +40,7 @@ if(isset($_GET['i'])) {
 </head>
 <body style="display:none;">
     <?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
+    <div class="notification"></div>
     <div id="sidebar">
         <div id="sidebar_header">
             <img id="document" src="http://resources.code.dev.laborate.io/img/document.png"/>
