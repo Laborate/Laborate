@@ -4,7 +4,6 @@ var mysql = require('mysql');
 var queues = require('mysql-queues');
 
 /* Configs */
-//Socket IO Config
 io.configure(function(){
     io.enable('browser client minification');  // send minified client
     io.enable('browser client etag');          // apply etag caching logic based on version number
@@ -20,7 +19,6 @@ io.on('error', function(err) {
     return false;
 });
 
-//MYSQL Config
 var connection = mysql.createConnection({
     //socketPath : '/Applications/MAMP/tmp/mysql/mysql.sock',
     user     : 'root',
@@ -36,13 +34,15 @@ connection.on('error', function(err) {
 
 queues(connection);
 
-//Node Error Handling
 process.on('uncaughtException', function(err) {
   console.log("Uncaught Error: " + err);
   return false;
 });
 
 
-/* Exports */
-exports.io = io;
-exports.connection = connection;
+/* Module Exports */
+module.exports = {
+    io: io,
+    connection: connection,
+    crypt_salt: 'ajl!k3?242!@#f342$%6456^&*()_`\`a;k:sfj#/?a-]s{df}|'
+}

@@ -1,7 +1,13 @@
 $(window).ready(function() {
     $.each($("#sidebar_header img"), function() {
         var module = $(this).attr("id");
-        $.get('/includes/sidebar_' + module + '.php?i=' + getUrlVars()['i'], function(newHtml) {
+        if(getUrlVars()['i'] == undefined) {
+            var url = '/includes/sidebar_' + module + '.php';
+        } else {
+            var url = '/includes/sidebar_' + module + '.php?i=' + getUrlVars()['i'];
+        }
+
+        $.get(url, function(newHtml) {
 			$("#sidebar_content").append(newHtml);
 			if('initialize_' + module in window) {
     			window['initialize_' + module]();

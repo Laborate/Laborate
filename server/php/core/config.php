@@ -38,7 +38,7 @@ else {
 $_SESSION['webSiteTitle'] = " · Code-Laborate";
 
 //Crypt Salt
-$_SESSION['cryptSalt'] = '$2a$07$aydsaqvpodfwrtdmdnbohnytk$';
+$_SESSION['cryptSalt'] = 'ajl!k3?242!@#f342$%6456^&*()_`\`a;k:sfj#/?a-]s{df}|';
 
 //Github Authentication
 $_SESSION['github_id'] = "310d8a45f13df3dfbf95";

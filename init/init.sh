@@ -21,7 +21,6 @@ cd $BASE
 npm link mysql
 npm link mysql-queues
 npm link socket.io
-npm link aes-helper
 echo -e '\033[32mLinked Node Modules \033[m'
 
 #Install PHP Vendor Modules

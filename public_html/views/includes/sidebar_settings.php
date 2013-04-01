@@ -1,10 +1,16 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
-if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['user']) {
+if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['user'] || !isset($_GET['i'])) {
     $action = "Delete";
 } else {
     $action = "Forget";
+}
+
+if($action == "Delete" && !is_null($GLOBALS['row_Users']['user_pricing'])) {
+    $passAllowed = true;
+} else {
+    $passAllowed = false;
 }
 ?>
 <div id="sidebar_settings" class="sidebar_content_inner">
@@ -66,7 +72,7 @@ if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['user']) {
     			<? } ?>
     			$.post("/php/session/update.php", { session_id: getUrlVars()['i'],
     			                                           session_name: $("#documentTitle").val(),
-    			                                           <?php if($action == "Delete" && !is_null($GLOBALS['row_Users']['user_pricing'])) { ?>
+    			                                           <?php if($passAllowed) { ?>
                                                            session_password: $("#documentPassword").val()
                                                            <? } ?>
                                         },
@@ -116,7 +122,7 @@ if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['user']) {
         <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
     </div>
     <hr/>
-    <?php if($action == "Delete" && !is_null($GLOBALS['row_Users']['user_pricing'])) { ?>
+    <?php if($passAllowed) { ?>
     <div>
        <div class="header">Document Password</div>
        <div><input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/></div>

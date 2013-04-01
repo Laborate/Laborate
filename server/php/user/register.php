@@ -23,7 +23,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     				   $id,
     				   GetSQLValueString($_POST['user_name'], "text"),
     				   GetSQLValueString($_POST['user_email'], "text"),
-    				   GetSQLValueString(crypt($_POST['user_password'], $_SESSION['cryptSalt']), "text"),
+    				   GetSQLValueString(aesEncrypt($_POST['user_password'], $_SESSION['cryptSalt']), "text"),
     				   rand(101, 99999999), 'NULL',
     				   GetSQLValueString(explode(" ", $_POST['user_name'])[0], "text"));
 

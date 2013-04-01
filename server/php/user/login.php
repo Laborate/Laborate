@@ -10,7 +10,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     $totalRows_Sessions = mysql_num_rows($Sessions);
 
     if($row_Sessions['user_email'] == $_POST['user_email']) {
-        if($row_Sessions['user_password'] == crypt($_POST['user_password'], $_SESSION['cryptSalt'])) {
+        if($row_Sessions['user_password'] == aesEncrypt($_POST['user_password'], $_SESSION['cryptSalt'])) {
             $_SESSION['user'] = "user_id";
 
             $uuid = gen_uuid();

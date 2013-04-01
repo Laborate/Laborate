@@ -27,12 +27,14 @@ if(isset($_GET['i'])) {
   	        });
 
   	        window.nodeSocket.on("reconnecting", function() {
+      	        editor.options.readOnly = true;
       	        window.notification.open("Reconnecting...");
   	        });
 
   	        window.nodeSocket.on("reconnect", function() {
       	        window.nodeSocket.emit('join', [getUrlVars()['i'], $("#backdropPassword").val()]);
       	        window.notification.close();
+      	        editor.options.readOnly = false;
   	        });
   	    } catch(err) { window.location.href = "/errors/node.php" }
   	 </script>
