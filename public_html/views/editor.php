@@ -31,7 +31,7 @@ if(isset($_GET['i'])) {
   	        });
 
   	        window.nodeSocket.on("reconnect", function() {
-      	        window.nodeSocket.emit('join', getUrlVars()['i'], $("#backdropPassword").val());
+      	        window.nodeSocket.emit('join', [getUrlVars()['i'], $("#backdropPassword").val()]);
       	        window.notification.close();
   	        });
   	    } catch(err) { window.location.href = "/errors/node.php" }

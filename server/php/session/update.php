@@ -3,6 +3,7 @@ $GLOBALS['ajax_message'] = json_encode([0,0]);
 $GLOBALS['ajax_only'] = true;
 require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_id'])){
@@ -11,21 +12,18 @@ if(isset($_POST['session_id'])){
     $row_Sessions = mysql_fetch_assoc($Sessions);
 
     if($row_Sessions['session_id'] == $_POST['session_id']) {
-        if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
-            if(isset($_POST['session_password']) && !is_null($GLOBALS['row_Users']['user_pricing'])) {
-                if($_POST['session_password'] == "") { $pass = NULL; }
-                else { $pass = crypt($_POST['session_password'], $_SESSION['cryptSalt']); }
+        if($row_Sessions['session_owner'] == $_SESSION['user'] || in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
+            if(isset($_POST['session_password']) && !is_null($GLOBALS['row_Users']['user_pricing']) && $row_Sessions['session_owner'] == $_SESSION['user'] ) {
+                if($_POST['session_password'] == "") {
+                    $password = NULL;
+                } else {
+                    $password = aesEncrypt($_POST['session_password'], $_SESSION['cryptSalt']);
+                }
 
-                if($row_Sessions['session_password'] == $pass) {
+                if($row_Sessions['session_password'] == $password) {
                     $response = json_encode([1,0]);
                 } else {
                    $response = json_encode([1,1]);
-                }
-
-                if($_POST['session_password'] != "") {
-                    $password = crypt($_POST['session_password'], $_SESSION['cryptSalt']);
-                } else {
-                    $password = NULL;
                 }
             } else {
                 $response = json_encode([1,0]);

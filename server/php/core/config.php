@@ -20,7 +20,7 @@ if (!isset($_SESSION['initiated'])) {
     $_SESSION['initiated'] = true;
 }
 
-if(isset($_SESSION['userId'])) {
+if(isset($_SESSION['user'])) {
     if(!isset($_SESSION['file_owner'])) {
         $_SESSION['file_owner'] = array();
     }
@@ -44,7 +44,7 @@ $_SESSION['cryptSalt'] = '$2a$07$aydsaqvpodfwrtdmdnbohnytk$';
 $_SESSION['github_id'] = "310d8a45f13df3dfbf95";
 $_SESSION['github_secret'] = "0be78393c4533047b1e1e230cd3f8039e82879d5";
 $_SESSION['github_scope'] = "repo";
-$_SESSION['github_state'] = crypt($_SESSION['userId'], $_SESSION['cryptSalt']);
+$_SESSION['github_state'] = crypt($_SESSION['user'], $_SESSION['cryptSalt']);
 $_SESSION['github_auth_url'] = "https://github.com/login/oauth/authorize?client_id=";
 $_SESSION['github_auth_url'] .= $_SESSION['github_id']."&scope=".$_SESSION['github_scope']."&state=".$_SESSION['github_state'];
 ?>

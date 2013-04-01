@@ -3,6 +3,7 @@ $GLOBALS['ajax_message'] = "Password Authentication: Failed";
 $GLOBALS['ajax_only'] = true;
 require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_id'])) {
@@ -14,7 +15,7 @@ if(isset($_POST['session_id'])) {
     if($row_Sessions['session_id'] == $_POST['session_id']) {
         if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
             if($_POST['session_password'] == "") { $pass = NULL; }
-            else { $pass = crypt($_POST['session_password'], $_SESSION['cryptSalt']); }
+            else { $pass = aesEncrypt($_POST['session_password'], $_SESSION['cryptSalt']); }
 
             if($row_Sessions['session_password'] == $pass ) {
                 function createId() {

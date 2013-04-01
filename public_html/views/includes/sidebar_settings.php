@@ -66,7 +66,7 @@ if($GLOBALS['row_Sessions_id']['session_owner'] == $_SESSION['user']) {
     			<? } ?>
     			$.post("/php/session/update.php", { session_id: getUrlVars()['i'],
     			                                           session_name: $("#documentTitle").val(),
-    			                                           <?php if(in_array($_GET['i'], $_SESSION['file_owner'])) { ?>
+    			                                           <?php if($action == "Delete" && !is_null($GLOBALS['row_Users']['user_pricing'])) { ?>
                                                            session_password: $("#documentPassword").val()
                                                            <? } ?>
                                         },

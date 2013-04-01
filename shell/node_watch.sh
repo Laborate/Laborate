@@ -2,6 +2,7 @@
 BASE="$(cd "$(dirname "$0")"; pwd)/../"
 
 while inotifywait -e CLOSE_WRITE $BASE/server/node/*; do
+    $BASE/shell/clear_logs.sh;
     $BASE/shell/node_control.sh restart;
     clear;
     echo "Restarted Node";

@@ -121,7 +121,7 @@ $(window).ready(function() {
 });
 
 function finishBackdrop(title) {
-    window.nodeSocket.emit('join', getUrlVars()['i'], $("#backdropPassword").val());
+    window.nodeSocket.emit('join', [getUrlVars()['i'], $("#backdropPassword").val()]);
     setTimeout(function(){
         window.sidebarUtil.setTitle(title);
         window.chatRoom.screenNameChange("", $("#backdropScreenName").val());
