@@ -8,6 +8,7 @@
     font-family: "Helvetica Neue";
     background-color: #F0F1F1;
     background: -webkit-linear-gradient(315deg, rgba(241, 243, 243, .5), RGBA(241, 243, 243, .5) 80%), url("/img/bg.png");
+    z-index: 100000000;
 }
 
 #backdrop * {
