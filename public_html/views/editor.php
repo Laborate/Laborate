@@ -27,7 +27,7 @@ if(isset($_GET['i'])) {
   	        });
 
   	        window.nodeSocket.on("reconnecting", function() {
-      	        window.notification.open("Reconnecting To Server");
+      	        window.notification.open("Reconnecting...");
   	        });
 
   	        window.nodeSocket.on("reconnect", function() {
