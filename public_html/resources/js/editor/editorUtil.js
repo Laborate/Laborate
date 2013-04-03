@@ -24,34 +24,39 @@ window.editorUtil = {
         }
     },
     gutterClick: function(direction, data) {
-        var info = window.editor.lineInfo(data["line"]);
+        var info = window.editor.lineInfo(parseInt(data["line"]));
         var marker = document.createElement("div");
         marker.className ="CodeMirror-breakpoint";
         marker.innerHTML = "●";
         if(direction == "out") {
             window.editor.setGutterMarker(data["line"], "breakpoints", info.gutterMarkers ? null : marker);
-            window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"lineMarker": {"line":data["line"], "remove":info.gutterMarkers}}} );
+            window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"breakpoint": {"line":data["line"], "remove":info.gutterMarkers}}} );
         }
 
         if(direction == "in") {
             window.editor.setGutterMarker(data["line"], "breakpoints", data["remove"] ? null : marker);
         }
     },
-    users: function(id, name, remove) {
-        if(remove && $.inArray(id, window.users) > -1) {
-            $("#document_contributors").find("[data=" + id + "]").remove();
-            delete window.users[id];
-            window.editorUtil.userCursors("in", {"from":id, "remove":true})
+    join: function(name, password) {
+        window.screenName = name;
+        $.cookie("screenName", name);
+        window.nodeSocket.emit('join', {"from":window.userId, "name": name,
+                                    "session": getUrlVars()['i'], "password": password});
+    },
+    users: function(data) {
+        if(data['leave'] && $.inArray(data['from'], window.users) > -1) {
+            $("#document_contributors").find("[data=" + data['from'] + "]").remove();
+            window.users.splice(window.users.indexOf(data['from']), 1);
         }
         else {
-            if($.inArray(id, window.users) == -1) {
-                $("<style type='text/css'> .u" + id + "{background:" + randomUserColor() + " !important;} </style>").appendTo("head");
-                var contributor = '<div class="contributor u'+id+'" data="'+id+'" userName="'+name+'"></div>';
+            if($.inArray(data['from'], window.users) == -1) {
+                $("<style type='text/css'> .u" + data['from'] + "{background:" + randomUserColor() + " !important;} </style>").appendTo("head");
+                var contributor = '<div class="contributor u'+data['from']+'" data="'+data['from']+'" userName="'+data['name']+'"></div>';
                 $("#document_contributors").append(contributor);
-                window.users.push(id);
+                window.users.push(data['from']);
             }
             else {
-                $("#document_contributors").find("[data=" + id + "]").attr("userName", name);
+                $("#document_contributors").find("[data=" + data['from'] + "]").attr("userName", data['name']);
             }
         }
     },
@@ -69,15 +74,15 @@ window.editorUtil = {
     },
     userCursors: function(direction, data) {
         if(direction == "out") {
-            if(data['remove']) {
-                window.nodeSocket.emit('cursors' , {"from":window.userId, "remove":true} );
+            if(data['leave']) {
+                window.nodeSocket.emit('cursors' , {"from":window.userId, "leave":true} );
             } else {
                 window.nodeSocket.emit('cursors' , {"from":window.userId, "line":data['line']} );
             }
         }
 
         if(direction == "in") {
-            if(data['remove']) {
+            if(data['leave']) {
                 window.editor.removeLineClass(window.cursors[data['from']], "", ("u"+data['from']));
                 delete window.cursors[data['from']];
             }

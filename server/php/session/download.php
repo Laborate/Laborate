@@ -33,7 +33,7 @@ if(isset($_POST['download_id'])) {
 				   GetSQLValueString(json_encode($editors), "text"), $row_Sessions['session_id']);
         $UpdateSessions = mysql_query($updateSQL , $database) or die(mysql_error());
 
-        echo $row_Sessions['session_document'];
+        echo json_encode([$row_Sessions['session_breakpoints'], $row_Sessions['session_document']]);
 
     } else {
         echo $GLOBALS['ajax_message'];

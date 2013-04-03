@@ -87,13 +87,17 @@ $("#backdropExistingFileForm").live("submit", function() {
                                     window.passTemplate = $("#backdropPassword").val();
                                     proccessedDocuemt = "";
                                     var json = JSON.parse(dowload_response);
-                                    $.each(json, function(i, item) {
-                                        if(i+1 != json.length) { var new_line = "\n"; }
-                                        else { var new_line = ""; }
-                                        proccessedDocuemt += item + new_line;
-                                    });
 
+                                    $.each(JSON.parse(json[1]), function(i, item) {
+                                        proccessedDocuemt += item;
+                                        if(i+1 != json.length) {
+                                            proccessedDocuemt += "\n";
+                                        }
+                                    });
                                     window.editor.setValue(proccessedDocuemt);
+                                    $.each(JSON.parse(json[0]), function(i, item) {
+                                        window.editorUtil.gutterClick("in", {"line":item, "remove": false});
+                                    });
                                     setTimeout(function() {
                                         finishBackdrop($("#backdropExistingFileForm #backdropDocTitle").val());
                                     }, 500);
@@ -121,11 +125,9 @@ $(window).ready(function() {
 });
 
 function finishBackdrop(title) {
-    window.nodeSocket.emit('join', [getUrlVars()['i'], $("#backdropPassword").val()]);
+    window.editorUtil.join($("#backdropScreenName").val(), $("#backdropPassword").val());
     setTimeout(function(){
         window.sidebarUtil.setTitle(title);
-        window.chatRoom.screenNameChange("", $("#backdropScreenName").val());
-        window.chatRoom.signIn();
         $("#backdrop, #backdrop div").hide();
         $("body div").not("#backdrop, #backdrop div, #contributor_info, #actionConfirm, .notification").show();
         $("#header #logo").hAlign().vAlign();

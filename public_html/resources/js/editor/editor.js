@@ -117,8 +117,8 @@ window.nodeSocket.on('editor', function (data) {
                 window.location.reload(true);
             }
 
-            if(data["extras"]["lineMarker"] != null && data["extras"]["lineMarker"] != "") {
-                window.editorUtil.gutterClick("in", data["extras"]["lineMarker"]);
+            if(data["extras"]["breakpoint"] != null && data["extras"]["breakpoint"] != "") {
+                window.editorUtil.gutterClick("in", data["extras"]["breakpoint"]);
             }
         }
     }
@@ -134,11 +134,15 @@ setInterval(function() {
 //Pull User Info
 window.nodeSocket.on('users', function (data) {
     if(data['from'] != window.userId && (""+data['from']) != "null") {
-        if(data["isLeave"]) {
-            window.editorUtil.users(data['from'], data['name'], true);
-        }
-        else {
-            window.editorUtil.users(data['from'], data['name']);
+        if(data["join"]) {
+            window.chatRoom.signIn(data["name"]);
+            window.editorUtil.users(data);
+        } else if(data["leave"]) {
+            window.chatRoom.signOut(data["name"]);
+            window.editorUtil.users(data);
+            window.editorUtil.userCursors("in", data);
+        } else {
+            window.editorUtil.users(data);
         }
     }
 });

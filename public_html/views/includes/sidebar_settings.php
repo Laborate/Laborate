@@ -39,7 +39,6 @@ if($action == "Delete" && !is_null($GLOBALS['row_Users']['user_pricing'])) {
         			                                 window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"passChange": "true"}} );
         			                             <?php } ?>
         			                             setTimeout(function() {
-            			                             window.nodeSocket.emit( 'chatRoom' , {"from":window.userId, "isLeave":true} );
             			                             window.location.href = "/documents/";
         			                             }, 100);
         			                         }

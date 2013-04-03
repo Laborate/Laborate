@@ -33,7 +33,7 @@ if(isset($_GET['i'])) {
   	        });
 
   	        window.nodeSocket.on("reconnect", function() {
-      	        window.nodeSocket.emit('join', [getUrlVars()['i'], $("#backdropPassword").val()]);
+      	        window.editorUtil.join($.cookie("screenName"), $("#backdropPassword").val());
       	        window.notification.close();
       	        editor.options.readOnly = false;
       	        $("#editorCodeMirror").css({"opacity": ""});
