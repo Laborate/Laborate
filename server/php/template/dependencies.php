@@ -45,6 +45,7 @@ function getDependencies($dependencies) {
     }
 
     if(in_array("codeMirror", $dependencies)) {
+         array_push($GLOBALS['js'],  "editor/modes.js");
         array_push($GLOBALS['codeMirror_js'], "lib/codemirror.js", "addon/mode/loadmode.js");
         array_push($GLOBALS['codeMirror_css'], "lib/codemirror.css", "theme/codelaborate.css");
     }
@@ -54,7 +55,11 @@ function getDependencies($dependencies) {
         array_push($GLOBALS['css'], "backdrop/backdrop.css");
 
         if($GLOBALS['backdropMode'] == "editor") {
-            array_push($GLOBALS['js'], "backdrop/backdropEditor.js", "backdrop/upload_file.js", "core/form.js");
+            array_push($GLOBALS['js'], "backdrop/backdropEditor.js");
+
+            if(!isset($_GET['i'])) {
+                array_push($GLOBALS['js'], "backdrop/upload_file.js", "core/form.js");
+            }
         }
 
         if($GLOBALS['backdropMode'] == "login" || $GLOBALS['backdropMode'] == "register") {
