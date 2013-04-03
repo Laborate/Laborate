@@ -30,6 +30,7 @@ cp $BASE/init/composer.json composer.json
 curl -s http://getcomposer.org/installer | php
 php composer.phar install
 cd $BASE/server/php/vendor/
+git clone https://github.com/Synchro/PHPMailer.git
 git clone https://github.com/phpseclib/phpseclib.git
 cp -r $BASE/server/php/vendor/phpseclib/phpseclib $BASE/server/php/vendor/phpseclib2
 rm -r $BASE/server/php/vendor/phpseclib
