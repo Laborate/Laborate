@@ -36,6 +36,7 @@ $(window).ready(function() {
     });
 });
 
+
 //Pull New Code
 window.nodeSocket.on('editor', function (data) {
     if(data["from"] != window.userId) {

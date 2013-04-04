@@ -15,7 +15,9 @@ io.sockets.on('connection', function (socket) {
                 }
                 socket.join(data['session']);
                 session = data;
-                socket.broadcast.to(session['session']).emit('users' , {"from": data['from'], "name": data['name'], "join": true});
+
+                var join = {"from": data['from'], "name": data['name'], "join": true};
+                socket.broadcast.to(session['session']).emit('users' , join);
             }
         });
     });
@@ -45,7 +47,8 @@ io.sockets.on('connection', function (socket) {
         session["name"] = data["name"];
     });
 
-    socket.on('disconnect', function(data) {
-        socket.broadcast.to(session['session']).emit('users' , {"from": session['from'], "name": session['name'], "leave": true});
+    socket.on('disconnect', function() {
+        var data = {"from": session['from'], "name": session['name'], "leave": true};
+        socket.broadcast.to(session['session']).emit('users' , data);
     });
 });

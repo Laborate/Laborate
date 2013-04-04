@@ -34,7 +34,8 @@ module.exports = {
         connection.query(session_pull, function(err, sql_results) {
             var sql_session_document = JSON.parse(sql_results[0]["session_document"]);
 
-            //add and remove logic
+            //console.log(sql_session_document);
+            //console.log(data);
 
             var session_push = 'Update sessions SET session_document="' + JSON.stringify(sql_session_document) + '" WHERE session_id = ' + session;
             connection.query(session_push);
