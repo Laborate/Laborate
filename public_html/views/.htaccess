@@ -5,7 +5,6 @@ AuthUserFile /var/www/.htpasswd
 require valid-user
 Order allow,deny
 Allow from localhost
-Allow from 127.0.0.1
 Satisfy Any
 
 # Prevent Directory Listing

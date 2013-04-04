@@ -21,19 +21,12 @@ if(isset($_POST['session_id'])) {
             $mail->AddAddress(trim($email));
         }
 
+        $post = $_POST;
+        $post['url_host'] = $_SERVER["HTTP_HOST"];
+
         $mail->SetFrom($GLOBALS['row_Users']['user_email'], $GLOBALS['row_Users']['user_name']);
         $mail->Subject = $_POST['session_name']." (".$GLOBALS['row_Users']['user_email'].") - ".substr($_SESSION['webSiteTitle'], 3);
-
-        $opts = array('http' =>
-            array(
-                'method'  => 'POST',
-                'header'  => 'Content-type: application/x-www-form-urlencoded',
-                'content' => $_POST
-            )
-        );
-
-        $context  = stream_context_create($opts);
-        $mail->MsgHTML(file_get_contents("http://".$_SERVER["HTTP_HOST"]."/php/email/templates/invite.php", false, $context));
+        $mail->MsgHTML(file_get_contents("http://localhost/php/email/templates/invite.php?".http_build_query($post)));
         $mail->Send();
         echo 1;
     //}
