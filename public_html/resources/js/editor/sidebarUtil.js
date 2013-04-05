@@ -144,7 +144,9 @@ window.sidebarUtil = {
         );
     },
     downloadFile: function() {
+        $("#downloadFile").removeClass("red_harsh").addClass("disabled").val("Downloading File...");
         window.sidebarUtil.passwordCheck(function(callback) {
+            $("#downloadFile").removeClass("disabled");
             if(callback) {
                 window.location.href = "/php/session/download_file.php?i=" + callback;
             }
@@ -157,19 +159,31 @@ window.sidebarUtil = {
         });
     },
     printFile: function() {
-        var url = "/print/?i="+ getUrlVars()['i'] + "&p="+ window.passTemplate + "&t=" + $("#document_title").text();
-        printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+        $("#printButton").removeClass("red_harsh").addClass("disabled").val("Printing File...");
+        window.sidebarUtil.passwordCheck(function(callback) {
+            $("#printButton").removeClass("disabled");
+            if(callback) {
+                var url = "/print/?i="+ callback + "&t=" + $("#document_title").text();
+                printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+            } else {
+                $("#printButton").addClass("red_harsh").val("Print Failed");
+                setTimeout(function() {
+            		$("#printButton").removeClass("red_harsh").val("Print Document");
+        		}, 5000);
+            }
+        });
     },
     commitFile: function() {
+        $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting File...");
         window.sidebarUtil.passwordCheck(function(callback) {
             if(callback) {
-                $("#githubCommit").removeClass("red_harsh").val("Commiting File...");
                 if($("#githubReference").val() != "") { var related = "\n\Issue: #" + $("#githubReference").val(); }
                 else { var related = ""; }
                 $.post("/php/locations/github_commit.php", { commit_id: callback,
                                                                    session_document: window.editor.getValue(),
                                                                    message: $("#githubMessage").val() + related },
                     function(result){
+                        $("#githubCommit").removeClass("disabled");
                         if(result == "Commit Succeeded") {
                             $("#githubCommit").val("File Commited").removeClass("red_harsh");
                             $("#githubMessage, #githubReference").val("");
@@ -187,7 +201,7 @@ window.sidebarUtil = {
                 );
             }
             else {
-                $("#githubCommit").addClass("red_harsh").val("Commit Failed");
+                $("#githubCommit").removeClass("disabled").addClass("red_harsh").val("Commit Failed");
                 setTimeout(function() {
                     $("#githubCommit").removeClass("red_harsh").val("Commit File");
                 }, 5000);
@@ -195,14 +209,15 @@ window.sidebarUtil = {
         });
     },
     pushFile: function() {
+        $("#saveToServer").removeClass("red_harsh").addClass("disabled").val("Saving File...");
         window.sidebarUtil.passwordCheck(function(callback) {
             if(callback) {
-                $("#saveToServer").removeClass("red_harsh").val("Saving File...");
                 $.post("/php/locations/sftp_push.php", {
                                                         commit_id: callback,
                                                         session_document: window.editor.getValue(),
                                         },
                     function(result){
+                        $("#saveToServer").removeClass("disabled");
                         if(result == "File Pushed") {
                             $("#saveToServer").val("File Saved").removeClass("red_harsh");
                             setTimeout(function() {
@@ -219,7 +234,7 @@ window.sidebarUtil = {
                 );
             }
             else {
-                $("#saveToServer").addClass("red_harsh").val("Save Failed");
+                $("#saveToServer").removeClass("disabled").addClass("red_harsh").val("Save Failed");
                 setTimeout(function() {
                    $("#saveToServer").removeClass("red_harsh").val("Save To Server");
         		}, 5000);

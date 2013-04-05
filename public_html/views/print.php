@@ -46,7 +46,6 @@ $title = $_GET['t'];
 
     <!-- Data Elements -->
     <div id="mode" style="display:none"><?php echo explode(".", $_GET['t'])[1]; ?></div>
-    <div id="session_id" style="display:none"><?php echo $_GET['i']; ?></div>
-    <div id="password" style="display:none"><?php echo $_GET['p']; ?></div>
+    <div id="download_id" style="display:none"><?php echo $_GET['i']; ?></div>
 </body>
 </html>

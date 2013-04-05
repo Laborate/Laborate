@@ -20,7 +20,7 @@ $backdrop_button = "font-size: 14px; cursor: pointer; padding: 3px 10px; -moz-bo
                     <tr>
                         <td align="center">
                             <a style="<?php echo $backdrop_logo; ?>" href="<?php echo "http://".$_GET['url_host']."/"; ?>" target="_blank">
-                                code-laborate
+                                <img src="http://resources.code.dev.laborate.io/img/email_logo.png">
                             </a>
                         </td>
                     </tr>

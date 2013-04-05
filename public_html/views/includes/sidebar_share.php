@@ -17,14 +17,15 @@
 
         $("#emailSend").on("click", function() {
             if($("#emailAddresses").val() != "") {
+                $("#emailSend").addClass("disabled").val("Sending...");
                 $.post("/php/email/invite.php", {   session_id: getUrlVars()['i'],
-                                                            session_name: $("#document_title").text(),
-                                                            email_addresses: $("#emailAddresses").val(),
-                                                            email_message: $("#emailMessage").val() },
+                                                    session_name: $("#document_title").text(),
+                                                    email_addresses: $("#emailAddresses").val(),
+                                                    email_message: $("#emailMessage").val() },
         			                         function(result) {
             			                         if(result == "1") {
             			                             $("#emailAddresses, #emailMessage").val("");
-            			                             $("#emailSend").val("Email Sent");
+            			                             $("#emailSend").removeClass("disabled").val("Email Sent");
             			                         }
             			                         else {
                 			                         $("#emailSend").val("Email Failed").addClass("red_harsh");

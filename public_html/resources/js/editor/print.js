@@ -22,37 +22,26 @@ $(window).ready(function() {
     if($("#mode").text() == "") { window.close(); }
     setEditorMode($("#mode").text());
 
-    $.post("/php/session/password_check.php", { session_id: $("#session_id").text(),
-                                               session_password: $("#password").text()
-                                        },
-            function(password_response){
-                if(password_response != "Password Authentication: Failed") {
-                    setTimeout(function() {
-                        $.post("/php/session/download.php", { download_id: "" + password_response },
-                            function(dowload_response){
-                                if(dowload_response != "Download: Failed") {
-                                    proccessedDocuemt = "";
-                                    var json = JSON.parse(dowload_response);
-                                    var session_document = JSON.parse(json[1]);
+    $.post("/php/session/download.php", { download_id: "" + $("#download_id").text() },
+        function(dowload_response) {
+            if(dowload_response != "Download: Failed") {
+                proccessedDocuemt = "";
+                var json = JSON.parse(dowload_response);
+                var session_document = JSON.parse(json[1]);
 
-                                    $.each(session_document, function(i, item) {
-                                        proccessedDocuemt += item;
-                                        if(i+1 != session_document.length) {
-                                            proccessedDocuemt += "\n";
-                                        } else {
-                                            window.editor.setValue(proccessedDocuemt);
-                                            finish();
-                                        }
-                                    });
-                                }
-                                else { failed(); }
-                            }
-                        );
-                    }, 500);
-                }
-                else { failed(); }
-        }
-    );
+                $.each(session_document, function(i, item) {
+                    proccessedDocuemt += item;
+                    if(i+1 != session_document.length) {
+                        proccessedDocuemt += "\n";
+                    } else {
+                        window.editor.setValue(proccessedDocuemt);
+                        finish();
+                    }
+                });
+            } else {
+                failed();
+            }
+    });
 });
 
 function failed() {
@@ -69,5 +58,5 @@ function finish() {
         window.editor.refresh();
         window.print();
         window.close();
-    }, 500);
+    }, 1000);
 };
