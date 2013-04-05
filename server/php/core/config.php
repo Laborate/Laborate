@@ -1,5 +1,5 @@
 <?php
-
+/* Configuration */
 if($_SERVER['REMOTE_ADDR'] != "127.0.0.1") {
     error_reporting(E_ERROR | E_PARSE);
     //error_reporting(E_ALL);
@@ -34,6 +34,8 @@ else {
     $_SESSION['no_cache'] = false;
 }
 
+
+/* Globals Settings */
 //Website Title
 $_SESSION['webSiteTitle'] = " · Code-Laborate";
 
@@ -47,4 +49,12 @@ $_SESSION['github_scope'] = "repo";
 $_SESSION['github_state'] = crypt($_SESSION['user'], $_SESSION['cryptSalt']);
 $_SESSION['github_auth_url'] = "https://github.com/login/oauth/authorize?client_id=";
 $_SESSION['github_auth_url'] .= $_SESSION['github_id']."&scope=".$_SESSION['github_scope']."&state=".$_SESSION['github_state'];
+
+//Email Authentication
+$_SESSION['email_authentication'] = true;
+$_SESSION['email_authentication_method'] = "tls";
+$_SESSION['email_host'] = "smtp.gmail.com";
+$_SESSION['email_port'] = 587;
+$_SESSION['email_username'] = "support@laborate.io";
+$_SESSION['email_password'] = "vallelunga";
 ?>

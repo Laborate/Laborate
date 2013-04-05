@@ -9,7 +9,7 @@ $backdrop_button = "font-size: 14px; cursor: pointer; padding: 3px 10px; -moz-bo
 ?>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body leftmargin="0" margin="0" topmargin="0" marginheight="0" offset="0">
     <table width="100%" bgcolor="#FFFFFF" cellpadding="10" cellspacing="0">

@@ -10,12 +10,12 @@ if(isset($_POST['session_id'])) {
     $mail->IsSMTP();
 
     try {
-        $mail->SMTPAuth   = true;
-        $mail->SMTPSecure = "tls";
-        $mail->Host       = "smtp.gmail.com";
-        $mail->Port       = 587;
-        $mail->Username   = "support@laborate.io";
-        $mail->Password   = "vallelunga";
+        $mail->SMTPAuth   = $_SESSION['email_authentication'];
+        $mail->SMTPSecure = $_SESSION['email_authentication_method'];
+        $mail->Host       = $_SESSION['email_host'];
+        $mail->Port       = $_SESSION['email_port'];
+        $mail->Username   = $_SESSION['email_username'];
+        $mail->Password   = $_SESSION['email_password'];
 
         foreach(explode(",", $_POST['email_addresses']) as $key => $email) {
             $mail->AddAddress(trim($email));
