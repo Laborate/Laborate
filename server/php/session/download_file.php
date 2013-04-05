@@ -6,15 +6,15 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_GET['i'])) {
 
-    $query_Sessions = "SELECT * FROM download, sessions WHERE sessions.session_id = download.session_id AND download.download_id = '".$_GET['i']."'";
+    $query_Sessions = "SELECT * FROM session_aliases, sessions WHERE sessions.session_id = session_aliases.session_id AND session_aliases.alias_id = '".$_GET['i']."'";
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
 
-    $deleteSQL = sprintf("DELETE FROM download WHERE download.download_id = '".$_GET['i']."'");
+    $deleteSQL = sprintf("DELETE FROM session_aliases WHERE session_aliases.alias_id = '".$_GET['i']."'");
     mysql_select_db($database_database, $database);
     $Result1 = mysql_query($deleteSQL, $database) or die(mysql_error());
 
-    if($row_Sessions['download_id'] == $_GET['i']) {
+    if($row_Sessions['alias_id'] == $_GET['i']) {
 
         $fd = fopen($row_Sessions['session_name'], "rw");
         $path_parts = pathinfo($row_Sessions['session_name']);

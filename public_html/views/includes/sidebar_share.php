@@ -18,6 +18,9 @@
         $("#emailSend").on("click", function() {
             if($("#emailAddresses").val() != "") {
                 $("#emailSend").addClass("disabled").val("Sending...");
+                $("#sidebar_share .header").eq(0).css("color", "");
+                $("#sidebar_share .header").eq(1).css("color", "");
+                $("#emailAddresses").css("border", "");
                 $.post("/php/email/invite.php", {   session_id: getUrlVars()['i'],
                                                     session_name: $("#document_title").text(),
                                                     email_addresses: $("#emailAddresses").val(),
@@ -28,7 +31,10 @@
             			                             $("#emailSend").removeClass("disabled").val("Email Sent");
             			                         }
             			                         else {
-                			                         $("#emailSend").val("Email Failed").addClass("red_harsh");
+                			                         $("#emailSend").removeClass("disabled").val("Email Failed").addClass("red_harsh");
+                			                         setTimeout(function() {
+                                                        $("#emailSend").val("Send Email").removeClass("red_harsh");
+                                                    }, 5000);
             			                         }
                 			                 });
             } else {
@@ -36,13 +42,13 @@
                 $("#sidebar_share .header").eq(1).css("color", "#F10F00");
                 $("#emailAddresses").css("border", "solid 1px #F10F00");
                 $("#emailSend").val("Missing Information").addClass("red_harsh");
+                setTimeout(function() {
+                    $("#sidebar_share .header").eq(0).css("color", "");
+                    $("#sidebar_share .header").eq(1).css("color", "");
+                    $("#emailAddresses").css("border", "");
+                    $("#emailSend").val("Send Email").removeClass("red_harsh");
+                }, 5000);
             }
-            setTimeout(function() {
-                $("#sidebar_share .header").eq(0).css("color", "");
-                $("#sidebar_share .header").eq(1).css("color", "");
-                $("#emailAddresses").css("border", "");
-                $("#emailSend").val("Send Email").removeClass("red_harsh");
-            }, 5000);
         });
     </script>
     <div>
