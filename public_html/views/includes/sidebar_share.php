@@ -2,7 +2,6 @@
 	<script type="text/javascript" src="http://resources.code.dev.laborate.io/js/core/copy.js"></script>
 	<script type="text/javascript">
 		function initialize_share() {
-    		$("#shareUrl").val(window.location.href);
             $("#shareCopy").zclip({
                 path:'http://resources.code.dev.laborate.io/flash/copy.swf',
                 copy: window.location.href,

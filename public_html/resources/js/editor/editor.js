@@ -72,7 +72,7 @@ setInterval(function() {
 
 //Pull User Info
 window.nodeSocket.on('users', function (data) {
-    if(data['from'] != window.userId && (""+data['from']) != "null") {
+    if(data['from'] != window.userId && data['from']) {
         if(data["join"]) {
             window.chatRoom.signIn(data["name"]);
             window.editorUtil.users(data);

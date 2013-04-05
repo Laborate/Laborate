@@ -48,7 +48,10 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function() {
-        var data = {"from": session['from'], "name": session['name'], "leave": true};
-        socket.broadcast.to(session['session']).emit('users' , data);
+        if(session['from']) {
+            var data = {"from": session['from'], "name": session['name'], "leave": true};
+            socket.broadcast.to(session['session']).emit('users' , data);
+            socket.join(data['session']);
+        }
     });
 });
