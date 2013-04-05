@@ -149,6 +149,7 @@ window.sidebarUtil = {
             $("#downloadFile").removeClass("disabled");
             if(callback) {
                 window.location.href = "/php/session/download_file.php?i=" + callback;
+                $("#downloadFile").removeClass("red_harsh").val("Download File");
             }
             else {
                 $("#downloadFile").addClass("red_harsh").val("Download Failed");
@@ -165,6 +166,7 @@ window.sidebarUtil = {
             if(callback) {
                 var url = "/print/?i="+ callback + "&t=" + $("#document_title").text();
                 printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+                $("#printButton").removeClass("red_harsh").val("Print Document");
             } else {
                 $("#printButton").addClass("red_harsh").val("Print Failed");
                 setTimeout(function() {
