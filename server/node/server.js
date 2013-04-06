@@ -18,6 +18,8 @@ io.sockets.on('connection', function (socket) {
 
                 var join = {"from": data['from'], "name": data['name'], "join": true};
                 socket.broadcast.to(session['session']).emit('users' , join);
+            } else {
+                socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
             }
         });
     });
@@ -27,10 +29,18 @@ io.sockets.on('connection', function (socket) {
 
         if("extras" in data) {
             if("breakpoint" in data["extras"]) {
-                utils.session_breakpoint(session['session'], data["extras"]["breakpoint"]);
+                utils.session_breakpoint(session['session'], data["extras"]["breakpoint"], function(success) {
+                    if(!success) {
+                        socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
+                    }
+                });
             }
         } else {
-            utils.session_document(session['session'], data);
+            utils.session_document(session['session'], data, function(success) {
+                if(!success) {
+                    socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
+                }
+            });
         }
     });
 
