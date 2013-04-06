@@ -31,10 +31,10 @@
             			                         }
             			                         else {
                 			                         $("#emailSend").removeClass("disabled").val("Email Failed").addClass("red_harsh");
-                			                         setTimeout(function() {
-                                                        $("#emailSend").val("Send Email").removeClass("red_harsh");
-                                                    }, 5000);
             			                         }
+            			                         setTimeout(function() {
+                                                    $("#emailSend").val("Send Email").removeClass("red_harsh");
+                                                 }, 5000);
                 			                 });
             } else {
                 $("#sidebar_share .header").eq(0).css("color", "#F10F00");
@@ -52,7 +52,9 @@
     </script>
     <div>
        <div class="header">Email Address(s)</div>
-       <div class="header" style="color: #666; font-size: 12px;">Comma Delimiter</div>
+       <div class="header left" style="color: #666; font-size: 12px;">Comma Delimiter</div>
+       <div class="header right" style="color: #888; font-size: 12px;">20 Max</div>
+       <div class="clear"></div>
        <div><textarea id="emailAddresses" rows="1" style="height:40px;" class="input textarea" placeholder="john@doe.com, doe@jon.com"></textarea></div>
     </div>
     <div>

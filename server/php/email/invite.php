@@ -5,7 +5,8 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/vendor/PHPMailer/class.phpmailer.php');
 include($_SERVER['DOCUMENT_ROOT'].'/class.smtp.php');
 
-if(isset($_POST['session_id'])) {
+$addresses = array_unique(explode(",", $_POST['email_addresses']));
+if(isset($_POST['session_id']) && count($addresses) <= 20) {
     $mail = new PHPMailer(true);
     $mail->IsSMTP();
 
@@ -17,7 +18,7 @@ if(isset($_POST['session_id'])) {
         $mail->Username   = $_SESSION['email_username'];
         $mail->Password   = $_SESSION['email_password'];
 
-        foreach(explode(",", $_POST['email_addresses']) as $key => $email) {
+        foreach($addresses as $key => $email) {
             $mail->AddAddress(trim($email));
         }
 

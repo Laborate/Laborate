@@ -5,7 +5,6 @@
         $("#lineNumberScrollForm").on("submit", function() { window.sidebarUtil.scroll($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
         $("#lineNumberForm").on("submit", function() { window.sidebarUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
         $("#findWordsForm").on("submit", function() { window.sidebarUtil.search($("#findWords").val()); $("#findWords").val(""); });
-        $("#findRegexForm").on("submit", function() { alert("havent started yet") });
     </script>
 	<div>
         <div class="header">Scroll To A Line</div>
@@ -35,15 +34,5 @@
             <div class="clear"></div>
         </form>
         <div id="findList" style="margin-top:15px;"></div>
-    </div>
-    <hr/>
-    <div>
-        <div class="header">Find Regex</div>
-        <form id="findRegexForm">
-            <input id="findRegex" type="text"  class="left input" style="width:120px;"  placeholder="\bt[a-z]+\b" spellcheck="false"/>
-            <input type="submit" class="button blue right" id="findRegexGo" value="Find">
-            <div class="clear"></div>
-        </form>
-        <div id="findRegexList" style="margin-top:15px;"></div>
     </div>
 </div>
