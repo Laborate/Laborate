@@ -4,7 +4,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
-    $query_Sessions = "SELECT * FROM users, pricing WHERE users.user_pricing = pricing.pricing_id AND users.user_email = '".$_POST['user_email']."'";
+    $query_Sessions = "SELECT * FROM users WHERE users.user_email = '".$_POST['user_email']."'";
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
     $totalRows_Sessions = mysql_num_rows($Sessions);

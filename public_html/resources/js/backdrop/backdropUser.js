@@ -107,7 +107,7 @@ $("#backdropRegister").live("submit", function() {
                         window.location.href = "/documents";
                     }
                     else {
-                       $("#backdropInital .textError").text("User Registration Failed").fadeIn();
+                       $("#backdropInital .textError").text("Registration Failed").fadeIn();
                        $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
                     }
 
