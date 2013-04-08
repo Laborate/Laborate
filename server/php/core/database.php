@@ -45,12 +45,12 @@ $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
 $row_Sessions = mysql_fetch_assoc($Sessions);
 
 global $Sessions_id, $row_Sessions_id;
-$query_Sessions_id = 'SELECT * FROM sessions WHERE session_id = '.GetSQLValueString($_GET['i'], "text");
+$query_Sessions_id = 'SELECT * FROM sessions WHERE session_id = '.GetSQLValueString($_GET['i'], "double");
 $Sessions_id = mysql_query($query_Sessions_id , $database) or die(mysql_error());
 $row_Sessions_id = mysql_fetch_assoc($Sessions_id);
 
 global $Users, $row_Users;
-$query_Sessions = "SELECT * FROM users, pricing WHERE users.user_pricing = pricing.pricing_id AND users.user_id = '".$_SESSION['user']."'";
+$query_Sessions = "SELECT * FROM users, pricing WHERE users.user_pricing = pricing.pricing_id AND users.user_id = '".GetSQLValueString($_SESSION['user'], "double")."'";
 $Users = mysql_query($query_Sessions , $database) or die(mysql_error());
 $row_Users = mysql_fetch_assoc($Users);
 

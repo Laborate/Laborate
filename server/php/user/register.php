@@ -9,7 +9,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
         $continue = true;
         while($continue == true) {
             $id = rand(0, 9999999999999) + rand(0, 999999999);
-            $query_Sessions = "SELECT * FROM users WHERE users.user_id = '".$id."'";
+            $query_Sessions = "SELECT * FROM users WHERE users.user_id = '".GetSQLValueString($id, "double")."'";
             $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
             $row_Sessions = mysql_fetch_assoc($Sessions);
             if(is_null($row_Sessions['user_id'])) { $continue = false; }
@@ -20,11 +20,11 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     $id = createId();
     $insertSQL = sprintf("INSERT INTO users (user_id, user_name, user_email, user_password, user_activated,
                                             user_locations, user_screen_name) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-    				   $id,
+    				   GetSQLValueString($id, "double"),
     				   GetSQLValueString($_POST['user_name'], "text"),
     				   GetSQLValueString($_POST['user_email'], "text"),
     				   GetSQLValueString(aesEncrypt($_POST['user_password'], $_SESSION['cryptSalt']), "text"),
-    				   rand(101, 99999999), 'NULL',
+    				   GetSQLValueString(rand(101, 99999999), "double"), 'NULL',
     				   GetSQLValueString(explode(" ", $_POST['user_name'])[0], "text"));
 
     $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
@@ -34,7 +34,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
     setcookie('userLogin', $hash, time()+1209600, "/");
 
     $insertSQL = sprintf("INSERT INTO login ( login_uuid, login_user_id ) VALUES (%s, %s)",
-    GetSQLValueString($hash, "text"), $id);
+    GetSQLValueString($hash, "text"), GetSQLValueString($id, "double"));
     $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
     echo 1;
 }

@@ -121,8 +121,8 @@ window.sidebarUtil = {
         delete window.searchList[parseInt(element.attr("data"))];
         element.parent().remove();
     },
-    scroll: function(i) {
-        window.editor.scrollIntoView({"ch":"0", "line": (i - 1) + ""}, 500)
+    jumpToLine: function(line) {
+        window.editor.scrollIntoView({"line": (line - 1), "ch":0});
     },
     setTitle: function(title) {
         $("#documentTitle").val(title);

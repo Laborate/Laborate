@@ -17,7 +17,7 @@ if(isset($_POST['user_email']) && isset($_POST['user_password'])) {
             setcookie('USRRC', $uuid, time()+1209600, "/");
 
             $insertSQL = sprintf("INSERT INTO login ( login_uuid, login_user_id ) VALUES (%s, %s)",
-            GetSQLValueString($uuid, "text"), $row_Sessions['user_id']);
+            GetSQLValueString($uuid, "text"), GetSQLValueString($row_Sessions['user_id'], "double"));
             $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
         }
         else {

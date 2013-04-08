@@ -38,16 +38,56 @@ module.exports = {
         });
     },
     session_document: function(session, data, callback) {
-        var session_pull = 'SELECT session_document FROM sessions WHERE session_id = ' + session;
+        var session_pull = 'SELECT session_document FROM sessions WHERE session_id = "' + session + '"';
         connection.query(session_pull, function(err, sql_results) {
             if(!err && sql_results.length != 0) {
+                //Session Objects
                 var sql_session_document = JSON.parse(sql_results[0]["session_document"]);
+                var change_object = data['changes'];
 
-                //console.log(sql_session_document);
-                //console.log(data);
+                console.log(change_object);
 
-                var session_push = 'Update sessions SET session_document="';
-                session_push += JSON.stringify(sql_session_document) + '" WHERE session_id = ' + session;
+                /*
+                                                       TODO:
+                -----------------------------------------------------------------------------------------
+                        1) sql_session_document.slice(0, from_line) -> list1
+                        2) sql_session_document.slice(to_line) -> list2
+
+                        3) list1[from_line].substring(0, from_ch) -> string1
+                        4) list1[from_line].substring(to_ch) -> string2
+                        5) string1 + change_object["text"][0] + string2 -> list1[from_line]
+
+                        6) if to_after:
+                                change_object["text"][last element] + list2[0] -> list2[0]
+                                list1 + change_object["text"].slice(1, -1) + list2 -> list3
+                           else:
+                                list1 + change_object["text"].slice(1) + list2 -> list3
+                */
+
+                var list1 = sql_session_document.slice(0, (change_object["from"]['line'] + 1));
+                var list2 = sql_session_document.slice(change_object["to"]['line'] + 1);
+
+                console.log(list1[change_object["from"]['line']]);
+
+                var string1 = list1[change_object["from"]['line']].substring(0, change_object["from"]['ch']);
+                var string2 = list1[change_object["from"]['line']].substring(change_object["to"]['ch']);
+
+                list1[change_object["from"]['line']] = string1.concat(change_object["text"][0], string2);
+
+                if ("after" in change_object["to"] && change_object["to"]["after"]) {
+                    list2[0] = change_object["text"][change_object["text"].length-1] + list2[0]
+                    final_session_document = list1.concat(change_object["text"].slice(1, -1), list2);
+                } else {
+                    final_session_document = list1.concat(change_object["text"].slice(1), list2);
+                }
+
+                var json_final_document = JSON.stringify(final_session_document).replace(/\\/g, "\\\\");
+                console.log("\n\n");
+
+                //Save To Database
+                //Use Single Quotes As A Wrapper For The JSON Object
+                var session_push = "Update sessions SET session_document='";
+                session_push += json_final_document + "' WHERE session_id = " + session;
                 connection.query(session_push);
             } else {
                 callback(false);

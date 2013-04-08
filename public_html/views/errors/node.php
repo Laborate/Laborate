@@ -12,7 +12,11 @@ $title = "Realtime Server Error";
     <script type="text/javascript">
         try {
   	        window.nodeSocket = io.connect('http://<?php echo $_SERVER["HTTP_HOST"]; ?>:8000');
-  	        window.location.href = "/editor";
+  	        <?php if(isset($_GET['return'])) { ?>
+  	             window.location.href = "<?php echo $_GET['return']; ?>";
+  	        <?php } else { ?>
+  	             window.location.href = "/editor";
+  	        <?php } ?>
   	    } catch(err) {}
     </script>
     <?php placeDependencies(); ?>

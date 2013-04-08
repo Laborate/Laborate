@@ -7,7 +7,7 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_id'])) {
-    $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".$_POST['session_id']."'";
+    $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".GetSQLValueString($_POST['session_id'], "double")."'";
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
     $totalRows_Sessions = mysql_num_rows($Sessions);
@@ -23,7 +23,7 @@ if(isset($_POST['session_id'])) {
                     $continue = true;
                     while($continue == true) {
                         $id = rand(0, 9999999999999) + rand(0, 999999999);
-                        $query_Sessions = "SELECT * FROM session_aliases WHERE session_aliases.alias_id = '".$id."'";
+                        $query_Sessions = "SELECT * FROM session_aliases WHERE session_aliases.alias_id = '".GetSQLValueString($id, "double")."'";
                         $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
                         $row_Sessions = mysql_fetch_assoc($Sessions);
                         if(is_null($row_Sessions['download_id'])) {$continue = false; }
@@ -32,7 +32,8 @@ if(isset($_POST['session_id'])) {
                 }
 
                 $id = createId();
-                $insertSQL = sprintf("INSERT INTO session_aliases (alias_id, session_id) VALUES (%s, %s)", $id, $_POST['session_id']);
+                $insertSQL = sprintf("INSERT INTO session_aliases (alias_id, session_id) VALUES (%s, %s)",
+                    GetSQLValueString($id, "double"), GetSQLValueString($_POST['session_id'], "double"));
                 $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
                 echo $id;
             } else { echo $GLOBALS['ajax_message']; }

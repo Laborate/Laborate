@@ -6,12 +6,12 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_id'])) {
-    $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".$_POST['session_id']."'";
+    $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".GetSQLValueString($_POST['session_id'], "double")."'";
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
 
     if($row_Sessions['session_owner'] == $_SESSION['user']) {
-    	$Delete = "DELETE FROM sessions WHERE session_id='".$_POST['session_id']."'";
+    	$Delete = "DELETE FROM sessions WHERE session_id='".GetSQLValueString($_POST['session_id'], "double")."'";
     	mysql_select_db($database_database, $database);
     	$delete_results = mysql_query($Delete, $database) or die(mysql_error());
     	echo "1";
@@ -25,7 +25,7 @@ if(isset($_POST['session_id'])) {
             $editors = json_encode($editors);
             $updateSQL = sprintf("UPDATE sessions SET session_editors=%s WHERE session_id=%s",
     				   GetSQLValueString($editors, "text"),
-    				   $row_Sessions['session_id']);
+    				   GetSQLValueString($row_Sessions['session_id'], "double"));
             $UpdateSessions = mysql_query($updateSQL , $database) or die(mysql_error());
             echo "1";
         } else {

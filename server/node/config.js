@@ -10,13 +10,7 @@ io.configure(function(){
     io.enable('browser client gzip');          // gzip the file
     io.set('log level', 1);                    // reduce logging
     io.set('transports', [ 'websocket', 'flashsocket', 'htmlfile', 'xhr-polling', 'jsonp-polling']);
-    io.set('log colors', true);
-});
-
-io.on('error', function(err) {
-    console.log('Socket IO Error: ' + err.stack);
-    require('socket.io').listen(8000);
-    return false;
+    io.set('log colors', false);
 });
 
 var connection = mysql.createConnection({
@@ -26,19 +20,25 @@ var connection = mysql.createConnection({
     database : 'code',
 });
 
-connection.on('error', function(err) {
-    console.log('MYSQL Error: ' + err.stack);
-    connection = mysql.createConnection(connection.config);
-    return false;
-});
-
 queues(connection);
 
+/* Error Handling */
 process.on('uncaughtException', function(err) {
   console.log("Uncaught Error: " + err);
   return false;
 });
 
+io.on('error', function(err) {
+    console.log('Socket IO Error: ' + err.stack);
+    require('socket.io').listen(8000);
+    return false;
+});
+
+connection.on('error', function(err) {
+    console.log('MYSQL Error: ' + err.stack);
+    connection = mysql.createConnection(connection.config);
+    return false;
+});
 
 /* Module Exports */
 module.exports = {

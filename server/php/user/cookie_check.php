@@ -14,14 +14,14 @@ if(!function_exists('cookieCheck')) {
             if($row_Login['login_uuid'] == $_COOKIE['USRRC']) {
                     $_SESSION['user'] = $row_Login["user_id"];
 
-                    $deleteSQL = sprintf("DELETE FROM login WHERE login.login_uuid = '".$_COOKIE['USRRC']."'");
+                    $deleteSQL = sprintf("DELETE FROM login WHERE login.login_uuid = '".GetSQLValueString($_COOKIE['USRRC'], "defined")."'");
                     $delete = mysql_query($deleteSQL , $database) or die(mysql_error());
 
                     $uuid = gen_uuid();
                     setcookie('USRRC', $uuid, time()+1209600, "/");
 
                     $insertSQL = sprintf("INSERT INTO login ( login_uuid, login_user_id ) VALUES (%s, %s)",
-                    GetSQLValueString($uuid, "text"), $row_Login['user_id']);
+                    GetSQLValueString($uuid, "text"), GetSQLValueString($row_Login['user_id'], "double"));
                     $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
                     return true;
             } else {

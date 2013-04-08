@@ -25,7 +25,7 @@ if(isset($_POST['session_id'])){
         }
 
         $updateSQL = sprintf("UPDATE sessions SET session_name=%s, session_external_path=%s WHERE session_id=%s",
-				   GetSQLValueString($name, "text"), GetSQLValueString($path, "text"), $_POST['session_id']);
+				   GetSQLValueString($name, "text"), GetSQLValueString($path, "text"), GetSQLValueString($_POST['session_id'], "double"));
         $update = mysql_query($updateSQL , $database) or die(mysql_error());
     }
 }

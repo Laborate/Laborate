@@ -2,18 +2,17 @@
     <script type="text/javascript">
         $("#lineNumberList .listX").live("click", function() { window.sidebarUtil.highlightRemove($(this).parent()); });
         $("#findList .listX").live("click", function() { window.sidebarUtil.searchRemove($(this)); });
-        $("#lineNumberScrollForm").on("submit", function() { window.sidebarUtil.scroll($("#lineNumberScroll").val()); $("#lineNumberScroll").val(""); });
+        $("#lineNumberJumpForm").on("submit", function() { window.sidebarUtil.jumpToLine($("#lineNumberJump").val()); $("#lineNumberJump").val(""); });
         $("#lineNumberForm").on("submit", function() { window.sidebarUtil.highlight($("#lineNumber").val()); $("#lineNumber").val(""); });
         $("#findWordsForm").on("submit", function() { window.sidebarUtil.search($("#findWords").val()); $("#findWords").val(""); });
     </script>
 	<div>
-        <div class="header">Scroll To A Line</div>
-        <form id="lineNumberScrollForm">
-            <input id="lineNumberScroll" class="left input" style="width:120px;" type="text" placeholder="5" spellcheck="false"/>
-            <input type="submit" class="button blue right" id="lineNumberScrollGo" value="Find">
+        <div class="header">Jump To A Line</div>
+        <form id="lineNumberJumpForm">
+            <input id="lineNumberJump" class="left input" style="width:120px;" type="text" placeholder="5" spellcheck="false"/>
+            <input type="submit" class="button blue right" id="lineNumberJumpGo" value="Jump">
             <div class="clear"></div>
         </form>
-        <div id="lineNumberScrollList" style="margin-top:15px;"></div>
      </div>
      <hr/>
      <div>

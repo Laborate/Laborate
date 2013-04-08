@@ -87,15 +87,17 @@ $("#backdropExistingFileForm").live("submit", function() {
                                     window.passTemplate = $("#backdropPassword").val();
                                     proccessedDocuemt = "";
                                     var json = JSON.parse(dowload_response);
+                                    var session_breakpoints = JSON.parse(json[0]);
+                                    var session_document = JSON.parse(json[1]);
 
-                                    $.each(JSON.parse(json[1]), function(i, item) {
+                                    $.each(session_document, function(i, item) {
                                         proccessedDocuemt += item;
-                                        if(i+1 != json.length) {
+                                        if(i+1 != session_document.length) {
                                             proccessedDocuemt += "\n";
                                         }
                                     });
                                     window.editor.setValue(proccessedDocuemt);
-                                    $.each(JSON.parse(json[0]), function(i, item) {
+                                    $.each(session_breakpoints, function(i, item) {
                                         window.editorUtil.gutterClick("in", {"line":item, "remove": false});
                                     });
                                     setTimeout(function() {

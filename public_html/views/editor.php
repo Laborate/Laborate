@@ -38,7 +38,7 @@ if(isset($_GET['i'])) {
       	        editor.options.readOnly = false;
       	        $("#editorCodeMirror").css({"opacity": ""});
   	        });
-  	    } catch(err) { window.location.href = "/errors/node.php" }
+  	    } catch(err) { window.location.href = "/errors/node.php?return=http://<?php echo $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]?>" }
   	 </script>
   	 <?php placeDependencies(); ?>
 </head>

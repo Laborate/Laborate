@@ -35,11 +35,15 @@ if(isset($_POST['session_id'])){
                 $path = $row_Sessions['session_external_path'];
             } else {
                 $name = $_POST['session_name'];
-                if(strrpos($row_Sessions['session_external_path'], "/") === false) {
-                    $path = $_POST['session_name'];
+                if(!is_null($row_Sessions['session_external_path'])) {
+                    if(strrpos($row_Sessions['session_external_path'], "/") === false) {
+                        $path = $_POST['session_name'];
+                    } else {
+                        $path = substr($row_Sessions['session_external_path'], 0, strrpos($row_Sessions['session_external_path'], "/"));
+                        $path .= "/".$_POST['session_name'];
+                    }
                 } else {
-                    $path = substr($row_Sessions['session_external_path'], 0, strrpos($row_Sessions['session_external_path'], "/"));
-                    $path .= "/".$_POST['session_name'];
+                   $path = $row_Sessions['session_external_path'];
                 }
             }
 
@@ -47,7 +51,7 @@ if(isset($_POST['session_id'])){
         				   GetSQLValueString($name, "text"),
         				   GetSQLValueString($path, "text"),
         				   GetSQLValueString($password, "text"),
-        				   GetSQLValueString($_POST['session_id'], "int"));
+        				   GetSQLValueString($_POST['session_id'], "double"));
              $Sessions = mysql_query($updateSQL , $database) or die(mysql_error());
              echo $response;
         } else {
