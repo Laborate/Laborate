@@ -61,5 +61,11 @@
     <div class="presets" id="share_url">
         <input type="text" class="input full"/>
     </div>
+    <div class="presets" id="rename">
+        <form>
+            <input type="text" class="input full selection"/>
+            <input type="submit" class="button blue full" value="Rename Document" />
+        </form>
+    </div>
 </div>
 <div id="popup_backdrop" class="hidden"></div>

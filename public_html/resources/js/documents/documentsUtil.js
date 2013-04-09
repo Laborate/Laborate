@@ -5,13 +5,14 @@ window.documents = {
     popUp: function(preset, data) {
         //Inital Clean Up
         $("#popup .presets").hide();
-        $("#popup .selection").hide().eq(0).show();
+        $("#popup .selection").hide();
         $("#popUp input[type=text], #popUp input[type=password], #popUp select").val('').css({"border":""});
         $("#popup .selected").removeClass("selected");
 
         //Cycle Through Presets
         if(preset == "location_add") {
             $("#popup #location_add").show();
+            $("#popup #location_add .selection").eq(0).show();
             $("#popup #popup_header #popup_header_name").text("New Location");
             $("#popup").css({"width": "280"});
         }
@@ -30,6 +31,14 @@ window.documents = {
             $("#popup #share_url input[type=text]").val(data);
             $("#popup #share_url").show();
             $("#popup #popup_header #popup_header_name").text("Document Url");
+            $("#popup").css({"width": "250"});
+        }
+
+        if(preset == "rename") {
+            $("#popup #rename input[type=text]").val(data).css({"border":""});
+            $("#popup #rename").show();
+            $("#popup #rename .selection").show();
+            $("#popup #popup_header #popup_header_name").text("Rename Document");
             $("#popup").css({"width": "250"});
         }
 
@@ -74,14 +83,23 @@ window.documents = {
             }
 
             if(id == "rename") {
-                var name = prompt("File Name", $("#file_" + reference + " .title").attr("data"));
-                if (name != null && name != "") {
-                    var title = window.documents.nameToTitle(name);
-                    $("#file_"+reference+" .title").attr("data", name);
-                    $("#file_"+reference+" .title").text(title);
+                window.documents.popUp("rename", $("#file_" + reference + " .title").attr("data"));
+                $("#popup #rename form").live("submit", function() {
+                    var name = $("#popup #rename input[type=text]").val();
+                    if (name != null && name != "") {
+                        var title = window.documents.nameToTitle(name);
+                        $("#file_"+reference+" .title").attr("data", name);
+                        $("#file_"+reference+" .title").text(title);
+                        window.documents.popUpClose();
+                        $.post("/php/session/rename.php", { session_id: reference, session_name: name});
+                        $("#popup #rename form").die();
+                    } else {
+                        $("#popup #rename input[type=text]").css({"border":"solid thin #CC352D"});
+                    }
 
-                    $.post("/php/session/rename.php", { session_id: reference, session_name: name});
-                }
+                    return false;
+
+                });
             }
 
             if(id == "action") {
@@ -160,7 +178,7 @@ window.documents = {
         });
 
         //Check For Form Submit
-        $("#popup .presets form").live("submit", function() {
+        $("#popup #location_add form").live("submit", function() {
             var type = $("#popup #popup_location_type").val();
             var type_icon = type;
             var passed = true;
@@ -214,6 +232,7 @@ window.documents = {
                 li += '</span>' + $("#popup #popup_location_name").val() + '</li>';
                 $("#locations ul").append(li);
                 window.documents.popUpClose();
+                $("#popup #location_add form, #popup #popup_location_type, #popup #popup_location_github ul li").die();
                 $.post("/php/user/update.php", { locations_add: [key, items] });
             }
             return false;
