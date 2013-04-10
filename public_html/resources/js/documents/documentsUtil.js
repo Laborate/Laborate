@@ -30,7 +30,7 @@ window.documents = {
         if(preset == "share_url") {
             $("#popup #share_url input[type=text]").val(data);
             $("#popup #share_url").show();
-            $("#popup #popup_header #popup_header_name").text("Document Url");
+            $("#popup #popup_header #popup_header_name").text("Share Url");
             $("#popup").css({"width": "250"});
         }
 
@@ -48,10 +48,7 @@ window.documents = {
     },
     popUpClose: function() {
         //Remove Live Events From Forms
-        $("#popup .presets form").die();
-        $("#popup #popup_location_type").die();
-        $("#popup #popup_location_github ul li").die();
-        $("#popup #location_remove input[type=button]").die();
+        $("#popup .presets *").die();
 
         //Hide Pop Up
         $("#popup").hide();
@@ -92,7 +89,6 @@ window.documents = {
                         $("#file_"+reference+" .title").text(title);
                         window.documents.popUpClose();
                         $.post("/php/session/rename.php", { session_id: reference, session_name: name});
-                        $("#popup #rename form").die();
                     } else {
                         $("#popup #rename input[type=text]").css({"border":"solid thin #CC352D"});
                     }
@@ -111,7 +107,7 @@ window.documents = {
             }
 
             if(id == "share") {
-                window.documents.popUp("share_url", location.protocol + '//' + location.host+ "/editor?i=" + reference);
+                window.documents.popUp("share_url", location.protocol + '//' + location.host+ "/editor/?i=" + reference);
             }
 
         }, 100);
@@ -232,7 +228,6 @@ window.documents = {
                 li += '</span>' + $("#popup #popup_location_name").val() + '</li>';
                 $("#locations ul").append(li);
                 window.documents.popUpClose();
-                $("#popup #location_add form, #popup #popup_location_type, #popup #popup_location_github ul li").die();
                 $.post("/php/user/update.php", { locations_add: [key, items] });
             }
             return false;
