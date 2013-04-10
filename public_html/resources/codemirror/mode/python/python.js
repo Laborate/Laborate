@@ -4,7 +4,7 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
     function wordRegexp(words) {
         return new RegExp("^((" + words.join(")|(") + "))\\b");
     }
-    
+
     var singleOperators = parserConf.singleOperators || new RegExp("^[\\+\\-\\*/%&|\\^~<>!]");
     var singleDelimiters = parserConf.singleDelimiters || new RegExp('^[\\(\\)\\[\\]\\{\\}@,:`=;\\.]');
     var doubleOperators = parserConf.doubleOperators || new RegExp("^((==)|(!=)|(<=)|(>=)|(<>)|(<<)|(>>)|(//)|(\\*\\*))");
@@ -27,7 +27,18 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
                           'object', 'oct', 'open', 'ord', 'pow', 'property', 'range',
                           'repr', 'reversed', 'round', 'set', 'setattr', 'slice',
                           'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple',
-                          'type', 'vars', 'zip', '__import__', 'NotImplemented',
+                          'type', 'vars', 'zip', '__import__', 'NotImplemented', 'Exception',
+                          "BaseException", "args", "Exception", "StandardError", "ArithmeticError",
+                          "BufferError", "LookupError", "EnvironmentError", "AssertionError",
+                          "AttributeError", "EOFError", "FloatingPointError", "GeneratorExit",
+                          "IOError", "ImportError", "IndexError", "KeyError", "KeyboardInterrupt",
+                          "MemoryError", "NameError", "NotImplementedError", "OSError", "OverflowError",
+                          "ReferenceError", "RuntimeError", "StopIteration", "SyntaxError", "IndentationError",
+                          "TabError", "SystemError", "SystemExit", "TypeError", "UnboundLocalError", "UnicodeError",
+                          "encoding", "reason", "object", "start", "end", "UnicodeEncodeError", "UnicodeDecodeError",
+                          "UnicodeTranslateError", "ValueError", "VMSError", "WindowsError", "ZeroDivisionError",
+                          "Warning", "UserWarning", "DeprecationWarning", "PendingDeprecationWarning", "SyntaxWarning",
+                          "RuntimeWarning", "FutureWarning", "ImportWarning", "UnicodeWarning",
                           'Ellipsis', '__debug__'];
     var py2 = {'builtins': ['apply', 'basestring', 'buffer', 'cmp', 'coerce', 'execfile',
                             'file', 'intern', 'long', 'raw_input', 'reduce', 'reload',
@@ -72,15 +83,15 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
         if (stream.eatSpace()) {
             return null;
         }
-        
+
         var ch = stream.peek();
-        
+
         // Handle Comments
         if (ch === '#') {
             stream.skipToEnd();
             return 'comment';
         }
-        
+
         // Handle Number Literals
         if (stream.match(/^[0-9\.]/, false)) {
             var floatLiteral = false;
@@ -116,13 +127,13 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
                 return 'number';
             }
         }
-        
+
         // Handle Strings
         if (stream.match(stringPrefixes)) {
             state.tokenize = tokenStringFactory(stream.current());
             return state.tokenize(stream, state);
         }
-        
+
         // Handle operators and Delimiters
         if (stream.match(tripleDelimiters) || stream.match(doubleDelimiters)) {
             return null;
@@ -135,31 +146,31 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
         if (stream.match(singleDelimiters)) {
             return null;
         }
-        
+
         if (stream.match(keywords)) {
             return 'keyword';
         }
-        
+
         if (stream.match(builtins)) {
             return 'builtin';
         }
-        
+
         if (stream.match(identifiers)) {
             return 'variable';
         }
-        
+
         // Handle non-detected items
         stream.next();
         return ERRORCLASS;
     }
-    
+
     function tokenStringFactory(delimiter) {
         while ('rub'.indexOf(delimiter.charAt(0).toLowerCase()) >= 0) {
             delimiter = delimiter.substr(1);
         }
         var singleline = delimiter.length == 1;
         var OUTCLASS = 'string';
-        
+
         function tokenString(stream, state) {
             while (!stream.eol()) {
                 stream.eatWhile(/[^'"\\]/);
@@ -187,7 +198,7 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
         tokenString.isString = true;
         return tokenString;
     }
-    
+
     function indent(stream, state, type) {
         type = type || 'py';
         var indentUnit = 0;
@@ -210,7 +221,7 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
             type: type
         });
     }
-    
+
     function dedent(stream, state, type) {
         type = type || 'py';
         if (state.scopes.length == 1) return;
@@ -259,7 +270,7 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
             }
             return style;
         }
-        
+
         // Handle decorators
         if (current === '@') {
             return stream.match(identifiers, false) ? 'meta' : ERRORCLASS;
@@ -269,7 +280,7 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
             && state.lastToken === 'meta') {
             style = 'meta';
         }
-        
+
         // Handle scope changes.
         if (current === 'pass' || current === 'return') {
             state.dedent += 1;
@@ -298,7 +309,7 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
             if (state.scopes.length > 1) state.scopes.shift();
             state.dedent -= 1;
         }
-        
+
         return style;
     }
 
@@ -312,27 +323,27 @@ CodeMirror.defineMode("python", function(conf, parserConf) {
               dedent: 0
           };
         },
-        
+
         token: function(stream, state) {
             var style = tokenLexer(stream, state);
-            
+
             state.lastToken = style;
-            
+
             if (stream.eol() && stream.lambda) {
                 state.lambda = false;
             }
-            
+
             return style;
         },
-        
+
         indent: function(state) {
             if (state.tokenize != tokenBase) {
                 return state.tokenize.isString ? CodeMirror.Pass : 0;
             }
-            
+
             return state.scopes[0].offset;
         }
-        
+
     };
     return external;
 });
