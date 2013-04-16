@@ -32,7 +32,7 @@
     background: -ms-linear-gradient(#ffffff 0%, #ededed 100%);
     background: -o-linear-gradient(#ffffff 0%, #ededed 100%);
     outline: none;
-    border: solid 1px #ededed;
+    border: solid 1px #b0b0b0;
     border-radius: 3px;
     padding: 5px 10px;
     color: #666;
@@ -41,12 +41,12 @@
 
 .cm-s-codelaborate .CodeMirror-dialog button:hover,
 .cm-s-codelaborate .CodeMirror-dialog input[type=button]:hover {
-    border: solid 1px #b0b0b0;
+    border: solid 1px #737373;
 }
 
 .cm-s-codelaborate .CodeMirror-dialog button:active,
 .cm-s-codelaborate .CodeMirror-dialog input[type=button]:active {
-    border: solid 1px #666;
+    border: solid 1px #5b5b5b;
 }
 
 .cm-s-codelaborate pre {color: #292929; padding: 0;}

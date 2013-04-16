@@ -81,13 +81,13 @@ module.exports = {
                     final_session_document = list1.concat(change_object["text"].slice(1), list2);
                 }
 
-                var json_final_document = JSON.stringify(final_session_document).replace(/\\/g, "\\\\");
+                var json_final_document = JSON.stringify(final_session_document);
                 console.log("\n\n");
 
                 //Save To Database
                 //Use Single Quotes As A Wrapper For The JSON Object
-                var session_push = "Update sessions SET session_document='";
-                session_push += json_final_document + "' WHERE session_id = " + session;
+                var session_push = "Update sessions SET session_document= ";
+                session_push += connection.escape(json_final_document) + " WHERE session_id = " + connection.escape(session);
                 connection.query(session_push);
             } else {
                 callback(false);
