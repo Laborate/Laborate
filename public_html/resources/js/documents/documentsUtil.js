@@ -167,10 +167,26 @@ window.documents = {
             $("#popup").hAlign().vAlign();
         });
 
+        //Look For Location Type Change
+        $("#popup #popup_location_type").live("change", function() {
+            $("#popup .selection").hide();
+
+            if($(this).val() == "sftp") {
+                $("#popup_location_sftp").show();
+            }
+            else {
+                $("#popup_location_" + $(this).val()).show();
+            }
+            $("#popup").hAlign().vAlign();
+        });
+
         //Add Select Class To Github Repository
         $("#popup #popup_location_github ul li").live("click", function() {
             $("#popup #popup_location_github ul li").removeClass("selected");
             $(this).addClass("selected");
+            if($("#popup #popup_location_name").val() == "") {
+                $("#popup #popup_location_name").val($(this).text());
+            }
         });
 
         //Check For Form Submit

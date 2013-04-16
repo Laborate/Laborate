@@ -148,8 +148,22 @@ window.sidebarUtil = {
         window.sidebarUtil.passwordCheck(function(callback) {
             $("#downloadFile").removeClass("disabled");
             if(callback) {
-                window.location.href = "/php/session/download_file.php?i=" + callback;
-                $("#downloadFile").removeClass("red_harsh").val("Download File");
+                $.fileDownload("/php/session/download.php", {
+                    httpMethod: "POST",
+                    data: "download_id=" + callback,
+                    successCallback: function () {
+                        $("#downloadFile").removeClass("red_harsh").val("Download File");
+                    },
+                    failCallback: function (html, url) {
+                        alert('Your file download just failed for this URL:' + url + '\r\n' +
+                                'Here was the resulting error HTML: \r\n' + html
+                                );
+                        $("#downloadFile").addClass("red_harsh").val("Download Failed");
+                        setTimeout(function() {
+                    		$("#downloadFile").removeClass("red_harsh").val("Download File");
+                		}, 5000);
+                    }
+                });
             }
             else {
                 $("#downloadFile").addClass("red_harsh").val("Download Failed");

@@ -3,7 +3,8 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 
 function getDependencies($dependencies) {
     if(in_array("core", $dependencies)) {
-        array_push($GLOBALS['js'],  "core/center.js", "core/core.js", "core/cookie.js", "core/colors.js", "core/notification.js");
+        array_push($GLOBALS['js'],  "core/center.js", "core/core.js", "core/cookie.js",
+                                    "core/colors.js", "core/notification.js", "core/download.js");
         array_push($GLOBALS['css'], "core/core.css", "core/form.css", "core/colors.css", "core/notification.css");
     }
 

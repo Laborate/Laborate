@@ -5,9 +5,7 @@
             <?php if($GLOBALS['backdropMode'] == "editor") { ?>
                 <div id="userNavigation">
                     <div><a href="/logout/">Sign Out</a></div>
-                    <div>|</div>
                     <div><a href="/documents/">Documents</a></div>
-                    <div>|</div>
                     <div><a href="/account/" id="userNavigationName"><?php echo $GLOBALS['row_Users']['user_name']; ?></a></div>
                 </div>
                 <?php if(!isset($_GET['i'])) { ?>

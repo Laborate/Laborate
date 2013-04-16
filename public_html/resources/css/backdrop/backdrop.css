@@ -114,23 +114,26 @@
 
 #userNavigation {
     position: fixed;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 20px;
 }
 
 #userNavigation div {
     float: right;
-    margin-left: 10px;
-    font-size: 14px;
+    margin-left: 15px;
+    font-size: 15px;
 }
 
 #userNavigation a {
-    color: #000;
+    font-weight: bold;
+    font-size: 15px;
+    color: #2d2d2d;
+    float: right;
+    opacity: .7;
 }
 
 #userNavigation a:hover {
-    color: #666;
-    text-decoration: underline;
+    opacity: 1;
 
 }
 

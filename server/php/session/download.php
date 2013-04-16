@@ -1,6 +1,5 @@
 <?php
 $GLOBALS['ajax_message'] = "Download: Failed";
-$GLOBALS['ajax_only'] = true;
 require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
@@ -32,6 +31,12 @@ if(isset($_POST['download_id'])) {
         $updateSQL = sprintf("UPDATE sessions SET session_editors=%s WHERE session_id=%s",
 				   GetSQLValueString(json_encode($editors), "text"), GetSQLValueString($row_Sessions['session_id'], "double"));
         $UpdateSessions = mysql_query($updateSQL , $database) or die(mysql_error());
+
+        header('Set-Cookie: fileDownload=true; path=/');
+        header('Cache-Control: max-age=60, must-revalidate');
+        header("Content-type: application/octet-stream");
+        header('Content-Disposition: attachment; filename="'.$row_Sessions['session_name'].'"');
+        header("Cache-control: private");
 
         echo json_encode([$row_Sessions['session_breakpoints'], $row_Sessions['session_document']]);
 
