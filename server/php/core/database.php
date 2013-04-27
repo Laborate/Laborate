@@ -2,6 +2,7 @@
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
 require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
 
+global $database;
 $hostname_database = "localhost";
 $database_database = "code";
 $username_database = "root";
@@ -60,5 +61,22 @@ if(!is_null($GLOBALS['row_Users']['user_locations'])) {
 
 if(!is_null($GLOBALS['row_Users']['user_github'])) {
     $GLOBALS['row_Users']['user_github'] = aesDecrypt($GLOBALS['row_Users']['user_github'], $_SESSION['cryptSalt']);
+}
+
+if(!function_exists('session_alias')) {
+    function session_alias($alias_id) {
+        $query_Sessions = "SELECT * FROM session_aliases, sessions WHERE sessions.session_id = session_aliases.session_id AND session_aliases.alias_id = '".GetSQLValueString($alias_id, "double")."'";
+        $Sessions = mysql_query($query_Sessions , $GLOBALS['database']) or die(mysql_error());
+        $row_Sessions = mysql_fetch_assoc($Sessions);
+
+        $deleteSQL = sprintf("DELETE FROM session_aliases WHERE session_aliases.alias_id = '".GetSQLValueString($alias_id, "double")."'");
+        mysql_query($deleteSQL, $GLOBALS['database']) or die(mysql_error());
+
+        if($row_Sessions['alias_id'] == $alias_id) {
+            return $row_Sessions;
+        } else {
+            return false;
+        }
+    }
 }
 ?>

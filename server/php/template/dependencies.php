@@ -17,8 +17,8 @@ function getDependencies($dependencies) {
                                               "addon/search/search.js", "addon/search/searchcursor.js",
                                               "addon/edit/matchbrackets.js", "addon/selection/active-line.js",
                                               "addon/edit/closebrackets.js", "addon/edit/closetag.js",
-                                              "addon/display/placeholder.js", "keymap/vim.js",
-                                              "keymap/emacs.js", "addon/dialog/dialog.js");
+                                              "addon/mode/overlay.js", "addon/display/placeholder.js",
+                                              "keymap/vim.js", "keymap/emacs.js", "addon/dialog/dialog.js");
 
         getDependencies(["icons", "codeMirror"]);
     }

@@ -40,6 +40,9 @@ mv $BASE/server/php/vendor/minify/min $BASE/server/php/vendor/min
 rm -r $BASE/server/php/vendor/minify
 echo -e '\033[32mPHP Vendor Modules Install Complete \033[m'
 
+#Crontab
+$BASE/shell/update_cron.sh
+
 #Clean Up Install
 echo -e '\033[32mCleaning Up Install \033[m'
 rm $BASE/server/php/composer.lock

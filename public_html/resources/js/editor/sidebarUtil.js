@@ -195,7 +195,7 @@ window.sidebarUtil = {
             if(callback) {
                 if($("#githubReference").val() != "") { var related = "\n\Issue: #" + $("#githubReference").val(); }
                 else { var related = ""; }
-                $.post("/php/locations/github_commit.php", { commit_id: callback,
+                $.post("/php/locations/github_commit.php", { alias_id: callback,
                                                                    session_document: window.editor.getValue(),
                                                                    message: $("#githubMessage").val() + related },
                     function(result){
@@ -229,7 +229,7 @@ window.sidebarUtil = {
         window.sidebarUtil.passwordCheck(function(callback) {
             if(callback) {
                 $.post("/php/locations/sftp_push.php", {
-                                                        commit_id: callback,
+                                                        alias_id: callback,
                                                         session_document: window.editor.getValue(),
                                         },
                     function(result){

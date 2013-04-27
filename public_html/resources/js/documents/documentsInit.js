@@ -10,8 +10,17 @@ $(window).ready(function() {
     window.notification.open("loading...");
     window.documents.locationChange(getUrlVars()['loc'], true);
 
+    window.documents.locationListing(function(callback) {
+        initialCheckList['location_listings'] = callback;
+    });
 
-    if(getUrlVars()['type'] == undefined) {
+    if(getUrlVars()['type'] == undefined || getUrlVars()['loc'] == undefined) {
+        var type = "online";
+    } else {
+        var type = getUrlVars()['type'];
+    }
+
+    if(type == "online") {
         window.documents.onlineDirectory(false,
             function(callback) {
                 initialCheckList['online_directory'] = callback;
@@ -21,11 +30,7 @@ $(window).ready(function() {
         initialCheckList['online_directory'] = true;
     }
 
-    window.documents.locationListing(function(callback) {
-        initialCheckList['location_listings'] = callback;
-    });
-
-    if(getUrlVars()['type'] == "github") {
+    if(type == "github") {
         window.documents.githubDirectory(getUrlVars()['loc'], getUrlVars()['dir'], false,
             function(callback) {
                 initialCheckList['github_directory'] = callback;
@@ -35,7 +40,7 @@ $(window).ready(function() {
         initialCheckList['github_directory'] = true;
     }
 
-    if(getUrlVars()['type'] == "sftp") {
+    if(type == "sftp") {
         window.documents.sftpDirectory(getUrlVars()['loc'], getUrlVars()['dir'], false,
             function(callback) {
                 initialCheckList['sftp_directory'] = callback;

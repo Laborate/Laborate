@@ -48,7 +48,7 @@ window.documents = {
     },
     popUpClose: function() {
         //Remove Live Events From Forms
-        $("#popup .presets *").die();
+        $("#popup *").die();
 
         //Hide Pop Up
         $("#popup").hide();
@@ -414,13 +414,8 @@ window.documents = {
                         return false;
                     }
 
-                    if(json == "Bad Location") {
+                    if(json == "Bad Location" || json == "Not Github Location") {
                         window.notification.open("Location Does Not Exist");
-                        return false;
-                    }
-
-                    if(json == "Not Github Location") {
-                        window.notification.open("This Is Not A Github Location");
                         return false;
                     }
 
@@ -469,13 +464,8 @@ window.documents = {
                     return false;
                 }
 
-                if(contents == "Bad Location") {
+                if(contents == "Bad Location" || contents == "Not Github Location") {
                     window.notification.open("Location Does Not Exist");
-                    return false;
-                }
-
-                if(contents == "Not Github Location") {
-                    window.notification.open("This Is Not A Github Location");
                     return false;
                 }
 
@@ -513,13 +503,8 @@ window.documents = {
                         return false;
                     }
 
-                    if(json == "Bad Location") {
+                    if(json == "Bad Location" || json == "Not SFTP Location") {
                         window.notification.open("Location Does Not Exist");
-                        return false;
-                    }
-
-                    if(json == "Not SFTP Location") {
-                        window.notification.open("This Is Not A SFTP Location");
                         return false;
                     }
 
@@ -570,13 +555,8 @@ window.documents = {
                     return false;
                 }
 
-                if(json == "Bad Location") {
+                if(json == "Bad Location" || json == "Not SFTP Location") {
                     window.notification.open("Location Does Not Exist");
-                    return false;
-                }
-
-                if(json == "Not SFTP Location") {
-                    window.notification.open("This Is Not A SFTP Location");
                     return false;
                 }
 

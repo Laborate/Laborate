@@ -1,0 +1,2 @@
+@daily $BASE/shell/sql_update.sh content
+@daily $BASE/shell/clear_logs.sh

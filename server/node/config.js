@@ -36,7 +36,7 @@ io.on('error', function(err) {
 
 connection.on('error', function(err) {
     console.log('MYSQL Error: ' + err.stack);
-    connection = mysql.createConnection(connection.config);
+    module.exports.connection = mysql.createConnection(connection.config);
     return false;
 });
 

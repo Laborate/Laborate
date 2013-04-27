@@ -1,6 +1,14 @@
 input, select, textarea {
     outline: none;
     margin: 2px 0px;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    -webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
 }
 
 input[disabled="disabled"], select[disabled="disabled"],

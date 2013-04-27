@@ -1,10 +1,11 @@
 function setEditorMode(mode) {
-    languageExtentsion =  { "js":"javascript",
+    languageExtentsion =  { "js":"text/javascript", "json":"application/json",
                             "php":"php",
                             "css":"css",
-                            "h":"clike", "c":"clike", "cc":"clike", "cpp":"clike", "cxx":"clike", "cxx":"clike","java":"clike",
-                            "jar":"clike","scala":"clike","m":"clike", "pch":"clike",
-                            "coffee":"coffeescript",
+                            "h":"text/x-c++src", "c":"text/x-csrc", "cc":"text/x-csrc", "cpp":"text/x-c++src",
+                            "cxx":"text/x-csharp", "java":"text/x-java", "jar":"text/x-java","scala":"text/x-c++src",
+                            "m":"text/x-c++src", "pch":"text/x-c++src",
+                            "coffee":"text/x-coffeescript",
                             "lisp":"commonlisp",
                             "clj":"clojure",
                             "diff":"diff", "patch":"diff",
@@ -18,8 +19,8 @@ function setEditorMode(mode) {
                             "html":"htmlmixed","plist":"htmlmixed",
                             "less":"less",
                             "lua":"lua",
-                            "markdown":"markdown", "mdown":"markdown", "mkdn":"markdown", "md":"markdown", "mkd":"markdown",
-                            "mdwn":"markdown", "mdtxt":"markdown", "mdtext":"markdown", "text":"markdown",
+                            "markdown":"gfm", "mdown":"gfm", "mkdn":"gfm", "md":"gfm", "mkd":"gfm",
+                            "mdwn":"gfm", "mdtxt":"gfm", "mdtext":"gfm", "text":"gfm",
                             "frm":"mysql", "myd":"mysql", "myi":"mysql",
                             "nt":"ntriples",
                             "ocaml":"ocaml", "ml":"ocaml", "mli":"ocaml",
@@ -54,6 +55,17 @@ function setEditorMode(mode) {
 
     if(mode in languageExtentsion) { var modeName = languageExtentsion[mode]; }
     else { var modeName = "shell" }
+
+    if(modeName == "gfm") {
+        CodeMirror.autoLoadMode(window.editor, "javascript");
+        CodeMirror.autoLoadMode(window.editor, "css");
+        CodeMirror.autoLoadMode(window.editor, "htmlmixed");
+        CodeMirror.autoLoadMode(window.editor, "clike");
+    }
+
+    if(modeName in ["m", "h", "c", "cc", "cpp", "cxx", "java", "jar", "scala", "pch"]) {
+        CodeMirror.autoLoadMode(window.editor, "clike");
+    }
 
     window.editor.setOption("mode", modeName);
     CodeMirror.autoLoadMode(window.editor, modeName);
