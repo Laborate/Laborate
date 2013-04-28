@@ -1,4 +1,4 @@
 @reboot $BASE/shell/update_cron.sh
 @reboot $BASE/shell/clear_logs.sh
 @reboot $BASE/shell/node_control.sh start
-@reboot $BASE/shell/sql_update.sh content
+@daily $BASE/shell/sql_backup.sh
