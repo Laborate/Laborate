@@ -1,0 +1,29 @@
+html, body {
+    overflow: hidden;
+}
+
+.notification {
+    top: 34px;
+}
+
+#editorCodeMirror {
+	overflow: hidden;
+	clear: none;
+	margin: 0px 230px 0px 211px;
+    padding: 0px;
+    position: relative;
+}
+
+#full_screen {
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    z-index: 100;
+    color: #777;
+}
+
+#full_screen:hover {
+    color: #000;
+}

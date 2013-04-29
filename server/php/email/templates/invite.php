@@ -1,91 +1,54 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <style style="text/css">
-            html, body {
-                margin: 0px;
-                padding: 0px;
-                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            }
-
-            .button {
-                font-size: 14px;
-                cursor: pointer;
-                padding: 3px 10px;
-                -moz-border-radius: 3px;
-                border-radius: 3px;
-                font-weight: bold;
-                opacity: 0.8;
-                text-align: center;
-                -moz-box-sizing: border-box;
-                -webkit-box-sizing: border-box;
-                box-sizing: border-box;
-                margin-top: 20px;
-            }
-
-            .button:hover { opacity: 1; }
-
-            .blue {
-                color: #fff;
-                border: solid 1px #0471ed;
-                box-shadow: inset 0px 1px 0px #80d6ff;
-                background: -webkit-linear-gradient(#00acff 0%, #0078ff 100%);
-                background: -moz-linear-gradient(#00acff 0%, #0078ff 100%);
-                background: -ms-linear-gradient(#00acff 0%, #0078ff 100%);
-                background: -o-linear-gradient(#00acff 0%, #0078ff 100%);
-            }
-
-            #core {
-                float: left;
-                margin-left: 20px;
-
-            }
-
-            #logo {
-                width: 100%;
-                text-align: center;
-                font-size: 24px;
-                margin: 30px 0px 5px 0px;
-                font-family: "Not Just Groovy";
-             }
-
-            #name {
-                color: #394a51;
-
-            }
-
-            #wrapper {
-                padding: 20px;
-                background: #f8f8f8;
-                border: thin solid #CCC;
-                width: 250px;
-                -moz-border-radius: 5px;
-                border-radius: 5px;
-                color: #516067;
-                font-size: 16px;
-                text-align: left;
-            }
-
-            #addtional {
-                margin-top: 15px;
-                display: block;
-                text-align: left;
-            }
-
-            #addtional_header { font-weight: bold; }
-        </style>
-    </head>
-    <body>
-        <div id="core">
-            <div id="logo">code-laborate</div>
-            <div id="wrapper">Brian Vallelunga has invited you to work on <span id="name"><?php echo $file_name; ?></span>.
-                <?php if(!is_null($additional_message)) { ?>
-                    <div id="addtional">
-                        <div id="addtional_header">Additional Message:</div>
-                        <div><?php echo $additional_message; ?></div>
-                    </div>
-                <?php } ?>
-                <div class="button blue">Start Codelaborating</div>
-            </div>
-        </div>
-    </body>
+<?php
+$backdrop_logo = "font-size: 18px; text-align:center; text-decoration:none; color: #000000;";
+$backdrop_container = "-moz-border-radius: 5px; border-radius: 5px; border: 1px solid #CCCCCC; overflow:hidden;";
+$backdrop_info = "font-size: 18px; color: #516067; word-break: break-all; word-wrap: break-word; border-bottom:1px solid #E4E4E4;";
+$backdrop_info_small = "font-size: 14px; font-style:italic; color: #516067; word-break: break-all; word-wrap: break-word; border-bottom:1px solid #CCCCCC; ";
+$backdrop_info_password = "font-size: 14px; color: #516067; border-bottom:1px solid #CCCCCC; ";
+$backdrop_additional = "border-bottom:1px solid #999999; background: #f2f2f2";
+$backdrop_button = "font-size: 14px; cursor: pointer; padding: 3px 10px; -moz-border-radius: 3px; border-radius: 3px; font-weight: bold; text-align: center; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; text-decoration: none; color: #ffffff; border: solid 1px #0d92ff; background: #2EA2FF; display:block;";
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body leftmargin="0" margin="0" topmargin="0" marginheight="0" offset="0">
+    <table width="100%" bgcolor="#FFFFFF" cellpadding="10" cellspacing="0">
+        <tr valign="middle" align="center">
+            <td>
+                <table width="300" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="center">
+                            <a style="<?php echo $backdrop_logo; ?>" href="<?php echo "http://".$_GET['url_host']."/"; ?>" target="_blank">
+                                <img src="http://resources.code.dev.laborate.io/img/email_logo.png" border="0" width="300px" height="30px">
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table width="300" bgcolor="#F8F8F8" cellpadding="15" cellspacing="0" style="<?php echo $backdrop_container; ?>">
+                                <tr>
+                                    <td bgcolor="#F8F8F8" align="center" style="<?php echo $backdrop_info; ?>">
+                                        <?php echo $_GET['session_name']; ?>
+                                    </td>
+                                </tr>
+                                <?php if($_GET['email_message'] != "") { ?>
+                                    <tr>
+                                        <td bgcolor="#f2f2f2" align="center" style="<?php echo $backdrop_info_small; ?>">
+                                            <?php echo $_GET['email_message']; ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <tr>
+                                    <td bgcolor="#F8F8F8" style="padding: 15px;">
+                                        <a href="<?php echo "http://".$_GET['url_host']."/editor/?i=".$_GET['session_id']; ?>" style="<?php echo $backdrop_button; ?>" target="_blank">Start Coding</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
 </html>

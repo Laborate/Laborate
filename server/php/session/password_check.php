@@ -1,28 +1,29 @@
 <?php
 $GLOBALS['ajax_message'] = "Password Authentication: Failed";
 $GLOBALS['ajax_only'] = true;
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['session_id'])) {
-    $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".$_POST['session_id']."'";
+    $query_Sessions = "SELECT * FROM sessions WHERE sessions.session_id = '".GetSQLValueString($_POST['session_id'], "double")."'";
     $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
     $row_Sessions = mysql_fetch_assoc($Sessions);
     $totalRows_Sessions = mysql_num_rows($Sessions);
 
     if($row_Sessions['session_id'] == $_POST['session_id']) {
-        if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['userId'], json_decode($row_Sessions['session_editors']))) {
+        if($row_Sessions['session_id'] == $_POST['session_id'] || in_array($_SESSION['user'], json_decode($row_Sessions['session_editors']))) {
             if($_POST['session_password'] == "") { $pass = NULL; }
-            else { $pass = crypt($_POST['session_password'], $_SESSION['cryptSalt']); }
+            else { $pass = aesEncrypt($_POST['session_password'], $_SESSION['cryptSalt']); }
 
             if($row_Sessions['session_password'] == $pass ) {
                 function createId() {
-                    require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+                    require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
                     $continue = true;
                     while($continue == true) {
-                        $id = rand(101, 999999999999999999) - rand(1, 100);
-                        $query_Sessions = "SELECT * FROM download WHERE download.download_id = '".$id."'";
+                        $id = rand(0, 9999999999999) + rand(0, 999999999);
+                        $query_Sessions = "SELECT * FROM session_aliases WHERE session_aliases.alias_id = '".GetSQLValueString($id, "double")."'";
                         $Sessions = mysql_query($query_Sessions , $database) or die(mysql_error());
                         $row_Sessions = mysql_fetch_assoc($Sessions);
                         if(is_null($row_Sessions['download_id'])) {$continue = false; }
@@ -31,7 +32,8 @@ if(isset($_POST['session_id'])) {
                 }
 
                 $id = createId();
-                $insertSQL = sprintf("INSERT INTO download (download_id, session_id) VALUES (%s, %s)", $id, $_POST['session_id']);
+                $insertSQL = sprintf("INSERT INTO session_aliases (alias_id, session_id) VALUES (%s, %s)",
+                    GetSQLValueString($id, "double"), GetSQLValueString($_POST['session_id'], "double"));
                 $Sessions = mysql_query($insertSQL , $database) or die(mysql_error());
                 echo $id;
             } else { echo $GLOBALS['ajax_message']; }

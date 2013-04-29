@@ -1,5 +1,5 @@
 <?php
-
+/* Configuration */
 if($_SERVER['REMOTE_ADDR'] != "127.0.0.1") {
     error_reporting(E_ERROR | E_PARSE);
     //error_reporting(E_ALL);
@@ -20,7 +20,7 @@ if (!isset($_SESSION['initiated'])) {
     $_SESSION['initiated'] = true;
 }
 
-if(isset($_SESSION['userId'])) {
+if(isset($_SESSION['user'])) {
     if(!isset($_SESSION['file_owner'])) {
         $_SESSION['file_owner'] = array();
     }
@@ -35,17 +35,26 @@ else {
 }
 
 
+/* Globals Settings */
 //Website Title
 $_SESSION['webSiteTitle'] = " · Code-Laborate";
 
 //Crypt Salt
-$_SESSION['cryptSalt'] = '$2a$07$aydsaqvpodfwrtdmdnbohnytk$';
+$_SESSION['cryptSalt'] = 'ajl!k3?242!@#f342$%6456^&*()_`\`a;k:sfj#/?a-]s{df}|';
 
 //Github Authentication
-$_SESSION['github_id'] = "ee64faf165b2893ad110";
-$_SESSION['github_secret'] = "89348434028c7b34505ec3457ded160765c89592";
+$_SESSION['github_id'] = "310d8a45f13df3dfbf95";
+$_SESSION['github_secret'] = "0be78393c4533047b1e1e230cd3f8039e82879d5";
 $_SESSION['github_scope'] = "repo";
-$_SESSION['github_state'] = crypt($_SESSION['userId'], $_SESSION['cryptSalt']);
+$_SESSION['github_state'] = crypt($_SESSION['user'], $_SESSION['cryptSalt']);
 $_SESSION['github_auth_url'] = "https://github.com/login/oauth/authorize?client_id=";
 $_SESSION['github_auth_url'] .= $_SESSION['github_id']."&scope=".$_SESSION['github_scope']."&state=".$_SESSION['github_state'];
+
+//Email Authentication
+$_SESSION['email_authentication'] = true;
+$_SESSION['email_authentication_method'] = "tls";
+$_SESSION['email_host'] = "smtp.gmail.com";
+$_SESSION['email_port'] = 587;
+$_SESSION['email_username'] = "support@laborate.io";
+$_SESSION['email_password'] = "vallelunga";
 ?>

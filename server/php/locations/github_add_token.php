@@ -1,8 +1,8 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/user/restrict.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/core.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/user/restrict.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_GET['code'])) {
     if(urldecode($_GET['state']) == $_SESSION['github_state']) {
@@ -18,10 +18,8 @@ if(isset($_GET['code'])) {
 
         if($json['error'] == "") {
             $updateSQL = sprintf("UPDATE users SET user_github=%s WHERE user_id=%s",
-                    GetSQLValueString(aesEncrypt($json['access_token'], $_SESSION['cryptSalt']), "text"), $_SESSION['userId']);
+                    GetSQLValueString(aesEncrypt($json['access_token'], $_SESSION['cryptSalt']), "text"), $_SESSION['user']);
             $UpdateSessions = mysql_query($updateSQL , $database) or die(mysql_error());
-
-            $_SESSION['userGithub'] = $json['access_token'];
 
             if(isset($_SESSION['github_redirect']) && !is_null($_SESSION['github_redirect'])) {
                 $redirect = $_SESSION['github_redirect'];

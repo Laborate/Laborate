@@ -1,0 +1,2 @@
+@hourly $BASE/shell/node_control.sh restart
+@hourly $BASE/shell/sql_backup.sh

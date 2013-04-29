@@ -1,6 +1,6 @@
 <?php
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/config.php');
-require($_SERVER['DOCUMENT_ROOT'].'/server/php/core/database.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/config.php');
+require($_SERVER['DOCUMENT_ROOT'].'/php/core/database.php');
 
 if(isset($_POST['user_email'])) {
     $query_Sessions = "SELECT * FROM users WHERE users.user_email = '".$_POST['user_email']."'";

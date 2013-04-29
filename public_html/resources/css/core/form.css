@@ -1,0 +1,107 @@
+input, select, textarea {
+    outline: none;
+    margin: 2px 0px;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    -webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+input[disabled="disabled"], select[disabled="disabled"],
+textarea[disabled="disabled"], input[disabled="disabled"]:hover,
+select[disabled="disabled"]:hover, textarea[disabled="disabled"]:hover,
+input[disabled="disabled"]:focus, input[disabled="disabled"]:active,
+select[disabled="disabled"]:focus, textarea[disabled="disabled"]:focus {
+    opacity: .4 !important;
+    cursor: default !important;
+}
+
+.button {
+    font-size: 14px !important;
+    cursor: pointer !important;
+    padding: 3px 10px !important;
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
+    font-weight: bold !important;
+    opacity: 0.8 !important;
+    text-align: center !important;
+    -moz-box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+}
+
+.button:hover,
+.button.hover {
+    opacity: 1 !important;
+}
+
+.button:hover:active,
+.button.active {
+    -moz-box-shadow: inset 0px 1px 2px rgba(51,51,51,0.64) !important;
+    -webkit-box-shadow: inset 0px 1px 2px rgba(51,51,51,0.64) !important;
+    -ms-box-shadow: inset 0px 1px 2px rgba(51,51,51,0.64) !important;
+    -o-box-shadow: inset 0px 1px 2px rgba(51,51,51,0.64) !important;
+    box-shadow: inset 0px 1px 2px rgba(51,51,51,0.64) !important;
+}
+
+.button.disabled {
+    opacity: .5 !important;
+    cursor: default !important;
+}
+
+.button:hover:active.disabled,
+.button.active.disabled {
+    -moz-box-shadow: inherit !important;
+    -webkit-box-shadow: inherit !important;
+    -ms-box-shadow: inherit !important;
+    -o-box-shadow: inherit !important;
+    box-shadow: inherit !important;
+}
+
+.input {
+	width: 100%;
+	padding: 5px;
+	border: solid 1px #999;
+}
+
+.input:focus {
+    border: solid 1px #666;
+}
+
+.input.textarea {
+	height: 80px;
+	resize: none;
+}
+
+.select {
+    border: 1px solid #999 !important;
+    color: #555 !important;
+    font-size: 12px !important;
+    padding: 5px 20px 5px 5px !important;
+    font-weight: normal !important;
+    cursor: pointer !important;
+    background-color: #fff !important;
+    background-image: url("/img/select.png") !important;
+    background-repeat: no-repeat !important;
+    background-position: right center !important;
+    -webkit-appearance: button !important;
+    -webkit-border-radius: 0px !important;
+    -moz-appearance: button !important;
+    -moz-border-radius: 0px !important;
+    -moz-user-select: none !important;
+    -ms-appearance: button !important;
+    -ms-border-radius: 0px !important;
+    -ms-user-select: none !important;
+    -o-appearance: button !important;
+    -o-border-radius: 0px !important;
+    -o-user-select: none !important;
+}
+
+.select:focus {
+    border: solid 1px #666 !important;
+}
