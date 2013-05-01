@@ -7,7 +7,6 @@ cd ~; git clone -b develop git@github.com:Laborate/code.git; bash code/init/init
 
 **Enter Your MYSQL Password**
 ```bash
-file: server/php/core/database.php, line 9
 file: server/node/config.js, line 19
 ```
 
