@@ -47,11 +47,11 @@ cd $BASE/server/php/vendor/
 git clone https://github.com/Synchro/PHPMailer.git
 git clone https://github.com/phpseclib/phpseclib.git
 cp -r $BASE/server/php/vendor/phpseclib/phpseclib $BASE/server/php/vendor/phpseclib2
-rm -r $BASE/server/php/vendor/phpseclib
+rm -rf $BASE/server/php/vendor/phpseclib
 mv $BASE/server/php/vendor/phpseclib2 $BASE/server/php/vendor/phpseclib
 git clone https://github.com/mrclay/minify.git $BASE/server/php/vendor/minify/
 mv $BASE/server/php/vendor/minify/min $BASE/server/php/vendor/min
-rm -r $BASE/server/php/vendor/minify
+rm -rf $BASE/server/php/vendor/minify
 echo -e '\033[32mPHP Vendor Modules Install Complete \033[m'
 
 #Crontab
@@ -59,9 +59,7 @@ $BASE/shell/update_cron.sh
 
 #Clean Up Install
 echo -e '\033[32mCleaning Up Install \033[m'
-rm $BASE/server/php/composer.lock
-rm $BASE/server/php/composer.phar
-rm $BASE/server/php/composer.json
+rm -f $BASE/server/php/composer.*
 mkdir $BASE/server/apache
 mkdir $BASE/server/node/logs
 echo -e '\033[32mInstaller Finished \033[m'
