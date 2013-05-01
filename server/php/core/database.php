@@ -4,9 +4,9 @@ require($_SERVER['DOCUMENT_ROOT'].'/php/core/core.php');
 
 global $database;
 $hostname_database = "localhost";
-$database_database = "code_".exec('whoami');
-$username_database = exec('whoami');
-$password_database = "<password>";
+$database_database = "code_".$_SERVER['PHP_AUTH_USER'];
+$username_database = $_SERVER['PHP_AUTH_USER'];
+$password_database = $_SERVER['PHP_AUTH_PW'];
 $database = mysql_pconnect($hostname_database, $username_database, $password_database) or trigger_error(mysql_error(),E_USER_ERROR);
 mysql_select_db($database_database, $database);
 
