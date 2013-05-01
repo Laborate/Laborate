@@ -5,11 +5,12 @@ while [[ -z "$mysql_username" || -z "$mysql_password" ]]; do
     clear;
     read -p "MYSQL Username: " mysql_username;
     read -p "MYSQL Password: " mysql_password;
-done
+    read -p "Is this information correct [y,n]: " mysql_correct;
 
-while [[ -z "$user_password" ]]; do
-    clear;
-    read -p "User's Password: " user_password;
+    if [ "$mysql_correct" == "n" ]; then
+        mysql_username=;
+        mysql_password=;
+    fi
 done
 clear;
 
