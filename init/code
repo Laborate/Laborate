@@ -1,20 +1,20 @@
 NameVirtualHost *:80
 
 <VirtualHost *:80>
-    ServerAdmin webmaster@localhost
-    ServerName code.dev.laborate.io
-    DocumentRoot /var/www/code/public_html/views
-    ErrorLog /var/www/code/server/apache/error.log
+    ServerAdmin {{user_name}}@laborate.io
+    ServerName code.{{user_name}}.dev.laborate.io
+    DocumentRoot /home/{{user_name}}/code/public_html/views
+    ErrorLog /home/{{user_name}}/code/server/apache/error.log
     LogLevel debug
-    CustomLog /var/www/code/server/apache/access.log combined
+    CustomLog /home/{{user_name}}/code/server/apache/access.log combined
 </VirtualHost>
 
 
 <VirtualHost *:80>
-    ServerAdmin webmaster@localhost
-    ServerName resources.code.dev.laborate.io
-    DocumentRoot /var/www/code/public_html/resources
-    ErrorLog /var/www/code/server/apache/error_resources.log
+    ServerAdmin {{user_name}}@laborate.io
+    ServerName resources.code.{{user_name}}.dev.laborate.io
+    DocumentRoot /home/{{user_name}}/code/public_html/resources
+    ErrorLog /home/{{user_name}}/code/server/apache/error_resources.log
     LogLevel debug
-    CustomLog /var/www/code/server/apache/access_resources.log combined
+    CustomLog /home/{{user_name}}/code/server/apache/access_resources.log combined
 </VirtualHost>

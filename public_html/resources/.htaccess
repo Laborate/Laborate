@@ -1,7 +1,7 @@
 # User Authentication On Dev Site
 AuthName "Secure Area"
 AuthType Basic
-AuthUserFile /var/www/.htpasswd
+AuthUserFile /home/.htpasswd
 require valid-user
 Allow from localhost
 Satisfy Any

@@ -1,9 +1,26 @@
 #Start Up
 BASE="$(cd "$(dirname "$0")"; pwd)/../"
 
+clear;
+read -p "MYSQL Username: " mysql_username;
+read -p "MYSQL Password: " mysql_password;
+
+while [[ -z "$mysql_username" || -z "$mysql_password" ]]; do
+    clear;
+    echo -e "\033[31mPlease Enter Username & Password\033[0m";
+    read -p "MYSQL Username: " mysql_username;
+    read -p "MYSQL Password: " mysql_password;
+done
+
+while [[ -z "$user_password" ]]; do
+    clear;
+    echo -e "\033[31mPlease Enter User's Password\033[0m";
+    read -p "User's Password: " user_password;
+done
+
 #Install Apache2 Site
 echo -e '\033[32mInstalling Apache2 Site\033[m'
-cp $BASE/init/code /etc/apache2/sites-available/code
+sed "s/{{user_name}}/$(whoami)/g" "$BASE/init/code" > /etc/apache2/sites-available/code
 a2ensite code
 service apache2 reload
 service apache2 restart
@@ -11,7 +28,8 @@ echo -e '\033[32mApache2 Site Install Complete\033[m'
 
 #Populate Database
 echo -e '\033[32mPopulating Database \033[m'
-mysql --user="root" --password="bjv0623" -e "CREATE DATABASE code"
+mysql --user="$mysql_username" --password="$mysql_password" -e "CREATE DATABASE code_$(whoami);"
+mysql --user="$mysql_username" --password="$mysql_password" -e "GRANT ALL PRIVILEGES ON code_$(whoami).* To '$(whoami)';"
 $BASE/shell/sql_update.sh content
 echo -e '\033[32mDatabase Populated \033[m'
 
