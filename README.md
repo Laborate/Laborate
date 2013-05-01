@@ -11,3 +11,7 @@ file: server/php/core/database.php, line 9
 file: server/node/config.js, line 19
 ```
 
+**Ask Administrator To Reload Apache**
+```bash
+service apache2 reload;
+```
