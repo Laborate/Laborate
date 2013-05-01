@@ -15,9 +15,9 @@ io.configure(function(){
 
 var connection = mysql.createConnection({
     //socketPath : '/Applications/MAMP/tmp/mysql/mysql.sock',
-    user     : 'root',
-    password : 'bjv0623',
-    database : 'code',
+    user     : process.env.LOGNAME,
+    password : '<password>',
+    database : 'code_' + process.env.LOGNAME,
 });
 
 queues(connection);
