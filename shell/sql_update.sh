@@ -1,6 +1,8 @@
 #!/bin/bash
 BASE="$(cd "$(dirname "$0")"; pwd)/../"
 
+mysql_password=$2;
+
 while [[ -z "$mysql_password" ]]; do
     clear;
     read -p "MYSQL Password: " mysql_password;

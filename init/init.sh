@@ -5,7 +5,7 @@ while [[ -z "$mysql_username" || -z "$mysql_password" ]]; do
     clear;
     read -p "MYSQL Username: " mysql_username;
     read -p "MYSQL Password: " mysql_password;
-    read -p "Is this information correct [y,n]: " mysql_correct;
+    read -p "Is this information correct [Y/n]: " mysql_correct;
 
     if [ "$mysql_correct" == "n" ]; then
         mysql_username=;
@@ -16,8 +16,8 @@ clear;
 
 #Install Apache2 Site
 echo -e '\033[32mInstalling Apache2 Site\033[m'
-sed "s/{{user_name}}/$(whoami)/g" "$BASE/init/code" > /etc/apache2/sites-available/code
-a2ensite code
+sed "s/{{user_name}}/$(whoami)/g" "$BASE/init/code" > "/etc/apache2/sites-available/code_$(whoami)"
+a2ensite "code_$(whoami)"
 service apache2 reload
 service apache2 restart
 echo -e '\033[32mApache2 Site Install Complete\033[m'
@@ -26,7 +26,7 @@ echo -e '\033[32mApache2 Site Install Complete\033[m'
 echo -e '\033[32mPopulating Database \033[m'
 mysql --user="$mysql_username" --password="$mysql_password" -e "CREATE DATABASE code_$(whoami);"
 mysql --user="$mysql_username" --password="$mysql_password" -e "GRANT ALL PRIVILEGES ON code_$(whoami).* To '$(whoami)';"
-$BASE/shell/sql_update.sh content
+$BASE/shell/sql_update.sh "content" "$mysql_password"
 echo -e '\033[32mDatabase Populated \033[m'
 
 #Link Up Node Modules
