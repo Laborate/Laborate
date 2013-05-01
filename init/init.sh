@@ -1,22 +1,17 @@
 #Start Up
 BASE="$(cd "$(dirname "$0")"; pwd)/../"
 
-clear;
-read -p "MYSQL Username: " mysql_username;
-read -p "MYSQL Password: " mysql_password;
-
 while [[ -z "$mysql_username" || -z "$mysql_password" ]]; do
     clear;
-    echo -e "\033[31mPlease Enter Username & Password\033[0m";
     read -p "MYSQL Username: " mysql_username;
     read -p "MYSQL Password: " mysql_password;
 done
 
 while [[ -z "$user_password" ]]; do
     clear;
-    echo -e "\033[31mPlease Enter User's Password\033[0m";
     read -p "User's Password: " user_password;
 done
+clear;
 
 #Install Apache2 Site
 echo -e '\033[32mInstalling Apache2 Site\033[m'
