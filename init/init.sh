@@ -18,8 +18,6 @@ clear;
 echo -e '\033[32mInstalling Apache2 Site\033[m'
 sed "s/{{user_name}}/$(whoami)/g" "$BASE/init/code" > "/etc/apache2/sites-available/code_$(whoami)"
 a2ensite "code_$(whoami)"
-service apache2 reload
-service apache2 restart
 echo -e '\033[32mApache2 Site Install Complete\033[m'
 
 #Populate Database
