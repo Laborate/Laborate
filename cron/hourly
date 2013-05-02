@@ -1,1 +1,0 @@
-@hourly $BASE/shell/node_control.sh restart
