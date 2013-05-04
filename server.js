@@ -10,7 +10,8 @@ var clientCSS  = piler.createCSSManager();
 
 /* Modules: Custom */
 var core = require('./lib/core');
-var routes = require('./routes');
+var routes = require('./routes/index');
+var auth = require('./routes/auth');
 
 /* Configuration */
 app.configure(function() {
@@ -30,6 +31,8 @@ app.configure(function() {
     app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
+    app.use(express.cookieParser());
+    app.use(express.cookieSession({key: "usrs", secret: "secret_password"}));
     app.use(app.router);
 });
 
@@ -38,7 +41,14 @@ app.configure('development', function() {
   app.use(express.errorHandler());
 });
 
-/* Routes */
-app.get('/', core.dependencies, routes.index);
+/* Routes: GET */
+app.get('/', core.dependencies, routes.login);
+app.get('/login', core.dependencies, routes.login);
+app.get('/register', core.dependencies, routes.register);
+
+/* Routes: POST */
+app.post('/auth/login', auth.login);
+app.post('/auth/register', auth.register);
+app.post('/auth/email_check', auth.email_check);
 
 srv.listen(3000);

@@ -16,18 +16,18 @@ $("#backdropSigIn").live("submit", function() {
     else { $("#backdropSigIn #backdropSigInPassword").css({"border":""}); }
 
     if(passed == true) {
-        $.post("/php/user/login.php", { user_email: $("#backdropSigIn #backdropSigInEmail").val(),
-                                               user_password:$("#backdropSigIn #backdropSigInPassword").val()
+        $.post("/auth/login/", { user_email: $("#backdropSigIn #backdropSigInEmail").val(),
+                                        user_password:$("#backdropSigIn #backdropSigInPassword").val()
                                         },
             function(result){
-                if(result == "User Login: Failed") {
-                    $("#backdropInital .textError").text("Incorrect Email or Password").fadeIn();
-                    $("#backdropSigIn input[type=submit]").val("Sign In").removeClass("disabled");
-                }
-                else {
+                if(result['success']) {
                     var urlContinue = getUrlVars()['continue'];
                     if(urlContinue == null || urlContinue == "") { window.location.href = "/documents"; }
                     else { window.location.href = urlContinue; }
+                }
+                else {
+                    $("#backdropInital .textError").text("Incorrect Email or Password").fadeIn();
+                    $("#backdropSigIn input[type=submit]").val("Sign In").removeClass("disabled");
                 }
             }
         );
@@ -55,9 +55,9 @@ $("#backdropRegister").live("submit", function() {
         finishRegister();
     }
     else {
-         $.post("/php/user/email_check.php", { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
-            function(result){
-                if(result == "1") {
+         $.post("/auth/email_check/", { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
+            function(result) {
+                if(result['success']) {
                     $("#backdropRegister #backdropRegisterEmail").css({"border":""});
                     finishRegister();
                 }
@@ -98,12 +98,12 @@ $("#backdropRegister").live("submit", function() {
         }
 
         if(passed == true) {
-            $.post("/php/user/register.php", { user_name: $("#backdropRegister #backdropRegisterName").val(),
+            $.post("/auth/register/", { user_name: $("#backdropRegister #backdropRegisterName").val(),
                                                      user_email: $("#backdropRegister #backdropRegisterEmail").val(),
                                                      user_password: $("#backdropRegister #backdropRegisterPassword").val()
                                             },
                 function(result){
-                    if(result == 1) {
+                    if(result['success']) {
                         window.location.href = "/documents";
                     }
                     else {
