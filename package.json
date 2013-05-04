@@ -1,14 +1,24 @@
 {
-  "name": "Code",
+  "name": "code",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node start.js"
   },
   "dependencies": {
     "express": "3.2.1",
     "ejs": "*",
-    "nodemon": "*",
-    "less-middleware": "*"
+    "less": "*",
+    "express-subdomains": "*",
+    "forever": "*",
+    "redis": "*",
+    "hiredis": "*",
+    "piler": "*",
+    "forever-monitor": "*",
+    "socket.io": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Laborate/code.git"
   }
 }

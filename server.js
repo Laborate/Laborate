@@ -1,29 +1,44 @@
-/* Modules */
-var http    = require('http');
-var express = require('express');
-var routes  = require('./routes');
-var app = express();
+/* Modules: NPM */
+var express    = require('express');
+var app        = express();
+var subdomains = require('express-subdomains');
+var srv        = require('http').createServer(app);
+var io         = require('socket.io').listen(srv);
+var piler      = require("piler");
+var clientJS   = piler.createJSManager();
+var clientCSS  = piler.createCSSManager();
+
+/* Modules: Custom */
+var core = require('./lib/core');
+var routes = require('./routes');
 
 /* Configuration */
-app.engine('html', require('ejs').renderFile);
-app.set('port', 3000);
-app.set('views', __dirname + '/views');
-app.set('view engine', 'html');
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
-app.use(require('less-middleware')({ src: __dirname + '/public',  compress: true, optimization: 2 }));
-app.use(express.static(__dirname + '/public'));
+app.configure(function() {
+    clientJS.bind(app,srv);
+    clientCSS.bind(app,srv);
+    subdomains.use('api');
+    app.engine('html', require('ejs').renderFile);
+    app.set('root', __dirname + '/');
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'html');
+    app.set('clientJS', clientJS);
+    app.set('clientCSS', clientCSS);
+    app.use('/fonts', express.static(__dirname + '/public/fonts'));
+    app.use('/flash', express.static(__dirname + '/public/flash'));
+    app.use('/img', express.static(__dirname + '/public/img'));
+    app.use(express.logger('dev'));
+    app.use(express.compress());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+});
 
-// development only
-if ('development' == app.get('env')) {
+/* Developement Only */
+app.configure('development', function() {
   app.use(express.errorHandler());
-}
+});
 
 /* Routes */
-app.get('*[^.css]', routes.index);
+app.get('/', core.dependencies, routes.index);
 
-http.createServer(app).listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + app.get('port'));
-});
+srv.listen(3000);
