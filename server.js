@@ -11,6 +11,11 @@ var clientCSS  = piler.createCSSManager();
 /* Modules: Custom */
 var config = require('./config');
 
+/* Express: Development Only */
+app.configure('development', function() {
+    app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
+});
+
 /* Express: Configuration */
 app.configure(function() {
     clientJS.bind(app,srv);
@@ -38,11 +43,6 @@ app.configure(function() {
         secret: config.cookie_session.secret
     }));
     app.use(app.router);
-});
-
-/* Express: Development Only */
-app.configure('development', function() {
-    app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
 });
 
 /* Express: Import Routes */

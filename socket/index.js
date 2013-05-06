@@ -1,7 +1,7 @@
- /* Requires */
+/* Modules: NPM */
 var utils = require('./utils.js');
 
-/* Socket Events */
+/* Module Exports */
 module.exports = function(io) {
     io.sockets.on('connection', function (socket) {
         var session = {};

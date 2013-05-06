@@ -1,3 +1,7 @@
+/* Modules: Custom */
+var mysql = require('../lib/mysql');
+
+/* Module Exports */
 exports.login = function(req, res) {
     if(req.param('user_email') && req.param('user_password')) {
         req.session.id = "5";

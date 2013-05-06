@@ -18,7 +18,8 @@
     "forever-monitor": "*",
     "socket.io": "*",
     "mysql": "*",
-    "mysql-queues": "*"
+    "mysql-queues": "*",
+    "crypto": "*"
   },
   "repository": {
     "type": "git",
