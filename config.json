@@ -12,10 +12,12 @@
         "secret": "test"
     },
     "mysql": {
+        "database": "",
         "username": "",
         "password": ""
     },
     "redis": {
+        "database": "",
         "username": "",
         "password": ""
     },

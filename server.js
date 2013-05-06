@@ -2,7 +2,7 @@
 var express    = require('express');
 var app        = express();
 var subdomains = require('express-subdomains');
-var srv        = require('http').createServer(app);
+var srv        = require('http').createServer(app).listen(3000);
 var io         = require('socket.io').listen(srv);
 var piler      = require("piler");
 var clientJS   = piler.createJSManager();
@@ -11,7 +11,7 @@ var clientCSS  = piler.createCSSManager();
 /* Modules: Custom */
 var config = require('./config');
 
-/* Configuration */
+/* Express: Configuration */
 app.configure(function() {
     clientJS.bind(app,srv);
     clientCSS.bind(app,srv);
@@ -40,12 +40,42 @@ app.configure(function() {
     app.use(app.router);
 });
 
-/* Development Only */
+/* Express: Development Only */
 app.configure('development', function() {
     app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
-})
+});
 
-/* Activate Routes */
+/* Express: Import Routes */
 require('./routes')(app);
 
-srv.listen(3000);
+/* Socket IO: Configuration */
+io.configure(function(){
+    io.enable('browser client minification');
+    io.enable('browser client etag');
+    io.enable('browser client gzip');
+    io.set('log level', 1);
+    io.set('transports', [
+        'websocket',
+        'flashsocket',
+        'htmlfile',
+        'xhr-polling',
+        'jsonp-polling'
+    ]);
+    io.set('log colors', false);
+});
+
+/* Socket IO: Error Handling */
+io.on('error', function(err) {
+    console.log('Socket IO Error: ' + err.stack);
+    require('socket.io').listen(8000);
+    return false;
+});
+
+/* Socket IO: Import Routes */
+require('./socket')(io);
+
+/* General: Error Handling */
+process.on('uncaughtException', function(err) {
+  console.log("Uncaught Error: " + err);
+  return false;
+});
