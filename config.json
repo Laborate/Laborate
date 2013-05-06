@@ -4,8 +4,12 @@
         "email": ""
     },
     "basicAuth": {
-        "username": "",
-        "password": ""
+        "username": "test",
+        "password": "test"
+    },
+    "cookie_session": {
+        "key": "usrs",
+        "secret": "test"
     },
     "mysql": {
         "username": "",
@@ -19,6 +23,7 @@
         "site_title": "Code-Laborate",
         "site_delimeter": " · ",
         "environment": "development",
+        "cookie_session_id": "usrs",
         "silent": false,
         "watch": true,
         "watch_directory": ".",

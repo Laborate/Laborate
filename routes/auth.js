@@ -10,6 +10,11 @@ exports.login = function(req, res) {
     }
 };
 
+exports.logout = function(req, res) {
+    req.session = null;
+    res.redirect('/');
+};
+
 exports.register = function(req, res) {
     req.session.id = "6";
     res.json({"success": true});

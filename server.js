@@ -10,9 +10,6 @@ var clientCSS  = piler.createCSSManager();
 
 /* Modules: Custom */
 var config = require('./config');
-var core   = require('./lib/core');
-var routes = require('./routes/index');
-var auth   = require('./routes/auth');
 
 /* Configuration */
 app.configure(function() {
@@ -37,8 +34,8 @@ app.configure(function() {
     app.use(express.methodOverride());
     app.use(express.cookieParser());
     app.use(express.cookieSession({
-        key: config.basicAuth.username,
-        secret: config.basicAuth.password
+        key: config.cookie_session.key,
+        secret: config.cookie_session.secret
     }));
     app.use(app.router);
 });
@@ -48,15 +45,7 @@ app.configure('development', function() {
     app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
 })
 
-/* Routes: GET */
-app.get('/', auth.loginCheck, core.dependencies, routes.login);
-app.get('/login', auth.loginCheck, core.dependencies, routes.login);
-app.get('/register', auth.loginCheck, core.dependencies, routes.register);
-app.get('/documents', auth.restrictAccess, routes.documents);
-
-/* Routes: POST */
-app.post('/auth/login', auth.login);
-app.post('/auth/register', auth.register);
-app.post('/auth/email_check', auth.emailCheck);
+/* Activate Routes */
+require('./routes')(app);
 
 srv.listen(3000);

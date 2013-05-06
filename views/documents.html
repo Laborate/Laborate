@@ -1,5 +1,5 @@
 <% include includes/header.html %>
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/header.php"); ?>
+<% include includes/navigation.html %>
 <div id="locations">
     <div id="locations_header">
         <div class="left">Locations</div>
@@ -21,9 +21,6 @@
                 <option value="">Protection</option>
                 <option value="o" <?php if($_GET['p'] == "o") { echo "selected"; } ?>>Protection: Open</option>
                 <option value="p" <?php if($_GET['p'] == "p") { echo "selected"; } ?>>Protection: Password</option>
-                <?php if($_SESSION['userLevel'] == 3) { ?>
-                    <option value="e" <?php if($_GET['p'] == "e") { echo "selected"; } ?>>Protection: Employee</option>
-                <?php } ?>
             </select>
             <select name="r" class="select left">
                 <option value="">Relation</option>
@@ -49,6 +46,6 @@
         <div id="file_library"></div>
     </div>
 </div>
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/mouseMenu.php"); ?>
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/popUp.php"); ?>
+<% include includes/mouseMenu.html %>
+<% include includes/popUp.html %>
 <% include includes/footer.html %>

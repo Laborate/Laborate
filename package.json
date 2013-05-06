@@ -16,7 +16,9 @@
     "hiredis": "*",
     "piler": "*",
     "forever-monitor": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "mysql": "*",
+    "mysql-queues": "*"
   },
   "repository": {
     "type": "git",

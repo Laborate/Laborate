@@ -1,33 +1,22 @@
-exports.login = function(req, res) {
-    console.log(req.session.id);
-    var data = {
-        host: req.host,
-        title: 'Login',
-        js: req.app.get("clientJS").renderTags("core", "backdrop"),
-        css: req.app.get("clientCSS").renderTags("core", "backdrop")
-    }
+var core = require('./core');
+var auth = require('./auth');
 
-    res.render('login', data);
-};
+module.exports = function(app){
+    /* Root Route */
+    app.get('/', auth.loginCheck, core.login);
 
-exports.register = function(req, res) {
-    var data = {
-        host: req.host,
-        title: 'Register',
-        js: req.app.get("clientJS").renderTags("core", "backdrop"),
-        css: req.app.get("clientCSS").renderTags("core", "backdrop")
-    }
+    /* Login */
+    app.get('/login', auth.loginCheck, core.login);
+    app.post('/auth/login', auth.login);
 
-    res.render('register', data);
-};
+    /* Register */
+    app.get('/register', auth.loginCheck, core.register);
+    app.post('/auth/register', auth.register);
+    app.post('/auth/email_check', auth.emailCheck);
 
-exports.documents = function(req, res) {
-    var data = {
-        host: req.host,
-        title: 'Documents',
-        js: req.app.get("clientJS").renderTags("core", "documents"),
-        css: req.app.get("clientCSS").renderTags("core", "documents")
-    }
+    /* Logout */
+    app.get('/logout', auth.logout);
 
-    res.render('documents', data);
-};
+    /* Documents */
+    app.get('/documents', auth.restrictAccess, core.documents);
+}
