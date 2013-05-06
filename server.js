@@ -36,15 +36,23 @@ app.configure(function() {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser());
-    app.use(express.cookieSession({key: "usrs", secret: "secret_password"}));
+    app.use(express.cookieSession({
+        key: config.basicAuth.username,
+        secret: config.basicAuth.password
+    }));
     app.use(app.router);
 });
+
+/* Development Only */
+app.configure('development', function() {
+    app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
+})
 
 /* Routes: GET */
 app.get('/', auth.loginCheck, core.dependencies, routes.login);
 app.get('/login', auth.loginCheck, core.dependencies, routes.login);
 app.get('/register', auth.loginCheck, core.dependencies, routes.register);
-app.get('/documents', auth.restrictAccess, core.dependencies, routes.documents);
+app.get('/documents', auth.restrictAccess, routes.documents);
 
 /* Routes: POST */
 app.post('/auth/login', auth.login);
