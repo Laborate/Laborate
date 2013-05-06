@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node start.js",
-    "preinstall": "mkdir logs; npm i -g forever;"
+    "preinstall": "mkdir logs; npm i -g forever"
   },
   "dependencies": {
     "express": "3.2.1",

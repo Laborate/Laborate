@@ -26,7 +26,7 @@ $("#backdropSigIn").live("submit", function() {
                     else { window.location.href = urlContinue; }
                 }
                 else {
-                    $("#backdropInital .textError").text("Incorrect Email or Password").fadeIn();
+                    $("#backdropInital .textError").text(result['error_message']).fadeIn();
                     $("#backdropSigIn input[type=submit]").val("Sign In").removeClass("disabled");
                 }
             }
@@ -63,7 +63,7 @@ $("#backdropRegister").live("submit", function() {
                 }
                 else {
                     $("#backdropRegister #backdropRegisterEmail").css({"border":"solid thin #CC352D"});
-                    $("#backdropInital .textError").text("Email Already Exists").fadeIn();
+                    $("#backdropInital .textError").text(result['error_message']).fadeIn();
                     passed = false;
                     finishRegister();
                 }
@@ -107,7 +107,7 @@ $("#backdropRegister").live("submit", function() {
                         window.location.href = "/documents";
                     }
                     else {
-                       $("#backdropInital .textError").text("Registration Failed").fadeIn();
+                       $("#backdropInital .textError").text(result['error_message']).fadeIn();
                        $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
                     }
 

@@ -1,11 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title><%= title %></title>
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <%- js %>
-    <%- css %>
-  </head>
-  <body>
+    <head>
+        <% if (typeof(title) !== 'undefined') {
+            title = title + settings.site_delimeter + settings.site_title;
+        } else {
+            title = settings.site_title;
+        } %>
+
+        <!-- Base Meta Tags -->
+        <title><%= title %></title>
+        <meta name="description" content="Collaborative software development made easy! Upload files manually, from Github repositories or SFTP Servers in seconds and start editing in realtime with your team.">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+
+        <!-- Open Graph Meta Tags -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="http://<%= host %>/">
+        <meta property="og:image" content="http://<%= host %>/favicon/196.png">
+        <meta property="og:title" content="<%= title %>">
+        <meta property="og:description" content="Collaborative software development made easy! Upload files manually, from Github repositories or SFTP Servers in seconds and start editing in realtime with your team.">
+
+        <!-- Google Webmaster Meta Tags -->
+        <meta name="google-site-verification" content="4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY" />
+
+        <!-- Robot Meta Tags -->
+        <meta name="revisit-after" content="5 days">
+        <meta name="distribution" content="web">
+        <meta name="ROBOTS" content="INDEX, FOLLOW">
+
+        <!-- Opera Speed Dial Favicon -->
+        <link rel="icon" type="image/png" href="http://<%= host %>/favicon/160.png" />
+        <!-- Standard Favicon -->
+        <link rel="icon" type="image/png" href="http://<%= host %>/favicon/16.png" />
+        <!-- For iPhone 4 Retina display: -->
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://<%= host %>/favicon/114.png">
+        <!-- For iPad: -->
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://<%= host %>/favicon/72.png">
+        <!-- For iPhone: -->
+        <link rel="apple-touch-icon-precomposed" href="http://<%= host %>/favicon/57.png">
+        <%- js %>
+        <%- css %>
+    </head>
+    <body>
