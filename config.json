@@ -3,6 +3,11 @@
         "name": "",
         "email": ""
     },
+    "general": {
+        "site_title": "Code-Laborate",
+        "site_delimeter": " · ",
+        "environment": "development"
+    },
     "basicAuth": {
         "username": "test",
         "password": "test"
@@ -21,11 +26,7 @@
         "username": "",
         "password": ""
     },
-    "general": {
-        "site_title": "Code-Laborate",
-        "site_delimeter": " · ",
-        "environment": "development",
-        "cookie_session_id": "usrs",
+    "forever": {
         "silent": false,
         "watch": true,
         "watch_directory": ".",

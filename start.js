@@ -2,21 +2,21 @@ var config = require('./config');
 var forever = require('forever-monitor');
 
 var child = new (forever.Monitor)('server.js', {
-    max: config.general.max_failures,
-    silent: config.general.silent,
+    max: config.forever.max_failures,
+    silent: config.forever.silent,
 
-    watch: config.general.watch,
-    watchDirectory: config.general.watch_directory,
-    watchIgnoreDotFiles: config.general.watch_ignore_dot,
-    watchIgnorePatterns: config.general.watch_ignore_patterns,
+    watch: config.forever.watch,
+    watchDirectory: config.forever.watch_directory,
+    watchIgnoreDotFiles: config.forever.watch_ignore_dot,
+    watchIgnorePatterns: config.forever.watch_ignore_patterns,
 
     env: {
         'NODE_ENV': config.general.environment
     },
 
-    //logFile: config.general.forever_log,
-    //outFile: config.general.output_log,
-    //errFile: config.general.error_log,
+    //logFile: config.forever.forever_log,
+    //outFile: config.forever.output_log,
+    //errFile: config.forever.error_log,
 
     killTree: true
 });
