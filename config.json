@@ -4,7 +4,7 @@
         "email": ""
     },
     "general": {
-        "site_title": "Code Laborate",
+        "site_title": "Code-Laborate",
         "site_delimeter": " · ",
         "environment": "development"
     },
@@ -17,9 +17,9 @@
         "secret": "test"
     },
     "mysql": {
-        "database": "code_root",
-        "username": "brian",
-        "password": "bjv0623"
+        "database": "",
+        "username": "",
+        "password": ""
     },
     "redis": {
         "database": "",
