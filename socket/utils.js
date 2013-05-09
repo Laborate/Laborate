@@ -1,12 +1,12 @@
 /* Modules: NPM */
-var aes = require('../lib/aes.js');
-var mysql_connection = require('../lib/mysql.js');
+var aes = require('../lib/aes');
+var mysql = require('../lib/mysql');
 
 /* Module Exports */
 module.exports = {
     session_authentication: function(data, callback) {
         var session_pull = 'SELECT session_id, session_password FROM sessions WHERE session_id = "' + data['session'] + '"';
-        mysql_connection.query(session_pull, function(err, sql_results) {
+        mysql.query(session_pull, function(err, sql_results) {
             if(!err && sql_results.length != 0) {
                 var sql_session_id = sql_results[0]["session_id"];
                 //var sql_session_password = aes.decrypt(sql_results[0]["session_password"], base.crypt_salt);
@@ -16,12 +16,12 @@ module.exports = {
                 callback(false);
             }
 
-            mysql_connection.end();
+            mysql.end();
         });
     },
     session_breakpoint: function(session, data, callback) {
         var session_pull = 'SELECT session_breakpoints FROM sessions WHERE session_id = "' + session + '"';
-        mysql_connection.query(session_pull, function(err, sql_results) {
+        mysql.query(session_pull, function(err, sql_results) {
             if(!err && sql_results.length != 0) {
                 var sql_session_breakpoints = JSON.parse(sql_results[0]["session_breakpoints"]);
                 if(data['remove']) {
@@ -32,17 +32,17 @@ module.exports = {
                 }
                 var session_push = 'Update sessions SET session_breakpoints="';
                 session_push += JSON.stringify(sql_session_breakpoints) + '" WHERE session_id = "' + session + '"';
-                mysql_connection.query(session_push);
+                mysql.query(session_push);
             } else {
                 callback(false);
             }
 
-            mysql_connection.end();
+            mysql.end();
         });
     },
     session_document: function(session, data, callback) {
         var session_pull = 'SELECT session_document FROM sessions WHERE session_id = "' + session + '"';
-        mysql_connection.query(session_pull, function(err, sql_results) {
+        mysql.query(session_pull, function(err, sql_results) {
             if(!err && sql_results.length != 0) {
                 //Session Objects
                 var sql_session_document = JSON.parse(sql_results[0]["session_document"]);
@@ -90,13 +90,13 @@ module.exports = {
                 //Save To Database
                 //Use Single Quotes As A Wrapper For The JSON Object
                 var session_push = "Update sessions SET session_document= ";
-                session_push += mysql_connection.escape(json_final_document) + " WHERE session_id = " + mysql_connection.escape(session);
-                mysql_connection.query(session_push);
+                session_push += mysql.escape(json_final_document) + " WHERE session_id = " + mysql.escape(session);
+                mysql.query(session_push);
             } else {
                 callback(false);
             }
 
-            mysql_connection.end();
+            mysql.end();
         });
     }
 }

@@ -1,0 +1,56 @@
+<% include includes/header.html %>
+<% include includes/navigation.html %>
+<div id="navigation">
+    <div id="navigation_header"><%= user.user_name %></div>
+    <% if(user.user_pricing) { %>
+    <div id="navigation_password_file">
+        <div id="navigation_password_header" class="left">PRIVATE DOCUMENTS</div>
+        <div id="navigation_password_header_light" class="right">
+            <% if(pricing.pricing_documents) { %>
+                2 of <%= pricing.pricing_documents %>
+            <% } else { %>
+                2
+            <% } %>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <% } %>
+    <ul>
+        <li id="profile">Public Profile</li>
+        <li id="account">Account Settings</li>
+        <li id="github">Github Locations</li>
+        <li id="sftp">SFTP Locations</li>
+        <li id="billing">Billing Options</li>
+        <li id="payments">Payment History</li>
+    </ul>
+</div>
+<div id="setting_pane">
+    <div class="notification"></div>
+
+    <div id="settings_profile" class="settings">
+        <div class="settings_header">Public Profile</div>
+        <div class="settings_content">
+            asdfasdfasdf
+        </div>
+    </div>
+
+    <div id="settings_github" class="settings">
+        <div class="settings_header">
+            <div class="left">Github Repositories</div>
+            <% if(user.user_github) { %>
+                <a class="button red right" href="/php/locations/github_remove_token.php">Deauthorize With Github</a>
+            <% } else { %>
+                <a class="button green right" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
+            <% } %>
+            <div class="clear"></div>
+        </div>
+        <div class="settings_content">
+            <ul class="table"></ul>
+            <div id="need_github_login" class="hidden">
+                <div class="icon_big icon-github"></div>
+                <div class="bold">You Need To Be Authorized<br>With Github To View You Repositories</div>
+            </div>
+        </div>
+    </div>
+</div>
+<% include includes/footer.html %>

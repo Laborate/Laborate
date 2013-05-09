@@ -5,8 +5,8 @@ var subdomains = require('express-subdomains');
 var srv        = require('http').createServer(app).listen(3000);
 var io         = require('socket.io').listen(srv);
 var piler      = require("piler");
-var clientJS   = piler.createJSManager();
-var clientCSS  = piler.createCSSManager();
+var clientJS   = piler.createJSManager({urlRoot: "/js/"});
+var clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
 
 /* Modules: Custom */
 var config = require('./config');
@@ -14,6 +14,14 @@ var config = require('./config');
 /* Express: Development Only */
 app.configure('development', function() {
     app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
+});
+
+/* Express: Production Only */
+app.configure('production', function() {
+    process.on('uncaughtException', function(err) {
+      console.log("Uncaught Error: " + err);
+      return false;
+    });
 });
 
 /* Express: Configuration */
@@ -73,9 +81,3 @@ io.on('error', function(err) {
 
 /* Socket IO: Import Routes */
 require('./socket')(io);
-
-/* General: Error Handling */
-process.on('uncaughtException', function(err) {
-  console.log("Uncaught Error: " + err);
-  return false;
-});

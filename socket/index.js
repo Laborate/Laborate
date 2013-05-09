@@ -1,5 +1,5 @@
 /* Modules: NPM */
-var utils = require('./utils.js');
+var utils = require('./utils');
 
 /* Module Exports */
 module.exports = function(io) {

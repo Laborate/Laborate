@@ -4,7 +4,7 @@
         "email": ""
     },
     "general": {
-        "site_title": "Code-Laborate",
+        "site_title": "Code Laborate",
         "site_delimeter": " · ",
         "environment": "development"
     },
@@ -17,9 +17,9 @@
         "secret": "test"
     },
     "mysql": {
-        "database": "",
-        "username": "",
-        "password": ""
+        "database": "code_root",
+        "username": "brian",
+        "password": "bjv0623"
     },
     "redis": {
         "database": "",
@@ -32,7 +32,8 @@
         "watch_directory": ".",
         "watch_ignore_dot": true,
         "watch_ignore_patterns": [
-            "logs/*"
+            "logs/*",
+            "*.less"
         ],
         "max_failures": 100,
         "forever_log": "logs/forever.log",

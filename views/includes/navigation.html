@@ -1,21 +1,21 @@
 <div id="header">
     <a href="/editor/" id="logo">code-laborate</a>
     <div id="document_info">
-        <?php if($GLOBALS['backdropMode'] == "editor") { ?>
+        <% if(mode == "editor") { %>
             <div id="document_title" class="hover" onclick="sidebar('settings', 'documentTitle');">Document Name</div>
             <div id="document_contributors"></div>
             <div id="contributor_info">
                 <div id="contributor_info_arrow"></div>
                 <div id="contributor_info_name"></div>
             </div>
-        <?php } else { ?>
-            <div id="document_title">Document Name</div>
-        <?php } ?>
+        <% } else { %>
+            <div id="document_title"><%= mode %></div>
+        <% } %>
     </div>
     <div id="user">
         <div><a href="/logout/">Sign Out</a></div>
         <div><a href="/documents/">Documents</a></div>
-        <div><a href="/account/">User Name</a></div>
+        <div><a href="/account/"><%= user.user_name %></a></div>
     </div>
     <div class="clear"></div>
 </div>

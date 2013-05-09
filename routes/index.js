@@ -17,6 +17,9 @@ module.exports = function(app){
     /* Logout */
     app.get('/logout', auth.logout);
 
+    /* Account */
+    app.get('/account', auth.restrictAccess, core.account);
+
     /* Documents */
     app.get('/documents', auth.restrictAccess, core.documents);
 }
