@@ -1,9 +1,15 @@
 <% include includes/header.html %>
 <% include includes/navigation.html %>
 <div id="navigation">
-    <div id="navigation_header"><%= user.user_name %></div>
-    <% if(user.user_pricing) { %>
-    <div id="navigation_password_file">
+    <div id="navigation_header">
+        <div id="navigation_header_gravatar">
+            <img src="https://www.gravatar.com/avatar/<%= user.email_hash %>?s=30&d=http%3A%2F%2F<%= host %>%2Fimg%2Fdefault_gravatar.jpeg" width="30px" height="30px">
+        </div>
+        <div id="navigation_header_screen_name"><%= user.screen_name %></div>
+        <div class="clear"></div>
+    </div>
+    <% if(user.pricing) { %>
+    <div id="navigation_password_left">
         <div id="navigation_password_header" class="left">PRIVATE DOCUMENTS</div>
         <div id="navigation_password_header_light" class="right">
             <% if(pricing.pricing_documents) { %>
@@ -37,7 +43,7 @@
     <div id="settings_github" class="settings">
         <div class="settings_header">
             <div class="left">Github Repositories</div>
-            <% if(user.user_github) { %>
+            <% if(user.github) { %>
                 <a class="button red right" href="/php/locations/github_remove_token.php">Deauthorize With Github</a>
             <% } else { %>
                 <a class="button green right" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>

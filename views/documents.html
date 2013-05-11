@@ -19,13 +19,13 @@
             <input type="text" class="input left search_input" autocomplete="off" name="s" placeholder="Search For Files"/>
             <select name="p" class="select left">
                 <option value="">Protection</option>
-                <option value="o" <?php if($_GET['p'] == "o") { echo "selected"; } ?>>Protection: Open</option>
-                <option value="p" <?php if($_GET['p'] == "p") { echo "selected"; } ?>>Protection: Password</option>
+                <option value="o">Protection: Open</option>
+                <option value="p">Protection: Password</option>
             </select>
             <select name="r" class="select left">
                 <option value="">Relation</option>
-                <option value="o" <?php if($_GET['r'] == "o") { echo "selected"; } ?>>Relation: Owner</option>
-                <option value="e" <?php if($_GET['r'] == "e") { echo "selected"; } ?>>Relation: Editor</option>
+                <option value="o">Relation: Owner</option>
+                <option value="e">Relation: Editor</option>
                             </select>
             <input type="submit" class="button blue left search_submit" value="Search" />
             <input type="button" class="button red search_submit" id="clearSearch" value="Clear" />

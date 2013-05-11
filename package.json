@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node start.js",
-    "preinstall": "mkdir logs"
+    "preinstall": "mkdir logs",
+    "//prestart": "node tests/",
+    "start": "node start.js"
   },
   "dependencies": {
     "express": "3.2.1",
@@ -19,7 +20,8 @@
     "socket.io": "*",
     "mysql": "*",
     "mysql-queues": "*",
-    "crypto": "*"
+    "crypto": "*",
+    "futures": ">=2.1.0"
   },
   "repository": {
     "type": "git",

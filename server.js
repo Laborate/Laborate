@@ -11,19 +11,6 @@ var clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
 /* Modules: Custom */
 var config = require('./config');
 
-/* Express: Development Only */
-app.configure('development', function() {
-    app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
-});
-
-/* Express: Production Only */
-app.configure('production', function() {
-    process.on('uncaughtException', function(err) {
-      console.log("Uncaught Error: " + err);
-      return false;
-    });
-});
-
 /* Express: Configuration */
 app.configure(function() {
     clientJS.bind(app,srv);
@@ -50,8 +37,23 @@ app.configure(function() {
         key: config.cookie_session.key,
         secret: config.cookie_session.secret
     }));
-    app.use(app.router);
 });
+
+/* Express: Development Only */
+app.configure('development', function() {
+    app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
+});
+
+/* Express: Production Only */
+app.configure('production', function() {
+    process.on('uncaughtException', function(err) {
+      console.log("Uncaught Error: " + err);
+      return false;
+    });
+});
+
+/* Express: Start Router */
+app.use(app.router);
 
 /* Express: Import Routes */
 require('./routes')(app);

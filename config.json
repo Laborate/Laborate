@@ -26,6 +26,20 @@
         "username": "",
         "password": ""
     },
+    "github": {
+        "id": "",
+        "secret": "",
+        "scope": "repo",
+        "url": "https://github.com/login/oauth/authorize"
+    },
+    "email": {
+        "mode": "smtp",
+        "authentication": "tls",
+        "host": "smtp.gmail.com",
+        "port": 587,
+        "username": "",
+        "password": ""
+    },
     "forever": {
         "silent": false,
         "watch": true,

@@ -1,37 +1,43 @@
 /* Modules: Custom */
 var aes   = require('../lib/aes');
-var mysql = require('../lib/mysql');
+var mysql_lib = require('../lib/mysql_lib');
+var sequence = require("futures").sequence();
+var crypto = require('crypto');
 
 /* Module Exports */
 exports.login = function(req, res) {
-    mysql.pool.getConnection(function(err, connection) {
-        var connection = mysql.config_connection(connection);
-        var sql = "SELECT user_id, user_name, user_password, user_pricing, user_github \
-                   FROM users WHERE user_email = " + connection.escape(req.param('user_email'))
+    sequence
+        .then(function(next) {
+            mysql_lib.user_by_email(next, req.param('user_email'));
+        })
+        .then(function(next, user) {
+            if(user) {
+                if(aes.decrypt(user[0]['user_password'], req.param('user_password')) == req.param('user_password')) {
+                    req.session.user = {
+                        id: user[0]["user_id"],
+                        name: user[0]["user_name"],
+                        screen_name: user[0]["user_screen_name"],
+                        email: user[0]["user_email"],
+                        email_hash: crypto.createHash('md5').update(user[0]["user_email"]).digest("hex"),
+                        pricing: user[0]["user_pricing"],
+                        github: user[0]["user_github"]
+                    };
 
-        connection.query(sql, function(err, result) {
-                if(result.length == 1) {
-                    if(aes.decrypt(result[0]['user_password'], req.param('user_password')) == req.param('user_password')) {
-                        delete result[0]['user_password'];
-                        req.session.user = result[0];
-                        res.json({"success": true});
-                    } else {
-                        res.json({
-                            "success": false,
-                            "error_message": "Incorrect Email or Password"
-                        });
-                    }
+                    res.json({"success": true});
                 } else {
-                   res.json({
+                    res.json({
                         "success": false,
                         "error_message": "Incorrect Email or Password"
                     });
                 }
-
-                connection.end();
+            } else {
+               res.json({
+                    "success": false,
+                    "error_message": "Incorrect Email or Password"
+                });
             }
-        );
-    });
+            next();
+        });
 };
 
 exports.logout = function(req, res) {
