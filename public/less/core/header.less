@@ -17,7 +17,7 @@
     text-shadow: 1px 4px 6px #ededed, 0 0 0 #000, 1px 4px 6px #ededed;
 }
 
-#header #document_info {
+#header #header_document_info {
     float: left;
     color: #333;
     margin-left: 20px;
@@ -82,27 +82,33 @@
     text-align: center;
 }
 
-#header #user {
+#header #header_navigation {
     margin-right: 20px;
 }
 
-#header #user div {
+#header #header_navigation div {
     float: right;
     font-size: 13px;
     font-weight: bold;
     color: #a3a3a3;
-    padding-left: 5px;
+    padding-left: 10px;
+    margin-left: 10px;
+    border-left: solid 1px #e5e5e5;
+    opacity: 1;
 }
 
-#user div a {
+#header #header_navigation div:last-child {
+    border: none;
+}
+
+#header_navigation div a {
     font-weight: bold;
     font-size: 15px;
     color: #4c4c4c;
     float: right;
-    padding-left: 10px;
 }
 
-#user div a:hover {
+#header_navigation div a:hover {
     opacity: .7;
 }
 

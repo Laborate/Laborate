@@ -58,6 +58,9 @@ app.use(app.router);
 /* Express: Import Routes */
 require('./routes')(app);
 
+/* Ejs: Import Filters */
+require('./lib/ejs_filters')();
+
 /* Socket IO: Configuration */
 io.configure(function(){
     io.enable('browser client minification');

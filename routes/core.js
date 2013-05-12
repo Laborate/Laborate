@@ -1,6 +1,6 @@
 /* Modules */
 var sequence = require("futures").sequence();
-var mysql_lib = require("../lib/mysql_lib");
+var mysql_lib = require("../lib/users_mysql_lib");
 var load_dependencies = require("../lib/dependencies");
 
 exports.login = function(req, res) {
@@ -32,24 +32,16 @@ exports.register = function(req, res) {
 };
 
 exports.account = function(req, res) {
-    sequence
-        .then(function(next) {
-            load_dependencies(req);
-            mysql_lib.pricing_by_id(next, req.session.user.pricing);
-        })
-        .then(function(next, pricing){
-            var data = {
-                host: req.host,
-                title: 'Account',
-                mode: 'User Settings',
-                user: req.session.user,
-                pricing: pricing[0],
-                js: req.app.get("clientJS").renderTags("core", "account", "header"),
-                css: req.app.get("clientCSS").renderTags("core", "account", "header", "icons"),
-            }
-            res.render('account', data);
-            next();
-        });
+    load_dependencies(req);
+    var data = {
+        host: req.host,
+        title: 'Account',
+        mode: 'User Settings',
+        user: req.session.user,
+        js: req.app.get("clientJS").renderTags("core", "account", "header"),
+        css: req.app.get("clientCSS").renderTags("core", "account", "header", "icons"),
+    }
+    res.render('account', data);
 };
 
 exports.documents = function(req, res) {

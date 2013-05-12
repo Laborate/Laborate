@@ -1,6 +1,6 @@
 /* Modules: Custom */
 var aes   = require('../lib/aes');
-var mysql_lib = require('../lib/mysql_lib');
+var mysql_lib = require('../lib/users_mysql_lib');
 var sequence = require("futures").sequence();
 var crypto = require('crypto');
 
@@ -19,7 +19,8 @@ exports.login = function(req, res) {
                         screen_name: user[0]["user_screen_name"],
                         email: user[0]["user_email"],
                         email_hash: crypto.createHash('md5').update(user[0]["user_email"]).digest("hex"),
-                        pricing: user[0]["user_pricing"],
+                        pricing_id: user[0]["user_pricing"],
+                        pricing_documents: user[0]["pricing_documents"],
                         github: user[0]["user_github"]
                     };
 
