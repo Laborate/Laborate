@@ -9,12 +9,12 @@
         "environment": "development"
     },
     "basicAuth": {
-        "username": "test",
-        "password": "test"
+        "username": "",
+        "password": ""
     },
     "cookie_session": {
         "key": "usrs",
-        "secret": "test"
+        "secret": ""
     },
     "mysql": {
         "database": "",
