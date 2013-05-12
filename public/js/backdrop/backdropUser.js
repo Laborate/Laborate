@@ -1,21 +1,18 @@
 //User Login
 $("#backdropSigIn").live("submit", function() {
-    $("#backdropSigIn input[type=submit]").val("loading...").addClass("disabled");
-    var passed = true
+    window.passed = true
 
-    if($("#backdropSigIn #backdropSigInEmail").val() == "") {
-        $("#backdropSigIn #backdropSigInEmail").css({"border":"solid thin #CC352D"});
-        passed = false;
-    }
-    else { $("#backdropSigIn #backdropSigInEmail").css({"border":""}); }
+    $("#backdropSigIn input").each(function() {
+        if($(this).val() == "") {
+            $(this).css({"border":"solid thin #CC352D"});
+            window.passed = false;
+        } else {
+            $(this).css({"border":""});
+        }
+    });
 
-    if($("#backdropSigIn #backdropSigInPassword").val() == "") {
-        $("#backdropSigIn #backdropSigInPassword").css({"border":"solid thin #CC352D"});
-        passed = false;
-    }
-    else { $("#backdropSigIn #backdropSigInPassword").css({"border":""}); }
-
-    if(passed == true) {
+    if(window.passed) {
+        $("#backdropSigIn input[type=submit]").val("loading...").addClass("disabled");
         $.post("/auth/login/", { user_email: $("#backdropSigIn #backdropSigInEmail").val(),
                                         user_password:$("#backdropSigIn #backdropSigInPassword").val()
                                         },
@@ -41,80 +38,67 @@ $("#backdropSigIn").live("submit", function() {
 $("#backdropRegister").live("submit", function() {
     $("#backdropRegister input[type=submit]").val("loading...").addClass("disabled");
     $("#backdropInital .textError").fadeOut();
-    var passed = true
+    window.passed = true
 
-    if($("#backdropRegister #backdropRegisterName").val() == "") {
-        $("#backdropRegister #backdropRegisterName").css({"border":"solid thin #CC352D"});
-        passed = false;
-    }
-    else { $("#backdropRegister #backdropRegisterName").css({"border":""}); }
+    $("#backdropRegister input").each(function() {
+        if($(this).val() == "") {
+            $(this).css({"border":"solid thin #CC352D"});
+            window.passed = false;
+        } else {
+            if($(this).attr("id") == "backdropRegisterEmail") {
+                var element = $(this);
+                $.ajax({
+                  type: 'POST',
+                  url: "/auth/email_check/",
+                  data: { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
+                  success: success,
+                  async: false
+                });
 
-    if($("#backdropRegister #backdropRegisterEmail").val() == "") {
-        $("#backdropRegister #backdropRegisterEmail").css({"border":"solid thin #CC352D"});
-        passed = false;
-        finishRegister();
-    }
-    else {
-         $.post("/auth/email_check/", { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
-            function(result) {
-                if(result['success']) {
-                    $("#backdropRegister #backdropRegisterEmail").css({"border":""});
-                    finishRegister();
+                function success(result) {
+                    if(result['success']) {
+                        element.css({"border":""});
+                    } else {
+                        element.css({"border":"solid thin #CC352D"});
+                        $("#backdropInital .textError").text(result['error_message']).fadeIn();
+                        window.passed = false;
+                    }
+
+                }
+            } else if($(this).attr("id") == "backdropRegisterConfirm") {
+                if($("#backdropRegister #backdropRegisterPassword").val() ==  $("#backdropRegister #backdropRegisterConfirm").val()) {
+                    $("#backdropRegister #backdropRegisterPassword").css({"border":""});
+                    $("#backdropRegister #backdropRegisterConfirm").css({"border":""});
                 }
                 else {
-                    $("#backdropRegister #backdropRegisterEmail").css({"border":"solid thin #CC352D"});
-                    $("#backdropInital .textError").text(result['error_message']).fadeIn();
-                    passed = false;
-                    finishRegister();
+                    $("#backdropRegister #backdropRegisterPassword").css({"border":"solid thin #CC352D"});
+                    $("#backdropRegister #backdropRegisterConfirm").css({"border":"solid thin #CC352D"});
+                    $("#backdropInital .textError").text("Passwords Do Not Match").fadeIn();
+                    window.passed = false;
+                }
+            } else {
+                $(this).css({"border":""});
+            }
+        }
+    });
+
+    if(window.passed) {
+        $.post("/auth/register/", { user_name: $("#backdropRegister #backdropRegisterName").val(),
+                                                 user_email: $("#backdropRegister #backdropRegisterEmail").val(),
+                                                 user_password: $("#backdropRegister #backdropRegisterPassword").val()
+                                        },
+            function(result){
+                if(result['success']) {
+                    window.location.href = "/documents";
+                }
+                else {
+                   $("#backdropInital .textError").text(result['error_message']).fadeIn();
+                   $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
                 }
 
             }
         );
-    }
-
-    function finishRegister() {
-        if($("#backdropRegister #backdropRegisterPassword").val() == "") {
-            $("#backdropRegister #backdropRegisterPassword").css({"border":"solid thin #CC352D"});
-            passed = false;
-        }
-        else { $("#backdropRegister #backdropRegisterPassword").css({"border":""}); }
-
-
-        if($("#backdropRegister #backdropRegisterConfirm").val() == "") {
-            $("#backdropRegister #backdropRegisterConfirm").css({"border":"solid thin #CC352D"});
-            passed = false;
-        }
-        else {
-            if($("#backdropRegister #backdropRegisterPassword").val() ==  $("#backdropRegister #backdropRegisterConfirm").val()) {
-                $("#backdropRegister #backdropRegisterPassword").css({"border":""});
-                $("#backdropRegister #backdropRegisterConfirm").css({"border":""});
-            }
-            else {
-                $("#backdropRegister #backdropRegisterPassword").css({"border":"solid thin #CC352D"});
-                $("#backdropRegister #backdropRegisterConfirm").css({"border":"solid thin #CC352D"});
-                $("#backdropInital .textError").text("Passwords Do Not Match").fadeIn();
-                passed = false;
-            }
-        }
-
-        if(passed == true) {
-            $.post("/auth/register/", { user_name: $("#backdropRegister #backdropRegisterName").val(),
-                                                     user_email: $("#backdropRegister #backdropRegisterEmail").val(),
-                                                     user_password: $("#backdropRegister #backdropRegisterPassword").val()
-                                            },
-                function(result){
-                    if(result['success']) {
-                        window.location.href = "/documents";
-                    }
-                    else {
-                       $("#backdropInital .textError").text(result['error_message']).fadeIn();
-                       $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
-                    }
-
-                }
-            );
-        } else {
-            $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
-        }
+    } else {
+        $("#backdropRegister input[type=submit]").val("Register").removeClass("disabled");
     }
 });

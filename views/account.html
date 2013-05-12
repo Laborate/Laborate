@@ -3,7 +3,9 @@
 <div id="navigation">
     <div id="navigation_header">
         <div id="navigation_header_gravatar">
-            <img src="https://www.gravatar.com/avatar/<%= user.email_hash %>?s=30&d=http%3A%2F%2F<%= host %>%2Fimg%2Fdefault_gravatar.jpeg" width="30px" height="30px">
+            <a href="http://gravatar.com/emails/" target="_blank">
+                <img src="https://www.gravatar.com/avatar/<%= user.email_hash %>?s=30&d=http%3A%2F%2F<%= host %>%2Fimg%2Fdefault_gravatar.jpeg" width="30px" height="30px">
+            </a>
         </div>
         <div id="navigation_header_screen_name"><%= user.screen_name %></div>
         <div class="clear"></div>
