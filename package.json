@@ -5,7 +5,8 @@
   "scripts": {
     "preinstall": "mkdir logs",
     "//prestart": "node tests/",
-    "start": "node start.js"
+    "start": "node start.js",
+    "stop": "pkill node"
   },
   "dependencies": {
     "express": "3.2.1",

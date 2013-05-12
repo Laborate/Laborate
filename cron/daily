@@ -1,0 +1,3 @@
+@daily $BASE/shell/update_cron.sh
+@daily $BASE/shell/clear_logs.sh
+
