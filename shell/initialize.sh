@@ -1,3 +1,4 @@
 #!/bin/bash
-BASE = ~/code
+BASE=~/code
+
 git update-index --assume-unchanged $BASE/config.json
