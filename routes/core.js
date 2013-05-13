@@ -32,16 +32,24 @@ exports.register = function(req, res) {
 };
 
 exports.account = function(req, res) {
-    load_dependencies(req);
-    var data = {
-        host: req.host,
-        title: 'Account',
-        mode: 'User Settings',
-        user: req.session.user,
-        js: req.app.get("clientJS").renderTags("core", "account", "header"),
-        css: req.app.get("clientCSS").renderTags("core", "account", "header", "icons"),
-    }
-    res.render('account', data);
+    sequence.
+    then(function(next) {
+        load_dependencies(req);
+        mysql_lib.user_pass_sessions(next, req.session.user.id);
+    })
+    .then(function(next, pass_sessions_count) {
+        var data = {
+            host: req.host,
+            title: 'Account',
+            mode: 'User Settings',
+            user: req.session.user,
+            pass_sessions_count: pass_sessions_count,
+            js: req.app.get("clientJS").renderTags("core", "account", "header"),
+            css: req.app.get("clientCSS").renderTags("core", "account", "header", "icons"),
+        }
+        res.render('account', data);
+        next();
+    })
 };
 
 exports.documents = function(req, res) {
