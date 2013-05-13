@@ -4,13 +4,14 @@
         "email": ""
     },
     "general": {
+        "port": 3000,
         "site_title": "Code-Laborate",
         "site_delimeter": " · ",
         "environment": "development"
     },
     "basicAuth": {
-        "username": "",
-        "password": ""
+        "username": "test",
+        "password": "test"
     },
     "cookie_session": {
         "key": "usrs",

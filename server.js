@@ -1,15 +1,16 @@
+/* Modules: Custom */
+var config = require('./config');
+
 /* Modules: NPM */
 var express    = require('express');
 var app        = express();
 var subdomains = require('express-subdomains');
-var srv        = require('http').createServer(app).listen(3000);
+var srv        = require('http').createServer(app).listen(config.general.port);;
+var node_reverse_proxy = require('node-reverse-proxy');
 var io         = require('socket.io').listen(srv);
 var piler      = require("piler");
 var clientJS   = piler.createJSManager({urlRoot: "/js/"});
 var clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
-
-/* Modules: Custom */
-var config = require('./config');
 
 /* Express: Configuration */
 app.configure(function() {
@@ -42,10 +43,19 @@ app.configure(function() {
 /* Express: Development Only */
 app.configure('development', function() {
     app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
+
+    var server = {}
+    server["code." + config.profile.name + ".dev.laborate.io"] = '127.0.0.1:' + config.general.port
+    var reverse_proxy = new node_reverse_proxy(server).start(80);
 });
 
 /* Express: Production Only */
 app.configure('production', function() {
+
+    var server = {}
+    server["code.laborate.io"] = '127.0.0.1:' + config.general.port
+    var reverse_proxy = new node_reverse_proxy(server).start(80);
+
     process.on('uncaughtException', function(err) {
       console.log("Uncaught Error: " + err);
       return false;
@@ -80,7 +90,7 @@ io.configure(function(){
 /* Socket IO: Error Handling */
 io.on('error', function(err) {
     console.log('Socket IO Error: ' + err.stack);
-    require('socket.io').listen(8000);
+    require('socket.io').listen(srv);
     return false;
 });
 
