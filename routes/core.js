@@ -1,5 +1,7 @@
-/* Modules */
-var sequence = require("futures").sequence();
+/* Modules: NPM */
+var async = require("async");
+
+/* Modules: Custom */
 var mysql_lib = require("../lib/users_mysql_lib");
 var load_dependencies = require("../lib/dependencies");
 
@@ -32,24 +34,24 @@ exports.register = function(req, res) {
 };
 
 exports.account = function(req, res) {
-    sequence.
-    then(function(next) {
+    async.parallel({
+        pass_sessions_count: function(callback) {
+            mysql_lib.user_pass_sessions_count(callback, req.session.user.id);
+        }
+    }, function(error, results){
         load_dependencies(req);
-        mysql_lib.user_pass_sessions(next, req.session.user.id);
-    })
-    .then(function(next, pass_sessions_count) {
+
         var data = {
             host: req.host,
             title: 'Account',
             mode: 'User Settings',
             user: req.session.user,
-            pass_sessions_count: pass_sessions_count,
+            pass_sessions_count: results.pass_sessions_count,
             js: req.app.get("clientJS").renderTags("core", "account", "header"),
             css: req.app.get("clientCSS").renderTags("core", "account", "header", "icons"),
         }
         res.render('account', data);
-        next();
-    })
+    });
 };
 
 exports.documents = function(req, res) {

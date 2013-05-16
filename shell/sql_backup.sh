@@ -14,7 +14,7 @@ while [[ -z "$mysql_password" ]]; do
 done
 
 rm $BASE/sql_backups/*
-mysqldump --user="$(whoami)" --password="$mysql_password" "code_$(whoami)" --hex-blob > $BASE/sql_backups/update_content.sql
+mysqldump --user="$(whoami)" --password="$mysql_password" "laborate_$(whoami)" --hex-blob > $BASE/sql_backups/update_content.sql
 bunzip2 --compress $BASE/sql_backups/update_content.sql
-mysqldump -d --user="$(whoami)" --password="$mysql_password" "code_$(whoami)" --hex-blob > $BASE/sql_backups/update_structure.sql
+mysqldump -d --user="$(whoami)" --password="$mysql_password" "laborate_$(whoami)" --hex-blob > $BASE/sql_backups/update_structure.sql
 bunzip2 --compress $BASE/sql_backups/update_structure.sql

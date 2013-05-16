@@ -1,44 +1,47 @@
+/* Modules: NPM */
+var crypto = require('crypto');
+var async = require("async");
+
 /* Modules: Custom */
 var aes   = require('../lib/aes');
 var mysql_lib = require('../lib/users_mysql_lib');
-var sequence = require("futures").sequence();
-var crypto = require('crypto');
 
 /* Module Exports */
 exports.login = function(req, res) {
-    sequence
-        .then(function(next) {
-            mysql_lib.user_by_email(next, req.param('user_email'));
-        })
-        .then(function(next, user) {
-            if(user) {
-                if(aes.decrypt(user[0]['user_password'], req.param('user_password')) == req.param('user_password')) {
-                    req.session.user = {
-                        id: user[0]["user_id"],
-                        name: user[0]["user_name"],
-                        screen_name: user[0]["user_screen_name"],
-                        email: user[0]["user_email"],
-                        email_hash: crypto.createHash('md5').update(user[0]["user_email"]).digest("hex"),
-                        pricing_id: user[0]["user_pricing"],
-                        pricing_documents: user[0]["pricing_documents"],
-                        github: user[0]["user_github"]
-                    };
+    async.parallel({
+        user: function(callback) {
+            mysql_lib.user_by_email(callback, req.param('user_email'));
+        }
+    }, function(error, results){
+        user = results.user;
 
-                    res.json({"success": true});
-                } else {
-                    res.json({
-                        "success": false,
-                        "error_message": "Incorrect Email or Password"
-                    });
-                }
+        if(!error && user) {
+            if(aes.decrypt(user[0]['user_password'], req.param('user_password')) == req.param('user_password')) {
+                req.session.user = {
+                    id: user[0]["user_id"],
+                    name: user[0]["user_name"],
+                    screen_name: user[0]["user_screen_name"],
+                    email: user[0]["user_email"],
+                    email_hash: crypto.createHash('md5').update(user[0]["user_email"]).digest("hex"),
+                    pricing_id: user[0]["user_pricing"],
+                    pricing_documents: user[0]["pricing_documents"],
+                    github: user[0]["user_github"]
+                };
+
+                res.json({"success": true});
             } else {
-               res.json({
+                res.json({
                     "success": false,
                     "error_message": "Incorrect Email or Password"
                 });
             }
-            next();
-        });
+        } else {
+           res.json({
+                "success": false,
+                "error_message": "Incorrect Email or Password"
+            });
+        }
+    });
 };
 
 exports.logout = function(req, res) {
@@ -63,11 +66,17 @@ exports.emailCheck = function(req, res) {
 };
 
 exports.restrictAccess = function(req, res, next) {
-    if(!req.session.user) {
-        res.redirect('/login/');
-    } else {
-        next();
-    }
+    async.parallel({
+        userCount: function(callback) {
+            mysql_lib.user_by_id_count(callback, req.session.user.id);
+        }
+    }, function(error, results){
+        if(!error, results.userCount && req.session.user) {
+            next();
+        } else {
+            res.redirect('/logout/');
+        }
+    });
 };
 
 exports.loginCheck = function(req, res, next) {

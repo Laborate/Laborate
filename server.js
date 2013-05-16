@@ -6,13 +6,13 @@ var express    = require('express');
 var app        = express();
 var subdomains = require('express-subdomains');
 var srv        = require('http').createServer(app).listen(config.general.port);;
-var node_reverse_proxy = require('node-reverse-proxy');
 var io         = require('socket.io').listen(srv);
+var slashes    = require("connect-slashes");
 var piler      = require("piler");
 var clientJS   = piler.createJSManager({urlRoot: "/js/"});
 var clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
 
-/* Express: Configuration */
+/* Configuration */
 app.configure(function() {
     clientJS.bind(app,srv);
     clientCSS.bind(app,srv);
@@ -29,6 +29,7 @@ app.configure(function() {
     app.use('/fonts', express.static(__dirname + '/public/fonts'));
     app.use('/flash', express.static(__dirname + '/public/flash'));
     app.use('/img', express.static(__dirname + '/public/img'));
+    app.use(slashes(true));
     app.use(express.logger('dev'));
     app.use(express.compress());
     app.use(express.bodyParser());
@@ -40,22 +41,13 @@ app.configure(function() {
     }));
 });
 
-/* Express: Development Only */
+/* Development Only */
 app.configure('development', function() {
     app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
-
-    var server = {}
-    server["code." + config.profile.name + ".dev.laborate.io"] = '127.0.0.1:' + config.general.port
-    var reverse_proxy = new node_reverse_proxy(server).start(80);
 });
 
-/* Express: Production Only */
+/* Production Only */
 app.configure('production', function() {
-
-    var server = {}
-    server["code.laborate.io"] = '127.0.0.1:' + config.general.port
-    var reverse_proxy = new node_reverse_proxy(server).start(80);
-
     process.on('uncaughtException', function(err) {
       console.log("Uncaught Error: " + err);
       return false;

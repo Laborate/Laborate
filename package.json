@@ -22,8 +22,10 @@
     "mysql": "*",
     "mysql-queues": "*",
     "crypto": "*",
-    "futures": ">=2.1.0",
-    "node-reverse-proxy": "*"
+    "async": "*",
+    "node-reverse-proxy": "*",
+    "connect-slashes": "*",
+    "octonode": "*"
   },
   "repository": {
     "type": "git",

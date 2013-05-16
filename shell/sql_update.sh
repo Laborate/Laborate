@@ -21,7 +21,7 @@ else
     then
         cp $BASE/sql_backups/update_content.sql.bz2 $BASE/sql_backups/update_content2.sql.bz2
         bunzip2 $BASE/sql_backups/update_content.sql.bz2
-        mysql --user="$(whoami)" --password="$mysql_password" "code_$(whoami)" < $BASE/sql_backups/update_content.sql
+        mysql --user="$(whoami)" --password="$mysql_password" "laborate_$(whoami)" < $BASE/sql_backups/update_content.sql
         mv $BASE/sql_backups/update_content2.sql.bz2 $BASE/sql_backups/update_content.sql.bz2
         rm $BASE/sql_backups/update_content.sql
         echo "SQL Content and Structure Successfully Updated";
@@ -29,7 +29,7 @@ else
     then
         cp $BASE/sql_backups/update_structure.sql.bz2 $BASE/sql_backups/update_structure2.sql.bz2
         bunzip2 $BASE/sql_backups/update_structure.sql.bz2
-        mysql --user="$(whoami)" --password="$mysql_password" "code_$(whoami)" < $BASE/sql_backups/update_structure.sql
+        mysql --user="$(whoami)" --password="$mysql_password" "laborate_$(whoami)" < $BASE/sql_backups/update_structure.sql
         mv $BASE/sql_backups/update_structure2.sql.bz2 $BASE/sql_backups/update_structure.sql.bz2
         rm $BASE/sql_backups/update_structure.sql
         echo "SQL Structure Successfully Updated";

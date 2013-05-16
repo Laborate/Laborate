@@ -1,4 +1,5 @@
 var core = require('./core');
+var ajax = require('./ajax');
 var auth = require('./auth');
 
 module.exports = function(app){
@@ -19,6 +20,7 @@ module.exports = function(app){
 
     /* Account */
     app.get('/account', auth.restrictAccess, core.account);
+    app.get('/account/ajax/github', auth.restrictAccess, ajax.account_github);
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, core.documents);
