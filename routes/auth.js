@@ -13,19 +13,19 @@ exports.login = function(req, res) {
             mysql_lib.user_by_email(callback, req.param('user_email'));
         }
     }, function(error, results){
-        user = results.user;
+        user = results.user[0];
 
         if(!error && user) {
-            if(aes.decrypt(user[0]['user_password'], req.param('user_password')) == req.param('user_password')) {
+            if(aes.decrypt(user['user_password'], req.param('user_password')) == req.param('user_password')) {
                 req.session.user = {
-                    id: user[0]["user_id"],
-                    name: user[0]["user_name"],
-                    screen_name: user[0]["user_screen_name"],
-                    email: user[0]["user_email"],
-                    email_hash: crypto.createHash('md5').update(user[0]["user_email"]).digest("hex"),
-                    pricing_id: user[0]["user_pricing"],
-                    pricing_documents: user[0]["pricing_documents"],
-                    github: user[0]["user_github"]
+                    id: user["user_id"],
+                    name: user["user_name"],
+                    screen_name: user["user_screen_name"],
+                    email: user["user_email"],
+                    email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
+                    pricing_id: user["user_pricing"],
+                    pricing_documents: user["pricing_documents"],
+                    github: user["user_github"]
                 };
 
                 res.json({"success": true});
@@ -66,17 +66,21 @@ exports.emailCheck = function(req, res) {
 };
 
 exports.restrictAccess = function(req, res, next) {
-    async.parallel({
-        userCount: function(callback) {
-            mysql_lib.user_by_id_count(callback, req.session.user.id);
-        }
-    }, function(error, results){
-        if(!error, results.userCount && req.session.user) {
-            next();
-        } else {
-            res.redirect('/logout/');
-        }
-    });
+    if(req.session.user) {
+        async.parallel({
+            userCount: function(callback) {
+                mysql_lib.user_by_id_count(callback, req.session.user.id);
+            }
+        }, function(error, results){
+            if(!error, results.userCount) {
+                next();
+            } else {
+                res.redirect('/logout/');
+            }
+        });
+    } else {
+        res.redirect('/logout/');
+    }
 };
 
 exports.loginCheck = function(req, res, next) {

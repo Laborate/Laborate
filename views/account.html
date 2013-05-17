@@ -24,10 +24,10 @@
     </div>
     <% } %>
     <ul>
-        <li id="profile">Public Profile</li>
+        <li id="profile">Profile</li>
         <li id="account">Account Settings</li>
-        <li id="github">Github Locations</li>
-        <li id="sftp">SFTP Locations</li>
+        <li id="emails">Emails</li>
+        <li id="notifications">Notification Center</li>
         <li id="billing">Billing Options</li>
         <li id="payments">Payment History</li>
     </ul>
@@ -38,27 +38,32 @@
     <div id="settings_profile" class="settings">
         <div class="settings_header">Public Profile</div>
         <div class="settings_content">
-            asdfasdfasdf
+            <% if(user.github) { %>
+                <a class="button red" href="/php/locations/github_remove_token.php">Deauthorize With Github</a>
+            <% } else { %>
+                <a class="button green" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
+            <% } %>
         </div>
     </div>
-
-    <div id="settings_github" class="settings">
-        <div class="settings_header">
-            <div class="left">Github Repositories</div>
-            <% if(user.github) { %>
-                <a class="button red right" href="/php/locations/github_remove_token.php">Deauthorize With Github</a>
-            <% } else { %>
-                <a class="button green right" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
-            <% } %>
-            <div class="clear"></div>
-        </div>
-        <div class="settings_content">
-            <ul class="table"></ul>
-            <div id="need_github_login" class="hidden">
-                <div class="icon_big icon-github"></div>
-                <div class="bold">You Need To Be Authorized<br>With Github To View You Repositories</div>
-            </div>
-        </div>
+    <div id="settings_account" class="settings">
+        <div class="settings_header">Account Settings</div>
+        <div class="settings_content"></div>
+    </div>
+    <div id="settings_emails" class="settings">
+        <div class="settings_header">Emails</div>
+        <div class="settings_content"></div>
+    </div>
+    <div id="settings_notifications" class="settings">
+        <div class="settings_header">Notification Center</div>
+        <div class="settings_content"></div>
+    </div>
+    <div id="settings_billing" class="settings">
+        <div class="settings_header">Billing Options</div>
+        <div class="settings_content"></div>
+    </div>
+    <div id="settings_payments" class="settings">
+        <div class="settings_header">Payment History</div>
+        <div class="settings_content"></div>
     </div>
 </div>
 <% include includes/footer.html %>

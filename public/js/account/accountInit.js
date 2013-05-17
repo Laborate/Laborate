@@ -1,3 +1,3 @@
 $(window).ready(function() {
-    window.account.navigationChange("github", true);
+    window.account.navigationChange("profile", true);
 });
