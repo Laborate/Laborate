@@ -1,6 +1,6 @@
 {
     "profile": {
-        "name": "", //allowed: lowercase a-z and _
+        "name": "",
         "email": ""
     },
     "general": {
