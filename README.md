@@ -4,18 +4,18 @@ Install After [base-init](https://github.com/Laborate/base-init)
 1. **Run Installer Script**
 
    ```bash
-     cd ~; git clone -b node_migration git@github.com:Laborate/code.git; cd code; npm install;
+cd ~; git clone -b node_migration git@github.com:Laborate/code.git; cd code; npm install;
    ```
    
 2. **Fill In** ```config.json``` **With Your Info**
    
     ```
-      profile name must be lowercase a-z with no spaces
+profile name must be lowercase a-z with no spaces
     ```
 
 3. **Start Server**
    ```bash
-      npm start
+npm start
    ```
 
 Start Tracking ```config.json```
