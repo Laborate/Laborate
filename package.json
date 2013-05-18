@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "shell/initialize.sh",
+    "postinstall": "npm install forever -g",
     "start": "node start.js",
     "stop": "pkill node"
   },
