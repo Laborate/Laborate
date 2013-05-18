@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "preinstall": "shell/initialize.sh",
-    "postinstall": "npm install forever -g",
     "start": "node start.js",
     "stop": "pkill node"
   },
@@ -14,10 +13,10 @@
     "less": "*",
     "express-subdomains": "*",
     "forever": "*",
+    "forever-monitor": "*",
     "redis": "*",
     "hiredis": "*",
     "piler": "*",
-    "forever-monitor": "*",
     "socket.io": "*",
     "mysql": "*",
     "mysql-queues": "*",
@@ -25,7 +24,8 @@
     "async": "*",
     "node-reverse-proxy": "*",
     "connect-slashes": "*",
-    "octonode": "*"
+    "octonode": "*",
+    "jquery": "*"
   },
   "repository": {
     "type": "git",
