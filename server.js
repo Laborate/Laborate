@@ -48,8 +48,8 @@ app.configure('development', function() {
 
 /* Production Only */
 app.configure('production', function() {
-    process.on('uncaughtException', function(err) {
-      console.log("Uncaught Error: " + err);
+    process.on('uncaughtException', function(error) {
+      console.log("Uncaught Error: " + error.stack);
       return false;
     });
 });
@@ -80,8 +80,8 @@ io.configure(function(){
 });
 
 /* Socket IO: Error Handling */
-io.on('error', function(err) {
-    console.log('Socket IO Error: ' + err.stack);
+io.on('error', function(error) {
+    console.log('Socket IO Error: ' + error.stack);
     require('socket.io').listen(srv);
     return false;
 });
