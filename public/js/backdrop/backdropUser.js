@@ -84,9 +84,10 @@ $("#backdropRegister").live("submit", function() {
 
     if(window.passed) {
         $.post("/auth/register/", { user_name: $("#backdropRegister #backdropRegisterName").val(),
-                                                 user_email: $("#backdropRegister #backdropRegisterEmail").val(),
-                                                 user_password: $("#backdropRegister #backdropRegisterPassword").val()
-                                        },
+                                    user_screen_name: $("#backdropRegister #backdropRegisterScreenName").val(),
+                                    user_email: $("#backdropRegister #backdropRegisterEmail").val(),
+                                    user_password: $("#backdropRegister #backdropRegisterPassword").val()
+                                  },
             function(result){
                 if(result['success']) {
                     window.location.href = "/documents";

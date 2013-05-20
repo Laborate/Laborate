@@ -50,19 +50,49 @@ exports.logout = function(req, res) {
 };
 
 exports.register = function(req, res) {
-    req.session.user = "6";
-    res.json({"success": true});
+    async.parallel({
+        register: function(callback) {
+            req.body.user_password = aes.encrypt(req.body.user_password, req.body.user_password);
+            mysql_lib.user_insert(callback, req.body);
+        }
+    }, function(error, results){
+        if(!error && results.register) {
+            req.session.user = {
+                id: results.register.insertId,
+                name: req.body.user_name,
+                screen_name: req.body.user_screen_name,
+                email: req.body.user_email,
+                email_hash: crypto.createHash('md5').update(req.body.user_email).digest("hex"),
+                pricing_id: 0,
+                pricing_documents: 0,
+                github: null
+            };
+
+            res.json({"success": true});
+        } else {
+            res.json({
+                "success": false,
+                "error_message": "User Registration Failed"
+            });
+        }
+    });
 };
 
 exports.emailCheck = function(req, res) {
-    if(req.param('user_email') != "1") {
-        res.json({"success": true});
-    } else {
-        res.json({
-            "success": false,
-            "error_message": "Email Already Exists"
-        });
-    }
+    async.parallel({
+        userCount: function(callback) {
+            mysql_lib.user_by_email_count(callback, req.param('user_email'));
+        }
+    }, function(error, results){
+        if(!error && !results.userCount) {
+            res.json({"success": true});
+        } else {
+            res.json({
+                "success": false,
+                "error_message": "Email Already Exists"
+            });
+        }
+    });
 };
 
 exports.restrictAccess = function(req, res, next) {
@@ -72,7 +102,7 @@ exports.restrictAccess = function(req, res, next) {
                 mysql_lib.user_by_id_count(callback, req.session.user.id);
             }
         }, function(error, results){
-            if(!error, results.userCount) {
+            if(!error && results.userCount) {
                 next();
             } else {
                 res.redirect('/logout/');
