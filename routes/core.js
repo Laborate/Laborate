@@ -12,7 +12,7 @@ exports.login = function(req, res) {
         host: req.host,
         title: 'Login',
         mode: 'Login',
-        js: req.app.get("clientJS").renderTags("core", "backdrop"),
+        js: req.app.get("clientJS").renderTags("core", "backdrop", "backdrop_user"),
         css: req.app.get("clientCSS").renderTags("core", "backdrop")
     }
 
@@ -26,7 +26,7 @@ exports.register = function(req, res) {
         host: req.host,
         title: 'Register',
         mode: 'Register',
-        js: req.app.get("clientJS").renderTags("core", "backdrop"),
+        js: req.app.get("clientJS").renderTags("core", "backdrop", "backdrop_user"),
         css: req.app.get("clientCSS").renderTags("core", "backdrop")
     }
 
