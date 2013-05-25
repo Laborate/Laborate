@@ -3,8 +3,8 @@ var crypto = require('crypto');
 var async = require("async");
 
 /* Modules: Custom */
-var aes   = require('../lib/aes');
-var mysql_lib = require('../lib/users_mysql_lib');
+var aes   = require('../lib/core/aes');
+var mysql_lib = require('../lib/mysql/users');
 
 /* Module Exports */
 exports.login = function(req, res) {
@@ -16,7 +16,7 @@ exports.login = function(req, res) {
         user = results.user[0];
 
         if(!error && user) {
-            if(aes.decrypt(user['user_password'], req.param('user_password')) == req.param('user_password')) {
+            if(aes.decrypt(user['user_password'], req.param('user_email')) == req.param('user_password')) {
                 req.session.user = {
                     id: user["user_id"],
                     name: user["user_name"],
@@ -52,7 +52,7 @@ exports.logout = function(req, res) {
 exports.register = function(req, res) {
     async.parallel({
         register: function(callback) {
-            req.body.user_password = aes.encrypt(req.body.user_password, req.body.user_password);
+            req.body.user_password = aes.encrypt(req.param('user_password'), req.param('user_email'));
             mysql_lib.user_insert(callback, req.body);
         }
     }, function(error, results){
@@ -119,4 +119,29 @@ exports.loginCheck = function(req, res, next) {
     } else {
         next();
     }
+};
+
+exports.reload_user = function(req, next) {
+    async.parallel({
+        user: function(callback) {
+            mysql_lib.user_by_id(callback, req.session.user.id);
+        }
+    }, function(error, results){
+        user = results.user[0];
+
+        if(!error && user) {
+            req.session.user = {
+                id: user["user_id"],
+                name: user["user_name"],
+                screen_name: user["user_screen_name"],
+                email: user["user_email"],
+                email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
+                pricing_id: user["user_pricing"],
+                pricing_documents: user["pricing_documents"],
+                github: user["user_github"]
+            };
+        }
+
+        next(null);
+    });
 };

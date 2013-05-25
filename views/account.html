@@ -39,9 +39,9 @@
         <div class="settings_header">Public Profile</div>
         <div class="settings_content">
             <% if(user.github) { %>
-                <a class="button red" href="/php/locations/github_remove_token.php">Deauthorize With Github</a>
+                <a class="button red" href="/account/github_remove_token/">Deauthorize With Github</a>
             <% } else { %>
-                <a class="button green" href="<?php echo $_SESSION['github_auth_url']; ?>">Authorize With Github</a>
+                <a class="button green" href="<%= github_auth_url %>">Authorize With Github</a>
             <% } %>
         </div>
     </div>

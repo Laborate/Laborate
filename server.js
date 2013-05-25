@@ -61,7 +61,7 @@ app.use(app.router);
 require('./routes')(app);
 
 /* Ejs: Import Filters */
-require('./lib/ejs_filters')();
+require('./lib/core/ejs_filters')();
 
 /* Socket IO: Configuration */
 io.configure(function(){

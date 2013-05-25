@@ -25,7 +25,8 @@
     "node-reverse-proxy": "*",
     "connect-slashes": "*",
     "octonode": "*",
-    "jquery": "*"
+    "jquery": "*",
+    "octonode": "*"
   },
   "repository": {
     "type": "git",

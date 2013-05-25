@@ -1,6 +1,7 @@
 var core = require('./core');
-var ajax = require('./ajax');
 var auth = require('./auth');
+var account = require('./account');
+var documents = require('./documents');
 
 module.exports = function(app){
     /* Root Route */
@@ -19,9 +20,10 @@ module.exports = function(app){
     app.get('/logout', auth.logout);
 
     /* Account */
-    app.get('/account', auth.restrictAccess, core.account);
-    app.get('/account/ajax/github', auth.restrictAccess, ajax.account_github);
+    app.get('/account', auth.restrictAccess, account.index);
+    app.get('/account/github_add_token', auth.restrictAccess, account.github_add_token);
+    app.get('/account/github_remove_token', auth.restrictAccess, account.github_remove_token);
 
     /* Documents */
-    app.get('/documents', auth.restrictAccess, core.documents);
+    app.get('/documents', auth.restrictAccess, documents.index);
 }
