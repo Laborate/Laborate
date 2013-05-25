@@ -10,8 +10,8 @@
         "environment": "development"
     },
     "basicAuth": {
-        "username": "test",
-        "password": "test"
+        "username": "",
+        "password": ""
     },
     "cookie_session": {
         "key": "usrs",
@@ -30,8 +30,7 @@
     "github": {
         "id": "",
         "secret": "",
-        "scope": "repo",
-        "url": "https://github.com/login/oauth/authorize"
+        "scope": ["repo", "gist"]
     },
     "email": {
         "mode": "smtp",
