@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "preinstall": "shell/initialize.sh",
-    "start": "node start.js",
-    "stop": "pkill node"
+    "start": "forever start start.js",
   },
   "dependencies": {
     "express": "3.2.1",
