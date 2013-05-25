@@ -38,15 +38,15 @@
     <div id="settings_profile" class="settings">
         <div class="settings_header">Public Profile</div>
         <div class="settings_content">
+        </div>
+    </div>
+    <div id="settings_account" class="settings">
+        <div class="settings_header">Account Settings</div>
             <% if(user.github) { %>
                 <a class="button red" href="/account/github_remove_token/">Deauthorize With Github</a>
             <% } else { %>
                 <a class="button green" href="<%= github_auth_url %>">Authorize With Github</a>
             <% } %>
-        </div>
-    </div>
-    <div id="settings_account" class="settings">
-        <div class="settings_header">Account Settings</div>
         <div class="settings_content"></div>
     </div>
     <div id="settings_emails" class="settings">
