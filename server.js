@@ -4,7 +4,6 @@ var config = require('./config');
 /* Modules: NPM */
 var express    = require('express');
 var app        = express();
-var subdomains = require('express-subdomains');
 var srv        = require('http').createServer(app).listen(config.general.port);;
 var io         = require('socket.io').listen(srv);
 var slashes    = require("connect-slashes");
@@ -16,7 +15,6 @@ var clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
 app.configure(function() {
     clientJS.bind(app,srv);
     clientCSS.bind(app,srv);
-    subdomains.use('api');
     app.engine('html', require('ejs').renderFile);
     app.set('site_title', config.general.site_title);
     app.set('site_delimeter', config.general.site_delimeter);

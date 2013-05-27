@@ -10,7 +10,6 @@
     "express": "3.2.1",
     "ejs": "*",
     "less": "*",
-    "express-subdomains": "*",
     "forever": "*",
     "forever-monitor": "*",
     "redis": "*",
