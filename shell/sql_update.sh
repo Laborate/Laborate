@@ -6,7 +6,7 @@ mysql_password=$2;
 while [[ -z "$mysql_password" ]]; do
     clear;
     read -p "MYSQL Password: " mysql_password;
-    read -p "Is this information correct [y,n]: " mysql_correct;
+    read -p "Is this information correct [Y/n]: " mysql_correct;
 
     if [ "$mysql_correct" == "n" ]; then
         mysql_password=;
