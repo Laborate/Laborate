@@ -5,6 +5,7 @@
     },
     "general": {
         "port": 3000,
+        "subdomains": ["code"],
         "site_title": "Code-Laborate",
         "site_delimeter": " · ",
         "environment": "development"
