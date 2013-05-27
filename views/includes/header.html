@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <% if (typeof(title) !== 'undefined') {
+        <% if (title) {
             title = title + settings.site_delimeter + settings.site_title;
         } else {
             title = settings.site_title;

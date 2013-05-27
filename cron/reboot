@@ -1,3 +1,0 @@
-@reboot $BASE/shell/node_control.sh start
-@reboot $BASE/shell/update_cron.sh
-@reboot $BASE/shell/clear_logs.sh
