@@ -13,7 +13,7 @@
     "forever": "*",
     "forever-monitor": "*",
     "redis": "*",
-    "redis-ns",
+    "redis-ns": "*",
     "piler": "*",
     "socket.io": "*",
     "mysql": "*",
@@ -22,7 +22,7 @@
     "async": "*",
     "connect-slashes": "*",
     "octonode": "*",
-    "jquery": "*",
+    "jquery": "*"
   },
   "repository": {
     "type": "git",
