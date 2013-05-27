@@ -2,6 +2,7 @@ var core = require('./core');
 var auth = require('./auth');
 var account = require('./account');
 var documents = require('./documents');
+var editor = require('./editor');
 
 module.exports = function(app){
     /* Root Route */
@@ -26,4 +27,7 @@ module.exports = function(app){
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);
+
+	/* Editor */
+	app.get('/editor', auth.restrictAccess, editor.index);
 }

@@ -14,7 +14,7 @@
     "forever": "*",
     "forever-monitor": "*",
     "redis": "*",
-    "hiredis": "*",
+    "redis-ns",
     "piler": "*",
     "socket.io": "*",
     "mysql": "*",
