@@ -28,24 +28,46 @@ exports.add_token = function(req, res) {
 };
 
 exports.remove_token = function(req, res) {
-    async.series({
-        remove_token: function(callback) {
-            user_mysql.user_github_remove_token(callback, req.session.user.id);
-        },
-        reload_user: function(callback) {
-            auth.reload_user(req, callback);
-        }
-    }, function(error, results){
-        res.redirect("/account/");
-    });
+    if(req.session.user.github) {
+        async.series({
+            remove_token: function(callback) {
+                user_mysql.user_github_remove_token(callback, req.session.user.id);
+            },
+            reload_user: function(callback) {
+                auth.reload_user(req, callback);
+            }
+        }, function(error, results){
+            res.redirect("/account/");
+        });
+    } else {
+        res.json({});
+    }
 };
 
 exports.user_repos = function(req, res) {
-    async.series({
-        repos: function(callback) {
-            github_lib.user_repos(req.session.user.github, callback);
-        },
-    }, function(error, results){
-        res.json(results.repos);
-    });
+    if(req.session.user.github) {
+        async.series({
+            repos: function(callback) {
+                github_lib.user_repos(req.session.user.github, callback);
+            },
+        }, function(error, results){
+            res.json(results.repos);
+        });
+    } else {
+        res.json({});
+    }
+};
+
+exports.repo_contents = function(req, res) {
+    if(req.session.user.github) {
+        async.series({
+            contents: function(callback) {
+                github_lib.repo_contents(req.session.user.github, req.param("0"), req.param("1"), callback);
+            },
+        }, function(error, results){
+            res.json(results.contents);
+        });
+    } else {
+        res.json({});
+    }
 };
