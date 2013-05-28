@@ -25,7 +25,7 @@ exports.login = function(req, res) {
                     email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
                     pricing_id: user["user_pricing"],
                     pricing_documents: user["pricing_documents"],
-                    github: user["user_github"]
+                    github: aes.decrypt(user["user_github"], user["user_email"])
                 };
 
                 res.json({"success": true});
@@ -103,7 +103,7 @@ exports.restrictAccess = function(req, res, next) {
             }
         }, function(error, results){
             if(!error && results.userCount) {
-                next();
+                if(next) next();
             } else {
                 res.redirect('/logout/');
             }
@@ -117,7 +117,7 @@ exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
         res.redirect('/documents/');
     } else {
-        next();
+        if(next) next();
     }
 };
 
@@ -138,10 +138,10 @@ exports.reload_user = function(req, next) {
                 email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
                 pricing_id: user["user_pricing"],
                 pricing_documents: user["pricing_documents"],
-                github: user["user_github"]
+                github: aes.decrypt(user["user_github"], user["user_email"])
             };
         }
 
-        next(null);
+        if(next) next(error);
     });
 };

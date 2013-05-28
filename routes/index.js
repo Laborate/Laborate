@@ -3,6 +3,7 @@ var auth = require('./auth');
 var account = require('./account');
 var documents = require('./documents');
 var editor = require('./editor');
+var github = require('./github');
 
 module.exports = function(app){
     /* Root Route */
@@ -22,12 +23,15 @@ module.exports = function(app){
 
     /* Account */
     app.get('/account', auth.restrictAccess, account.index);
-    app.get('/account/github_add_token', auth.restrictAccess, account.github_add_token);
-    app.get('/account/github_remove_token', auth.restrictAccess, account.github_remove_token);
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);
 
 	/* Editor */
 	app.get('/editor', auth.restrictAccess, editor.index);
+
+    /* Github */
+    app.get('/github/token/add', auth.restrictAccess, github.add_token);
+    app.get('/github/token/remove', auth.restrictAccess, github.remove_token);
+    app.get('/github/repos', auth.restrictAccess, github.user_repos);
 }

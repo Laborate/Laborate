@@ -2,8 +2,6 @@
 var async = require("async");
 
 /* Modules: Custom */
-var auth = require("./auth");
-var aes   = require('../lib/core/aes');
 var user_mysql = require("../lib/mysql/users");
 var github_lib = require("../lib/github");
 var load_dependencies = require("../lib/core/dependencies");
@@ -27,38 +25,5 @@ exports.index = function(req, res) {
             css: req.app.get("clientCSS").renderTags("core", "account", "header", "icons"),
         }
         res.render('account', data);
-    });
-};
-
-exports.github_add_token = function(req, res) {
-    if(req.param("code")) {
-        async.series({
-            add_token: function(callback) {
-                github_lib.get_token(req.param("code"), function (token) {
-                    token = aes.encrypt(token, req.session.user.email)
-                    user_mysql.user_add_token(callback, req.session.user.id, token);
-                });
-            },
-            reload_user: function(callback) {
-                auth.reload_user(req, callback);
-            }
-        }, function(error, results){
-            res.redirect("/account/");
-        });
-    } else {
-        res.redirect("/account/");
-    }
-};
-
-exports.github_remove_token = function(req, res) {
-    async.series({
-        remove_token: function(callback) {
-            user_mysql.user_remove_token(callback, req.session.user.id);
-        },
-        reload_user: function(callback) {
-            auth.reload_user(req, callback);
-        }
-    }, function(error, results){
-        res.redirect("/account/");
     });
 };
