@@ -34,5 +34,5 @@ module.exports = function(app){
     app.get('/github/token/add', auth.restrictAccess, github.add_token);
     app.get('/github/token/remove', auth.restrictAccess, github.remove_token);
     app.get('/github/repos', auth.restrictAccess, github.user_repos);
-    app.get(/^\/github\/(.*)\/contents\/(.*)\//, auth.restrictAccess, github.repo_contents);
+    app.get(/^\/github\/(.*)\/contents\/(.*)\/?/, auth.restrictAccess, github.repo_contents);
 }

@@ -40,7 +40,7 @@ exports.remove_token = function(req, res) {
             res.redirect("/account/");
         });
     } else {
-        res.json({});
+        res.redirect("/account/");
     }
 };
 
@@ -54,20 +54,28 @@ exports.user_repos = function(req, res) {
             res.json(results.repos);
         });
     } else {
-        res.json({});
+        res.json([]);
     }
 };
 
 exports.repo_contents = function(req, res) {
-    if(req.session.user.github) {
+    if(req.session.user.github && req.session.user.locations) {
         async.series({
             contents: function(callback) {
-                github_lib.repo_contents(req.session.user.github, req.param("0"), req.param("1"), callback);
+                if(req.param("0") in req.session.user.locations) {
+                    github_lib.repo_contents(
+                        req.session.user.github,
+                        req.session.user.locations[req.param("0")],
+                        req.param("1"), callback
+                    );
+                } else {
+                    callback([]);
+                }
             },
         }, function(error, results){
             res.json(results.contents);
         });
     } else {
-        res.json({});
+        res.json([]);
     }
 };

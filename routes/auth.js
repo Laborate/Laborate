@@ -25,7 +25,8 @@ exports.login = function(req, res) {
                     email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
                     pricing_id: user["user_pricing"],
                     pricing_documents: user["pricing_documents"],
-                    github: aes.decrypt(user["user_github"], user["user_email"])
+                    github: aes.decrypt(user["user_github"], user["user_email"]),
+                    locations: aes.decrypt(user["user_locations"], user["user_email"])
                 };
 
                 res.json({"success": true});

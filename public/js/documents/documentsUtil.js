@@ -182,11 +182,12 @@ window.documents = {
 
         //Add Select Class To Github Repository
         $("#popup #popup_location_github ul li").live("click", function() {
-            $("#popup #popup_location_github ul li").removeClass("selected");
-            $(this).addClass("selected");
-            if($("#popup #popup_location_name").val() == "") {
+            if($("#popup #popup_location_name").val() == $("#popup #popup_location_github .selected").text()) {
                 $("#popup #popup_location_name").val($(this).text());
             }
+
+            $("#popup #popup_location_github ul li").removeClass("selected");
+            $(this).addClass("selected");
         });
 
         //Check For Form Submit
@@ -365,7 +366,7 @@ window.documents = {
         );
     },
     githubRepos: function(callback) {
-        $.post("/php/locations/github_repos.php",
+        $.get("/github/repos/",
             function(json) {
                 if(json == "Bad Token") {
                     window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
@@ -373,7 +374,7 @@ window.documents = {
                 }
 
                 var repos = "";
-                $.each(JSON.parse(json), function(i, item) {
+                $.each(json, function(i, item) {
                     repos += '<li>' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
                 });
 
@@ -407,7 +408,7 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            $.post("/php/locations/github_directory.php", { location_id: location_id, dir: path },
+            $.get("/github/" + location_id + "/contents/" + path,
                 function(json) {
                     if(json == "Bad Token") {
                         window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
