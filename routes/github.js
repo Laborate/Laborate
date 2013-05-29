@@ -57,15 +57,11 @@ exports.repo_contents = function(req, res) {
     if(req.session.user.github) {
         async.series({
             contents: function(callback) {
-                if(req.param("0") in req.session.user.locations) {
-                    github_lib.repo_contents(
-                        req.session.user.github,
-                        req.session.user.locations[req.param("0")].github_repository,
-                        req.param("1"), callback
-                    );
-                } else {
-                    callback([]);
-                }
+                github_lib.repo_contents(
+                    req.session.user.github,
+                    req.session.user.locations[req.param("0")].github_repository,
+                    req.param("1"), callback
+                );
             },
         }, function(error, results){
             res.json(results.contents);
