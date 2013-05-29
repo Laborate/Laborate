@@ -28,15 +28,15 @@ module.exports = function(app){
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);
     app.get('/documents/locations', auth.restrictAccess, documents.locations);
+    app.get(/^\/documents\/location\/(\d*)\/(.*)\/?/, auth.restrictAccess, documents.location);
     app.post('/documents/location/create', auth.restrictAccess, documents.create_location);
     app.post('/documents/location/remove', auth.restrictAccess, documents.remove_location);
 
-	/* Editor */
-	app.get('/editor', auth.restrictAccess, editor.index);
+    /* Editor */
+    app.get('/editor', auth.restrictAccess, editor.index);
 
     /* Github */
     app.get('/github/token/add', auth.restrictAccess, github.add_token);
     app.get('/github/token/remove', auth.restrictAccess, github.remove_token);
     app.get('/github/repos', auth.restrictAccess, github.user_repos);
-    app.get(/^\/github\/(.*)\/contents\/(.*)\/?/, auth.restrictAccess, github.repo_contents);
 }
