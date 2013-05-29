@@ -3,6 +3,7 @@ var $ = require("jquery");
 var async = require("async");
 
 /* Modules: Custom */
+var github = require("./github");
 var aes = require("../lib/core/aes");
 var user_mysql = require("../lib/mysql/users");
 var load_dependencies = require("../lib/core/dependencies");
@@ -20,6 +21,19 @@ exports.index = function(req, res) {
     }
 
     res.render('documents', data);
+};
+
+/* Locations */
+exports.location = function(req, res) {
+    if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
+        if(req.session.user.locations[req.param("0")].type == "github") {
+            github.repo_contents(req, res);
+        } else {
+            res.json([]);
+        }
+    } else {
+        res.json([]);
+    }
 };
 
 exports.locations = function(req, res) {
