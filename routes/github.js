@@ -54,7 +54,7 @@ exports.user_repos = function(req, res) {
 };
 
 exports.repo_contents = function(req, res) {
-    if(req.session.user.github && req.session.user.locations) {
+    if(req.session.user.github) {
         async.series({
             contents: function(callback) {
                 if(req.param("0") in req.session.user.locations) {
