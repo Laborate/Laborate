@@ -245,7 +245,7 @@ window.documents = {
                 li += '</span>' + $("#popup #popup_location_name").val() + '</li>';
                 $("#locations ul").append(li);
                 window.documents.popUpClose();
-                $.post("/php/user/update.php", { locations_add: [key, items] });
+                $.post("/documents/location/create/", { locations_add: [key, items] });
             }
             return false;
         });
@@ -261,7 +261,7 @@ window.documents = {
                 window.documents.locationChange("online");
             }
 
-            $.post("/php/user/update.php", { locations_remove: id });
+            $.post("/documents/location/remove/", { locations_remove: id });
 
             if($("#locations.remove ul li").size() == 1) {
                 $("#locations").removeClass("remove");
@@ -274,12 +274,15 @@ window.documents = {
         $("#locations #online").toggle();
     },
     locationListing: function(callback) {
-        $.post("/php/locations/locations_listing.php",
+        $.get("/documents/locations/",
             function(json) {
                 var locations = "";
-                $.each(JSON.parse(json), function(i, item) {
+                $.each(json, function(i, item) {
+                    if(item["type"] == "github") { var icon = "icon-github"; }
+                    else if(item["type"] == "sftp") { var icon = "icon-drawer"; }
+                    else { var icon = "icon-storage"; }
                     locations += '<li id="' + item['key'] + '" data="' + item['type'] + '">';
-                    locations += '<span class="icon ' + item['icon'] + '"></span>' + item['name'] + '</li>';
+                    locations += '<span class="icon ' + icon + '"></span>' + item['name'] + '</li>';
                 });
                 $("#locations ul").append(locations);
 

@@ -23,20 +23,20 @@ exports.login = function(req, res) {
                         exports.reload_user(req, callback);
                     },
                     function(callback) {
-                        res.json({"success": true});
+                        res.json({success: true});
                         callback(null);
                     }
                 ]);
             } else {
                 res.json({
-                    "success": false,
-                    "error_message": "Incorrect Email or Password"
+                    success: false,
+                    error_message: "Incorrect Email or Password"
                 });
             }
         } else {
            res.json({
-                "success": false,
-                "error_message": "Incorrect Email or Password"
+                success: false,
+                error_message: "Incorrect Email or Password"
             });
         }
     });
@@ -61,14 +61,14 @@ exports.register = function(req, res) {
                     exports.reload_user(req, callback);
                 },
                 function(callback) {
-                    res.json({"success": true});
+                    res.json({success: true});
                     callback(null);
                 }
             ]);
         } else {
             res.json({
-                "success": false,
-                "error_message": "User Registration Failed"
+                success: false,
+                error_message: "User Registration Failed"
             });
         }
     });
@@ -91,8 +91,8 @@ exports.reload_user = function(req, next) {
                 email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
                 pricing_id: user["user_pricing"],
                 pricing_documents: user["pricing_documents"],
-                github: aes.decrypt(user["user_github"], user["user_email"]),
-                locations: aes.decrypt(user["user_locations"], user["user_email"])
+                github: aes.decrypt(String(user["user_github"]), user["user_email"]),
+                locations: JSON.parse(aes.decrypt(String(user["user_locations"]), user["user_email"]))
             };
         }
         if(next) next(error);
@@ -106,11 +106,11 @@ exports.emailCheck = function(req, res) {
         }
     }, function(error, results){
         if(!error && !results.userCount) {
-            res.json({"success": true});
+            res.json({success: true});
         } else {
             res.json({
-                "success": false,
-                "error_message": "Email Already Exists"
+                success: false,
+                error_message: "Email Already Exists"
             });
         }
     });
