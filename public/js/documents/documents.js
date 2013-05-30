@@ -2,19 +2,17 @@
 window.onpopstate = function() {
    var passed = true;
     $.each(initialCheckList, function( key, value ) {
-        if(value != true) {
-            passed = false;
-        }
+        passed = value;
     });
 
     if(passed) {
-        window.documents.locationChange(getUrlVars()['loc'], true);
-        if(getUrlVars()['type'] == undefined) {
+        location_parts = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href)
+        if(location_parts) window.documents.locationChange(location_parts[1], true);
+
+        if(location_parts) {
+           window.documents.locationDirectory(location_parts[1], location_parts[2], true);
+        } else {
             window.documents.onlineDirectory(true);
-        } else if(getUrlVars()['type'] == "github") {
-            window.documents.githubDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
-        } if(getUrlVars()['type'] == "sftp") {
-            window.documents.sftpDirectory(getUrlVars()['loc'], getUrlVars()['dir'], true);
         }
     }
 };
