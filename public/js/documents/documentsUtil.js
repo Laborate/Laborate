@@ -411,7 +411,7 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            $.get("/github/" + location_id + "/contents/" + path,
+            $.get("/documents/location/" + location_id + "/" + path,
                 function(json) {
                     if(json == "Bad Token") {
                         window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");

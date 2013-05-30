@@ -81,7 +81,6 @@ exports.reload_user = function(req, next) {
         }
     }, function(error, results){
         user = results.user[0];
-
         if(!error && user) {
             req.session.user = {
                 id: user["user_id"],
