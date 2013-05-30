@@ -28,3 +28,38 @@ exports.register = function(req, res) {
 
     res.render('register', data);
 };
+
+exports.not_found = function(req, res) {
+    res.status(404);
+
+    res.format({
+        'text/plain': function(){
+            res.send("404 - Page Not Found");
+        },
+        'text/html': function(){
+            load_dependencies(req);
+
+            var data = {
+                host: req.host,
+                title: 'Not Found',
+                mode: 'Not Found',
+                js: req.app.get("clientJS").renderTags("core", "backdrop"),
+                css: req.app.get("clientCSS").renderTags("core", "backdrop")
+            }
+
+            res.render('not_found', data);
+        },
+        'json': function(){
+            res.json({
+                success: false,
+                error_message: "404 - Page Not Found"
+            });
+        },
+        'application/json': function(){
+            res.json({
+                success: false,
+                error_message: "404 - Page Not Found"
+            });
+        }
+    });
+};
