@@ -87,28 +87,15 @@ $(".online.file .file_attributes").live("click", function() {
     return false;
 });
 
-$(".github.file .file_attributes").live("click", function() {
+$(".external.file .file_attributes").live("click", function() {
     var type = $(this).attr("data");
 
     if(type == "folder") {
-        window.documents.githubDirectory(window.sidebar, $(this).parent().attr("data"));
+        window.documents.locationDirectory(window.sidebar, $(this).parent().attr("data"));
     }
 
     if(type == "file") {
-        window.documents.githubFile(window.sidebar, $(this));
-    }
-    return false;
-});
-
-$(".sftp.file .file_attributes").live("click", function() {
-    var type = $(this).attr("data");
-
-    if(type == "folder") {
-        window.documents.sftpDirectory(window.sidebar, $(this).parent().attr("data"));
-    }
-
-    if(type == "file") {
-        window.documents.sftpFile(window.sidebar, $(this));
+        window.documents.locationFile(window.sidebar, $(this));
     }
     return false;
 });

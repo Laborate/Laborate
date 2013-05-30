@@ -139,12 +139,7 @@ window.documents = {
            $("#files #location_template #file_library").html("");
            $("#files #location_template").show();
            if(!dont_pull_content) {
-                if(type == "github") {
-                   window.documents.githubDirectory(location_id);
-                }
-                else if(type == "sftp") {
-                   window.documents.sftpDirectory(location_id);
-                }
+                window.documents.locationDirectory(location_id);
             }
         }
 
@@ -286,11 +281,7 @@ window.documents = {
                 });
                 $("#locations ul").append(locations);
 
-                if(callback == undefined) {
-                    callback = function(){}
-                }
-
-                callback(true);
+                if(callback) callback(true);
             }
         );
     },
@@ -330,13 +321,13 @@ window.documents = {
                 session_type: type, session_external_path:  path,
                 session_location_id: location_id },
             function(id) {
-                callback(id);
+                if(callback) callback(id);
             }
         );
     },
     onlineDirectory: function(no_history, callback) {
         window.notification.open("loading...");
-        $.post("/php/locations/online_directory.php",
+        $.post("/documents/files/",
             function(json) {
                 var files = "";
                 var type_convert = {"github":"icon-github", "sftp":"icon-drawer"};
@@ -356,15 +347,12 @@ window.documents = {
 
                 $("#files #location_online #file_library").append(files);
 
-                if(callback == undefined) {
-                    callback = function(){}
-                }
-
                 window.notification.close();
                 if(!no_history) {
                     history.pushState(null, null, "/documents/");
                 }
-                callback(true);
+
+                if(callback) callback(true);
             }
         );
     },
@@ -387,25 +375,17 @@ window.documents = {
                     $("#popup_location_github #github_empty").show();
                 }
 
-                if(callback == undefined) {
-                    callback = function(){}
-                }
-
-                callback(true);
+                if(callback) callback(true);
             }
         );
     },
-    githubDirectory: function(location_id, path, no_history, callback) {
+    locationDirectory: function(location_id, path, no_history, callback) {
         window.notification.open("loading...");
         var response = window.documents.cachedLocations(location_id);
         var files = "";
 
-        if(path == undefined || path == "" || path == "/") {
-            var dir = "";
+        if(path == undefined || path == "/") {
             path = "";
-        }
-        else {
-            var dir = "&dir=" + path;
         }
 
         if(response[path] != undefined) {
@@ -437,7 +417,7 @@ window.documents = {
 
                 var title = window.documents.nameToTitle(item["name"]);
 
-                var template = '<div location_id="github_' + item["path"] + '" class="file github" data="' + item["path"] + '">';
+                var template = '<div class="file external" data="' + item["path"] + '">';
                 template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
                 template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
                 template += '</div>';
@@ -446,18 +426,15 @@ window.documents = {
             $("#files #location_template #file_library").html(files);
             window.notification.close();
 
-            if(no_history != true) {
-                history.pushState(null, null, "?type=github&loc=" + location_id + dir);
+            if(!no_history) {
+                path = (path.substr(-1) != '/' && path) ? path + "/" : path;
+                history.pushState(null, null, "/documents/location/" + location_id + "/" + path);
             }
 
-            if(callback == undefined) {
-                callback = function(){}
-            }
-
-            callback(true);
+            if(callback) callback(true);
         }
     },
-    githubFile: function(location_id, file) {
+    locationFile: function(location_id, file) {
         var path = file.parent().attr("data");
         window.notification.open("downloading...");
 
@@ -476,97 +453,6 @@ window.documents = {
                 window.documents.newFile(file.parent().find(".title").attr("data"),
                                          JSON.stringify(contents.split('\n')),
                                          "github", path, location_id,
-                     function(id) {
-                         window.documents.goToLink("/editor/?i=" + id);
-                         window.notification.close();
-                     }
-                );
-            }
-        );
-    },
-    sftpDirectory: function(location_id, path, no_history, callback) {
-        window.notification.open("loading...");
-        var response = window.documents.cachedLocations(location_id);
-        var files = "";
-
-        if(path == undefined || path == "") {
-            var dir = "";
-            path = "";
-        }
-        else {
-            var dir = "&dir=" + path;
-        }
-
-        if(response[path] != undefined) {
-            finish(response[path]);
-        } else {
-            $.post("/php/locations/sftp_directory.php", { location_id: location_id, dir: path },
-                function(json) {
-                    if(json == "Bad Credentials") {
-                        window.notification.open("Bad SFTP Credentials");
-                        return false;
-                    }
-
-                    if(json == "Bad Location" || json == "Not SFTP Location") {
-                        window.notification.open("Location Does Not Exist");
-                        return false;
-                    }
-
-                    window.documents.addcachedLocation(location_id, path, json);
-                    finish(json);
-                }
-            );
-        }
-
-        function finish(response) {
-            $.each(JSON.parse(response), function(i, item) {
-                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
-                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
-                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
-
-                var title = window.documents.nameToTitle(item["name"]);
-
-                if(item["path"] != null) {
-                    var template = '<div location_id="sftp_' + item["path"] + '" class="file sftp" data="' + item["path"] + '">';
-                    template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                    template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
-                    template += '</div>';
-                    files += template;
-                }
-            });
-            $("#files #location_template #file_library").html(files);
-            window.notification.close();
-
-            if(!no_history) {
-                history.pushState(null, null, "?type=sftp&loc=" + location_id + dir);
-            }
-
-            if(callback == undefined) {
-                callback = function(){}
-            }
-
-            callback(true);
-        }
-    },
-    sftpFile: function(location_id, file) {
-        var path = file.parent(".file").attr("data");
-        window.notification.open("downloading...");
-
-        $.post("/php/locations/sftp_file.php", { location_id: location_id, file: path },
-            function(json) {
-                if(json == "Bad Credentials") {
-                    window.notification.open("Bad SFTP Credentials");
-                    return false;
-                }
-
-                if(json == "Bad Location" || json == "Not SFTP Location") {
-                    window.notification.open("Location Does Not Exist");
-                    return false;
-                }
-
-                window.documents.newFile(file.parent().find(".title").attr("data"),
-                                         JSON.stringify(json.split('\n')),
-                                         "sftp", path, location_id,
                      function(id) {
                          window.documents.goToLink("/editor/?i=" + id);
                          window.notification.close();

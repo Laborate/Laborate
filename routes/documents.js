@@ -25,14 +25,18 @@ exports.index = function(req, res) {
 
 /* Locations */
 exports.location = function(req, res) {
-    if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
-        if(req.session.user.locations[req.param("0")].type == "github") {
-            github.repo_contents(req, res);
+    if(req.xhr) {
+        if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
+            if(req.session.user.locations[req.param("0")].type == "github") {
+                github.repo_contents(req, res);
+            } else {
+                res.json([]);
+            }
         } else {
             res.json([]);
         }
     } else {
-        res.json([]);
+        exports.index(req, res);
     }
 };
 
