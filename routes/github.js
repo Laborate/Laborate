@@ -2,7 +2,8 @@
 var async = require("async");
 
 /* Modules: Custom */
-var aes   = require('../lib/core/aes');
+var aes = require('../lib/core/aes');
+var github_lib = require("../lib/github");
 var user_mysql = require("../lib/mysql/users");
 var github_lib = require("../lib/github");
 
@@ -45,14 +46,23 @@ exports.user_repos = function(req, res) {
             repos: function(callback) {
                 github_lib.user_repos(req.session.user.github, callback);
             },
-        }, function(error, results){
+        }, function(error, results) {
             if(!error) {
                 res.json(results.repos);
             } else {
-                res.json({
-                    success: false,
-                    error_message: "Failed To Load Github Repos"
-                });
+                if(error.message == "Bad credentials") {
+                    res.json({
+                        success: false,
+                        error_message: "Bad Github Oauth Token",
+                        github_oath: github_lib.auth_url
+                    });
+
+                } else {
+                    res.json({
+                        success: false,
+                        error_message: "Failed To Load Github Contents"
+                    });
+                }
             }
         });
     } else {
@@ -77,10 +87,19 @@ exports.repo_contents = function(req, res) {
             if(!error) {
                 res.json(results.contents);
             } else {
-                res.json({
-                    success: false,
-                    error_message: "Failed To Load Github Contents"
-                });
+                if(error.message == "Bad credentials") {
+                    res.json({
+                        success: false,
+                        error_message: "Bad Github Oauth Token",
+                        github_oath: github_lib.auth_url
+                    });
+
+                } else {
+                    res.json({
+                        success: false,
+                        error_message: "Failed To Load Github Contents"
+                    });
+                }
             }
         });
     } else {
