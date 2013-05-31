@@ -8,7 +8,11 @@ var initialCheckList = {
 $(window).ready(function() {
     window.notification.open("loading...");
     location_parts = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href)
-    if(location_parts) window.documents.locationChange(location_parts[1], true);
+    if(location_parts) {
+        window.documents.locationChange(location_parts[1], true);
+    } else {
+        window.documents.locationChange("online", true);
+    }
 
     window.documents.locationListing(function(callback) {
         initialCheckList['location_listings'] = callback;

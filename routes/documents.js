@@ -23,6 +23,10 @@ exports.index = function(req, res) {
     res.render('documents', data);
 };
 
+exports.files = function(req, res) {
+    res.json([]);
+};
+
 /* Locations */
 exports.location = function(req, res) {
     if(req.xhr) {

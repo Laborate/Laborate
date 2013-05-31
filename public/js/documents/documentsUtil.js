@@ -126,7 +126,7 @@ window.documents = {
         $("#" + location_id).addClass("selected");
         var type = $("#" + location_id).attr("data");
 
-        if(location_id == "online" || location_id == undefined) {
+        if(location_id == "online" || !location_id) {
             $("#online").addClass("selected");
             $("#files #location_online #file_library").html("");
             $("#files #location_online").show();
@@ -327,11 +327,11 @@ window.documents = {
     },
     onlineDirectory: function(no_history, callback) {
         window.notification.open("loading...");
-        $.post("/documents/files/",
+        $.get("/documents/files/",
             function(json) {
                 var files = "";
                 var type_convert = {"github":"icon-github", "sftp":"icon-drawer"};
-                $.each(JSON.parse(json), function(i, item) {
+                $.each(json, function(i, item) {
                     var file = '<div id="file_' + item['id'] + '" class="file online" data="' + item['id'] + '">';
                     file += '<div class="file_attributes icon ' + item['protection'] + '" data="' + item['protection'] + '">';
                     if(item['type'] != "" && item['type'] != undefined) {

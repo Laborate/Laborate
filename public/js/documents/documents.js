@@ -68,7 +68,13 @@ $("#locations #remove_location, #locations #finished_remove_location").live("cli
 });
 
 //Search
-$(".file_search select").live("change", function() { $(this).parent("form").submit(); });
+$(".file_search input").live("keyup", function() {
+    $(this).parent("form").submit();
+});
+
+$(".file_search select").live("change", function() {
+    $(this).parent("form").submit();
+});
 
 $(".file_search #clearSearch").live("click", function() {
     window.documents.fileSearchClear($(this));

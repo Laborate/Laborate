@@ -27,6 +27,7 @@ module.exports = function(app){
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);
+    app.get('/documents/files', auth.restrictAccess, documents.files);
     app.get('/documents/locations', auth.restrictAccess, documents.locations);
     app.get(/^\/documents\/location\/(\d*)\/(.*)/, auth.restrictAccess, documents.location);
     app.post('/documents/location/create', auth.restrictAccess, documents.create_location);
