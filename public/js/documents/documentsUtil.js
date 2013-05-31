@@ -393,18 +393,19 @@ window.documents = {
         } else {
             $.get("/documents/location/" + location_id + "/" + path,
                 function(json) {
-                    if(json == "Bad Token") {
-                        window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
-                        return false;
-                    }
+                    if("error_message" in json) {
+                        if(json.error_message == "Bad Github Oauth Token") {
+                            var oath_url = json.github_oath + "&redirect_uri=" + encodeURI(window.location.href);
+                            window.notification.open("Opps! Github Needs To Be <a href='" + oath_url + "'>Reauthorized</a>");
+                            alert(oath_url);
+                        } else {
+                            window.notification.open(json.error_message);
+                        }
 
-                    if(json == "Bad Location" || json == "Not Github Location") {
-                        window.notification.open("Location Does Not Exist");
-                        return false;
+                    } else {
+                        window.documents.addcachedLocation(location_id, path, json);
+                        finish(json);
                     }
-
-                    window.documents.addcachedLocation(location_id, path, json);
-                    finish(json);
                 }
             );
         }
@@ -420,7 +421,7 @@ window.documents = {
 
                 var template = '<div class="file external" data="' + item["path"] + '">';
                 template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                template += '<div class="title" data="' + item["name"] + '">' + title + '</div>';
+                template += '<div class="title" data="' + item["name"] + '">' + item["name"] + '</div>';
                 template += '</div>';
                 files += template;
             });
