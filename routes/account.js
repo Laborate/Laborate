@@ -9,7 +9,7 @@ var load_dependencies = require("../lib/core/dependencies");
 exports.index = function(req, res) {
     async.parallel({
         pass_sessions_count: function(callback) {
-            user_mysql.user_pass_sessions_count(callback, req.session.user.id);
+            user_mysql.user_pass_documents_count(callback, req.session.user.id);
         }
     }, function(error, results){
         load_dependencies(req);

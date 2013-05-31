@@ -46,10 +46,20 @@ exports.user_repos = function(req, res) {
                 github_lib.user_repos(req.session.user.github, callback);
             },
         }, function(error, results){
-            res.json(results.repos);
+            if(!error) {
+                res.json(results.repos);
+            } else {
+                res.json({
+                    success: false,
+                    error_message: "Failed To Load Github Repos"
+                });
+            }
         });
     } else {
-        res.json([]);
+        res.json({
+            success: false,
+            error_message: "Github Oauth Token Required"
+        });
     }
 };
 
@@ -64,9 +74,19 @@ exports.repo_contents = function(req, res) {
                 );
             },
         }, function(error, results){
-            res.json(results.contents);
+            if(!error) {
+                res.json(results.contents);
+            } else {
+                res.json({
+                    success: false,
+                    error_message: "Failed To Load Github Contents"
+                });
+            }
         });
     } else {
-        res.json([]);
+        res.json({
+            success: false,
+            error_message: "Github Oauth Token Required"
+        });
     }
 };

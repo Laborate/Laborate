@@ -413,6 +413,7 @@ window.documents = {
             $.each(response, function(i, item) {
                 if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
                 if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
+                if(item["type"] == "symlink") { var type = "folder"; var icon = "folder"; var type_title = "symlink"; }
                 if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
 
                 var title = window.documents.nameToTitle(item["name"]);

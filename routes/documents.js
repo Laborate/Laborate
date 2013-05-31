@@ -6,6 +6,7 @@ var async = require("async");
 var github = require("./github");
 var aes = require("../lib/core/aes");
 var user_mysql = require("../lib/mysql/users");
+var documments_mysql = require("../lib/mysql/users");
 var load_dependencies = require("../lib/core/dependencies");
 
 exports.index = function(req, res) {
@@ -34,10 +35,16 @@ exports.location = function(req, res) {
             if(req.session.user.locations[req.param("0")].type == "github") {
                 github.repo_contents(req, res);
             } else {
-                res.json([]);
+                res.json({
+                    success: false,
+                    error_message: "Location Type Unknown"
+                });
             }
         } else {
-            res.json([]);
+            res.json({
+                success: false,
+                error_message: "Could Not Find Location"
+            });
         }
     } else {
         exports.index(req, res);
@@ -69,7 +76,10 @@ exports.locations = function(req, res) {
         if(!error) {
             res.json(results.locations);
         } else {
-            res.json([]);
+            res.json({
+                success: false,
+                error_message: "Failed To Load Locations"
+            });
         }
     });
 };
@@ -90,12 +100,12 @@ exports.create_location = function(req, res) {
         }
     ], function(error) {
         if(!error) {
+            res.json({success: true});
+        } else {
             res.json({
                 success: false,
                 error_message: "Failed To Create Location"
             });
-        } else {
-            res.json({success: true});
         }
     });
 };
@@ -116,13 +126,13 @@ exports.remove_location = function(req, res) {
                 user_mysql.user_locations(callback, req.session.user.id, locations);
             }
         ], function(error) {
-            if(!error) {
+            if(error) {
+                res.json({success: true});
+            } else {
                 res.json({
                     success: false,
                     error_message: "Failed To Remove Location"
                 });
-            } else {
-                res.json({success: true});
             }
         });
     } else {
