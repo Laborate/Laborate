@@ -19,11 +19,7 @@
         "secret": ""
     },
     "mysql": {
-        "database": "",
-        "username": "",
-        "password": ""
-    },
-    "redis": {
+        "host": "",
         "database": "",
         "username": "",
         "password": ""
