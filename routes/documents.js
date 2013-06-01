@@ -39,7 +39,7 @@ exports.files = function(req, res) {
                     name: value.code_document_name,
                     password: value.code_document_password,
                     location: value.code_document_location,
-                    allocation: value.code_allocation_name
+                    role: value.code_role_name
                 });
             });
 

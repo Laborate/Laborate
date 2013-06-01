@@ -330,7 +330,7 @@ window.documents = {
                     var protection = (item['password']) ? "password" : "open";
                     var file = '<div id="file_' + item['id'] + '" class="file online" data="' + item['id'] + '">';
                     file += '<div class="file_attributes icon ' + protection + '" data="' + protection + '">';
-                    file += item['allocation'].toLowerCase();
+                    file += item['role'].toLowerCase();
                     file += '</div>';
                     file += '<div class="title" data="' + item['name'] + '">';
                     file += window.documents.nameToTitle(item['name']);
