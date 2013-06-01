@@ -1,16 +1,27 @@
 //Url Parameters
-window.url_params = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href);
+window.url_params = function() {
+    params = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href);
+    params_dict = {};
+
+    if(params) {
+        params_dict["location"] = params[1];
+        params_dict["dir"] = params[2];
+    } else {
+        params_dict["location"] = "online";
+        params_dict["dir"] = "";
+    }
+    return params_dict;
+}
 
 //History Change
 window.onpopstate = function() {
-   var location = (window.url_params) ? [window.url_params[1], window.url_params[2]]  : ["online", ""];
-   window.documents.locationChange(location[0], location[1]);
+   window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
 };
 
 $(".newFile").live("click", function() {
     window.notification.open("creating file in current directory...");
-    if(getUrlVars()['dir'] != undefined) {
-        var path = getUrlVars()['dir'] + "Untitled Document".replace("//", "/");
+    if(window.url_params()["dir"]) {
+        var path = window.url_params()["dir"] + "Untitled Document";
     } else {
         var path = "";
     }

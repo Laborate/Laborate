@@ -1,8 +1,7 @@
-//Get the URL Variables
-function getUrlVars() {
-   var vars = {};
-   var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-   function(m,key,value) {vars[key] = value;}); return vars;
+Array.prototype.remove = function(from, to) {
+  var rest = this.slice((to || from) + 1 || this.length);
+  this.length = from < 0 ? this.length + from : from;
+  return this.push.apply(this, rest);
 };
 
 function createRange() {

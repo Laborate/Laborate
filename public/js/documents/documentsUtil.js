@@ -120,7 +120,7 @@ window.documents = {
         else { var title = name; }
         return title;
     },
-    locationChange: function(location_id, path) {
+    locationChange: function(location_id, path, no_history) {
         $("#files .location").hide();
         $("#locations ul li").removeClass("selected");
         $("#" + location_id).addClass("selected");
@@ -130,11 +130,11 @@ window.documents = {
             $("#files #location_online #file_library").html("");
             $("#files #location_online").show();
             location_id = "online";
-            window.documents.onlineDirectory();
+            window.documents.onlineDirectory(no_history);
         } else {
            $("#files #location_template #file_library").html("");
            $("#files #location_template").show();
-           window.documents.locationDirectory(location_id, path);
+           window.documents.locationDirectory(location_id, path, no_history);
         }
 
         window.sidebar = location_id;
@@ -318,7 +318,7 @@ window.documents = {
             }
         );
     },
-    onlineDirectory: function() {
+    onlineDirectory: function(no_history) {
         window.notification.open("loading...");
         $.get("/documents/files/",
             function(json) {
@@ -338,7 +338,7 @@ window.documents = {
                 $("#files #location_online #file_library").append(files);
 
                 window.notification.close();
-                history.pushState(null, null, "/documents/");
+                if(!no_history) history.pushState(null, null, "/documents/");
             }
         );
     },
@@ -363,7 +363,7 @@ window.documents = {
             }
         );
     },
-    locationDirectory: function(location_id, path) {
+    locationDirectory: function(location_id, path, no_history) {
         window.notification.open("loading...");
         var response = window.documents.cachedLocations(location_id);
         var files = "";
@@ -412,7 +412,7 @@ window.documents = {
             $("#files #location_template #file_library").html(files);
             window.notification.close();
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
-            history.pushState(null, null, "/documents/location/" + location_id + "/" + path);
+            if(!no_history) history.pushState(null, null, "/documents/location/" + location_id + "/" + path);
         }
     },
     locationFile: function(location_id, file) {
