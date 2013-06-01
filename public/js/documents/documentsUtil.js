@@ -320,8 +320,11 @@ window.documents = {
     },
     onlineDirectory: function(no_history) {
         window.notification.open("loading...");
-        $.get("/documents/files/",
-            function(json) {
+        $.get("/documents/files/", function(json) {
+            if("error_message" in json) {
+                window.notification.open(json.error_message);
+
+            } else {
                 var files = "";
                 $.each(json, function(i, item) {
                     var protection = (item['password']) ? "password" : "open";
@@ -340,28 +343,32 @@ window.documents = {
                 window.notification.close();
                 if(!no_history) history.pushState(null, null, "/documents/");
             }
-        );
+        });
     },
     githubRepos: function() {
-        $.get("/github/repos/",
-            function(json) {
-                if(json == "Bad Token") {
-                    window.notification.open("Opps! Github Needs To Be <a href='/account?github=2'>Reauthorized</a>");
-                    return false;
-                }
+        $.get("/github/repos/", function(json) {
+            if("error_message" in json) {
+                    if(json.error_message == "Bad Github Oauth Token") {
+                        var oath_url = json.github_oath + "&redirect_uri=" + encodeURI(window.location.href);
+                        window.notification.open("Opps! Github Needs To Be <a href='" + oath_url + "'>Reauthorized</a>");
+                        alert(oath_url);
+                    } else {
+                        window.notification.open(json.error_message);
+                    }
 
-                var repos = "";
-                $.each(json, function(i, item) {
-                    repos += '<li>' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
-                });
-
-                if(repos) {
-                    $("#popup_location_github").append("<ul>" + repos + "</ul>");
                 } else {
-                    $("#popup_location_github #github_empty").show();
+                    var repos = "";
+                    $.each(json, function(i, item) {
+                        repos += '<li>' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
+                    });
+
+                    if(repos) {
+                        $("#popup_location_github").append("<ul>" + repos + "</ul>");
+                    } else {
+                        $("#popup_location_github #github_empty").show();
+                    }
                 }
-            }
-        );
+        });
     },
     locationDirectory: function(location_id, path, no_history) {
         window.notification.open("loading...");

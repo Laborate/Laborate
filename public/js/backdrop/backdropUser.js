@@ -18,9 +18,7 @@ $("#backdropSigIn").live("submit", function() {
                                         },
             function(result){
                 if(result['success']) {
-                    var urlContinue = getUrlVars()['continue'];
-                    if(urlContinue == null || urlContinue == "") { window.location.href = "/documents"; }
-                    else { window.location.href = urlContinue; }
+                    window.location.href = "/documents";
                 }
                 else {
                     $("#backdropInital .textError").text(result['error_message']).fadeIn();

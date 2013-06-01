@@ -125,49 +125,41 @@ exports.restrictAccess = function(req, res, next) {
             if(!error && results.userCount) {
                 if(next) next();
             } else {
-                res.format({
-                    'text/plain': function(){
-                        res.send("Login Required");
-                    },
-                    'text/html': function(){
-                        res.redirect('/logout/');
-                    },
-                    'json': function(){
-                        res.json({
-                            success: false,
-                            error_message: "404 - Page Not Found"
-                        });
-                    },
-                    'application/json': function(){
-                        res.json({
-                            success: false,
-                            error_message: "Login Required"
-                        });
-                    }
-                });
+                failed();
             }
         });
     } else {
-        res.format({
-            'text/plain': function(){
-                res.send("Login Required");
-            },
-            'text/html': function(){
-                res.redirect('/logout/');
-            },
-            'json': function(){
-                res.json({
-                    success: false,
-                    error_message: "404 - Page Not Found"
-                });
-            },
-            'application/json': function(){
-                res.json({
-                    success: false,
-                    error_message: "Login Required"
-                });
-            }
-        });
+        failed();
+    }
+
+    function failed() {
+        if(req.xhr) {
+            res.json({
+                success: false,
+                error_message: "Login Required"
+            });
+        } else {
+            res.format({
+                'text/plain': function(){
+                    res.send("Login Required");
+                },
+                'text/html': function(){
+                    res.redirect('/logout/');
+                },
+                'json': function(){
+                    res.json({
+                        success: false,
+                        error_message: "Login Required"
+                    });
+                },
+                'application/json': function(){
+                    res.json({
+                        success: false,
+                        error_message: "Login Required"
+                    });
+                }
+            });
+        }
     }
 };
 
