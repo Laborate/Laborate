@@ -1,7 +1,9 @@
+//Url Parameters
+window.url_params = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href);
+
 //History Change
 window.onpopstate = function() {
-   var location_parts = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href)
-   var location = (location_parts) ? [location_parts[1], location_parts[2]]  : ["online", ""];
+   var location = (window.url_params) ? [window.url_params[1], window.url_params[2]]  : ["online", ""];
    window.documents.locationChange(location[0], location[1]);
 };
 
