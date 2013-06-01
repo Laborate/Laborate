@@ -6,7 +6,7 @@ var async = require("async");
 var github = require("./github");
 var aes = require("../lib/core/aes");
 var user_mysql = require("../lib/mysql/users");
-var documments_mysql = require("../lib/mysql/users");
+var documments_mysql = require("../lib/mysql/users/documents");
 var load_dependencies = require("../lib/core/dependencies");
 
 exports.index = function(req, res) {
@@ -25,7 +25,20 @@ exports.index = function(req, res) {
 };
 
 exports.files = function(req, res) {
-    res.json([]);
+    async.series({
+        user_files: function(callback) {
+            documments_mysql.documents_by_user(callback, req.session.user.id);
+        }
+    }, function(error, results) {
+        if(!error) {
+            res.json(results.user_files);
+        } else {
+            res.json({
+                success: false,
+                error_message: "Failed To Load Your Files"
+            });
+        }
+    });
 };
 
 /* Locations */
