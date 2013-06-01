@@ -230,8 +230,8 @@ window.documents = {
                 else { var icon = "icon-storage"; }
                 var key = Math.floor((Math.random()*10000)+1);
                 var li = '<li id="' + key +'" data="' + type_icon + '">';
-                li += '<span class="icon ' + icon + '">';
-                li += '</span>' + $("#popup #popup_location_name").val() + '</li>';
+                li += '<span class="icon ' + icon + '"></span>';
+                li += '<span class="location_name">' + $("#popup #popup_location_name").val() + '</span></li>';
                 $("#locations ul").append(li);
                 window.documents.popUpClose();
                 $.post("/documents/location/create/", { locations_add: [key, items] });
@@ -271,7 +271,8 @@ window.documents = {
                     else if(item["type"] == "sftp") { var icon = "icon-drawer"; }
                     else { var icon = "icon-storage"; }
                     locations += '<li id="' + item['key'] + '" data="' + item['type'] + '">';
-                    locations += '<span class="icon ' + icon + '"></span>' + item['name'] + '</li>';
+                    locations += '<span class="icon ' + icon + '"></span>';
+                    locations += '<span class="location_name">' + item['name'] + '</span></li>';
                 });
                 $("#locations ul").append(locations);
                 $("#" + location).addClass("selected");
@@ -328,8 +329,9 @@ window.documents = {
                 var files = "";
                 $.each(json, function(i, item) {
                     var protection = (item['password']) ? "password" : "open";
+                    var location = (item['location']) ? item['location'] : "";
                     var file = '<div id="file_' + item['id'] + '" class="file online" data="' + item['id'] + '">';
-                    file += '<div class="file_attributes icon ' + protection + '" data="' + protection + '">';
+                    file += '<div class="file_attributes icon ' + protection + '" data="' + location + '">';
                     file += item['role'].toLowerCase();
                     file += '</div>';
                     file += '<div class="title" data="' + item['name'] + '">';
