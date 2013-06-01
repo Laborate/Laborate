@@ -1,20 +1,8 @@
 //History Change
 window.onpopstate = function() {
-   var passed = true;
-    $.each(initialCheckList, function( key, value ) {
-        passed = value;
-    });
-
-    if(passed) {
-        location_parts = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href)
-        if(location_parts) window.documents.locationChange(location_parts[1], true);
-
-        if(location_parts) {
-           window.documents.locationDirectory(location_parts[1], location_parts[2], true);
-        } else {
-            window.documents.onlineDirectory(true);
-        }
-    }
+   var location_parts = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href)
+   var location = (location_parts) ? [location_parts[1], location_parts[2]]  : ["online", ""];
+   window.documents.locationChange(location[0], location[1]);
 };
 
 $(".newFile").live("click", function() {

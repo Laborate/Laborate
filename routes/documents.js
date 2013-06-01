@@ -31,7 +31,19 @@ exports.files = function(req, res) {
         }
     }, function(error, results) {
         if(!error) {
-            res.json(results.user_files);
+            var files = [];
+
+            $.each(results.user_files, function(key, value) {
+                files.push({
+                    id: value.code_document_id,
+                    name: value.code_document_name,
+                    password: value.code_document_password,
+                    location: value.code_document_location,
+                    allocation: value.code_allocation_name
+                });
+            });
+
+            res.json(files);
         } else {
             res.json({
                 success: false,

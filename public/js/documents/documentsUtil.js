@@ -120,27 +120,21 @@ window.documents = {
         else { var title = name; }
         return title;
     },
-    locationChange: function(location_id, dont_pull_content) {
+    locationChange: function(location_id, path) {
         $("#files .location").hide();
         $("#locations ul li").removeClass("selected");
         $("#" + location_id).addClass("selected");
-        var type = $("#" + location_id).attr("data");
 
         if(location_id == "online" || !location_id) {
             $("#online").addClass("selected");
             $("#files #location_online #file_library").html("");
             $("#files #location_online").show();
             location_id = "online";
-            if(!dont_pull_content) {
-                window.documents.onlineDirectory();
-                window.notification.close();
-            }
+            window.documents.onlineDirectory();
         } else {
            $("#files #location_template #file_library").html("");
            $("#files #location_template").show();
-           if(!dont_pull_content) {
-                window.documents.locationDirectory(location_id);
-            }
+           window.documents.locationDirectory(location_id, path);
         }
 
         window.sidebar = location_id;
@@ -268,7 +262,7 @@ window.documents = {
         $("#locations").toggleClass("remove");
         $("#locations #online").toggle();
     },
-    locationListing: function(callback) {
+    locationListing: function(location) {
         $.get("/documents/locations/",
             function(json) {
                 var locations = "";
@@ -280,8 +274,7 @@ window.documents = {
                     locations += '<span class="icon ' + icon + '"></span>' + item['name'] + '</li>';
                 });
                 $("#locations ul").append(locations);
-
-                if(callback) callback(true);
+                $("#" + location).addClass("selected");
             }
         );
     },
@@ -325,19 +318,16 @@ window.documents = {
             }
         );
     },
-    onlineDirectory: function(no_history, callback) {
+    onlineDirectory: function() {
         window.notification.open("loading...");
         $.get("/documents/files/",
             function(json) {
                 var files = "";
-                var type_convert = {"github":"icon-github", "sftp":"icon-drawer"};
                 $.each(json, function(i, item) {
+                    var protection = (item['password']) ? "password" : "open";
                     var file = '<div id="file_' + item['id'] + '" class="file online" data="' + item['id'] + '">';
-                    file += '<div class="file_attributes icon ' + item['protection'] + '" data="' + item['protection'] + '">';
-                    if(item['type'] != "" && item['type'] != undefined) {
-                        file += '<div class="file_badge ' + type_convert[item['type']] + '"></div>';
-                    }
-                    file += item['ownership'];
+                    file += '<div class="file_attributes icon ' + protection + '" data="' + protection + '">';
+                    file += item['allocation'].toLowerCase();
                     file += '</div>';
                     file += '<div class="title" data="' + item['name'] + '">';
                     file += window.documents.nameToTitle(item['name']);
@@ -348,15 +338,11 @@ window.documents = {
                 $("#files #location_online #file_library").append(files);
 
                 window.notification.close();
-                if(!no_history) {
-                    history.pushState(null, null, "/documents/");
-                }
-
-                if(callback) callback(true);
+                history.pushState(null, null, "/documents/");
             }
         );
     },
-    githubRepos: function(callback) {
+    githubRepos: function() {
         $.get("/github/repos/",
             function(json) {
                 if(json == "Bad Token") {
@@ -369,17 +355,15 @@ window.documents = {
                     repos += '<li>' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
                 });
 
-                if(repos != "") {
+                if(repos) {
                     $("#popup_location_github").append("<ul>" + repos + "</ul>");
                 } else {
                     $("#popup_location_github #github_empty").show();
                 }
-
-                if(callback) callback(true);
             }
         );
     },
-    locationDirectory: function(location_id, path, no_history, callback) {
+    locationDirectory: function(location_id, path) {
         window.notification.open("loading...");
         var response = window.documents.cachedLocations(location_id);
         var files = "";
@@ -427,13 +411,8 @@ window.documents = {
             });
             $("#files #location_template #file_library").html(files);
             window.notification.close();
-
-            if(!no_history) {
-                path = (path.substr(-1) != '/' && path) ? path + "/" : path;
-                history.pushState(null, null, "/documents/location/" + location_id + "/" + path);
-            }
-
-            if(callback) callback(true);
+            path = (path.substr(-1) != '/' && path) ? path + "/" : path;
+            history.pushState(null, null, "/documents/location/" + location_id + "/" + path);
         }
     },
     locationFile: function(location_id, file) {
