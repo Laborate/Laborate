@@ -17,10 +17,10 @@ exports.add_token = function(req, res) {
                 });
             }
         }, function(error, results){
-            res.redirect("/account/");
+            res.redirect("/account/settings/");
         });
     } else {
-        res.redirect("/account/");
+        res.redirect("/account/settings/");
     }
 };
 
@@ -32,10 +32,10 @@ exports.remove_token = function(req, res) {
                 user_mysql.user_github_token(callback, req.session.user.id, null);
             }
         }, function(error, results){
-            res.redirect("/account/");
+            res.redirect("/account/settings/");
         });
     } else {
-        res.redirect("/account/");
+        res.redirect("/account/settings/");
     }
 };
 
@@ -65,10 +65,7 @@ exports.repos = function(req, res) {
             }
         });
     } else {
-        res.json({
-            success: false,
-            error_message: "Github Oauth Token Required"
-        });
+        res.json([]);
     }
 };
 

@@ -2,14 +2,13 @@
 //          Account Instances
 /////////////////////////////////////////////////
 window.account = {
-    navigationChange: function(settings_id, initialize) {
+    navigationChange: function(mode_id, initialize) {
         $(".settings").hide();
         $("#navigation ul li").removeClass("selected");
-        $("#settings_" + settings_id).show();
-        $("#navigation ul #" + settings_id).addClass("selected");
-        if(settings_id == "github" && initialize) {
-            window.account.githubRepos();
-        }
-        history.pushState(null, null, "?nav=" + settings_id);
+        $("#settings_" + mode_id).show();
+        $("#navigation ul #" + mode_id).addClass("selected");
+
+        var mode = (mode_id == "profile") ? "" : mode_id + "/";
+        history.pushState(null, null, "/account/" + mode);
     }
 }

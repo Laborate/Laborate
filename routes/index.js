@@ -23,7 +23,7 @@ module.exports = function(app){
     app.get('/logout', auth.logout);
 
     /* Account */
-    app.get('/account', auth.restrictAccess, account.index);
+    app.get(/^\/account\/.*/, auth.restrictAccess, account.index);
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);

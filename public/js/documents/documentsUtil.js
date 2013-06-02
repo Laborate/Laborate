@@ -343,9 +343,7 @@ window.documents = {
         $.get("/github/repos/", function(json) {
             if("error_message" in json) {
                     if(json.error_message == "Bad Github Oauth Token") {
-                        var oath_url = json.github_oath + "&redirect_uri=" + encodeURI(window.location.href);
-                        window.notification.open("Opps! Github Needs To Be <a href='" + oath_url + "'>Reauthorized</a>");
-                        alert(oath_url);
+                        window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                     } else {
                         window.notification.open(json.error_message);
                     }
@@ -380,9 +378,7 @@ window.documents = {
                 function(json) {
                     if("error_message" in json) {
                         if(json.error_message == "Bad Github Oauth Token") {
-                            var oath_url = json.github_oath + "&redirect_uri=" + encodeURI(window.location.href);
-                            window.notification.open("Opps! Github Needs To Be <a href='" + oath_url + "'>Reauthorized</a>");
-                            alert(oath_url);
+                            window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                         } else {
                             window.notification.open(json.error_message);
                         }

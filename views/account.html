@@ -25,9 +25,9 @@
     <% } %>
     <ul>
         <li id="profile">Profile</li>
-        <li id="account">Account Settings</li>
+        <li id="settings">Settings</li>
         <li id="emails">Emails</li>
-        <li id="notifications">Notification Center</li>
+        <li id="notifications">Notifications</li>
         <li id="billing">Billing Options</li>
         <li id="payments">Payment History</li>
     </ul>
@@ -40,7 +40,7 @@
         <div class="settings_content">
         </div>
     </div>
-    <div id="settings_account" class="settings">
+    <div id="settings_settings" class="settings">
         <div class="settings_header">Account Settings</div>
             <% if(user.github) { %>
                 <a class="button red" href="/github/token/remove/">Deauthorize With Github</a>
