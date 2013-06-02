@@ -84,9 +84,8 @@ window.documents = {
                 $("#popup #rename form").live("submit", function() {
                     var name = $("#popup #rename input[type=text]").val();
                     if (name != null && name != "") {
-                        var title = window.documents.nameToTitle(name);
                         $("#file_"+reference+" .title").attr("data", name);
-                        $("#file_"+reference+" .title").text(title);
+                        $("#file_"+reference+" .title").text(name);
                         window.documents.popUpClose();
                         $.post("/php/session/rename.php", { session_id: reference, session_name: name});
                     } else {
@@ -114,11 +113,6 @@ window.documents = {
     },
     contextMenuClose: function() {
        $("#menu").hide();
-    },
-    nameToTitle: function(name) {
-        if(name.length > 11) { var title = name.substring(0, 10) + "..."; }
-        else { var title = name; }
-        return title;
     },
     locationChange: function(location_id, path, no_history) {
         $("#files .location").hide();
@@ -334,9 +328,7 @@ window.documents = {
                     file += '<div class="file_attributes icon ' + protection + '" data="' + location + '">';
                     file += item['role'].toLowerCase();
                     file += '</div>';
-                    file += '<div class="title" data="' + item['name'] + '">';
-                    file += window.documents.nameToTitle(item['name']);
-                    file += '</div></div>';
+                    file += '<div class="title" data="' + item['name'] + '">' + item['name'] + '</div></div>';
                     files += file;
                 });
 
@@ -409,8 +401,6 @@ window.documents = {
                 if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
                 if(item["type"] == "symlink") { var type = "folder"; var icon = "folder"; var type_title = "symlink"; }
                 if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
-
-                var title = window.documents.nameToTitle(item["name"]);
 
                 var template = '<div class="file external" data="' + item["path"] + '">';
                 template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';

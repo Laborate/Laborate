@@ -47,7 +47,7 @@ exports.files = function(req, res) {
         } else {
             res.json({
                 success: false,
-                error_message: "Failed To Load Your Files"
+                error_message: "Failed To Load Files"
             });
         }
     });
@@ -57,18 +57,22 @@ exports.files = function(req, res) {
 exports.location = function(req, res) {
     if(req.xhr) {
         if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
-            if(req.session.user.locations[req.param("0")].type == "github") {
-                github.repo_contents(req, res);
-            } else {
-                res.json({
-                    success: false,
-                    error_message: "Location Type Unknown"
-                });
+            switch(req.session.user.locations[req.param("0")].type) {
+                case "github":
+                    github.contents(req, res);
+                    break;
+                default:
+                    res.json({
+                        success: false,
+                        error_message: "Location Type Unknown"
+                    });
+                    break;
             }
+
         } else {
             res.json({
                 success: false,
-                error_message: "Could Not Find Location"
+                error_message: "Location Does Not Exist"
             });
         }
     } else {

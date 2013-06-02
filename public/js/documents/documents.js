@@ -107,15 +107,11 @@ $(".external.file .file_attributes").live("click", function() {
 
 $('.file').live("hover", function() {
     $("#" + $(this).find(".file_attributes").attr("data") + " .location_name").css("text-decoration", "underline");
-    $(this).find(".title").text($(this).find(".title").attr("data"));
     return false;
 });
 
 $('.file').live("mouseleave",function() {
     $("#" + $(this).find(".file_attributes").attr("data") + " .location_name").css("text-decoration", "");
-    var name = $(this).find(".title").attr("data");
-    var title = window.documents.nameToTitle(name);
-    $(this).find(".title").text(title);
     return false;
 });
 

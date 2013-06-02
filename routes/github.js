@@ -5,7 +5,6 @@ var async = require("async");
 var aes = require('../lib/core/aes');
 var github_lib = require("../lib/github");
 var user_mysql = require("../lib/mysql/users");
-var github_lib = require("../lib/github");
 
 exports.add_token = function(req, res) {
     if(req.param("code")) {
@@ -40,11 +39,11 @@ exports.remove_token = function(req, res) {
     }
 };
 
-exports.user_repos = function(req, res) {
+exports.repos = function(req, res) {
     if(req.session.user.github) {
         async.series({
             repos: function(callback) {
-                github_lib.user_repos(req.session.user.github, callback);
+                github_lib.repos(req.session.user.github, callback);
             },
         }, function(error, results) {
             if(!error) {
@@ -73,11 +72,11 @@ exports.user_repos = function(req, res) {
     }
 };
 
-exports.repo_contents = function(req, res) {
+exports.contents = function(req, res) {
     if(req.session.user.github) {
         async.series({
             contents: function(callback) {
-                github_lib.repo_contents(
+                github_lib.contents(
                     req.session.user.github,
                     req.session.user.locations[req.param("0")].github_repository,
                     req.param("1"), callback
