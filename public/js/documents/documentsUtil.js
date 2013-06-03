@@ -6,7 +6,7 @@ window.documents = {
         //Inital Clean Up
         $("#popup .presets").hide();
         $("#popup .selection").hide();
-        $("#popUp input[type=text], #popUp input[type=password], #popUp select").val('').css({"border":""});
+        $("#popup .input, #popUp .select").val('').css({"border":""});
         $("#popup .selected").removeClass("selected");
 
         //Cycle Through Presets
@@ -14,6 +14,7 @@ window.documents = {
             $("#popup #location_add").show();
             $("#popup #location_add .selection").eq(0).show();
             $("#popup #popup_header #popup_header_name").text("New Location");
+            $("#popup #location_add .select").val($("#popup #location_add .select option:first").val());
             $("#popup").css({"width": "280"});
         }
 
@@ -150,19 +151,6 @@ window.documents = {
             $("#popup").hAlign().vAlign();
         });
 
-        //Look For Location Type Change
-        $("#popup #popup_location_type").live("change", function() {
-            $("#popup .selection").hide();
-
-            if($(this).val() == "sftp") {
-                $("#popup_location_sftp").show();
-            }
-            else {
-                $("#popup_location_" + $(this).val()).show();
-            }
-            $("#popup").hAlign().vAlign();
-        });
-
         //Add Select Class To Github Repository
         $("#popup #popup_location_github ul li").live("click", function() {
             if($("#popup #popup_location_name").val() == $("#popup #popup_location_github .selected").text()) {
@@ -219,16 +207,14 @@ window.documents = {
             }
 
             if(passed) {
-                if(type_icon == "github") { var icon = "icon-github"; }
-                else if(type_icon == "sftp") { var icon = "icon-drawer"; }
-                else { var icon = "icon-storage"; }
-                var key = Math.floor((Math.random()*10000)+1);
-                var li = '<li id="' + key +'" data="' + type_icon + '">';
-                li += '<span class="icon ' + icon + '"></span>';
-                li += '<span class="location_name">' + $("#popup #popup_location_name").val() + '</span></li>';
-                $("#locations ul").append(li);
+                $("#popup #popup_location_type").die();
+                $("#popup #popup_location_github ul li").die();
+                $("#popup #location_add form").die();
+                $.post("/documents/location/create/", { locations_add: [Math.floor((Math.random()*10000)+1), items] },
+                    function() {
+                        window.documents.locationListing();
+                });
                 window.documents.popUpClose();
-                $.post("/documents/location/create/", { locations_add: [key, items] });
             }
             return false;
         });
@@ -249,6 +235,7 @@ window.documents = {
             if($("#locations.remove ul li").size() == 1) {
                 $("#locations").removeClass("remove");
                 $("#locations #online").toggle().addClass("selected");
+                $("#popup #location_remove input[type=button]").die();
             }
         });
     },
@@ -268,6 +255,7 @@ window.documents = {
                     locations += '<span class="icon ' + icon + '"></span>';
                     locations += '<span class="location_name">' + item['name'] + '</span></li>';
                 });
+                $("#locations ul li").not("li[id='online']").remove();
                 $("#locations ul").append(locations);
                 $("#" + location).addClass("selected");
             }
