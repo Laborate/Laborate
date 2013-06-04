@@ -43,9 +43,23 @@ window.documents = {
             $("#popup").css({"width": "250"});
         }
 
+        if(preset == "photo_preview") {
+            $("#popup #photo_preview").show();
+            $("#popup #popup_header #popup_header_name").text(data[0]);
+            $("#popup #photo_preview a").attr("href", data[1]);
+            $("#popup #photo_preview img").attr("src", data[1]);
+            $("#popup").css({"width": "300"});
+            $('#image_preview').load(function() {
+                $("#popup").hAlign().vAlign();
+            });
+        }
+
         //Auto Center And Show
-        $("#popup").hAlign().vAlign().show();
-        $("#popup_backdrop").show();
+        $("html, body").animate({ scrollTop: 0 }, 500, function() {
+            $("#popup").hAlign().vAlign().show();
+            $("#popup_backdrop").show();
+            $("body").css("overflow", "hidden");
+        });
     },
     popUpClose: function() {
         //Remove Live Events From Forms
@@ -54,6 +68,7 @@ window.documents = {
         //Hide Pop Up
         $("#popup").hide();
         $("#popup_backdrop").hide();
+        $("body").css("overflow", "");
     },
     contextMenu: function(element, e) {
         if($.trim(element.find(".file_attributes").text()) == "owner") { var action  = "Delete"; }
@@ -395,7 +410,7 @@ window.documents = {
             $("#files #location_template #file_library").html(files);
             window.notification.close();
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
-            if(!no_history) history.pushState(null, null, "/documents/location/" + location_id + "/" + path);
+            if(!no_history) history.pushState(null, null, "/documents/" + location_id + "/" + path);
         }
     },
     locationFile: function(location_id, file) {
@@ -424,6 +439,10 @@ window.documents = {
                 );
             }
         );
+    },
+    photoPreview: function(location_id, name, path) {
+        var url = "/documents/location/" + location_id + "/" + path + "/";
+        window.documents.popUp("photo_preview", [name, url]);
     },
     fileSearch: function(form) {
         var search = form.find("input[name=s]").val();

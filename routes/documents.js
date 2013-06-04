@@ -55,28 +55,24 @@ exports.files = function(req, res) {
 
 /* Locations */
 exports.location = function(req, res) {
-    if(req.xhr) {
-        if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
-            switch(req.session.user.locations[req.param("0")].type) {
-                case "github":
-                    github.contents(req, res);
-                    break;
-                default:
-                    res.json({
-                        success: false,
-                        error_message: "Location Type Unknown"
-                    });
-                    break;
-            }
-
-        } else {
-            res.json({
-                success: false,
-                error_message: "Location Does Not Exist"
-            });
+    if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
+        switch(req.session.user.locations[req.param("0")].type) {
+            case "github":
+                github.contents(req, res);
+                break;
+            default:
+                res.json({
+                    success: false,
+                    error_message: "Location Type Unknown"
+                });
+                break;
         }
+
     } else {
-        exports.index(req, res);
+        res.json({
+            success: false,
+            error_message: "Location Does Not Exist"
+        });
     }
 };
 

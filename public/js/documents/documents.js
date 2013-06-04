@@ -1,6 +1,6 @@
 //Url Parameters
 window.url_params = function() {
-    params = /\/documents\/location\/(\d*)\/(.*)/.exec(window.location.href);
+    params = /\/documents\/(\d*)\/(.*)/.exec(window.location.href);
     params_dict = {};
 
     if(params) {
@@ -100,7 +100,13 @@ $(".external.file .file_attributes").live("click", function() {
     }
 
     if(type == "file") {
-        window.documents.locationFile(window.sidebar, $(this));
+        var extension = $(this).parent().find(".title").attr("data").split(".")[1];
+        if(["png", "gif", "jpg", "jpeg"].indexOf(extension) > -1) {
+            window.documents.photoPreview(window.sidebar, $(this).parent().find(".title").attr("data"),
+                                          $(this).parent().attr("data"));
+        } else {
+            window.documents.locationFile(window.sidebar, $(this));
+        }
     }
     return false;
 });
