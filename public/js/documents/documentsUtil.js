@@ -55,10 +55,10 @@ window.documents = {
         }
 
         //Auto Center And Show
-        $("html, body").animate({ scrollTop: 0 }, 500, function() {
-            $("#popup").hAlign().vAlign().show();
-            $("#popup_backdrop").show();
+        $("html, body").animate({ scrollTop: 0 }, ($(window).scrollTop()/2), function() {
             $("body").css("overflow", "hidden");
+            $("#popup_backdrop").show();
+            $("#popup").hAlign().vAlign().show();
         });
     },
     popUpClose: function() {
