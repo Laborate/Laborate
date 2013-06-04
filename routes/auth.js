@@ -117,22 +117,8 @@ exports.emailCheck = function(req, res) {
 
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
-        async.series({
-            userCount: function(callback) {
-                mysql_lib.user_by_id_count(callback, req.session.user.id);
-            }
-        }, function(error, results){
-            if(!error && results.userCount) {
-                if(next) next();
-            } else {
-                failed();
-            }
-        });
+        if(next) next();
     } else {
-        failed();
-    }
-
-    function failed() {
         if(req.xhr) {
             res.json({
                 success: false,
