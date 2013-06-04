@@ -81,7 +81,18 @@ exports.contents = function(req, res) {
             },
         }, function(error, results){
             if(!error) {
-                res.json(results.contents);
+                if("name" in results.contents) {
+                    var extension = results.contents.name.split(".")[1];
+                    if(["png", "gif", "jpg", "jpeg"].indexOf(extension) > -1) {
+                        res.writeHead(200, {"Content-Type": "image/" + extension});
+                        res.write(results.contents.file, "binary");
+                        res.end();
+                    } else {
+                        res.json(results.contents);
+                    }
+                } else {
+                    res.json(results.contents);
+                }
             } else {
                 if(error.message == "Bad credentials") {
                     res.json({
