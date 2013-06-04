@@ -396,10 +396,31 @@ window.documents = {
 
         function finish(response) {
             $.each(response, function(i, item) {
-                if(item["type"] == "file") { var type = "file"; var icon = "open"; var type_title = "file"; }
-                if(item["type"] == "dir") { var type = "folder"; var icon = "folder"; var type_title = "folder"; }
-                if(item["type"] == "symlink") { var type = "folder"; var icon = "folder"; var type_title = "symlink"; }
-                if(item["type"] == "back") { var type = "folder"; var icon = "back"; var type_title = "back"; }
+                switch(item["type"]) {
+                    case "dir":
+                        var type = "folder";
+                        var icon = "folder";
+                        var type_title = "folder";
+                        break;
+                    case "symlink":
+                        var type = "folder";
+                        var icon = "folder";
+                        var type_title = "symlink";
+                        break;
+                    case "back":
+                        var type = "folder";
+                        var icon = "back";
+                        var type_title = "back";
+                        break;
+                    case "file":
+                        var type = "file";
+                        var icon = "open";
+                        if(item["extension"].length <= 5) {
+                            var type_title = item["extension"];
+                        } else {
+                            var type_title = "file";
+                        }
+                }
 
                 var template = '<div class="file external" data="' + item["path"] + '">';
                 template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';

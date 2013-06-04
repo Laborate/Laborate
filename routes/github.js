@@ -84,9 +84,11 @@ exports.contents = function(req, res) {
                 if("name" in results.contents) {
                     var extension = results.contents.name.split(".")[1];
                     if(["png", "gif", "jpg", "jpeg"].indexOf(extension) > -1) {
-                        res.writeHead(200, {"Content-Type": "image/" + extension});
-                        res.write(results.contents.file, "binary");
-                        res.end();
+                        res.writeHead(200, {
+                            "Content-Type": "image/" + extension,
+                            "Content-disposition": "attachment; filename=" + results.contents.name
+                        });
+                        res.end(results.contents.file, "binary");
                     } else {
                         res.json(results.contents);
                     }
