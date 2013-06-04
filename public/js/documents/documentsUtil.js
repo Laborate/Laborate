@@ -415,7 +415,7 @@ window.documents = {
                     case "file":
                         var type = "file";
                         var icon = "open";
-                        if(item["extension"].length <= 5) {
+                        if(item["extension"] && item["extension"].length <= 5) {
                             var type_title = item["extension"];
                         } else {
                             var type_title = "file";
