@@ -103,7 +103,10 @@ window.documents = {
                         $("#file_"+reference+" .title").attr("data", name);
                         $("#file_"+reference+" .title").text(name);
                         window.documents.popUpClose();
-                        $.post("/php/session/rename.php", { session_id: reference, session_name: name});
+                        $.post("/php/session/rename.php", { session_id: reference,
+                                                            session_name: name,
+                                                            _csrf: $("#_csrf").val()
+                                                           });
                     } else {
                         $("#popup #rename input[type=text]").css({"border":"solid thin #CC352D"});
                     }
@@ -114,7 +117,7 @@ window.documents = {
             }
 
             if(id == "action") {
-                $.post("/php/session/actions.php", { session_id: reference});
+                $.post("/php/session/actions.php", { session_id: reference, _csrf: $("#_csrf").val() });
                 $("#file_" + reference).animate({"opacity": 0}, 500);
                 setTimeout(function() {
                     $("#file_" + reference).remove();
@@ -225,7 +228,7 @@ window.documents = {
                 $("#popup #popup_location_type").die();
                 $("#popup #popup_location_github ul li").die();
                 $("#popup #location_add form").die();
-                $.post("/documents/location/create/", { locations_add: [Math.floor((Math.random()*10000)+1), items] },
+                $.post("/documents/location/create/", { locations_add: [Math.floor((Math.random()*10000)+1), items], _csrf: $("#_csrf").val() },
                     function() {
                         window.documents.locationListing();
                 });
@@ -245,7 +248,7 @@ window.documents = {
                 window.documents.locationChange("online");
             }
 
-            $.post("/documents/location/remove/", { locations_remove: id });
+            $.post("/documents/location/remove/", { locations_remove: id, _csrf: $("#_csrf").val() });
 
             if($("#locations.remove ul li").size() == 1) {
                 $("#locations").removeClass("remove");
@@ -310,7 +313,9 @@ window.documents = {
         $.post("/php/session/new.php",
             {   session_name: name, session_document: data,
                 session_type: type, session_external_path:  path,
-                session_location_id: location_id },
+                session_location_id: location_id,
+                _csrf: $("#_csrf").val()
+            },
             function(id) {
                 if(callback) callback(id);
             }
@@ -345,24 +350,24 @@ window.documents = {
     githubRepos: function() {
         $.get("/github/repos/", function(json) {
             if("error_message" in json) {
-                    if(json.error_message == "Bad Github Oauth Token") {
-                        window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
-                    } else {
-                        window.notification.open(json.error_message);
-                    }
-
+                if(json.error_message == "Bad Github Oauth Token") {
+                    window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                 } else {
-                    var repos = "";
-                    $.each(json, function(i, item) {
-                        repos += '<li>' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
-                    });
-
-                    if(repos) {
-                        $("#popup_location_github").append("<ul>" + repos + "</ul>");
-                    } else {
-                        $("#popup_location_github #github_empty").show();
-                    }
+                    window.notification.open(json.error_message);
                 }
+
+            } else {
+                var repos = "";
+                $.each(json, function(i, item) {
+                    repos += '<li>' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
+                });
+
+                if(repos) {
+                    $("#popup_location_github").append("<ul>" + repos + "</ul>");
+                } else {
+                    $("#popup_location_github #github_empty").show();
+                }
+            }
         });
     },
     locationDirectory: function(location_id, path, no_history) {
@@ -438,7 +443,7 @@ window.documents = {
         var path = file.parent().attr("data");
         window.notification.open("downloading...");
 
-        $.post("/php/locations/github_file.php", { location_id: location_id, file: path },
+        $.post("/php/locations/github_file.php", { location_id: location_id, file: path, _csrf: $("#_csrf").val() },
             function(contents) {
                 if(contents == "Bad Token") {
                     window.notification.open("File Does Not Exist");

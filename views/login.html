@@ -9,6 +9,7 @@
                     <form id="backdropSigIn">
                         <input type="text" autofocus="on" id="backdropSigInEmail" placeholder="Email"/>
                         <input type="password" id="backdropSigInPassword" placeholder="Password"/>
+                        <input type="hidden" id="_csrf" value="<%= _csrf %>"/>
                         <input type="submit" class="backdropButton button full blue" value="Sign In"/>
                     </form>
                 </div>

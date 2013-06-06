@@ -3,6 +3,7 @@ var crypto = require('crypto');
 var async = require("async");
 
 /* Modules: Custom */
+var core   = require('./core');
 var aes   = require('../lib/core/aes');
 var mysql_lib = require('../lib/mysql/users');
 
@@ -119,33 +120,7 @@ exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(next) next();
     } else {
-        if(req.xhr) {
-            res.json({
-                success: false,
-                error_message: "Login Required"
-            });
-        } else {
-            res.format({
-                'text/plain': function(){
-                    res.send("Login Required");
-                },
-                'text/html': function(){
-                    res.redirect('/logout/');
-                },
-                'json': function(){
-                    res.json({
-                        success: false,
-                        error_message: "Login Required"
-                    });
-                },
-                'application/json': function(){
-                    res.json({
-                        success: false,
-                        error_message: "Login Required"
-                    });
-                }
-            });
-        }
+        core.error_handling({status: 401}, req, res, next);
     }
 };
 

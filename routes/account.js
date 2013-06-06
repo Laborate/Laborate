@@ -15,7 +15,6 @@ exports.index = function(req, res) {
         load_dependencies(req);
 
         var data = {
-            host: req.host,
             title: 'Account',
             mode: 'User Settings',
             user: req.session.user,

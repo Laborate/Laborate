@@ -6,7 +6,7 @@ var documents = require('./documents');
 var editor = require('./editor');
 var github = require('./github');
 
-module.exports = function(app){
+module.exports = function(app) {
     /* Root Route */
     app.get('/', auth.loginCheck, core.login);
 
@@ -44,4 +44,7 @@ module.exports = function(app){
 
     /* Not Found Page */
     app.all('*', core.not_found);
+
+    /* Error Handling */
+    app.use(core.error_handling);
 }

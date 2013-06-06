@@ -14,11 +14,12 @@ $("#backdropSigIn").live("submit", function() {
     if(window.passed) {
         $("#backdropSigIn input[type=submit]").val("loading...").addClass("disabled");
         $.post("/auth/login/", { user_email: $("#backdropSigIn #backdropSigInEmail").val(),
-                                        user_password:$("#backdropSigIn #backdropSigInPassword").val()
-                                        },
+                                 user_password:$("#backdropSigIn #backdropSigInPassword").val(),
+                                 _csrf: $("#_csrf").val()
+                               },
             function(result){
                 if(result['success']) {
-                    window.location.href = "/documents";
+                    window.location.href = "/documents/";
                 }
                 else {
                     $("#backdropInital .textError").text(result['error_message']).fadeIn();
@@ -48,7 +49,10 @@ $("#backdropRegister").live("submit", function() {
                 $.ajax({
                   type: 'POST',
                   url: "/auth/email_check/",
-                  data: { user_email: $("#backdropRegister #backdropRegisterEmail").val() },
+                  data: {
+                      user_email: $("#backdropRegister #backdropRegisterEmail").val(),
+                      _csrf: $("#_csrf").val()
+                  },
                   success: success,
                   async: false
                 });
@@ -84,11 +88,12 @@ $("#backdropRegister").live("submit", function() {
         $.post("/auth/register/", { user_name: $("#backdropRegister #backdropRegisterName").val(),
                                     user_screen_name: $("#backdropRegister #backdropRegisterScreenName").val(),
                                     user_email: $("#backdropRegister #backdropRegisterEmail").val(),
-                                    user_password: $("#backdropRegister #backdropRegisterPassword").val()
+                                    user_password: $("#backdropRegister #backdropRegisterPassword").val(),
+                                    _csrf: $("#_csrf").val()
                                   },
             function(result){
                 if(result['success']) {
-                    window.location.href = "/documents";
+                    window.location.href = "/documents/";
                 }
                 else {
                    $("#backdropInital .textError").text(result['error_message']).fadeIn();

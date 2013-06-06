@@ -16,8 +16,6 @@ app.configure(function() {
     clientJS.bind(app,srv);
     clientCSS.bind(app,srv);
     app.engine('html', require('ejs').renderFile);
-    app.set('site_title', config.general.site_title);
-    app.set('site_delimeter', config.general.site_delimeter);
     app.set('root', __dirname + '/');
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');
@@ -37,6 +35,16 @@ app.configure(function() {
         key: config.cookie_session.key,
         secret: config.cookie_session.secret
     }));
+    app.use(express.csrf());
+    app.use(function(req, res, next) {
+        res.locals.host = req.host;
+        res.locals.site_title = config.general.site_title;
+        res.locals.site_delimeter = config.general.site_delimeter;
+        res.locals._csrf = req.session._csrf;
+        res.setHeader("Server", "Laborate.io");
+        res.removeHeader("X-Powered-By");
+        next();
+    });
 });
 
 /* Development Only */
