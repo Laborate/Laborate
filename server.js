@@ -8,19 +8,18 @@ var srv        = require('http').createServer(app).listen(config.general.port);;
 var io         = require('socket.io').listen(srv);
 var slashes    = require("connect-slashes");
 var piler      = require("piler");
-var clientJS   = piler.createJSManager({urlRoot: "/js/"});
-var clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
+
+/* No Var Makes It Global Throught All File */
+clientJS   = piler.createJSManager({urlRoot: "/js/"});
+clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
 
 /* Configuration */
 app.configure(function() {
     clientJS.bind(app,srv);
     clientCSS.bind(app,srv);
     app.engine('html', require('ejs').renderFile);
-    app.set('root', __dirname + '/');
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');
-    app.set('clientJS', clientJS);
-    app.set('clientCSS', clientCSS);
     app.use('/favicon', express.static(__dirname + '/public/favicon'));
     app.use('/fonts', express.static(__dirname + '/public/fonts'));
     app.use('/flash', express.static(__dirname + '/public/flash'));
@@ -43,6 +42,7 @@ app.configure(function() {
         res.locals._csrf = req.session._csrf;
         res.setHeader("Server", "Laborate.io");
         res.removeHeader("X-Powered-By");
+        require("./lib/core/dependencies")();
         next();
     });
 });

@@ -1,29 +1,20 @@
-/* Modules: Custom */
-var load_dependencies = require("../lib/core/dependencies");
-
 exports.login = function(req, res) {
-    load_dependencies(req);
-
     var data = {
         title: 'Login',
         mode: 'Login',
-        js: req.app.get("clientJS").renderTags("core", "backdrop", "backdrop_user"),
-        css: req.app.get("clientCSS").renderTags("core", "backdrop")
+        js: clientJS.renderTags("core", "backdrop", "backdrop_user"),
+        css: clientCSS.renderTags("core", "backdrop")
     }
-
     res.render('login', data);
 };
 
 exports.register = function(req, res) {
-    load_dependencies(req);
-
     var data = {
         title: 'Register',
         mode: 'Register',
-        js: req.app.get("clientJS").renderTags("core", "backdrop", "backdrop_user"),
-        css: req.app.get("clientCSS").renderTags("core", "backdrop")
+        js: clientJS.renderTags("core", "backdrop", "backdrop_user"),
+        css: clientCSS.renderTags("core", "backdrop")
     }
-
     res.render('register', data);
 };
 
@@ -68,14 +59,12 @@ exports.error_handling = function(error, req, res, next) {
                     if(redirect_url) {
                         res.redirect(redirect_url);
                     } else {
-                        load_dependencies(req);
-
                         var data = {
                             host: req.host,
                             title: error_message,
                             mode: error_message,
-                            js: req.app.get("clientJS").renderTags("core", "backdrop"),
-                            css: req.app.get("clientCSS").renderTags("core", "backdrop"),
+                            js: clientJS.renderTags("core", "backdrop"),
+                            css: clientCSS.renderTags("core", "backdrop"),
                             error_html: error_html
                         }
 
