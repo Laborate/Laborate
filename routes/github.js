@@ -75,7 +75,7 @@ exports.contents = function(req, res) {
             contents: function(callback) {
                 github_lib.contents(
                     req.session.user.github,
-                    req.session.user.locations[req.param("0")].github_repository,
+                    req.session.user.code_locations[req.param("0")].github_repository,
                     req.param("1"), callback
                 );
             },
@@ -83,7 +83,7 @@ exports.contents = function(req, res) {
             if(!error) {
                 if("name" in results.contents) {
                     var extension = results.contents.name.split(".")[1];
-                    if(["png", "gif", "jpg", "jpeg"].indexOf(extension) > -1) {
+                    if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
                         res.writeHead(200, {
                             "Content-Type": "image/" + extension,
                             "Content-disposition": "attachment; filename=" + results.contents.name

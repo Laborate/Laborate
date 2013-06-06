@@ -101,7 +101,7 @@ $(".external.file .file_attributes").live("click", function() {
 
     if(type == "file") {
         var extension = $(this).parent().find(".title").attr("data").split(".")[1];
-        if(["png", "gif", "jpg", "jpeg"].indexOf(extension) > -1) {
+        if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
             window.documents.photoPreview(window.sidebar, $(this).parent().find(".title").attr("data"),
                                           $(this).parent().attr("data"));
         } else {

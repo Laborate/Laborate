@@ -88,10 +88,10 @@ exports.reload_user = function(req, next) {
                 screen_name: user["user_screen_name"],
                 email: user["user_email"],
                 email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
-                pricing_id: user["user_pricing"],
-                pricing_documents: user["pricing_documents"],
                 github: aes.decrypt(String(user["user_github"]), user["user_email"]),
-                locations: JSON.parse(aes.decrypt(String(user["user_locations"]), user["user_email"]))
+                code_pricing_id: user["code_user_pricing"],
+                code_pricing_documents: user["pricing_documents"],
+                code_locations: JSON.parse(aes.decrypt(String(user["user_locations"]), user["user_email"]))
             };
         }
         if(next) next(error);

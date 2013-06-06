@@ -10,12 +10,12 @@
         <div id="navigation_header_screen_name"><%= user.screen_name %></div>
         <div class="clear"></div>
     </div>
-    <% if(user.pricing_documents != 0) { %>
+    <% if(user.code_pricing_documents != 0) { %>
     <div id="navigation_password_left">
         <div id="navigation_password_header" class="left">PRIVATE DOCUMENTS</div>
         <div id="navigation_password_header_light" class="right">
-            <% if(user.pricing_documents) { %>
-                <%= pass_sessions_count + " of " + user.pricing_documents %>
+            <% if(user.code_pricing_documents) { %>
+                <%= pass_sessions_count + " of " + user.code_pricing_documents %>
             <% } else { %>
                 <%= pass_sessions_count %>
             <% } %>

@@ -55,8 +55,8 @@ exports.files = function(req, res) {
 
 /* Locations */
 exports.location = function(req, res) {
-    if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
-        switch(req.session.user.locations[req.param("0")].type) {
+    if(req.session.user.code_locations && (req.param("0") in req.session.user.code_locations)) {
+        switch(req.session.user.code_locations[req.param("0")].type) {
             case "github":
                 github.contents(req, res);
                 break;
@@ -79,9 +79,9 @@ exports.location = function(req, res) {
 exports.locations = function(req, res) {
     async.series({
         locations: function(callback) {
-            if(req.session.user.locations) {
+            if(req.session.user.code_locations) {
                 locations = [];
-                $.each(req.session.user.locations, function(key, value) {
+                $.each(req.session.user.code_locations, function(key, value) {
                     if(!req.session.user.github && value.type == "github") {
                         return;
                     }
@@ -112,15 +112,15 @@ exports.locations = function(req, res) {
 exports.create_location = function(req, res) {
     async.series([
         function(callback) {
-            if(!req.session.user.locations) {
-                req.session.user.locations = {}
+            if(!req.session.user.code_locations) {
+                req.session.user.code_locations = {}
             }
 
-            req.session.user.locations[req.param("locations_add")[0]] = req.param("locations_add")[1];
+            req.session.user.code_locations[req.param("locations_add")[0]] = req.param("locations_add")[1];
             callback(null);
         },
         function(callback) {
-            var locations = aes.encrypt(JSON.stringify(req.session.user.locations), req.session.user.email);
+            var locations = aes.encrypt(JSON.stringify(req.session.user.code_locations), req.session.user.email);
             user_mysql.user_locations(callback, req.session.user.id, locations);
         }
     ], function(error) {
@@ -136,17 +136,17 @@ exports.create_location = function(req, res) {
 };
 
 exports.remove_location = function(req, res) {
-    if(req.session.user.locations && (req.param("locations_remove") in req.session.user.locations)) {
+    if(req.session.user.code_locations && (req.param("locations_remove") in req.session.user.code_locations)) {
         async.series([
             function(callback) {
-                delete req.session.user.locations[req.param("locations_remove")];
+                delete req.session.user.code_locations[req.param("locations_remove")];
                 callback(null);
             },
             function(callback) {
-                if(Object.keys(req.session.user.locations).length == 0) {
+                if(Object.keys(req.session.user.code_locations).length == 0) {
                     var locations = null;
                 } else {
-                    var locations = aes.encrypt(JSON.stringify(req.session.user.locations), req.session.user.email);
+                    var locations = aes.encrypt(JSON.stringify(req.session.user.code_locations), req.session.user.email);
                 }
                 user_mysql.user_locations(callback, req.session.user.id, locations);
             }
