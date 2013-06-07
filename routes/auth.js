@@ -51,6 +51,7 @@ exports.logout = function(req, res) {
 exports.register = function(req, res) {
     async.series({
         register: function(callback) {
+            delete req.body._csrf;
             req.body.user_password = aes.encrypt(req.param('user_password'), req.param('user_email'));
             mysql_lib.user_insert(callback, req.body);
         }
