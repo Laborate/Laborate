@@ -146,7 +146,7 @@ exports.remove_location = function(req, res) {
                 user_mysql.user_locations(callback, req.session.user.id, locations);
             }
         ], function(error) {
-            if(error) {
+            if(!error) {
                 res.json({success: true});
             } else {
                 res.json({
