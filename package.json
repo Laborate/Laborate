@@ -22,7 +22,8 @@
     "async": "*",
     "connect-slashes": "*",
     "octonode": "*",
-    "jquery": "*"
+    "jquery": "*",
+    "node-uuid": "*"
   },
   "repository": {
     "type": "git",
