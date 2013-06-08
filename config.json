@@ -14,12 +14,15 @@
         "username": "",
         "password": ""
     },
+    "cookies": {
+        "rememberme": "usrr"
+    },
     "cookie_session": {
         "key": "usrs",
         "secret": ""
     },
     "mysql": {
-        "host": "",
+        "host": "localhost",
         "database": "",
         "username": "",
         "password": ""
