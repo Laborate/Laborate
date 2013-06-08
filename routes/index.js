@@ -1,6 +1,7 @@
 /* Modules: Custom */
 var core = require('./core');
 var auth = require('./auth');
+var error = require('./error');
 var account = require('./account');
 var documents = require('./documents');
 var editor = require('./editor');
@@ -46,5 +47,5 @@ module.exports = function(app) {
     app.all('*', core.not_found);
 
     /* Error Handling */
-    app.use(core.error_handling);
+    app.use(error.handler);
 }

@@ -242,19 +242,23 @@ window.documents = {
         window.documents.popUp("location_delete");
 
         $("#popup #location_remove input[type=button]").live("click", function() {
-            element.remove();
+            $.post("/documents/location/remove/", { locations_remove: id, _csrf: $("#_csrf").val() }, function(json) {
+                if("error_message" in json) {
+                    window.notification.open(json.error_message);
+                } else {
+                    element.remove();
 
-            if(window.sidebar == id) {
-                window.documents.locationChange("online");
-            }
+                    if(window.sidebar == id) {
+                        window.documents.locationChange("online");
+                    }
 
-            $.post("/documents/location/remove/", { locations_remove: id, _csrf: $("#_csrf").val() });
-
-            if($("#locations.remove ul li").size() == 1) {
-                $("#locations").removeClass("remove");
-                $("#locations #online").toggle().addClass("selected");
-                $("#popup #location_remove input[type=button]").die();
-            }
+                    if($("#locations.remove ul li").size() == 1) {
+                        $("#locations").removeClass("remove");
+                        $("#locations #online").toggle().addClass("selected");
+                        $("#popup #location_remove input[type=button]").die();
+                    }
+                }
+            });
         });
     },
     toggleRemoveMode: function() {

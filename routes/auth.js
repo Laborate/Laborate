@@ -6,6 +6,7 @@ var uuid = require('node-uuid');
 /* Modules: Custom */
 var config   = require('../config');
 var core   = require('./core');
+var error   = require('./error');
 var aes   = require('../lib/core/aes');
 var user_mysql = require('../lib/mysql/users');
 
@@ -127,7 +128,7 @@ exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(next) next();
     } else {
-        core.error_handling({status: 401}, req, res, next);
+        error.handler({status: 401}, req, res, next);
     }
 };
 
