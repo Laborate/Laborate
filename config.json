@@ -47,7 +47,7 @@
         "watch_ignore_dot": true,
         "watch_ignore_patterns": [
             "logs/*",
-            "*.less"
+            "*.css"
         ],
         "max_failures": 100,
         "forever_log": "logs/forever.log",
