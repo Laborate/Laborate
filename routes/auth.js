@@ -101,7 +101,7 @@ exports.reload_user = function(req, res, next) {
 
             var user_uuid = uuid.v1();
             user_mysql.user_insert_recovery(user["user_id"], user_uuid);
-            res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000 });
+            res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000, httpOnly: true });
         }
         if(next) next(error);
     });
@@ -126,7 +126,11 @@ exports.emailCheck = function(req, res) {
 
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
-        if(next) next();
+        if(config.cookies.rememberme in req.cookies) {
+            if(next) next();
+        } else {
+            exports.reload_user(req, res, next);
+        }
     } else {
         async.series({
             uuid: function(callback) {
