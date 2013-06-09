@@ -6,12 +6,12 @@ var uuid = require('node-uuid');
 /* Modules: Custom */
 var config   = require('../config');
 var core   = require('./core');
-var error   = require('./error');
+var error_lib   = require('./error');
 var aes   = require('../lib/core/aes');
 var user_mysql = require('../lib/mysql/users');
 
 /* Module Exports */
-exports.login = function(req, res) {
+exports.login = function(req, res, next) {
     async.series({
         user: function(callback) {
             user_mysql.user_by_email(callback, req.param('user_email'));
@@ -23,12 +23,8 @@ exports.login = function(req, res) {
             if(aes.decrypt(user['user_password'], req.param('user_email')) == req.param('user_password')) {
                 async.series([
                     function(callback) {
-                        var user_uuid = uuid.v1();
-                        user_mysql.user_recovery(user["user_id"], user_uuid, function(error, result) {
-                            req.session.user = { id: user["user_id"] };
-                            res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000 });
-                            exports.reload_user(req, callback);
-                        });
+                        req.session.user = { id: user["user_id"] };
+                        exports.reload_user(req, res, callback);
                     },
                     function(callback) {
                         res.json({success: true});
@@ -83,7 +79,7 @@ exports.register = function(req, res) {
     });
 };
 
-exports.reload_user = function(req, next) {
+exports.reload_user = function(req, res, next) {
     async.series({
         user: function(callback) {
             user_mysql.user_by_id(callback, req.session.user.id);
@@ -102,6 +98,10 @@ exports.reload_user = function(req, next) {
                 code_pricing_documents: user["pricing_documents"],
                 code_locations: JSON.parse(aes.decrypt(String(user["user_locations"]), user["user_email"]))
             };
+
+            var user_uuid = uuid.v1();
+            user_mysql.user_insert_recovery(user["user_id"], user_uuid);
+            res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000 });
         }
         if(next) next(error);
     });
@@ -128,7 +128,18 @@ exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(next) next();
     } else {
-        error.handler({status: 401}, req, res, next);
+        async.series({
+            uuid: function(callback) {
+                user_mysql.user_by_uuid(callback, req.cookies[config.cookies.rememberme]);
+            }
+        }, function(error, result) {
+            if(!error && result.uuid.length) {
+                req.session.user = { id: result.uuid[0]["recovery_user_id"] };
+                exports.reload_user(req, res, next);
+            } else {
+                error_lib.handler({status: 401}, req, res, next);
+            }
+        });
     }
 };
 
