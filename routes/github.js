@@ -5,6 +5,7 @@ var async = require("async");
 var aes = require('../lib/core/aes');
 var github_lib = require("../lib/github");
 var user_mysql = require("../lib/mysql/users");
+var user_sessions_mysql = require("../lib/mysql/users/sessions");
 
 exports.add_token = function(req, res) {
     if(req.param("code")) {
@@ -81,19 +82,35 @@ exports.contents = function(req, res) {
             },
         }, function(error, results){
             if(!error) {
-                if("name" in results.contents) {
-                    var extension = results.contents.name.split(".")[1];
-                    if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                switch(results.contents.type) {
+                    case "image":
                         res.writeHead(200, {
-                            "Content-Type": "image/" + extension,
+                            "Content-Type": "image/" +  results.contents.extension,
                             "Content-disposition": "attachment; filename=" + results.contents.name
                         });
-                        res.end(results.contents.file, "binary");
-                    } else {
-                        res.json(results.contents);
-                    }
-                } else {
-                    res.json(results.contents);
+                        res.end(results.contents.contents, "binary");
+                        break;
+                    case "document":
+                        var session = [
+                            results.contents.name,
+                            JSON.stringify(results.contents.contents.split("\n")),
+                            req.session.user.id,
+                            req.param("1"),
+                            req.param("0")
+                        ];
+                        user_sessions_mysql.session_insert(session, function(error, results) {
+                            if(!error) {
+                                res.json({document_id: results.insertId});
+                            } else {
+                                res.json({
+                                    success: false,
+                                    error_message: "Failed To Create Document"
+                                });
+                            }
+                        });
+                        break;
+                    case "directory":
+                        res.json(results.contents.contents);
                 }
             } else {
                 if(error.message == "Bad credentials") {
@@ -102,7 +119,6 @@ exports.contents = function(req, res) {
                         error_message: "Bad Github Oauth Token",
                         github_oath: github_lib.auth_url
                     });
-
                 } else {
                     res.json({
                         success: false,
