@@ -313,18 +313,6 @@ window.documents = {
             window.location.href = link;
         }
     },
-    newFile: function(name, data, type, path, location_id, callback) {
-        $.post("/php/session/new.php",
-            {   session_name: name, session_document: data,
-                session_type: type, session_external_path:  path,
-                session_location_id: location_id,
-                _csrf: $("#_csrf").val()
-            },
-            function(id) {
-                if(callback) callback(id);
-            }
-        );
-    },
     onlineDirectory: function(no_history) {
         window.notification.open("loading...");
         $.get("/documents/files/", function(json) {
