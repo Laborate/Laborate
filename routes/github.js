@@ -100,7 +100,7 @@ exports.contents = function(req, res) {
                         ];
                         user_sessions_mysql.session_insert(session, function(error, results) {
                             if(!error) {
-                                res.json({document_id: results.insertId});
+                                res.json({document: results.insertId});
                             } else {
                                 res.json({
                                     success: false,

@@ -443,32 +443,18 @@ window.documents = {
             if(!no_history) history.pushState(null, null, "/documents/" + location_id + "/" + path);
         }
     },
-    locationFile: function(location_id, file) {
-        var path = file.parent().attr("data");
+    locationFile: function(location_id, element) {
+        var path = element.parent().attr("data");
         window.notification.open("downloading...");
 
-        $.post("/php/locations/github_file.php", { location_id: location_id, file: path, _csrf: $("#_csrf").val() },
-            function(contents) {
-                if(contents == "Bad Token") {
-                    window.notification.open("File Does Not Exist");
-                    return false;
-                }
-
-                if(contents == "Bad Location" || contents == "Not Github Location") {
-                    window.notification.open("Location Does Not Exist");
-                    return false;
-                }
-
-                window.documents.newFile(file.parent().find(".title").attr("data"),
-                                         JSON.stringify(contents.split('\n')),
-                                         "github", path, location_id,
-                     function(id) {
-                         window.documents.goToLink("/editor/?i=" + id);
-                         window.notification.close();
-                     }
-                );
+        $.get("/documents/location/" + location_id + "/" + path, function(json) {
+            if("error_message" in json) {
+                 window.notification.open(json.error_message);
+            } else {
+                window.documents.goToTab("/editor/" + json.document + "/");
+                window.notification.close();
             }
-        );
+        });
     },
     photoPreview: function(location_id, name, path) {
         var url = "/documents/location/" + location_id + "/" + path + "/";
