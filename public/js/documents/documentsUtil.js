@@ -375,7 +375,10 @@ window.documents = {
         var response = window.documents.cachedLocations(location_id);
         var files = "";
 
-        if(path == undefined || path == "/") {
+        path = $.trim(path)
+        path = (path.slice(-1) == "/") ? path : path + "/";
+
+        if(!path || path == "/") {
             path = "";
         }
 
