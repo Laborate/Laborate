@@ -103,29 +103,38 @@ window.documents = {
                         $("#file_"+reference+" .title").attr("data", name);
                         $("#file_"+reference+" .title").text(name);
                         window.documents.popUpClose();
-                        $.post("/php/session/rename.php", { session_id: reference,
-                                                            session_name: name,
-                                                            _csrf: $("#_csrf").val()
-                                                           });
+                        $.post("/documents/file/" + reference + "/rename/", { name: name,  _csrf: $("#_csrf").val() },
+                            function(json) {
+                                if("error_message" in json) {
+                                    window.notification.open(json.error_message);
+                                } else {
+                                    $("#popup #rename form").die();
+                                }
+                        });
                     } else {
                         $("#popup #rename input[type=text]").css({"border":"solid thin #CC352D"});
                     }
 
                     return false;
-
                 });
             }
 
             if(id == "action") {
-                $.post("/php/session/actions.php", { session_id: reference, _csrf: $("#_csrf").val() });
-                $("#file_" + reference).animate({"opacity": 0}, 500);
-                setTimeout(function() {
-                    $("#file_" + reference).remove();
-                }, 600);
+                $.post("/documents/file/" + reference + "/remove/", { _csrf: $("#_csrf").val() }, function(json) {
+                    if("error_message" in json) {
+                        window.notification.open(json.error_message);
+                    } else {
+                        $("#file_" + reference).animate({"opacity": 0}, 500);
+                        setTimeout(function() {
+                            $("#file_" + reference).remove();
+                        }, 600);
+                    }
+
+                });
             }
 
             if(id == "share") {
-                window.documents.popUp("share_url", location.protocol + '//' + location.host+ "/editor/?i=" + reference);
+                window.documents.popUp("share_url", location.protocol + '//' + location.host+ "/editor/" + reference + "/");
             }
 
         }, 100);
@@ -318,17 +327,16 @@ window.documents = {
         $.get("/documents/files/", function(json) {
             if("error_message" in json) {
                 window.notification.open(json.error_message);
-
             } else {
                 var files = "";
                 $.each(json, function(i, item) {
-                    var protection = (item['password']) ? "password" : "open";
-                    var location = (item['location']) ? item['location'] : "";
-                    var file = '<div id="file_' + item['id'] + '" class="file online" data="' + item['id'] + '">';
+                    var protection = (item.password) ? "password" : "open";
+                    var location = (item.location) ? item['location'] : "";
+                    var file = '<div id="file_' + item.id + '" class="file online" data="' + item.id + '">';
                     file += '<div class="file_attributes icon ' + protection + '" data="' + location + '">';
-                    file += item['role'].toLowerCase();
+                    file += item.role.toLowerCase();
                     file += '</div>';
-                    file += '<div class="title" data="' + item['name'] + '">' + item['name'] + '</div></div>';
+                    file += '<div class="title" data="' + item.name + '">' + item.name + '</div></div>';
                     files += file;
                 });
 

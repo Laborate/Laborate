@@ -50,7 +50,29 @@ exports.files = function(req, res) {
 };
 
 exports.file_rename = function(req, res) {
+    user_documents_mysql.document_rename(req.param("0"), req.param("name"), function(error, data) {
+        if(!error) {
+            res.json({ success: true });
+        } else {
+            res.json({
+                success: false,
+                error_message: "Failed To Rename File"
+            });
+        }
+    });
+};
 
+exports.file_remove = function(req, res) {
+    user_documents_mysql.document_remove(req.param("0"), function(error, data) {
+        if(!error) {
+            res.json({ success: true });
+        } else {
+            res.json({
+                success: false,
+                error_message: "Failed To Rename File"
+            });
+        }
+    });
 };
 
 /* Locations */
