@@ -11,12 +11,12 @@ var piler      = require("piler");
 
 /* No Var Makes It Global Throught All File */
 clientJS   = piler.createJSManager({urlRoot: "/js/"});
-clientCSS  = piler.createCSSManager({urlRoot: "/css/"});
+clientCSS  = piler.createCSSManager({urlRoot: "/css/", outputDirectory: __dirname + "/public/css"});
 
 /* Configuration */
 app.configure(function() {
-    clientJS.bind(app,srv);
-    clientCSS.bind(app,srv);
+    clientJS.bind(app, srv);
+    clientCSS.bind(app, srv);
     app.engine('html', require('ejs').renderFile);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');

@@ -38,8 +38,8 @@ exports.handler = function(error, req, res, next) {
                             host: req.host,
                             title: error_message,
                             mode: error_message,
-                            js: clientJS.renderTags("core", "backdrop"),
-                            css: clientCSS.renderTags("core", "backdrop"),
+                            js: clientJS.renderTags("backdrop"),
+                            css: clientCSS.renderTags("backdrop"),
                             error_html: error_html
                         }
 

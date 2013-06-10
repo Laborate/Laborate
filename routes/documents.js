@@ -13,8 +13,8 @@ exports.index = function(req, res) {
         title: 'Documents',
         mode: 'Documents Drive',
         user: req.session.user,
-        js: clientJS.renderTags("core", "documents", "header"),
-        css: clientCSS.renderTags("core", "documents", "header", "icons")
+        js: clientJS.renderTags("documents", "header"),
+        css: clientCSS.renderTags("documents", "header", "icons")
     }
     res.render('documents', data);
 };

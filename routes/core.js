@@ -4,8 +4,8 @@ exports.login = function(req, res) {
     var data = {
         title: 'Login',
         mode: 'Login',
-        js: clientJS.renderTags("core", "backdrop", "backdrop_user"),
-        css: clientCSS.renderTags("core", "backdrop")
+        js: clientJS.renderTags("backdrop", "backdrop_user"),
+        css: clientCSS.renderTags("backdrop")
     }
     res.render('login', data);
 };
@@ -14,8 +14,8 @@ exports.register = function(req, res) {
     var data = {
         title: 'Register',
         mode: 'Register',
-        js: clientJS.renderTags("core", "backdrop", "backdrop_user"),
-        css: clientCSS.renderTags("core", "backdrop")
+        js: clientJS.renderTags("backdrop", "backdrop_user"),
+        css: clientCSS.renderTags("backdrop")
     }
     res.render('register', data);
 };
