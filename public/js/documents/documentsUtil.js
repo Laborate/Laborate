@@ -92,7 +92,7 @@ window.documents = {
             }
 
             if(id == "tab") {
-                window.documents.goToTab("/editor/?i=" + reference);
+                window.documents.goToTab("/editor/" + reference + "/");
             }
 
             if(id == "rename") {

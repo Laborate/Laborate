@@ -5,7 +5,7 @@ var async = require("async");
 var aes = require('../lib/core/aes');
 var github_lib = require("../lib/github");
 var user_mysql = require("../lib/mysql/users");
-var user_sessions_mysql = require("../lib/mysql/users/sessions");
+var user_documents_mysql = require("../lib/mysql/users/documents");
 
 exports.add_token = function(req, res) {
     if(req.param("code")) {
@@ -91,14 +91,14 @@ exports.contents = function(req, res) {
                         res.end(results.contents.contents, "binary");
                         break;
                     case "document":
-                        var session = [
+                        var document = [
                             results.contents.name,
                             JSON.stringify(results.contents.contents.split("\n")),
                             req.session.user.id,
                             req.param("1"),
                             req.param("0")
                         ];
-                        user_sessions_mysql.session_insert(session, function(error, results) {
+                        user_documents_mysql.document_insert(document, function(error, results) {
                             if(!error) {
                                 res.json({document: results.insertId});
                             } else {

@@ -6,7 +6,7 @@ var async = require("async");
 var github = require("./github");
 var aes = require("../lib/core/aes");
 var user_mysql = require("../lib/mysql/users");
-var documments_mysql = require("../lib/mysql/users/documents");
+var user_documents_mysql = require("../lib/mysql/users/documents");
 
 exports.index = function(req, res) {
     var data = {
@@ -19,10 +19,11 @@ exports.index = function(req, res) {
     res.render('documents', data);
 };
 
+/* Online Files */
 exports.files = function(req, res) {
     async.series({
         user_files: function(callback) {
-            documments_mysql.documents_by_user(callback, req.session.user.id);
+            user_documents_mysql.documents_by_user(callback, req.session.user.id);
         }
     }, function(error, results) {
         if(!error) {
@@ -46,6 +47,10 @@ exports.files = function(req, res) {
             });
         }
     });
+};
+
+exports.file_rename = function(req, res) {
+
 };
 
 /* Locations */
