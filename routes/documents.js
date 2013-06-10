@@ -49,6 +49,27 @@ exports.files = function(req, res) {
     });
 };
 
+exports.file_create = function(req, res) {
+    var path = req.param("external_path");
+    var document = [
+        req.param("name"),
+        JSON.stringify([]),
+        req.session.user.id,
+        (path.slice(-1) == "/") ? path.slice(0, -1) : path,
+        req.param("location")
+    ];
+    user_documents_mysql.document_insert(document, function(error, results) {
+        if(!error) {
+            res.json({document: results.insertId});
+        } else {
+            res.json({
+                success: false,
+                error_message: "Failed To Create Document"
+            });
+        }
+    });
+};
+
 exports.file_rename = function(req, res) {
     user_documents_mysql.document_rename(req.param("0"), req.param("name"), function(error, data) {
         if(!error) {

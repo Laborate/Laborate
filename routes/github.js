@@ -91,11 +91,14 @@ exports.contents = function(req, res) {
                         res.end(results.contents.contents, "binary");
                         break;
                     case "document":
+                        path = (req.param("1").slice(-1) == "/") ? req.param("1").slice(0, -1) : req.param("1");
+                        path = path.substr(0, path.lastIndexOf('/'));
+
                         var document = [
                             results.contents.name,
                             JSON.stringify(results.contents.contents.split("\n")),
                             req.session.user.id,
-                            req.param("1"),
+                            path,
                             req.param("0")
                         ];
                         user_documents_mysql.document_insert(document, function(error, results) {

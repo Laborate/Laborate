@@ -19,20 +19,7 @@ window.onpopstate = function() {
 };
 
 $(".newFile").live("click", function() {
-    window.notification.open("creating file in current directory...");
-    if(window.url_params()["dir"]) {
-        var path = window.url_params()["dir"] + "Untitled Document";
-    } else {
-        var path = "";
-    }
-
-    window.documents.newFile("Untitled Document", JSON.stringify([""]), $("#" + window.sidebar).attr("data"),
-                             path, window.sidebar,
-         function(id) {
-             window.documents.goToTab("/editor/?i=" + id);
-             window.notification.close();
-         }
-    );
+    window.documents.newFile(window.url_params()["dir"], window.sidebar);
 });
 
 $("#locations #add_location").live("hover", function() {

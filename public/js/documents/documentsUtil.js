@@ -35,6 +35,14 @@ window.documents = {
             $("#popup").css({"width": "250"});
         }
 
+        if(preset == "new_file") {
+            $("#popup #new_file input[type=text]").css({"border":""});
+            $("#popup #new_file").show();
+            $("#popup #new_file .selection").show();
+            $("#popup #popup_header #popup_header_name").text("Name Document");
+            $("#popup").css({"width": "250"});
+        }
+
         if(preset == "rename") {
             $("#popup #rename input[type=text]").val(data).css({"border":""});
             $("#popup #rename").show();
@@ -99,7 +107,7 @@ window.documents = {
                 window.documents.popUp("rename", $("#file_" + reference + " .title").attr("data"));
                 $("#popup #rename form").live("submit", function() {
                     var name = $("#popup #rename input[type=text]").val();
-                    if (name != null && name != "") {
+                    if(name) {
                         $("#file_"+reference+" .title").attr("data", name);
                         $("#file_"+reference+" .title").text(name);
                         window.documents.popUpClose();
@@ -322,6 +330,29 @@ window.documents = {
             window.location.href = link;
         }
     },
+    newFile: function(path, location) {
+        window.documents.popUp("new_file");
+
+        $("#popup #new_file form").live("submit", function() {
+            var name = $("#popup #new_file input[type=text]").val();
+            if(name) {
+                window.documents.popUpClose();
+                window.notification.open("creating file in current directory...");
+                $.post("/documents/file/create/", { name: name, external_path:  path, location: location, _csrf: $("#_csrf").val() },
+                    function(json) {
+                        if("error_message" in json) {
+                            window.notification.open(json.error_message);
+                        } else {
+                            window.documents.goToTab("/editor/" + json.document + "/");
+                            window.notification.close();
+                        }
+                });
+            } else {
+                $("#popup #new_file input[type=text]").css({"border":"solid thin #CC352D"});
+            }
+            return false;
+        });
+    },
     onlineDirectory: function(no_history) {
         window.notification.open("loading...");
         $.get("/documents/files/", function(json) {
@@ -443,8 +474,8 @@ window.documents = {
         }
     },
     locationFile: function(location_id, element) {
-        var path = element.parent().attr("data");
         window.notification.open("downloading...");
+        var path = element.parent().attr("data");
 
         $.get("/documents/location/" + location_id + "/" + path, function(json) {
             if("error_message" in json) {
