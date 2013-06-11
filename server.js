@@ -50,8 +50,7 @@ app.configure(function() {
 /* Development Only */
 app.configure('development', function() {
     app.use(express.basicAuth(config.development.basicAuth.username, config.development.basicAuth.password));
-    var edt = require('express-debug');
-    edt(app, {
+    require('express-debug')(app, {
         theme: __dirname + config.development.debugger.theme,
         panels: config.development.debugger.panels
     });

@@ -68,6 +68,8 @@
     left: 0;
     opacity: 1;
     background: #fff;
+    height: 100%;
+    overflow-x: hidden;
 }
 
 #EDT td, #EDT th { vertical-align: top; }
@@ -198,7 +200,7 @@
 #EDT .date:after { content: '")'; color: #000; }
 #EDT .exceeded { color: #666; font-style: italic; }
 /* template code and functions */
-#EDT pre { background-color: #F5F5F5; color: #444; border: 1px solid #DDD; padding: 8px; }
+#EDT pre { background-color: #F5F5F5; color: #444; border: 1px solid #DDD; padding: 8px; word-wrap: break-word;}
 #EDT pre.fn { display: none; margin-top: 6px; }
 #EDT .showFn, #EDT .hideFn { cursor: pointer; }
 #EDT .showFn:before, #EDT .showFn:after, #EDT .hideFn:before, #EDT .hideFn:after { color: #666; font-weight: bold; }

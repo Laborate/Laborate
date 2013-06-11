@@ -2,7 +2,7 @@ var fs = require('node-fs');
 var config = require('./config');
 var forever = require('forever-monitor');
 
-fs.mkdirSync(__dirname + '/../logs/code/', 0775, true);
+fs.mkdirSync(__dirname + '/../logs/' + config.forever.uid, 0775, true);
 
 var child = new (forever.Monitor)('server.js', {
     uid: config.forever.uid,
