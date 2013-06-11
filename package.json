@@ -25,6 +25,9 @@
     "jquery": "*",
     "node-uuid": "*"
   },
+  "devDependencies": {
+    "express-debug": "*"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Laborate/code.git"

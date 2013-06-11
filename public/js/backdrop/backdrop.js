@@ -2,9 +2,6 @@
 $("form").live("submit", function() { return false; });
 
 $(window).ready(function() {
-    $("body div").not("#backdrop, #backdrop div").hide();
-    $("body").show();
-
     //Auto center backdrop core
 	$("#backdropCore").vAlign().hAlign();
 
