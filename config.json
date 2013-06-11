@@ -10,9 +10,15 @@
         "site_delimeter": " · ",
         "environment": "development"
     },
-    "basicAuth": {
-        "username": "",
-        "password": ""
+    "development" : {
+        "basicAuth": {
+            "username": "",
+            "password": ""
+        },
+        "debugger": {
+            "theme": "/lib/debugger/edt.css",
+            "panels": ["locals", "request", "session", "template", "nav"]
+        }
     },
     "cookies": {
         "rememberme": "usrr"
@@ -41,17 +47,17 @@
         "password": ""
     },
     "forever": {
+        "uid": "code",
         "silent": false,
         "watch": true,
         "watch_directory": ".",
         "watch_ignore_dot": true,
         "watch_ignore_patterns": [
-            "logs/*",
             "*.css"
         ],
         "max_failures": 100,
-        "forever_log": "logs/forever.log",
-        "output_log": "logs/output.log",
-        "error_log": "logs/errors.log"
+        "forever_log": "../logs/code/forever.log",
+        "output_log": "../logs/code/forever.out",
+        "error_log": "../logs/code/forever.error"
     }
 }

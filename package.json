@@ -23,7 +23,8 @@
     "connect-slashes": "*",
     "octonode": "*",
     "jquery": "*",
-    "node-uuid": "*"
+    "node-uuid": "*",
+    "node-fs": "*"
   },
   "devDependencies": {
     "express-debug": "*"

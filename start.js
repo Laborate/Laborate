@@ -1,7 +1,11 @@
+var fs = require('node-fs');
 var config = require('./config');
 var forever = require('forever-monitor');
 
+fs.mkdirSync(__dirname + '/../logs/code/', 0775, true);
+
 var child = new (forever.Monitor)('server.js', {
+    uid: config.forever.uid,
     max: config.forever.max_failures,
     silent: config.forever.silent,
 
@@ -14,9 +18,9 @@ var child = new (forever.Monitor)('server.js', {
         'NODE_ENV': config.general.environment
     },
 
-    //logFile: config.forever.forever_log,
-    //outFile: config.forever.output_log,
-    //errFile: config.forever.error_log,
+    logFile: config.forever.forever_log,
+    outFile: config.forever.output_log,
+    errFile: config.forever.error_log,
 
     killTree: true
 });

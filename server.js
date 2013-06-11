@@ -20,6 +20,7 @@ app.configure(function() {
     app.engine('html', require('ejs').renderFile);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');
+    app.set('x-powered-by', false);
     app.use('/favicon', express.static(__dirname + '/public/favicon'));
     app.use('/fonts', express.static(__dirname + '/public/fonts'));
     app.use('/flash', express.static(__dirname + '/public/flash'));
@@ -41,7 +42,6 @@ app.configure(function() {
         res.locals.site_delimeter = config.general.site_delimeter;
         res.locals._csrf = req.session._csrf;
         res.setHeader("Server", "Laborate.io");
-        res.removeHeader("X-Powered-By");
         require("./lib/core/dependencies")();
         next();
     });
@@ -49,9 +49,12 @@ app.configure(function() {
 
 /* Development Only */
 app.configure('development', function() {
-    app.use(express.basicAuth(config.basicAuth.username, config.basicAuth.password));
+    app.use(express.basicAuth(config.development.basicAuth.username, config.development.basicAuth.password));
     var edt = require('express-debug');
-    edt(app, {theme: __dirname + "/lib/debugger/edt.css"});
+    edt(app, {
+        theme: __dirname + config.development.debugger.theme,
+        panels: config.development.debugger.panels
+    });
 });
 
 /* Production Only */
