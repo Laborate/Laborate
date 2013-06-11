@@ -24,7 +24,8 @@
 /* SHOW/HIDE buttons */
 #EDT-show {
     position: fixed;
-    top: 40%;
+    top: inherit;
+    bottom: 0;
     right: 0;
     z-index: 100000000000000;
     border-right: none;
@@ -38,9 +39,7 @@
     background: -ms-linear-gradient(#fcfcfc 0%, #eeeeee 100%) !important;
     background: -o-linear-gradient(#fcfcfc 0%, #eeeeee 100%) !important;
     border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
     -moz-border-top-left-radius: 3px;
-    -moz-border-bottom-left-radius: 3px;
     opacity: .8;
 }
 #EDT-show:hover, #EDT-show:focus {
