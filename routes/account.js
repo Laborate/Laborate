@@ -8,7 +8,7 @@ var github_lib = require("../lib/github");
 exports.index = function(req, res) {
     async.parallel({
         pass_sessions_count: function(callback) {
-            user_mysql.user_pass_documents_count(callback, req.session.user.id);
+            user_mysql.user_pass_documents_count(req.session.user.id, callback);
         }
     }, function(error, results){
         var data = {

@@ -10,24 +10,79 @@ var error_lib   = require('./error');
 var aes   = require('../lib/core/aes');
 var user_mysql = require('../lib/mysql/users');
 
-/* Module Exports */
+/* Module Exports: Access Checks */
+exports.restrictAccess = function(req, res, next) {
+    if(req.session.user) {
+        if(config.cookies.rememberme in req.cookies) {
+            excuse_links = ["/activate/", "/activate/resend/", "/auth/activate/"];
+            if(req.session.user.activated && excuse_links.indexOf(req.url) == -1) {
+                res.redirect("/activate/");
+            } else {
+                if(next) next();
+            }
+        } else {
+            exports.load_user(req, res, next);
+        }
+    } else {
+        async.series({
+            uuid: function(callback) {
+                user_mysql.user_by_uuid(req.cookies[config.cookies.rememberme], callback);
+            }
+        }, function(error, result) {
+            if(!error && result.uuid.length) {
+                req.session.user = { id: result.uuid[0]["recovery_user_id"] };
+                exports.load_user(req, res, next);
+            } else {
+                error_lib.handler({status: 401}, req, res, next);
+            }
+        });
+    }
+};
+
+exports.loginCheck = function(req, res, next) {
+    if(req.session.user) {
+        res.redirect('/documents/');
+    } else {
+        if(config.cookies.rememberme in req.cookies) {
+            async.series({
+                uuid: function(callback) {
+                    user_mysql.user_by_uuid(req.cookies[config.cookies.rememberme], callback);
+                }
+            }, function(error, result) {
+                if(!error && result.uuid.length) {
+                    req.session.user = { id: result.uuid[0]["recovery_user_id"] };
+                    exports.load_user(req, res, next);
+                } else {
+                    if(next) next();
+                }
+            });
+        } else {
+            if(next) next();
+        }
+    }
+};
+
+/* Module Exports: Access Operations */
 exports.login = function(req, res, next) {
     async.series({
         user: function(callback) {
-            user_mysql.user_by_email(callback, req.param('user_email'));
+            user_mysql.user_by_email(req.param('email'), callback);
         }
     }, function(error, results){
         user = results.user[0];
 
         if(!error && user) {
-            if(aes.decrypt(user['user_password'], req.param('user_email')) == req.param('user_password')) {
+            if(aes.decrypt(user['user_password'], req.param('email')) == req.param('password')) {
                 async.series([
                     function(callback) {
                         req.session.user = { id: user["user_id"] };
-                        exports.reload_user(req, res, callback);
+                        exports.load_user(req, res, callback);
                     },
                     function(callback) {
-                        res.json({success: true});
+                        res.json({
+                            success: true,
+                            next: "/documents/"
+                        });
                         callback(null);
                     }
                 ]);
@@ -48,41 +103,80 @@ exports.login = function(req, res, next) {
 
 exports.logout = function(req, res) {
     req.session = null;
+    res.clearCookie(config.cookies.rememberme);
     res.redirect('/');
 };
 
+// TODO: Send Email
 exports.register = function(req, res) {
-    async.series({
-        register: function(callback) {
-            delete req.body._csrf;
-            req.body.user_password = aes.encrypt(req.param('user_password'), req.param('user_email'));
-            user_mysql.user_insert(callback, req.body);
-        }
-    }, function(error, results){
-        if(!error && results.register) {
-            async.series([
-                function(callback) {
-                    req.session.user = { id: results.register.insertId };
-                    exports.reload_user(req, callback);
-                },
-                function(callback) {
-                    res.json({success: true});
-                    callback(null);
-                }
-            ]);
+    user_mysql.user_by_email_count(req.param('email'), function(error, results) {
+        if(!error && !results.userCount) {
+            if(req.param('password') == req.param('password_confirm')) {
+                async.series({
+                    register: function(callback) {
+                        delete req.body._csrf;
+                        delete req.body.password_confirm;
+                        req.body.password = aes.encrypt(req.param('password'), req.param('email'));
+                        req.body.activated = Math.floor(Math.random()*100000000),
+                        user_mysql.user_insert(req.body, callback);
+                    }
+                }, function(error, results) {
+                    if(!error && results.register) {
+                        async.series([
+                            function(callback) {
+                                req.session.user = { id: results.register.insertId };
+                                exports.load_user(req, res, callback);
+                            },
+                            function(callback) {
+                                res.json({
+                                    success: true,
+                                    next: "/activate/"
+                                });
+                                callback(null);
+                            }
+                        ]);
+                    } else {
+                        res.json({
+                            success: false,
+                            error_message: "User Registration Failed"
+                        });
+                    }
+                });
+            } else {
+                res.json({
+                    success: false,
+                    error_message: "Passwords Do Not Match"
+                });
+            }
         } else {
             res.json({
                 success: false,
-                error_message: "User Registration Failed"
+                error_message: "Email Already Exists"
             });
         }
     });
 };
 
-exports.reload_user = function(req, res, next) {
+exports.activate = function(req, res) {
+    if(req.param('activation_code') == req.session.user.activated) {
+        req.session.user.activated = null;
+        user_mysql.user_activation(req.session.user.id, null);
+        res.json({
+            success: true,
+            next: "/documents/"
+        })
+    } else {
+        res.json({
+            success: false,
+            error_message: "Incorrect Activation Code"
+        })
+    }
+};
+
+exports.load_user = function(req, res, next) {
     async.series({
         user: function(callback) {
-            user_mysql.user_by_id(callback, req.session.user.id);
+            user_mysql.user_by_id(req.session.user.id, callback);
         }
     }, function(error, results){
         user = results.user[0];
@@ -93,64 +187,17 @@ exports.reload_user = function(req, res, next) {
                 screen_name: user["user_screen_name"],
                 email: user["user_email"],
                 email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
-                github: aes.decrypt(String(user["user_github"]), user["user_email"]),
+                activated: user["user_activated"],
+                github: (user["user_github"]) ? aes.decrypt(String(user["user_github"]), user["user_email"]) : null,
                 code_pricing_id: user["user_code_pricing"],
                 code_pricing_documents: user["pricing_documents"],
-                code_locations: JSON.parse(aes.decrypt(String(user["user_locations"]), user["user_email"]))
+                code_locations: (user["user_locations"]) ? JSON.parse(aes.decrypt(String(user["user_locations"]), user["user_email"])) : null
             };
 
-            var user_uuid = uuid.v1();
+            var user_uuid = uuid.v4();
             user_mysql.user_insert_recovery(user["user_id"], user_uuid);
             res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000, httpOnly: true });
         }
         if(next) next(error);
     });
-};
-
-exports.emailCheck = function(req, res) {
-    async.series({
-        userCount: function(callback) {
-            user_mysql.user_by_email_count(callback, req.param('user_email'));
-        }
-    }, function(error, results){
-        if(!error && !results.userCount) {
-            res.json({success: true});
-        } else {
-            res.json({
-                success: false,
-                error_message: "Email Already Exists"
-            });
-        }
-    });
-};
-
-exports.restrictAccess = function(req, res, next) {
-    if(req.session.user) {
-        if(config.cookies.rememberme in req.cookies) {
-            if(next) next();
-        } else {
-            exports.reload_user(req, res, next);
-        }
-    } else {
-        async.series({
-            uuid: function(callback) {
-                user_mysql.user_by_uuid(callback, req.cookies[config.cookies.rememberme]);
-            }
-        }, function(error, result) {
-            if(!error && result.uuid.length) {
-                req.session.user = { id: result.uuid[0]["recovery_user_id"] };
-                exports.reload_user(req, res, next);
-            } else {
-                error_lib.handler({status: 401}, req, res, next);
-            }
-        });
-    }
-};
-
-exports.loginCheck = function(req, res, next) {
-    if(req.session.user) {
-        res.redirect('/documents/');
-    } else {
-        if(next) next();
-    }
 };

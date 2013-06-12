@@ -23,7 +23,7 @@ exports.index = function(req, res) {
 exports.files = function(req, res) {
     async.series({
         user_files: function(callback) {
-            user_documents_mysql.documents_by_user(callback, req.session.user.id);
+            user_documents_mysql.documents_by_user(req.session.user.id, callback);
         }
     }, function(error, results) {
         if(!error) {
@@ -164,7 +164,7 @@ exports.create_location = function(req, res) {
         },
         function(callback) {
             var locations = aes.encrypt(JSON.stringify(req.session.user.code_locations), req.session.user.email);
-            user_mysql.user_locations(callback, req.session.user.id, locations);
+            user_mysql.user_locations(req.session.user.id, locations, callback);
         }
     ], function(error) {
         if(!error) {
@@ -191,7 +191,7 @@ exports.remove_location = function(req, res) {
                 } else {
                     var locations = aes.encrypt(JSON.stringify(req.session.user.code_locations), req.session.user.email);
                 }
-                user_mysql.user_locations(callback, req.session.user.id, locations);
+                user_mysql.user_locations(req.session.user.id, locations, callback);
             }
         ], function(error) {
             if(!error) {

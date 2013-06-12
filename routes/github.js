@@ -14,7 +14,7 @@ exports.add_token = function(req, res) {
                 github_lib.get_token(req.param("code"), function (error, token) {
                     req.session.user.github = token;
                     token = aes.encrypt(token, req.session.user.email)
-                    user_mysql.user_github_token(callback, req.session.user.id, token);
+                    user_mysql.user_github_token(req.session.user.id, token, callback);
                 });
             }
         }, function(error, results){
@@ -30,7 +30,7 @@ exports.remove_token = function(req, res) {
         async.series({
             remove_token: function(callback) {
                 req.session.user.github = null;
-                user_mysql.user_github_token(callback, req.session.user.id, null);
+                user_mysql.user_github_token(req.session.user.id, null, callback);
             }
         }, function(error, results){
             res.redirect("/account/settings/");

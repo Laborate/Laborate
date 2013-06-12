@@ -8,7 +8,7 @@ var editor = require('./editor');
 var github = require('./github');
 
 module.exports = function(app) {
-    /* Root Route */
+    /* Root */
     app.get('/', auth.loginCheck, core.login);
 
     /* Login */
@@ -18,7 +18,11 @@ module.exports = function(app) {
     /* Register */
     app.get('/register', auth.loginCheck, core.register);
     app.post('/auth/register', auth.register);
-    app.post('/auth/email_check', auth.emailCheck);
+
+    /* Activate */
+    app.get('/activate', auth.restrictAccess, core.activate);
+    app.post('/activate/resend', auth.restrictAccess, core.activate_resend);
+    app.post('/auth/activate', auth.restrictAccess, auth.activate);
 
     /* Logout */
     app.get('/logout', auth.logout);

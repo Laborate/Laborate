@@ -111,7 +111,7 @@ window.documents = {
                         $("#file_"+reference+" .title").attr("data", name);
                         $("#file_"+reference+" .title").text(name);
                         window.documents.popUpClose();
-                        $.post("/documents/file/" + reference + "/rename/", { name: name,  _csrf: $("#_csrf").val() },
+                        $.post("/documents/file/" + reference + "/rename/", { name: name,  _csrf: $("#_csrf").text() },
                             function(json) {
                                 if("error_message" in json) {
                                     window.notification.open(json.error_message);
@@ -128,7 +128,7 @@ window.documents = {
             }
 
             if(id == "action") {
-                $.post("/documents/file/" + reference + "/remove/", { _csrf: $("#_csrf").val() }, function(json) {
+                $.post("/documents/file/" + reference + "/remove/", { _csrf: $("#_csrf").text() }, function(json) {
                     if("error_message" in json) {
                         window.notification.open(json.error_message);
                     } else {
@@ -245,9 +245,13 @@ window.documents = {
                 $("#popup #popup_location_type").die();
                 $("#popup #popup_location_github ul li").die();
                 $("#popup #location_add form").die();
-                $.post("/documents/location/create/", { locations_add: [Math.floor((Math.random()*10000)+1), items], _csrf: $("#_csrf").val() },
-                    function() {
-                        window.documents.locationListing();
+                $.post("/documents/location/create/", { locations_add: [Math.floor((Math.random()*10000)+1), items], _csrf: $("#_csrf").text() },
+                    function(json) {
+                        if("error_message" in json) {
+                            window.notification.open(json.error_message);
+                        } else {
+                            window.documents.locationListing();
+                        }
                 });
                 window.documents.popUpClose();
             }
@@ -259,7 +263,7 @@ window.documents = {
         window.documents.popUp("location_delete");
 
         $("#popup #location_remove input[type=button]").live("click", function() {
-            $.post("/documents/location/remove/", { locations_remove: id, _csrf: $("#_csrf").val() }, function(json) {
+            $.post("/documents/location/remove/", { locations_remove: id, _csrf: $("#_csrf").text() }, function(json) {
                 if("error_message" in json) {
                     window.notification.open(json.error_message);
                 } else {
@@ -338,7 +342,7 @@ window.documents = {
             if(name) {
                 window.documents.popUpClose();
                 window.notification.open("creating file in current directory...");
-                $.post("/documents/file/create/", { name: name, external_path:  path, location: location, _csrf: $("#_csrf").val() },
+                $.post("/documents/file/create/", { name: name, external_path:  path, location: location, _csrf: $("#_csrf").text() },
                     function(json) {
                         if("error_message" in json) {
                             window.notification.open(json.error_message);
