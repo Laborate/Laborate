@@ -39,7 +39,7 @@ window.documents = {
             $("#popup #new_file input[type=text]").css({"border":""});
             $("#popup #new_file").show();
             $("#popup #new_file .selection").show();
-            $("#popup #popup_header #popup_header_name").text("Name Document");
+            $("#popup #popup_header #popup_header_name").text("Document Name");
             $("#popup").css({"width": "250"});
         }
 
