@@ -2,12 +2,14 @@
 var crypto = require('crypto');
 var async = require("async");
 var uuid = require('node-uuid');
+var rand = require("generate-key");
 
 /* Modules: Custom */
-var config   = require('../config');
-var core   = require('./core');
-var error_lib   = require('./error');
-var aes   = require('../lib/core/aes');
+var config = require('../config');
+var core = require('./core');
+var error_lib = require('./error');
+var aes = require('../lib/core/aes');
+var email = require('../lib/email');
 var user_mysql = require('../lib/mysql/users');
 
 /* Module Exports: Access Checks */
@@ -110,14 +112,14 @@ exports.logout = function(req, res) {
 // TODO: Send Email
 exports.register = function(req, res) {
     user_mysql.user_by_email_count(req.param('email'), function(error, results) {
-        if(!error && !results.userCount) {
+        if(!error && !results) {
             if(req.param('password') == req.param('password_confirm')) {
                 async.series({
                     register: function(callback) {
                         delete req.body._csrf;
                         delete req.body.password_confirm;
                         req.body.password = aes.encrypt(req.param('password'), req.param('email'));
-                        req.body.activated = Math.floor(Math.random()*100000000),
+                        req.body.activated = rand.generateKey(10).toLowerCase(),
                         user_mysql.user_insert(req.body, callback);
                     }
                 }, function(error, results) {
@@ -132,7 +134,16 @@ exports.register = function(req, res) {
                                     success: true,
                                     next: "/activate/"
                                 });
-                                callback(null);
+
+                                email("activate", {
+                                    from: "support@laborate.io",
+                                    subject: "Please Activate Your Account" + config.general.site_delimeter + config.general.site_title,
+                                    users: [{
+                                        name: req.param('name'),
+                                        email: req.param('email'),
+                                        activated: req.body.activated
+                                    }]
+                                }, callback);
                             }
                         ]);
                     } else {

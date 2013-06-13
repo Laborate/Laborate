@@ -24,7 +24,10 @@
     "octonode": "*",
     "jquery": "*",
     "node-uuid": "*",
-    "node-fs": "*"
+    "node-fs": "*",
+    "generate-key": "*",
+    "email-templates": "*",
+    "nodemailer": "*"
   },
   "devDependencies": {
     "express-debug": "*"
