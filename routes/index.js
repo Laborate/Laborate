@@ -19,10 +19,10 @@ module.exports = function(app) {
     app.get('/register', auth.loginCheck, core.register);
     app.post('/auth/register', auth.register);
 
-    /* Activate */
-    app.get('/activate', auth.restrictAccess, core.activate);
-    app.post('/activate/resend', auth.restrictAccess, core.activate_resend);
-    app.post('/auth/activate', auth.restrictAccess, auth.activate);
+    /* Verify Email */
+    app.get('/verify', auth.restrictAccess, core.verify);
+    app.get('/verify/resend', auth.restrictAccess, core.verify_resend);
+    app.post('/auth/verify', auth.restrictAccess, auth.verify);
 
     /* Logout */
     app.get('/logout', auth.logout);

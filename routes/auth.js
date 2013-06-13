@@ -16,9 +16,9 @@ var user_mysql = require('../lib/mysql/users');
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(config.cookies.rememberme in req.cookies) {
-            excuse_links = ["/activate/", "/activate/resend/", "/auth/activate/"];
-            if(req.session.user.activated && excuse_links.indexOf(req.url) == -1) {
-                res.redirect("/activate/");
+            excuse_links = ["/verify/", "/verify/resend/", "/auth/verify/"];
+            if(req.session.user.verified && excuse_links.indexOf(req.url) == -1) {
+                res.redirect("/verify/");
             } else {
                 if(next) next();
             }
@@ -119,7 +119,7 @@ exports.register = function(req, res) {
                         delete req.body._csrf;
                         delete req.body.password_confirm;
                         req.body.password = aes.encrypt(req.param('password'), req.param('email'));
-                        req.body.activated = rand.generateKey(10).toLowerCase(),
+                        req.body.verified = rand.generateKey(10).toLowerCase(),
                         user_mysql.user_insert(req.body, callback);
                     }
                 }, function(error, results) {
@@ -132,16 +132,17 @@ exports.register = function(req, res) {
                             function(callback) {
                                 res.json({
                                     success: true,
-                                    next: "/activate/"
+                                    next: "/verify/"
                                 });
 
-                                email("activate", {
+                                email("verify", {
+                                    host: req.host,
                                     from: "support@laborate.io",
-                                    subject: "Please Activate Your Account" + config.general.site_delimeter + config.general.site_title,
+                                    subject: "Please Verify Your Email",
                                     users: [{
                                         name: req.param('name'),
                                         email: req.param('email'),
-                                        activated: req.body.activated
+                                        code: req.body.verified
                                     }]
                                 }, callback);
                             }
@@ -168,10 +169,10 @@ exports.register = function(req, res) {
     });
 };
 
-exports.activate = function(req, res) {
-    if(req.param('activation_code') == req.session.user.activated) {
-        req.session.user.activated = null;
-        user_mysql.user_activation(req.session.user.id, null);
+exports.verify = function(req, res) {
+    if(req.param('verification_code') == req.session.user.verified) {
+        req.session.user.verified = null;
+        user_mysql.user_verification(req.session.user.id, null);
         res.json({
             success: true,
             next: "/documents/"
@@ -179,7 +180,7 @@ exports.activate = function(req, res) {
     } else {
         res.json({
             success: false,
-            error_message: "Incorrect Activation Code"
+            error_message: "Incorrect Verification Code"
         })
     }
 };
@@ -198,7 +199,7 @@ exports.load_user = function(req, res, next) {
                 screen_name: user["user_screen_name"],
                 email: user["user_email"],
                 email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
-                activated: user["user_activated"],
+                verified: user["user_verified"],
                 github: (user["user_github"]) ? aes.decrypt(String(user["user_github"]), user["user_email"]) : null,
                 code_pricing_id: user["user_code_pricing"],
                 code_pricing_documents: user["pricing_documents"],

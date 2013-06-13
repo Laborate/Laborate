@@ -4,15 +4,15 @@
         <a href="/"><div id="backdropLogo">code-laborate</div></a>
         <div id="backdropInital">
             <div class="backdropContainer">
-                <div class="backdropInitalWelcome seperatorRequired" style="font-size: 16px;">Activation Email Has Been Sent</div>
+                <div class="backdropInitalWelcome seperatorRequired" style="font-size: 16px;"><%= feedback %></div>
                 <div class="seperatorRequired">
-                    <form action="/auth/activate/">
-                        <input type="text" autofocus="on" name="activation_code" placeholder="Activation Code"/>
-                        <input type="submit" class="backdropButton button full blue" value="Activate"/>
+                    <form action="/auth/verify/">
+                        <input type="text" autofocus="on" name="verification_code" placeholder="Verification Code"/>
+                        <input type="submit" class="backdropButton button full blue" value="Verify"/>
                     </form>
                 </div>
                 <div class="backdropInitalWelcome" style="font-size: 14px;">
-                    Need an activation code? <a href="/activate/resend/">Send Email</a>
+                    Need an verification code? <a href="/verify/resend/">Send Email</a>
                 </div>
             </div>
             <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>

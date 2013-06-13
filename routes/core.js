@@ -1,3 +1,7 @@
+/* Modules: Custom */
+var config = require('../config');
+var email = require('../lib/email');
+
 exports.login = function(req, res) {
     var data = {
         title: 'Login',
@@ -18,30 +22,42 @@ exports.register = function(req, res) {
     res.render('register', data);
 };
 
-exports.activate = function(req, res) {
-    if(req.session.user.activated) {
+exports.verify = function(req, res) {
+    if(req.session.user.verified) {
         var data = {
-            title: 'Activate Your Account',
-            mode: 'Activate',
+            title: 'Verify Your Account',
+            mode: 'Verify',
+            feedback: 'Verification Email Has Been Sent',
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop")
         }
-        res.render('activate', data);
+        res.render('verify', data);
     } else {
         res.redirect("/documents/");
     }
 };
 
-// TODO: Send Email
-exports.activate_resend = function(req, res) {
-    if(req.session.user.activated) {
+exports.verify_resend = function(req, res) {
+    if(req.session.user.verified) {
         var data = {
-            title: 'Activate Your Account',
-            mode: 'Activate',
+            title: 'Resent Verification Email',
+            mode: 'Verify',
+            feedback: 'Resent Verification Email',
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop")
         }
-        res.render('activate', data);
+        res.render('verify', data);
+
+        email("verify", {
+            host: req.host,
+            from: "support@laborate.io",
+            subject: "Please Verify Your Email",
+            users: [{
+                name: req.session.user.name,
+                email: req.session.user.email,
+                code: req.session.user.verified
+            }]
+        });
     } else {
         res.redirect("/documents/");
     }
