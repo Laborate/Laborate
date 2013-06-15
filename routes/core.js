@@ -1,5 +1,4 @@
 /* Modules: Custom */
-var config = require('../config');
 var email = require('../lib/email');
 
 exports.login = function(req, res) {

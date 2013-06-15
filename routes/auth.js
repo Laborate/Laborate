@@ -5,7 +5,6 @@ var uuid = require('node-uuid');
 var rand = require("generate-key");
 
 /* Modules: Custom */
-var config = require('../config');
 var core = require('./core');
 var error_lib = require('./error');
 var aes = require('../lib/core/aes');

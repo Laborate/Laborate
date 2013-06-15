@@ -27,7 +27,8 @@
     "node-fs": "*",
     "generate-key": "*",
     "email-templates": "*",
-    "nodemailer": "*"
+    "nodemailer": "*",
+    "sequelize": "*"
   },
   "devDependencies": {
     "express-debug": "*"

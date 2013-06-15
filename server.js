@@ -1,17 +1,16 @@
-/* Modules: Custom */
-var config = require('./config');
-
 /* Modules: NPM */
-var express    = require('express');
-var app        = express();
-var srv        = require('http').createServer(app).listen(config.general.port);;
-var io         = require('socket.io').listen(srv);
-var slashes    = require("connect-slashes");
-var piler      = require("piler");
+var express = require('express');
+var app     = express();
+var srv     = require('http').createServer(app);
+var io      = require('socket.io').listen(srv);
+var slashes = require("connect-slashes");
+var piler   = require("piler");
 
-/* No Var Makes It Global Throught All File */
-clientJS   = piler.createJSManager({urlRoot: "/js/"});
-clientCSS  = piler.createCSSManager({urlRoot: "/css/", outputDirectory: __dirname + "/public/css"});
+/* IMPORTANT - No VAR Makes Variables Global */
+config    = require('./config');
+models    = require("./lib/models");
+clientJS  = piler.createJSManager({urlRoot: "/js/"});
+clientCSS = piler.createCSSManager({urlRoot: "/css/", outputDirectory: __dirname + "/public/css"});
 
 /* Configuration */
 app.configure(function() {
@@ -98,3 +97,6 @@ io.on('error', function(error) {
 
 /* Socket IO: Import Routes */
 require('./socket')(io);
+
+/* Listen To Server */
+srv.listen(config.general.port);
