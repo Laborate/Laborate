@@ -65,42 +65,35 @@ exports.loginCheck = function(req, res, next) {
 
 /* Module Exports: Access Operations */
 exports.login = function(req, res, next) {
-    async.series({
-        user: function(callback) {
-            user_mysql.user_by_email(req.param('email'), callback);
-        }
-    }, function(error, results){
-        user = results.user[0];
-
-        if(!error && user) {
-            if(aes.decrypt(user['user_password'], req.param('email')) == req.param('password')) {
-                async.series([
-                    function(callback) {
-                        req.session.user = { id: user["user_id"] };
-                        exports.load_user(req, res, callback);
-                    },
-                    function(callback) {
-                        res.json({
-                            success: true,
-                            next: "/documents/"
-                        });
-                        callback(null);
-                    }
-                ]);
-            } else {
-                res.json({
-                    success: false,
-                    error_message: "Incorrect Email or Password"
-                });
-            }
+    models.USERS.find({
+        where: {
+            email: req.param('email'),
+            password: aes.encrypt(req.param('password'), req.param('password'))
+        },
+        include: [{
+            model: models.USERS_PRICING,
+            as: 'pricing'
+        }]
+    }).success(function(user) {
+        if(user) {
+            var user_uuid = uuid.v4();
+            user.recovery = user_uuid;
+            user.save();
+            req.session.user = user.values;
+            res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000, httpOnly: true });
+            res.json({
+                success: false,
+                error_message: "Incorrect Email or Password"
+            });
         } else {
-           res.json({
+            res.json({
                 success: false,
                 error_message: "Incorrect Email or Password"
             });
         }
+
     });
-};
+}
 
 exports.logout = function(req, res) {
     req.session = null;

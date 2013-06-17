@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "preinstall": "shell/initialize.sh",
-    "start": "forever start start.js"
+    "preinstall": "shell/initialize.sh"
   },
   "dependencies": {
     "express": "3.2.1",
