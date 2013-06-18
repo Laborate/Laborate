@@ -65,32 +65,24 @@ exports.loginCheck = function(req, res, next) {
 
 /* Module Exports: Access Operations */
 exports.login = function(req, res, next) {
-    models.USERS.find({
-        where: {
-            email: req.param('email'),
-            password: aes.encrypt(req.param('password'), req.param('password'))
-        },
-        include: [{
-            model: models.USERS_PRICING,
-            as: 'pricing'
-        }]
-    }).success(function(user) {
-        if(user) {
-            user.updateAttributes({
-                recovery: uuid.v4()
-            });
+    req.models.users.find({
+        email: req.param('email'),
+        password: aes.encrypt(req.param('password'), req.param('password'))
+    }, function(error, user) {
+        console.log(user);
+        if(!error && user) {
+            user[0].recovery = uuid.v4();
+            req.session.user = user[0];
 
-            req.session.user = user.values;
-
-            res.cookie(config.cookies.rememberme, user.recovery, {
+            res.cookie(config.cookies.rememberme, user[0].recovery, {
                 maxAge: 9000000000,
                 httpOnly: true
             });
 
             res.json({
-                success: false,
-                error_message: "Incorrect Email or Password"
-            });
+                success: true,
+                next: "/documents/"
+             });
         } else {
             res.json({
                 success: false,
