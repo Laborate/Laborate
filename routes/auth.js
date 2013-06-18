@@ -76,11 +76,17 @@ exports.login = function(req, res, next) {
         }]
     }).success(function(user) {
         if(user) {
-            var user_uuid = uuid.v4();
-            user.recovery = user_uuid;
-            user.save();
+            user.updateAttributes({
+                recovery: uuid.v4()
+            });
+
             req.session.user = user.values;
-            res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000, httpOnly: true });
+
+            res.cookie(config.cookies.rememberme, user.recovery, {
+                maxAge: 9000000000,
+                httpOnly: true
+            });
+
             res.json({
                 success: false,
                 error_message: "Incorrect Email or Password"
