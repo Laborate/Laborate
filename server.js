@@ -8,7 +8,6 @@ var piler   = require("piler");
 
 /* IMPORTANT - No VAR Makes Variables Global */
 config    = require('./config');
-models    = require("./lib/models");
 clientJS  = piler.createJSManager({urlRoot: "/js/"});
 clientCSS = piler.createCSSManager({urlRoot: "/css/", outputDirectory: __dirname + "/public/css"});
 
@@ -35,6 +34,7 @@ app.configure(function() {
         secret: config.cookie_session.secret
     }));
     app.use(express.csrf());
+    app.use(require("./lib/models"));
     app.use(function(req, res, next) {
         res.locals.host = req.host;
         res.locals.site_title = config.general.site_title;
