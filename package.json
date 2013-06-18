@@ -27,7 +27,8 @@
     "generate-key": "*",
     "email-templates": "*",
     "nodemailer": "*",
-    "sequelize": "*"
+    "sequelize": "*",
+    "orm": "*"
   },
   "devDependencies": {
     "express-debug": "*"
