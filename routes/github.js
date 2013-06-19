@@ -12,9 +12,7 @@ exports.add_token = function(req, res) {
         async.series({
             add_token: function(callback) {
                 github_lib.get_token(req.param("code"), function (error, token) {
-                    req.session.user.github = token;
-                    token = aes.encrypt(token, req.session.user.email)
-                    user_mysql.user_github_token(req.session.user.id, token, callback);
+                    req.session.user.github = aes.encrypt(token, req.session.user.key);
                 });
             }
         }, function(error, results){

@@ -9,7 +9,6 @@ var core = require('./core');
 var error_lib = require('./error');
 var aes = require('../lib/core/aes');
 var email = require('../lib/email');
-var user_mysql = require('../lib/mysql/users');
 
 /* Module Exports: Access Checks */
 exports.restrictAccess = function(req, res, next) {
@@ -22,20 +21,17 @@ exports.restrictAccess = function(req, res, next) {
                 if(next) next();
             }
         } else {
-            exports.load_user(req, res, next);
+            req.session.user.set_recovery(res);
+            next();
         }
     } else {
-        async.series({
-            uuid: function(callback) {
-                user_mysql.user_by_uuid(req.cookies[config.cookies.rememberme], callback);
-            }
-        }, function(error, result) {
-            if(!error && result.uuid.length) {
-                req.session.user = { id: result.uuid[0]["recovery_user_id"] };
-                exports.load_user(req, res, next);
-            } else {
-                error_lib.handler({status: 401}, req, res, next);
-            }
+        req.models.find({recovery: req.cookies[config.cookies.rememberme]}, function(error, user) {
+             if(!error && user) {
+                 user.set_recovery(res);
+                 req.session.user = user;
+             } else {
+                 error_lib.handler({status: 401}, req, res, next);
+             }
         });
     }
 };
@@ -45,17 +41,14 @@ exports.loginCheck = function(req, res, next) {
         res.redirect('/documents/');
     } else {
         if(config.cookies.rememberme in req.cookies) {
-            async.series({
-                uuid: function(callback) {
-                    user_mysql.user_by_uuid(req.cookies[config.cookies.rememberme], callback);
-                }
-            }, function(error, result) {
-                if(!error && result.uuid.length) {
-                    req.session.user = { id: result.uuid[0]["recovery_user_id"] };
-                    exports.load_user(req, res, next);
-                } else {
-                    if(next) next();
-                }
+            req.models.find({recovery: req.cookies[config.cookies.rememberme]}, function(error, user) {
+                 if(!error && user) {
+                     user.set_recovery(res);
+                     req.session.user = user;
+                     res.redirect('/documents/');
+                 } else {
+                     error_lib.handler({status: 401}, req, res, next);
+                 }
             });
         } else {
             if(next) next();
@@ -67,18 +60,11 @@ exports.loginCheck = function(req, res, next) {
 exports.login = function(req, res, next) {
     req.models.users.find({
         email: req.param('email'),
-        password: aes.encrypt(req.param('password'), req.param('password'))
-    }, function(error, user) {
-        console.log(user);
-        if(!error && user) {
-            user[0].recovery = uuid.v4();
-            req.session.user = user[0];
-
-            res.cookie(config.cookies.rememberme, user[0].recovery, {
-                maxAge: 9000000000,
-                httpOnly: true
-            });
-
+        password: req.models.users.hash(req.param('password'))
+    }, function(error, users) {
+        if(!error && users.length == 1) {
+            users[0].set_recovery(res);
+            req.session.user = users[0];
             res.json({
                 success: true,
                 next: "/documents/"
@@ -99,70 +85,57 @@ exports.logout = function(req, res) {
     res.redirect('/');
 };
 
-// TODO: Send Email
 exports.register = function(req, res) {
-    user_mysql.user_by_email_count(req.param('email'), function(error, results) {
-        if(!error && !results) {
+    req.models.users.exists({email: req.param('email')}, function(error, exists) {
+        if(!error && !exists) {
             if(req.param('password') == req.param('password_confirm')) {
-                async.series({
-                    register: function(callback) {
-                        delete req.body._csrf;
-                        delete req.body.password_confirm;
-                        req.body.password = aes.encrypt(req.param('password'), req.param('email'));
-                        req.body.verified = rand.generateKey(10).toLowerCase(),
-                        user_mysql.user_insert(req.body, callback);
-                    }
-                }, function(error, results) {
-                    if(!error && results.register) {
-                        async.series([
-                            function(callback) {
-                                req.session.user = { id: results.register.insertId };
-                                exports.load_user(req, res, callback);
-                            },
-                            function(callback) {
-                                res.json({
-                                    success: true,
-                                    next: "/verify/"
-                                });
-
-                                email("verify", {
-                                    host: req.host,
-                                    from: "support@laborate.io",
-                                    subject: "Please Verify Your Email",
-                                    users: [{
-                                        name: req.param('name'),
-                                        email: req.param('email'),
-                                        code: req.body.verified
-                                    }]
-                                }, callback);
-                            }
-                        ]);
-                    } else {
+                req.models.users.create({
+                    name: req.param('name'),
+                    screen_name: req.param('screen_name'),
+                    email: req.param('email'),
+                    password: req.param('password')
+                }, function(error, user) {
+                    if(!error) {
+                        user.set_recovery(res);
+                        req.session.user = user;
                         res.json({
-                            success: false,
-                            error_message: "User Registration Failed"
+                            success: true,
+                            next: "/verify/"
                         });
+
+                        email("verify", {
+                            host: req.host,
+                            from: "support@laborate.io",
+                            subject: "Please Verify Your Email",
+                            users: [{
+                                name: user.name,
+                                email: user.email,
+                                code: user.verified
+                            }]
+                        });
+                    } else {
+                        failed("Please Enter A Valid Email");
                     }
                 });
             } else {
-                res.json({
-                    success: false,
-                    error_message: "Passwords Do Not Match"
-                });
+                failed("Passwords Do Not Match");
             }
         } else {
-            res.json({
-                success: false,
-                error_message: "Email Already Exists"
-            });
+            failed("Email Already Exists")
         }
     });
+
+    function failed(message) {
+        res.json({
+            success: false,
+            error_message: message
+        });
+    }
 };
 
 exports.verify = function(req, res) {
     if(req.param('verification_code') == req.session.user.verified) {
         req.session.user.verified = null;
-        user_mysql.user_verification(req.session.user.id, null);
         res.json({
             success: true,
             next: "/documents/"
@@ -173,33 +146,4 @@ exports.verify = function(req, res) {
             error_message: "Incorrect Verification Code"
         })
     }
-};
-
-exports.load_user = function(req, res, next) {
-    async.series({
-        user: function(callback) {
-            user_mysql.user_by_id(req.session.user.id, callback);
-        }
-    }, function(error, results){
-        user = results.user[0];
-        if(!error && user) {
-            req.session.user = {
-                id: user["user_id"],
-                name: user["user_name"],
-                screen_name: user["user_screen_name"],
-                email: user["user_email"],
-                email_hash: crypto.createHash('md5').update(user["user_email"]).digest("hex"),
-                verified: user["user_verified"],
-                github: (user["user_github"]) ? aes.decrypt(String(user["user_github"]), user["user_email"]) : null,
-                code_pricing_id: user["user_code_pricing"],
-                code_pricing_documents: user["pricing_documents"],
-                code_locations: (user["user_locations"]) ? JSON.parse(aes.decrypt(String(user["user_locations"]), user["user_email"])) : null
-            };
-
-            var user_uuid = uuid.v4();
-            user_mysql.user_insert_recovery(user["user_id"], user_uuid);
-            res.cookie(config.cookies.rememberme, user_uuid, { maxAge: 9000000000, httpOnly: true });
-        }
-        if(next) next(error);
-    });
 };
