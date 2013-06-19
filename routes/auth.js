@@ -21,18 +21,30 @@ exports.restrictAccess = function(req, res, next) {
                 if(next) next();
             }
         } else {
-            req.session.user.set_recovery(res);
-            next();
+            req.models.users.get(req.session.user.id, function(error, user) {
+                if(!error && user) {
+                    user.set_recovery(res);
+                    if(next) next();
+                } else {
+                    error_lib.handler({status: 401}, req, res, next);
+                }
+            });
         }
     } else {
-        req.models.find({recovery: req.cookies[config.cookies.rememberme]}, function(error, user) {
-             if(!error && user) {
-                 user.set_recovery(res);
-                 req.session.user = user;
-             } else {
-                 error_lib.handler({status: 401}, req, res, next);
-             }
-        });
+        if(config.cookies.rememberme in req.cookies) {
+            req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
+                function(error, user) {
+                    if(!error && user) {
+                        user[0].set_recovery(res);
+                        req.session.user = user[0];
+                        if(next) next();
+                    } else {
+                        error_lib.handler({status: 401}, req, res, next);
+                    }
+            });
+        } else {
+            error_lib.handler({status: 401}, req, res, next);
+        }
     }
 };
 
@@ -41,14 +53,15 @@ exports.loginCheck = function(req, res, next) {
         res.redirect('/documents/');
     } else {
         if(config.cookies.rememberme in req.cookies) {
-            req.models.find({recovery: req.cookies[config.cookies.rememberme]}, function(error, user) {
-                 if(!error && user) {
-                     user.set_recovery(res);
-                     req.session.user = user;
-                     res.redirect('/documents/');
-                 } else {
-                     error_lib.handler({status: 401}, req, res, next);
-                 }
+            req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
+                function(error, user) {
+                    if(!error && user) {
+                        user[0].set_recovery(res);
+                        req.session.user = user[0];
+                        if(next) next();
+                    } else {
+                        error_lib.handler({status: 401}, req, res, next);
+                    }
             });
         } else {
             if(next) next();
@@ -135,11 +148,14 @@ exports.register = function(req, res) {
 
 exports.verify = function(req, res) {
     if(req.param('verification_code') == req.session.user.verified) {
-        req.session.user.verified = null;
-        res.json({
-            success: true,
-            next: "/documents/"
-        })
+        req.models.users.get(req.session.user.id, function(error, user) {
+            user.verified = null;
+            req.session.user = user;
+            res.json({
+                success: true,
+                next: "/documents/"
+            });
+        });
     } else {
         res.json({
             success: false,
