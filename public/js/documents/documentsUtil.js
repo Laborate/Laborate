@@ -237,7 +237,7 @@ window.documents = {
                 }
                 else {
                     $("#popup_location_" + type).css({"border": ""});
-                    items["github_repository"] = $("#popup_location_" + type + " .selected").text();
+                    items["repository"] = $("#popup_location_" + type + " .selected").text();
                 }
             }
 

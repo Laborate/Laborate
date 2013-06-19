@@ -61,7 +61,7 @@ exports.repos = function(req, res) {
 exports.contents = function(req, res) {
     if(req.session.user.github) {
         github_lib.contents(req.session.user.github,
-            req.session.user.code_locations[req.param("0")].github_repository,
+            req.session.user.code_locations[req.param("0")].repository,
             req.param("1"),
         function(error, results){
             if(!error) {
