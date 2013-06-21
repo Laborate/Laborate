@@ -4,9 +4,6 @@ var async = require("async");
 
 /* Modules: Custom */
 var github = require("./github");
-var aes = require("../lib/core/aes");
-var user_mysql = require("../lib/mysql/users");
-var user_documents_mysql = require("../lib/mysql/users/documents");
 
 exports.index = function(req, res) {
     var data = {
@@ -21,21 +18,20 @@ exports.index = function(req, res) {
 
 /* Online Files */
 exports.files = function(req, res) {
-    async.series({
-        user_files: function(callback) {
-            user_documents_mysql.documents_by_user(req.session.user.id, callback);
-        }
-    }, function(error, results) {
+    req.models.documents_roles.find({
+        user_id: req.session.user.id
+    }, function(error, documents) {
+        console.log(documents)
         if(!error) {
             var files = [];
 
-            $.each(results.user_files, function(key, value) {
+            $.each(documents, function(key, value) {
                 files.push({
-                    id: value.code_document_id,
-                    name: value.code_document_name,
-                    password: value.code_document_password,
-                    location: value.code_document_location,
-                    role: value.code_role_name
+                    id: value.document_id,
+                    name: value.document.name,
+                    password: (value.document.password),
+                    location: value.document.location,
+                    role: value.permission.name
                 });
             });
 
@@ -51,16 +47,14 @@ exports.files = function(req, res) {
 
 exports.file_create = function(req, res) {
     var path = req.param("external_path");
-    var document = [
-        req.param("name"),
-        JSON.stringify([]),
-        req.session.user.id,
-        (path.slice(-1) == "/") ? path.slice(0, -1) : path,
-        req.param("location")
-    ];
-    user_documents_mysql.document_insert(document, function(error, results) {
+    req.models.documents.create({
+        name: req.param("name"),
+        owner: req.session.user.id,
+        path: (path.slice(-1) == "/") ? path.slice(0, -1) : path,
+        location: req.param("location")
+    }, function(error, document) {
         if(!error) {
-            res.json({document: results.insertId});
+            res.json({document: document.id});
         } else {
             res.json({
                 success: false,
@@ -71,8 +65,9 @@ exports.file_create = function(req, res) {
 };
 
 exports.file_rename = function(req, res) {
-    user_documents_mysql.document_rename(req.param("0"), req.param("name"), function(error, data) {
+    req.models.documents.get(req.param("0"), function(error, document) {
         if(!error) {
+            document.name = req.param("name");
             res.json({ success: true });
         } else {
             res.json({
@@ -84,13 +79,13 @@ exports.file_rename = function(req, res) {
 };
 
 exports.file_remove = function(req, res) {
-    user_documents_mysql.document_remove(req.param("0"), function(error, data) {
+    req.models.documents.get(req.param("0")).remove(function(error) {
         if(!error) {
             res.json({ success: true });
         } else {
             res.json({
                 success: false,
-                error_message: "Failed To Rename File"
+                error_message: "Failed To Remove File"
             });
         }
     });
@@ -98,8 +93,8 @@ exports.file_remove = function(req, res) {
 
 /* Locations */
 exports.location = function(req, res) {
-    if(req.session.user.code_locations && (req.param("0") in req.session.user.code_locations)) {
-        switch(req.session.user.code_locations[req.param("0")].type) {
+    if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
+        switch(req.session.user.locations[req.param("0")].type) {
             case "github":
                 github.contents(req, res);
                 break;
@@ -110,7 +105,6 @@ exports.location = function(req, res) {
                 });
                 break;
         }
-
     } else {
         res.json({
             success: false,
@@ -122,9 +116,9 @@ exports.location = function(req, res) {
 exports.locations = function(req, res) {
     async.series({
         locations: function(callback) {
-            if(req.session.user.code_locations) {
+            if(req.session.user.locations) {
                 locations = [];
-                $.each(req.session.user.code_locations, function(key, value) {
+                $.each(req.session.user.locations, function(key, value) {
                     if(!req.session.user.github && value.type == "github") {
                         return;
                     }
@@ -153,20 +147,14 @@ exports.locations = function(req, res) {
 };
 
 exports.create_location = function(req, res) {
-    async.series([
-        function(callback) {
-            if(!req.session.user.code_locations) {
-                req.session.user.code_locations = {}
-            }
-
-            req.session.user.code_locations[req.param("locations_add")[0]] = req.param("locations_add")[1];
-            callback(null);
-        },
-        function(callback) {
-            var locations = aes.encrypt(JSON.stringify(req.session.user.code_locations), req.session.user.email);
-            user_mysql.user_locations(req.session.user.id, locations, callback);
+    req.models.users.get(req.session.user.id, function(error, user) {
+        if(!req.session.user.locations) {
+            req.session.user.locations = {}
         }
-    ], function(error) {
+
+        req.session.user.locations[req.param("locations_add")[0]] = req.param("locations_add")[1];
+        user.location = req.session.user.locations;
+
         if(!error) {
             res.json({success: true});
         } else {
@@ -179,21 +167,11 @@ exports.create_location = function(req, res) {
 };
 
 exports.remove_location = function(req, res) {
-    if(req.session.user.code_locations && (req.param("locations_remove") in req.session.user.code_locations)) {
-        async.series([
-            function(callback) {
-                delete req.session.user.code_locations[req.param("locations_remove")];
-                callback(null);
-            },
-            function(callback) {
-                if(Object.keys(req.session.user.code_locations).length == 0) {
-                    var locations = null;
-                } else {
-                    var locations = aes.encrypt(JSON.stringify(req.session.user.code_locations), req.session.user.email);
-                }
-                user_mysql.user_locations(req.session.user.id, locations, callback);
-            }
-        ], function(error) {
+    if(req.session.user.locations && (req.param("locations_remove") in req.session.user.locations)) {
+        req.models.users.get(req.session.user.id, function(error, user) {
+            delete req.session.user.locations[req.param("locations_remove")];
+            user.location = req.session.user.locations;
+
             if(!error) {
                 res.json({success: true});
             } else {

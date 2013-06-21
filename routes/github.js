@@ -4,7 +4,6 @@ var async = require("async");
 /* Modules: Custom */
 var aes = require('../lib/core/aes');
 var github_lib = require("../lib/github");
-var user_documents_mysql = require("../lib/mysql/users/documents");
 
 exports.add_token = function(req, res) {
     if(req.param("code")) {
@@ -61,7 +60,7 @@ exports.repos = function(req, res) {
 exports.contents = function(req, res) {
     if(req.session.user.github) {
         github_lib.contents(req.session.user.github,
-            req.session.user.code_locations[req.param("0")].repository,
+            req.session.user.locations[req.param("0")].repository,
             req.param("1"),
         function(error, results){
             if(!error) {
