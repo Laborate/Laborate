@@ -22,10 +22,6 @@ window.documents = {
             $("#popup #location_remove").show();
             $("#popup #popup_header #popup_header_name").text("Confirm Location Deletion?");
             $("#popup").css({"width": "250"});
-
-            $("#popup #location_remove input[type=button]").live("click", function() {
-                window.documents.popUpClose();
-            });
         }
 
         if(preset == "share_url") {
@@ -242,9 +238,6 @@ window.documents = {
             }
 
             if(passed) {
-                $("#popup #popup_location_type").die();
-                $("#popup #popup_location_github ul li").die();
-                $("#popup #location_add form").die();
                 $.post("/documents/location/create/", { locations_add: [Math.floor((Math.random()*10000)+1), items], _csrf: $("#_csrf").text() },
                     function(json) {
                         if("error_message" in json) {
@@ -253,6 +246,9 @@ window.documents = {
                             window.documents.locationListing();
                         }
                 });
+                $("#popup #popup_location_type").die();
+                $("#popup #popup_location_github ul li").die();
+                $("#popup #location_add form").die();
                 window.documents.popUpClose();
             }
             return false;
@@ -276,10 +272,11 @@ window.documents = {
                     if($("#locations.remove ul li").size() == 1) {
                         $("#locations").removeClass("remove");
                         $("#locations #online").toggle().addClass("selected");
-                        $("#popup #location_remove input[type=button]").die();
                     }
                 }
             });
+            $("#popup #location_remove input[type=button]").die();
+            window.documents.popUpClose();
         });
     },
     toggleRemoveMode: function() {
@@ -300,7 +297,12 @@ window.documents = {
                 });
                 $("#locations ul li").not("li[id='online']").remove();
                 $("#locations ul").append(locations);
-                $("#" + location).addClass("selected");
+
+                if(location) {
+                    $("#" + location).addClass("selected");
+                } else {
+                    $("#" + window.sidebar).addClass("selected");
+                }
             }
         );
     },

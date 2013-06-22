@@ -43,9 +43,9 @@
     <div id="settings_settings" class="settings">
         <div class="settings_header">Account Settings</div>
             <% if(user.github) { %>
-                <a class="button red" href="/github/token/remove/">Deauthorize With Github</a>
+                <a class="button red" href="/github/token/remove/">Disconnect With Github</a>
             <% } else { %>
-                <a class="button green" href="<%= github_auth_url %>">Authorize With Github</a>
+                <a class="button green" href="<%= github_auth_url %>">Connect With Github</a>
             <% } %>
         <div class="settings_content"></div>
     </div>
