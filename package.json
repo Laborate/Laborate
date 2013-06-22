@@ -25,7 +25,8 @@
     "email-templates": "*",
     "nodemailer": "*",
     "sequelize": "*",
-    "orm": "*"
+    "orm": "*",
+    "mysql": "*"
   },
   "devDependencies": {
     "express-debug": "*"
