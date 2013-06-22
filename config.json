@@ -27,7 +27,9 @@
         "key": "usrs",
         "secret": ""
     },
-    "mysql": {
+    "orm": {
+        "dialect": "mysql",
+        "port": 3306,
         "host": "localhost",
         "database": "",
         "username": "",
@@ -43,8 +45,10 @@
         "authentication": "tls",
         "host": "smtp.gmail.com",
         "port": 587,
-        "username": "",
-        "password": ""
+        "auth": {
+            "user": "",
+            "pass": ""
+        }
     },
     "forever": {
         "uid": "code",
