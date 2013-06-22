@@ -21,7 +21,6 @@ exports.files = function(req, res) {
     req.models.documents_roles.find({
         user_id: req.session.user.id
     }, function(error, documents) {
-        console.log(documents)
         if(!error) {
             var files = [];
 
@@ -79,15 +78,17 @@ exports.file_rename = function(req, res) {
 };
 
 exports.file_remove = function(req, res) {
-    req.models.documents.get(req.param("0")).remove(function(error) {
-        if(!error) {
-            res.json({ success: true });
-        } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Remove File"
-            });
-        }
+    req.models.documents.get(req.param("0"), function(error, user) {
+        user.remove(function(error) {
+            if(!error) {
+                res.json({ success: true });
+            } else {
+                res.json({
+                    success: false,
+                    error_message: "Failed To Remove File"
+                });
+            }
+        });
     });
 };
 
@@ -153,7 +154,7 @@ exports.create_location = function(req, res) {
         }
 
         req.session.user.locations[req.param("locations_add")[0]] = req.param("locations_add")[1];
-        user.location = req.session.user.locations;
+        user.locations = req.session.user.locations;
 
         if(!error) {
             res.json({success: true});
@@ -170,7 +171,7 @@ exports.remove_location = function(req, res) {
     if(req.session.user.locations && (req.param("locations_remove") in req.session.user.locations)) {
         req.models.users.get(req.session.user.id, function(error, user) {
             delete req.session.user.locations[req.param("locations_remove")];
-            user.location = req.session.user.locations;
+            user.locations = req.session.user.locations;
 
             if(!error) {
                 res.json({success: true});
