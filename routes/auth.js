@@ -23,7 +23,7 @@ exports.restrictAccess = function(req, res, next) {
         } else {
             req.models.users.get(req.session.user.id, function(error, user) {
                 if(!error && user) {
-                    user.set_recovery(res);
+                    user.set_recovery(req, res);
                     if(next) next();
                 } else {
                     error_lib.handler({status: 401}, req, res, next);
@@ -35,7 +35,7 @@ exports.restrictAccess = function(req, res, next) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
                 function(error, user) {
                     if(!error && user) {
-                        user[0].set_recovery(res);
+                        user[0].set_recovery(req, res);
                         req.session.user = user[0];
                         if(next) next();
                     } else {
@@ -56,7 +56,7 @@ exports.loginCheck = function(req, res, next) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
                 function(error, user) {
                     if(!error && user) {
-                        user[0].set_recovery(res);
+                        user[0].set_recovery(req, res);
                         req.session.user = user[0];
                         if(next) next();
                     } else {
@@ -76,7 +76,7 @@ exports.login = function(req, res, next) {
         password: req.models.users.hash(req.param('password'))
     }, function(error, users) {
         if(!error && users.length == 1) {
-            users[0].set_recovery(res);
+            users[0].set_recovery(req, res);
             req.session.user = users[0];
             res.json({
                 success: true,
@@ -109,7 +109,7 @@ exports.register = function(req, res) {
                     password: req.param('password')
                 }, function(error, user) {
                     if(!error) {
-                        user.set_recovery(res);
+                        user.set_recovery(req, res);
                         req.session.user = user;
                         res.json({
                             success: true,
