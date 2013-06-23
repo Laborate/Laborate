@@ -23,7 +23,6 @@ exports.files = function(req, res) {
     }, function(error, documents) {
         if(!error) {
             var files = [];
-
             $.each(documents, function(key, value) {
                 files.push({
                     id: value.document_id,
