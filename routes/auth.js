@@ -56,7 +56,6 @@ exports.loginCheck = function(req, res, next) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
                 function(error, user) {
                     if(!error && user.length > 0) {
-                        console.log(user[0])
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
                         if(next) next();
@@ -76,7 +75,7 @@ exports.login = function(req, res, next) {
         email: req.param('email'),
         password: req.models.users.hash(req.param('password'))
     }, function(error, users) {
-        if(!error && users.length == 1) {
+        if(!error && users.length > 0) {
             users[0].set_recovery(req, res);
             req.session.user = users[0];
             res.json({

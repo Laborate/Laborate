@@ -10,18 +10,21 @@ var piler   = require("piler-compat");
 config    = require('./config');
 clientJS  = piler.createJSManager({
     urlRoot: "/js/",
-    outputDirectory: __dirname + "/public/min/"
+    //outputDirectory: __dirname + "/public/min/"
 });
 clientCSS = piler.createCSSManager({
     urlRoot: "/css/",
-    outputDirectory: __dirname + "/public/min/"
+    //outputDirectory: __dirname + "/public/min/"
 });
 
 /* Configuration */
 app.configure(function() {
+    //Assests
     clientJS.bind(app, srv);
     clientCSS.bind(app, srv);
     require("./lib/core/dependencies")();
+
+    //Express
     app.engine('html', require('ejs').renderFile);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');
