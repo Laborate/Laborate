@@ -45,9 +45,9 @@ function createRange() {
   return array;
 }
 
-//Prevent Rewriting Of Document
-setInterval(function() {
-    if($("body").attr("contenteditable") == "true") {
+$(window).ready(function() {
+    //Prevent Rewriting Of Document
+    setInterval(function() {
         $("body").attr("contenteditable", "false");
-    }
-}, 500)
+    }, 500);
+});
