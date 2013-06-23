@@ -1,5 +1,5 @@
 /* Modules: NPM */
-//var utils = require('./utils');
+//var utils = require('.utils');
 
 /* Module Exports */
 module.exports = function(io) {
@@ -7,20 +7,20 @@ module.exports = function(io) {
         var session = {};
 
         socket.on('join', function(data) {
-            utils.session_authentication(data, function(success) {
-                if(success) {
-                    if(session == data['session']) {
-                        socket.leave(session);
-                    }
-                    socket.join(data['session']);
-                    session = data;
-
-                    var join = {"from": data['from'], "name": data['name'], "join": true};
-                    socket.broadcast.to(session['session']).emit('users' , join);
-                } else {
-                    socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
-                }
-            });
+            //utils.session_authentication(data, function(success) {
+            //    if(success) {
+            //        if(session == data['session']) {
+            //            socket.leave(session);
+            //        }
+            //        socket.join(data['session']);
+            //        session = data;
+            //
+            //        var join = {"from": data['from'], "name": data['name'], "join": true};
+            //        socket.broadcast.to(session['session']).emit('users' , join);
+            //    } else {
+            //        socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
+            //    }
+            //});
         });
 
         socket.on('editor', function(data) {
@@ -28,18 +28,18 @@ module.exports = function(io) {
 
             if("extras" in data) {
                 if("breakpoint" in data["extras"]) {
-                    utils.session_breakpoint(session['session'], data["extras"]["breakpoint"], function(success) {
-                        if(!success) {
-                            socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
-                        }
-                    });
+                    //utils.session_breakpoint(session['session'], data["extras"]["breakpoint"], function(success) {
+                    //    if(!success) {
+                    //        socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
+                    //    }
+                    //});
                 }
             } else {
-                utils.session_document(session['session'], data, function(success) {
-                    if(!success) {
-                        socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
-                    }
-                });
+                //utils.session_document(session['session'], data, function(success) {
+                //    if(!success) {
+                //        socket.to(data['session']).emit( 'editor' , {"extras": {"passChange": "true"}} );
+                //    }
+                //});
             }
         });
 

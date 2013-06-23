@@ -1,10 +1,10 @@
 $(window).ready(function() {
     $.each($("#sidebar_header img"), function() {
         var module = $(this).attr("id");
-        if(getUrlVars()['i'] == undefined) {
+        if(window.url_params()["document"] == undefined) {
             var url = '/includes/sidebar_' + module + '.php';
         } else {
-            var url = '/includes/sidebar_' + module + '.php?i=' + getUrlVars()['i'];
+            var url = '/includes/sidebar_' + module + '.php?i=' + window.url_params()["document"];
         }
 
         $.get(url, function(newHtml) {

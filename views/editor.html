@@ -1,0 +1,24 @@
+<% include includes/header.html %>
+<% include includes/navigation.html %>
+<div class="notification"></div>
+<div id="sidebar">
+    <div id="sidebar_header">
+        <img id="document" src="/img/document.png"/>
+        <img id="find" class="default" src="/img/find.png"/>
+        <img id="share" src="/img/share.png"/>
+        <img id="download" src="/img/download.png"/>
+        <img id="settings" src="/img/settings.png"/>
+    </div>
+    <div id="sidebar_content"></div>
+</div>
+<div id="editorCodeMirror">
+    <div id="full_screen" class="icon-expand right"></div>
+    <textarea id="code" name="code" placeholder="Code goes here..."><%= content %></textarea>
+</div>
+<div id="chatRoom">
+    <div id="chatConversation" class="scroll-pane"></div>
+    <div id="chatBox">
+        <textarea id="messenger" placeholder="Enter Message Here"></textarea>
+    </div>
+</div>
+<% include includes/footer.html %>

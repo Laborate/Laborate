@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <% if (title) {
+        <% if(title) {
             title = title + site_delimeter + site_title;
         } else {
             title = site_title;
@@ -42,6 +42,7 @@
 
         <%- js %>
         <%- css %>
+
     </head>
     <body>
         <div id="_csrf" class="hidden"><%= _csrf %></div>

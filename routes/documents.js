@@ -8,7 +8,8 @@ var github = require("./github");
 exports.index = function(req, res) {
     var data = {
         title: 'Documents',
-        mode: 'Documents Drive',
+        navigation: 'Documents Drive',
+        mode: "documents",
         user: req.session.user,
         js: clientJS.renderTags("documents", "header"),
         css: clientCSS.renderTags("documents", "header", "icons")

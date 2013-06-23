@@ -11,7 +11,8 @@ exports.index = function(req, res) {
     }, function(error, count) {
         var data = {
             title: 'Account',
-            mode: 'User Settings',
+            navigation: 'User Settings',
+            mode: "account",
             user: req.session.user,
             github_auth_url: github_lib.auth_url,
             pass_sessions_count: count,

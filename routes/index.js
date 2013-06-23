@@ -43,7 +43,8 @@ module.exports = function(app) {
     app.post('/documents/location/remove', auth.restrictAccess, documents.remove_location);
 
     /* Editor */
-    app.get(/^\/editor\/(\d*)/, auth.restrictAccess, editor.index);
+    app.get('/editor', auth.restrictAccess, editor.index);
+    app.get(/^\/editor\/(\d*)\/$/, auth.restrictAccess, editor.index);
 
     /* Github */
     app.get('/github/token/add', auth.restrictAccess, github.add_token);

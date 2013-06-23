@@ -79,7 +79,7 @@ exports.contents = function(req, res) {
 
                         req.models.documents.create({
                             name: results.name,
-                            content: results.contents,
+                            content: results.contents.split("\n"),
                             owner_id: req.session.user.id,
                             path: path,
                             location: req.param("0"),
