@@ -58,7 +58,7 @@ exports.loginCheck = function(req, res, next) {
                     if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
-                        if(next) next();
+                        res.redirect('/documents/');
                     } else {
                         if(next) next();
                     }
@@ -94,7 +94,7 @@ exports.login = function(req, res, next) {
 
 exports.logout = function(req, res) {
     req.session = null;
-    res.clearCookie(config.cookies.rememberme);
+    res.clearCookie(config.cookies.rememberme, { domain: req.host.replace(/^[^.]+\./g, "") });
     res.redirect('/');
 };
 
