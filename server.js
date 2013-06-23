@@ -10,11 +10,11 @@ var piler   = require("piler");
 config    = require('./config');
 clientJS  = piler.createJSManager({
     urlRoot: "/js/",
-    outputDirectory: __dirname + "/public/min/js"
+    outputDirectory: __dirname + "/public/min/"
 });
 clientCSS = piler.createCSSManager({
     urlRoot: "/css/",
-    outputDirectory: __dirname + "/public/min/css"
+    outputDirectory: __dirname + "/public/min/"
 });
 
 /* Configuration */
