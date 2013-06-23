@@ -34,7 +34,7 @@ exports.restrictAccess = function(req, res, next) {
         if(config.cookies.rememberme in req.cookies) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
                 function(error, user) {
-                    if(!error && user.length > 0) {
+                    if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
                         if(next) next();
@@ -55,7 +55,7 @@ exports.loginCheck = function(req, res, next) {
         if(config.cookies.rememberme in req.cookies) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
                 function(error, user) {
-                    if(!error && user.length > 0) {
+                    if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
                         if(next) next();
@@ -75,7 +75,7 @@ exports.login = function(req, res, next) {
         email: req.param('email'),
         password: req.models.users.hash(req.param('password'))
     }, function(error, users) {
-        if(!error && users.length > 0) {
+        if(!error && users.length == 1) {
             users[0].set_recovery(req, res);
             req.session.user = users[0];
             res.json({
