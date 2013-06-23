@@ -4,7 +4,7 @@ var app     = express();
 var srv     = require('http').createServer(app);
 var io      = require('socket.io').listen(srv);
 var slashes = require("connect-slashes");
-var piler   = require("piler");
+var piler   = require("piler-compat");
 
 /* IMPORTANT - No VAR Makes Variables Global */
 config    = require('./config');
@@ -21,6 +21,7 @@ clientCSS = piler.createCSSManager({
 app.configure(function() {
     clientJS.bind(app, srv);
     clientCSS.bind(app, srv);
+    require("./lib/core/dependencies")();
     app.engine('html', require('ejs').renderFile);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');
@@ -47,7 +48,6 @@ app.configure(function() {
         res.locals.site_delimeter = config.general.site_delimeter;
         res.locals._csrf = req.session._csrf;
         res.setHeader("Server", "Laborate.io");
-        require("./lib/core/dependencies")();
         next();
     });
 });

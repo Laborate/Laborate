@@ -12,7 +12,7 @@
     "forever-monitor": "*",
     "redis": "*",
     "redis-ns": "*",
-    "piler": "*",
+    "piler-compat": "*",
     "socket.io": "*",
     "crypto": "*",
     "async": "*",
