@@ -79,16 +79,23 @@ exports.file_rename = function(req, res) {
 
 exports.file_remove = function(req, res) {
     req.models.documents.get(req.param("0"), function(error, user) {
-        user.remove(function(error) {
-            if(!error) {
-                res.json({ success: true });
-            } else {
-                res.json({
-                    success: false,
-                    error_message: "Failed To Remove File"
-                });
-            }
-        });
+        if(!error) {
+            user.remove(function(error) {
+                if(!error) {
+                    res.json({ success: true });
+                } else {
+                    res.json({
+                        success: false,
+                        error_message: "Failed To Remove File"
+                    });
+                }
+            });
+        } else {
+            res.json({
+                success: false,
+                error_message: "Failed To Remove File"
+            });
+        }
     });
 };
 
