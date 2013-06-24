@@ -1,13 +1,12 @@
 <% include signature.html %>
+<% if(title) {
+    title = title + site_delimeter + site_title;
+} else {
+    title = site_title;
+} %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <% if(title) {
-            title = title + site_delimeter + site_title;
-        } else {
-            title = site_title;
-        } %>
-
         <!-- Base Meta Tags -->
         <title><%= title %></title>
         <meta name="description" content="Collaborative software development made easy! Upload files manually, from Github repositories or SFTP Servers in seconds and start editing in realtime with your team.">
@@ -42,7 +41,6 @@
 
         <%- js %>
         <%- css %>
-
     </head>
     <body>
         <div id="_csrf" class="hidden"><%= _csrf %></div>

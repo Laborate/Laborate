@@ -182,8 +182,6 @@
 }
 
 #files .file .file_attributes {
-    background: #efefef;
-    border: solid 3px #ebebeb;
     padding: 55px 10px 0px 10px;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -195,17 +193,43 @@
     background-repeat: no-repeat;
     text-align: center;
     margin: 0px auto 5px auto;
+    color: #4c4c4c;
+    border: solid 3px #dcdcdc;
 }
 
 #files .file_attributes:hover { border: solid 3px #00a7ff; }
-#files .file_attributes:hover > .file_badge { box-shadow: 0px 0px 2px #bbbbbb; }
 #files .file_attributes:hover:active { border: solid 3px #0093e2; }
 
-#files .file .file_attributes.open { background-image: url("/img/document_open.png"); }
-#files .file .file_attributes.password { background-image: url("/img/document_password.png"); }
-#files .file .file_attributes.employee { background-image: url("/img/document_employees.png"); }
-#files .file .file_attributes.folder { background-image: url("/img/document_folder.png"); }
-#files .file .file_attributes.back { background-image: url("/img/document_back.png"); }
+#files .file .file_attributes.open {
+    background-image: url("/img/document_open.png"), -webkit-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_open.png"), -moz-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_open.png"), -ms-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_open.png"), -o-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+}
+#files .file .file_attributes.password {
+    background-image: url("/img/document_password.png"), -webkit-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_password.png"), -moz-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_password.png"), -ms-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_password.png"), -o-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+}
+#files .file .file_attributes.employee {
+    background-image: url("/img/document_employees.png"), -webkit-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_employees.png"), -moz-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_employees.png"), -ms-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_employees.png"), -o-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+}
+#files .file .file_attributes.folder {
+    background-image: url("/img/document_folder.png"), -webkit-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_folder.png"), -moz-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_folder.png"), -ms-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_folder.png"), -o-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+}
+#files .file .file_attributes.back {
+    background-image: url("/img/document_back.png"), -webkit-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_back.png"), -moz-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_back.png"), -ms-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+    background-image: url("/img/document_back.png"), -o-linear-gradient(#fcfcfc 0%, #f6f6f6 100%);
+}
 
 #files .notFound { display: none; }
 
