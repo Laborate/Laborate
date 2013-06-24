@@ -8,14 +8,8 @@ var piler   = require("piler-compat");
 
 /* IMPORTANT - No VAR Makes Variables Global */
 config    = require('./config');
-clientJS  = piler.createJSManager({
-    urlRoot: "/js/",
-    //outputDirectory: __dirname + "/public/min/"
-});
-clientCSS = piler.createCSSManager({
-    urlRoot: "/css/",
-    //outputDirectory: __dirname + "/public/min/"
-});
+clientJS  = piler.createJSManager({urlRoot: "/js/"});
+clientCSS = piler.createCSSManager({urlRoot: "/css/"});
 
 /* Configuration */
 app.configure(function() {
