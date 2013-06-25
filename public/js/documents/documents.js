@@ -108,6 +108,6 @@ $('body').live("contextmenu",function() {
     return false;
 });
 
-$("body").live("click", function() {
+$("*").live("click", function() {
     window.documents.contextMenuClose();
 });
