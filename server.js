@@ -51,11 +51,15 @@ app.configure(function() {
 
 /* Development Only */
 app.configure('development', function() {
-    app.use(express.basicAuth(config.development.basicAuth.username, config.development.basicAuth.password));
     require('express-debug')(app, {
         theme: __dirname + config.development.debugger.theme,
         panels: config.development.debugger.panels
     });
+
+    app.use(express.basicAuth(
+        config.development.basicAuth.username,
+        config.development.basicAuth.password
+    ));
 });
 
 /* Production Only */
