@@ -147,20 +147,16 @@ window.documents = {
        $("#menu").hide();
     },
     locationChange: function(location_id, path, no_history) {
-        $("#files .location").hide();
         $("#locations ul li").removeClass("selected");
         $("#" + location_id).addClass("selected");
+        $("#files #file_library").html("");
 
         if(location_id == "online" || !location_id) {
             $("#online").addClass("selected");
-            $("#files #location_online #file_library").html("");
-            $("#files #location_online").show();
             location_id = "online";
             window.documents.onlineDirectory(no_history);
         } else {
-           $("#files #location_template #file_library").html("");
-           $("#files #location_template").show();
-           window.documents.locationDirectory(location_id, path, no_history);
+            window.documents.locationDirectory(location_id, path, no_history);
         }
 
         window.sidebar = location_id;
@@ -377,7 +373,7 @@ window.documents = {
                     files += file;
                 });
 
-                $("#files #location_online #file_library").append(files);
+                $("#files #file_library").append(files);
 
                 window.notification.close();
                 if(!no_history) history.pushState(null, null, "/documents/");
@@ -473,7 +469,7 @@ window.documents = {
                 template += '</div>';
                 files += template;
             });
-            $("#files #location_template #file_library").html(files);
+            $("#files #file_library").html(files);
             window.notification.close();
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(!no_history) history.pushState(null, null, "/documents/" + location_id + "/" + path);
@@ -500,20 +496,19 @@ window.documents = {
         var search = form.find("input[name=s]").val();
         var protection = form.find("select[name=p]").val();
         var relation = form.find("select[name=r]").val();
-        var parent_location = form.parent(".location");
+        var parent_location = form.parent("#location_template");
 
         parent_location.find(".file").each(function() {
             var show = true;
-            if($(this).find(".title").attr("data").toLowerCase().indexOf(search) < 0) { show = false; }
-            if(window.sidebar == "online") {
-                if(protection != $(this).find(".file_attributes").attr("data")[0] && protection != "") { show = false; }
-                if(relation != $.trim($(this).find(".file_attributes").text())[0] && relation != "") { show = false; }
+            if($(this).find(".title").attr("data").toLowerCase().indexOf(search) < 0) {
+                $(this).hide();
+            } else {
+                $(this).show();
             }
-            if(show) { $(this).show(); } else { $(this).hide(); }
         });
 
         if(parent_location.find(".file:visible").length == 0 && parent_location.find(".file").length != 0) {
-            $(".location:visible .notFound").show();
+            $(".notFound").show();
             if($(window).width() < 950) {
                 parent_location.find("#newFile").hide();
                 parent_location.find("#clearSearch").css("float","right");
