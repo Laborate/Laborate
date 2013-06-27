@@ -347,6 +347,7 @@ window.documents = {
                         } else {
                             window.documents.goToTab("/editor/" + json.document + "/");
                             window.notification.close();
+                            $("#popup #new_file form").die();
                         }
                 });
             } else {

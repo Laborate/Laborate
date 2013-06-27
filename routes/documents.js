@@ -48,7 +48,7 @@ exports.file_create = function(req, res) {
     var path = req.param("external_path");
     req.models.documents.create({
         name: req.param("name"),
-        owner: req.session.user.id,
+        owner_id: req.session.user.id,
         path: (path.slice(-1) == "/") ? path.slice(0, -1) : path,
         location: req.param("location")
     }, function(error, document) {

@@ -3,7 +3,8 @@ window.onpopstate = function() {
    window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
 };
 
-$(".newFile").live("click", function() {
+//Add New File
+$("#newFile").live("click", function() {
     window.documents.newFile(window.url_params()["dir"], window.sidebar);
 });
 
