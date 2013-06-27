@@ -13,7 +13,7 @@ var email = require('../lib/email');
 /* Module Exports: Access Checks */
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
-        if(config.cookies.rememberme in req.cookies) {
+        if(config.cookies.rememberme in req.signedCookies) {
             excuse_links = ["/verify/", "/verify/resend/", "/auth/verify/"];
             if(req.session.user.verified && excuse_links.indexOf(req.url) == -1) {
                 res.redirect("/verify/");
@@ -31,8 +31,8 @@ exports.restrictAccess = function(req, res, next) {
             });
         }
     } else {
-        if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
+        if(config.cookies.rememberme in req.signedCookies) {
+            req.models.users.find({recovery: req.signedCookies[config.cookies.rememberme]},
                 function(error, user) {
                     if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
@@ -52,8 +52,8 @@ exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
         res.redirect('/documents/');
     } else {
-        if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
+        if(config.cookies.rememberme in req.signedCookies) {
+            req.models.users.find({recovery: req.signedCookies[config.cookies.rememberme]},
                 function(error, user) {
                     if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
