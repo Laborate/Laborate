@@ -510,7 +510,7 @@ window.documents = {
 
         if(parent_location.find(".file:visible").length == 0 && parent_location.find(".file").length != 0) {
             $(".notFound").show();
-            if($(window).width() < 950) {
+            if($(window).width() < 1015) {
                 parent_location.find("#newFile").hide();
                 parent_location.find("#clearSearch").css("float","right");
             }
