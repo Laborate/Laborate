@@ -27,7 +27,7 @@ app.configure(function() {
     app.use('/fonts', express.static(__dirname + '/public/fonts'));
     app.use('/flash', express.static(__dirname + '/public/flash'));
     app.use('/img', express.static(__dirname + '/public/img'));
-    app.use('/codemirror', express.static(__dirname + '/public/codemirror'));
+    app.use('/codemirror', express.static(__dirname + '/node_modules/codemirror'));
     app.use(slashes(true));
     app.use(express.logger('dev'));
     app.use(express.compress());

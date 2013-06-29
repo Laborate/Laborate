@@ -5,7 +5,7 @@ $(window).ready(function() {
             lineWrapping: true,
             matchBrackets: true,
             tabMode: "indent",
-            theme: "codelaborate",
+            theme: "laborate",
             indentUnit: 4,
             indentWithTabs: true,
             smartIndent: true,
@@ -34,6 +34,9 @@ $(window).ready(function() {
     window.editor.on("blur", function() {
         window.editorUtil.userCursors("out", {"remove":true});
     });
+
+    //Editor Mode (TEMPORARY)
+    window.sidebarUtil.setTitle($("#document_title").text());
 
 
     //Pull New Code

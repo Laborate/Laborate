@@ -81,14 +81,8 @@
                     <% if(document.owner.locations[document.location].type == "github") { %>
                         <form id="commitFile">
                             <div>
-                                <div class="header">Commit File</div>
-                                <div><input id="githubMessage" type="text" placeholder="Commit Message" spellcheck="false" class="input"/></div>
-                                <div>
-                                    <div class="left" style="margin-top: 6px">Reference Issue</div>
-                                    <div class="left" style="color:#666; margin:6px 2px 0px 5px">#</div>
-                                    <input id="githubReference" type="text" placeholder="22" spellcheck="false" style="width:50px" class="input right"/>
-                                    <div class="clear"></div>
-                                </div>
+                                <div class="header">Commit Message</div>
+                                <div><textarea id="githubMessage" placeholder="Fixed problems with the search algorithm. ISSUE: #143" class="input textarea" style="height:60px;"></textarea></div>
                             </div>
                             <input type="submit" id="githubCommit" value="Commit File" class="button green full"/>
                         </form>
