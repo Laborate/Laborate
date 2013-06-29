@@ -1,12 +1,14 @@
+var $ = require("jquery");
+
 exports.index = function(req, res) {
     req.models.documents.get(req.param("0"), function(error, document) {
         if(document) {
-            console.log(document)
             var data = {
                 title: document.name,
                 navigation: document.name,
                 mode: "editor",
-                content: (document.content) ? document.content.join("\n") : '',
+                user: req.session.user,
+                document: document,
                 js: clientJS.renderTags("editor", "header", "codemirror", "jscroll"),
                 css: clientCSS.renderTags("editor", "header", "codemirror", "jscroll")
             }

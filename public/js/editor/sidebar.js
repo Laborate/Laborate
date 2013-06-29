@@ -1,19 +1,5 @@
 $(window).ready(function() {
-    $.each($("#sidebar_header img"), function() {
-        var module = $(this).attr("id");
-        if(window.url_params()["document"] == undefined) {
-            var url = '/includes/sidebar_' + module + '.php';
-        } else {
-            var url = '/includes/sidebar_' + module + '.php?i=' + window.url_params()["document"];
-        }
-
-        $.get(url, function(newHtml) {
-			$("#sidebar_content").append(newHtml);
-			if('initialize_' + module in window) {
-    			window['initialize_' + module]();
-            }
-         });
-    });
+    sidebar($("#sidebar_header .default").attr("id"));
 });
 
 function sidebar(module, focusElement) {

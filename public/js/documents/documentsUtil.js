@@ -234,7 +234,7 @@ window.documents = {
             }
 
             if(passed) {
-                $.post("/documents/location/create/", { locations_add: [Math.floor((Math.random()*10000)+1), items], _csrf: $("#_csrf").text() },
+                $.post("/documents/location/create/", { locations_add: items, _csrf: $("#_csrf").text() },
                     function(json) {
                         if("error_message" in json) {
                             window.notification.open(json.error_message);
@@ -288,8 +288,9 @@ window.documents = {
                     else if(item["type"] == "sftp") { var icon = "icon-drawer"; }
                     else { var icon = "icon-storage"; }
                     locations += '<li id="' + item['key'] + '" data="' + item['type'] + '">';
-                    locations += '<span class="icon ' + icon + '"></span>';
-                    locations += '<span class="location_name">' + item['name'] + '</span></li>';
+                    locations += '<div class="left icon ' + icon + '"></div>';
+                    locations += '<div class="location_name">' + item['name'] + '</div>';
+                    locations += '<div class="clear"></div></li>';
                 });
                 $("#locations ul li").not("li[id='online']").remove();
                 $("#locations ul").append(locations);

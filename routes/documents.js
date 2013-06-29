@@ -1,6 +1,7 @@
 /* Modules: NPM */
 var $ = require("jquery");
 var async = require("async");
+var rand = require("generate-key");
 
 /* Modules: Custom */
 var github = require("./github");
@@ -78,18 +79,34 @@ exports.file_rename = function(req, res) {
 };
 
 exports.file_remove = function(req, res) {
-    req.models.documents.get(req.param("0"), function(error, user) {
+    req.models.documents.get(req.param("0"), function(error, document) {
         if(!error) {
-            user.remove(function(error) {
-                if(!error) {
-                    res.json({ success: true });
-                } else {
-                    res.json({
-                        success: false,
-                        error_message: "Failed To Remove File"
-                    });
-                }
-            });
+            if(document.owner_id == req.session.user.id) {
+                document.remove(function(error) {
+                    if(!error) {
+                        res.json({ success: true });
+                    } else {
+                        res.json({
+                            success: false,
+                            error_message: "Failed To Remove File"
+                        });
+                    }
+                });
+            } else {
+                req.models.documents_roles.find({
+                    user_id: req.session.user.id,
+                    document_id: req.param("0")
+                }).remove(function(error) {
+                    if(!error) {
+                        res.json({ success: true });
+                    } else {
+                        res.json({
+                            success: false,
+                            error_message: "Failed To Remove File"
+                        });
+                    }
+                });
+            }
         } else {
             res.json({
                 success: false,
@@ -160,7 +177,7 @@ exports.create_location = function(req, res) {
             req.session.user.locations = {}
         }
 
-        req.session.user.locations[req.param("locations_add")[0]] = req.param("locations_add")[1];
+        req.session.user.locations[rand.generateKey(10)] = req.param("locations_add");
         user.locations = req.session.user.locations;
 
         if(!error) {

@@ -9,11 +9,135 @@
         <img id="download" src="/img/download.png"/>
         <img id="settings" src="/img/settings.png"/>
     </div>
-    <div id="sidebar_content"></div>
+    <div id="sidebar_content">
+        <div id="sidebar_document" class="sidebar_content_inner">
+            <a href="/editor/" class="button green full" style="display:block">New Document</a>
+            <hr/>
+            <div>
+                <div class="header">Document History</div>
+                <input id="document_undo" type="button" value="Undo" class="button blue pull_left"/>
+                <input id="document_redo" type="button" value="Redo" class="button blue pull_right"/>
+                <div class="clear"></div>
+            </div>
+            <hr/>
+            <div>
+                <div class="header">Auto Format</div>
+                <input id="document_format_selection" type="button" value="Selection" class="button blue pull_left"/>
+                <input id="document_format" type="button" value="All" class="button blue pull_right"/>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div id="sidebar_find" class="sidebar_content_inner">
+        	<div>
+                <div class="header">Jump To A Line</div>
+                <form id="lineNumberJumpForm">
+                    <input id="lineNumberJump" class="left input" style="width:120px;" type="text" placeholder="5" spellcheck="false"/>
+                    <input type="submit" class="button blue right" id="lineNumberJumpGo" value="Jump">
+                    <div class="clear"></div>
+                </form>
+             </div>
+             <hr/>
+             <div>
+                <div class="header">Line Number (s)</div>
+                <form id="lineNumberForm">
+                    <input id="lineNumber" class="left input" style="width:120px;" type="text" placeholder="1, 15-40, 55" spellcheck="false"/>
+                    <input type="submit" class="button blue right" id="lineNumberGo" value="Find">
+                    <div class="clear"></div>
+                </form>
+                <div id="lineNumberList" style="margin-top:15px;"></div>
+            </div>
+            <hr/>
+            <div>
+                <div class="header">Find Words</div>
+                <form id="findWordsForm">
+                    <input id="findWords" type="text"  class="left input" style="width:120px;"  placeholder="function()" spellcheck="false"/>
+                    <input type="submit" class="button blue right" id="findWordsGo" value="Find">
+                    <div class="clear"></div>
+                </form>
+                <div id="findList" style="margin-top:15px;"></div>
+            </div>
+        </div>
+        <div id="sidebar_share" class="sidebar_content_inner">
+            <div>
+               <div class="header">Email Address(s)</div>
+               <div class="header left" style="color: #666; font-size: 12px;">Comma Delimiter</div>
+               <div class="header right" style="color: #888; font-size: 12px;">20 Max</div>
+               <div class="clear"></div>
+               <div><textarea id="emailAddresses" rows="1" style="height:40px;" class="input textarea" placeholder="john@doe.com, doe@jon.com"></textarea></div>
+            </div>
+            <div>
+               <div class="header">Additional Message</div>
+               <div><textarea id="emailMessage" spellcheck="false" class="input textarea" placeholder="Welcome to the team!"></textarea></div>
+            </div>
+            <input type="button" value="Send Email" id="emailSend" class="button green full"/>
+            <hr/>
+            <input type="button" value="Copy Invite Url" id="shareCopy" class="button blue full"/>
+        </div>
+        <div id="sidebar_download" class="sidebar_content_inner">
+            <% if(document.location in document.owner.locations) { %>
+                <% if(document.owner.locations[document.location].type == "github") { %>
+                    <div>
+                        <div class="header">Commit File</div>
+                        <div><input id="githubMessage" type="text" placeholder="Commit Message" spellcheck="false" class="input"/></div>
+                        <div>
+                            <div class="left" style="margin-top: 6px">Reference Issue</div>
+                            <div class="left" style="color:#666; margin:6px 2px 0px 5px">#</div>
+                            <input id="githubReference" type="text" placeholder="22" spellcheck="false" style="width:50px" class="input right"/>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <input type="button" id="githubCommit" value="Commit File" class="button green full"/>
+                    <hr/>
+                <% } else if(document.owner.locations[document.location].type == "sftp") { %>
+                    <input type="button" value="Save To Server" id="saveToServer" class="button green full"/>
+                    <hr/>
+                <% } %>
+            <% } %>
+            <input type="button" value="Download Document" id="downloadFile" class="button blue full"/>
+            <hr/>
+            <input type="button" value="Print Document" id="printButton" class="button blue full"/>
+        </div>
+        <div id="sidebar_settings" class="sidebar_content_inner">
+            <div>
+                <div class="header">Screen Name</div>
+                <div><input id="screenName" type="text" placeholder="John Doe" spellcheck="false" class="input"/></div>
+            </div>
+            <hr/>
+            <div>
+                <div class="header">Document Title</div>
+                <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
+            </div>
+            <hr/>
+            <% if(document.owner_id == user.id) { %>
+                <div>
+                    <div class="header">Document Password</div>
+                    <div><input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/></div>
+                </div>
+                <hr/>
+            <% } %>
+            <div>
+                <div class="header">Key Mapping</div>
+                <div>
+                    <select id="keyMap" class="select full">
+                        <option id="keyMap_default" value="default">None</option>
+                        <option id="keyMap_vim" value="vim">Vim</option>
+                        <option id="keyMap_emacs" value="emacs">Emacs</option>
+                    </select>
+                </div>
+            </div>
+            <hr/>
+            <input type="button" id="settingsSave" value="Save Settings" class="button green full"/>
+            <hr/>
+            <input type="button" id="actionDoc" value="<%= (document.owner_id == user.id) ? "Delete" : "Forget" %> Document" class="button red full"/>
+            <div id="actionConfirm"><span class="a" id="actionConfirmClick">Yes</span> I am sure. <span class="a" id="actionConfirmCancel">Cancel</span></div>
+        </div>
+    </div>
 </div>
 <div id="editorCodeMirror">
     <div id="full_screen" class="icon-expand right"></div>
-    <textarea id="code" name="code" placeholder="Code goes here..."><%= content %></textarea>
+    <textarea id="code" name="code" placeholder="Code goes here..."><%=
+        (document.content && !document.password) ? document.content.join("\n") : ""
+    %></textarea>
 </div>
 <div id="chatRoom">
     <div id="chatConversation" class="scroll-pane"></div>

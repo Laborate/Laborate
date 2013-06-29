@@ -18,7 +18,9 @@ $("#backdrop form").live("submit", function() {
         $("#backdrop input[type=submit]").val("loading...").addClass("disabled");
         $.post($("#backdrop form").attr("action"), data, function(result){
             if(result.success) {
-                window.location.href = result.next;
+                if(result.next) {
+                    window.location.href = result.next;
+                }
             }
             else {
                 $("#backdrop .textError").text(result.error_message).fadeIn();
