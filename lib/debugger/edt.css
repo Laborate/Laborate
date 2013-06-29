@@ -62,7 +62,7 @@
     display: none;
     font-size: 14px;
     z-index: 100000000000000;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     left: 0;

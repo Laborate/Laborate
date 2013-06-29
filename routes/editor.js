@@ -1,11 +1,12 @@
 exports.index = function(req, res) {
-    req.models.documents_roles.find({document_id: req.param("0"), user_id: req.session.user.id}, function(error, documents) {
-        if(documents.length > 0) {
+    req.models.documents.get(req.param("0"), function(error, document) {
+        if(document) {
+            console.log(document)
             var data = {
-                title: documents[0].document.name,
-                navigation: documents[0].document.name,
+                title: document.name,
+                navigation: document.name,
                 mode: "editor",
-                content: (documents[0].document.content) ? documents[0].document.content.join("\n") : '',
+                content: (document.content) ? document.content.join("\n") : '',
                 js: clientJS.renderTags("editor", "header", "codemirror", "jscroll"),
                 css: clientCSS.renderTags("editor", "header", "codemirror", "jscroll")
             }
