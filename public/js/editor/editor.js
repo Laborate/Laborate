@@ -1,5 +1,5 @@
 $(window).ready(function() {
-     CodeMirror.modeURL = "http://resources.code.dev.laborate.io/codemirror/mode/%N/%N.js"
+     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
      window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             lineNumbers: true,
             lineWrapping: true,
