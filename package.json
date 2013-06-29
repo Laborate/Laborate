@@ -10,8 +10,6 @@
     "ejs": "*",
     "less": "*",
     "forever-monitor": "*",
-    "redis": "*",
-    "redis-ns": "*",
     "piler-compat": "*",
     "socket.io": "*",
     "crypto": "*",
@@ -24,9 +22,10 @@
     "generate-key": "*",
     "email-templates": "*",
     "nodemailer": "*",
-    "sequelize": "*",
     "orm": "*",
-    "mysql": "*"
+    "mysql": "*",
+    "codemirror": "*",
+    "redis": "*"
   },
   "devDependencies": {
     "express-debug": "*"

@@ -20,6 +20,7 @@ exports.index = function(req, res) {
                     navigation: '',
                     mode: "editor",
                     content: '',
+                    document: null,
                     js: clientJS.renderTags("editor", "header", "codemirror", "jscroll"),
                     css: clientCSS.renderTags("editor", "header", "codemirror", "jscroll")
                 }

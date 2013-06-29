@@ -17,7 +17,7 @@ exports.index = function(req, res) {
             github_auth_url: github_lib.auth_url,
             pass_sessions_count: count,
             js: clientJS.renderTags("account", "header"),
-            css: clientCSS.renderTags("account", "header", "icons"),
+            css: clientCSS.renderTags("account", "header"),
         }
         res.render('account', data);
     });
