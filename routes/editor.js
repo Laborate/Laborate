@@ -9,8 +9,8 @@ exports.index = function(req, res) {
                 mode: "editor",
                 user: req.session.user,
                 document: document,
-                js: clientJS.renderTags("editor", "header", "codemirror", "jscroll"),
-                css: clientCSS.renderTags("editor", "header", "codemirror", "jscroll")
+                js: clientJS.renderTags("codemirror", "editor", "header", "jscroll"),
+                css: clientCSS.renderTags("codemirror", "editor", "header", "jscroll")
             }
             res.render('editor', data);
         } else {
@@ -19,10 +19,10 @@ exports.index = function(req, res) {
                     title: 'Editor',
                     navigation: '',
                     mode: "editor",
-                    content: '',
+                    user: req.session.user,
                     document: null,
-                    js: clientJS.renderTags("editor", "header", "codemirror", "jscroll"),
-                    css: clientCSS.renderTags("editor", "header", "codemirror", "jscroll")
+                    js: clientJS.renderTags("codemirror", "editor", "header", "jscroll"),
+                    css: clientCSS.renderTags("codemirror", "editor", "header", "jscroll")
                 }
                 res.render('editor', data);
             } else {

@@ -1,5 +1,5 @@
 function setEditorMode(mode) {
-    languageExtentsion =  { "js":"javascript", "json":"json",
+    languageExtentsion =  { "js":"javascript", "json":"javascript",
                             "php":"php",
                             "css":"css",
                             "h":"text/x-c++src", "c":"text/x-csrc", "cc":"text/x-csrc", "cpp":"text/x-c++src",

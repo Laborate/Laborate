@@ -6,6 +6,7 @@ var account = require('./account');
 var documents = require('./documents');
 var editor = require('./editor');
 var github = require('./github');
+var realtime = require('./realtime');
 
 module.exports = function(app) {
     /* Root */
@@ -28,7 +29,7 @@ module.exports = function(app) {
     app.get('/logout', auth.logout);
 
     /* Account */
-    app.get(/^\/account\/.*/, auth.restrictAccess, account.index);
+    app.get(/^\/account\/.*/, auth.restrictAccess, realtime.index, account.index);
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);
@@ -43,8 +44,8 @@ module.exports = function(app) {
     app.post('/documents/location/remove', auth.restrictAccess, documents.remove_location);
 
     /* Editor */
-    app.get('/editor', auth.restrictAccess, editor.index);
-    app.get(/^\/editor\/(\d*)\/$/, auth.restrictAccess, editor.index);
+    app.get('/editor', auth.restrictAccess, realtime.index, editor.index);
+    app.get(/^\/editor\/(\d*)\/$/, auth.restrictAccess, realtime.index, editor.index);
 
     /* Github */
     app.get('/github/token/add', auth.restrictAccess, github.add_token);

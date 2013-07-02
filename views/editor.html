@@ -21,10 +21,7 @@
             </div>
             <hr/>
             <div>
-                <div class="header">Auto Format</div>
-                <input id="document_format_selection" type="button" value="Selection" class="button blue pull_left"/>
-                <input id="document_format" type="button" value="All" class="button blue pull_right"/>
-                <div class="clear"></div>
+                <input id="document_format" type="button" value="Auto Format Document" class="button blue full"/>
             </div>
         </div>
         <div id="sidebar_find" class="sidebar_content_inner">
@@ -76,21 +73,19 @@
             <input type="button" value="Copy Invite Url" id="shareCopy" class="button blue full"/>
         </div>
         <div id="sidebar_download" class="sidebar_content_inner">
-            <% if(document) { %>
-                <% if(document.location in document.owner.locations) { %>
-                    <% if(document.owner.locations[document.location].type == "github") { %>
-                        <form id="commitFile">
-                            <div>
-                                <div class="header">Commit Message</div>
-                                <div><textarea id="githubMessage" placeholder="Fixed problems with the search algorithm. ISSUE: #143" class="input textarea" style="height:60px;"></textarea></div>
-                            </div>
-                            <input type="submit" id="githubCommit" value="Commit File" class="button green full"/>
-                        </form>
-                        <hr>
-                    <% } else if(document.owner.locations[document.location].type == "sftp") { %>
-                        <input type="button" value="Save To Server" id="saveToServer" class="button green full"/>
-                        <hr>
-                    <% } %>
+            <% if(document && document.location in document.owner.locations) { %>
+                <% if(document.owner.locations[document.location].type == "github") { %>
+                    <form id="commitFile">
+                        <div>
+                            <div class="header">Commit Message</div>
+                            <div><textarea id="githubMessage" placeholder="Fixed problems with the search algorithm. ISSUE: #143" class="input textarea" style="height:60px;"></textarea></div>
+                        </div>
+                        <input type="submit" id="githubCommit" value="Commit File" class="button green full"/>
+                    </form>
+                    <hr>
+                <% } else if(document.owner.locations[document.location].type == "sftp") { %>
+                    <input type="button" value="Save To Server" id="saveToServer" class="button green full"/>
+                    <hr>
                 <% } %>
             <% } %>
             <input type="button" value="Download Document" id="downloadFile" class="button blue full"/>
@@ -102,18 +97,11 @@
                 <div class="header">Document Title</div>
                 <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
             </div>
-            <% if(document) { %>
-                <% if(document.owner_id == user.id) { %>
+            <% if((!document || document.owner_id == user.id) && user.pass_documents < user.code_pricing.documents) { %>
                     <div>
                         <div class="header">Document Password</div>
                         <div><input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/></div>
                     </div>
-                <% } %>
-            <% } else { %>
-                <div>
-                    <div class="header">Document Password</div>
-                    <div><input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/></div>
-                </div>
             <% } %>
             <div>
                 <div class="header">Key Mapping</div>

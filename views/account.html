@@ -15,7 +15,7 @@
         <div id="navigation_password_header" class="left">PRIVATE DOCUMENTS</div>
         <div id="navigation_password_header_light" class="right">
             <% if(user.code_pricing.documents) { %>
-                <%= pass_sessions_count + " of " + user.code_pricing.documents %>
+                <%= user.pass_documents + " of " + user.code_pricing.documents %>
             <% } else { %>
                 <%= pass_sessions_count %>
             <% } %>
