@@ -340,7 +340,13 @@ window.documents = {
             var name = $("#popup #new_file input[type=text]").val();
             if(name) {
                 window.documents.popUpClose();
-                window.notification.open("creating file in current directory...");
+                if(location == "online") {
+                    location = null;
+                    window.notification.open("creating file");
+                } else {
+                    window.notification.open("creating file in current directory...");
+                }
+
                 $.post("/documents/file/create/", { name: name, external_path:  path, location: location, _csrf: $("#_csrf").text() },
                     function(json) {
                         if("error_message" in json) {
