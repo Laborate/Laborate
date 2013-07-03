@@ -9,7 +9,13 @@ $(window).ready(function() {
     });
 
     /* Triggers: Documents */
-    $("#document_undo").on("click", window.editor.undo);
-    $("#document_redo").on("click", window.editor.redo);
-    $("#document_format").on("click", window.sidebarUtil.format);
+    $("#document_undo").live("click", function() {
+        window.editor.undo();
+    });
+
+    $("#document_redo").live("click", function() {
+        window.editor.redo();
+    });
+
+    $("#document_format").live("click", window.sidebarUtil.format);
 });
