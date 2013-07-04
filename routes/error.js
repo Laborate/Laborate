@@ -34,16 +34,14 @@ exports.handler = function(error, req, res, next) {
                     if(redirect_url) {
                         res.redirect(redirect_url);
                     } else {
-                        var data = {
+                        res.render('error', {
                             host: req.host,
                             title: error_message,
                             mode: error_message,
                             js: clientJS.renderTags("backdrop"),
                             css: clientCSS.renderTags("backdrop"),
                             error_html: error_html
-                        }
-
-                        res.render('error', data);
+                        });
                     }
                 },
                 'json': function(){

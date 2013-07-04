@@ -5,7 +5,7 @@ var async = require("async");
 var github_lib = require("../lib/github");
 
 exports.index = function(req, res) {
-    var data = {
+    res.render('account', {
         title: 'Account',
         navigation: 'User Settings',
         mode: "account",
@@ -13,6 +13,5 @@ exports.index = function(req, res) {
         github_auth_url: github_lib.auth_url,
         js: clientJS.renderTags("account", "header"),
         css: clientCSS.renderTags("account", "header"),
-    }
-    res.render('account', data);
+    });
 };

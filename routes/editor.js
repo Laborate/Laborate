@@ -5,7 +5,7 @@ var $ = require("jquery");
 var email = require('../lib/email');
 var error_lib = require('./error');
 
-exports.index = function(req, res) {
+exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.get(req.param("document"), function(error, document) {
             if(document) {
@@ -20,7 +20,7 @@ exports.index = function(req, res) {
                     css: clientCSS.renderTags("codemirror", "editor", "header", "jscroll")
                 });
             } else {
-                res.redirect('/documents/');
+                error_lib.handler({status: 404}, req, res, next);
             }
         });
     } else {

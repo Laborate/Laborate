@@ -7,15 +7,14 @@ var rand = require("generate-key");
 var github = require("./github");
 
 exports.index = function(req, res) {
-    var data = {
+    res.render('documents', {
         title: 'Documents',
         navigation: 'Documents Drive',
         mode: "documents",
         user: req.session.user,
         js: clientJS.renderTags("documents", "header"),
         css: clientCSS.renderTags("documents", "header")
-    }
-    res.render('documents', data);
+    });
 };
 
 /* Online Files */
