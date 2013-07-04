@@ -6,34 +6,26 @@ var email = require('../lib/email');
 var error_lib = require('./error');
 
 exports.index = function(req, res) {
-    req.models.documents.get(req.param("document"), function(error, document) {
-        if(document) {
-            document.join(req.session.user.id, 2);
-            res.render('editor', {
-                title: document.name,
-                navigation: document.name,
-                mode: "editor",
-                user: req.session.user,
-                document: document,
-                js: clientJS.renderTags("codemirror", "editor", "header", "jscroll"),
-                css: clientCSS.renderTags("codemirror", "editor", "header", "jscroll")
-            });
-        } else {
-            if(!req.param("document")) {
+    if(req.param("document")) {
+        req.models.documents.get(req.param("document"), function(error, document) {
+            if(document) {
+                document.join(req.session.user.id, 2);
                 res.render('editor', {
-                    title: 'Editor',
-                    navigation: '',
+                    title: document.name,
+                    navigation: document.name,
                     mode: "editor",
                     user: req.session.user,
-                    document: null,
+                    document: document,
                     js: clientJS.renderTags("codemirror", "editor", "header", "jscroll"),
                     css: clientCSS.renderTags("codemirror", "editor", "header", "jscroll")
                 });
             } else {
-                res.redirect('/editor/');
+                res.redirect('/documents/');
             }
-        }
-    });
+        });
+    } else {
+       res.redirect('/documents/');
+    }
 };
 
 exports.download = function(req, res, next) {

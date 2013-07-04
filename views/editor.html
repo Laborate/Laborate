@@ -73,7 +73,7 @@
             <input type="button" value="Copy Invite Url" id="shareCopy" class="button blue full"/>
         </div>
         <div id="sidebar_download" class="sidebar_content_inner">
-            <% if(document && document.location in document.owner.locations) { %>
+            <% if(document.location in document.owner.locations) { %>
                 <% if(document.owner.locations[document.location].type == "github") { %>
                     <form id="commitFile">
                         <div>
@@ -97,7 +97,7 @@
                 <div class="header">Document Title</div>
                 <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
             </div>
-            <% if((!document || document.owner_id == user.id) && user.code_pricing && user.pass_documents < user.code_pricing.documents) { %>
+            <% if(document.owner_id == user.id && user.code_pricing && user.pass_documents < user.code_pricing.documents) { %>
                     <div>
                         <div class="header">Document Password</div>
                         <div><input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/></div>
@@ -118,7 +118,7 @@
             </div>
             <hr/>
             <input type="button" id="actionDoc" value="<%=
-                (document) ? (document.owner_id == user.id) ? "Delete" : "Forget" : "Delete"
+                (document.owner_id == user.id) ? "Delete" : "Forget"
             %> Document" class="button red full"/>
             <div id="actionConfirm"><span class="a" id="actionConfirmClick">
                 Yes</span> I am sure. <span class="a" id="actionConfirmCancel">Cancel</span>
@@ -129,7 +129,7 @@
 <div id="editorCodeMirror">
     <div id="full_screen" class="icon-expand-2 right"></div>
     <textarea id="code" name="code" placeholder="Code goes here..."><%=
-        (document) ? (document.content && !document.password) ? document.content.join("\n") : "" : ""
+        (document.content && !document.password) ? document.content.join("\n") : ""
     %></textarea>
 </div>
 <div id="chatRoom">
