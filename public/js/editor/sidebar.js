@@ -87,4 +87,10 @@ $(window).ready(function() {
             }, 5000);
         }
     });
+
+    /* Triggers: Download */
+    $("#downloadFile").live("click", window.sidebarUtil.downloadFile);
+    $("#printButton").live("click", window.sidebarUtil.printFile);
+    $("#githubCommit").live("click", window.sidebarUtil.commitFile);
+    $("#saveToServer").live("click", window.sidebarUtil.pushFile);
 });

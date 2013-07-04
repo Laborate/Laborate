@@ -45,7 +45,8 @@ module.exports = function(app) {
 
     /* Editor */
     app.get('/editor', auth.restrictAccess, realtime.index, editor.index);
-    app.get('/editor/:id', auth.restrictAccess, realtime.index, editor.index);
+    app.get('/editor/:document', auth.restrictAccess, realtime.index, editor.index);
+    app.get('/editor/:document/download', auth.restrictAccess, realtime.index, editor.download);
     app.post('/editor/email/invite', auth.restrictAccess, editor.invite_email);
 
     /* Github */

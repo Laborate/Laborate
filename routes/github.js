@@ -66,10 +66,7 @@ exports.contents = function(req, res) {
             if(!error) {
                 switch(results.type) {
                     case "image":
-                        res.writeHead(200, {
-                            "Content-Type": "image/" +  results.extension,
-                            "Content-disposition": "attachment; filename=" + results.name
-                        });
+                        res.attachment(results.name);
                         res.end(results.contents, "binary");
                         break;
 

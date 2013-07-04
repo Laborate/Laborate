@@ -97,7 +97,7 @@
                 <div class="header">Document Title</div>
                 <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
             </div>
-            <% if((!document || document.owner_id == user.id) && user.pass_documents < user.code_pricing.documents) { %>
+            <% if((!document || document.owner_id == user.id) && user.code_pricing && user.pass_documents < user.code_pricing.documents) { %>
                     <div>
                         <div class="header">Document Password</div>
                         <div><input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/></div>

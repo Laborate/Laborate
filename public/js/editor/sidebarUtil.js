@@ -144,35 +144,8 @@ window.sidebarUtil = {
 			  );
 	},
 	downloadFile: function() {
-		$("#downloadFile").removeClass("red_harsh").addClass("disabled").val("Downloading File...");
-		window.sidebarUtil.passwordCheck(function(callback) {
-			$("#downloadFile").removeClass("disabled");
-			if(callback) {
-				$.fileDownload("/php/session/download.php", {
-					httpMethod: "POST",
-					data: "download_id=" + callback,
-					successCallback: function () {
-					$("#downloadFile").removeClass("red_harsh").val("Download File");
-				},
-							   failCallback: function (html, url) {
-					alert('Your file download just failed for this URL:' + url + '\r\n' +
-						  'Here was the resulting error HTML: \r\n' + html
-						 );
-					$("#downloadFile").addClass("red_harsh").val("Download Failed");
-					setTimeout(function() {
-						$("#downloadFile").removeClass("red_harsh").val("Download File");
-					}, 5000);
-				}
-			});
-		}
-										 else {
-										 $("#downloadFile").addClass("red_harsh").val("Download Failed");
-		setTimeout(function() {
-			$("#downloadFile").removeClass("red_harsh").val("Download File");
-		}, 5000);
-	}
-});
-},
+		window.location.href = "/editor/" + window.url_params()["document"] + "/download/";
+    },
 	printFile: function() {
 		$("#printButton").removeClass("red_harsh").addClass("disabled").val("Printing File...");
 		window.sidebarUtil.passwordCheck(function(callback) {
