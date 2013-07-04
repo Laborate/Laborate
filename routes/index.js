@@ -33,19 +33,20 @@ module.exports = function(app) {
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);
-    app.get('/documents/files', auth.restrictAccess, documents.files);
-    app.post(/^\/documents\/file\/create/, auth.restrictAccess, documents.file_create);
-    app.post(/^\/documents\/file\/(\d*)\/rename/, auth.restrictAccess, documents.file_rename);
-    app.post(/^\/documents\/file\/(\d*)\/remove/, auth.restrictAccess, documents.file_remove);
-    app.get('/documents/locations', auth.restrictAccess, documents.locations);
+    app.get('/documents/files', auth.restrictAccess, auth.xhr, documents.files);
+    app.get('/documents/locations', auth.restrictAccess, auth.xhr, documents.locations);
     app.get(/^\/documents\/([\w\d]{10})\/(.*)/, auth.restrictAccess, documents.index);
     app.get(/^\/documents\/location\/([\w\d]{10})\/(.*)/, auth.restrictAccess, documents.location);
-    app.post('/documents/location/create', auth.restrictAccess, documents.create_location);
-    app.post('/documents/location/remove', auth.restrictAccess, documents.remove_location);
+    app.post(/^\/documents\/file\/create/, auth.restrictAccess, auth.xhr, documents.file_create);
+    app.post(/^\/documents\/file\/(\d*)\/rename/, auth.restrictAccess, auth.xhr, documents.file_rename);
+    app.post(/^\/documents\/file\/(\d*)\/remove/, auth.restrictAccess, auth.xhr, documents.file_remove);
+    app.post('/documents/location/create', auth.restrictAccess, auth.xhr, documents.create_location);
+    app.post('/documents/location/remove', auth.restrictAccess, auth.xhr, documents.remove_location);
 
     /* Editor */
     app.get('/editor', auth.restrictAccess, realtime.index, editor.index);
-    app.get(/^\/editor\/(\d*)\/$/, auth.restrictAccess, realtime.index, editor.index);
+    app.get('/editor/:id', auth.restrictAccess, realtime.index, editor.index);
+    app.post('/editor/email/invite', auth.restrictAccess, editor.invite_email);
 
     /* Github */
     app.get('/github/token/add', auth.restrictAccess, github.add_token);

@@ -111,14 +111,14 @@ $(window).ready(function() {
         fullScreen: function() {
             if($("#header").is(":visible")) {
                 $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%"});
-                $("#full_screen").addClass("icon-contract");
-                $("#full_screen").removeClass("icon-expand");
+                $("#full_screen").addClass("icon-contract-2");
+                $("#full_screen").removeClass("icon-expand-2");
                 $("#full_screen").css({"font-size": "24px", "margin": "0 0 0 30px"});
                 $("#sidebar, #header, #chatRoom").hide();
             } else {
                 $("#editorCodeMirror").css({"margin": "", "width": ""});
-                $("#full_screen").addClass("icon-expand");
-                $("#full_screen").removeClass("icon-contract");
+                $("#full_screen").addClass("icon-expand-2");
+                $("#full_screen").removeClass("icon-contract-2");
                 $("#full_screen").css({"font-size": "", "margin": ""});
                 $("#sidebar, #header, #chatRoom").show();
             }

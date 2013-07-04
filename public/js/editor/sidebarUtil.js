@@ -20,7 +20,7 @@ window.sidebarUtil = {
 		window.editor.refresh();
 	},
 	highlight: function(line) {
-		this.sidebar('find');
+		this.change('find');
 		if(line.length != 0 && window.editor.getValue().length != 0 && /[^0-9,-]/.test(line) == false) {
 			var lines = line.split(",");
 			var part1 = "<div class='header clear'>";

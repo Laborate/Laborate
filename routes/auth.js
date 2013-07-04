@@ -69,6 +69,14 @@ exports.loginCheck = function(req, res, next) {
     }
 };
 
+exports.xhr = function(req, res, next) {
+    if(req.xhr) {
+        next();
+    } else {
+        res.redirect("/documents/");
+    }
+}
+
 /* Module Exports: Access Operations */
 exports.login = function(req, res, next) {
     req.models.users.find({

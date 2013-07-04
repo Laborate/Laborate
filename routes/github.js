@@ -97,6 +97,7 @@ exports.contents = function(req, res) {
 
                     case "directory":
                         res.json(results.contents);
+                        break;
                 }
             } else {
                 if(error.message == "Bad credentials") {
