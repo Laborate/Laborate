@@ -48,17 +48,18 @@ exports.invite_email = function(req, res) {
         document_id: req.param("document")
     }, function(error, documents) {
         if(!error) {
+            console.log(documents[0].document)
             email("document_invite", {
                 host: req.host,
                 from: req.session.user.name + " <" + req.session.user.email + ">",
-                subject: req.session.user.name + " Has Invited You To " + documents[0].document.name,
+                subject: "You Have Been Invited To Work On " + documents[0].document.name,
                 users: $.map(req.param("addresses").split(","), function(address) {
                     return {
                         email: $.trim(address),
-                        document: {
-                            id: documents[0].document.id,
-                            name: documents[0].document.name
-                        },
+                        role: documents[0],
+                        collaborators: $.map(documents[0].document.roles, function(role) {
+                            return role.user.screen_name;
+                        }).join(", "),
                         message: req.param("message")
                     }
                 })
