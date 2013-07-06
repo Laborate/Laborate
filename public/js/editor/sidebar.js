@@ -88,6 +88,19 @@ $(window).ready(function() {
         }
     });
 
+    setTimeout(function() {
+        $("#shareCopy").zclip({
+            path:'/flash/copy.swf',
+            copy: window.location.href,
+            afterCopy: function() {
+                $("#shareCopy").val("Copied");
+                setTimeout(function() {
+                    $("#shareCopy").val("Copy Invite Url");
+                }, 5000);
+            }
+        });
+    }, 1000);
+
     /* Triggers: Download */
     $("#downloadFile").live("click", window.sidebarUtil.downloadFile);
     $("#printButton").live("click", window.sidebarUtil.printFile);

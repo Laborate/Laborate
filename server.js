@@ -4,6 +4,8 @@ var app     = express().http().io();
 var srv     = require('http').createServer(app);
 var slashes = require("connect-slashes");
 var piler   = require("piler-compat");
+var redis   = require('redis');
+var ejs     = require('ejs');
 
 /* IMPORTANT - No VAR Makes Variables Global */
 config    = require('./config');
@@ -17,8 +19,15 @@ app.configure(function() {
     clientCSS.bind(app, srv);
     require("./lib/core/dependencies")();
 
+    //Redis
+    app.io.set('store', new express.io.RedisStore({
+        redisPub: redis.createClient(),
+        redisSub: redis.createClient(),
+        redisClient: redis.createClient()
+    }));
+
     //Express
-    app.engine('html', require('ejs').renderFile);
+    app.engine('html', ejs.renderFile);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');
     app.set('x-powered-by', false);
@@ -74,7 +83,7 @@ app.use(app.router);
 require('./routes')(app);
 
 /* Ejs: Import Filters */
-require('./lib/core/ejs_filters')();
+require('./lib/core/ejs_filters')(ejs);
 
 /* Socket IO: Configuration */
 app.io.configure(function(){
@@ -96,4 +105,4 @@ app.io.configure(function(){
 require('./socket')(app.io);
 
 /* Listen To Server */
-srv.listen(config.general.port);
+app.listen(config.general.port);

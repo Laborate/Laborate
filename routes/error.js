@@ -45,12 +45,6 @@ exports.handler = function(error, req, res, next) {
                         });
                     }
                 },
-                'json': function(){
-                    res.json({
-                        success: false,
-                        error_message: error_message
-                    });
-                },
                 'application/json': function(){
                     res.json({
                         success: false,
