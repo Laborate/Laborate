@@ -1,4 +1,5 @@
 /* Modules: NPM */
+var $ = require('jquery');
 var crypto = require('crypto');
 var async = require("async");
 var uuid = require('node-uuid');
@@ -80,8 +81,8 @@ exports.xhr = function(req, res, next) {
 /* Module Exports: Access Operations */
 exports.login = function(req, res, next) {
     req.models.users.find({
-        email: req.param('email'),
-        password: req.models.users.hash(req.param('password'))
+        email: $.trim(req.param('email')),
+        password: req.models.users.hash($.trim(req.param('password')))
     }, function(error, users) {
         if(!error && users.length == 1) {
             users[0].set_recovery(req, res);
@@ -111,10 +112,10 @@ exports.register = function(req, res) {
         if(!error && !exists) {
             if(req.param('password') == req.param('password_confirm')) {
                 req.models.users.create({
-                    name: req.param('name'),
-                    screen_name: req.param('screen_name'),
-                    email: req.param('email'),
-                    password: req.param('password')
+                    name: $.trim(req.param('name')),
+                    screen_name: $.trim(req.param('screen_name')),
+                    email: $.trim(req.param('email')),
+                    password: $.trim(req.param('password'))
                 }, function(error, user) {
                     if(!error) {
                         user.set_recovery(req, res);
@@ -155,7 +156,7 @@ exports.register = function(req, res) {
 };
 
 exports.verify = function(req, res) {
-    if(req.param('verification_code') == req.session.user.verified) {
+    if($.trim(req.param('verification_code')) == req.session.user.verified) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified = null;
             req.session.user = user;

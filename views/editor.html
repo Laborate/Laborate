@@ -115,11 +115,11 @@
                 <input type="button" id="settingsSave" value="Save Settings" class="button green full"/>
             </div>
             <hr/>
-            <input type="button" id="actionDoc" value="<%=
+            <input type="button" id="removeDoc" value="<%=
                 (document.owner_id == user.id) ? "Delete" : "Forget"
             %> Document" class="button red full"/>
-            <div id="actionConfirm"><span class="a" id="actionConfirmClick">
-                Yes</span> I am sure. <span class="a" id="actionConfirmCancel">Cancel</span>
+            <div id="removeConfirm">
+                <span class="a" id="removeConfirmClick">Yes</span> I am sure. <span class="a" id="actionConfirmCancel">Cancel</span>
             </div>
         </div>
     </div>

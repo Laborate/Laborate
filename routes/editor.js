@@ -28,6 +28,20 @@ exports.index = function(req, res, next) {
     }
 };
 
+exports.update = function(req, res, next) {
+    req.models.documents_roles.find({
+        user_id: req.session.user.id,
+        document_id: req.param("document")
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            documents[0].document.name = req.param("name");
+            res.json({ success: true });
+        } else {
+            error_lib.handler({status: 404}, req, res, next);
+        }
+    });
+}
+
 exports.download = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
@@ -38,6 +52,44 @@ exports.download = function(req, res, next) {
             res.end(documents[0].document.content.join("\n"));
         } else {
             error_lib.handler({status: 404}, req, res, next);
+        }
+    });
+}
+
+exports.remove = function(req, res, next) {
+    req.models.documents.get(req.param("document"), function(error, document) {
+        if(!error) {
+            if(document.owner_id == req.session.user.id) {
+                document.remove(function(error) {
+                    if(!error) {
+                        res.json({ success: true });
+                    } else {
+                        res.json({
+                            success: false,
+                            error_message: "Failed To Remove File"
+                        });
+                    }
+                });
+            } else {
+                req.models.documents_roles.find({
+                    user_id: req.session.user.id,
+                    document_id: req.param("0")
+                }).remove(function(error) {
+                    if(!error) {
+                        res.json({ success: true });
+                    } else {
+                        res.json({
+                            success: false,
+                            error_message: "Failed To Remove File"
+                        });
+                    }
+                });
+            }
+        } else {
+            res.json({
+                success: false,
+                error_message: "Failed To Remove File"
+            });
         }
     });
 }
@@ -65,9 +117,7 @@ exports.invite_email = function(req, res) {
                 })
             }, function(errors) {
                 if(errors.length == 0) {
-                    res.json({
-                        success: true
-                    });
+                    res.json({ success: true });
                 } else {
                     res.json({
                         success: false,

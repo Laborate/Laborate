@@ -62,10 +62,12 @@ app.configure('development', function() {
         panels: config.development.debugger.panels
     });
 
-    app.use(express.basicAuth(
-        config.development.basicAuth.username,
-        config.development.basicAuth.password
-    ));
+    if(config.development.basicAuth.username) {
+        app.use(express.basicAuth(
+            config.development.basicAuth.username,
+            config.development.basicAuth.password
+        ));
+    }
 });
 
 /* Production Only */

@@ -52,58 +52,21 @@ $(window).ready(function() {
     });
 
     /* Triggers: Share */
-    $("#email_share").live("submit", function() {
-        if($("#emailAddresses").val() != "") {
-            $("#emailSend").addClass("disabled").val("Sending...");
-            $("#sidebar_share .header").eq(0).css("color", "");
-            $("#emailAddresses").css("border", "");
-
-            $.post("/editor/email/invite/", {
-                document: url_params()["document"],
-                addresses: $("#emailAddresses").val(),
-                message: $("#emailMessage").val(),
-                _csrf: $("#_csrf").text()
-            }, function(json) {
-                 if(json.success) {
-                     $("#emailAddresses, #emailMessage").val("");
-                     $("#emailSend").removeClass("disabled").val("Email Sent");
-                 }
-                 else {
-                     $("#emailSend").removeClass("disabled").val("Email Failed").addClass("red_harsh");
-                 }
-
-                 setTimeout(function() {
-                    $("#emailSend").val("Send Email").removeClass("red_harsh");
-                 }, 5000);
-             });
-        } else {
-            $("#sidebar_share .header").eq(0).css("color", "#F10F00");
-            $("#emailAddresses").css("border", "solid 1px #F10F00");
-            $("#emailSend").val("Missing Information").addClass("red_harsh");
-            setTimeout(function() {
-                $("#sidebar_share .header").eq(0).css("color", "");
-                $("#emailAddresses").css("border", "");
-                $("#emailSend").val("Send Email").removeClass("red_harsh");
-            }, 5000);
-        }
-    });
-
-    setTimeout(function() {
-        $("#shareCopy").zclip({
-            path:'/flash/copy.swf',
-            copy: window.location.href,
-            afterCopy: function() {
-                $("#shareCopy").val("Copied");
-                setTimeout(function() {
-                    $("#shareCopy").val("Copy Invite Url");
-                }, 5000);
-            }
-        });
-    }, 1000);
+    $("#email_share").live("submit", window.sidebarUtil.email_invite);
+    setTimeout(window.sidebarUtil.copy_button, 1000);
 
     /* Triggers: Download */
     $("#downloadFile").live("click", window.sidebarUtil.downloadFile);
     $("#printButton").live("click", window.sidebarUtil.printFile);
     $("#githubCommit").live("click", window.sidebarUtil.commitFile);
     $("#saveToServer").live("click", window.sidebarUtil.pushFile);
+
+    /* Triggers: Settings */
+    $("#settingsSave").on("click", window.sidebarUtil.settings);
+
+    $("#removeDoc, #actionConfirmCancel").live("click", function() {
+        $("#removeConfirm").slideToggle();
+    });
+
+    $("#removeConfirmClick").on("click", window.sidebarUtil.remove);
 });

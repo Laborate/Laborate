@@ -131,103 +131,99 @@ window.sidebarUtil = {
 		$("title").text(title + " · Code-Laborate");
 		window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"docName": $("#documentTitle").val()}} );
 	},
-	passwordCheck: function(callback) {
-		$.post("/php/session/password_check.php", { session_id: getUrlVars()['i'], session_password: $("#backdropPassword").val() },
-			   function(password_response){
-				   if(password_response != "Password Authentication: Failed") {
-					   callback(password_response);
-				   }
-				   else {
-					   callback(false);
-				   }
-			   }
-			  );
+	settings: function() {
+        window.sidebarUtil.keyMap($("#keyMap").val());
+	    window.sidebarUtil.setTitle($("#documentTitle").val());
+        $.post("/editor/" + window.url_params()["document"] + "/update/", {
+            name: $("#documentTitle").val(),
+            password: $("#documentPassword").val(),
+            _csrf: $("#_csrf").text()
+        }, function(json) {
+            if(json.success) {
+                $("#settingsSave").val("Settings Saved");
+            } else {
+               $("#settingsSave").addClass("red_harsh").val("Failed To Save");
+            }
+
+            setTimeout(function() {
+                $("#settingsSave").removeClass("red_harsh").val("Save Settings");
+            }, 5000);
+        });
+	},
+	remove: function() {
+	    var input_val = $("#removeDoc").val();
+    	$.post("/editor/" + window.url_params()["document"] + "/remove/", {
+            _csrf: $("#_csrf").text()
+        }, function(json) {
+            if(json.success) {
+                window.location.href = "/documents/";
+            } else {
+               $("#removeDoc").addClass("red_harsh").val("Failed To Remove");
+            }
+
+            setTimeout(function() {
+                $("#removeDoc").removeClass("red_harsh").val(input_val);
+            }, 5000);
+        });
+	},
+	copy_button: function() {
+    	$("#shareCopy").zclip({
+            path:'/flash/copy.swf',
+            copy: window.location.href,
+            afterCopy: function() {
+                $("#shareCopy").val("Copied");
+                setTimeout(function() {
+                    $("#shareCopy").val("Copy Invite Url");
+                }, 5000);
+            }
+        });
+	},
+	email_invite: function() {
+    	if($("#emailAddresses").val() != "") {
+            $("#emailSend").addClass("disabled").val("Sending...");
+            $("#sidebar_share .header").eq(0).css("color", "");
+            $("#emailAddresses").css("border", "");
+
+            $.post("/editor/email/invite/", {
+                document: url_params()["document"],
+                addresses: $("#emailAddresses").val(),
+                message: $("#emailMessage").val(),
+                _csrf: $("#_csrf").text()
+            }, function(json) {
+                 if(json.success) {
+                     $("#emailAddresses, #emailMessage").val("");
+                     $("#emailSend").removeClass("disabled").val("Email Sent");
+                 }
+                 else {
+                     $("#emailSend").removeClass("disabled").val("Email Failed").addClass("red_harsh");
+                 }
+
+                 setTimeout(function() {
+                    $("#emailSend").val("Send Email").removeClass("red_harsh");
+                 }, 5000);
+             });
+        } else {
+            $("#sidebar_share .header").eq(0).css("color", "#F10F00");
+            $("#emailAddresses").css("border", "solid 1px #F10F00");
+            $("#emailSend").val("Missing Information").addClass("red_harsh");
+            setTimeout(function() {
+                $("#sidebar_share .header").eq(0).css("color", "");
+                $("#emailAddresses").css("border", "");
+                $("#emailSend").val("Send Email").removeClass("red_harsh");
+            }, 5000);
+        }
 	},
 	downloadFile: function() {
 		window.location.href = "/editor/" + window.url_params()["document"] + "/download/";
     },
 	printFile: function() {
-		$("#printButton").removeClass("red_harsh").addClass("disabled").val("Printing File...");
-		window.sidebarUtil.passwordCheck(function(callback) {
-			$("#printButton").removeClass("disabled");
-			if(callback) {
-				var url = "/print/?i="+ callback + "&t=" + $("#document_title").text();
-				printWindow = window.open(url, 'title', 'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-				$("#printButton").removeClass("red_harsh").val("Print Document");
-			} else {
-				$("#printButton").addClass("red_harsh").val("Print Failed");
-				setTimeout(function() {
-					$("#printButton").removeClass("red_harsh").val("Print Document");
-				}, 5000);
-			}
-		});
+		window.open('/print/' + window.url_params()["document"], 'title',
+			            'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
 	},
-		commitFile: function() {
-			$("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting File...");
-			window.sidebarUtil.passwordCheck(function(callback) {
-				if(callback) {
-					if($("#githubReference").val() != "") { var related = "\n\Issue: #" + $("#githubReference").val(); }
-					else { var related = ""; }
-					$.post("/php/locations/github_commit.php", { alias_id: callback,
-																session_document: window.editor.getValue(),
-																message: $("#githubMessage").val() + related },
-						   function(result){
-							   $("#githubCommit").removeClass("disabled");
-							   if(result == "Commit Succeeded") {
-								   $("#githubCommit").val("File Commited").removeClass("red_harsh");
-								   $("#githubMessage, #githubReference").val("");
-								   setTimeout(function() {
-									   $("#githubCommit").removeClass("red_harsh").val("Commit File");
-								   }, 5000);
-							   }
-							   else {
-								   $("#githubCommit").addClass("red_harsh").val("Commit Failed");
-								   setTimeout(function() {
-									   $("#githubCommit").removeClass("red_harsh").val("Commit File");
-								   }, 5000);
-							   }
-						   }
-						  );
-				}
-				else {
-					$("#githubCommit").removeClass("disabled").addClass("red_harsh").val("Commit Failed");
-					setTimeout(function() {
-						$("#githubCommit").removeClass("red_harsh").val("Commit File");
-					}, 5000);
-				}
-			});
-		},
-			pushFile: function() {
-				$("#saveToServer").removeClass("red_harsh").addClass("disabled").val("Saving File...");
-				window.sidebarUtil.passwordCheck(function(callback) {
-					if(callback) {
-						$.post("/php/locations/sftp_push.php", {
-							alias_id: callback,
-							session_document: window.editor.getValue(),
-						},
-							   function(result){
-								   $("#saveToServer").removeClass("disabled");
-								   if(result == "File Pushed") {
-									   $("#saveToServer").val("File Saved").removeClass("red_harsh");
-									   setTimeout(function() {
-										   $("#saveToServer").removeClass("red_harsh").val("Save To Server");
-									   }, 5000);
-								   }
-								   else {
-									   $("#saveToServer").addClass("red_harsh").val("Save Failed");
-									   setTimeout(function() {
-										   $("#saveToServer").removeClass("red_harsh").val("Save To Server");
-									   }, 5000);
-								   }
-							   }
-							  );
-					}
-					else {
-						$("#saveToServer").removeClass("disabled").addClass("red_harsh").val("Save Failed");
-						setTimeout(function() {
-							$("#saveToServer").removeClass("red_harsh").val("Save To Server");
-						}, 5000);
-					}
-				});
-			}
+    commitFile: function() {
+            $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting File...");
+	},
+	pushFile: function() {
+		$("#saveToServer").removeClass("red_harsh").addClass("disabled").val("Saving File...");
+	}
 }
