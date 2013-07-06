@@ -1,6 +1,7 @@
 * {
     font-family: sans-serif, serif;
     font-size: 14px;
+    color: #000;
 }
 
 .header {
@@ -15,12 +16,12 @@
 
 .body {
     background: #FFFFFF;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -khtml-border-radius: 3px;
-    -o-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -ms-border-radius: 3px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    -o-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -ms-border-radius: 4px;
     overflow: hidden;
     border-bottom: solid 1px #d6d6d6;
 }
