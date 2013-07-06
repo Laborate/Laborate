@@ -12,6 +12,7 @@ exports.handler = function(error, req, res, next) {
             case 403:
                 error_message = "Access Forbidden";
                 error_html = 'You are not authorized to view this page.<br/>Please continue back <a href="/">home</a>.';
+                delete req.session._csrf;
                 break;
             default:
                 error_message = "Page Not Found";

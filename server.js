@@ -1,8 +1,7 @@
 /* Modules: NPM */
-var express = require('express');
-var app     = express();
+var express = require('express.io');
+var app     = express().http().io();
 var srv     = require('http').createServer(app);
-var io      = require('socket.io').listen(srv);
 var slashes = require("connect-slashes");
 var piler   = require("piler-compat");
 
@@ -78,30 +77,23 @@ require('./routes')(app);
 require('./lib/core/ejs_filters')();
 
 /* Socket IO: Configuration */
-io.configure(function(){
-    io.enable('browser client minification');
-    io.enable('browser client etag');
-    io.enable('browser client gzip');
-    io.set('log level', 1);
-    io.set('transports', [
+app.io.configure(function(){
+    app.io.enable('browser client minification');
+    app.io.enable('browser client etag');
+    app.io.enable('browser client gzip');
+    app.io.set('log level', 1);
+    app.io.set('transports', [
         'websocket',
         'flashsocket',
         'htmlfile',
         'xhr-polling',
         'jsonp-polling'
     ]);
-    io.set('log colors', false);
-});
-
-/* Socket IO: Error Handling */
-io.on('error', function(error) {
-    console.log('Socket IO Error: ' + error.stack);
-    require('socket.io').listen(srv);
-    return false;
+    app.io.set('log colors', true);
 });
 
 /* Socket IO: Import Routes */
-require('./socket')(io);
+require('./socket')(app.io);
 
 /* Listen To Server */
 srv.listen(config.general.port);
