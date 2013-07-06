@@ -52,7 +52,7 @@ exports.invite_email = function(req, res) {
             email("document_invite", {
                 host: req.host,
                 from: req.session.user.name + " <" + req.session.user.email + ">",
-                subject: "You Have Been Invited To Work On " + documents[0].document.name,
+                subject: documents[0].document.name,
                 users: $.map(req.param("addresses").split(","), function(address) {
                     return {
                         email: $.trim(address),

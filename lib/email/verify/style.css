@@ -1,34 +1,76 @@
-.backdrop_logo {
-    text-align:center;
-    text-decoration:none;
-}
-
-.backdrop_container {
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border: 1px solid #CCCCCC;
-    overflow:hidden;
-}
-
-.backdrop_info {
+* {
+    font-family: sans-serif, serif;
     font-size: 14px;
-    color: #516067;
-    border-bottom:1px solid #E4E4E4;
 }
 
-.backdrop_button {
+.header {
+    height: 50px;
+    padding: 30px 0 10px 0;
+}
+
+.header-link {
+    color: #fff;
+    text-decoration: none;
+}
+
+.body {
+    background: #FFFFFF;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -ms-border-radius: 3px;
+    overflow: hidden;
+    border-bottom: solid 1px #d6d6d6;
+}
+
+.header-inner {
+    color: #fff;
+    text-align: center;
+    padding: 12px 0;
+    background: #4fb8db;
+    font-weight: bold;
+    border-bottom: solid 3px #39a2c2;
+}
+
+.body-inner {
+    padding: 12px;
+    border: solid 1px #d6d6d6;
+    border-top: none;
+    border-bottom: none;
+}
+
+.footer {
+    padding: 5px 0 30px 0;
+    color: #767676;
+    font-weight: bold;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-variant: small-caps;
+}
+
+.footer-link {
+    color: #6b6b6b;
+    text-decoration: none;
+    font-size: 10px;
+}
+
+.link-button {
     font-size: 14px;
     cursor: pointer;
-    padding: 3px 10px;
-    -moz-border-radius: 3px;
+    padding: 5px 10px;
     border-radius: 3px;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -o-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -ms-border-radius: 3px;
     font-weight: bold;
     text-align: center;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
     text-decoration: none;
     color: #ffffff;
-    border: solid 1px #0d92ff;
-    background: #2EA2FF; display:block;
+    background: #2EA2FF;
+    display:block;
+    margin: 5px auto;
 }
