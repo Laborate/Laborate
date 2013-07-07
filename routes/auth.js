@@ -51,7 +51,11 @@ exports.restrictAccess = function(req, res, next) {
 
 exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
-        res.redirect('/documents/');
+        if(req.session.redirect_url) {
+            res.redirect(req.session.redirect_url);
+        } else {
+            res.redirect('/documents/');
+        }
     } else {
         if(config.cookies.rememberme in req.cookies) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
@@ -59,7 +63,12 @@ exports.loginCheck = function(req, res, next) {
                     if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
-                        res.redirect('/documents/');
+                        if(req.session.redirect_url) {
+                            res.redirect(req.session.redirect_url);
+                            delete req.session.redirect_url;
+                        } else {
+                            res.redirect('/documents/');
+                        }
                     } else {
                         if(next) next();
                     }
@@ -87,9 +96,17 @@ exports.login = function(req, res, next) {
         if(!error && users.length == 1) {
             users[0].set_recovery(req, res);
             req.session.user = users[0];
+
+            if(req.session.redirect_url) {
+                var url = req.session.redirect_url;
+                delete req.session.redirect_url;
+            } else {
+                var url = '/documents/';
+            }
+
             res.json({
                 success: true,
-                next: "/documents/"
+                next: url
              });
         } else {
             res.json({
@@ -102,7 +119,7 @@ exports.login = function(req, res, next) {
 }
 
 exports.logout = function(req, res) {
-    req.session = null;
+    req.session.user = null;
     res.clearCookie(config.cookies.rememberme, { domain: req.host.replace(/^[^.]+\./g, "") });
     res.redirect('/');
 };

@@ -8,6 +8,7 @@ exports.handler = function(error, req, res, next) {
             case 401:
                 error_message = "Login Required";
                 redirect_url = "/logout/";
+                req.session.redirect_url = req.originalUrl;
                 break;
             case 403:
                 error_message = "Access Forbidden";
