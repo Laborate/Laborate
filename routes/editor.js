@@ -35,6 +35,13 @@ exports.update = function(req, res, next) {
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             documents[0].document.name = req.param("name");
+
+            if(documents[0].document.owner = req.session.user.id && req.param("password")) {
+                documents[0].document.password = documents[0].document.hash(req.param("password"));
+            } else {
+                documents[0].document.password = null;
+            }
+
             res.json({ success: true });
         } else {
             error_lib.handler({status: 404}, req, res, next);
