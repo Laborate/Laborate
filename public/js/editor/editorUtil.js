@@ -128,6 +128,7 @@ $(window).ready(function() {
         },
         join: function(data) {
             window.editor.setValue(data.join("\n"));
+            window.editor.clearHistory();
             $("#backdrop").hide();
         }
     }
