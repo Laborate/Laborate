@@ -9,8 +9,6 @@ exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.get(req.param("document"), function(error, document) {
             if(document) {
-                document.join(req.session.user.id, 2);
-
                 if(document.password == null) {
                     var js = clientJS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll", "editor-auto-join");
                 } else {
@@ -36,13 +34,10 @@ exports.index = function(req, res, next) {
 };
 
 exports.join = function(req, res, next) {
-    req.models.documents_roles.find({
-        user_id: req.session.user.id,
-        document_id: req.param("document")
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            var document = documents[0].document;
+    req.models.documents.get(req.param("document"), function(error, document) {
+        if(!error) {
             if(!document.password || document.hash(req.param("password")) == document.password) {
+                document.join(req.session.user.id, 2);
                 res.json({
                     success: true,
                     next: {
