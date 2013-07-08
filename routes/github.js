@@ -133,8 +133,8 @@ exports.commit = function(req, res) {
                     (document.path) ? document.path + "/" + document.name : document.name,
                     document.content.join("\n"),
                     req.param("message"),
-                function(error, results) {
-                    if(!error) {
+                function(errors) {
+                    if(!errors) {
                         res.json({ success: true });
                     } else {
                         res.json({
