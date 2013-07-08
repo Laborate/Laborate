@@ -1,16 +1,26 @@
 Install After [base-init](https://github.com/Laborate/base-init)
-------------------------------------------
-**Run Installer Script**
-```bash
-cd ~; git clone -b develop git@github.com:Laborate/code.git; bash code/init/init.sh;
-```
+----------------------------------------------------------------
 
-**Enter Your MYSQL Password**
-```bash
-file: server/node/config.js, line 19
-```
+1. **Run Installer Script**
 
-**Ask Administrator To Reload Apache**
+   ```bash
+cd ~; git clone -b node_migration git@github.com:Laborate/code.git; cd code; npm install;
+   ```
+   
+2. **Fill In** ```config.json``` **With Your Info**
+   
+    ```
+profile name must be lowercase a-z with no spaces
+    ```
+
+3. **Start Server**
+   ```bash
+npm start
+   ```
+
+Start Tracking ```config.json```
+------------------------------------
+
 ```bash
-service apache2 reload;
+git update-index --no-assume-unchanged ~/code/config.json;
 ```
