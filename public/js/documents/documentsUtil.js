@@ -230,6 +230,7 @@ window.documents = {
                 else {
                     $("#popup_location_" + type).css({"border": ""});
                     items["repository"] = $("#popup_location_" + type + " .selected").text();
+                    items["branch"] = $("#popup_location_" + type + " .selected").attr("data");
                 }
             }
 
@@ -400,7 +401,7 @@ window.documents = {
             } else {
                 var repos = "";
                 $.each(json, function(i, item) {
-                    repos += '<li>' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
+                    repos += '<li data="' + item['branch'] + '">' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
                 });
 
                 if(repos) {

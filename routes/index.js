@@ -47,15 +47,16 @@ module.exports = function(app) {
     app.get('/editor', auth.restrictAccess, realtime.index, editor.index);
     app.get('/editor/:document', auth.restrictAccess, realtime.index, editor.index);
     app.get('/editor/:document/download', auth.restrictAccess, editor.download);
-    app.post('/editor/:document/join', auth.restrictAccess, editor.join);
-    app.post('/editor/:document/update', auth.restrictAccess, editor.update);
-    app.post('/editor/:document/remove', auth.restrictAccess, editor.remove);
-    app.post('/editor/email/invite', auth.restrictAccess, editor.invite_email);
+    app.post('/editor/:document/join', auth.restrictAccess, auth.xhr, editor.join);
+    app.post('/editor/:document/update', auth.restrictAccess, auth.xhr, editor.update);
+    app.post('/editor/:document/remove', auth.restrictAccess, auth.xhr, editor.remove);
+    app.post('/editor/:document/commit', auth.restrictAccess, auth.xhr, github.commit);
+    app.post('/editor/:document/invite', auth.restrictAccess, auth.xhr, editor.invite);
 
     /* Github */
     app.get('/github/token/add', auth.restrictAccess, github.add_token);
     app.get('/github/token/remove', auth.restrictAccess, github.remove_token);
-    app.get('/github/repos', auth.restrictAccess, github.repos);
+    app.get('/github/repos', auth.restrictAccess, auth.xhr, github.repos);
 
     /* Not Found Page */
     app.all('*', core.not_found);

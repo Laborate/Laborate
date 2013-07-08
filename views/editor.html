@@ -14,7 +14,11 @@
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
-                        Forgot the password? <a href="mailto:<%= user.email %>">Email</a> the owner.
+                        <% if(document.owner_id == user.id) { %>
+                            Forgot the password? <a href="mailto:support@laborate.io?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Dear Support Team, %0D%0AI am <%= user.name %> and was wondering if you could reset document #<%= document.id %>'s password?">Email</a> support.
+                        <% } else { %>
+                            Forgot the password? <a href="mailto:<%= user.email %>?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Hey <%= user.name %>,%0D%0AI am <%= user.name %> and was wondering if you knew document #<%= document.id %>'s password?">Email</a> the owner.
+                        <% } %>
                     </div>
                 <% } else { %>
                     <div>

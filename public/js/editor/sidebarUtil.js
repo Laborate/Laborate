@@ -185,8 +185,7 @@ window.sidebarUtil = {
             $("#sidebar_share .header").eq(0).css("color", "");
             $("#emailAddresses").css("border", "");
 
-            $.post("/editor/email/invite/", {
-                document: url_params()["document"],
+            $.post("/editor/" + url_params()["document"] + "/invite/", {
                 addresses: $("#emailAddresses").val(),
                 message: $("#emailMessage").val(),
                 _csrf: $("#_csrf").text()
@@ -223,6 +222,22 @@ window.sidebarUtil = {
 	},
     commitFile: function() {
         $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting...");
+        $.post("/editor/" + url_params()["document"] + "/commit/", {
+            message: $("#githubMessage").val(),
+            _csrf: $("#_csrf").text()
+        }, function(json) {
+             if(json.success) {
+                 $("#githubMessage").val("");
+                 $("#githubCommit").removeClass("disabled").val("File Commited");
+             }
+             else {
+                 $("#githubCommit").removeClass("disabled").val("Commit Failed").addClass("red_harsh");
+             }
+
+             setTimeout(function() {
+                $("#githubCommit").val("Commit File").removeClass("red_harsh");
+             }, 5000);
+         });
 	},
 	pushFile: function() {
 		$("#saveToServer").removeClass("red_harsh").addClass("disabled").val("Saving...");

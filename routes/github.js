@@ -62,7 +62,7 @@ exports.contents = function(req, res) {
         github_lib.contents(req.session.user.github,
             req.session.user.locations[req.param("0")].repository,
             req.param("1"),
-        function(error, results){
+        function(error, results) {
             if(!error) {
                 switch(results.type) {
                     case "image":
@@ -118,3 +118,42 @@ exports.contents = function(req, res) {
         });
     }
 };
+
+exports.commit = function(req, res) {
+    if(req.session.user.github) {
+        req.models.documents_roles.find({
+            user_id: req.session.user.id,
+            document_id: req.param("document")
+        }, function(error, documents) {
+            if(!error && documents.length == 1 && documents[0].permission_id != 3) {
+                var document = documents[0].document;
+                github_lib.commit(req.session.user.github,
+                    req.session.user.locations[document.location].repository,
+                    req.session.user.locations[document.location].branch,
+                    (document.path) ? document.path + "/" + document.name : document.name,
+                    document.content.join("\n"),
+                    req.param("message"),
+                function(error, results) {
+                    if(!error) {
+                        res.json({ success: true });
+                    } else {
+                        res.json({
+                            success: false,
+                            error_message: "Failed To Commit File"
+                        });
+                    }
+                });
+            } else {
+                res.json({
+                    success: false,
+                    error_message: "Failed To Commit File"
+                });
+            }
+        });
+    } else {
+        res.json({
+            success: false,
+            error_message: "Failed To Commit File"
+        });
+    }
+}

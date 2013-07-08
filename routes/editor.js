@@ -57,7 +57,10 @@ exports.join = function(req, res, next) {
                  });
             }
         } else {
-            error_lib.handler({status: 404}, req, res, next);
+            res.json({
+                success: false,
+                error_message: "Failed To Join File"
+            });
         }
     });
 }
@@ -79,7 +82,10 @@ exports.update = function(req, res, next) {
 
             res.json({ success: true });
         } else {
-            error_lib.handler({status: 404}, req, res, next);
+            res.json({
+                success: false,
+                error_message: "Failed To Update File"
+            });
         }
     });
 }
@@ -137,7 +143,7 @@ exports.remove = function(req, res, next) {
     });
 }
 
-exports.invite_email = function(req, res) {
+exports.invite = function(req, res) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
         document_id: req.param("document")
