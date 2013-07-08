@@ -10,14 +10,21 @@ exports.index = function(req, res, next) {
         req.models.documents.get(req.param("document"), function(error, document) {
             if(document) {
                 document.join(req.session.user.id, 2);
+
+                if(document.password == null) {
+                    var js = clientJS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll", "editor-auto-join");
+                } else {
+                    var js = clientJS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll")
+                }
+
                 res.render('editor', {
                     title: document.name,
                     navigation: document.name,
                     mode: "editor",
                     user: req.session.user,
                     document: document,
-                    js: clientJS.renderTags("codemirror", "editor", "header", "jscroll"),
-                    css: clientCSS.renderTags("codemirror", "editor", "header", "jscroll")
+                    js: js,
+                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll")
                 });
             } else {
                 error_lib.handler({status: 404}, req, res, next);
@@ -28,18 +35,46 @@ exports.index = function(req, res, next) {
     }
 };
 
+exports.join = function(req, res, next) {
+    req.models.documents_roles.find({
+        user_id: req.session.user.id,
+        document_id: req.param("document")
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            var document = documents[0].document;
+            if(!document.password || document.hash(req.param("password")) == document.password) {
+                res.json({
+                    success: true,
+                    next: {
+                        function: "window.editorUtil.join",
+                        arguments: (document.content) ? document.content : []
+                    }
+                });
+            } else {
+                res.json({
+                    success: false,
+                    error_message: "Incorrect Password"
+                 });
+            }
+        } else {
+            error_lib.handler({status: 404}, req, res, next);
+        }
+    });
+}
+
 exports.update = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
         document_id: req.param("document")
     }, function(error, documents) {
         if(!error && documents.length == 1) {
-            documents[0].document.name = req.param("name");
+            var document = documents[0].document;
+            document.name = req.param("name");
 
-            if(documents[0].document.owner = req.session.user.id && req.param("password")) {
-                documents[0].document.password = documents[0].document.hash(req.param("password"));
+            if(document.owner = req.session.user.id && req.param("password")) {
+                document.password = document.hash(req.param("password"));
             } else {
-                documents[0].document.password = null;
+                document.password = null;
             }
 
             res.json({ success: true });
@@ -55,8 +90,9 @@ exports.download = function(req, res, next) {
         document_id: req.param("document")
     }, function(error, documents) {
         if(!error && documents.length == 1) {
-            res.attachment(documents[0].document.name);
-            res.end(documents[0].document.content.join("\n"));
+            var document = documents[0].document;
+            res.attachment(document.name);
+            res.end(document.content.join("\n"));
         } else {
             error_lib.handler({status: 404}, req, res, next);
         }
@@ -107,16 +143,16 @@ exports.invite_email = function(req, res) {
         document_id: req.param("document")
     }, function(error, documents) {
         if(!error) {
-            console.log(documents[0].document)
+            var document = documents[0].document;
             email("document_invite", {
                 host: req.host,
                 from: req.session.user.name + " <" + req.session.user.email + ">",
-                subject: documents[0].document.name,
+                subject: document.name,
                 users: $.map(req.param("addresses").split(","), function(address) {
                     return {
                         email: $.trim(address),
                         role: documents[0],
-                        collaborators: $.map(documents[0].document.roles, function(role) {
+                        collaborators: $.map(document.roles, function(role) {
                             return role.user.screen_name;
                         }).join(", "),
                         message: req.param("message")

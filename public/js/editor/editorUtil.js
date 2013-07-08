@@ -125,6 +125,10 @@ $(window).ready(function() {
 
             window.editor.refresh();
             window.editorUtil.refresh();
+        },
+        join: function(data) {
+            window.editor.setValue(data.join("\n"));
+            $("#backdrop").hide();
         }
     }
 });

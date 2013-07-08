@@ -1,5 +1,36 @@
 <% include includes/header.html %>
 <% include includes/navigation.html %>
+<div id="backdrop">
+    <div id="backdropCore">
+        <a href="/"><div id="backdropLogo">code-laborate</div></a>
+        <div id="backdropInital">
+            <div class="backdropContainer">
+                <div class="backdropInitalWelcome seperatorRequired"><%= document.name %></div>
+                <% if(document.password) { %>
+                    <div class="seperatorRequired">
+                        <form action="/editor/<%= document.id %>/join/">
+                            <input type="password" autofocus="on" name="password" placeholder="Password"/>
+                            <input type="submit" class="backdropButton button full blue" value="Join Document"/>
+                        </form>
+                    </div>
+                    <div class="backdropInitalWelcome" style="font-size: 14px;">
+                        Forgot the password? <a href="mailto:<%= user.email %>">Email</a> the owner.
+                    </div>
+                <% } else { %>
+                    <div>
+                        <form action="/editor/<%= document.id %>/join/">
+                            <input type="hidden" name="password"/>
+                            <div id="loadingProgressG">
+                                <div id="loadingProgressG_1" class="loadingProgressG"></div>
+                            </div>
+                        </form>
+                    </div>
+                <% } %>
+            </div>
+            <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>
+        </div>
+    </div>
+</div>
 <div class="notification"></div>
 <div id="sidebar">
     <div id="sidebar_header">
@@ -126,9 +157,7 @@
 </div>
 <div id="editorCodeMirror">
     <div id="full_screen" class="icon-expand-2 right"></div>
-    <textarea id="code" name="code" placeholder="Code goes here..."><%=
-        (document.content && !document.password) ? document.content.join("\n") : ""
-    %></textarea>
+    <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
 </div>
 <div id="chatRoom">
     <div id="chatConversation" class="scroll-pane"></div>

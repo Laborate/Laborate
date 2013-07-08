@@ -47,6 +47,7 @@ module.exports = function(app) {
     app.get('/editor', auth.restrictAccess, realtime.index, editor.index);
     app.get('/editor/:document', auth.restrictAccess, realtime.index, editor.index);
     app.get('/editor/:document/download', auth.restrictAccess, editor.download);
+    app.post('/editor/:document/join', auth.restrictAccess, editor.join);
     app.post('/editor/:document/update', auth.restrictAccess, editor.update);
     app.post('/editor/:document/remove', auth.restrictAccess, editor.remove);
     app.post('/editor/email/invite', auth.restrictAccess, editor.invite_email);

@@ -132,6 +132,7 @@ window.sidebarUtil = {
 		window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"docName": $("#documentTitle").val()}} );
 	},
 	settings: function() {
+	    $("#settingsSave").removeClass("red_harsh").addClass("disabled").val("Saving...");
         window.sidebarUtil.keyMap($("#keyMap").val());
 	    window.sidebarUtil.setTitle($("#documentTitle").val());
         $.post("/editor/" + window.url_params()["document"] + "/update/", {
@@ -140,9 +141,9 @@ window.sidebarUtil = {
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
-                $("#settingsSave").val("Settings Saved");
+                $("#settingsSave").removeClass("disabled").val("Settings Saved");
             } else {
-               $("#settingsSave").addClass("red_harsh").val("Failed To Save");
+               $("#settingsSave").removeClass("disabled").addClass("red_harsh").val("Failed To Save");
             }
 
             setTimeout(function() {
@@ -221,9 +222,9 @@ window.sidebarUtil = {
 			            'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
 	},
     commitFile: function() {
-            $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting File...");
+        $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting...");
 	},
 	pushFile: function() {
-		$("#saveToServer").removeClass("red_harsh").addClass("disabled").val("Saving File...");
+		$("#saveToServer").removeClass("red_harsh").addClass("disabled").val("Saving...");
 	}
 }

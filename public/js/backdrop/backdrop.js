@@ -18,8 +18,14 @@ $("#backdrop form").live("submit", function() {
         $("#backdrop input[type=submit]").val("loading...").addClass("disabled");
         $.post($("#backdrop form").attr("action"), data, function(result){
             if(result.success) {
-                if(result.next) {
+                if(typeof result.next == "string") {
                     window.location.href = result.next;
+                } else {
+                    if(result.next.arguments) {
+                        eval(result.next.function)(result.next.arguments);
+                    } else {
+                        eval(result.next.function)();
+                    }
                 }
             }
             else {

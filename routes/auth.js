@@ -53,6 +53,7 @@ exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
         if(req.session.redirect_url) {
             res.redirect(req.session.redirect_url);
+            delete req.session.redirect_url;
         } else {
             res.redirect('/documents/');
         }
@@ -177,10 +178,17 @@ exports.verify = function(req, res) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified = null;
             req.session.user = user;
+            if(req.session.redirect_url) {
+                var url = req.session.redirect_url;
+                delete req.session.redirect_url;
+            } else {
+                var url = '/documents/';
+            }
+
             res.json({
                 success: true,
-                next: "/documents/"
-            });
+                next: url
+             });
         });
     } else {
         res.json({
