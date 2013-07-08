@@ -117,7 +117,7 @@ exports.remove = function(req, res, next) {
             } else {
                 req.models.documents_roles.find({
                     user_id: req.session.user.id,
-                    document_id: req.param("0")
+                    document_id: req.param("document")
                 }).remove(function(error) {
                     if(!error) {
                         res.json({ success: true });
