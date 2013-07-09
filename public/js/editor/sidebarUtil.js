@@ -153,13 +153,14 @@ window.sidebarUtil = {
 	},
 	remove: function() {
 	    var input_val = $("#removeDoc").val();
+	    $("#removeDoc").addClass("disabled").val("Removing...");
     	$.post("/editor/" + window.url_params()["document"] + "/remove/", {
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
                 window.location.href = "/documents/";
             } else {
-               $("#removeDoc").addClass("red_harsh").val("Failed To Remove");
+               $("#removeDoc").removeClass("disabled").addClass("red_harsh").val("Failed To Remove");
             }
 
             setTimeout(function() {

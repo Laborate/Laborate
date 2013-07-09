@@ -3,9 +3,11 @@ var express = require('express.io');
 var app     = express().http().io();
 var srv     = require('http').createServer(app);
 var slashes = require("connect-slashes");
-var piler   = require("piler-compat");
+var piler   = require("piler");
 var redis   = require('redis');
 var ejs     = require('ejs');
+
+console.log(srv)
 
 /* IMPORTANT - No VAR Makes Variables Global */
 config    = require('./config');
@@ -42,7 +44,7 @@ app.configure(function() {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.cookieParser(config.cookie_session.secret));
-    app.use(express.cookieSession({key: config.cookie_session.key}));
+    app.use(express.cookieSession({ key: config.cookie_session.key }));
     app.use(express.csrf());
     app.use(require("./lib/models"));
     app.use(function(req, res, next) {
@@ -107,4 +109,4 @@ app.io.configure(function(){
 require('./socket')(app.io);
 
 /* Listen To Server */
-app.listen(config.general.port);
+srv.listen(config.general.port);

@@ -131,7 +131,7 @@ exports.commit = function(req, res) {
                     req.session.user.locations[document.location].repository,
                     req.session.user.locations[document.location].branch,
                     (document.path) ? document.path + "/" + document.name : document.name,
-                    document.content.join("\n"),
+                    (document.content) ? document.content.join("\n") : "",
                     req.param("message"),
                 function(errors) {
                     if(!errors) {
