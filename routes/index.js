@@ -22,8 +22,7 @@ module.exports = function(app) {
 
     /* Verify Email */
     app.get('/verify', auth.restrictAccess, core.verify);
-    app.get('/verify/resend', auth.restrictAccess, core.verify_resend);
-    app.post('/auth/verify', auth.restrictAccess, auth.verify);
+    app.get('/verify/:code', auth.restrictAccess, auth.verify);
 
     /* Logout */
     app.get('/logout', auth.logout);

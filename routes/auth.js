@@ -15,8 +15,7 @@ var email = require('../lib/email');
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(config.cookies.rememberme in req.cookies) {
-            excuse_links = ["/verify/", "/verify/resend/", "/auth/verify/"];
-            if(req.session.user.verified && excuse_links.indexOf(req.url) == -1) {
+            if(req.session.user.verified && req.url.indexOf("verify") == -1) {
                 res.redirect("/verify/");
             } else {
                 if(next) next();
@@ -121,7 +120,9 @@ exports.login = function(req, res, next) {
 
 exports.logout = function(req, res) {
     req.session.user = null;
-    res.clearCookie(config.cookies.rememberme, { domain: req.host.replace(/^[^.]+\./g, "") });
+    res.clearCookie(config.cookies.rememberme, {
+        domain: req.host.replace(/^[^.]+\./g, "")
+    });
     res.redirect('/');
 };
 
@@ -174,26 +175,24 @@ exports.register = function(req, res) {
 };
 
 exports.verify = function(req, res) {
-    if($.trim(req.param('verification_code')) == req.session.user.verified) {
-        req.models.users.get(req.session.user.id, function(error, user) {
-            user.verified = null;
-            req.session.user = user;
-            if(req.session.redirect_url) {
-                var url = req.session.redirect_url;
-                delete req.session.redirect_url;
-            } else {
-                var url = '/documents/';
-            }
+    if(req.session.user.verified) {
+        if($.trim(req.param('code')) == req.session.user.verified) {
+            req.models.users.get(req.session.user.id, function(error, user) {
+                user.verified = null;
+                req.session.user = user;
+                if(req.session.redirect_url) {
+                    var url = req.session.redirect_url;
+                    delete req.session.redirect_url;
+                } else {
+                    var url = '/documents/';
+                }
 
-            res.json({
-                success: true,
-                next: url
-             });
-        });
+                res.redirect(url);
+            });
+        } else {
+            res.redirect('/logout/');
+        }
     } else {
-        res.json({
-            success: false,
-            error_message: "Incorrect Verification Code"
-        })
+        res.redirect('/documents/');
     }
 };
