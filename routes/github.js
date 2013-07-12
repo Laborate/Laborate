@@ -101,6 +101,8 @@ exports.contents = function(req, res, next) {
                         status: 200,
                         message: "Bad Github Oauth Token",
                     }, req, res, next);
+                } if(error.message == "This repository is empty.") {
+                    res.json([]);
                 } else {
                     error_lib.handler({
                         status: 200,

@@ -8,7 +8,7 @@ window.nodeSocket = io.connect("/", {
 window.nodeSocket.on("reconnecting", function() {
     $("#editorCodeMirror").css({"opacity": ".5"});
     editor.options.readOnly = true;
-    window.notification.open("Reconnecting...");
+    window.notification.open("Reconnecting...", true);
 });
 
 window.nodeSocket.on("reconnect", function() {
@@ -25,7 +25,6 @@ window.url_params = function() {
     params_dict["document"] = (params) ? params[1] : null;
     return params_dict;
 }
-
 
 $(window).ready(function() {
     //Set Tmp User Id

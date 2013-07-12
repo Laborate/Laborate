@@ -1,4 +1,5 @@
 exports.handler = function(error, req, res, next) {
+    console.log(error);
     if(error.status) {
         var error_message;
         var error_html;
@@ -22,6 +23,8 @@ exports.handler = function(error, req, res, next) {
         }
 
         error_message = (error.message) ? error.message : error_message;
+        error_html = (error.message) ? error.message : error_html;
+        error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
 
         if(req.xhr) {
             res.json({

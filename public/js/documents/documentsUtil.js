@@ -18,7 +18,7 @@ window.documents = {
             $("#popup").css({"width": "280"});
         }
 
-        if(preset == "location_delete") {
+        if(preset == "location_remove") {
             $("#popup #location_remove").show();
             $("#popup #popup_header #popup_header_name").text("Confirm Location Deletion?");
             $("#popup").css({"width": "250"});
@@ -63,6 +63,7 @@ window.documents = {
             $("body").css("overflow", "hidden");
             $("#popup_backdrop").show();
             $("#popup").hAlign().vAlign().show();
+            $("#popup #" + preset + " input").eq(0).focus();
         });
     },
     popUpClose: function() {
@@ -253,7 +254,7 @@ window.documents = {
     },
     removeLocation: function(element) {
         var id = element.attr("id");
-        window.documents.popUp("location_delete");
+        window.documents.popUp("location_remove");
 
         $("#popup #location_remove input[type=button]").live("click", function() {
             $.post("/documents/location/remove/", { locations_remove: id, _csrf: $("#_csrf").text() }, function(json) {
