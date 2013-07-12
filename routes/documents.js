@@ -5,6 +5,7 @@ var rand = require("generate-key");
 
 /* Modules: Custom */
 var github = require("./github");
+var error_lib = require('./error');
 
 exports.index = function(req, res, next) {
     res.render('documents', {

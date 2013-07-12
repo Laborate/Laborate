@@ -4,6 +4,7 @@ var async = require("async");
 /* Modules: Custom */
 var aes = require('../lib/core/aes');
 var github_lib = require("../lib/github");
+var error_lib = require('./error');
 
 exports.add_token = function(req, res, next) {
     if(req.param("code")) {
