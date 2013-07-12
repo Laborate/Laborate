@@ -12,7 +12,6 @@ window.nodeSocket.on("reconnecting", function() {
 });
 
 window.nodeSocket.on("reconnect", function() {
-    window.editorUtil.join($.cookie("screenName"), $("#backdropPassword").val());
     window.notification.close();
     editor.options.readOnly = false;
     $("#editorCodeMirror").css({"opacity": ""});

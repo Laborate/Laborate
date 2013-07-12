@@ -218,8 +218,8 @@ window.sidebarUtil = {
 		window.location.href = "/editor/" + window.url_params()["document"] + "/download/";
     },
 	printFile: function() {
-		window.open('/print/' + window.url_params()["document"], 'title',
-			            'width=800, height=500, menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+		window.open('/print/' + window.url_params()["document"] + "/", 'title',
+			            'width=800,height=500,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
 	},
     commitFile: function() {
         $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting...");
