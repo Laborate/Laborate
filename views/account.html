@@ -17,7 +17,7 @@
             <% if(user.code_pricing.documents) { %>
                 <%= user.pass_documents + " of " + user.code_pricing.documents %>
             <% } else { %>
-                <%= pass_sessions_count %>
+                <%= user.pass_documents %>
             <% } %>
         </div>
         <div class="clear"></div>

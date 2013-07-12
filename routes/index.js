@@ -6,7 +6,7 @@ var account = require('./account');
 var documents = require('./documents');
 var editor = require('./editor');
 var github = require('./github');
-var realtime = require('./realtime');
+var update = require('./update');
 
 module.exports = function(app) {
     /* Root */
@@ -28,7 +28,7 @@ module.exports = function(app) {
     app.get('/logout', auth.logout);
 
     /* Account */
-    app.get(/^\/account\/.*/, auth.restrictAccess, realtime.index, account.index);
+    app.get(/^\/account\/.*/, auth.restrictAccess, update.index, account.index);
 
     /* Documents */
     app.get('/documents', auth.restrictAccess, documents.index);
@@ -43,8 +43,8 @@ module.exports = function(app) {
     app.post('/documents/location/remove', auth.restrictAccess, auth.xhr, documents.remove_location);
 
     /* Editor */
-    app.get('/editor', auth.restrictAccess, realtime.index, editor.index);
-    app.get('/editor/:document', auth.restrictAccess, realtime.index, editor.index);
+    app.get('/editor', auth.restrictAccess, update.index, editor.index);
+    app.get('/editor/:document', auth.restrictAccess, update.index, editor.index);
     app.get('/editor/:document/download', auth.restrictAccess, editor.download);
     app.post('/editor/:document/join', auth.restrictAccess, auth.xhr, editor.join);
     app.post('/editor/:document/update', auth.restrictAccess, auth.xhr, editor.update);

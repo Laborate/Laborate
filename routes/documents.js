@@ -6,7 +6,7 @@ var rand = require("generate-key");
 /* Modules: Custom */
 var github = require("./github");
 
-exports.index = function(req, res) {
+exports.index = function(req, res, next) {
     res.render('documents', {
         title: 'Documents',
         navigation: 'Documents Drive',
@@ -18,7 +18,7 @@ exports.index = function(req, res) {
 };
 
 /* Online Files */
-exports.files = function(req, res) {
+exports.files = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id
     }, function(error, documents) {
@@ -36,15 +36,15 @@ exports.files = function(req, res) {
 
             res.json(files);
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Load Files"
-            });
+            error_lib.handler({
+                status: 200,
+                message: "Failed To Load Files",
+            }, req, res, next);
         }
     });
 };
 
-exports.file_create = function(req, res) {
+exports.file_create = function(req, res, next) {
     var path = req.param("external_path");
     req.models.documents.create({
         name: req.param("name"),
@@ -55,29 +55,29 @@ exports.file_create = function(req, res) {
         if(!error) {
             res.json({document: document.id});
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Create Document"
-            });
+            error_lib.handler({
+                status: 200,
+                message: "Failed To Create Document",
+            }, req, res, next);
         }
     });
 };
 
-exports.file_rename = function(req, res) {
+exports.file_rename = function(req, res, next) {
     req.models.documents.get(req.param("0"), function(error, document) {
         if(!error) {
             document.name = req.param("name");
             res.json({ success: true });
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Rename File"
-            });
+            error_lib.handler({
+                status: 200,
+                message: "Failed To Rename File",
+            }, req, res, next);
         }
     });
 };
 
-exports.file_remove = function(req, res) {
+exports.file_remove = function(req, res, next) {
     req.models.documents.get(req.param("0"), function(error, document) {
         if(!error) {
             if(document.owner_id == req.session.user.id) {
@@ -85,10 +85,10 @@ exports.file_remove = function(req, res) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.json({
-                            success: false,
-                            error_message: "Failed To Remove File"
-                        });
+                        error_lib.handler({
+                            status: 200,
+                            message: "Failed To Remove File",
+                        }, req, res, next);
                     }
                 });
             } else {
@@ -99,45 +99,45 @@ exports.file_remove = function(req, res) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.json({
-                            success: false,
-                            error_message: "Failed To Remove File"
-                        });
+                        error_lib.handler({
+                            status: 200,
+                            message: "Failed To Remove File",
+                        }, req, res, next);
                     }
                 });
             }
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Remove File"
-            });
+            error_lib.handler({
+                status: 200,
+                message: "Failed To Remove File",
+            }, req, res, next);
         }
     });
 };
 
 /* Locations */
-exports.location = function(req, res) {
+exports.location = function(req, res, next) {
     if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
         switch(req.session.user.locations[req.param("0")].type) {
             case "github":
-                github.contents(req, res);
+                github.contents(req, res, next);
                 break;
             default:
-                res.json({
-                    success: false,
-                    error_message: "Location Type Unknown"
-                });
+                error_lib.handler({
+                    status: 200,
+                    message: "Unknown Location Type",
+                }, req, res, next);
                 break;
         }
     } else {
-        res.json({
-            success: false,
-            error_message: "Location Does Not Exist"
-        });
+        error_lib.handler({
+            status: 200,
+            message: "Location Does Not Exist",
+        }, req, res, next);
     }
 };
 
-exports.locations = function(req, res) {
+exports.locations = function(req, res, next) {
     async.series({
         locations: function(callback) {
             if(req.session.user.locations) {
@@ -162,15 +162,15 @@ exports.locations = function(req, res) {
         if(!error) {
             res.json(results.locations);
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Load Locations"
-            });
+            error_lib.handler({
+                status: 200,
+                message: "Failed To Load Locations",
+            }, req, res, next);
         }
     });
 };
 
-exports.create_location = function(req, res) {
+exports.create_location = function(req, res, next) {
     req.models.users.get(req.session.user.id, function(error, user) {
         if(!req.session.user.locations) {
             req.session.user.locations = {}
@@ -182,15 +182,15 @@ exports.create_location = function(req, res) {
         if(!error) {
             res.json({success: true});
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Create Location"
-            });
+            error_lib.handler({
+                status: 200,
+                message: "Failed To Create Location",
+            }, req, res, next);
         }
     });
 };
 
-exports.remove_location = function(req, res) {
+exports.remove_location = function(req, res, next) {
     if(req.session.user.locations && (req.param("locations_remove") in req.session.user.locations)) {
         req.models.users.get(req.session.user.id, function(error, user) {
             delete req.session.user.locations[req.param("locations_remove")];
@@ -199,16 +199,16 @@ exports.remove_location = function(req, res) {
             if(!error) {
                 res.json({success: true});
             } else {
-                res.json({
-                    success: false,
-                    error_message: "Failed To Remove Location"
-                });
+                error_lib.handler({
+                    status: 200,
+                    message: "Failed To Remove Location",
+                }, req, res, next);
             }
         });
     } else {
-        res.json({
-            success: false,
-            error_message: "Failed To Remove Location"
-        });
+        error_lib.handler({
+            status: 200,
+            message: "Failed To Remove Location",
+        }, req, res, next);
     }
 };

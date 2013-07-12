@@ -8,6 +8,7 @@ exports.index = function(req, res, next) {
                 password: req.db.tools.ne(null)
             }, function(error, count) {
                 if(!error) {
+                    console.log(count)
                     req.session.user.pass_documents = count;
                 } else {
                     req.session.user.pass_documents = null;

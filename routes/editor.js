@@ -46,16 +46,13 @@ exports.join = function(req, res, next) {
                     }
                 });
             } else {
-                res.json({
-                    success: false,
-                    error_message: "Incorrect Password"
-                 });
+                error_lib.handler({
+                    status: 200,
+                    message: "Incorrect Password",
+                }, req, res, next);
             }
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Join File"
-            });
+            error_lib.handler({status: 404}, req, res, next);
         }
     });
 }
@@ -65,22 +62,26 @@ exports.update = function(req, res, next) {
         user_id: req.session.user.id,
         document_id: req.param("document")
     }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            var document = documents[0].document;
-            document.name = req.param("name");
+        if(documents.length == 1) {
+            if(!error) {
+                var document = documents[0].document;
+                document.name = req.param("name");
 
-            if(document.owner = req.session.user.id && req.param("password")) {
-                document.password = document.hash(req.param("password"));
+                if(document.owner = req.session.user.id && req.param("password")) {
+                    document.password = document.hash(req.param("password"));
+                } else {
+                    document.password = null;
+                }
+
+                res.json({ success: true });
             } else {
-                document.password = null;
+                error_lib.handler({
+                    status: 200,
+                    message: "Failed To Update File",
+                }, req, res, next);
             }
-
-            res.json({ success: true });
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Update File"
-            });
+            error_lib.handler({status: 404}, req, res, next);
         }
     });
 }
@@ -90,10 +91,17 @@ exports.download = function(req, res, next) {
         user_id: req.session.user.id,
         document_id: req.param("document")
     }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            var document = documents[0].document;
-            res.attachment(document.name);
-            res.end(document.content.join("\n"));
+        if(documents.length == 1) {
+            if(!error) {
+                var document = documents[0].document;
+                res.attachment(document.name);
+                res.end(document.content.join("\n"));
+            } else {
+                error_lib.handler({
+                    status: 200,
+                    message: "Failed To Download File",
+                }, req, res, next);
+            }
         } else {
             error_lib.handler({status: 404}, req, res, next);
         }
@@ -108,10 +116,10 @@ exports.remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.json({
-                            success: false,
-                            error_message: "Failed To Remove File"
-                        });
+                        error_lib.handler({
+                            status: 200,
+                            message: "Failed To Remove File",
+                        }, req, res, next);
                     }
                 });
             } else {
@@ -122,58 +130,59 @@ exports.remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.json({
-                            success: false,
-                            error_message: "Failed To Remove File"
-                        });
+                        error_lib.handler({
+                            status: 200,
+                            message: "Failed To Remove File",
+                        }, req, res, next);
                     }
                 });
             }
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Remove File"
-            });
+            error_lib.handler({status: 404}, req, res, next);
         }
     });
 }
 
-exports.invite = function(req, res) {
+exports.invite = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
         document_id: req.param("document")
     }, function(error, documents) {
-        if(!error) {
-            var document = documents[0].document;
-            email("document_invite", {
-                host: req.host,
-                from: req.session.user.name + " <" + req.session.user.email + ">",
-                subject: document.name,
-                users: $.map(req.param("addresses").split(","), function(address) {
-                    return {
-                        email: $.trim(address),
-                        role: documents[0],
-                        collaborators: $.map(document.roles, function(role) {
-                            return role.user.screen_name;
-                        }).join(", "),
-                        message: req.param("message")
+        if(documents.length == 1) {
+            if(!error) {
+                var document = documents[0].document;
+                email("document_invite", {
+                    host: req.host,
+                    from: req.session.user.name + " <" + req.session.user.email + ">",
+                    subject: document.name,
+                    users: $.map(req.param("addresses").split(","), function(address) {
+                        return {
+                            email: $.trim(address),
+                            role: documents[0],
+                            collaborators: $.map(document.roles, function(role) {
+                                return role.user.screen_name;
+                            }).join(", "),
+                            message: req.param("message")
+                        }
+                    })
+                }, function(errors) {
+                    if(errors.length == 0) {
+                        res.json({ success: true });
+                    } else {
+                        error_lib.handler({
+                            status: 200,
+                            message: "Failed To Send Invite",
+                        }, req, res, next);
                     }
-                })
-            }, function(errors) {
-                if(errors.length == 0) {
-                    res.json({ success: true });
-                } else {
-                    res.json({
-                        success: false,
-                        error_message: "Failed To Send Email"
-                    });
-                }
-            });
+                });
+            } else {
+                error_lib.handler({
+                    status: 200,
+                    message: "Failed To Send Invite",
+                }, req, res, next);
+            }
         } else {
-            res.json({
-                success: false,
-                error_message: "Failed To Send Email"
-            });
+            error_lib.handler({status: 404}, req, res, next);
         }
     });
 }

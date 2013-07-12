@@ -7,8 +7,6 @@ var piler   = require("piler");
 var redis   = require('redis');
 var ejs     = require('ejs');
 
-console.log(srv)
-
 /* IMPORTANT - No VAR Makes Variables Global */
 config    = require('./config');
 clientJS  = piler.createJSManager({urlRoot: "/js/"});
@@ -32,6 +30,8 @@ app.configure(function() {
     app.engine('html', ejs.renderFile);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'html');
+    app.set('view options', { layout: true });
+    app.set('view cache', true);
     app.set('x-powered-by', false);
     app.use('/favicon', express.static(__dirname + '/public/favicon'));
     app.use('/fonts', express.static(__dirname + '/public/fonts'));
@@ -104,9 +104,6 @@ app.io.configure(function(){
     ]);
     app.io.set('log colors', true);
 });
-
-/* Socket IO: Import Routes */
-require('./socket')(app.io);
 
 /* Listen To Server */
 srv.listen(config.general.port);

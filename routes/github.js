@@ -5,7 +5,7 @@ var async = require("async");
 var aes = require('../lib/core/aes');
 var github_lib = require("../lib/github");
 
-exports.add_token = function(req, res) {
+exports.add_token = function(req, res, next) {
     if(req.param("code")) {
         github_lib.get_token(req.param("code"), function (error, token) {
             req.models.users.get(req.session.user.id, function(error, user) {
@@ -19,7 +19,7 @@ exports.add_token = function(req, res) {
     }
 };
 
-exports.remove_token = function(req, res) {
+exports.remove_token = function(req, res, next) {
     if(req.session.user.github) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.github = null;
@@ -31,24 +31,22 @@ exports.remove_token = function(req, res) {
     }
 };
 
-exports.repos = function(req, res) {
+exports.repos = function(req, res, next) {
     if(req.session.user.github) {
         github_lib.repos(req.session.user.github, function(error, results) {
             if(!error) {
                 res.json(results);
             } else {
                 if(error.message == "Bad credentials") {
-                    res.json({
-                        success: false,
-                        error_message: "Bad Github Oauth Token",
-                        github_oath: github_lib.auth_url
-                    });
-
+                    error_lib.handler({
+                        status: 200,
+                        message: "Bad Github Oauth Token",
+                    }, req, res, next);
                 } else {
-                    res.json({
-                        success: false,
-                        error_message: "Failed To Load Github Contents"
-                    });
+                    error_lib.handler({
+                        status: 200,
+                        message: "Failed To Load Github Contents",
+                    }, req, res, next);
                 }
             }
         });
@@ -57,7 +55,7 @@ exports.repos = function(req, res) {
     }
 };
 
-exports.contents = function(req, res) {
+exports.contents = function(req, res, next) {
     if(req.session.user.github) {
         github_lib.contents(req.session.user.github,
             req.session.user.locations[req.param("0")].repository,
@@ -84,10 +82,10 @@ exports.contents = function(req, res) {
                             if(!error) {
                                 res.json({document: document.id});
                             } else {
-                                res.json({
-                                    success: false,
-                                    error_message: "Failed To Create Document"
-                                });
+                                error_lib.handler({
+                                    status: 200,
+                                    message: "Failed To Create Document",
+                                }, req, res, next);
                             }
                         });
                         break;
@@ -98,28 +96,27 @@ exports.contents = function(req, res) {
                 }
             } else {
                 if(error.message == "Bad credentials") {
-                    res.json({
-                        success: false,
-                        error_message: "Bad Github Oauth Token",
-                        github_oath: github_lib.auth_url
-                    });
+                    error_lib.handler({
+                        status: 200,
+                        message: "Bad Github Oauth Token",
+                    }, req, res, next);
                 } else {
-                    res.json({
-                        success: false,
-                        error_message: "Failed To Load Github Contents"
-                    });
+                    error_lib.handler({
+                        status: 200,
+                        message: "Failed To Load Github Contents",
+                    }, req, res, next);
                 }
             }
         });
     } else {
-        res.json({
-            success: false,
-            error_message: "Github Oauth Token Required"
-        });
+        error_lib.handler({
+            status: 200,
+            message: "Github Oauth Token Required",
+        }, req, res, next);
     }
 };
 
-exports.commit = function(req, res) {
+exports.commit = function(req, res, next) {
     if(req.session.user.github) {
         req.models.documents_roles.find({
             user_id: req.session.user.id,
@@ -137,23 +134,23 @@ exports.commit = function(req, res) {
                     if(!errors) {
                         res.json({ success: true });
                     } else {
-                        res.json({
-                            success: false,
-                            error_message: "Failed To Commit File"
-                        });
+                        error_lib.handler({
+                            status: 200,
+                            message: "Failed To Commit File",
+                        }, req, res, next);
                     }
                 });
             } else {
-                res.json({
-                    success: false,
-                    error_message: "Failed To Commit File"
-                });
+                error_lib.handler({
+                    status: 200,
+                    message: "Failed To Commit File",
+                }, req, res, next);
             }
         });
     } else {
-        res.json({
-            success: false,
-            error_message: "Failed To Commit File"
-        });
+        error_lib.handler({
+            status: 200,
+            message: "Failed To Commit File",
+        }, req, res, next);
     }
 }

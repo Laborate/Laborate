@@ -12,14 +12,16 @@ exports.handler = function(error, req, res, next) {
                 break;
             case 403:
                 error_message = "Access Forbidden";
-                error_html = 'You are not authorized to view this page.<br/>Please continue back <a href="/">home</a>.';
+                error_html = 'You are not authorized to view this page.';
                 delete req.session._csrf;
                 break;
             default:
                 error_message = "Page Not Found";
-                error_html = 'Sorry, this page is not available.<br/>Please continue back <a href="/">home</a>.';
+                error_html = 'Sorry, this page is not available.';
                 break;
         }
+
+        error_message = (error.message) ? error.message : error_message;
 
         if(req.xhr) {
             res.json({
