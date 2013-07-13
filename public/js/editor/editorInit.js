@@ -26,9 +26,6 @@ window.url_params = function() {
 }
 
 $(window).ready(function() {
-    //Set Tmp User Id
-    window.userId = Math.floor((Math.random()*100000000000000000)+1);
-
     //Set Array of Users
     window.users = new Array();
 

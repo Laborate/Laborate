@@ -99,13 +99,11 @@ $(window).ready(function() {
         refresh: function() {
             var header = $("#header").height();
             var window_height = window.innerHeight;
-
             if($("#header").is(":visible")) {
                 window.editor.setSize("", (window_height - header - 38) + "px")
             } else {
                 window.editor.setSize("", (window_height - header - 68) + "px")
             }
-
             editor.refresh();
         },
         fullScreen: function() {

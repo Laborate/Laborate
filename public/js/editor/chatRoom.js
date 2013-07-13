@@ -43,14 +43,17 @@ window.chatRoom = {
         $("#sidebar").toggle();
         window.editor.refresh();
     },
-    message: function(from, name, message, direction) {
-        if(window.chatRoom._check(message, "commands", from) != true) {
+    message: function(from, message, direction) {
+        if(!window.chatRoom._check(message, "commands", from)) {
             if(window.chatRoom._check(message, "js")) {
-                if(direction == "out") { window.chatRoom._pushMessage(message); }
+                if(direction == "out") {
+                    window.chatRoom._pushMessage(message);
+                }
+
                 var lineContent = window.chatRoom._check(message, "line");
                 var searchContent = window.chatRoom._check(lineContent, "search");
                 var scrollContent = window.chatRoom._check(searchContent, "scroll");
-                window.chatRoom._inputMessage(name, scrollContent, direction);
+                window.chatRoom._inputMessage(from, scrollContent, direction);
             }
         }
         window.chatRoom.resize();
@@ -79,61 +82,65 @@ window.chatRoom = {
         window.jscrollData.reinitialise();
         window.jscrollData.scrollToPercentY("100");
     },
-    screenNameChange: function(oldScreenName, newScreenName) {
-        window.screenName = newScreenName;
-        $.cookie("screenName", newScreenName);
-        if(oldScreenName != "" && oldScreenName != "undefined" && newScreenName != "undefined") {
-            window.nodeSocket.emit('chatRoom', {"from": window.userId, "name": newScreenName,
-                                                "message": oldScreenName + " new screen name: " + newScreenName,
-                                                "isStatus": true}
-            );
-            $(".out .chatRoomName").text(window.screenName);
-        }
-        $("#screenName").val(newScreenName);
-    },
-    _check: function(message, type, name) {
+    _check: function(message, type) {
         if(type == "commands") {
             message = message.toLowerCase();
-            commands = {":c": "clear",
-				        ":h": "help",
-				        ":n": "toggle",
-				        ":s": "sidebar"
-				}
+            commands = {
+                ":c": "clear",
+		        ":h": "help",
+		        ":n": "toggle",
+		        ":s": "sidebar"
+            }
 
         	for(var command in commands) {
         		if(message == command) {
-            		if(name == window.userId) {
-            			window.chatRoom[commands[command]](message);
-                    }
+                    window.chatRoom[commands[command]](message);
                     return true
         		}
         	}
         } else if(type == "js") {
-            if(message.toLowerCase().search(/.*<script.*/ig)) { return true; }
-            else { return false; }
+            if(message.toLowerCase().search(/.*<script.*/ig)) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            types = { "search": [/.*@.*/ig, "@", "window.sidebarUtil.search"],
-                      "line": [/.*#\d.*/ig, "#", "window.sidebarUtil.highlight"],
-                      "scroll": [/.*&.*/ig, "&", "window.sidebarUtil.scroll"] }
+            types = {
+                "search": [/.*@.*/ig, "@", "window.sidebarUtil.search"],
+                "line": [/.*#\d.*/ig, "#", "window.sidebarUtil.highlight"],
+                "scroll": [/.*&.*/ig, "&", "window.sidebarUtil.scroll"]
+            }
 
             if(!message.search(types[type][0])) {
         		var splits = (" " + message + " ").split(types[type][1]);
 
-        		if(splits[0].length == 0){ var before = "" } else { var before = splits[0] };
-        		var middle = splits[1].split(" ")[0]
-        		if(splits[1].split(" ")[1].length == 0){ var after = "" }
-        		else { var list = splits[1].split(" "); list.shift(); var after =  " " + list.join(" ") };
+        		if(splits[0].length == 0){
+        		    var before = ""
+                } else {
+                    var before = splits[0]
+                };
+
+        		var middle = splits[1].split(" ")[0];
+
+        		if(splits[1].split(" ")[1].length == 0){
+        		    var after = ""
+                } else {
+                    var list = splits[1].split(" ");
+                    list.shift();
+                    var after =  " " + list.join(" ")
+                };
 
         		middleCall = "'" + middle + "'";
-        		return before + '<span class="link" onClick="' + types[type][2] + '(' + middleCall + ')"> '+ middle +'</span>' + after;
-
+        		return (before + '<span class="link" onClick="' + types[type][2] +
+        		            '(' + middleCall + ')"> '+ middle +'</span>' + after);
         	} else {
         		return message;
         	}
         }
     },
-    _inputMessage: function(name, message, direction) {
-        var html = '<div class="chatRoomMessage ' + direction + '"><div class="chatRoomName">' + name +'</div><div class="chatRoomBubble">' + message +'</div></div>';
+    _inputMessage: function(from, message, direction) {
+        var html = '<div class="chatRoomMessage ' + direction + '"><div class="chatRoomName">';
+        html += from +'</div><div class="chatRoomBubble">' + message +'</div></div>';
         $(".jspPane").append(html);
     },
     _inputStatus: function(status) {
@@ -143,13 +150,15 @@ window.chatRoom = {
     },
     _reset: function() {
         $("#messenger").blur();
-        setTimeout(function() { $("#messenger").val('').focus() }, 05);
+        setTimeout(function() {
+            $("#messenger").val('').focus()
+        }, 05);
     },
     _pushMessage: function(message) {
-        window.nodeSocket.emit( 'chatRoom' , {"from":window.userId,
-                                              "name":window.screenName,
-                                              "message": message,
-                                              "isStatus": false} );
+        window.nodeSocket.emit('chatRoom', {
+            "message": message,
+            "isStatus": false
+        });
     }
 }
 
@@ -172,14 +181,7 @@ $(window).ready(function() {
         //Checks if enter key is pressed
         if(e.which == 13) {
         	if($.trim($(this).val()) != "") {
-        		if(window.screenName == "" || window.screenName == null) {
-        		   window.chatRoom.status("Please Enter Your Screen Name");
-        		   window.chatRoom.status("in the sidebar to the left");
-        		   sidebar('settings', 'screenName');
-                }
-        		else {
-            		window.chatRoom.message(window.userId, window.screenName, $.trim($(this).val()), "out");
-        		}
+        		  window.chatRoom.message("", $.trim($(this).val()), "out");
         	}
         	window.chatRoom._reset();
     	}
@@ -187,14 +189,12 @@ $(window).ready(function() {
 
     //Pull Message
     window.nodeSocket.on('chatRoom', function (data) {
-        if(data['from'] != window.userId && (""+data['from']) != "null") {
-            window.editorUtil.users(data);
-            if(data['isStatus']) {
-                window.chatRoom.status(data['message']);
-            }
-            else {
-                window.chatRoom.message(data['from'], data['name'], data['message'], "in");
-            }
+        window.editorUtil.users(data);
+        if(data['isStatus']) {
+            window.chatRoom.status(data['message']);
+        }
+        else {
+            window.chatRoom.message(data['from'], data['message'], "in");
         }
     });
 });
