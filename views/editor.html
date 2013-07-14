@@ -130,11 +130,16 @@
             </div>
             <% if(document.owner_id == user.id && user.code_pricing) { %>
                     <% if(user.code_pricing.documents == null || user.pass_documents < user.code_pricing.documents) { %>
-                        <div>
-                            <div class="header">Document Password</div>
-                            <div>
-                                <input id="documentPassword" type="password" placeholder="leave blank for no password" spellcheck="false" class="input"/>
+                        <div style="position:relative">
+                            <div id="password_container">
+                                <div class="header">Document Password</div>
+                                <div>
+                                    <input id="documentPassword" type="password" placeholder="leave blank for no password"
+                                                spellcheck="false" class="input" disabled="disabled"/>
+                                    <input id="change_password" value="false" type="hidden"/>
+                                </div>
                             </div>
+                            <div id="password_change" class="icon-pencil grey"></div>
                         </div>
                     <% } %>
             <% } %>

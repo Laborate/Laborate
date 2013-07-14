@@ -62,10 +62,12 @@ exports.update = function(req, res, next) {
                 var document = documents[0].document;
                 document.name = req.param("name");
 
-                if(document.owner = req.session.user.id && req.param("password")) {
-                    document.password = document.hash(req.param("password"));
-                } else {
-                    document.password = null;
+                if(document.owner = req.session.user.id && req.param("change_password") == "true") {
+                    if(req.param("password")) {
+                        document.password = document.hash(req.param("password"));
+                    } else {
+                        document.password = null;
+                    }
                 }
 
                 res.json({ success: true });

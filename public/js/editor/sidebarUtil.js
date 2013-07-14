@@ -138,6 +138,7 @@ window.sidebarUtil = {
         $.post("/editor/" + window.url_params()["document"] + "/update/", {
             name: $("#documentTitle").val(),
             password: $("#documentPassword").val(),
+            change_password: $("#change_password").val(),
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
@@ -179,6 +180,23 @@ window.sidebarUtil = {
                 }, 5000);
             }
         });
+	},
+	togglePassword: function() {
+        if($("#documentPassword").is(":disabled")) {
+            $("#documentPassword").removeAttr("disabled");
+            $("#change_password").val("true");
+            $("#password_change")
+                .removeClass("icon-pencil")
+                .addClass("icon-cancel")
+                .css("cssText", "border: solid 1px #999 !important;");
+        } else {
+            $("#documentPassword").attr("disabled", "disabled");
+            $("#change_password").val("false");
+            $("#password_change")
+                .removeClass("icon-cancel")
+                .addClass("icon-pencil")
+                .css("cssText", "");
+        }
 	},
 	email_invite: function() {
     	if($("#emailAddresses").val() != "") {

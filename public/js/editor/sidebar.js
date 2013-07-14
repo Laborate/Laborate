@@ -61,6 +61,7 @@ $(window).ready(function() {
     $("#saveToServer").live("click", window.sidebarUtil.pushFile);
 
     /* Triggers: Settings */
+    $("#password_change").on("click", window.sidebarUtil.togglePassword);
     $("#settingsSave").on("click", window.sidebarUtil.settings);
 
     $("#removeDoc, #actionConfirmCancel").live("click", function() {
