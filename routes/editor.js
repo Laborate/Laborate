@@ -1,10 +1,6 @@
 /* Modules: NPM */
 var $ = require("jquery");
 
-/* Modules: Custom */
-var email = require('../lib/email');
-var error_lib = require('./error');
-
 exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.get(req.param("document"), function(error, document) {
@@ -25,7 +21,7 @@ exports.index = function(req, res, next) {
                     css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll")
                 });
             } else {
-                error_lib.handler({status: 404}, req, res, next);
+                res.error(404);
             }
         });
     } else {
@@ -46,13 +42,10 @@ exports.join = function(req, res, next) {
                     }
                 });
             } else {
-                error_lib.handler({
-                    status: 200,
-                    message: "Incorrect Password",
-                }, req, res, next);
+                res.error(200, "Incorrect Password");
             }
         } else {
-            error_lib.handler({status: 404}, req, res, next);
+            res.error(404);
         }
     });
 }
@@ -75,13 +68,10 @@ exports.update = function(req, res, next) {
 
                 res.json({ success: true });
             } else {
-                error_lib.handler({
-                    status: 200,
-                    message: "Failed To Update File",
-                }, req, res, next);
+                res.error(200, "Failed To Update File");
             }
         } else {
-            error_lib.handler({status: 404}, req, res, next);
+            res.error(404);
         }
     });
 }
@@ -97,13 +87,10 @@ exports.download = function(req, res, next) {
                 res.attachment(document.name);
                 res.end(document.content.join("\n"));
             } else {
-                error_lib.handler({
-                    status: 200,
-                    message: "Failed To Download File",
-                }, req, res, next);
+                res.error(200, "Failed To Download File");
             }
         } else {
-            error_lib.handler({status: 404}, req, res, next);
+            res.error(404);
         }
     });
 }
@@ -116,10 +103,7 @@ exports.remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        error_lib.handler({
-                            status: 200,
-                            message: "Failed To Remove File",
-                        }, req, res, next);
+                        res.error(200, "Failed To Remove File");
                     }
                 });
             } else {
@@ -130,15 +114,12 @@ exports.remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        error_lib.handler({
-                            status: 200,
-                            message: "Failed To Remove File",
-                        }, req, res, next);
+                        res.error(200, "Failed To Remove File");
                     }
                 });
             }
         } else {
-            error_lib.handler({status: 404}, req, res, next);
+            res.error(404);
         }
     });
 }
@@ -151,8 +132,7 @@ exports.invite = function(req, res, next) {
         if(documents.length == 1) {
             if(!error) {
                 var document = documents[0].document;
-                email("document_invite", {
-                    host: req.host,
+                req.email("document_invite", {
                     from: req.session.user.name + " <" + req.session.user.email + ">",
                     subject: document.name,
                     users: $.map(req.param("addresses").split(","), function(address) {
@@ -169,20 +149,14 @@ exports.invite = function(req, res, next) {
                     if(errors.length == 0) {
                         res.json({ success: true });
                     } else {
-                        error_lib.handler({
-                            status: 200,
-                            message: "Failed To Send Invite",
-                        }, req, res, next);
+                        res.error(200, "Failed To Send Invite");
                     }
                 });
             } else {
-                error_lib.handler({
-                    status: 200,
-                    message: "Failed To Send Invite",
-                }, req, res, next);
+                res.error(200, "Failed To Send Invite");
             }
         } else {
-            error_lib.handler({status: 404}, req, res, next);
+            res.error(404);
         }
     });
 }

@@ -1,6 +1,3 @@
-/* Modules: Custom */
-var email = require('../lib/email');
-
 exports.login = function(req, res) {
     res.render('login', {
         title: 'Login',
@@ -31,8 +28,4 @@ exports.verify = function(req, res) {
     } else {
         res.redirect("/documents/");
     }
-};
-
-exports.not_found = function(req, res, next) {
-    require("./error").handler({status: 404}, req, res, next);
 };

@@ -5,7 +5,6 @@ var rand = require("generate-key");
 
 /* Modules: Custom */
 var github = require("./github");
-var error_lib = require('./error');
 
 exports.index = function(req, res, next) {
     res.render('documents', {
@@ -37,10 +36,7 @@ exports.files = function(req, res, next) {
 
             res.json(files);
         } else {
-            error_lib.handler({
-                status: 200,
-                message: "Failed To Load Files",
-            }, req, res, next);
+            res.error(200, "Failed To Load Files");
         }
     });
 };
@@ -56,10 +52,7 @@ exports.file_create = function(req, res, next) {
         if(!error) {
             res.json({document: document.id});
         } else {
-            error_lib.handler({
-                status: 200,
-                message: "Failed To Create Document",
-            }, req, res, next);
+            res.error(200, "Failed To Create Document");
         }
     });
 };
@@ -70,10 +63,7 @@ exports.file_rename = function(req, res, next) {
             document.name = req.param("name");
             res.json({ success: true });
         } else {
-            error_lib.handler({
-                status: 200,
-                message: "Failed To Rename File",
-            }, req, res, next);
+            res.error(200, "Failed To Rename File");
         }
     });
 };
@@ -86,10 +76,7 @@ exports.file_remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        error_lib.handler({
-                            status: 200,
-                            message: "Failed To Remove File",
-                        }, req, res, next);
+                        res.error(200, "Failed To Remove File");
                     }
                 });
             } else {
@@ -100,18 +87,12 @@ exports.file_remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        error_lib.handler({
-                            status: 200,
-                            message: "Failed To Remove File",
-                        }, req, res, next);
+                        res.error(200, "Failed To Remove File");
                     }
                 });
             }
         } else {
-            error_lib.handler({
-                status: 200,
-                message: "Failed To Remove File",
-            }, req, res, next);
+            res.error(200, "Failed To Remove File");
         }
     });
 };
@@ -124,10 +105,7 @@ exports.location = function(req, res, next) {
                 github.contents(req, res, next);
                 break;
             default:
-                error_lib.handler({
-                    status: 200,
-                    message: "Unknown Location Type",
-                }, req, res, next);
+                res.error(200, "Unknown Location Type");
                 break;
         }
     } else {
@@ -163,10 +141,7 @@ exports.locations = function(req, res, next) {
         if(!error) {
             res.json(results.locations);
         } else {
-            error_lib.handler({
-                status: 200,
-                message: "Failed To Load Locations",
-            }, req, res, next);
+            res.error(200, "Failed To Load Locations");
         }
     });
 };
@@ -183,10 +158,7 @@ exports.create_location = function(req, res, next) {
         if(!error) {
             res.json({success: true});
         } else {
-            error_lib.handler({
-                status: 200,
-                message: "Failed To Create Location",
-            }, req, res, next);
+            res.error(200, "Failed To Create Location");
         }
     });
 };
@@ -200,16 +172,10 @@ exports.remove_location = function(req, res, next) {
             if(!error) {
                 res.json({success: true});
             } else {
-                error_lib.handler({
-                    status: 200,
-                    message: "Failed To Remove Location",
-                }, req, res, next);
+                res.error(200, "Failed To Remove Location");
             }
         });
     } else {
-        error_lib.handler({
-            status: 200,
-            message: "Failed To Remove Location",
-        }, req, res, next);
+        res.error(200, "Failed To Remove Location");
     }
 };

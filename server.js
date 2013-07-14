@@ -7,6 +7,9 @@ var piler   = require("piler");
 var redis   = require('redis');
 var ejs     = require('ejs');
 
+/* Modules: Custom */
+var error = require("./routes/error");
+
 /* IMPORTANT - No VAR Makes Variables Global */
 config    = require('./config');
 clientJS  = piler.createJSManager({urlRoot: "/js/"});
@@ -47,6 +50,9 @@ app.configure(function() {
     app.use(express.cookieSession({ key: config.cookie_session.key }));
     app.use(express.csrf());
     app.use(require("./lib/models"));
+    app.use(require("./lib/email"));
+    app.use(error.global);
+    app.use(error.handler);
     app.use(function(req, res, next) {
         res.locals.host = req.host;
         res.locals.site_title = config.general.site_title;

@@ -4,7 +4,6 @@ var async = require("async");
 /* Modules: Custom */
 var aes = require('../lib/core/aes');
 var github_lib = require("../lib/github");
-var error_lib = require('./error');
 
 exports.add_token = function(req, res, next) {
     if(req.param("code")) {
@@ -39,15 +38,9 @@ exports.repos = function(req, res, next) {
                 res.json(results);
             } else {
                 if(error.message == "Bad credentials") {
-                    error_lib.handler({
-                        status: 200,
-                        message: "Bad Github Oauth Token",
-                    }, req, res, next);
+                    res.error(200, "Bad Github Oauth Token");
                 } else {
-                    error_lib.handler({
-                        status: 200,
-                        message: "Failed To Load Github Contents",
-                    }, req, res, next);
+                    res.error(200, "Failed To Load Github Contents");
                 }
             }
         });
@@ -83,10 +76,7 @@ exports.contents = function(req, res, next) {
                             if(!error) {
                                 res.json({document: document.id});
                             } else {
-                                error_lib.handler({
-                                    status: 200,
-                                    message: "Failed To Create Document",
-                                }, req, res, next);
+                                res.error(200, "Failed To Create Document");
                             }
                         });
                         break;
@@ -97,25 +87,16 @@ exports.contents = function(req, res, next) {
                 }
             } else {
                 if(error.message == "Bad credentials") {
-                    error_lib.handler({
-                        status: 200,
-                        message: "Bad Github Oauth Token",
-                    }, req, res, next);
+                    res.error(200, "Bad Github Oauth Token");
                 } if(error.message == "This repository is empty.") {
                     res.json([]);
                 } else {
-                    error_lib.handler({
-                        status: 200,
-                        message: "Failed To Load Github Contents",
-                    }, req, res, next);
+                    res.error(200, "Failed To Load Github Contents");
                 }
             }
         });
     } else {
-        error_lib.handler({
-            status: 200,
-            message: "Github Oauth Token Required",
-        }, req, res, next);
+        res.error(200, "Github Oauth Token Required");
     }
 };
 
@@ -137,23 +118,14 @@ exports.commit = function(req, res, next) {
                     if(!errors) {
                         res.json({ success: true });
                     } else {
-                        error_lib.handler({
-                            status: 200,
-                            message: "Failed To Commit File",
-                        }, req, res, next);
+                        res.error(200, "Failed To Commit File");
                     }
                 });
             } else {
-                error_lib.handler({
-                    status: 200,
-                    message: "Failed To Commit File",
-                }, req, res, next);
+                res.error(200, "Failed To Commit File");
             }
         });
     } else {
-        error_lib.handler({
-            status: 200,
-            message: "Failed To Commit File",
-        }, req, res, next);
+        res.error(200, "Failed To Commit File");
     }
 }

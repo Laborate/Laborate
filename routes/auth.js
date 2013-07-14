@@ -7,9 +7,7 @@ var rand = require("generate-key");
 
 /* Modules: Custom */
 var core = require('./core');
-var error_lib = require('./error');
 var aes = require('../lib/core/aes');
-var email = require('../lib/email');
 
 /* Module Exports: Access Checks */
 exports.restrictAccess = function(req, res, next) {
@@ -26,7 +24,7 @@ exports.restrictAccess = function(req, res, next) {
                     user.set_recovery(req, res);
                     if(next) next();
                 } else {
-                    error_lib.handler({status: 401}, req, res, next);
+                    res.error(401);
                 }
             });
         }
@@ -39,11 +37,11 @@ exports.restrictAccess = function(req, res, next) {
                         req.session.user = user[0];
                         if(next) next();
                     } else {
-                        error_lib.handler({status: 401}, req, res, next);
+                        res.error(401);
                     }
             });
         } else {
-            error_lib.handler({status: 401}, req, res, next);
+            res.error(401);
         }
     }
 };
@@ -109,10 +107,7 @@ exports.login = function(req, res, next) {
                 next: url
              });
         } else {
-            error_lib.handler({
-                status: 200,
-                message: "Incorrect Email or Password",
-            }, req, res, next);
+            res.error(200, "Incorrect Email or Password");
         }
 
     });
@@ -129,15 +124,9 @@ exports.logout = function(req, res) {
 exports.register = function(req, res, next) {
     req.models.users.exists({email: req.param('email')}, function(error, exists) {
         if(error || exists) {
-            error_lib.handler({
-                status: 200,
-                message: "Email Already Exists",
-            }, req, res, next);
+            res.error(200, "Email Already Exists");
         } else if(req.param('password') != req.param('password_confirm')) {
-            error_lib.handler({
-                status: 200,
-                message: "Passwords Do Not Match",
-            }, req, res, next);
+            res.error(200, "Passwords Do Not Match");
         } else {
             req.models.users.create({
                 name: $.trim(req.param('name')),
@@ -153,8 +142,7 @@ exports.register = function(req, res, next) {
                         next: "/verify/"
                     });
 
-                    email("verify", {
-                        host: req.host,
+                    req.email("verify", {
                         from: "support@laborate.io",
                         subject: "Please Verify Your Email",
                         users: [{
@@ -164,10 +152,7 @@ exports.register = function(req, res, next) {
                         }]
                     });
                 } else {
-                    error_lib.handler({
-                        status: 200,
-                        message: "Please Enter A Valid Email",
-                    }, req, res, next);
+                    res.error(200, "Please Enter A Valid Email");
                 }
             });
         }
@@ -178,7 +163,7 @@ exports.verify = function(req, res, next) {
     if(!req.session.user.verified) {
         res.redirect('/documents/');
     } else if($.trim(req.param('code')) != req.session.user.verified) {
-        error_lib.handler({status: 401}, req, res, next);
+        res.error(401);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified = null;
