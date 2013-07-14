@@ -35,7 +35,7 @@ module.exports = function(app) {
     app.get('/documents/files', auth.restrictAccess, auth.xhr, documents.files);
     app.get('/documents/locations', auth.restrictAccess, auth.xhr, documents.locations);
     app.get(/^\/documents\/([\w\d]{10})\/(.*?)/, auth.restrictAccess, documents.index);
-    app.get(/^\/documents\/location\/([\w\d]{10})\/(.*?)/, auth.restrictAccess, documents.location);
+    app.get(/^\/documents\/location\/([\w\d]{10})\/(.*)/, auth.restrictAccess, documents.location);
     app.post(/^\/documents\/file\/create\/$/, auth.restrictAccess, auth.xhr, documents.file_create);
     app.post(/^\/documents\/file\/(\d*)\/rename\/$/, auth.restrictAccess, auth.xhr, documents.file_rename);
     app.post(/^\/documents\/file\/(\d*)\/remove\/$/, auth.restrictAccess, auth.xhr, documents.file_remove);

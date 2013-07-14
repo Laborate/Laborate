@@ -3,11 +3,10 @@ var async = require("async");
 
 /* Modules: Custom */
 var aes = require('../lib/core/aes');
-var github_lib = require("../lib/github");
 
 exports.add_token = function(req, res, next) {
     if(req.param("code")) {
-        github_lib.get_token(req.param("code"), function (error, token) {
+        req.github.get_token(req.param("code"), function (error, token) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 user.github = token;
                 req.session.user = user;
@@ -33,7 +32,7 @@ exports.remove_token = function(req, res, next) {
 
 exports.repos = function(req, res, next) {
     if(req.session.user.github) {
-        github_lib.repos(req.session.user.github, function(error, results) {
+        req.github.repos(req.session.user.github, function(error, results) {
             if(!error) {
                 res.json(results);
             } else {
@@ -51,7 +50,7 @@ exports.repos = function(req, res, next) {
 
 exports.contents = function(req, res, next) {
     if(req.session.user.github) {
-        github_lib.contents(req.session.user.github,
+        req.github.contents(req.session.user.github,
             req.session.user.locations[req.param("0")].repository,
             req.param("1"),
         function(error, results) {
@@ -108,7 +107,7 @@ exports.commit = function(req, res, next) {
         }, function(error, documents) {
             if(!error && documents.length == 1 && documents[0].permission_id != 3) {
                 var document = documents[0].document;
-                github_lib.commit(req.session.user.github,
+                req.github.commit(req.session.user.github,
                     req.session.user.locations[document.location].repository,
                     req.session.user.locations[document.location].branch,
                     (document.path) ? document.path + "/" + document.name : document.name,

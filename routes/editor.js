@@ -6,9 +6,11 @@ exports.index = function(req, res, next) {
         req.models.documents.get(req.param("document"), function(error, document) {
             if(document) {
                 if(document.password == null) {
-                    var js = clientJS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll", "editor-auto-join");
+                    var js = clientJS.renderTags("backdrop", "codemirror", "editor",
+                                                    "header", "jscroll", "editor-auto-join");
                 } else {
-                    var js = clientJS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll")
+                    var js = clientJS.renderTags("backdrop", "codemirror", "editor",
+                                                    "header", "jscroll")
                 }
 
                 res.render('editor', {
@@ -140,7 +142,7 @@ exports.invite = function(req, res, next) {
                             email: $.trim(address),
                             role: documents[0],
                             collaborators: $.map(document.roles, function(role) {
-                                return role.user.screen_name;
+                                return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
                             }).join(", "),
                             message: req.param("message")
                         }

@@ -49,8 +49,11 @@ app.configure(function() {
     app.use(express.cookieParser(config.cookie_session.secret));
     app.use(express.cookieSession({ key: config.cookie_session.key }));
     app.use(express.csrf());
+
+    //Custom
     app.use(require("./lib/models"));
     app.use(require("./lib/email"));
+    app.use(require("./lib/github"));
     app.use(error.global);
     app.use(error.handler);
     app.use(function(req, res, next) {
