@@ -1,6 +1,6 @@
 #editorCodeMirror * {outline: none;}
 
-.CodeMirror {overflow: visible;}
+.CodeMirror {position: relative;}
 .CodeMirror-scroll {height: 100%; overflow-y: auto; overflow-x: auto;}
 .CodeMirror-focused .cm-matchhighlight {background: #adfab4}
 .CodeMirror-activeline-background {background: rgba(213,238,250,0.2);}
@@ -14,21 +14,26 @@
 .cm-s-laborate .CodeMirror-cursor {border-left: 1px solid #666;}
 .cm-s-laborate .CodeMirror-breakpoint {color: #56606E;}
 .cm-s-laborate .CodeMirror-dialog {
-    position: absolute !important;
+    position: fixed !important;
     padding: 10px 0px 10px 10px !important;
     font-size: 24px !important;
     overflow: visible !important;
     z-index: 100 !important;
     height: auto !important;
     margin-right: -15px !important;
+    left: 211px !important;
+    right: 245px !important;
+    border-bottom: solid 1px #ccc !important;
 }
 
 .cm-s-laborate .CodeMirror-dialog-top {
-    border-bottom: solid 1px #ccc;
+    top: 50px !important;
+    border-bottom: solid 1px #ccc !important;
 }
 
 .cm-s-laborate .CodeMirror-dialog-bottom {
-    border-top: solid 1px #ccc;
+    bottom: 0 !important;
+    border-top: solid 1px #ccc !important;
 }
 
 .cm-s-laborate .CodeMirror-dialog input {

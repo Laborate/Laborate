@@ -142,14 +142,19 @@ window.sidebarUtil = {
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
-                $("#settingsSave").removeClass("disabled").val("Settings Saved");
+                $("#settingsSave").removeClass("red_harsh disabled").val("Settings Saved");
+                window.sidebarUtil.togglePassword(true);
+                setTimeout(function() {
+                    $("#settingsSave").val("Save Settings");
+                }, 5000);
+
             } else {
                $("#settingsSave").removeClass("disabled").addClass("red_harsh").val("Failed To Save");
+               setTimeout(function() {
+                    $("#settingsSave").removeClass("red_harsh").val("Save Settings");
+                    window.sidebarUtil.togglePassword(true);
+                }, 5000);
             }
-
-            setTimeout(function() {
-                $("#settingsSave").removeClass("red_harsh").val("Save Settings");
-            }, 5000);
         });
 	},
 	remove: function() {
@@ -181,21 +186,21 @@ window.sidebarUtil = {
             }
         });
 	},
-	togglePassword: function() {
-        if($("#documentPassword").is(":disabled")) {
-            $("#documentPassword").removeAttr("disabled");
-            $("#change_password").val("true");
-            $("#password_change")
-                .removeClass("icon-pencil")
-                .addClass("icon-cancel")
-                .css("cssText", "border: solid 1px #999 !important;");
-        } else {
-            $("#documentPassword").attr("disabled", "disabled");
+	togglePassword: function(reset) {
+        if(!$("#documentPassword").is(":disabled") || reset == true) {
+            $("#documentPassword").attr("disabled", "disabled").val("");
             $("#change_password").val("false");
             $("#password_change")
                 .removeClass("icon-cancel")
                 .addClass("icon-pencil")
                 .css("cssText", "");
+        } else {
+            $("#documentPassword").removeAttr("disabled").val("");
+            $("#change_password").val("true");
+            $("#password_change")
+                .removeClass("icon-pencil")
+                .addClass("icon-cancel")
+                .css("cssText", "border: solid 1px #999 !important;");
         }
 	},
 	email_invite: function() {
