@@ -12,6 +12,7 @@ window.nodeSocket.on("reconnecting", function() {
 });
 
 window.nodeSocket.on("reconnect", function() {
+    window.nodeSocket.emit("editorJoin", window.url_params()["document"]);
     window.notification.close();
     editor.options.readOnly = false;
     $("#editorCodeMirror").css({"opacity": ""});
