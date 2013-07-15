@@ -38,12 +38,6 @@ $(window).ready(function() {
                 window.editor.setGutterMarker(data["line"], "breakpoints", data["remove"] ? null : marker);
             }
         },
-        join: function(name, password) {
-            window.screenName = name;
-            $.cookie("screenName", name);
-            window.nodeSocket.emit('join', {"from":window.userId, "name": name,
-                                        "session": window.url_params()["document"], "password": password});
-        },
         users: function(data) {
             if(data['leave'] && $.inArray(data['from'], window.users) > -1) {
                 $("#document_contributors").find("[data=" + data['from'] + "]").remove();
@@ -125,6 +119,7 @@ $(window).ready(function() {
             window.editorUtil.refresh();
         },
         join: function(data) {
+            window.nodeSocket.emit("editorJoin", window.url_params()["document"]);
             window.editor.setValue(data.join("\n"));
             window.editor.clearHistory();
             $("#backdrop").hide();

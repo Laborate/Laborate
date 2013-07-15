@@ -46,8 +46,11 @@ app.configure(function() {
     app.use(express.compress());
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(express.cookieParser(config.cookie_session.secret));
-    app.use(express.cookieSession({ key: config.cookie_session.key }));
+    app.use(express.cookieParser());
+    app.use(express.session({
+        key: config.cookie_session.key,
+        secret: config.cookie_session.secret
+    }));
     app.use(express.csrf());
 
     //Custom

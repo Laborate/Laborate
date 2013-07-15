@@ -7,16 +7,16 @@ window.chatRoom = {
          window.chatRoom.resize();
     },
     help: function() {
-        help = '<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline; margin: 5px 0px 0px 0px;">Console Commands</div></strong>';
-        help += '<div style="text-align:left; font-size:12px; color:#666; margin: 5px 0px;" class="chatRoomStatus">1 command per message</div>';
-        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:c = clear screen</div>';
-        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:h = console commands</div>';
-        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>';
-        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px; margin-bottom: 30px;">:s = toggle sidebar visibility</div>';
-        help += '<strong><div class="chatRoomStatus" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
-        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
-        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
-        help += '<div class="chatRoomStatus" style="text-align:left; text-indent: 10px;">@pattern = search for word</div>';
+        help = '<strong><div class="chatRoomHelper" style="text-align:left; text-decoration:underline; margin: 5px 0px 0px 0px;">Console Commands</div></strong>';
+        help += '<div style="text-align:left; font-size:12px; color:#666; margin: 5px 0px;" class="chatRoomHelper">1 command per message</div>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:c = clear screen</div>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:h = console commands</div>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px; margin-bottom: 30px;">:s = toggle sidebar visibility</div>';
+        help += '<strong><div class="chatRoomHelper" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">@pattern = search for word</div>';
     	$(".jspPane").append(help);
     	window.chatRoom.resize();
     	window.chatRoom._scrollToBottom();
@@ -155,7 +155,7 @@ window.chatRoom = {
         }, 05);
     },
     _pushMessage: function(message) {
-        window.nodeSocket.emit('chatRoom', {
+        window.nodeSocket.emit('editorChatRoom', {
             "message": message,
             "isStatus": false
         });
@@ -168,28 +168,32 @@ window.chatRoom = {
 $(window).ready(function() {
     $(function() {
     	var pane = $('.scroll-pane');
-    	pane.jScrollPane({ showArrows: false, animateScroll: true, autoReinitialise: true, hideFocus: true });
+    	pane.jScrollPane({
+    	    showArrows: false,
+    	    animateScroll: true,
+    	    autoReinitialise: true,
+    	    hideFocus: true
+        });
     	window.jscrollData = $('.scroll-pane').data('jsp');
 	});
 
-    setTimeout(function() { window.chatRoom.help(); }, 10);
-    $(window).resize(function() { window.chatRoom.resize(); });
-    setInterval(function(){ window.chatRoom.resize(); }, 1000);
+    setTimeout(window.chatRoom.help, 10);
+    setInterval(window.chatRoom.resize, 1000);
+    $(window).resize(window.chatRoom.resize);
 
     //Submit New Message
     $("#messenger").live('keydown', function(e) {
         //Checks if enter key is pressed
         if(e.which == 13) {
         	if($.trim($(this).val()) != "") {
-        		  window.chatRoom.message("", $.trim($(this).val()), "out");
+        		  window.chatRoom.message("me", $.trim($(this).val()), "out");
         	}
         	window.chatRoom._reset();
     	}
     });
 
     //Pull Message
-    window.nodeSocket.on('chatRoom', function (data) {
-        window.editorUtil.users(data);
+    window.nodeSocket.on('editorChatRoom', function (data) {
         if(data['isStatus']) {
             window.chatRoom.status(data['message']);
         }
