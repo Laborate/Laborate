@@ -54,7 +54,7 @@ $(window).ready(function() {
                     window.editor.setValue(data["extras"]["initialCode"]);
                 }
 
-                if(data["extras"]["passChange"] != null && data["extras"]["passChange"] != "") {
+                if(data["extras"]["passChange"] == true) {
                     window.location.reload(true);
                 }
 
@@ -67,25 +67,19 @@ $(window).ready(function() {
 
     //Pull User Info
     window.nodeSocket.on('editorUsers', function (data) {
-        if(data['from'] != window.userId && data['from']) {
-            if(data["join"]) {
-                window.chatRoom.signIn(data["name"]);
-                window.editorUtil.users(data);
-            } else if(data["leave"]) {
-                window.chatRoom.signOut(data["name"]);
-                window.editorUtil.users(data);
-                window.editorUtil.userCursors("in", data);
-            } else {
-                window.editorUtil.users(data);
-            }
+        if(data["join"]) {
+            window.editorUtil.users(data);
+        } else if(data["leave"]) {
+            window.editorUtil.users(data);
+            window.editorUtil.userCursors("in", data);
+        } else {
+            window.editorUtil.users(data);
         }
     });
 
     //Pull Cursor Info
     window.nodeSocket.on('editorCursors', function (data) {
-        if(data['from'] != window.userId && (""+data['from']) != "null") {
-            window.editorUtil.userCursors("in", data);
-        }
+        window.editorUtil.userCursors("in", data);
     });
 
     $("#editorContainer").on("click", function() {

@@ -148,8 +148,17 @@ window.sidebarUtil = {
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
+                if($("#change_password").val() == "true") {
+                    window.nodeSocket.emit('editorDocument', {
+                        "extras": {
+                            "passChange": true
+                        }
+                    });
+                }
                 $("#settingsSave").removeClass("red_harsh disabled").val("Settings Saved");
-                window.sidebarUtil.togglePassword(true);
+                setTimeout(function() {
+                    window.sidebarUtil.togglePassword(true);
+                }, 100);
                 setTimeout(function() {
                     $("#settingsSave").val("Save Settings");
                 }, 5000);

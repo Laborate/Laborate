@@ -8,7 +8,7 @@ $(window).ready(function() {
             if(data['origin'] != "setValue") {
                 if(direction == "out") {
                     if(window.editorUtil.clean) {
-                        window.nodeSocket.emit('editorDocument' , { "from": window.userId, "changes": data } );
+                        window.nodeSocket.emit('editorDocument', { "from": window.userId, "changes": data } );
                     } else {
                         window.editorUtil.clean = true;
                     }
@@ -31,7 +31,14 @@ $(window).ready(function() {
             marker.innerHTML = "●";
             if(direction == "out") {
                 window.editor.setGutterMarker(data["line"], "breakpoints", info.gutterMarkers ? null : marker);
-                window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"breakpoint": {"line":data["line"], "remove":info.gutterMarkers}}} );
+                window.nodeSocket.emit('editorDocument', {
+                    "extras": {
+                        "breakpoint": {
+                            "line":data["line"],
+                            "remove":info.gutterMarkers
+                        }
+                    }
+                });
             }
 
             if(direction == "in") {
@@ -70,9 +77,9 @@ $(window).ready(function() {
         userCursors: function(direction, data) {
             if(direction == "out") {
                 if(data['leave']) {
-                    window.nodeSocket.emit('editorCursors' , {"from":window.userId, "leave":true} );
+                    window.nodeSocket.emit('editorCursors', {"from":window.userId, "leave":true} );
                 } else {
-                    window.nodeSocket.emit('editorCursors' , {"from":window.userId, "line":data['line']} );
+                    window.nodeSocket.emit('editorCursors', {"from":window.userId, "line":data['line']} );
                 }
             }
 
