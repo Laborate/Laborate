@@ -1,11 +1,12 @@
 /* Modules: NPM */
-var express = require('express.io');
-var app     = express().http().io();
-var srv     = app.server;
-var slashes = require("connect-slashes");
-var piler   = require("piler");
-var redis   = require('redis');
-var ejs     = require('ejs');
+var express    = require('express.io');
+var app        = express().http().io();
+var srv        = app.server;
+var slashes    = require("connect-slashes");
+var piler      = require("piler");
+var redis      = require('redis');
+var RedisStore = require('connect-redis')(express);
+var ejs        = require('ejs');
 
 /* Modules: Custom */
 var error = require("./routes/error");
@@ -21,13 +22,6 @@ app.configure(function() {
     clientJS.bind(app, srv);
     clientCSS.bind(app, srv);
     require("./lib/core/dependencies")();
-
-    //Redis
-    app.io.set('store', new express.io.RedisStore({
-        redisPub: redis.createClient(),
-        redisSub: redis.createClient(),
-        redisClient: redis.createClient()
-    }));
 
     //Express
     app.engine('html', ejs.renderFile);
@@ -49,9 +43,19 @@ app.configure(function() {
     app.use(express.cookieParser());
     app.use(express.session({
         key: config.cookie_session.key,
-        secret: config.cookie_session.secret
+        secret: config.cookie_session.secret,
+        store: new RedisStore({
+            client: redis.createClient()
+        })
     }));
     app.use(express.csrf());
+
+    //Redis
+    app.io.set('store', new express.io.RedisStore({
+        redisPub: redis.createClient(),
+        redisSub: redis.createClient(),
+        redisClient: redis.createClient()
+    }));
 
     //Custom
     app.use(require("./lib/models"));

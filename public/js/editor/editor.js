@@ -40,7 +40,7 @@ $(window).ready(function() {
 
 
     //Pull New Code
-    window.nodeSocket.on('editor', function (data) {
+    window.nodeSocket.on('editorDocument', function (data) {
         if(data["from"] != window.userId) {
             if(data["extras"] == null || data["extras"] == "undefined") {
                 window.editorUtil.setChanges("in", data["changes"]);
@@ -65,15 +65,8 @@ $(window).ready(function() {
         }
     });
 
-
-    //Broadcast User Info
-    setInterval(function() {
-        window.nodeSocket.emit('users' , {"from":window.userId, "name":window.screenName} );
-    }, 1000);
-
-
     //Pull User Info
-    window.nodeSocket.on('users', function (data) {
+    window.nodeSocket.on('editorUsers', function (data) {
         if(data['from'] != window.userId && data['from']) {
             if(data["join"]) {
                 window.chatRoom.signIn(data["name"]);
@@ -89,7 +82,7 @@ $(window).ready(function() {
     });
 
     //Pull Cursor Info
-    window.nodeSocket.on('cursors', function (data) {
+    window.nodeSocket.on('editorCursors', function (data) {
         if(data['from'] != window.userId && (""+data['from']) != "null") {
             window.editorUtil.userCursors("in", data);
         }

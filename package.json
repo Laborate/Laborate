@@ -24,7 +24,8 @@
     "orm": "*",
     "mysql": "*",
     "codemirror": "*",
-    "redis": "*"
+    "redis": "*",
+    "connect-redis": "*"
   },
   "devDependencies": {
     "express-debug": "*"

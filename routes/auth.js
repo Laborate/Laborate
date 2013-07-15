@@ -35,6 +35,7 @@ exports.restrictAccess = function(req, res, next) {
                     if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
+                        req.session.save();
                         if(next) next();
                     } else {
                         res.error(401);
@@ -51,6 +52,7 @@ exports.loginCheck = function(req, res, next) {
         if(req.session.redirect_url) {
             res.redirect(req.session.redirect_url);
             delete req.session.redirect_url;
+            req.session.save();
         } else {
             res.redirect('/documents/');
         }
@@ -64,6 +66,7 @@ exports.loginCheck = function(req, res, next) {
                         if(req.session.redirect_url) {
                             res.redirect(req.session.redirect_url);
                             delete req.session.redirect_url;
+                            req.session.save();
                         } else {
                             res.redirect('/documents/');
                         }
@@ -101,7 +104,7 @@ exports.login = function(req, res, next) {
             } else {
                 var url = '/documents/';
             }
-
+            req.session.save();
             res.json({
                 success: true,
                 next: url
@@ -115,6 +118,7 @@ exports.login = function(req, res, next) {
 
 exports.logout = function(req, res) {
     req.session.user = null;
+    req.session.save();
     res.clearCookie(config.cookies.rememberme, {
         domain: req.host.replace(/^[^.]+\./g, "")
     });
@@ -137,6 +141,7 @@ exports.register = function(req, res, next) {
                 if(!error) {
                     user.set_recovery(req, res);
                     req.session.user = user;
+                    req.session.save();
                     res.json({
                         success: true,
                         next: "/verify/"
@@ -174,7 +179,7 @@ exports.verify = function(req, res, next) {
             } else {
                 var url = '/documents/';
             }
-
+            req.session.save();
             res.redirect(url);
         });
     }

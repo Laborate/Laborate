@@ -8,7 +8,7 @@ $(window).ready(function() {
             if(data['origin'] != "setValue") {
                 if(direction == "out") {
                     if(window.editorUtil.clean) {
-                        window.nodeSocket.emit( 'editor' , { "from": window.userId, "changes": data } );
+                        window.nodeSocket.emit('editorDocument' , { "from": window.userId, "changes": data } );
                     } else {
                         window.editorUtil.clean = true;
                     }
@@ -70,9 +70,9 @@ $(window).ready(function() {
         userCursors: function(direction, data) {
             if(direction == "out") {
                 if(data['leave']) {
-                    window.nodeSocket.emit('cursors' , {"from":window.userId, "leave":true} );
+                    window.nodeSocket.emit('editorCursors' , {"from":window.userId, "leave":true} );
                 } else {
-                    window.nodeSocket.emit('cursors' , {"from":window.userId, "line":data['line']} );
+                    window.nodeSocket.emit('editorCursors' , {"from":window.userId, "line":data['line']} );
                 }
             }
 

@@ -123,6 +123,12 @@ window.sidebarUtil = {
 	},
 	jumpToLine: function(line) {
 		window.editor.scrollIntoView({"line": (line - 1), "ch":0});
+		window.editor.addLineClass((line - 1), "", "CodeMirror-linejump ");
+
+		setTimeout(function() {
+            window.editor.removeLineClass((line - 1), "", "CodeMirror-linejump ");
+		}, 3000);
+
 	},
 	setTitle: function(title) {
 		$("#documentTitle").val(title);

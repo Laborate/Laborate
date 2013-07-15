@@ -108,7 +108,7 @@ window.chatRoom = {
             types = {
                 "search": [/.*@.*/ig, "@", "window.sidebarUtil.search"],
                 "line": [/.*#\d.*/ig, "#", "window.sidebarUtil.highlight"],
-                "scroll": [/.*&.*/ig, "&", "window.sidebarUtil.scroll"]
+                "scroll": [/.*&.*/ig, "&", "window.sidebarUtil.jumpToLine"]
             }
 
             if(!message.search(types[type][0])) {

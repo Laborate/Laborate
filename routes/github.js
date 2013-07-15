@@ -10,6 +10,7 @@ exports.add_token = function(req, res, next) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 user.github = token;
                 req.session.user = user;
+                req.session.save();
                 res.redirect("/account/settings/");
             });
         });
@@ -23,6 +24,7 @@ exports.remove_token = function(req, res, next) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.github = null;
             req.session.user = user;
+            req.session.save();
             res.redirect("/account/settings/");
         });
     } else {
