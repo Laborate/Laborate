@@ -331,7 +331,8 @@ window.documents = {
         window.location.href = link;
     },
     goToTab: function(link) {
-        if(!window.open(link)) {
+        var new_tab = window.open(link, '_blank')
+        if(!new_tab || !new_tab.document.hasFocus()) {
             window.location.href = link;
         }
     },

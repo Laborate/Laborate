@@ -6,13 +6,13 @@ window.nodeSocket = io.connect("/", {
 });
 
 window.nodeSocket.on("reconnecting", function() {
+    window.nodeSocket.emit("editorJoin");
     $("#editorCodeMirror").css({"opacity": ".5"});
     editor.options.readOnly = true;
     window.notification.open("Reconnecting...", true);
 });
 
 window.nodeSocket.on("reconnect", function() {
-    window.nodeSocket.emit("editorJoin", window.url_params()["document"]);
     window.notification.close();
     editor.options.readOnly = false;
     $("#editorCodeMirror").css({"opacity": ""});

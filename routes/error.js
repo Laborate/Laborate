@@ -22,7 +22,10 @@ var error_handler = function(status, message, req, res) {
 
     error_message = (message) ? message : error_message;
     error_html = (message) ? message : error_html;
-    error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
+
+    if(error_html) {
+        error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
+    }
 
     if(req.xhr) {
         res.json({

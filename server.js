@@ -57,7 +57,7 @@ app.configure(function() {
         redisClient: redis.createClient()
     }));
 
-    //Custom
+    //Custom: App
     app.use(require("./lib/models"));
     app.use(require("./lib/email"));
     app.use(require("./lib/github"));
@@ -71,6 +71,11 @@ app.configure(function() {
         res.setHeader("Server", "Laborate.io");
         next();
     });
+
+    //Custom: Socket IO
+    app.io.use(require("./lib/models"));
+    app.io.use(require("./lib/email"));
+    app.io.use(require("./lib/github"));
 });
 
 /* Development Only */

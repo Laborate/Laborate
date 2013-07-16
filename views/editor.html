@@ -106,7 +106,7 @@
             <input type="button" value="Copy Invite Url" id="shareCopy" class="button blue full"/>
         </div>
         <div id="sidebar_download" class="sidebar_content_inner">
-            <% if(document.location in document.owner.locations) { %>
+            <% if(document.owner.locations && document.location in document.owner.locations) { %>
                 <% if(document.owner.locations[document.location].type == "github") { %>
                     <form id="commitFile">
                         <div>
@@ -130,16 +130,14 @@
             </div>
             <% if(document.owner_id == user.id && user.code_pricing) { %>
                     <% if(user.code_pricing.documents == null || user.pass_documents < user.code_pricing.documents) { %>
-                        <div style="position:relative">
-                            <div id="password_container">
-                                <div class="header">Document Password</div>
-                                <div>
-                                    <input id="documentPassword" type="password" placeholder="leave blank for no password"
-                                                spellcheck="false" class="input" disabled="disabled"/>
-                                    <input id="change_password" value="false" type="hidden"/>
-                                </div>
+                        <div id="password_container">
+                            <div class="header">Document Password</div>
+                            <div style="position:relative">
+                                <input id="documentPassword" type="password" placeholder="leave blank for no password"
+                                            spellcheck="false" class="input" disabled="disabled"/>
+                                <input id="change_password" value="false" type="hidden"/>
+                                <div id="password_change" class="icon-pencil grey"></div>
                             </div>
-                            <div id="password_change" class="icon-pencil grey"></div>
                         </div>
                     <% } %>
             <% } %>

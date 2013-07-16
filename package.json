@@ -6,7 +6,7 @@
     "preinstall": "shell/initialize.sh"
   },
   "dependencies": {
-    "express.io": "1.1.12",
+    "express.io": "*",
     "ejs": "*",
     "less": "*",
     "forever-monitor": "*",

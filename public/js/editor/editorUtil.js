@@ -126,7 +126,7 @@ $(window).ready(function() {
             window.editorUtil.refresh();
         },
         join: function(data) {
-            window.nodeSocket.emit("editorJoin", window.url_params()["document"]);
+            window.nodeSocket.emit("editorJoin");
             window.editor.setValue(data.join("\n"));
             window.editor.clearHistory();
             $("#backdrop").hide();

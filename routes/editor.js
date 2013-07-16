@@ -62,15 +62,20 @@ exports.update = function(req, res, next) {
                 var document = documents[0].document;
                 document.name = req.param("name");
 
-                if(document.owner = req.session.user.id && req.param("change_password") == "true") {
-                    if(req.param("password")) {
-                        document.password = document.hash(req.param("password"));
+                if(req.param("change_password") == "true") {
+                    if(document.owner.id == req.session.user.id) {
+                        if(req.param("password")) {
+                            document.password = document.hash(req.param("password"));
+                        } else {
+                            document.password = null;
+                        }
+                        res.json({ success: true });
                     } else {
-                        document.password = null;
+                        res.error(200, "Failed To Update File");
                     }
+                } else {
+                    res.json({ success: true });
                 }
-
-                res.json({ success: true });
             } else {
                 res.error(200, "Failed To Update File");
             }
