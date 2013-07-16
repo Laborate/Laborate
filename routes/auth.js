@@ -1,15 +1,7 @@
 /* Modules: NPM */
-var $ = require('jquery');
-var crypto = require('crypto');
-var async = require("async");
-var uuid = require('node-uuid');
-var rand = require("generate-key");
+var $ = require("jquery");
 
-/* Modules: Custom */
-var core = require('./core');
-var aes = require('../lib/core/aes');
-
-/* Module Exports: Access Checks */
+/* Access Checks */
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(config.cookies.rememberme in req.cookies) {
@@ -88,7 +80,7 @@ exports.xhr = function(req, res, next) {
     }
 }
 
-/* Module Exports: Access Operations */
+/* Access Operations */
 exports.login = function(req, res, next) {
     req.models.users.find({
         email: $.trim(req.param('email')),

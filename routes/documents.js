@@ -1,6 +1,5 @@
 /* Modules: NPM */
 var $ = require("jquery");
-var async = require("async");
 var rand = require("generate-key");
 
 /* Modules: Custom */
@@ -117,33 +116,23 @@ exports.location = function(req, res, next) {
 };
 
 exports.locations = function(req, res, next) {
-    async.series({
-        locations: function(callback) {
-            if(req.session.user.locations) {
-                locations = [];
-                $.each(req.session.user.locations, function(key, value) {
-                    if(!req.session.user.github && value.type == "github") {
-                        return;
-                    }
-
-                    locations.push({
-                        key: key,
-                        name: value.name,
-                        type: value.type
-                    })
-                });
-                callback(null, locations);
-            } else {
-                callback(null, []);
+    if(req.session.user.locations) {
+        locations = [];
+        $.each(req.session.user.locations, function(key, value) {
+            if(!req.session.user.github && value.type == "github") {
+                return;
             }
-        }
-    }, function(error, results) {
-        if(!error) {
-            res.json(results.locations);
-        } else {
-            res.error(200, "Failed To Load Locations");
-        }
-    });
+
+            locations.push({
+                key: key,
+                name: value.name,
+                type: value.type
+            })
+        });
+        res.json(locations);
+    } else {
+        res.json([]);
+    }
 };
 
 exports.create_location = function(req, res, next) {

@@ -28,10 +28,15 @@ var error_handler = function(status, message, req, res) {
     }
 
     if(req.xhr) {
-        res.json({
+        var data = {
             success: false,
             error_message: error_message
-        });
+        }
+        if(error_message == "Bad Github Oauth Token") {
+            data["github_oath"] = req.github.auth_url;
+        }
+
+        res.json(data);
     } else {
         res.status(status)
         res.format({
@@ -53,10 +58,15 @@ var error_handler = function(status, message, req, res) {
                 }
             },
             'application/json': function(){
-                res.json({
+                var data = {
                     success: false,
                     error_message: error_message
-                });
+                }
+                if(error_message == "Bad Github Oauth Token") {
+                    data["github_oath"] = req.github.auth_url;
+                }
+
+                res.json(data);
             }
         });
     }

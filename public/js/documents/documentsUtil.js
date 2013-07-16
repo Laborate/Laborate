@@ -110,7 +110,7 @@ window.documents = {
                         window.documents.popUpClose();
                         $.post("/documents/file/" + reference + "/rename/", { name: name,  _csrf: $("#_csrf").text() },
                             function(json) {
-                                if("error_message" in json) {
+                                if(json.success == false) {
                                     window.notification.open(json.error_message);
                                 } else {
                                     $("#popup #rename form").die();
@@ -126,7 +126,7 @@ window.documents = {
 
             if(id == "action") {
                 $.post("/documents/file/" + reference + "/remove/", { _csrf: $("#_csrf").text() }, function(json) {
-                    if("error_message" in json) {
+                    if(json.success == false) {
                         window.notification.open(json.error_message);
                     } else {
                         $("#file_" + reference).animate({"opacity": 0}, 500);
@@ -238,7 +238,7 @@ window.documents = {
             if(passed) {
                 $.post("/documents/location/create/", { locations_add: items, _csrf: $("#_csrf").text() },
                     function(json) {
-                        if("error_message" in json) {
+                        if(json.success == false) {
                             window.notification.open(json.error_message);
                         } else {
                             window.documents.locationListing();
@@ -258,7 +258,7 @@ window.documents = {
 
         $("#popup #location_remove input[type=button]").live("click", function() {
             $.post("/documents/location/remove/", { locations_remove: id, _csrf: $("#_csrf").text() }, function(json) {
-                if("error_message" in json) {
+                if(json.success == false) {
                     window.notification.open(json.error_message);
                 } else {
                     element.remove();
@@ -352,7 +352,7 @@ window.documents = {
 
                 $.post("/documents/file/create/", { name: name, external_path:  path, location: location, _csrf: $("#_csrf").text() },
                     function(json) {
-                        if("error_message" in json) {
+                        if(json.success == false) {
                             window.notification.open(json.error_message);
                         } else {
                             window.documents.goToTab("/editor/" + json.document + "/");
@@ -369,7 +369,7 @@ window.documents = {
     onlineDirectory: function(no_history) {
         window.notification.open("loading...");
         $.get("/documents/files/", function(json) {
-            if("error_message" in json) {
+            if(json.success == false) {
                 window.notification.open(json.error_message);
             } else {
                 var files = "";
@@ -393,7 +393,7 @@ window.documents = {
     },
     githubRepos: function() {
         $.get("/github/repos/", function(json) {
-            if("error_message" in json) {
+            if(json.success == false) {
                 if(json.error_message == "Bad Github Oauth Token") {
                     window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                 } else {
@@ -431,7 +431,7 @@ window.documents = {
         } else {
             $.get("/documents/location/" + location_id + "/" + path,
                 function(json) {
-                    if("error_message" in json) {
+                    if(json.success == false) {
                         if(json.error_message == "Bad Github Oauth Token") {
                             window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                         } else {
@@ -491,7 +491,7 @@ window.documents = {
         var path = element.parent().attr("data");
 
         $.get("/documents/location/" + location_id + "/" + path, function(json) {
-            if("error_message" in json) {
+            if(json.success == false) {
                  window.notification.open(json.error_message);
             } else {
                 window.documents.goToTab("/editor/" + json.document + "/");

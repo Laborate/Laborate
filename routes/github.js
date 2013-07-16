@@ -1,9 +1,3 @@
-/* Modules: NPM */
-var async = require("async");
-
-/* Modules: Custom */
-var aes = require('../lib/core/aes');
-
 exports.add_token = function(req, res, next) {
     if(req.param("code")) {
         req.github.get_token(req.param("code"), function (error, token) {
