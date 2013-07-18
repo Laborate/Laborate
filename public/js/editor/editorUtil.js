@@ -46,19 +46,17 @@ $(window).ready(function() {
             }
         },
         users: function(data) {
-            $.when($(data).not(window.users).each(function(index, value) {
+            $.when($(Object.keys(window.users)).not(data).each(function(index, value) {
+                window.editor.removeLineClass(window.users[value], "", ("u" + value));
+                $("#document_contributors").find("[data=" + value + "]").remove();
+                delete window.users[value];
+            })).done($(data).not(Object.keys(window.users)).each(function(index, value) {
                 $("<style type='text/css'> .u" + value + "{background:" + randomUserColor() + " !important;} </style>").appendTo("head");
                 var contributor = '<div class="contributor u' + value + '" ';
                 contributor += 'data="'+ value +'" userName="' + value + '"></div>';
                 $("#document_contributors").append(contributor);
-                window.users.push(value);
-            })).done(function() {
-                $(window.users).not(data).each(function(index, value) {
-                    window.editor.removeLineClass(window.cursors[value], "", ("u" + value));
-                    $("#document_contributors").find("[data=" + value + "]").remove();
-                    window.users.splice(window.users.indexOf(value), 1);
-                });
-            });
+                window.users[value] = -1;
+            }));
         },
         userHover: function(element) {
             $("#contributor_info #contributor_info_name").text(element.attr("username"));
@@ -83,15 +81,13 @@ $(window).ready(function() {
 
             if(direction == "in") {
                 if(data['leave']) {
-                    window.editor.removeLineClass(window.cursors[data['from']], "", ("u"+data['from']));
-                    delete window.cursors[data['from']];
+                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+                    window.users[data['from']] = -1;
                 }
                 else {
-                    if(data['from'] in window.cursors) {
-                        window.editor.removeLineClass(window.cursors[data['from']], "", ("u"+data['from']));
-                    }
+                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
                     window.editor.addLineClass(data['line'], "", ("u"+data['from']));
-                    window.cursors[data['from']] = data['line'];
+                    window.users[data['from']] = data['line'];
                 }
             }
         },

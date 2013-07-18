@@ -29,7 +29,4 @@ window.url_params = function() {
 $(window).ready(function() {
     //Set Array of Users
     window.users = new Array();
-
-    //Set Array of User Lines
-    window.cursors = new Array();
 });
