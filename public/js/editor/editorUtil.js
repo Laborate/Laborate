@@ -46,21 +46,19 @@ $(window).ready(function() {
             }
         },
         users: function(data) {
-            if(data['leave'] && $.inArray(data['from'], window.users) > -1) {
-                $("#document_contributors").find("[data=" + data['from'] + "]").remove();
-                window.users.splice(window.users.indexOf(data['from']), 1);
-            }
-            else {
-                if($.inArray(data['from'], window.users) == -1) {
-                    $("<style type='text/css'> .u" + data['from'] + "{background:" + randomUserColor() + " !important;} </style>").appendTo("head");
-                    var contributor = '<div class="contributor u'+data['from']+'" data="'+data['from']+'" userName="'+data['name']+'"></div>';
-                    $("#document_contributors").append(contributor);
-                    window.users.push(data['from']);
-                }
-                else {
-                    $("#document_contributors").find("[data=" + data['from'] + "]").attr("userName", data['name']);
-                }
-            }
+            $.when($(data).not(window.users).each(function(index, value) {
+                $("<style type='text/css'> .u" + value + "{background:" + randomUserColor() + " !important;} </style>").appendTo("head");
+                var contributor = '<div class="contributor u' + value + '" ';
+                contributor += 'data="'+ value +'" userName="' + value + '"></div>';
+                $("#document_contributors").append(contributor);
+                window.users.push(value);
+            })).done(function() {
+                $(window.users).not(data).each(function(index, value) {
+                    window.editor.removeLineClass(window.cursors[value], "", ("u" + value));
+                    $("#document_contributors").find("[data=" + value + "]").remove();
+                    window.users.splice(window.users.indexOf(value), 1);
+                });
+            });
         },
         userHover: function(element) {
             $("#contributor_info #contributor_info_name").text(element.attr("username"));
@@ -77,9 +75,9 @@ $(window).ready(function() {
         userCursors: function(direction, data) {
             if(direction == "out") {
                 if(data['leave']) {
-                    window.nodeSocket.emit('editorCursors', {"from":window.userId, "leave":true} );
+                    window.nodeSocket.emit('editorCursors', {"leave":true} );
                 } else {
-                    window.nodeSocket.emit('editorCursors', {"from":window.userId, "line":data['line']} );
+                    window.nodeSocket.emit('editorCursors', {"line":data['line']} );
                 }
             }
 

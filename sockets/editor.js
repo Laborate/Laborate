@@ -22,7 +22,7 @@ exports.addUser = function(req, user, room) {
     if(!(user in exports.roomUsers[room])) {
         exports.roomUsers[room][user] = setInterval(function() {
             req.io.emit('editorUsers', exports.users(user, room));
-        }, 5000);
+        }, 2000);
     }
 }
 
