@@ -67,6 +67,8 @@ $(window).ready(function() {
 
     //Pull User Info
     window.nodeSocket.on('editorUsers', function (data) {
+        alert(JSON.stringify(data));
+        /*
         if(data["join"]) {
             window.editorUtil.users(data);
         } else if(data["leave"]) {
@@ -75,6 +77,7 @@ $(window).ready(function() {
         } else {
             window.editorUtil.users(data);
         }
+        */
     });
 
     //Pull Cursor Info
