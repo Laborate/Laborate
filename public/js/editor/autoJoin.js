@@ -1,3 +1,3 @@
-$(window).ready(function() {
+$(window).load(function() {
     $('#backdrop form').submit();
 });

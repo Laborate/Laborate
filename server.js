@@ -52,15 +52,8 @@ workers = function() {
         }));
         app.use(express.csrf());
 
-        //Redis
-        app.io.set('store', new express.io.RedisStore({
-            redisPub: redis.createClient(),
-            redisSub: redis.createClient(),
-            redisClient: redis.createClient()
-        }));
-
-        //Custom: App
-        app.use(require("./lib/models"));
+        //Express Custom
+        app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
         app.use(error.global);

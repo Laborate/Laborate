@@ -40,7 +40,7 @@ exports.join = function(req, res, next) {
                     success: true,
                     next: {
                         function: "window.editorUtil.join",
-                        arguments: (document.content) ? document.content : []
+                        arguments: document.password
                     }
                 });
             } else {

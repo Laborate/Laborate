@@ -1,22 +1,23 @@
 $(window).ready(function() {
-     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
-     window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-            lineNumbers: true,
-            lineWrapping: true,
-            matchBrackets: true,
-            tabMode: "indent",
-            theme: "laborate",
-            indentUnit: 4,
-            indentWithTabs: true,
-            smartIndent: true,
-            autofocus: false,
-            dragDrop: false,
-            autoCloseBrackets: true,
-            autoCloseTags: true,
-            highlightSelectionMatches: true,
-            styleSelectedText: true,
-            styleActiveLine: false,
-            gutters: ["CodeMirror-linenumbers", "breakpoints"]
+    CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
+
+    window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        tabMode: "indent",
+        theme: "laborate",
+        indentUnit: 4,
+        indentWithTabs: true,
+        smartIndent: true,
+        autofocus: false,
+        dragDrop: false,
+        autoCloseBrackets: true,
+        autoCloseTags: true,
+        highlightSelectionMatches: true,
+        styleSelectedText: true,
+        styleActiveLine: false,
+        gutters: ["CodeMirror-linenumbers", "breakpoints"]
     });
 
     window.editor.on("change", function(instance, changeObj) {
@@ -36,33 +37,12 @@ $(window).ready(function() {
     });
 
     //Editor Mode (TEMPORARY)
-    window.sidebarUtil.setTitle($("#document_title").text());
+    window.sidebarUtil.setTitle("in", $("#document_title").text());
 
 
-    //Pull New Code
+    //Pull Document Changes
     window.nodeSocket.on('editorDocument', function (data) {
-        if(data["from"] != window.userId) {
-            if(data["extras"] == null || data["extras"] == "undefined") {
-                window.editorUtil.setChanges("in", data["changes"]);
-            }
-            else {
-                if(data["extras"]["docName"] != null && data["extras"]["docName"] != "") {
-                    window.sidebarUtil.setTitle(data["extras"]["docName"]);
-                }
-
-                if(data["extras"]["initialCode"] != null && data["extras"]["initialCode"] != "") {
-                    window.editor.setValue(data["extras"]["initialCode"]);
-                }
-
-                if(data["extras"]["passChange"] == true) {
-                    window.location.reload(true);
-                }
-
-                if(data["extras"]["breakpoint"] != null && data["extras"]["breakpoint"] != "") {
-                    window.editorUtil.gutterClick("in", data["extras"]["breakpoint"]);
-                }
-            }
-        }
+        window.editorUtil.setChanges("in", data["changes"]);
     });
 
     //Pull User Info
@@ -73,6 +53,25 @@ $(window).ready(function() {
     //Pull Cursor Info
     window.nodeSocket.on('editorCursors', function (data) {
         window.editorUtil.userCursors("in", data);
+    });
+
+    //Pull Extras Info
+    window.nodeSocket.on('editorExtras', function (data) {
+        if("docName" in data) {
+            window.sidebarUtil.setTitle("in", data["docName"]);
+        }
+
+        if("breakpoint" in data) {
+            window.editorUtil.gutterClick("in", data["breakpoint"]);
+        }
+
+        if(data["docDelete"] == true) {
+            window.location.href = "/documents/";
+        }
+
+        if(data["passChange"] == true) {
+            window.location.reload(true);
+        }
     });
 
     $("#editorContainer").on("click", function() {

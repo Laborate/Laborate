@@ -130,17 +130,21 @@ window.sidebarUtil = {
 		}, 3000);
 
 	},
-	setTitle: function(title) {
+	setTitle: function(direction, title) {
 		$("#documentTitle").val(title);
 		$("#document_title").text(title);
 		setEditorMode(title.split(".")[title.split(".").length - 1]);
 		$("title").text(title + " · Code-Laborate");
-		window.nodeSocket.emit( 'editor' , {"from": window.userId, "extras": {"docName": $("#documentTitle").val()}} );
+		if(direction == "out") {
+    		window.nodeSocket.emit('editorExtras' , {
+    		    "docName": $("#documentTitle").val()
+            });
+        }
 	},
 	settings: function() {
 	    $("#settingsSave").removeClass("red_harsh").addClass("disabled").val("Saving...");
         window.sidebarUtil.keyMap($("#keyMap").val());
-	    window.sidebarUtil.setTitle($("#documentTitle").val());
+	    window.sidebarUtil.setTitle("out", $("#documentTitle").val());
         $.post("/editor/" + window.url_params()["document"] + "/update/", {
             name: $("#documentTitle").val(),
             password: $("#documentPassword").val(),
@@ -149,10 +153,8 @@ window.sidebarUtil = {
         }, function(json) {
             if(json.success) {
                 if($("#change_password").val() == "true") {
-                    window.nodeSocket.emit('editorDocument', {
-                        "extras": {
+                    window.nodeSocket.emit('editorExtras', {
                             "passChange": true
-                        }
                     });
                 }
                 $("#settingsSave").removeClass("red_harsh disabled").val("Settings Saved");
@@ -179,6 +181,9 @@ window.sidebarUtil = {
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
+                window.nodeSocket.emit('editorExtras', {
+                        "docDelete": true
+                });
                 window.location.href = "/documents/";
             } else {
                $("#removeDoc").removeClass("disabled").addClass("red_harsh").val("Failed To Remove");

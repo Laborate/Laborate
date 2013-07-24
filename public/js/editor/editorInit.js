@@ -6,16 +6,21 @@ window.nodeSocket = io.connect("/", {
 });
 
 window.nodeSocket.on("reconnecting", function() {
-    window.nodeSocket.emit("editorJoin");
     $("#editorCodeMirror").css({"opacity": ".5"});
     editor.options.readOnly = true;
     window.notification.open("Reconnecting...", true);
 });
 
 window.nodeSocket.on("reconnect", function() {
-    window.notification.close();
-    editor.options.readOnly = false;
-    $("#editorCodeMirror").css({"opacity": ""});
+    window.nodeSocket.emit("editorJoin", window.editorUtil.document_hash, function(json) {
+        if(json.success) {
+            window.notification.close();
+            editor.options.readOnly = false;
+            $("#editorCodeMirror").css({"opacity": ""});
+        } else {
+            window.location.href = "/documents/";
+        }
+    });
 });
 
 //Url Parameters
