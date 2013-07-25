@@ -1,8 +1,6 @@
 //Socket IO Configuration
-window.nodeSocket = io.connect("/", {
-    "max reconnection attempts": "Infinity",
-    "sync disconnect on unload": true,
-    "try multiple transports": true,
+window.nodeSocket = io.connect("", {
+    "sync disconnect on unload": true
 });
 
 window.nodeSocket.on("reconnecting", function() {

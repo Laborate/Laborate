@@ -42,6 +42,7 @@ exports.removeUser = function(req, user, room) {
             req.io.leave(exports.socketRoom(req));
             clearInterval(exports.roomUsers[room][user]);
             delete exports.roomUsers[room][user];
+            req.io.socket.disconnect();
 
             if(exports.roomUsers[room].length == 0) {
                 delete exports.roomUsers[room];
@@ -66,9 +67,8 @@ exports.socketRoom = function(req) {
 
 /* Route Functions */
 exports.join = function(req) {
-    console.log("attempted to join");
     models.documents.get(exports.room(req), function(error, document) {
-        if(!error) {
+        if(!error && document) {
             if(!document.password || req.data == document.password) {
                 exports.addUser(req, req.session.user.screen_name, exports.socketRoom(req), document.content);
                 req.io.room(exports.socketRoom(req)).broadcast('editorChatRoom', {
@@ -80,7 +80,6 @@ exports.join = function(req) {
                     success: true,
                     content: document.content
                 });
-                console.log("joined");
             } else {
                 req.io.respond({
                     success: false,
@@ -90,7 +89,7 @@ exports.join = function(req) {
         } else {
             req.io.respond({
                 success: false,
-                error_message: "Incorrect Password"
+                error_message: "Document Does Not Exist"
             });
         }
     });
