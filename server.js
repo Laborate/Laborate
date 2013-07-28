@@ -14,7 +14,6 @@ config    = require('./config');
 clientJS  = piler.createJSManager({urlRoot: "/js/"});
 clientCSS = piler.createCSSManager({urlRoot: "/css/"});
 
-
 var app = express().http().io();
 var srv = app.server;
 
@@ -85,6 +84,7 @@ app.configure(function() {
         res.locals.site_title = config.general.site_title;
         res.locals.site_delimeter = config.general.site_delimeter;
         res.locals._csrf = req.session._csrf;
+        res.locals._port = config.general.port;
         res.setHeader("Server", "Laborate.io");
         next();
     });

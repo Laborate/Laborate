@@ -25,7 +25,9 @@
     "mysql": "*",
     "codemirror": "*",
     "redis": "*",
-    "connect-redis": "*"
+    "connect-redis": "*",
+    "crontab": "*",
+    "npm": "*"
   },
   "devDependencies": {
     "express-debug": "*"

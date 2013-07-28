@@ -130,7 +130,11 @@ window.editorUtil = {
                         $("#backdrop").hide();
                         window.editorUtil.document_hash = password;
                     } else {
-                        window.location.href = "/documents/";
+                        if(error.message) {
+                            $(".backdropContainer").css("text-align", "center").text(error.message);
+                        } else {
+                            window.location.href = "/documents/";
+                        }
                     }
                 });
             }
