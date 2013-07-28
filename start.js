@@ -28,13 +28,13 @@ crontab.load(function(err, tab) {
 fs.mkdirSync(__dirname + '/../logs/' + config.forever.uid, 0775, true);
 
 //Configure Forever
-var child = new (forever.Monitor)('server.js', {
+var child = new (forever.Monitor)(__dirname + '/server.js', {
     uid: config.forever.uid,
     max: config.forever.max_failures,
     silent: config.forever.silent,
 
     watch: config.forever.watch,
-    watchDirectory: config.forever.watch_directory,
+    watchDirectory: __dirname + "/" + config.forever.watch_directory,
     watchIgnoreDotFiles: config.forever.watch_ignore_dot,
     watchIgnorePatterns: config.forever.watch_ignore_patterns,
 
@@ -42,9 +42,9 @@ var child = new (forever.Monitor)('server.js', {
         'NODE_ENV': config.general.environment
     },
 
-    logFile: config.forever.forever_log,
-    outFile: config.forever.output_log,
-    errFile: config.forever.error_log,
+    logFile: __dirname + "/" + config.forever.forever_log,
+    outFile: __dirname + "/" + config.forever.output_log,
+    errFile: __dirname + "/" + config.forever.error_log,
 
     killTree: true
 });
