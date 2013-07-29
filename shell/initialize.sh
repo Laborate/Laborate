@@ -26,4 +26,4 @@ forever start start.js
 clear
 
 #Install Complete
-echo -e "\e[33mInstall Complete\033[m"
+echo -e "\033[32mInstall Complete\033[m"
