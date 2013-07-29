@@ -70,7 +70,11 @@ $(window).ready(function() {
         }
 
         if(data["passChange"] == true) {
-            window.location.reload(true);
+            if(data["passOpen"] == true) {
+                window.editorUtil.document_hash = null;
+            } else {
+                window.location.reload(true);
+            }
         }
     });
 

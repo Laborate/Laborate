@@ -153,8 +153,10 @@ window.sidebarUtil = {
         }, function(json) {
             if(json.success) {
                 if($("#change_password").val() == "true") {
+                    window.editorUtil.document_hash = json.hash;
                     window.nodeSocket.emit('editorExtras', {
-                            "passChange": true
+                            "passChange": true,
+                            "passOpen": ($("#documentPassword").val() == "")
                     });
                 }
                 $("#settingsSave").removeClass("red_harsh disabled").val("Settings Saved");

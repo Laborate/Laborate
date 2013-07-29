@@ -69,7 +69,10 @@ exports.update = function(req, res, next) {
                         } else {
                             document.password = null;
                         }
-                        res.json({ success: true });
+                        res.json({
+                            success: true,
+                            hash: document.password
+                        });
                     } else {
                         res.error(200, "Failed To Update File");
                     }
