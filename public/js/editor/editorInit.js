@@ -7,7 +7,6 @@ window.nodeSocket.on("reconnecting", function() {
     $("#editorCodeMirror").css({"opacity": ".5"});
     editor.options.readOnly = true;
     window.notification.open("Reconnecting...", true);
-    editor.setValue(editor.getValue() + "\nLost Connection: " + new Date().toLocaleTimeString())
 });
 
 window.nodeSocket.on("reconnect", function() {
@@ -16,11 +15,16 @@ window.nodeSocket.on("reconnect", function() {
             window.notification.close();
             editor.options.readOnly = false;
             $("#editorCodeMirror").css({"opacity": ""});
-            editor.setValue(editor.getValue() + "\nRegained Connection: " + new Date().toLocaleTimeString())
         } else {
             if(error.message) {
                 $("#backdrop").show();
-                $(".backdropContainer").css("text-align", "center").text(error.message);
+                $(".backdropContainer")
+                    .width("300px")
+                    .html(
+                        $(".backdropInitalWelcome")
+                            .removeClass("seperatorRequired")
+                            .text(error.message)[0]
+                    );
             } else {
                 window.location.href = "/documents/";
             }
@@ -29,11 +33,31 @@ window.nodeSocket.on("reconnect", function() {
 });
 
 window.nodeSocket.on('connect_failed', function () {
-    window.location.reload(true);
+    $("#backdrop").show();
+    $(".backdropContainer")
+        .width("300px")
+        .html(
+            $(".backdropInitalWelcome")
+                .removeClass("seperatorRequired")
+                .text("Failed To Connect. Retrying now...")[0]
+        );
+    setTimeout(function() {
+        window.location.reload(true);
+    }, 5000);
 });
 
 window.nodeSocket.on('reconnect_failed', function () {
-    window.location.reload(true);
+    $("#backdrop").show();
+    $(".backdropContainer")
+        .width("300px")
+        .html(
+            $(".backdropInitalWelcome")
+                .removeClass("seperatorRequired")
+                .text("Failed To Reconnect. Retrying now...")[0]
+        );
+    setTimeout(function() {
+        window.location.reload(true);
+    }, 5000);
 });
 
 //Url Parameters
