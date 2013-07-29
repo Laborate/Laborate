@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#Clear Screen
+clear
+
+#Wait For User Input
 echo -e "\e[34mPlease fill out the config.json file\033[m"
 echo -e "\e[31mHit enter when finished\033[m"
 read
@@ -17,3 +21,9 @@ npm install
 
 #Start Server
 forever start start.js
+
+#Clear Screen
+clear
+
+#Install Complete
+echo -e "\e[33mInstall Complete\033[m"
