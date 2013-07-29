@@ -2,9 +2,6 @@
   "name": "code",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "preinstall": "shell/initialize.sh"
-  },
   "dependencies": {
     "express.io": "*",
     "ejs": "*",
