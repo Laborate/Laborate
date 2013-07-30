@@ -64,7 +64,7 @@
             "*html",
             "*.ejs"
         ],
-        "max_failures": 10000000000,
+        "max_failures": 100,
         "forever_log": "../logs/code/forever.log",
         "output_log": "../logs/code/forever.out",
         "error_log": "../logs/code/forever.error"
