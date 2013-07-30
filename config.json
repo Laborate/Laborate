@@ -61,7 +61,7 @@
             "./views/*",
             "*.less",
             "*.css",
-            "*html",
+            "*.html",
             "*.ejs"
         ],
         "max_failures": 100,
