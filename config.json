@@ -7,7 +7,7 @@
         "port": 3000,
         "subdomains": ["code"],
         "site_title": "Code-Laborate",
-        "site_delimeter": " · ",
+        "site_delimeter": " &middot; ",
         "environment": "development"
     },
     "development" : {
@@ -38,7 +38,7 @@
     "github": {
         "id": "",
         "secret": "",
-        "scope": ["repo", "gist"]
+        "scope": ["user", "repo", "gist"]
     },
     "email": {
         "mode": "smtp",
@@ -46,20 +46,25 @@
         "host": "smtp.gmail.com",
         "port": 587,
         "auth": {
-            "user": "",
-            "pass": ""
+            "user": "invite@laborate.io",
+            "pass": "laborateinvite"
         }
     },
     "forever": {
         "uid": "code",
         "silent": false,
         "watch": true,
-        "watch_directory": ".",
+        "watch_directory": "./",
         "watch_ignore_dot": true,
         "watch_ignore_patterns": [
-            "*.css"
+            "./public/*",
+            "./views/*",
+            "*.less",
+            "*.css",
+            "*html",
+            "*.ejs"
         ],
-        "max_failures": 100,
+        "max_failures": 10000000000,
         "forever_log": "../logs/code/forever.log",
         "output_log": "../logs/code/forever.out",
         "error_log": "../logs/code/forever.error"
