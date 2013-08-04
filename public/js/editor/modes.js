@@ -1,5 +1,5 @@
 function setEditorMode(mode) {
-    languageExtentsion =  { "js":"javascript", "json":"javascript",
+    languageExtentsion =  { "js":"javascript", "json":"application/json",
                             "php":"php",
                             "css":"css",
                             "h":"text/x-c++src", "c":"text/x-csrc", "cc":"text/x-csrc", "cpp":"text/x-c++src",
@@ -53,21 +53,27 @@ function setEditorMode(mode) {
                             "py":"python", "p":"python", "pickle":"python", "pyd":"python", "pyo":"python",  "pyw":"python",
                             "rpy":"python" }
 
-    if(mode in languageExtentsion) { var modeName = languageExtentsion[mode]; }
-    else { var modeName = "shell" }
+    if(mode in languageExtentsion) {
+        var modeName = languageExtentsion[mode];
+    } else {
+        var modeName = "shell";
+    }
 
     if(modeName == "gfm") {
         CodeMirror.autoLoadMode(window.editor, "javascript");
         CodeMirror.autoLoadMode(window.editor, "css");
         CodeMirror.autoLoadMode(window.editor, "htmlmixed");
         CodeMirror.autoLoadMode(window.editor, "clike");
+    } else if(["m", "h", "c", "cc", "cpp", "cxx", "java", "jar", "scala", "pch"].indexOf(modeName) != -1) {
+        CodeMirror.autoLoadMode(window.editor, "clike");
+    } else if(modeName == "application/json") {
+        CodeMirror.autoLoadMode(window.editor, "javascript");
     }
 
-    if(modeName in ["m", "h", "c", "cc", "cpp", "cxx", "java", "jar", "scala", "pch"]) {
-        CodeMirror.autoLoadMode(window.editor, "clike");
+    if(["application/json"].indexOf(modeName) == -1) {
+        CodeMirror.autoLoadMode(window.editor, modeName);
     }
 
     window.editor.setOption("mode", modeName);
-    CodeMirror.autoLoadMode(window.editor, modeName);
     setTimeout(function () { window.editor.refresh(); }, 100)
 }

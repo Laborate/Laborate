@@ -14,7 +14,7 @@ exports.join = function(req) {
 
                     req.io.respond({
                         success: true,
-                        content: document.content
+                        content: (document.content) ? document.content.join("\n") : ""
                     });
                 } else {
                     req.io.respond({
@@ -38,7 +38,6 @@ exports.join = function(req) {
 }
 
 exports.leave = function(req) {
-    console.log(req.io.socket.handshake.address)
     req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
         message: req.session.user.screen_name + " left the document",
         isStatus: true
@@ -52,6 +51,7 @@ exports.chatRoom = function(req) {
 }
 
 exports.document = function(req) {
+    console.log(req.data["changes"]);
     req.data["from"] = req.session.user.screen_name;
     req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 }

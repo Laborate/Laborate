@@ -10,7 +10,7 @@
                     <div class="seperatorRequired">
                         <form action="/editor/<%= document.id %>/join/">
                             <input type="password" autofocus="on" name="password" placeholder="Password"/>
-                            <input type="submit" class="backdropButton button full blue" value="Join Document"/>
+                            <input type="submit" class="backdropButton button full blue" value="Connecting..." disabled="disabled"/>
                         </form>
                     </div>
                     <div class="backdropInitalWelcome" style="font-size: 14px;">
@@ -121,7 +121,7 @@
                     <hr>
                 <% } %>
             <% } %>
-            <input type="button" value="Download Document" id="downloadFile" class="button blue full"/>
+            <input type="button" value="Download File" id="downloadFile" class="button blue full"/>
         </div>
         <div id="sidebar_settings" class="sidebar_content_inner">
             <div>

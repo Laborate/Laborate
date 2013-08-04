@@ -13,9 +13,7 @@ window.editorUtil = {
                 } else {
                     window.editorUtil.clean = true;
                 }
-            }
-
-            if(direction == "in") {
+            } else if(direction == "in") {
                 if(window.editorUtil.clean) {
                     window.editorUtil.clean = false;
                     window.editor.replaceRange(data['text'], data['from'], data['to']);
@@ -38,9 +36,7 @@ window.editorUtil = {
                     "remove":info.gutterMarkers
                 }
             });
-        }
-
-        if(direction == "in") {
+        } else if(direction == "in") {
             window.editor.setGutterMarker(data["line"], "breakpoints", data["remove"] ? null : marker);
         }
     },
@@ -76,9 +72,7 @@ window.editorUtil = {
             } else {
                 window.nodeSocket.emit('editorCursors', {"line":data['line']} );
             }
-        }
-
-        if(direction == "in") {
+        } else if(direction == "in") {
             if(data['leave']) {
                 window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
                 window.users[data['from']] = -1;
@@ -125,13 +119,13 @@ window.editorUtil = {
                 clearInterval(interval);
                 window.nodeSocket.emit("editorJoin", password, function(json) {
                     if(json.success) {
-                        window.editor.setValue(json.content.join("\n"));
+                        window.editor.setValue(json.content);
                         window.editor.clearHistory();
                         $("#backdrop").hide();
                         window.editorUtil.document_hash = password;
                     } else {
-                        if(error.message) {
-                            $(".backdropContainer").css("text-align", "center").text(error.message);
+                        if(json.error_message) {
+                            $(".backdropContainer").css("text-align", "center").text(json.error_message);
                         } else {
                             window.location.href = "/documents/";
                         }

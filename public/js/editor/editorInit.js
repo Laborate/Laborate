@@ -5,31 +5,41 @@ window.nodeSocket = io.connect(window.location.origin+":"+$("#_port").text(), {
 
 window.nodeSocket.on("reconnecting", function() {
     $("#editorCodeMirror").css({"opacity": ".5"});
+    $(".backdropButton").val("Reconnecting...").attr("disabled", "disabled");
     editor.options.readOnly = true;
     window.notification.open("Reconnecting...", true);
 });
 
+window.nodeSocket.on("connect", function() {
+    $(".backdropButton").val("Join Document").attr("disabled", false);
+    window.notification.close();
+    editor.options.readOnly = false;
+    $("#editorCodeMirror").css({"opacity": ""});
+});
+
 window.nodeSocket.on("reconnect", function() {
-    window.nodeSocket.emit("editorJoin", window.editorUtil.document_hash, function(json) {
-        if(json.success) {
-            window.notification.close();
-            editor.options.readOnly = false;
-            $("#editorCodeMirror").css({"opacity": ""});
-        } else {
-            if(error.message) {
-                $("#backdrop").show();
-                $(".backdropContainer")
-                    .width("300px")
-                    .html(
-                        $(".backdropInitalWelcome")
-                            .removeClass("seperatorRequired")
-                            .text(error.message)[0]
-                    );
+    if(!$("#backdrop").is(":visible")) {
+        window.nodeSocket.emit("editorJoin", window.editorUtil.document_hash, function(json) {
+            if(json.success) {
+                window.notification.close();
+                editor.options.readOnly = false;
+                $("#editorCodeMirror").css({"opacity": ""});
             } else {
-                window.location.href = "/documents/";
+                if(json.error_message) {
+                    $("#backdrop").show();
+                    $(".backdropContainer")
+                        .width("300px")
+                        .html(
+                            $(".backdropInitalWelcome")
+                                .removeClass("seperatorRequired")
+                                .text(json.error_message)[0]
+                        );
+                } else {
+                    window.location.href = "/documents/";
+                }
             }
-        }
-    });
+        });
+    }
 });
 
 window.nodeSocket.on('connect_failed', function () {
