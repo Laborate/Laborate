@@ -122,10 +122,14 @@ window.editorUtil = {
                         window.editor.setValue(json.content);
                         window.editor.clearHistory();
                         $("#backdrop").hide();
-                        window.editorUtil.document_hash = password;
+                        if(password) {
+                            window.editorUtil.document_hash = password;
+                        } else {
+                            window.editorUtil.document_hash = null;
+                        }
                     } else {
                         if(json.error_message) {
-                            $(".backdropContainer").css("text-align", "center").text(json.error_message);
+                            window.editorUtil.error(json.error_message, "/documents/");
                         } else {
                             window.location.href = "/documents/";
                         }
@@ -133,5 +137,28 @@ window.editorUtil = {
                 });
             }
         }, 100);
+    },
+    error: function(message, url) {
+        $("body > div").not("#backdrop").remove();
+        $("#backdrop").show();
+        $(".backdropContainer")
+            .width("320px")
+            .html(
+                $(".backdropInitalWelcome")
+                    .removeClass("seperatorRequired")
+                    .text(message)[0]
+            );
+
+        if(url) {
+            if(url == true) {
+                setTimeout(function() {
+                    window.location.reload(true);
+                }, 5000);
+            } else {
+                setTimeout(function() {
+                    window.location.href = url;
+                }, 30000);
+            }
+        }
     }
 }

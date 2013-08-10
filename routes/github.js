@@ -103,19 +103,23 @@ exports.commit = function(req, res, next) {
         }, function(error, documents) {
             if(!error && documents.length == 1 && documents[0].permission_id != 3) {
                 var document = documents[0].document;
-                req.github.commit(req.session.user.github,
-                    req.session.user.locations[document.location].repository,
-                    req.session.user.locations[document.location].branch,
-                    (document.path) ? document.path + "/" + document.name : document.name,
-                    (document.content) ? document.content.join("\n") : "",
-                    req.param("message"),
-                function(errors) {
-                    if(!errors) {
-                        res.json({ success: true });
-                    } else {
-                        res.error(200, "Failed To Commit File");
-                    }
-                });
+                if(document.password == req.access_token) {
+                    req.github.commit(req.session.user.github,
+                        req.session.user.locations[document.location].repository,
+                        req.session.user.locations[document.location].branch,
+                        (document.path) ? document.path + "/" + document.name : document.name,
+                        (document.content) ? document.content.join("\n") : "",
+                        req.param("message"),
+                    function(errors) {
+                        if(!errors) {
+                            res.json({ success: true });
+                        } else {
+                            res.error(200, "Failed To Commit File");
+                        }
+                    });
+                } else {
+                    res.error(200, "Failed To Commit File");
+                }
             } else {
                 res.error(200, "Failed To Commit File");
             }

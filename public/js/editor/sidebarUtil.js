@@ -144,11 +144,11 @@ window.sidebarUtil = {
 	settings: function() {
 	    $("#settingsSave").removeClass("red_harsh").addClass("disabled").val("Saving...");
         window.sidebarUtil.keyMap($("#keyMap").val());
-	    window.sidebarUtil.setTitle("out", $("#documentTitle").val());
         $.post("/editor/" + window.url_params()["document"] + "/update/", {
             name: $("#documentTitle").val(),
             password: $("#documentPassword").val(),
             change_password: $("#change_password").val(),
+            access_token: window.editorUtil.document_hash,
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
@@ -159,6 +159,7 @@ window.sidebarUtil = {
                             "passOpen": ($("#documentPassword").val() == "")
                     });
                 }
+                window.sidebarUtil.setTitle("out", $("#documentTitle").val());
                 $("#settingsSave").removeClass("red_harsh disabled").val("Settings Saved");
                 setTimeout(function() {
                     window.sidebarUtil.togglePassword(true);
@@ -180,6 +181,7 @@ window.sidebarUtil = {
 	    var input_val = $("#removeDoc").val();
 	    $("#removeDoc").addClass("disabled").val("Removing...");
     	$.post("/editor/" + window.url_params()["document"] + "/remove/", {
+            access_token: window.editorUtil.document_hash,
             _csrf: $("#_csrf").text()
         }, function(json) {
             if(json.success) {
@@ -234,6 +236,7 @@ window.sidebarUtil = {
             $.post("/editor/" + url_params()["document"] + "/invite/", {
                 addresses: $("#emailAddresses").val(),
                 message: $("#emailMessage").val(),
+                access_token: window.editorUtil.document_hash,
                 _csrf: $("#_csrf").text()
             }, function(json) {
                  if(json.success) {
@@ -260,7 +263,8 @@ window.sidebarUtil = {
         }
 	},
 	downloadFile: function() {
-		window.location.href = "/editor/" + window.url_params()["document"] + "/download/";
+	    var token = (window.editorUtil.document_hash) ? (window.editorUtil.document_hash + "/") : "";
+		window.location.href = "/editor/" + window.url_params()["document"] + "/download/" + token;
     },
     commitFile: function() {
         $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting...");

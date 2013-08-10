@@ -20,20 +20,9 @@ window.nodeSocket.on("connect", function() {
 window.nodeSocket.on("reconnect", function() {
     if(!$("#backdrop").is(":visible")) {
         window.nodeSocket.emit("editorJoin", window.editorUtil.document_hash, function(json) {
-            if(json.success) {
-                window.notification.close();
-                editor.options.readOnly = false;
-                $("#editorCodeMirror").css({"opacity": ""});
-            } else {
+            if(!json.success) {
                 if(json.error_message) {
-                    $("#backdrop").show();
-                    $(".backdropContainer")
-                        .width("300px")
-                        .html(
-                            $(".backdropInitalWelcome")
-                                .removeClass("seperatorRequired")
-                                .text(json.error_message)[0]
-                        );
+                    window.editorUtil.error(json.error_message, "/documents/");
                 } else {
                     window.location.href = "/documents/";
                 }
@@ -43,31 +32,11 @@ window.nodeSocket.on("reconnect", function() {
 });
 
 window.nodeSocket.on('connect_failed', function () {
-    $("#backdrop").show();
-    $(".backdropContainer")
-        .width("300px")
-        .html(
-            $(".backdropInitalWelcome")
-                .removeClass("seperatorRequired")
-                .text("Failed To Connect. Retrying now...")[0]
-        );
-    setTimeout(function() {
-        window.location.reload(true);
-    }, 5000);
+    window.editorUtil.error("Failed To Connect. Retrying now...", true);
 });
 
 window.nodeSocket.on('reconnect_failed', function () {
-    $("#backdrop").show();
-    $(".backdropContainer")
-        .width("300px")
-        .html(
-            $(".backdropInitalWelcome")
-                .removeClass("seperatorRequired")
-                .text("Failed To Reconnect. Retrying now...")[0]
-        );
-    setTimeout(function() {
-        window.location.reload(true);
-    }, 5000);
+    window.editorUtil.error("Failed To Reconnect. Retrying now...", true);
 });
 
 //Url Parameters

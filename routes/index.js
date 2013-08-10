@@ -43,14 +43,15 @@ module.exports = function(app) {
     app.post('/documents/location/remove', auth.restrictAccess, auth.xhr, documents.remove_location);
 
     /* Editor */
-    app.get('/editor', auth.restrictAccess, update.index, editor.index);
-    app.get('/editor/:document', auth.restrictAccess, update.index, editor.index);
-    app.get('/editor/:document/download', auth.restrictAccess, editor.download);
-    app.post('/editor/:document/join', auth.restrictAccess, auth.xhr, editor.join);
-    app.post('/editor/:document/update', auth.restrictAccess, auth.xhr, editor.update);
-    app.post('/editor/:document/remove', auth.restrictAccess, auth.xhr, editor.remove);
-    app.post('/editor/:document/commit', auth.restrictAccess, auth.xhr, github.commit);
-    app.post('/editor/:document/invite', auth.restrictAccess, auth.xhr, editor.invite);
+    app.get('/editor', auth.restrictAccess, update.index, editor.access_token, editor.index);
+    app.get('/editor/:document', auth.restrictAccess, update.index, editor.access_token, editor.index);
+    app.get('/editor/:document/download/:access_token', auth.restrictAccess, editor.access_token, editor.download);
+    app.get('/editor/:document/download/', auth.restrictAccess, editor.access_token, editor.download);
+    app.post('/editor/:document/join', auth.restrictAccess, auth.xhr, editor.access_token, editor.join);
+    app.post('/editor/:document/update', auth.restrictAccess, auth.xhr, editor.access_token, editor.update);
+    app.post('/editor/:document/remove', auth.restrictAccess, auth.xhr, editor.access_token, editor.remove);
+    app.post('/editor/:document/commit', auth.restrictAccess, auth.xhr, editor.access_token, github.commit);
+    app.post('/editor/:document/invite', auth.restrictAccess, auth.xhr, editor.access_token, editor.invite);
 
     /* Github */
     app.get('/github/token/add', auth.restrictAccess, github.add_token);

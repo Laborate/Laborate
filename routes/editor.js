@@ -60,24 +60,28 @@ exports.update = function(req, res, next) {
         if(documents.length == 1) {
             if(!error) {
                 var document = documents[0].document;
-                document.name = req.param("name");
+                if(document.password == req.access_token) {
+                    document.name = req.param("name");
 
-                if(req.param("change_password") == "true") {
-                    if(document.owner.id == req.session.user.id) {
-                        if(req.param("password")) {
-                            document.password = document.hash(req.param("password"));
+                    if(req.param("change_password") == "true") {
+                        if(document.owner.id == req.session.user.id) {
+                            if(req.param("password")) {
+                                document.password = document.hash(req.param("password"));
+                            } else {
+                                document.password = null;
+                            }
+                            res.json({
+                                success: true,
+                                hash: document.password
+                            });
                         } else {
-                            document.password = null;
+                            res.error(200, "Failed To Update File");
                         }
-                        res.json({
-                            success: true,
-                            hash: document.password
-                        });
                     } else {
-                        res.error(200, "Failed To Update File");
+                        res.json({ success: true });
                     }
                 } else {
-                    res.json({ success: true });
+                    res.error(200, "Failed To Update File");
                 }
             } else {
                 res.error(200, "Failed To Update File");
@@ -96,8 +100,14 @@ exports.download = function(req, res, next) {
         if(documents.length == 1) {
             if(!error) {
                 var document = documents[0].document;
-                res.attachment(document.name);
-                res.end(document.content.join("\n"));
+                console.log(req.access_token);
+                console.log(document.password);
+                if(document.password == req.access_token) {
+                    res.attachment(document.name);
+                    res.end(document.content.join("\n"));
+                } else {
+                    res.error(200, "Failed To Download File");
+                }
             } else {
                 res.error(200, "Failed To Download File");
             }
@@ -109,7 +119,7 @@ exports.download = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error) {
+        if(!error && document.password == req.access_token) {
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {
@@ -144,26 +154,30 @@ exports.invite = function(req, res, next) {
         if(documents.length == 1) {
             if(!error) {
                 var document = documents[0].document;
-                req.email("document_invite", {
-                    from: req.session.user.name + " <" + req.session.user.email + ">",
-                    subject: document.name,
-                    users: $.map(req.param("addresses").split(","), function(address) {
-                        return {
-                            email: $.trim(address),
-                            role: documents[0],
-                            collaborators: $.map(document.roles, function(role) {
-                                return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
-                            }).join(", "),
-                            message: req.param("message")
+                if(document.password == req.access_token) {
+                    req.email("document_invite", {
+                        from: req.session.user.name + " <" + req.session.user.email + ">",
+                        subject: document.name,
+                        users: $.map(req.param("addresses").split(","), function(address) {
+                            return {
+                                email: $.trim(address),
+                                role: documents[0],
+                                collaborators: $.map(document.roles, function(role) {
+                                    return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
+                                }).join(", "),
+                                message: req.param("message")
+                            }
+                        })
+                    }, function(errors) {
+                        if(errors.length == 0) {
+                            res.json({ success: true });
+                        } else {
+                            res.error(200, "Failed To Send Invite");
                         }
-                    })
-                }, function(errors) {
-                    if(errors.length == 0) {
-                        res.json({ success: true });
-                    } else {
-                        res.error(200, "Failed To Send Invite");
-                    }
-                });
+                    });
+                } else {
+                    res.error(200, "Failed To Send Invite");
+                }
             } else {
                 res.error(200, "Failed To Send Invite");
             }
@@ -171,4 +185,10 @@ exports.invite = function(req, res, next) {
             res.error(404);
         }
     });
+}
+
+
+exports.access_token = function(req, res, next) {
+    req.access_token = (req.param("access_token")) ? req.param("access_token") : null;
+    next();
 }
