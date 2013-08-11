@@ -36,10 +36,6 @@ $(window).ready(function() {
         window.editorUtil.userCursors("out", {"remove":true});
     });
 
-    //Editor Mode (TEMPORARY)
-    window.sidebarUtil.setTitle("in", $("#document_title").text());
-
-
     //Pull Document Changes
     window.nodeSocket.on('editorDocument', function (data) {
         window.editorUtil.setChanges("in", data["changes"]);
@@ -78,22 +74,22 @@ $(window).ready(function() {
         }
     });
 
+    //Focus Editor On Click
     $("#editorContainer").on("click", function() {
         window.editor.focus();
     });
 
+    //Resize Editor on Window Resize
     $(window).resize(function() {
         window.editorUtil.refresh();
     });
 
-    setInterval(function(){
-        window.editorUtil.refresh();
-    }, 1000);
-
+    //Toogle Full Screen Mode
     $("#full_screen").live("click", function() {
         window.editorUtil.fullScreen();
     });
 
+    //Contributor Events
     $(".contributor").live("hover", function(){
         window.editorUtil.userHover($(this));
     });

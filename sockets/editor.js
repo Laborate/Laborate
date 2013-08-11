@@ -21,6 +21,9 @@ exports.join = function(req) {
                         success: false,
                         error_message: "You Are Already Editing This Document"
                     });
+
+                    //Force Socket Disconnect
+                    req.io.socket.manager.onClientDisconnect(req.io.socket.id);
                 }
             } else {
                 req.io.respond({
@@ -33,16 +36,22 @@ exports.join = function(req) {
                 success: false,
                 error_message: "Document Does Not Exist"
             });
+
+            //Force Socket Disconnect
+            req.io.socket.manager.onClientDisconnect(req.io.socket.id);
         }
     });
 }
 
-exports.leave = function(req) {
-    req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
-        message: req.session.user.screen_name + " left the document",
-        isStatus: true
-    });
-    editorUtil.removeUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+exports.leave = function(req, res, next, forced) {
+    //Only Clean Disconnects
+    if(req.data == "booted") {
+        req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
+            message: req.session.user.screen_name + " left the document",
+            isStatus: true
+        });
+        editorUtil.removeUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+    }
 }
 
 exports.chatRoom = function(req) {

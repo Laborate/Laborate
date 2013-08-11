@@ -50,4 +50,10 @@ window.url_params = function() {
 $(window).ready(function() {
     //Set Array of Users
     window.users = new Array();
+
+    //Set Title
+    window.sidebarUtil.setTitle("in", $("#document_title").text());
+
+    //Refresh Editor
+    window.editorUtil.refresh();
 });

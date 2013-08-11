@@ -55,8 +55,6 @@ window.editorUtil = {
     },
     userHover: function(element) {
         $("#contributor_info #contributor_info_name").text(element.attr("username"));
-        if(element.index() == 0) { var extra = 0; }
-        else { var extra = 5; }
         var contributor_box_offset = element.offset().left - (element.width()/2);
         var contributor_info = $("#contributor_info").width()/2;
         $("#contributor_info").show().css("left", (contributor_box_offset - contributor_info) + "px");
@@ -68,9 +66,9 @@ window.editorUtil = {
     userCursors: function(direction, data) {
         if(direction == "out") {
             if(data['leave']) {
-                window.nodeSocket.emit('editorCursors', {"leave":true} );
+                window.nodeSocket.emit('editorCursors', {"leave":true});
             } else {
-                window.nodeSocket.emit('editorCursors', {"line":data['line']} );
+                window.nodeSocket.emit('editorCursors', {"line":data['line']});
             }
         } else if(direction == "in") {
             if(data['leave']) {
@@ -148,7 +146,7 @@ window.editorUtil = {
                     .removeClass("seperatorRequired")
                     .text(message)[0]
             );
-
+        $("#backdropCore").hAlign().vAlign();
         if(url) {
             if(url == true) {
                 setTimeout(function() {
