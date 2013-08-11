@@ -134,7 +134,7 @@ window.sidebarUtil = {
 		$("#documentTitle").val(title);
 		$("#document_title").text(title);
 		setEditorMode(title.split(".")[title.split(".").length - 1]);
-		$("title").text(title + $("#_delimeter").text() + "Code-Laborate");
+		$("title").text(title + window.config.delimeter + window.config.name);
 		if(direction == "out") {
     		window.nodeSocket.emit('editorExtras' , {
     		    "docName": $("#documentTitle").val()
@@ -149,7 +149,7 @@ window.sidebarUtil = {
             password: $("#documentPassword").val(),
             change_password: $("#change_password").val(),
             access_token: window.editorUtil.document_hash,
-            _csrf: $("#_csrf").text()
+            _csrf: window.config.csrf
         }, function(json) {
             if(json.success) {
                 if($("#change_password").val() == "true") {
@@ -182,7 +182,7 @@ window.sidebarUtil = {
 	    $("#removeDoc").addClass("disabled").val("Removing...");
     	$.post("/editor/" + window.url_params()["document"] + "/remove/", {
             access_token: window.editorUtil.document_hash,
-            _csrf: $("#_csrf").text()
+            _csrf: window.config.csrf
         }, function(json) {
             if(json.success) {
                 window.nodeSocket.emit('editorExtras', {
@@ -237,7 +237,7 @@ window.sidebarUtil = {
                 addresses: $("#emailAddresses").val(),
                 message: $("#emailMessage").val(),
                 access_token: window.editorUtil.document_hash,
-                _csrf: $("#_csrf").text()
+                _csrf: window.config.csrf
             }, function(json) {
                  if(json.success) {
                      $("#emailAddresses, #emailMessage").val("");
@@ -270,7 +270,7 @@ window.sidebarUtil = {
         $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting...");
         $.post("/editor/" + url_params()["document"] + "/commit/", {
             message: $("#githubMessage").val(),
-            _csrf: $("#_csrf").text()
+            _csrf: window.config.csrf
         }, function(json) {
              if(json.success) {
                  $("#githubMessage").val("");

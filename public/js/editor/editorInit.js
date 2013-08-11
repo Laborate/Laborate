@@ -1,5 +1,5 @@
 //Socket IO Configuration
-window.nodeSocket = io.connect(window.location.origin+":"+$("#_port").text(), {
+window.nodeSocket = io.connect(window.config.host+":"+window.config.port, {
     "sync disconnect on unload": true
 });
 

@@ -1,3 +1,18 @@
+exports.config = function(req, res, next) {
+    //Header Config
+    res.setHeader("Server", "Laborate.io");
+
+    //Response Locals
+    res.locals.host = req.host;
+    res.locals.site_title = config.general.site_title;
+    res.locals.site_delimeter = config.general.site_delimeter;
+    res.locals._csrf = req.session._csrf;
+    res.locals._port = config.general.port;
+
+    next();
+}
+
+
 exports.login = function(req, res) {
     res.render('login', {
         title: 'Login',

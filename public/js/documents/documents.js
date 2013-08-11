@@ -85,12 +85,16 @@ $(".external.file .file_attributes").live("click", function() {
 });
 
 $('.file').live("hover", function() {
-    $("#" + $(this).find(".file_attributes").attr("data") + " .location_name").css("text-decoration", "underline");
+    if($(this).find(".file_attributes").attr("data")) {
+        $("#" + $(this).find(".file_attributes").attr("data") + " .location_name").css("text-decoration", "underline");
+    }
     return false;
 });
 
 $('.file').live("mouseleave",function() {
-    $("#" + $(this).find(".file_attributes").attr("data") + " .location_name").css("text-decoration", "");
+    if($(this).find(".file_attributes").attr("data")) {
+        $("#" + $(this).find(".file_attributes").attr("data") + " .location_name").css("text-decoration", "");
+    }
     return false;
 });
 

@@ -5,7 +5,7 @@ $(window).ready(function() {
 
 $("#backdrop form").live("submit", function() {
     var passed = true;
-    var data = { _csrf: $("#_csrf").text() }
+    var data = { _csrf: window.config.csrf }
     var submit = $("#backdrop input[type=submit]").val();
 
     $("#backdrop input[type='text'], #backdrop input[type='password']").each(function() {

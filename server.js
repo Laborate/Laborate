@@ -81,17 +81,9 @@ workers = function() {
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
+        app.use(require("./routes/core").config);
         app.use(error.global);
         app.use(error.handler);
-        app.use(function(req, res, next) {
-            res.locals.host = req.host;
-            res.locals.site_title = config.general.site_title;
-            res.locals.site_delimeter = config.general.site_delimeter;
-            res.locals._csrf = req.session._csrf;
-            res.locals._port = config.general.port;
-            res.setHeader("Server", "Laborate.io");
-            next();
-        });
     });
 
     /* Development Only */

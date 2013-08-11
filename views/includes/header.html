@@ -1,9 +1,5 @@
 <% include signature.html %>
-<% if(title) {
-    title = title + site_delimeter + site_title;
-} else {
-    title = site_title;
-} %>
+<% title = (title) ? (title + site_delimeter + site_title) : site_title; %>
 <!DOCTYPE html>
 <html itemscope="itemscope" itemtype="http://schema.org/WebPage" lang="en">
     <head>
@@ -39,10 +35,21 @@
         <!-- For iPhone: -->
         <link rel="apple-touch-icon-precomposed" href="http://<%= host %>/favicon/57.png">
 
+        <!-- Site Config -->
+        <script type="text/javascript">
+            window.config = {
+                host: "<%= host %>",
+                csrf: "<%= _csrf %>",
+                port: "<%= _port %>",
+                name: "<%= site_title %>",
+                delimeter: "<%= site_delimeter %>"
+            }
+        </script>
+
+        <!-- Javascript -->
         <%- js %>
+
+        <!-- CSS -->
         <%- css %>
     </head>
     <body>
-        <div id="_csrf" class="hidden"><%= _csrf %></div>
-        <div id="_port" class="hidden"><%= _port %></div>
-        <div id="_delimeter" class="hidden"><%= site_delimeter %></div>
