@@ -1,6 +1,3 @@
-/* Modules: NPM */
-var $ = require("jquery");
-
 /* Access Checks */
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {

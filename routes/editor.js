@@ -1,6 +1,3 @@
-/* Modules: NPM */
-var $ = require("jquery");
-
 exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.get(req.param("document"), function(error, document) {

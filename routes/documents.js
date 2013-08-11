@@ -1,5 +1,4 @@
 /* Modules: NPM */
-var $ = require("jquery");
 var rand = require("generate-key");
 
 /* Modules: Custom */

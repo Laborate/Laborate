@@ -134,7 +134,7 @@ window.sidebarUtil = {
 		$("#documentTitle").val(title);
 		$("#document_title").text(title);
 		setEditorMode(title.split(".")[title.split(".").length - 1]);
-		$("title").text(title + " · Code-Laborate");
+		$("title").text(title + $("#_delimeter").text() + "Code-Laborate");
 		if(direction == "out") {
     		window.nodeSocket.emit('editorExtras' , {
     		    "docName": $("#documentTitle").val()

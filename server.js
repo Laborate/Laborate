@@ -11,6 +11,7 @@ var cluster    = require('cluster');
 var error = require("./routes/error");
 
 /* IMPORTANT - No VAR Makes Variables Global */
+$         = require("jquery");
 config    = require('./config');
 clientJS  = piler.createJSManager({urlRoot: "/js/"});
 clientCSS = piler.createCSSManager({urlRoot: "/css/"});
