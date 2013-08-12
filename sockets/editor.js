@@ -4,8 +4,8 @@ var editorUtil = require("./editorUtil");
 exports.join = function(req) {
     editorUtil.models.documents.get(editorUtil.room(req), function(error, document) {
         if(!error && document) {
-            if(!document.password || req.data == document.password) {
-                if(!editorUtil.inRoom(req.session.user.screen_name, editorUtil.socketRoom(req))) {
+            if(!document.password || req.data[0] == document.password) {
+                if(req.data[1] || !editorUtil.inRoom(req.session.user.screen_name, editorUtil.socketRoom(req))) {
                     editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req), document.content);
                     req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
                         message: req.session.user.screen_name + " joined the document",
@@ -23,7 +23,7 @@ exports.join = function(req) {
                     });
 
                     //Force Socket Disconnect
-                    req.io.socket.manager.onClientDisconnect(req.io.socket.id);
+                    req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
                 }
             } else {
                 req.io.respond({
@@ -38,14 +38,14 @@ exports.join = function(req) {
             });
 
             //Force Socket Disconnect
-            req.io.socket.manager.onClientDisconnect(req.io.socket.id);
+            req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
         }
     });
 }
 
-exports.leave = function(req, res, next, forced) {
-    //Only Clean Disconnects
-    if(req.data == "booted") {
+exports.leave = function(req) {
+    //Only Non-forced Disconnects
+    if(req.data != "forced") {
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
             message: req.session.user.screen_name + " left the document",
             isStatus: true

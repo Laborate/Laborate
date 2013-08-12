@@ -6,20 +6,20 @@ window.nodeSocket = io.connect(window.config.host+":"+window.config.port, {
 window.nodeSocket.on("reconnecting", function() {
     $("#editorCodeMirror").css({"opacity": ".5"});
     $(".backdropButton").val("Reconnecting...").attr("disabled", "disabled");
-    editor.options.readOnly = true;
+    window.editor.options.readOnly = true;
     window.notification.open("Reconnecting...", true);
 });
 
 window.nodeSocket.on("connect", function() {
     $(".backdropButton").val("Join Document").attr("disabled", false);
     window.notification.close();
-    editor.options.readOnly = false;
+    window.editor.options.readOnly = false;
     $("#editorCodeMirror").css({"opacity": ""});
 });
 
 window.nodeSocket.on("reconnect", function() {
     if(!$("#backdrop").is(":visible")) {
-        window.nodeSocket.emit("editorJoin", window.editorUtil.document_hash, function(json) {
+        window.nodeSocket.emit("editorJoin", [window.editorUtil.document_hash, true], function(json) {
             if(!json.success) {
                 if(json.error_message) {
                     window.editorUtil.error(json.error_message, "/documents/");
@@ -37,6 +37,10 @@ window.nodeSocket.on('connect_failed', function () {
 
 window.nodeSocket.on('reconnect_failed', function () {
     window.editorUtil.error("Failed To Reconnect. Retrying now...", true);
+});
+
+window.nodeSocket.on('error', function (reason){
+    window.editorUtil.error(reason, true);
 });
 
 //Url Parameters

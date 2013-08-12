@@ -21,16 +21,18 @@ exports.users = function(user, room) {
 }
 
 exports.addUser = function(req, user, room, document) {
-    if(!(room in exports.roomUsers)) {
-        exports.roomUsers[room] = {};
-        exports.client.set(room, document);
-    }
+    if(!req.data[1]) {
+        if(!(room in exports.roomUsers)) {
+            exports.roomUsers[room] = {};
+            exports.client.set(room, document);
+        }
 
-    if(!(user in exports.roomUsers[room])) {
-        req.io.join(exports.socketRoom(req));
-        exports.roomUsers[room][user] = setInterval(function() {
-            req.io.emit('editorUsers', exports.users(user, room));
-        }, 2000);
+        if(!(user in exports.roomUsers[room])) {
+            req.io.join(exports.socketRoom(req));
+            exports.roomUsers[room][user] = setInterval(function() {
+                req.io.emit('editorUsers', exports.users(user, room));
+            }, 2000);
+        }
     }
 }
 

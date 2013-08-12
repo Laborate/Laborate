@@ -115,7 +115,7 @@ window.editorUtil = {
         interval = setInterval(function() {
             if(nodeSocket.socket.connected) {
                 clearInterval(interval);
-                window.nodeSocket.emit("editorJoin", password, function(json) {
+                window.nodeSocket.emit("editorJoin", [password, false], function(json) {
                     if(json.success) {
                         window.editor.setValue(json.content);
                         window.editor.clearHistory();

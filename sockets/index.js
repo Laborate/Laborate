@@ -1,3 +1,4 @@
+var core = require("./core");
 var editor = require("./editor");
 
 module.exports = function(app) {
@@ -9,6 +10,6 @@ module.exports = function(app) {
     app.io.route('editorExtras', editor.extras);
 
     /* Disconnect */
-    app.io.route('disconnect', editor.leave);
-    app.io.route('reconnect_failed', editor.leave);
+    app.io.route('disconnect', core.leave);
+    app.io.route('reconnect_failed', core.leave);
 }
