@@ -101,7 +101,7 @@ exports.download = function(req, res, next) {
                 console.log(document.password);
                 if(document.password == req.access_token) {
                     res.attachment(document.name);
-                    res.end(document.content.join("\n"));
+                    res.end((document.content) ? document.content.join("\n") : "");
                 } else {
                     res.error(200, "Failed To Download File");
                 }
@@ -158,7 +158,9 @@ exports.invite = function(req, res, next) {
                         users: $.map(req.param("addresses").split(","), function(address) {
                             return {
                                 email: $.trim(address),
-                                role: documents[0],
+                                id: document.id,
+                                name: document.name,
+                                access: (document.password) ? "Password" : "Open",
                                 collaborators: $.map(document.roles, function(role) {
                                     return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
                                 }).join(", "),
