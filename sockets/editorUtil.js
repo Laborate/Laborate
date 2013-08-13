@@ -29,9 +29,12 @@ exports.addUser = function(req, user, room, document) {
 
         if(!(user in exports.roomUsers[room])) {
             req.io.join(exports.socketRoom(req));
-            exports.roomUsers[room][user] = setInterval(function() {
-                req.io.emit('editorUsers', exports.users(user, room));
-            }, 2000);
+            exports.roomUsers[room][user] = {
+                "socket": req.io.socket.id,
+                "update": setInterval(function() {
+                    req.io.emit('editorUsers', exports.users(user, room));
+                }, 2000)
+            }
         }
     }
 }
@@ -39,7 +42,7 @@ exports.addUser = function(req, user, room, document) {
 exports.removeUser = function(req, user, room) {
     if(room in exports.roomUsers) {
         if(user in exports.roomUsers[room]) {
-            clearInterval(exports.roomUsers[room][user]);
+            clearInterval(exports.roomUsers[room][user]["update"]);
             delete exports.roomUsers[room][user];
             req.io.leave(exports.socketRoom(req));
             req.io.socket.disconnect();
@@ -54,6 +57,18 @@ exports.removeUser = function(req, user, room) {
                 });
             }
         }
+    }
+}
+
+exports.userSocket = function(user, room) {
+    if(room in exports.roomUsers) {
+        if(user in exports.roomUsers[room]) {
+            return exports.roomUsers[room][user]["socket"];
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 }
 

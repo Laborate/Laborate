@@ -21,20 +21,22 @@ exports.join = function(req) {
                         success: false,
                         error_message: "You Are Already Editing This Document"
                     });
-
-                    //Force Socket Disconnect
-                    req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
                 }
             } else {
                 req.io.respond({
                     success: false,
-                    error_message: "Incorrect Password"
+                    error_message: "Incorrect Password",
+                    redirect_url: "/documents/"
                 });
+
+                //Force Socket Disconnect
+                req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
             }
         } else {
             req.io.respond({
                 success: false,
-                error_message: "Document Does Not Exist"
+                error_message: "Document Does Not Exist",
+                redirect_url: "/documents/"
             });
 
             //Force Socket Disconnect
@@ -43,9 +45,19 @@ exports.join = function(req) {
     });
 }
 
+exports.disconnectAll = function(req) {
+    var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
+    if(socket) {
+        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
+    }
+    req.io.respond({ success: true });
+    req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+}
+
 exports.leave = function(req) {
+    var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
     //Only Non-forced Disconnects
-    if(req.data != "forced") {
+    if(req.data == "booted" && socket == req.io.socket.id) {
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
             message: req.session.user.screen_name + " left the document",
             isStatus: true

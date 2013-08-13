@@ -22,9 +22,9 @@ window.nodeSocket.on("reconnect", function() {
         window.nodeSocket.emit("editorJoin", [window.editorUtil.document_hash, true], function(json) {
             if(!json.success) {
                 if(json.error_message) {
-                    window.editorUtil.error(json.error_message, "/documents/");
+                    window.editorUtil.error(json.error_message, json.redirect_url);
                 } else {
-                    window.location.href = "/documents/";
+                    window.location.href = json.redirect_url;
                 }
             }
         });
