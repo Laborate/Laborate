@@ -154,7 +154,6 @@ window.documents = {
 
         if(location_id == "online" || !location_id) {
             $("#online").addClass("selected");
-            location_id = "online";
             window.documents.onlineDirectory(no_history);
         } else {
             window.documents.locationDirectory(location_id, path, no_history);
@@ -386,7 +385,7 @@ window.documents = {
 
                 window.notification.close();
                 if(!no_history) history.pushState(null, null, "/documents/");
-                window.sidebar = location_id;
+                window.sidebar = "online";
             }
         });
     },
