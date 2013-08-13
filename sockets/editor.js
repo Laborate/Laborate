@@ -47,17 +47,20 @@ exports.join = function(req) {
 
 exports.disconnectAll = function(req) {
     var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
-    if(socket) {
+    if(socket in req.io.socket.manager.sockets.sockets) {
         req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
+    } else {
+        //Remove Any Users Logged In Under These Credentials;
+        exports.leave(req, true);
     }
     req.io.respond({ success: true });
     req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
 }
 
-exports.leave = function(req) {
+exports.leave = function(req, override) {
     var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
     //Only Non-forced Disconnects
-    if(req.data == "booted" && socket == req.io.socket.id) {
+    if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
             message: req.session.user.screen_name + " left the document",
             isStatus: true
