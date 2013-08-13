@@ -1,6 +1,8 @@
 //History Change
 window.onpopstate = function() {
-   window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
+    if(window.sidebar) {
+        window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
+    }
 };
 
 //Add New File

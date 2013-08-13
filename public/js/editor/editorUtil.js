@@ -127,7 +127,7 @@ window.editorUtil = {
                         }
                     } else {
                         if(json.error_message) {
-                            window.editorUtil.error(json.error_message, json.redirect_url);
+                            window.backdrop.error(json.error_message, json.redirect_url);
                         } else {
                             window.location.href = json.redirect_url;
                         }
@@ -135,43 +135,5 @@ window.editorUtil = {
                 });
             }
         }, 100);
-    },
-    error: function(message, url) {
-        if(message == "You Are Already Editing This Document") {
-            message += "<br><input type='button' id='disconnectAll' \
-                        style='margin:5px 0 0 0;' class='button blue full' value='Disconnect All Other Sessions'/>";
-
-            $("#disconnectAll").live("click", function() {
-                 window.nodeSocket.emit("editorDisconnectAll", {}, function(json) {
-                    if(json.success) {
-                        window.location.reload(true);
-                    }
-                 });
-            });
-        }
-
-        $("body > div").not("#backdrop").remove();
-        $("#backdrop").show();
-        $(".backdropContainer")
-            .width("320px")
-            .html(
-                $(".backdropInitalWelcome")
-                    .removeClass("seperatorRequired")
-                    .html(message)[0]
-            );
-
-        $("#backdropCore").hAlign().vAlign();
-
-        if(url) {
-            if(url == true) {
-                setTimeout(function() {
-                    window.location.reload(true);
-                }, 5000);
-            } else {
-                setTimeout(function() {
-                    window.location.href = url;
-                }, 30000);
-            }
-        }
     }
 }

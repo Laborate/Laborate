@@ -22,7 +22,7 @@ window.nodeSocket.on("reconnect", function() {
         window.nodeSocket.emit("editorJoin", [window.editorUtil.document_hash, true], function(json) {
             if(!json.success) {
                 if(json.error_message) {
-                    window.editorUtil.error(json.error_message, json.redirect_url);
+                    window.backdrop.error(json.error_message, json.redirect_url);
                 } else {
                     window.location.href = json.redirect_url;
                 }
@@ -32,15 +32,15 @@ window.nodeSocket.on("reconnect", function() {
 });
 
 window.nodeSocket.on('connect_failed', function () {
-    window.editorUtil.error("Failed To Connect. Retrying now...", true);
+    window.backdrop.error("Failed To Connect. Retrying now...", true);
 });
 
 window.nodeSocket.on('reconnect_failed', function () {
-    window.editorUtil.error("Failed To Reconnect. Retrying now...", true);
+    window.backdrop.error("Failed To Reconnect. Retrying now...", true);
 });
 
 window.nodeSocket.on('error', function (reason){
-    window.editorUtil.error(reason, true);
+    window.backdrop.error(reason, true);
 });
 
 //Url Parameters

@@ -14,6 +14,7 @@ window.url_params = function() {
 }
 
 $(window).ready(function() {
+    window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
     window.documents.locationListing(window.url_params()["location"]);
     window.documents.githubRepos();
 });

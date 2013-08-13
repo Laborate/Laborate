@@ -159,8 +159,6 @@ window.documents = {
         } else {
             window.documents.locationDirectory(location_id, path, no_history);
         }
-
-        window.sidebar = location_id;
     },
     addLocation: function() {
         //Show Pop Up
@@ -388,6 +386,7 @@ window.documents = {
 
                 window.notification.close();
                 if(!no_history) history.pushState(null, null, "/documents/");
+                window.sidebar = location_id;
             }
         });
     },
@@ -484,6 +483,7 @@ window.documents = {
             window.notification.close();
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(!no_history) history.pushState(null, null, "/documents/" + location_id + "/" + path);
+            window.sidebar = location_id;
         }
     },
     locationFile: function(location_id, element) {
