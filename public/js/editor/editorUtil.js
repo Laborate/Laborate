@@ -137,8 +137,6 @@ window.editorUtil = {
         }, 100);
     },
     error: function(message, url) {
-        nodeSocket.socket.options["sync disconnect on unload"] = false;
-
         if(message == "You Are Already Editing This Document") {
             message += "<br><input type='button' id='disconnectAll' \
                         style='margin:5px 0 0 0;' class='button blue full' value='Disconnect All Other Sessions'/>";
@@ -161,7 +159,9 @@ window.editorUtil = {
                     .removeClass("seperatorRequired")
                     .html(message)[0]
             );
+
         $("#backdropCore").hAlign().vAlign();
+
         if(url) {
             if(url == true) {
                 setTimeout(function() {
