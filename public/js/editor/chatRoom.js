@@ -155,7 +155,7 @@ window.chatRoom = {
         }, 05);
     },
     _pushMessage: function(message) {
-        window.nodeSocket.emit('editorChatRoom', {
+        window.socketUtil.socket.emit('editorChatRoom', {
             "message": message,
             "isStatus": false
         });
@@ -193,7 +193,7 @@ $(window).ready(function() {
     });
 
     //Pull Message
-    window.nodeSocket.on('editorChatRoom', function (data) {
+    window.socketUtil.socket.on('editorChatRoom', function (data) {
         if(data['isStatus']) {
             window.chatRoom.status(data['message']);
         }

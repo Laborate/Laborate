@@ -3,7 +3,7 @@ require("../lib/models").socket(function(response) {
     exports.models = response;
 });
 
-exports.client = require('redis').createClient();
+exports.redisClient = require('redis').createClient();
 exports.roomUsers = {};
 
 exports.users = function(user, room) {
@@ -21,20 +21,18 @@ exports.users = function(user, room) {
 }
 
 exports.addUser = function(req, user, room, document) {
-    if(!req.data[1]) {
-        if(!(room in exports.roomUsers)) {
-            exports.roomUsers[room] = {};
-            exports.client.set(room, document);
-        }
+    if(!(room in exports.roomUsers)) {
+        exports.roomUsers[room] = {};
+        exports.redisClient.set(room, document);
+    }
 
-        if(!(user in exports.roomUsers[room])) {
-            req.io.join(exports.socketRoom(req));
-            exports.roomUsers[room][user] = {
-                "socket": req.io.socket.id,
-                "update": setInterval(function() {
-                    req.io.emit('editorUsers', exports.users(user, room));
-                }, 2000)
-            }
+    if(!(user in exports.roomUsers[room])) {
+        req.io.join(exports.socketRoom(req));
+        exports.roomUsers[room][user] = {
+            "socket": req.io.socket.id,
+            "update": setInterval(function() {
+                req.io.emit('editorUsers', exports.users(user, room));
+            }, 2000)
         }
     }
 }
@@ -49,10 +47,10 @@ exports.removeUser = function(req, user, room) {
 
             if(exports.roomUsers[room].length == 0) {
                 delete exports.roomUsers[room];
-                exports.client.get(room, function(error, reply) {
+                exports.redisClient.get(room, function(error, reply) {
                      exports.models.documents.get(room, function(error, document) {
                         document.content = (reply.length != 0) ? reply : null;
-                        exports.client.del(room);
+                        exports.redisClient.del(room);
                      });
                 });
             }

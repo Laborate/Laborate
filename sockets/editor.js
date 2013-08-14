@@ -2,8 +2,12 @@ var editorUtil = require("./editorUtil");
 
 /* Route Functions */
 exports.join = function(req) {
-    editorUtil.models.documents.get(editorUtil.room(req), function(error, document) {
-        if(!error && document) {
+    editorUtil.models.documents_roles.find({
+        user_id: req.session.user.id,
+        document_id: editorUtil.room(req)
+    }, function(error, documents) {
+        if(documents.length == 1 && !error) {
+            var document = documents[0].document;
             if(!document.password || req.data[0] == document.password) {
                 if(req.data[1] || !editorUtil.inRoom(req.session.user.screen_name, editorUtil.socketRoom(req))) {
                     editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req), document.content);
@@ -49,12 +53,10 @@ exports.disconnectAll = function(req) {
     var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
     if(socket in req.io.socket.manager.sockets.sockets) {
         req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
-    } else {
-        //Remove Any Users Logged In Under These Credentials;
-        exports.leave(req, true);
     }
     req.io.respond({ success: true });
     req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+    exports.leave(req, true);
 }
 
 exports.leave = function(req, override) {

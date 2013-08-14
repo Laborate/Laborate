@@ -136,7 +136,7 @@ window.sidebarUtil = {
 		setEditorMode(title.split(".")[title.split(".").length - 1]);
 		$("title").text(title + window.config.delimeter + window.config.name);
 		if(direction == "out") {
-    		window.nodeSocket.emit('editorExtras' , {
+    		window.socketUtil.socket.emit('editorExtras' , {
     		    "docName": $("#documentTitle").val()
             });
         }
@@ -154,7 +154,7 @@ window.sidebarUtil = {
             if(json.success) {
                 if($("#change_password").val() == "true") {
                     window.editorUtil.document_hash = json.hash;
-                    window.nodeSocket.emit('editorExtras', {
+                    window.socketUtil.socket.emit('editorExtras', {
                             "passChange": true,
                             "passOpen": ($("#documentPassword").val() == "")
                     });
@@ -185,7 +185,7 @@ window.sidebarUtil = {
             _csrf: window.config.csrf
         }, function(json) {
             if(json.success) {
-                window.nodeSocket.emit('editorExtras', {
+                window.socketUtil.socket.emit('editorExtras', {
                         "docDelete": true
                 });
                 window.location.href = "/documents/";

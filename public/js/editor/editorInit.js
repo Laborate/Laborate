@@ -1,45 +1,56 @@
-//Socket IO Configuration
-window.nodeSocket = io.connect(window.config.host+":"+window.config.port, {
-    "sync disconnect on unload": true
-});
+//Socket Util
+window.socketUtil = {
+    socket: io.connect(window.config.host+":"+window.config.port, {
+        "sync disconnect on unload": true
+    }),
+    connect: function() {
+        $(".backdropButton").val("Join Document").attr("disabled", false);
+        window.notification.close();
+        if(window.editor) {
+            window.editor.options.readOnly = false;
+        }
+        $("#editorCodeMirror").css({"opacity": ""});
+    },
+    disconnect: function() {
+        $("#editorCodeMirror").css({"opacity": ".5"});
+        $(".backdropButton").val("Reconnecting...").attr("disabled", "disabled");
+        if(window.editor) {
+            window.editor.options.readOnly = true;
+        }
+        window.notification.open("Reconnecting...", true);
+        window.editorUtil.users([]);
 
-window.nodeSocket.on("reconnecting", function() {
-    $("#editorCodeMirror").css({"opacity": ".5"});
-    $(".backdropButton").val("Reconnecting...").attr("disabled", "disabled");
-    window.editor.options.readOnly = true;
-    window.notification.open("Reconnecting...", true);
-});
-
-window.nodeSocket.on("connect", function() {
-    $(".backdropButton").val("Join Document").attr("disabled", false);
-    window.notification.close();
-    window.editor.options.readOnly = false;
-    $("#editorCodeMirror").css({"opacity": ""});
-});
-
-window.nodeSocket.on("reconnect", function() {
-    if(!$("#backdrop").is(":visible")) {
-        window.nodeSocket.emit("editorJoin", [window.editorUtil.document_hash, true], function(json) {
-            if(!json.success) {
-                if(json.error_message) {
-                    window.backdrop.error(json.error_message, json.redirect_url);
-                } else {
-                    window.location.href = json.redirect_url;
+    },
+    reconnect: function() {
+        if(!$("#backdrop").is(":visible")) {
+            window.socketUtil.socket.emit("editorJoin", [window.editorUtil.document_hash, true], function(json) {
+                if(!json.success) {
+                    if(json.error_message) {
+                        window.backdrop.error(json.error_message, json.redirect_url);
+                    } else {
+                        window.location.href = json.redirect_url;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
-});
+}
 
-window.nodeSocket.on('connect_failed', function () {
+//Socket Events
+window.socketUtil.socket.on("connect", window.socketUtil.connect);
+window.socketUtil.socket.on("reconnect", window.socketUtil.reconnect);
+window.socketUtil.socket.on("reconnecting", window.socketUtil.disconnect);
+window.onoffline = window.socketUtil.disconnect;
+
+window.socketUtil.socket.on('connect_failed', function () {
     window.backdrop.error("Failed To Connect. Retrying now...", true);
 });
 
-window.nodeSocket.on('reconnect_failed', function () {
+window.socketUtil.socket.on('reconnect_failed', function () {
     window.backdrop.error("Failed To Reconnect. Retrying now...", true);
 });
 
-window.nodeSocket.on('error', function (reason){
+window.socketUtil.socket.on('error', function (reason){
     window.backdrop.error(reason, true);
 });
 

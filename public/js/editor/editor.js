@@ -37,22 +37,22 @@ $(window).ready(function() {
     });
 
     //Pull Document Changes
-    window.nodeSocket.on('editorDocument', function (data) {
+    window.socketUtil.socket.on('editorDocument', function (data) {
         window.editorUtil.setChanges("in", data["changes"]);
     });
 
     //Pull User Info
-    window.nodeSocket.on('editorUsers', function (data) {
+    window.socketUtil.socket.on('editorUsers', function (data) {
         window.editorUtil.users(data);
     });
 
     //Pull Cursor Info
-    window.nodeSocket.on('editorCursors', function (data) {
+    window.socketUtil.socket.on('editorCursors', function (data) {
         window.editorUtil.userCursors("in", data);
     });
 
     //Pull Extras Info
-    window.nodeSocket.on('editorExtras', function (data) {
+    window.socketUtil.socket.on('editorExtras', function (data) {
         if("docName" in data) {
             window.sidebarUtil.setTitle("in", data["docName"]);
         }

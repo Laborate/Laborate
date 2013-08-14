@@ -7,7 +7,7 @@ window.editorUtil = {
         if(data['origin'] != "setValue") {
             if(direction == "out") {
                 if(window.editorUtil.clean) {
-                    window.nodeSocket.emit('editorDocument', {
+                    window.socketUtil.socket.emit('editorDocument', {
                         "changes": data
                     });
                 } else {
@@ -30,7 +30,7 @@ window.editorUtil = {
         marker.innerHTML = "●";
         if(direction == "out") {
             window.editor.setGutterMarker(data["line"], "breakpoints", info.gutterMarkers ? null : marker);
-            window.nodeSocket.emit('editorExtras', {
+            window.socketUtil.socket.emit('editorExtras', {
                 "breakpoint": {
                     "line":data["line"],
                     "remove":info.gutterMarkers
@@ -66,9 +66,9 @@ window.editorUtil = {
     userCursors: function(direction, data) {
         if(direction == "out") {
             if(data['leave']) {
-                window.nodeSocket.emit('editorCursors', {"leave":true});
+                window.socketUtil.socket.emit('editorCursors', {"leave":true});
             } else {
-                window.nodeSocket.emit('editorCursors', {"line":data['line']});
+                window.socketUtil.socket.emit('editorCursors', {"line":data['line']});
             }
         } else if(direction == "in") {
             if(data['leave']) {
@@ -113,9 +113,9 @@ window.editorUtil = {
     join: function(password) {
         //Have to wait for the socket to initialize
         interval = setInterval(function() {
-            if(nodeSocket.socket.connected) {
+            if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
-                window.nodeSocket.emit("editorJoin", [password, false], function(json) {
+                window.socketUtil.socket.emit("editorJoin", [password, false], function(json) {
                     if(json.success) {
                         window.editor.setValue(json.content);
                         window.editor.clearHistory();
