@@ -23,7 +23,7 @@ window.socketUtil = {
     },
     reconnect: function() {
         if(!$("#backdrop").is(":visible")) {
-            window.socketUtil.socket.emit("editorJoin", [window.editorUtil.document_hash, true], function(json) {
+            window.socketUtil.socket.emit("editorJoin", [window.editorUtil.access_token, true], function(json) {
                 if(!json.success) {
                     if(json.error_message) {
                         window.backdrop.error(json.error_message, json.redirect_url);

@@ -148,12 +148,12 @@ window.sidebarUtil = {
             name: $("#documentTitle").val(),
             password: $("#documentPassword").val(),
             change_password: $("#change_password").val(),
-            access_token: window.editorUtil.document_hash,
+            access_token: window.editorUtil.access_token,
             _csrf: window.config.csrf
         }, function(json) {
             if(json.success) {
                 if($("#change_password").val() == "true") {
-                    window.editorUtil.document_hash = json.hash;
+                    window.editorUtil.access_token = json.hash;
                     window.socketUtil.socket.emit('editorExtras', {
                             "passChange": true,
                             "passOpen": ($("#documentPassword").val() == "")
@@ -181,7 +181,7 @@ window.sidebarUtil = {
 	    var input_val = $("#removeDoc").val();
 	    $("#removeDoc").addClass("disabled").val("Removing...");
     	$.post("/editor/" + window.url_params()["document"] + "/remove/", {
-            access_token: window.editorUtil.document_hash,
+            access_token: window.editorUtil.access_token,
             _csrf: window.config.csrf
         }, function(json) {
             if(json.success) {
@@ -236,7 +236,7 @@ window.sidebarUtil = {
             $.post("/editor/" + url_params()["document"] + "/invite/", {
                 addresses: $("#emailAddresses").val(),
                 message: $("#emailMessage").val(),
-                access_token: window.editorUtil.document_hash,
+                access_token: window.editorUtil.access_token,
                 _csrf: window.config.csrf
             }, function(json) {
                  if(json.success) {
@@ -263,7 +263,7 @@ window.sidebarUtil = {
         }
 	},
 	downloadFile: function() {
-	    var token = (window.editorUtil.document_hash) ? (window.editorUtil.document_hash + "/") : "";
+	    var token = (window.editorUtil.access_token) ? (window.editorUtil.access_token + "/") : "";
 		window.location.href = "/editor/" + window.url_params()["document"] + "/download/" + token;
     },
     commitFile: function() {

@@ -67,7 +67,7 @@ $(window).ready(function() {
 
         if(data["passChange"] == true) {
             if(data["passOpen"] == true) {
-                window.editorUtil.document_hash = null;
+                window.editorUtil.access_token = null;
             } else {
                 window.location.reload(true);
             }

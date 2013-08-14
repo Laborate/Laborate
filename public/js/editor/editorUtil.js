@@ -121,9 +121,9 @@ window.editorUtil = {
                         window.editor.clearHistory();
                         $("#backdrop").hide();
                         if(password) {
-                            window.editorUtil.document_hash = password;
+                            window.editorUtil.access_token = password;
                         } else {
-                            window.editorUtil.document_hash = null;
+                            window.editorUtil.access_token = null;
                         }
                     } else {
                         if(json.error_message) {
