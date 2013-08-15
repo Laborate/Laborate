@@ -28,8 +28,7 @@
         "rememberme": "usrr"
     },
     "cookie_session": {
-        "key": "usrs",
-        "secret": ""
+        "key": "usrs"
     },
     "orm": {
         "dialect": "mysql",
@@ -42,7 +41,7 @@
     "github": {
         "id": "",
         "secret": "",
-        "scope": ["user", "repo", "gist"]
+        "scope": ["user:email", "repo", "gist"]
     },
     "email": {
         "mode": "smtp",
