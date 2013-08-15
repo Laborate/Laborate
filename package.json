@@ -24,7 +24,8 @@
     "redis": "*",
     "connect-redis": "*",
     "crontab": "*",
-    "npm": "*"
+    "npm": "*",
+    "raven": "*"
   },
   "devDependencies": {
     "express-debug": "*"

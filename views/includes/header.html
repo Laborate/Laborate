@@ -35,12 +35,15 @@
         <!-- For iPhone: -->
         <link rel="apple-touch-icon-precomposed" href="http://<%= host %>/favicon/57.png">
 
+        <!-- CSS -->
+        <%- css %>
+
         <!-- Site Config -->
         <script type="text/javascript">
             window.config = {
                 host: "<%= host %>",
-                csrf: "<%= _csrf %>",
-                port: "<%= _port %>",
+                csrf: "<%= csrf %>",
+                port: "<%= port %>",
                 name: "<%= site_title %>",
                 delimeter: "<%= site_delimeter %>"
             }
@@ -49,7 +52,10 @@
         <!-- Javascript -->
         <%- js %>
 
-        <!-- CSS -->
-        <%- css %>
+        <!-- Sentry Logging -->
+        <script type="text/javascript">
+            Raven.config("<%= sentry %>").install();
+            window.onerror = Raven.process;
+        </script>
     </head>
     <body>

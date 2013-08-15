@@ -135,5 +135,22 @@ window.editorUtil = {
                 });
             }
         }, 100);
+    },
+    error: function(message, url) {
+        if(message == "You Are Already Editing This Document") {
+            message += "<br><input type='button' id='disconnectAll' \
+                        style='margin:5px 0 0 0;' class='button blue full' value='Disconnect All Other Sessions'/>";
+
+            $("#disconnectAll").live("click", function() {
+                $(this).val("loading...").addClass("disabled");
+                 window.socketUtil.socket.emit("editorDisconnectAll", {}, function(json) {
+                    if(json.success) {
+                        window.location.reload(true);
+                    }
+                 });
+            });
+        }
+
+        window.backdrop.error(message, url);
     }
 }

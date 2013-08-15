@@ -6,6 +6,7 @@ var redis      = require('redis');
 var ejs        = require('ejs');
 var RedisStore = require('connect-redis')(express);
 var cluster    = require('cluster');
+var raven      = require('raven');
 
 /* Modules: Custom */
 var error = require("./routes/error");
@@ -84,6 +85,9 @@ workers = function() {
         app.use(require("./routes/core").config);
         app.use(error.global);
         app.use(error.handler);
+
+        //Send Error Logging To Sentry
+        app.use(raven.middleware.express(config.sentry.node));
     });
 
     /* Development Only */
@@ -99,14 +103,6 @@ workers = function() {
                 config.development.basicAuth.password
             ));
         }
-    });
-
-    /* Production Only */
-    app.configure('production', function() {
-        process.on('uncaughtException', function(error) {
-          console.log("Uncaught Error: " + error.stack);
-          return false;
-        });
     });
 
     /* Express: Start Router */
