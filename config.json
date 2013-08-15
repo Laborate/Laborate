@@ -6,8 +6,8 @@
     "general": {
         "port": 3000,
         "subdomains": ["code"],
-        "site_title": "Code-Laborate",
-        "site_delimeter": " &middot; ",
+        "site_title": "Code - Laborate",
+        "site_delimeter": " - ",
         "environment": "development"
     },
     "development" : {
@@ -19,6 +19,10 @@
             "theme": "/lib/debugger/edt.css",
             "panels": ["locals", "request", "session", "template", "nav"]
         }
+    },
+    "sentry": {
+        "node": "",
+        "browser": ""
     },
     "cookies": {
         "rememberme": "usrr"
