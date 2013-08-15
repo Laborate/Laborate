@@ -32,8 +32,8 @@ window.editorUtil = {
             window.editor.setGutterMarker(data["line"], "breakpoints", info.gutterMarkers ? null : marker);
             window.socketUtil.socket.emit('editorExtras', {
                 "breakpoint": {
-                    "line":data["line"],
-                    "remove":info.gutterMarkers
+                    "line": data["line"],
+                    "remove": info.gutterMarkers
                 }
             });
         } else if(direction == "in") {
@@ -127,7 +127,7 @@ window.editorUtil = {
                         }
                     } else {
                         if(json.error_message) {
-                            window.backdrop.error(json.error_message, json.redirect_url);
+                            window.editorUtil.error(json.error_message, json.redirect_url);
                         } else {
                             window.location.href = json.redirect_url;
                         }

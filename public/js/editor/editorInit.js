@@ -22,6 +22,7 @@ window.socketUtil = {
 
     },
     reconnect: function() {
+        window.socketUtil.connect();
         if(!$("#backdrop").is(":visible")) {
             window.socketUtil.socket.emit("editorJoin", [window.editorUtil.access_token, true], function(json) {
                 if(!json.success) {
@@ -40,6 +41,7 @@ window.socketUtil = {
 window.socketUtil.socket.on("connect", window.socketUtil.connect);
 window.socketUtil.socket.on("reconnect", window.socketUtil.reconnect);
 window.socketUtil.socket.on("reconnecting", window.socketUtil.disconnect);
+window.socketUtil.socket.on("disconnect", window.socketUtil.disconnect);
 window.onoffline = window.socketUtil.disconnect;
 
 window.socketUtil.socket.on('connect_failed', function () {

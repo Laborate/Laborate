@@ -3,8 +3,9 @@ require("../lib/models").socket(function(response) {
     exports.models = response;
 });
 
-exports.redisClient = require('redis').createClient();
-exports.roomUsers = {};
+exports.redis = require('redis');
+exports.redisClient = exports.redis.createClient();
+exports.roomUsers = new Array();
 
 exports.users = function(user, room) {
     if(room in exports.roomUsers) {
@@ -22,18 +23,19 @@ exports.users = function(user, room) {
 
 exports.addUser = function(req, user, room, document) {
     if(!(room in exports.roomUsers)) {
-        exports.roomUsers[room] = {};
-        exports.redisClient.set(room, document);
+        exports.roomUsers[room] = new Array();
+        exports.redisClient.set(room, JSON.stringify({
+            content: document.content,
+            breakpoints: document.breakpoints
+        }));
     }
 
-    if(!(user in exports.roomUsers[room])) {
-        req.io.join(exports.socketRoom(req));
-        exports.roomUsers[room][user] = {
-            "socket": req.io.socket.id,
-            "update": setInterval(function() {
-                req.io.emit('editorUsers', exports.users(user, room));
-            }, 2000)
-        }
+    req.io.join(room);
+    exports.roomUsers[room][user] = {
+        "socket": req.io.socket.id,
+        "update": setInterval(function() {
+            req.io.emit('editorUsers', exports.users(user, room));
+        }, 2000)
     }
 }
 
@@ -45,13 +47,15 @@ exports.removeUser = function(req, user, room) {
             req.io.leave(exports.socketRoom(req));
             req.io.socket.disconnect();
 
-            if(exports.roomUsers[room].length == 0) {
+            if(Object.keys(exports.roomUsers[room]).length == 0) {
                 delete exports.roomUsers[room];
                 exports.redisClient.get(room, function(error, reply) {
-                     exports.models.documents.get(room, function(error, document) {
-                        document.content = (reply.length != 0) ? reply : null;
+                    reply = JSON.parse(reply);
+                    exports.models.documents.get(exports.room(req), function(error, document) {
+                        document.content = reply.content;
+                        document.breakpoints = reply.breakpoints;
                         exports.redisClient.del(room);
-                     });
+                    });
                 });
             }
         }

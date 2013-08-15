@@ -71,7 +71,7 @@ workers = function() {
         app.use(express.cookieParser());
         app.use(express.session({
             key: config.cookie_session.key,
-            secret: require("generate-key").generateKey(50),
+            secret: config.cookie_session.secret,
             store: new RedisStore({
                 client: redis.createClient()
             })
