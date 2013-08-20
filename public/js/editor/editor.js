@@ -5,6 +5,8 @@ $(window).ready(function() {
         lineNumbers: true,
         lineWrapping: true,
         matchBrackets: true,
+        matchTags: true,
+        extraKeys: {"Ctrl-J": "toMatchingTag"},
         tabMode: "indent",
         theme: "laborate",
         indentUnit: 4,

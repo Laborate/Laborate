@@ -36,9 +36,9 @@ module.exports = function(app) {
     app.get('/documents/locations', auth.restrictAccess, auth.xhr, documents.locations);
     app.get(/^\/documents\/([\w\d]{10})\/(.*?)/, auth.restrictAccess, documents.index);
     app.get(/^\/documents\/location\/([\w\d]{10})\/(.*)/, auth.restrictAccess, documents.location);
-    app.post(/^\/documents\/file\/create\/$/, auth.restrictAccess, auth.xhr, documents.file_create);
-    app.post(/^\/documents\/file\/(\d*)\/rename\/$/, auth.restrictAccess, auth.xhr, documents.file_rename);
-    app.post(/^\/documents\/file\/(\d*)\/remove\/$/, auth.restrictAccess, auth.xhr, documents.file_remove);
+    app.post('/documents/file/create', auth.restrictAccess, auth.xhr, documents.file_create);
+    app.post('/documents/file/:document/rename', auth.restrictAccess, auth.xhr, documents.file_rename);
+    app.post('/documents/file/:document/remove', auth.restrictAccess, auth.xhr, documents.file_remove);
     app.post('/documents/location/create', auth.restrictAccess, auth.xhr, documents.create_location);
     app.post('/documents/location/remove', auth.restrictAccess, auth.xhr, documents.remove_location);
 
@@ -46,7 +46,7 @@ module.exports = function(app) {
     app.get('/editor', auth.restrictAccess, update.index, editor.access_token, editor.index);
     app.get('/editor/:document', auth.restrictAccess, update.index, editor.access_token, editor.index);
     app.get('/editor/:document/download/:access_token', auth.restrictAccess, editor.access_token, editor.download);
-    app.get('/editor/:document/download/', auth.restrictAccess, editor.access_token, editor.download);
+    app.get('/editor/:document/download', auth.restrictAccess, editor.access_token, editor.download);
     app.post('/editor/:document/join', auth.restrictAccess, auth.xhr, editor.access_token, editor.join);
     app.post('/editor/:document/update', auth.restrictAccess, auth.xhr, editor.access_token, editor.update);
     app.post('/editor/:document/remove', auth.restrictAccess, auth.xhr, editor.access_token, editor.remove);

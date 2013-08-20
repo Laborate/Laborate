@@ -1,5 +1,5 @@
 exports.index = function(req, res) {
-    res.render('account', {
+    res.renderOutdated('account', {
         title: 'Account',
         navigation: 'User Settings',
         mode: "account",

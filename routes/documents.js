@@ -5,7 +5,7 @@ var rand = require("generate-key");
 var github = require("./github");
 
 exports.index = function(req, res, next) {
-    res.render('documents', {
+    res.renderOutdated('documents', {
         title: 'Documents',
         navigation: 'Documents Drive',
         mode: "documents",
@@ -56,7 +56,7 @@ exports.file_create = function(req, res, next) {
 };
 
 exports.file_rename = function(req, res, next) {
-    req.models.documents.get(req.param("0"), function(error, document) {
+    req.models.documents.get(req.param("document"), function(error, document) {
         if(!error) {
             document.name = req.param("name");
             res.json({ success: true });
@@ -67,7 +67,7 @@ exports.file_rename = function(req, res, next) {
 };
 
 exports.file_remove = function(req, res, next) {
-    req.models.documents.get(req.param("0"), function(error, document) {
+    req.models.documents.get(req.param("document"), function(error, document) {
         if(!error) {
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {

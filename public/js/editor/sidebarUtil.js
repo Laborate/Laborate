@@ -263,8 +263,24 @@ window.sidebarUtil = {
         }
 	},
 	downloadFile: function() {
-	    var token = (window.editorUtil.access_token) ? (window.editorUtil.access_token + "/") : "";
-		window.location.href = "/editor/" + window.url_params()["document"] + "/download/" + token;
+		var url = "/editor/" + window.url_params()["document"] + "/download/";
+		url += (window.editorUtil.access_token) ? (window.editorUtil.access_token + "/") : "";
+
+        $("#downloadFile").addClass("disabled").val("Downloading...");
+		$.fileDownload(url, {
+            successCallback: function (url) {
+                $("#downloadFile").removeClass("disabled red_harsh").val("Download File");
+            },
+            failCallback: function (responseHtml, url) {
+                $("#downloadFile").removeClass("disabled").addClass("red_harsh").val("Download Failed");
+
+                setTimeout(function() {
+                    $("#downloadFile").removeClass("disabled red_harsh").val("Download File");
+                }, 5000);
+            }
+		}).done(function() {
+
+		});
     },
     commitFile: function() {
         $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting...");

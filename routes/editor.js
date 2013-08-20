@@ -10,7 +10,7 @@ exports.index = function(req, res, next) {
                                                     "header", "jscroll")
                 }
 
-                res.render('editor', {
+                res.renderOutdated('editor', {
                     title: document.name,
                     navigation: document.name,
                     mode: "editor",
@@ -97,16 +97,15 @@ exports.download = function(req, res, next) {
         if(documents.length == 1) {
             if(!error) {
                 var document = documents[0].document;
-                console.log(req.access_token);
-                console.log(document.password);
                 if(document.password == req.access_token) {
+                    res.cookie("fileDownload", true, {path: "/"});
                     res.attachment(document.name);
-                    res.end((document.content) ? document.content.join("\n") : "");
+                    res.end((document.content) ? document.content.join("\n") : "", "UTF-8");
                 } else {
-                    res.error(200, "Failed To Download File");
+                    res.error(404);
                 }
             } else {
-                res.error(200, "Failed To Download File");
+                res.error(400, "Failed To Download File");
             }
         } else {
             res.error(404);
@@ -162,7 +161,11 @@ exports.invite = function(req, res, next) {
                                 name: document.name,
                                 access: (document.password) ? "Password" : "Open",
                                 collaborators: $.map(document.roles, function(role) {
-                                    return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
+                                    if(role.user) {
+                                        return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
+                                    } else {
+                                        return null;
+                                    }
                                 }).join(", "),
                                 message: req.param("message")
                             }
