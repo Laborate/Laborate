@@ -40,7 +40,7 @@ window.backdrop = {
     },
     error: function(message, url) {
         $("#backdrop .textError").hide();
-        $("body > div").not("#backdrop").remove();
+        $("body > *").not("#backdrop").remove();
         $("#backdrop").show();
         $(".backdropContainer")
             .width("320px")
@@ -51,6 +51,12 @@ window.backdrop = {
             );
 
         $("#backdropCore").hAlign().vAlign();
+
+        if(socketUtil) {
+            socketUtil.socket.disconnect();
+            delete socketUtil;
+            io = undefined;
+        }
 
         if(url) {
             if(url == true) {
