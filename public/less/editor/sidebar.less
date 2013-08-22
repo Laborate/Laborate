@@ -13,7 +13,7 @@
 #sidebar #sidebar_header {
     margin-top: 49px;
     background: #EDEDED;
-    padding: 10px 0px 8px 0px;
+    padding: 10px 0 8px 24px;
     background-image: url("/img/tshadowUp.png");
     background-position: 0px 35px;
     background-position-x: 0px;
@@ -22,17 +22,15 @@
     text-align: center;
 }
 
-#sidebar #sidebar_header img {
+#sidebar #sidebar_header .icon {
     margin-right: 20px;
     opacity: .5;
     cursor: pointer;
+    color: #49565C;
 }
 
-#sidebar #sidebar_header img:last-child {
-    margin-right: 0px;
-}
-
-#sidebar #sidebar_header img:hover, #sidebar #sidebar_header .state_active {
+#sidebar #sidebar_header .icon:hover,
+#sidebar #sidebar_header .state_active {
     opacity: 1;
 }
 

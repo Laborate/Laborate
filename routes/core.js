@@ -6,8 +6,8 @@ exports.config = function(req, res, next) {
 
     //Response Locals
     res.locals.host = req.host;
-    res.locals.site_title = config.general.site_title;
-    res.locals.site_delimeter = config.general.site_delimeter;
+    res.locals.site_title = config.general.product + config.general.delimeter.web + config.general.company;
+    res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.csrf = req.session._csrf;
     res.locals.port = config.general.port;
     res.locals.sentry = config.sentry.browser;

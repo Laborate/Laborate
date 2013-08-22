@@ -1,7 +1,7 @@
 window.sidebarUtil = {
 	change: function(module, focusElement) {
 		$(".sidebar_content_inner").hide();
-		$("#sidebar_header img").removeClass("state_active");
+		$("#sidebar_header .icon").removeClass("state_active");
 		$("#sidebar_header #" + module).addClass("state_active");
 		$("#sidebar_"+ module).show();
 		$("#" + focusElement).focus();
