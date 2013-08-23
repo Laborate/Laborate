@@ -85,9 +85,6 @@ workers = function() {
         app.use(require("./routes/core").config);
         app.use(error.global);
         app.use(error.handler);
-
-        //Send Error Logging To Sentry
-        app.use(raven.middleware.express(config.sentry.node));
     });
 
     /* Development Only */
@@ -103,6 +100,12 @@ workers = function() {
                 config.development.basicAuth.password
             ));
         }
+    });
+
+    app.configure('production', function() {
+        //Send Error Logging To Sentry
+        app.use(raven.middleware.express(config.sentry.node));
+
     });
 
     /* Express: Start Router */

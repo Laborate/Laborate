@@ -5,11 +5,12 @@ exports.config = function(req, res, next) {
     res.setHeader("Server", "Laborate.io");
 
     //Response Locals
+    res.locals.csrf = req.session._csrf;
+    res.locals.port = config.general.port;
+    res.locals.environment = config.general.environment;
     res.locals.host = req.host;
     res.locals.site_title = config.general.product + config.general.delimeter.web + config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
-    res.locals.csrf = req.session._csrf;
-    res.locals.port = config.general.port;
     res.locals.sentry = config.sentry.browser;
 
     //Replace Views Elements For Compatibility With IE

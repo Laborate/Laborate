@@ -26,7 +26,7 @@ exports.files = function(req, res, next) {
                 files.push({
                     id: value.document_id,
                     name: value.document.name,
-                    password: (value.document.password),
+                    password: (value.document.password != null),
                     location: value.document.location,
                     role: value.permission.name
                 });

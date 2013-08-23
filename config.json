@@ -1,7 +1,7 @@
 {
     "profile": {
-        "name": "brian",
-        "email": "brian@laborate.io"
+        "name": "",
+        "email": ""
     },
     "general": {
         "port": 3000,
@@ -12,13 +12,12 @@
         "delimeter": {
             "web": " · ",
             "email": " - "
-        },
-        "environment": "development"
+        }
     },
     "development" : {
         "basicAuth": {
-            "username": "brian",
-            "password": "bjv0623"
+            "username": "",
+            "password": ""
         },
         "debugger": {
             "theme": "/lib/debugger/edt.css",
@@ -26,27 +25,27 @@
         }
     },
     "sentry": {
-        "node": "https://beba575a90b44554a7476cd03e1d0c77:1bd6854a99524779963e3e1f71ed7c01@app.getsentry.com/11924",
-        "browser": "https://beba575a90b44554a7476cd03e1d0c77@app.getsentry.com/11924"
+        "node": "",
+        "browser": ""
     },
     "cookies": {
         "rememberme": "usrr"
     },
     "cookie_session": {
         "key": "usrs",
-        "secret": "3gh235hjk4l;654536jl4hk5g64f5c63d4fghj23k4234oajhsgfjas32489237treiyuwf"
+        "secret": ""
     },
     "orm": {
         "dialect": "mysql",
         "port": 3306,
         "host": "localhost",
-        "database": "laborate_brian",
-        "username": "brian",
-        "password": "bjv0623"
+        "database": "",
+        "username": "",
+        "password": ""
     },
     "github": {
-        "id": "310d8a45f13df3dfbf95",
-        "secret": "0be78393c4533047b1e1e230cd3f8039e82879d5",
+        "id": "",
+        "secret": "",
         "scope": ["user", "repo", "gist"]
     },
     "email": {

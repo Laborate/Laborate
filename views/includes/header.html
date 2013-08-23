@@ -52,10 +52,12 @@
         <!-- Javascript -->
         <%- js %>
 
-        <!-- Sentry Logging -->
-        <script type="text/javascript">
-            Raven.config("<%= sentry %>").install();
-            window.onerror = Raven.process;
-        </script>
+        <% if(environment == "production") { %>
+            <!-- Sentry Logging -->
+            <script type="text/javascript">
+                Raven.config("<%= sentry %>").install();
+                window.onerror = Raven.process;
+            </script>
+        <% } %>
     </head>
     <body>
