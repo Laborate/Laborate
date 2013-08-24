@@ -3,49 +3,21 @@ var editorUtil = require("./editorUtil");
 /* Route Functions */
 exports.join = function(req) {
     if(req.session.user) {
-        editorUtil.models.documents_roles.find({
-            user_id: req.session.user.id,
-            document_id: editorUtil.room(req)
-        }, function(error, documents) {
-            if(documents.length == 1 && !error) {
-                var document = documents[0].document;
-                if(!document.password || req.data[0] == document.password) {
-                    if(req.data[1] || !editorUtil.inRoom(req.session.user.screen_name, editorUtil.socketRoom(req))) {
-                        editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req), document);
-                        req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
-                            message: req.session.user.screen_name + " joined the document",
-                            isStatus: true
-                        });
-
-                        req.io.respond({
-                            success: true,
-                            content: (document.content) ? document.content.join("\n") : "",
-                            breakpoints: ((document.breakpoints) ? $.map(document.breakpoints, function(value) {
-                                return {"line": value};
-                            }) : [])
-                        });
-                    } else {
-                        req.io.respond({
-                            success: false,
-                            error_message: "You Are Already Editing This Document"
-                        });
-                    }
+        editorUtil.accessCheck(req.session.user.id, editorUtil.room(req), req.data[0], function(access_object) {
+            if(access_object.success) {
+                if(!editorUtil.inRoom(req.data[1], req.session.user.screen_name, editorUtil.socketRoom(req))) {
+                    editorUtil.clientData(editorUtil.socketRoom(req), access_object.document, function(data) {
+                        editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+                        req.io.respond(data);
+                    });
                 } else {
                     req.io.respond({
                         success: false,
-                        error_message: "Incorrect Password",
-                        redirect_url: "/documents/"
+                        error_message: "You Are Already Editing This Document"
                     });
-
-                    //Force Socket Disconnect
-                    req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
                 }
             } else {
-                req.io.respond({
-                    success: false,
-                    error_message: "Document Does Not Exist",
-                    redirect_url: "/documents/"
-                });
+                req.io.respond(access_object);
 
                 //Force Socket Disconnect
                 req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
@@ -57,6 +29,9 @@ exports.join = function(req) {
             error_message: "Log In Required",
             redirect_url: true
         });
+
+        //Force Socket Disconnect
+        req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
     }
 }
 
@@ -95,9 +70,14 @@ exports.chatRoom = function(req) {
 
 exports.document = function(req) {
     if(req.session.user) {
-        //console.log(req.data["changes"]);
         req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
+
+        editorUtil.redisClient.get(editorUtil.socketRoom(req), function(error, reply) {
+            reply = JSON.parse(reply);
+            reply.changes.push(req.data["changes"]);
+            editorUtil.redisClient.set(editorUtil.socketRoom(req), JSON.stringify(reply));
+        });
     }
 }
 
@@ -109,36 +89,41 @@ exports.cursors = function(req) {
 }
 
 exports.extras = function(req) {
+    //Methods
+    this.breakpoints = function(changes, breakpoints, callback) {
+        $.each(changes, function(index, value) {
+            if(value.remove) {
+                if(breakpoints.indexOf(value.line) > -1) {
+                    breakpoints.splice(breakpoints.indexOf(value.line), 1);
+                }
+            } else {
+                breakpoints.push(value.line);
+            }
+        });
+
+        callback(breakpoints);
+    }
+
+    this.get = function(callback) {
+        editorUtil.redisClient.get(editorUtil.socketRoom(req), function(error, reply) {
+            callback(JSON.parse(reply));
+        });
+    }
+
+    this.save = function(data) {
+        editorUtil.redisClient.set(editorUtil.socketRoom(req), JSON.stringify(data));
+    }
+
+    //Logic
     if(req.session.user) {
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', req.data);
 
         if("breakpoint" in req.data) {
-            editorUtil.redisClient.get(editorUtil.socketRoom(req), function(error, reply) {
-                reply = JSON.parse(reply);
-
-                if(!reply.breakpoints) {
-                    reply.breakpoints = new Array();
-                }
-
-                $.each(req.data.breakpoint, function(index, value) {
-                    if(value.remove) {
-                        if(reply.breakpoints.indexOf(value.line) > -1) {
-                            reply.breakpoints.splice(reply.breakpoints.indexOf(value.line), 1);
-                        }
-
-                        if(reply.breakpoints.length == 0) {
-                            reply.breakpoints = null;
-                        }
-                    } else {
-                        reply.breakpoints.push(value.line);
-                    }
+            this.get(function(reply) {
+                this.breakpoints(req.data.breakpoint, reply.breakpoints, function(breakpoints) {
+                    reply.breakpoints = breakpoints;
                 });
-
-
-                editorUtil.redisClient.set(editorUtil.socketRoom(req), JSON.stringify({
-                    content: reply.content,
-                    breakpoints: reply.breakpoints
-                }));
+                this.save(reply);
             });
         }
     }

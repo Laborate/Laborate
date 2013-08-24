@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////
 window.editorUtil = {
     clean: true,
-    setChanges: function(direction, data) {
+    setChanges: function(direction, data, override) {
         if(data['origin'] != "setValue") {
             if(direction == "out") {
                 if(window.editorUtil.clean) {
@@ -14,7 +14,7 @@ window.editorUtil = {
                     window.editorUtil.clean = true;
                 }
             } else if(direction == "in") {
-                if(window.editorUtil.clean) {
+                if(window.editorUtil.clean || override) {
                     window.editorUtil.clean = false;
                     window.editor.replaceRange(data['text'], data['from'], data['to']);
                 } else {
@@ -115,12 +115,13 @@ window.editorUtil = {
         window.editor.refresh();
         window.editorUtil.refresh();
     },
-    join: function(password) {
+    join: function(password, reconnect, callback) {
         //Have to wait for the socket to initialize
         interval = setInterval(function() {
             if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
-                window.socketUtil.socket.emit("editorJoin", [password, false], function(json) {
+                window.socketUtil.socket.emit("editorJoin", [password, reconnect], function(json) {
+                    window.debug = json;
                     if(json.success) {
                         if(password) {
                             window.editorUtil.access_token = password;
@@ -128,13 +129,27 @@ window.editorUtil = {
                             window.editorUtil.access_token = null;
                         }
 
-                        window.editor.setValue(json.content);
-
-                        setTimeout(function() {
-                            window.editorUtil.gutterClick("in", json.breakpoints);
-                            window.editor.clearHistory();
-                            $("#backdrop").hide();
-                        }, 500);
+                        async.series([
+                            function(next) {
+                                window.editor.setValue(json.content);
+                                next();
+                            },
+                            function(next) {
+                                $.each(json.changes, function(index, value) {
+                                    window.editorUtil.setChanges("in", value, true);
+                                });
+                                next();
+                            },
+                            function() {
+                                window.editorUtil.gutterClick("in", json.breakpoints);
+                                window.editor.clearHistory();
+                                if(callback) {
+                                    callback();
+                                } else {
+                                    $("#backdrop").hide();
+                                }
+                            }
+                        ]);
                     } else {
                         if(json.error_message) {
                             window.editorUtil.error(json.error_message, json.redirect_url);

@@ -23,15 +23,7 @@ window.socketUtil = {
     reconnect: function() {
         window.socketUtil.connect();
         if(!$("#backdrop").is(":visible")) {
-            window.socketUtil.socket.emit("editorJoin", [window.editorUtil.access_token, true], function(json) {
-                if(!json.success) {
-                    if(json.error_message) {
-                        window.editorUtil.error(json.error_message, json.redirect_url);
-                    } else {
-                        window.location.href = json.redirect_url;
-                    }
-                }
-            });
+            window.editorUtil.join(window.editorUtil.access_token, true, window.socketUtil.connect);
         }
     }
 }

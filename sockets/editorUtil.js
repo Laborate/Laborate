@@ -21,16 +21,71 @@ exports.users = function(user, room) {
     }
 }
 
-exports.addUser = function(req, user, room, document) {
+exports.accessCheck = function(user, room, token, callback) {
+    exports.models.documents_roles.find({
+        user_id: user,
+        document_id: room[0]
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            var document = documents[0].document;
+            if((!document.password || token == document.password)) {
+                callback({
+                    success: true,
+                    document: document,
+                });
+            } else {
+                callback({
+                    success: false,
+                    error_message: "Incorrect Password",
+                    redirect_url: "/documents/"
+                });
+            }
+        } else {
+            callback({
+                success: false,
+                error_message: "Document Does Not Exist",
+                redirect_url: "/documents/"
+            });
+        }
+    });
+}
+
+exports.clientData = function(room, document, callback) {
+    exports.redisClient.get(room, function(error, reply) {
+        if(!error && reply) {
+            reply = JSON.parse(reply);
+            document.breakpoints = reply.breakpoints;
+            document.changes = reply.changes;
+        } else {
+            document.changes = [];
+            exports.redisClient.set(room, JSON.stringify({
+                breakpoints: (document.breakpoints) ? document.breakpoints : [],
+                changes: []
+            }));
+        }
+
+        callback({
+            success: true,
+            content: (document.content) ? document.content.join("\n") : "",
+            breakpoints: ((document.breakpoints) ? $.map(document.breakpoints, function(value) {
+                return {"line": value};
+            }) : []),
+            changes: document.changes
+        });
+    });
+}
+
+exports.addUser = function(req, user, room) {
+    req.io.join(room);
+    req.io.room(room).broadcast('editorChatRoom', {
+        message: user + " joined the document",
+        isStatus: true
+    });
+
     if(!(room in exports.roomUsers)) {
         exports.roomUsers[room] = new Array();
-        exports.redisClient.set(room, JSON.stringify({
-            content: document.content,
-            breakpoints: document.breakpoints
-        }));
     }
 
-    req.io.join(room);
     exports.roomUsers[room][user] = {
         "socket": req.io.socket.id,
         "update": setInterval(function() {
@@ -53,8 +108,7 @@ exports.removeUser = function(req, user, room) {
                     reply = JSON.parse(reply);
                     exports.models.documents.get(exports.room(req), function(error, document) {
                         if(!error && document) {
-                            document.content = reply.content;
-                            document.breakpoints = reply.breakpoints;
+                            document.breakpoints = (reply.breakpoints.length != 0) ? reply.breakpoints : null;
                         }
                         exports.redisClient.del(room);
                     });
@@ -84,10 +138,14 @@ exports.socketRoom = function(req) {
     return "editor" + exports.room(req);
 }
 
-exports.inRoom = function(user, room) {
-    if(room in exports.roomUsers) {
-        if(user in exports.roomUsers[room]) {
-            return true;
+exports.inRoom = function(reconnect, user, room) {
+    if(!reconnect) {
+        if(room in exports.roomUsers) {
+            if(user in exports.roomUsers[room]) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
