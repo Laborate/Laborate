@@ -52,12 +52,6 @@ window.backdrop = {
 
         $("#backdropCore").hAlign().vAlign();
 
-        if(socketUtil) {
-            socketUtil.socket.disconnect();
-            delete socketUtil;
-            io = undefined;
-        }
-
         if(url) {
             if(url == true) {
                 setTimeout(function() {

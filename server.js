@@ -105,7 +105,6 @@ workers = function() {
     app.configure('production', function() {
         //Send Error Logging To Sentry
         app.use(raven.middleware.express(config.sentry.node));
-
     });
 
     /* Express: Start Router */

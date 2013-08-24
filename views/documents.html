@@ -4,12 +4,17 @@
     <div id="locations_header">
         <div class="left">Locations</div>
         <button id="remove_location" class="location_button right">-</button>
-        <button id="add_location" class="location_button right">+</button>
+        <!-- Remove When SFTP Wrapper Is Made -->
+        <% if(user.github) { %>
+            <button id="add_location" class="location_button right">+</button>
+        <% } else { %>
+            <button id="add_location" class="location_button disabled right">+</button>
+        <% } %>
         <button id="finished_remove_location" class="location_button hidden right">finished</button>
         <div class="clear"></div>
     </div>
     <ul>
-        <li id="online"><span class="icon icon-briefcase"></span>Online Files</li>
+        <li id="online"><span class="icon icon-briefcase"></span>Your Documents</li>
     </ul>
 </div>
 <div id="files">
@@ -53,6 +58,7 @@
                     <td width="85">Name:</td>
                     <td><input autocomplete="off" type="text" class="input full" id="popup_location_name" name="location_name" placeholder="Dev Site"/></td>
                 </tr>
+                <!-- Remove When SFTP Wrapper Is Made
                 <% if(user.github) { %>
                     <tr>
                         <td width="85">Type:</td>
@@ -66,7 +72,10 @@
                 <% } else { %>
                     <input type="hidden" id="popup_location_type" value="sftp" />
                 <% } %>
+                -->
+                <input type="hidden" id="popup_location_type" value="github" />
             </table>
+            <!-- Remove When SFTP Wrapper Is Made
             <div id="popup_location_sftp" class="selection">
                 <table width="100%" cellpadding="0px" cellspacing="0px">
                     <tr>
@@ -87,13 +96,14 @@
                     </tr>
                 </table>
             </div>
-            <% if(user.github) { %>
+            -->
+            <% //if(user.github) { %>
                 <div id="popup_location_github" class="hidden selection scroll">
                     <center id="github_empty" class="hidden" style="margin-top: 50px; color:red;">
                         <strong>You Do Not Have<br>Any Github Repositories</strong>
                     </center>
                 </div>
-            <% } %>
+            <% //} %>
             <input type="submit" class="button blue full" value="Add Location" />
         </form>
     </div>

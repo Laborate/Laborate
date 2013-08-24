@@ -107,10 +107,7 @@ exports.location = function(req, res, next) {
                 break;
         }
     } else {
-        error_lib.handler({
-            status: 200,
-            message: "Location Does Not Exist",
-        }, req, res, next);
+        res.error(200, "Location Does Not Exist");
     }
 };
 

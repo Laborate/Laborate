@@ -52,8 +52,10 @@ exports.removeUser = function(req, user, room) {
                 exports.redisClient.get(room, function(error, reply) {
                     reply = JSON.parse(reply);
                     exports.models.documents.get(exports.room(req), function(error, document) {
-                        document.content = reply.content;
-                        document.breakpoints = reply.breakpoints;
+                        if(!error && document) {
+                            document.content = reply.content;
+                            document.breakpoints = reply.breakpoints;
+                        }
                         exports.redisClient.del(room);
                     });
                 });

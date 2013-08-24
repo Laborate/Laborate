@@ -10,10 +10,6 @@ $("#newFile").live("click", function() {
     window.documents.newFile(window.url_params()["dir"], window.sidebar);
 });
 
-$("#locations #add_location").live("hover", function() {
-    $("#locations #remove_location").css("border-left", "solid 1px #b5b5b5");
-});
-
 $("#locations #add_location").live("mouseout", function() {
     $("#locations #remove_location").css("border-left", "");
 });
@@ -28,8 +24,12 @@ $("#locations:not(.remove) ul li").live("click", function() {
     window.documents.locationChange($(this).attr("id"));
 });
 
+$("#locations #add_location:not(.disabled)").live("hover", function() {
+    $("#locations #remove_location").css("border-left", "solid 1px #b5b5b5");
+});
+
 //Add Location
-$("#locations #add_location").live("click", function() {
+$("#locations #add_location:not(.disabled)").live("click", function() {
     window.documents.addLocation();
 });
 

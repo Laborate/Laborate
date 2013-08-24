@@ -286,7 +286,7 @@ window.documents = {
                     if(item["type"] == "github") { var icon = "icon-github"; }
                     else if(item["type"] == "sftp") { var icon = "icon-drawer"; }
                     else { var icon = "icon-storage"; }
-                    locations += '<li id="' + item['key'] + '" data="' + item['type'] + '">';
+                    locations += '<li id="' + item['key'] + '">';
                     locations += '<div class="left icon ' + icon + '"></div>';
                     locations += '<div class="location_name">' + item['name'] + '</div>';
                     locations += '<div class="clear"></div></li>';
@@ -433,7 +433,11 @@ window.documents = {
                         if(json.error_message == "Bad Github Oauth Token") {
                             window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                         } else {
-                            window.notification.open(json.error_message);
+                            if(no_history) {
+                                window.documents.locationChange("online");
+                            } else {
+                                window.notification.open(json.error_message);
+                            }
                         }
 
                     } else {

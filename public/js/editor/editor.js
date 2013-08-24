@@ -27,7 +27,7 @@ $(window).ready(function() {
     });
 
     window.editor.on("gutterClick", function(cm, n) {
-        window.editorUtil.gutterClick("out", {"line":n});
+        window.editorUtil.gutterClick("out", [{"line":n}]);
     });
 
     window.editor.on("cursorActivity", function() {

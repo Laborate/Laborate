@@ -43,6 +43,20 @@
     border: solid 1px #b5b5b5;
 }
 
+#locations #locations_header .location_button.disabled,
+#locations #locations_header .location_button.disabled:hover,
+#locations #locations_header .location_button.disabled:hover:active {
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -ms-box-shadow: none!important;
+    -o-box-shadow: none !important;
+    box-shadow: none !important;
+    opacity: .5;
+    cursor: not-allowed;
+    border: solid 1px #d9d9d9;
+}
+
+
 #locations #locations_header .location_button:hover:active {
     -webkit-box-shadow:  inset 0px 1px 3px #dfdfdf !important;
     -moz-box-shadow: inset 0px 1px 3px #dfdfdf !important;
@@ -55,6 +69,10 @@
     border-right: none !important;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
+}
+
+#locations #add_location:hover + #remove_location {
+    border-left: solid 1px #b5b5b5
 }
 
 #locations #remove_location {

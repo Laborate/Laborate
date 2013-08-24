@@ -24,21 +24,26 @@ window.editorUtil = {
         }
     },
     gutterClick: function(direction, data) {
-        var info = window.editor.lineInfo(parseInt(data["line"]));
-        var marker = document.createElement("div");
-        marker.className ="CodeMirror-breakpoint";
-        marker.innerHTML = "●";
-        if(direction == "out") {
-            window.editor.setGutterMarker(data["line"], "breakpoints", info.gutterMarkers ? null : marker);
-            window.socketUtil.socket.emit('editorExtras', {
-                "breakpoint": {
-                    "line": data["line"],
-                    "remove": info.gutterMarkers
+        $.each(data, function(index, value) {
+            if(!isNaN(value["line"])) {
+                var info = window.editor.lineInfo(parseInt(value["line"]));
+                var marker = document.createElement("div");
+                marker.className ="CodeMirror-breakpoint";
+                marker.innerHTML = "●";
+
+                if(direction == "out") {
+                    window.editor.setGutterMarker(value["line"], "breakpoints", info.gutterMarkers ? null : marker);
+                    window.socketUtil.socket.emit('editorExtras', {
+                        "breakpoint": [{
+                            "line": value["line"],
+                            "remove": info.gutterMarkers
+                        }]
+                    });
+                } else if(direction == "in") {
+                    window.editor.setGutterMarker(value["line"], "breakpoints", value["remove"] ? null : marker);
                 }
-            });
-        } else if(direction == "in") {
-            window.editor.setGutterMarker(data["line"], "breakpoints", data["remove"] ? null : marker);
-        }
+            }
+        });
     },
     users: function(data) {
         $.when($(Object.keys(window.users)).not(data).each(function(index, value) {
@@ -117,14 +122,19 @@ window.editorUtil = {
                 clearInterval(interval);
                 window.socketUtil.socket.emit("editorJoin", [password, false], function(json) {
                     if(json.success) {
-                        window.editor.setValue(json.content);
-                        window.editor.clearHistory();
-                        $("#backdrop").hide();
                         if(password) {
                             window.editorUtil.access_token = password;
                         } else {
                             window.editorUtil.access_token = null;
                         }
+
+                        window.editor.setValue(json.content);
+
+                        setTimeout(function() {
+                            window.editorUtil.gutterClick("in", json.breakpoints);
+                            window.editor.clearHistory();
+                            $("#backdrop").hide();
+                        }, 500);
                     } else {
                         if(json.error_message) {
                             window.editorUtil.error(json.error_message, json.redirect_url);
