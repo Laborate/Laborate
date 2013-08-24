@@ -28,6 +28,10 @@ $("#locations #add_location:not(.disabled)").live("hover", function() {
     $("#locations #remove_location").css("border-left", "solid 1px #b5b5b5");
 });
 
+$("#locations #add_location:not(.disabled)").live("mouseout", function() {
+    $("#locations #remove_location").css("border-left", "");
+});
+
 //Add Location
 $("#locations #add_location:not(.disabled)").live("click", function() {
     window.documents.addLocation();

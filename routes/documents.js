@@ -23,13 +23,15 @@ exports.files = function(req, res, next) {
         if(!error) {
             var files = [];
             $.each(documents, function(key, value) {
-                files.push({
-                    id: value.document_id,
-                    name: value.document.name,
-                    password: (value.document.password != null),
-                    location: value.document.location,
-                    role: value.permission.name
-                });
+                if(value) {
+                    files.push({
+                        id: value.document_id,
+                        name: value.document.name,
+                        password: (value.document.password != null),
+                        location: value.document.location,
+                        role: value.permission.name
+                    });
+                }
             });
 
             res.json(files);
