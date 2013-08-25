@@ -95,27 +95,60 @@ exports.addUser = function(req, user, room) {
 }
 
 exports.removeUser = function(req, user, room) {
+    req.io.leave(room);
+    req.io.socket.disconnect();
+
     if(room in exports.roomUsers) {
         if(user in exports.roomUsers[room]) {
             clearInterval(exports.roomUsers[room][user]["update"]);
             delete exports.roomUsers[room][user];
-            req.io.leave(exports.socketRoom(req));
-            req.io.socket.disconnect();
 
             if(Object.keys(exports.roomUsers[room]).length == 0) {
                 delete exports.roomUsers[room];
-                exports.redisClient.get(room, function(error, reply) {
-                    reply = JSON.parse(reply);
-                    exports.models.documents.get(exports.room(req), function(error, document) {
-                        if(!error && document) {
-                            document.breakpoints = (reply.breakpoints.length != 0) ? reply.breakpoints : null;
-                        }
+                exports.models.documents.get(exports.room(req), function(error, document) {
+                    if(!error && document) {
+                        exports.redisClient.get(room, function(error, reply) {
+                            reply = JSON.parse(reply);
+                            exports.applyChanges(document, reply.changes, function(content) {
+                                document.save({
+                                    content: (content) ? content : null,
+                                    breakpoints: (reply.breakpoints.length != 0) ? reply.breakpoints : null
+                                });
+                            });
+                            exports.redisClient.del(room);
+                        });
+                    } else  {
                         exports.redisClient.del(room);
-                    });
+                    }
                 });
             }
         }
     }
+}
+
+exports.applyChanges =  function(document, changes, callback) {
+    //Hot Patch Util jsdom works
+    return callback(document.content);
+
+    var html = "<html><head></head><body><textarea id='code'></textarea></body></html>";
+    var jsdom = require("jsdom").env(html, {
+        scripts: ['../node_modules/codemirror/lib/codemirror.js'],
+        done: function(errors, window) {
+            var document = window.document;
+
+            //Create Virtual Editor
+            var editor = window.CodeMirror(document.getElementById("code"), {
+                value: (document.content) ? document.content.join("\n") : ""
+            });
+
+            //Apply Change Objects
+            $.each(document.breakpoints, function(index, value) {
+                editor.replaceRange(value['text'], value['from'], value['to']);
+            });
+
+            callback(editor.getValue());
+        }
+    });
 }
 
 exports.userSocket = function(user, room) {

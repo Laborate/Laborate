@@ -121,7 +121,6 @@ window.editorUtil = {
             if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
                 window.socketUtil.socket.emit("editorJoin", [password, reconnect], function(json) {
-                    window.debug = json;
                     if(json.success) {
                         if(password) {
                             window.editorUtil.access_token = password;
@@ -135,19 +134,25 @@ window.editorUtil = {
                                 next();
                             },
                             function(next) {
+                                window.editorUtil.gutterClick("in", json.breakpoints);
+                                next();
+                            },
+                            function(next) {
                                 $.each(json.changes, function(index, value) {
                                     window.editorUtil.setChanges("in", value, true);
                                 });
                                 next();
                             },
-                            function() {
-                                window.editorUtil.gutterClick("in", json.breakpoints);
+                            function(next) {
                                 window.editor.clearHistory();
+
                                 if(callback) {
                                     callback();
                                 } else {
                                     $("#backdrop").hide();
                                 }
+
+                                next();
                             }
                         ]);
                     } else {
