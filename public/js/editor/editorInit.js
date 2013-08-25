@@ -18,12 +18,20 @@ window.socketUtil = {
         }
         window.notification.open("Reconnecting...", true);
         window.editorUtil.users([]);
+        $("title").text([
+            $("title").text().split(window.config.delimeter)[0],
+            "Reconnecting"
+        ].join(window.config.delimeter));
 
     },
     reconnect: function() {
         window.socketUtil.connect();
         if(!$("#backdrop").is(":visible")) {
             window.editorUtil.join(window.editorUtil.access_token, true, window.socketUtil.connect);
+            $("title").text([
+                $("title").text().split(window.config.delimeter)[0],
+                window.config.name
+            ].join(window.config.delimeter));
         }
     }
 }
