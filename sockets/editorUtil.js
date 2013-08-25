@@ -105,15 +105,21 @@ exports.removeUser = function(req, user, room) {
 
             if(Object.keys(exports.roomUsers[room]).length == 0) {
                 delete exports.roomUsers[room];
-                exports.models.documents.get(exports.room(req), function(error, document) {
-                    if(!error && document) {
+                exports.models.documents_roles.find({
+                    user_id: req.session.user.id,
+                    document_id: exports.room(req)
+                }, function(error, documents) {
+                    if(!error && documents.length == 1) {
+                        var document = documents[0].document;
                         exports.redisClient.get(room, function(error, reply) {
                             reply = JSON.parse(reply);
                             exports.applyChanges(document, reply.changes, function(content) {
+                                /* Orm gives RangeError on save (Internal Bug)
                                 document.save({
                                     content: (content) ? content : null,
                                     breakpoints: (reply.breakpoints.length != 0) ? reply.breakpoints : null
                                 });
+                                */
                             });
                             exports.redisClient.del(room);
                         });
@@ -127,7 +133,7 @@ exports.removeUser = function(req, user, room) {
 }
 
 exports.applyChanges =  function(document, changes, callback) {
-    //Hot Patch Util jsdom works
+    //Hot Patch Util Jsdom Works
     return callback(document.content);
 
     var html = "<html><head></head><body><textarea id='code'></textarea></body></html>";

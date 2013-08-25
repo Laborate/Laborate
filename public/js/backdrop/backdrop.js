@@ -1,6 +1,6 @@
 window.backdrop = {
     ready: function() {
-        $("#backdropCore").hide().vAlign().hAlign().show();
+        $("#backdropCore").vAlign().hAlign().show();
         $("#backdrop input[type=text]").attr({"spellcheck": false});
     },
     submit: function() {
