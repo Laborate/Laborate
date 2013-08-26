@@ -13,7 +13,11 @@ window.documents = {
         if(preset == "location_add") {
             $("#popup #location_add").show();
             $("#popup #location_add .selection").eq(0).show();
-            $("#popup #popup_header #popup_header_name").text("New Location");
+
+            // Until SFTP Is Working
+            //$("#popup #popup_header #popup_header_name").text("New Location");
+            $("#popup #popup_header #popup_header_name").text("New Location (Github)");
+
             $("#popup #location_add .select").val($("#popup #location_add .select option:first").val());
             $("#popup").css({"width": "280"});
         }
