@@ -4,46 +4,50 @@
 window.editorUtil = {
     clean: true,
     setChanges: function(direction, data, override) {
-        if(data['origin'] != "setValue") {
-            if(direction == "out") {
-                if(window.editorUtil.clean) {
-                    window.socketUtil.socket.emit('editorDocument', {
-                        "changes": data
-                    });
-                } else {
-                    window.editorUtil.clean = true;
-                }
-            } else if(direction == "in") {
-                if(window.editorUtil.clean || override) {
-                    window.editorUtil.clean = false;
-                    window.editor.replaceRange(data['text'], data['from'], data['to']);
-                } else {
-                    window.editorUtil.clean = true;
+        if(window.editorUtil.initialized) {
+            if(data['origin'] != "setValue") {
+                if(direction == "out") {
+                    if(window.editorUtil.clean) {
+                        window.socketUtil.socket.emit('editorDocument', {
+                            "changes": data
+                        });
+                    } else {
+                        window.editorUtil.clean = true;
+                    }
+                } else if(direction == "in") {
+                    if(window.editorUtil.clean || override) {
+                        window.editorUtil.clean = false;
+                        window.editor.replaceRange(data['text'], data['from'], data['to']);
+                    } else {
+                        window.editorUtil.clean = true;
+                    }
                 }
             }
         }
     },
     gutterClick: function(direction, data) {
-        $.each(data, function(index, value) {
-            if(!isNaN(value["line"])) {
-                var info = window.editor.lineInfo(parseInt(value["line"]));
-                var marker = document.createElement("div");
-                marker.className ="CodeMirror-breakpoint";
-                marker.innerHTML = "●";
+        if(window.editorUtil.initialized) {
+            $.each(data, function(index, value) {
+                if(!isNaN(value["line"])) {
+                    var info = window.editor.lineInfo(parseInt(value["line"]));
+                    var marker = document.createElement("div");
+                    marker.className ="CodeMirror-breakpoint";
+                    marker.innerHTML = "●";
 
-                if(direction == "out") {
-                    window.editor.setGutterMarker(value["line"], "breakpoints", info.gutterMarkers ? null : marker);
-                    window.socketUtil.socket.emit('editorExtras', {
-                        "breakpoint": [{
-                            "line": value["line"],
-                            "remove": info.gutterMarkers
-                        }]
-                    });
-                } else if(direction == "in") {
-                    window.editor.setGutterMarker(value["line"], "breakpoints", value["remove"] ? null : marker);
+                    if(direction == "out") {
+                        window.editor.setGutterMarker(value["line"], "breakpoints", info.gutterMarkers ? null : marker);
+                        window.socketUtil.socket.emit('editorExtras', {
+                            "breakpoint": [{
+                                "line": value["line"],
+                                "remove": info.gutterMarkers
+                            }]
+                        });
+                    } else if(direction == "in") {
+                        window.editor.setGutterMarker(value["line"], "breakpoints", value["remove"] ? null : marker);
+                    }
                 }
-            }
-        });
+            });
+        }
     },
     users: function(data) {
         $.when($(Object.keys(window.users)).not(data).each(function(index, value) {
@@ -69,21 +73,23 @@ window.editorUtil = {
         $("#contributor_info #contributor_info_name").text("");
     },
     userCursors: function(direction, data) {
-        if(direction == "out") {
-            if(data['leave']) {
-                window.socketUtil.socket.emit('editorCursors', {"leave":true});
-            } else {
-                window.socketUtil.socket.emit('editorCursors', {"line":data['line']});
-            }
-        } else if(direction == "in") {
-            if(data['leave']) {
-                window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
-                window.users[data['from']] = -1;
-            }
-            else {
-                window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
-                window.editor.addLineClass(data['line'], "", ("u"+data['from']));
-                window.users[data['from']] = data['line'];
+        if(window.editorUtil.initialized) {
+            if(direction == "out") {
+                if(data['leave']) {
+                    window.socketUtil.socket.emit('editorCursors', {"leave":true});
+                } else {
+                    window.socketUtil.socket.emit('editorCursors', {"line":data['line']});
+                }
+            } else if(direction == "in") {
+                if(data['leave']) {
+                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+                    window.users[data['from']] = -1;
+                }
+                else {
+                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+                    window.editor.addLineClass(data['line'], "", ("u"+data['from']));
+                    window.users[data['from']] = data['line'];
+                }
             }
         }
     },
@@ -152,6 +158,7 @@ window.editorUtil = {
                                     $("#backdrop").hide();
                                 }
 
+                                window.editorUtil.initialized = true;
                                 next();
                             }
                         ]);
