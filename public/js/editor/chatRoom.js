@@ -200,5 +200,11 @@ $(window).ready(function() {
         else {
             window.chatRoom.message(data['from'], data['message'], "in");
         }
+
+        if($("#header").is(":visible") == false) {
+            var count = $("#chat_bubble_count").text();
+            count = (count) ? parseInt(count) : 0;
+            $("#chat_bubble_count").text(count + 1);
+        }
     });
 });

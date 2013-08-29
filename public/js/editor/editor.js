@@ -87,7 +87,7 @@ $(window).ready(function() {
     });
 
     //Toogle Full Screen Mode
-    $("#full_screen").live("click", function() {
+    $("#full_screen, #chat_bubble").live("click", function() {
         window.editorUtil.fullScreen();
     });
 

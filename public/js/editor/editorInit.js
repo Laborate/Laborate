@@ -11,18 +11,19 @@ window.socketUtil = {
         $("#editorCodeMirror").css({"opacity": ""});
     },
     disconnect: function() {
-        $("#editorCodeMirror").css({"opacity": ".5"});
-        $(".backdropButton").val("Reconnecting...").attr("disabled", "disabled");
-        if(window.editor) {
-            window.editor.options.readOnly = true;
+        if(!window.unload) {
+            $("#editorCodeMirror").css({"opacity": ".5"});
+            $(".backdropButton").val("Reconnecting...").attr("disabled", "disabled");
+            if(window.editor) {
+                window.editor.options.readOnly = true;
+            }
+            window.notification.open("Reconnecting...", true);
+            window.editorUtil.users([]);
+            $("title").text([
+                $("title").text().split(window.config.delimeter)[0],
+                "Reconnecting"
+            ].join(window.config.delimeter));
         }
-        window.notification.open("Reconnecting...", true);
-        window.editorUtil.users([]);
-        $("title").text([
-            $("title").text().split(window.config.delimeter)[0],
-            "Reconnecting"
-        ].join(window.config.delimeter));
-
     },
     reconnect: function() {
         window.socketUtil.connect();
@@ -33,6 +34,9 @@ window.socketUtil = {
                 window.config.name
             ].join(window.config.delimeter));
         }
+    },
+    unload: function() {
+        window.unload = true;
     }
 }
 
@@ -42,6 +46,8 @@ window.socketUtil.socket.on("reconnect", window.socketUtil.reconnect);
 window.socketUtil.socket.on("reconnecting", window.socketUtil.disconnect);
 window.socketUtil.socket.on("disconnect", window.socketUtil.disconnect);
 window.onoffline = window.socketUtil.disconnect;
+window.onbeforeunload = window.socketUtil.unload;
+window.onunload = window.socketUtil.unload;
 
 window.socketUtil.socket.on('connect_failed', function () {
     window.backdrop.error("Failed To Connect. Retrying now...", true);

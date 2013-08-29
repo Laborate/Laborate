@@ -102,14 +102,17 @@ window.editorUtil = {
             $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%"});
             $("#full_screen").addClass("icon-contract-2");
             $("#full_screen").removeClass("icon-expand-2");
-            $("#full_screen").css({"font-size": "24px", "margin": "0 0 0 30px"});
+            $("#full_screen, #chat_bubble").css({"font-size": "24px"}).show();
             $("#sidebar, #header, #chatRoom").hide();
+            $("#chat_bubble_count").text("");
         } else {
             $("#editorCodeMirror").css({"margin": "", "width": ""});
             $("#full_screen").addClass("icon-expand-2");
             $("#full_screen").removeClass("icon-contract-2");
             $("#full_screen").css({"font-size": "", "margin": ""});
             $("#sidebar, #header, #chatRoom").show();
+            $("#chat_bubble").hide();
+            setTimeout(window.chatRoom._scrollToBottom, 100);
         }
 
         window.editor.refresh();
