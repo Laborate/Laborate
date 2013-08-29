@@ -122,7 +122,6 @@ window.editorUtil = {
                 clearInterval(interval);
                 window.socketUtil.socket.emit("editorJoin", [password, reconnect], function(json) {
                     if(json.success) {
-                        window.debug = json;
                         if(password) {
                             window.editorUtil.access_token = password;
                         } else {
@@ -130,6 +129,10 @@ window.editorUtil = {
                         }
 
                         async.series([
+                            function(next) {
+                                $("#editorCodeMirror").css({"opacity": "0"});
+                                next();
+                            },
                             function(next) {
                                 window.editor.setValue(json.content);
                                 next();
@@ -139,10 +142,16 @@ window.editorUtil = {
                                 next();
                             },
                             function(next) {
-                                $.each(json.changes, function(index, value) {
-                                    window.editorUtil.setChanges("in", value, true);
-                                });
-                                next();
+                                if(json.changes.length != 0) {
+                                    $.each(json.changes, function(index, value) {
+                                        window.editorUtil.setChanges("in", value, true);
+                                        if (index == json.changes.length-1) {
+                                            next();
+                                        }
+                                    });
+                                } else {
+                                    next();
+                                }
                             },
                             function(next) {
                                 window.editor.clearHistory();
@@ -151,6 +160,7 @@ window.editorUtil = {
                                     callback();
                                 } else {
                                     $("#backdrop").hide();
+                                    $("#editorCodeMirror").css({"opacity": ""});
                                 }
 
                                 window.editorUtil.initialized = true;
