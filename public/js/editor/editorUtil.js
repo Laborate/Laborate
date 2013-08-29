@@ -112,7 +112,7 @@ window.editorUtil = {
             $("#full_screen").css({"font-size": "", "margin": ""});
             $("#sidebar, #header, #chatRoom").show();
             $("#chat_bubble").hide();
-            setTimeout(window.chatRoom._scrollToBottom, 100);
+            setTimeout(window.chatRoom._scrollToBottom, 600);
         }
 
         window.editor.refresh();
