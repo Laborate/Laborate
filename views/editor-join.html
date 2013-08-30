@@ -1,0 +1,23 @@
+<% include includes/header.html %>
+<div id="backdrop">
+    <div id="backdropCore">
+        <a href="/"><div id="backdropLogo">code-laborate</div></a>
+        <div id="backdropInital">
+            <div class="backdropContainer">
+                <div class="backdropInitalWelcome seperatorRequired">Join A Document</div>
+                    <div class="seperatorRequired">
+                        <form action="/editor/exists/">
+                            <input type="text" autofocus="on" name="document" placeholder="12345"/>
+                            <input type="submit" class="backdropButton button full blue" value="Join Document"/>
+                        </form>
+                    </div>
+                    <div class="backdropInitalWelcome" style="font-size: 14px;">
+                        Don't have any? <a href="/documents/">Create a document</a>
+                    </div>
+                </div>
+            </div>
+            <div class="textError" style="margin-top: 10px; text-align: center; color:#CC352D;"></div>
+        </div>
+    </div>
+</div>
+<% include includes/footer.html %>

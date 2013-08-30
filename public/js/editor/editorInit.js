@@ -37,6 +37,7 @@ window.socketUtil = {
     },
     unload: function() {
         window.unload = true;
+        window.socketUtil.socket.socket.disconnect();
     }
 }
 
@@ -57,8 +58,10 @@ window.socketUtil.socket.on('reconnect_failed', function () {
     window.backdrop.error("Failed To Reconnect. Retrying now...", true);
 });
 
-window.socketUtil.socket.on('error', function (reason){
-    window.backdrop.error(reason, true);
+window.socketUtil.socket.on('error', function (reason) {
+    if(reason) {
+        window.editorUtil.error(reason, true);
+    }
 });
 
 //Url Parameters

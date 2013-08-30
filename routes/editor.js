@@ -24,9 +24,32 @@ exports.index = function(req, res, next) {
             }
         });
     } else {
-       res.redirect('/documents/');
+       res.renderOutdated('editor-join', {
+            title: "Join A Document",
+            mode: "editor-join",
+            js: clientJS.renderTags("backdrop"),
+            css: clientCSS.renderTags("backdrop")
+        });
     }
 };
+
+exports.exists = function(req, res, next) {
+    req.models.documents.exists({
+        id: req.param("document")
+    }, function(error, exists) {
+        if(!error && exists) {
+            res.json({
+                success: true,
+                next: {
+                    function: "window.backdrop.urlChange",
+                    arguments: "/editor/" + req.param("document") + "/"
+                }
+            });
+        } else {
+            res.error(200, "Document Doesn't Exist");
+        }
+    });
+}
 
 exports.join = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
@@ -119,7 +142,7 @@ exports.remove = function(req, res, next) {
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {
-                        res.json({ success: true });
+                        res.json({ success: true, master: true });
                     } else {
                         res.error(200, "Failed To Remove File");
                     }
@@ -130,7 +153,7 @@ exports.remove = function(req, res, next) {
                     document_id: req.param("document")
                 }).remove(function(error) {
                     if(!error) {
-                        res.json({ success: true });
+                        res.json({ success: true, master: false });
                     } else {
                         res.error(200, "Failed To Remove File");
                     }

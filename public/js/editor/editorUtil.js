@@ -171,6 +171,7 @@ window.editorUtil = {
                             }
                         ]);
                     } else {
+                        window.debug = json;
                         if(json.error_message) {
                             window.editorUtil.error(json.error_message, json.redirect_url);
                         } else {

@@ -185,9 +185,11 @@ window.sidebarUtil = {
             _csrf: window.config.csrf
         }, function(json) {
             if(json.success) {
-                window.socketUtil.socket.emit('editorExtras', {
-                        "docDelete": true
-                });
+                if(json.master) {
+                    window.socketUtil.socket.emit('editorExtras', {
+                            "docDelete": true
+                    });
+                }
                 window.location.href = "/documents/";
             } else {
                $("#removeDoc").removeClass("disabled").addClass("red_harsh").val("Failed To Remove");

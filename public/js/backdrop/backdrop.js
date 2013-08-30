@@ -39,30 +39,37 @@ window.backdrop = {
         return false;
     },
     error: function(message, url) {
-        $("#backdrop .textError").hide();
-        $("body > *").not("#backdrop").remove();
-        $("#backdrop").show();
-        $(".backdropContainer")
-            .width("320px")
-            .html(
-                $(".backdropInitalWelcome")
-                    .removeClass("seperatorRequired")
-                    .html(message)[0]
-            );
+        if(message) {
+            $("#backdrop .textError").hide();
+            $("body > *").not("#backdrop").remove();
+            $("#backdrop").show();
+            $(".backdropContainer")
+                .width("320px")
+                .html(
+                    $(".backdropInitalWelcome")
+                        .removeClass("seperatorRequired")
+                        .html(message)[0]
+                );
 
-        $("#backdropCore").hAlign().vAlign();
+            $("#backdropCore").hAlign().vAlign();
 
-        if(url) {
-            if(url == true) {
-                setTimeout(function() {
-                    window.location.reload(true);
-                }, 5000);
-            } else {
-                setTimeout(function() {
-                    window.location.href = url;
-                }, 30000);
+            if(url) {
+                if(url == true) {
+                    setTimeout(function() {
+                        window.location.reload(true);
+                    }, 5000);
+                } else {
+                    setTimeout(function() {
+                        window.location.href = url;
+                    }, 30000);
+                }
             }
+        } else {
+            window.location.href = (url) ? url : "/documents/";
         }
+    },
+    urlChange: function(url) {
+        window.location.href = url;
     }
 }
 
