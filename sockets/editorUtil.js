@@ -114,12 +114,8 @@ exports.removeUser = function(req, user, room) {
                         exports.redisClient.get(room, function(error, reply) {
                             reply = JSON.parse(reply);
                             exports.applyChanges(document, reply.changes, function(content) {
-                                /* Orm gives RangeError on save (Internal Bug)
-                                document.save({
-                                    content: (content) ? content : null,
-                                    breakpoints: (reply.breakpoints.length != 0) ? reply.breakpoints : null
-                                });
-                                */
+                                document.content = (content) ? content : null,
+                                document.breakpoints = (reply.breakpoints.length != 0) ? reply.breakpoints : null
                             });
                             exports.redisClient.del(room);
                         });

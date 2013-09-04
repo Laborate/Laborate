@@ -7,6 +7,7 @@ var ejs        = require('ejs');
 var RedisStore = require('connect-redis')(express);
 var cluster    = require('cluster');
 var raven      = require('raven');
+var device     = require('express-device');
 
 /* Modules: Custom */
 var error = require("./routes/error");
@@ -51,19 +52,28 @@ workers = function() {
         clientCSS.bind(app, srv);
         require("./lib/core/dependencies")();
 
-        //Express
+        //Express Engines
         app.engine('html', ejs.renderFile);
+
+        //Express Global Config
         app.set('views', __dirname + '/views');
         app.set('view engine', 'html');
         app.set('view options', { layout: true });
         app.set('view cache', true);
         app.set('x-powered-by', false);
+
+        //Express Direct Assests
         app.use('/favicon', express.static(__dirname + '/public/favicon'));
         app.use('/fonts', express.static(__dirname + '/public/fonts'));
         app.use('/flash', express.static(__dirname + '/public/flash'));
         app.use('/img', express.static(__dirname + '/public/img'));
         app.use('/codemirror', express.static(__dirname + '/node_modules/codemirror'));
+
+        //Express External Addons
         app.use(slashes(true));
+        app.use(device.capture());
+
+        //Express Logger & Cookie
         app.use(express.logger('dev'));
         app.use(express.compress());
         app.use(express.bodyParser());
@@ -78,13 +88,18 @@ workers = function() {
         }));
         app.use(express.csrf());
 
-        //Express Custom
+        //Error Handlers
+        app.use(error.global);
+        app.use(error.handler);
+
+        //Custom Routing Config
+        app.use(require("./routes/core").config);
+        app.use(require("./routes/device"));
+
+        //Custom Libraries
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
-        app.use(require("./routes/core").config);
-        app.use(error.global);
-        app.use(error.handler);
     });
 
     /* Development Only */
