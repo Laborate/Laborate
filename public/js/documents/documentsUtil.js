@@ -151,6 +151,12 @@ window.documents = {
     contextMenuClose: function() {
        $("#menu").hide();
     },
+    location: null,
+    locationReload: function() {
+        if(window.documents.location) {
+            window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
+        }
+    },
     locationChange: function(location_id, path, no_history) {
         $("#locations ul li").removeClass("selected");
         $("#" + location_id).addClass("selected");
@@ -264,7 +270,7 @@ window.documents = {
                 } else {
                     element.remove();
 
-                    if(window.sidebar == id) {
+                    if(window.documents.location == id) {
                         window.documents.locationChange("online");
                     }
 
@@ -301,7 +307,7 @@ window.documents = {
                 if(location) {
                     $("#" + location).addClass("selected");
                 } else {
-                    $("#" + window.sidebar).addClass("selected");
+                    $("#" + window.documents.location).addClass("selected");
                 }
             }
         );
@@ -389,7 +395,7 @@ window.documents = {
 
                 window.notification.close();
                 if(!no_history) history.pushState(null, null, "/documents/");
-                window.sidebar = "online";
+                window.documents.location = "online";
             }
         });
     },
@@ -490,7 +496,7 @@ window.documents = {
             window.notification.close();
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(!no_history) history.pushState(null, null, "/documents/" + location_id + "/" + path);
-            window.sidebar = location_id;
+            window.documents.location = location_id;
         }
     },
     locationFile: function(location_id, element) {

@@ -1,13 +1,6 @@
-//History Change
-window.onpopstate = function() {
-    if(window.sidebar) {
-        window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
-    }
-};
-
 //Add New File
 $("#newFile").live("click", function() {
-    window.documents.newFile(window.url_params()["dir"], window.sidebar);
+    window.documents.newFile(window.url_params()["dir"], window.documents.location);
 });
 
 $("#locations #add_location").live("mouseout", function() {
@@ -75,16 +68,16 @@ $(".external.file .file_attributes").live("click", function() {
     var type = $(this).attr("data");
 
     if(type == "folder") {
-        window.documents.locationDirectory(window.sidebar, $(this).parent().attr("data"));
+        window.documents.locationDirectory(window.documents.location, $(this).parent().attr("data"));
     }
 
     if(type == "file") {
         var extension = $(this).parent().find(".title").attr("data").split(".")[1];
         if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-            window.documents.photoPreview(window.sidebar, $(this).parent().find(".title").attr("data"),
+            window.documents.photoPreview(window.documents.location, $(this).parent().find(".title").attr("data"),
                                           $(this).parent().attr("data"));
         } else {
-            window.documents.locationFile(window.sidebar, $(this));
+            window.documents.locationFile(window.documents.location, $(this));
         }
     }
     return false;

@@ -49,7 +49,7 @@ exports.file_create = function(req, res, next) {
         path: (path.slice(-1) == "/") ? path.slice(0, -1) : path,
         location: req.param("location")
     }, function(error, document) {
-        if(!error) {
+        if(!error && document) {
             res.json({document: document.id});
         } else {
             res.error(200, "Failed To Create Document");
@@ -59,7 +59,7 @@ exports.file_create = function(req, res, next) {
 
 exports.file_rename = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error) {
+        if(!error && document) {
             document.name = req.param("name");
             res.json({ success: true });
         } else {
@@ -70,7 +70,7 @@ exports.file_rename = function(req, res, next) {
 
 exports.file_remove = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error) {
+        if(!error && document) {
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {
