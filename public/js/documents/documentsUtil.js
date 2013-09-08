@@ -73,6 +73,7 @@ window.documents = {
     popUpClose: function() {
         //Remove Live Events From Forms
         $("#popup *").die();
+        $("#popup form").die();
 
         //Hide Pop Up
         $("#popup").hide();

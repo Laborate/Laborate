@@ -17,21 +17,11 @@ exports.join = function(req) {
                     });
                 }
             } else {
-                req.io.respond(access_object);
-
-                //Force Socket Disconnect
-                req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+                editorUtil.kickOut(req, access_object);
             }
         });
     } else {
-        req.io.respond({
-            success: false,
-            error_message: "Log In Required",
-            redirect_url: true
-        });
-
-        //Force Socket Disconnect
-        req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+        editorUtil.kickOut(req);
     }
 }
 
@@ -58,6 +48,8 @@ exports.leave = function(req, override) {
             });
             editorUtil.removeUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
         }
+    } else {
+        editorUtil.kickOut(req);
     }
 }
 
@@ -65,10 +57,13 @@ exports.chatRoom = function(req) {
     if(req.session.user) {
         req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', req.data);
+    } else {
+        editorUtil.kickOut(req);
     }
 }
 
 exports.document = function(req) {
+    console.log(req.data["changes"]);
     if(req.session.user) {
         req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
@@ -85,6 +80,8 @@ exports.cursors = function(req) {
     if(req.session.user) {
         req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorCursors', req.data);
+    } else {
+        editorUtil.kickOut(req);
     }
 }
 
@@ -126,5 +123,7 @@ exports.extras = function(req) {
                 this.save(reply);
             });
         }
+    } else {
+        editorUtil.kickOut(req);
     }
 }

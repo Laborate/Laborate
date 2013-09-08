@@ -188,3 +188,14 @@ exports.inRoom = function(reconnect, user, room) {
         return false;
     }
 }
+
+exports.kickOut = function(req, response) {
+    req.io.respond(((!response) ? {
+        success: false,
+        error_message: "Log In Required",
+        redirect_url: true
+    } : response));
+
+    //Force Socket Disconnect
+    req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+}
