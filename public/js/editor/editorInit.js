@@ -27,12 +27,12 @@ window.socketUtil = {
     },
     reconnect: function() {
         window.socketUtil.connect();
+        $("title").text([
+            $("title").text().split(window.config.delimeter)[0],
+            window.config.name
+        ].join(window.config.delimeter));
         if(!$("#backdrop").is(":visible")) {
             window.editorUtil.join(window.editorUtil.access_token, true, window.socketUtil.connect);
-            $("title").text([
-                $("title").text().split(window.config.delimeter)[0],
-                window.config.name
-            ].join(window.config.delimeter));
         }
     },
     unload: function() {

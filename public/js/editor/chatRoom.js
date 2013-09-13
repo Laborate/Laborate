@@ -16,7 +16,7 @@ window.chatRoom = {
         help += '<strong><div class="chatRoomHelper" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
         help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
         help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">@pattern = search for word</div>';
+        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">^pattern = search for word</div>';
     	$(".jspPane").append(help);
     	window.chatRoom.resize();
     	window.chatRoom._scrollToBottom();
@@ -53,7 +53,8 @@ window.chatRoom = {
                 var lineContent = window.chatRoom._check(message, "line");
                 var searchContent = window.chatRoom._check(lineContent, "search");
                 var scrollContent = window.chatRoom._check(searchContent, "scroll");
-                window.chatRoom._inputMessage(from, scrollContent, direction);
+                var linkContent = window.chatRoom._check(scrollContent, "links");
+                window.chatRoom._inputMessage(from, linkContent, direction);
             }
         }
         window.chatRoom.resize();
@@ -104,9 +105,12 @@ window.chatRoom = {
             } else {
                 return false;
             }
+        } else if(type == "links") {
+            var urlRegex = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
+            return message.replace(urlRegex, '<a class="link" target="_blank" href="$1">$1</a>');
         } else {
             types = {
-                "search": [/.*@.*/ig, "@", "window.sidebarUtil.search"],
+                "search": [/.*\^.*/ig, "^", "window.sidebarUtil.search"],
                 "line": [/.*#\d.*/ig, "#", "window.sidebarUtil.highlight"],
                 "scroll": [/.*&.*/ig, "&", "window.sidebarUtil.jumpToLine"]
             }
