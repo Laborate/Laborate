@@ -1,10 +1,12 @@
+var core = require("./core");
+
 exports.login = function(req, res) {
     res.renderOutdated('auth/login', {
         title: 'Login',
         mode: "login",
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
-        backdrop_img: "/img/backgrounds/space/1.jpg"
+        backdrop_img: core.backdrop_image("space")
     });
 };
 
@@ -14,7 +16,7 @@ exports.register = function(req, res) {
         mode: 'register',
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
-        backdrop_img: "/img/backgrounds/space/1.jpg"
+        backdrop_img: core.backdrop_image("space")
     });
 };
 
@@ -26,7 +28,7 @@ exports.verify = function(req, res) {
             feedback: 'Verification Email Has Been Sent',
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
-            backdrop_img: "/img/backgrounds/space/1.jpg"
+            backdrop_img: core.backdrop_image("space")
         });
     } else {
         res.redirect("/documents/");

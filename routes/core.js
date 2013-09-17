@@ -1,5 +1,7 @@
+var fs = require("fs");
 var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
+var backdrop_themes = {};
 
 exports.config = function(req, res, next) {
     //Header Config
@@ -48,4 +50,20 @@ exports.update = function(req, res, next) {
             });
         }
     ], next)
+}
+
+exports.backdrop_image = function(theme) {
+    if(theme in backdrop_themes) {
+        var files = backdrop_themes[theme];
+        return "/img/backgrounds/" + theme + "/" + files[Math.floor((Math.random() * files.length))];
+    } else {
+        var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
+        if(fs.lstatSync(theme_path).isDirectory()) {
+            var files = fs.readdirSync(theme_path);
+            backdrop_themes[theme] = files;
+            return "/img/backgrounds/" + theme + "/" + files[Math.floor((Math.random() * files.length))];
+        } else {
+            return "";
+        }
+    }
 }
