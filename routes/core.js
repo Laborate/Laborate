@@ -23,7 +23,7 @@ exports.config = function(req, res, next) {
 
 
 exports.login = function(req, res) {
-    res.renderOutdated('login', {
+    res.renderOutdated('auth/login', {
         title: 'Login',
         mode: "login",
         js: clientJS.renderTags("backdrop"),
@@ -32,7 +32,7 @@ exports.login = function(req, res) {
 };
 
 exports.register = function(req, res) {
-    res.renderOutdated('register', {
+    res.renderOutdated('auth/register', {
         title: 'Register',
         mode: 'register',
         js: clientJS.renderTags("backdrop"),
@@ -42,7 +42,7 @@ exports.register = function(req, res) {
 
 exports.verify = function(req, res) {
     if(req.session.user.verified) {
-        res.renderOutdated('verify', {
+        res.renderOutdated('auth/verify', {
             title: 'Verify Your Account',
             mode: "verify",
             feedback: 'Verification Email Has Been Sent',

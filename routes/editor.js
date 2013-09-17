@@ -24,7 +24,7 @@ exports.index = function(req, res, next) {
             }
         });
     } else {
-       res.renderOutdated('editor-join', {
+       res.renderOutdated('editor/join', {
             title: "Join A Document",
             mode: "editor-join",
             js: clientJS.renderTags("backdrop"),

@@ -1,4 +1,4 @@
-<% include includes/header.html %>
+<% include ../includes/header.html %>
 <div id="backdrop">
     <div id="backdropCore">
         <a href="/"><div id="backdropLogo">code-laborate</div></a>
@@ -6,21 +6,18 @@
             <div class="backdropContainer">
                 <div class="backdropInitalWelcome seperatorRequired">Collaborative software<br>development made easy!</div>
                 <div class="seperatorRequired">
-                    <form action="/auth/register/">
-                        <input type="text" autofocus="on" name="name" placeholder="Name"/>
-                        <input type="text" name="screen_name" placeholder="Screen Name"/>
-                        <input type="text" name="email" placeholder="Email"/>
+                    <form action="/auth/login/">
+                        <input type="text" autofocus="on" name="email" placeholder="Email"/>
                         <input type="password" name="password" placeholder="Password"/>
-                        <input type="password" name="password_confirm" placeholder="Confirm Password"/>
-                        <input type="submit" class="backdropButton button full blue" value="Register"/>
+                        <input type="submit" class="backdropButton button full blue" value="Sign In"/>
                     </form>
                 </div>
                 <div class="backdropInitalWelcome backdropInitalWelcomeSmall">
-                   Have An Account? <a href="/login/">Sign In</a>
+                    Don't Have An Account? <a href="/register/">Register</a>
                 </div>
             </div>
             <div class="textError"></div>
         </div>
     </div>
 </div>
-<% include includes/footer.html %>
+<% include ../includes/footer.html %>
