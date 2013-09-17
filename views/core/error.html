@@ -1,19 +1,11 @@
 <% include ../includes/header.html %>
-<div id="backdrop">
-    <div id="backdropCore">
-        <a href="/"><div id="backdropLogo">code-laborate</div></a>
-        <!-- Start: Backdrop Error -->
-        <div id="backdropInital">
-            <div class="backdropContainer">
-                <div class="seperatorRequired textCenter">
-                    <img src="/img/error_big.png" height="125px"/>
-                </div>
-                <div class="backdropInitalWelcome backdropInitalWelcomeMedium">
-                    <%= error_html %><br/>Please continue back <a href="/">home</a>.
-                </div>
-            </div>
-        </div>
-        <!-- End: Backdrop Error -->
+<div id="backdrop" style="background-image: url('<%= backdrop_img %>');">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo">code-laborate</div></a>
+         <div id="backdrop-container" class="larger backdrop-text">
+            <%= error_html %><br/>Please continue back <a class="backdrop-link" href="/">home</a>.
+         </div>
     </div>
 </div>
 <% include ../includes/footer.html %>

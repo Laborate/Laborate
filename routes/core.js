@@ -1,3 +1,4 @@
+var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
 
 exports.config = function(req, res, next) {
@@ -22,38 +23,29 @@ exports.config = function(req, res, next) {
     next();
 }
 
-
-exports.login = function(req, res) {
-    res.renderOutdated('auth/login', {
-        title: 'Login',
-        mode: "login",
-        js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop"),
-        backdrop_img: "/img/backgrounds/space/1.jpg"
-    });
-};
-
-exports.register = function(req, res) {
-    res.renderOutdated('auth/register', {
-        title: 'Register',
-        mode: 'register',
-        js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop"),
-        backdrop_img: "/img/backgrounds/space/1.jpg"
-    });
-};
-
-exports.verify = function(req, res) {
-    if(req.session.user.verified) {
-        res.renderOutdated('auth/verify', {
-            title: 'Verify Your Account',
-            mode: "verify",
-            feedback: 'Verification Email Has Been Sent',
-            js: clientJS.renderTags("backdrop"),
-            css: clientCSS.renderTags("backdrop"),
-            backdrop_img: "/img/backgrounds/space/1.jpg"
-        });
+exports.device = function(req, res, next) {
+    if(req.device.type == "desktop") {
+        next();
     } else {
-        res.redirect("/documents/");
+        req.device.type = req.device.type.charAt(0).toUpperCase() + req.device.type.slice(1);
+        res.error(200, req.device.type + "'s aren't supported yet");
     }
-};
+}
+
+exports.update = function(req, res, next) {
+    async.series([
+        function(callback) {
+            req.models.documents.count({
+                owner_id: req.session.user.id,
+                password: req.db.tools.ne(null)
+            }, function(error, count) {
+                if(!error) {
+                    req.session.user.pass_documents = count;
+                } else {
+                    req.session.user.pass_documents = null;
+                }
+                callback(error);
+            });
+        }
+    ], next)
+}

@@ -10,7 +10,7 @@ exports.index = function(req, res, next) {
                                                     "header", "jscroll")
                 }
 
-                res.renderOutdated('editor', {
+                res.renderOutdated('editor/index', {
                     title: document.name,
                     navigation: document.name,
                     mode: "editor",

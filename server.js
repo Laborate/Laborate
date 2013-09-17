@@ -10,6 +10,7 @@ var raven      = require('raven');
 var device     = require('express-device');
 
 /* Modules: Custom */
+var core = require("./routes/core");
 var error = require("./routes/error");
 
 /* IMPORTANT - No VAR Makes Variables Global */
@@ -92,14 +93,14 @@ workers = function() {
         app.use(error.global);
         app.use(error.handler);
 
+        //Custom Routing Config
+        app.use(core.config);
+        app.use(core.device);
+
         //Custom Libraries
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
-
-        //Custom Routing Config
-        app.use(require("./routes/core").config);
-        app.use(require("./routes/device"));
     });
 
     /* Development Only */

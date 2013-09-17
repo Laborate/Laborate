@@ -5,7 +5,7 @@ var rand = require("generate-key");
 var github = require("./github");
 
 exports.index = function(req, res, next) {
-    res.renderOutdated('documents', {
+    res.renderOutdated('documents/index', {
         title: 'Documents',
         navigation: 'Documents Drive',
         mode: "documents",

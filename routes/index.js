@@ -1,63 +1,63 @@
 /* Modules: Custom */
 var core = require('./core');
 var auth = require('./auth');
+var authUtil = require('./authUtil');
 var account = require('./account');
 var documents = require('./documents');
 var editor = require('./editor');
 var github = require('./github');
-var update = require('./update');
 
 module.exports = function(app) {
     /* Root */
-    app.get('/', auth.loginCheck, core.login);
+    app.get('/', authUtil.loginCheck, auth.login);
 
     /* Login */
-    app.get('/login', auth.loginCheck, core.login);
-    app.post('/auth/login', auth.login);
+    app.get('/login', authUtil.loginCheck, auth.login);
+    app.post('/auth/login', authUtil.login);
 
     /* Register */
-    app.get('/register', auth.loginCheck, core.register);
-    app.post('/auth/register', auth.register);
+    app.get('/register', authUtil.loginCheck, auth.register);
+    app.post('/auth/register', authUtil.register);
 
     /* Verify Email */
-    app.get('/verify', auth.restrictAccess, core.verify);
-    app.get('/verify/:code', auth.restrictAccess, auth.verify);
+    app.get('/verify', authUtil.restrictAccess, auth.verify);
+    app.get('/verify/:code', authUtil.restrictAccess, authUtil.verify);
 
     /* Logout */
-    app.get('/logout', auth.logout);
+    app.get('/logout', authUtil.logout);
 
     /* Account */
-    app.get("/account", auth.restrictAccess, update.index, account.index);
-    app.get("/account/:panel", auth.restrictAccess, update.index, account.index);
+    app.get("/account", authUtil.restrictAccess, core.update, account.index);
+    app.get("/account/:panel", authUtil.restrictAccess, core.update, account.index);
 
     /* Documents */
-    app.get('/documents', auth.restrictAccess, documents.index);
-    app.get('/documents/files', auth.restrictAccess, auth.xhr, documents.files);
-    app.get('/documents/locations', auth.restrictAccess, auth.xhr, documents.locations);
-    app.get(/^\/documents\/([\w\d]{10})\/(.*?)/, auth.restrictAccess, documents.index);
-    app.get(/^\/documents\/location\/([\w\d]{10})\/(.*)/, auth.restrictAccess, documents.location);
-    app.post('/documents/file/create', auth.restrictAccess, auth.xhr, documents.file_create);
-    app.post('/documents/file/:document/rename', auth.restrictAccess, auth.xhr, documents.file_rename);
-    app.post('/documents/file/:document/remove', auth.restrictAccess, auth.xhr, documents.file_remove);
-    app.post('/documents/location/create', auth.restrictAccess, auth.xhr, documents.create_location);
-    app.post('/documents/location/remove', auth.restrictAccess, auth.xhr, documents.remove_location);
+    app.get('/documents', authUtil.restrictAccess, documents.index);
+    app.get('/documents/files', authUtil.restrictAccess, authUtil.xhr, documents.files);
+    app.get('/documents/locations', authUtil.restrictAccess, authUtil.xhr, documents.locations);
+    app.get(/^\/documents\/([\w\d]{10})\/(.*?)/, authUtil.restrictAccess, documents.index);
+    app.get(/^\/documents\/location\/([\w\d]{10})\/(.*)/, authUtil.restrictAccess, documents.location);
+    app.post('/documents/file/create', authUtil.restrictAccess, authUtil.xhr, documents.file_create);
+    app.post('/documents/file/:document/rename', authUtil.restrictAccess, authUtil.xhr, documents.file_rename);
+    app.post('/documents/file/:document/remove', authUtil.restrictAccess, authUtil.xhr, documents.file_remove);
+    app.post('/documents/location/create', authUtil.restrictAccess, authUtil.xhr, documents.create_location);
+    app.post('/documents/location/remove', authUtil.restrictAccess, authUtil.xhr, documents.remove_location);
 
     /* Editor */
-    app.get('/editor', auth.restrictAccess, editor.access_token, editor.index);
-    app.get('/editor/:document', auth.restrictAccess, update.index, editor.access_token, editor.index);
-    app.get('/editor/:document/download/:access_token', auth.restrictAccess, editor.access_token, editor.download);
-    app.get('/editor/:document/download', auth.restrictAccess, editor.access_token, editor.download);
-    app.post('/editor/exists', auth.restrictAccess, editor.access_token, editor.exists);
-    app.post('/editor/:document/join', auth.restrictAccess, auth.xhr, editor.access_token, editor.join);
-    app.post('/editor/:document/update', auth.restrictAccess, auth.xhr, editor.access_token, editor.update);
-    app.post('/editor/:document/remove', auth.restrictAccess, auth.xhr, editor.access_token, editor.remove);
-    app.post('/editor/:document/commit', auth.restrictAccess, auth.xhr, editor.access_token, github.commit);
-    app.post('/editor/:document/invite', auth.restrictAccess, auth.xhr, editor.access_token, editor.invite);
+    app.get('/editor', authUtil.restrictAccess, editor.access_token, editor.index);
+    app.get('/editor/:document', authUtil.restrictAccess, core.update, editor.access_token, editor.index);
+    app.get('/editor/:document/download/:access_token', authUtil.restrictAccess, editor.access_token, editor.download);
+    app.get('/editor/:document/download', authUtil.restrictAccess, editor.access_token, editor.download);
+    app.post('/editor/exists', authUtil.restrictAccess, editor.access_token, editor.exists);
+    app.post('/editor/:document/join', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.join);
+    app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.update);
+    app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.remove);
+    app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.access_token, github.commit);
+    app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.invite);
 
     /* Github */
-    app.get('/github/token/add', auth.restrictAccess, github.add_token);
-    app.get('/github/token/remove', auth.restrictAccess, github.remove_token);
-    app.get('/github/repos', auth.restrictAccess, auth.xhr, github.repos);
+    app.get('/github/token/add', authUtil.restrictAccess, github.add_token);
+    app.get('/github/token/remove', authUtil.restrictAccess, github.remove_token);
+    app.get('/github/repos', authUtil.restrictAccess, authUtil.xhr, github.repos);
 
     /* Not Found Page */
     app.all('*', function(req, res, next) {
