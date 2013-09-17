@@ -4,7 +4,7 @@ exports.login = function(req, res) {
     res.renderOutdated('auth/login', {
         title: 'Login',
         mode: "login",
-        js: clientJS.renderTags("backdrop"),
+        js: clientJS.renderTags("backdrop", "crypto"),
         css: clientCSS.renderTags("backdrop"),
         backdrop_img: core.backdrop_image("space")
     });

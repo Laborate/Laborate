@@ -4,9 +4,11 @@ exports.index = function(req, res, next) {
             if(document) {
                 if(document.password == null) {
                     var js = clientJS.renderTags("backdrop", "codemirror", "editor",
+                                                    "aysnc", "copy", "download",
                                                     "header", "jscroll", "editor-auto-join");
                 } else {
                     var js = clientJS.renderTags("backdrop", "codemirror", "editor",
+                                                    "aysnc", "copy", "download",
                                                     "header", "jscroll")
                 }
 
