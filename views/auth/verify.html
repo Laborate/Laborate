@@ -1,12 +1,9 @@
 <% include ../includes/header.html %>
-<div id="backdrop">
-    <div id="backdropCore">
-        <a href="/"><div id="backdropLogo">code-laborate</div></a>
-        <div id="backdropInital">
-            <div class="backdropContainer">
-                <div class="backdropInitalWelcome backdropInitalWelcomeMedium"><%= feedback %></div>
-            </div>
-        </div>
+<div id="backdrop" style="background-image: url('<%= backdrop_img %>');">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo">code-laborate</div></a>
+         <div id="backdrop-container" class="larger"><%= feedback %></div>
     </div>
 </div>
 <% include ../includes/footer.html %>

@@ -26,7 +26,8 @@
     "redis": "0.8.4",
     "connect-redis": "1.4.5",
     "codemirror": "3.16.0",
-    "raven": "0.5.1"
+    "raven": "0.5.1",
+    "node-cryptojs-aes": "*"
   },
   "devDependencies": {
     "express-debug": "*"

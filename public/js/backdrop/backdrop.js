@@ -1,17 +1,21 @@
 window.backdrop = {
     ready: function() {
-        $("#backdropCore").vAlign().hAlign().show();
-        $("#backdrop input[type=text]").attr({"spellcheck": false});
+        $("#backdrop-core").vAlign().hAlign().show();
+        $(".backdrop-input").attr({"spellcheck": false});
     },
     submit: function() {
         var passed = true;
         var data = { _csrf: window.config.csrf }
         var submit = $("#backdrop input[type=submit]").val();
 
-        $("#backdrop input[type='text'], #backdrop input[type='password']").each(function() {
+        $(".backdrop-input").each(function() {
             passed = (passed) ? !!$(this).val() : passed;
             data[$(this).attr("name")] = $(this).val();
-            $(this).css({"border": $(this).val() ? "" : "solid thin #CC352D"});
+            if($(this).val()) {
+                $(this).removeClass("error");
+            } else {
+                $(this).addClass("error");
+            }
         });
 
         if(passed) {
@@ -30,8 +34,7 @@ window.backdrop = {
                     }
                 }
                 else {
-                    $("#backdrop .textError").text(result.error_message).fadeIn();
-                    $("#backdrop input[type=submit]").val(submit).removeClass("disabled");
+                    $("#backdrop input[type=submit]").val(result.error_message).removeClass("disabled").addClass("error");
                 }
             });
         }
@@ -43,7 +46,7 @@ window.backdrop = {
             $("#backdrop .textError").hide();
             $("body > *").not("#backdrop").remove();
             $("#backdrop").show();
-            $(".backdropContainer")
+            $(".backdrop-container")
                 .width("320px")
                 .html(
                     $(".backdropInitalWelcome")
@@ -51,7 +54,7 @@ window.backdrop = {
                         .html(message)[0]
                 );
 
-            $("#backdropCore").hAlign().vAlign();
+            $("#backdrop-core").hAlign().vAlign();
 
             if(url) {
                 if(url == true) {
@@ -70,8 +73,14 @@ window.backdrop = {
     },
     urlChange: function(url) {
         window.location.href = url;
+    },
+    profileImg: function() {
+        $("#backdrop-profile").attr("src", ("https://www.gravatar.com/avatar/" +
+                                            CryptoJS.MD5($("#backdrop-email").val()).toString() +
+                                            "?s=150&d=http%3A%2F%2F" + window.config.host + "%2Fimg%2Fdefault_gravatar.jpeg"));
     }
 }
 
-$(window).ready(window.backdrop.ready);
+$(document).ready(window.backdrop.ready);
 $("#backdrop form").live("submit", window.backdrop.submit);
+$("#backdrop-email").live("blur", window.backdrop.profileImg);

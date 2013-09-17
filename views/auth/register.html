@@ -1,26 +1,19 @@
 <% include ../includes/header.html %>
-<div id="backdrop">
-    <div id="backdropCore">
-        <a href="/"><div id="backdropLogo">code-laborate</div></a>
-        <div id="backdropInital">
-            <div class="backdropContainer">
-                <div class="backdropInitalWelcome seperatorRequired">Collaborative software<br>development made easy!</div>
-                <div class="seperatorRequired">
-                    <form action="/auth/register/">
-                        <input type="text" autofocus="on" name="name" placeholder="Name"/>
-                        <input type="text" name="screen_name" placeholder="Screen Name"/>
-                        <input type="text" name="email" placeholder="Email"/>
-                        <input type="password" name="password" placeholder="Password"/>
-                        <input type="password" name="password_confirm" placeholder="Confirm Password"/>
-                        <input type="submit" class="backdropButton button full blue" value="Register"/>
-                    </form>
-                </div>
-                <div class="backdropInitalWelcome backdropInitalWelcomeSmall">
-                   Have An Account? <a href="/login/">Sign In</a>
-                </div>
-            </div>
-            <div class="textError"></div>
-        </div>
+<div id="backdrop" style="background-image: url('<%= backdrop_img %>');">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo">code-laborate</div></a>
+         <div id="backdrop-container">
+             <form action="/auth/register/" autocomplete="off">
+                <input type="text" class="backdrop-input" autofocus="on" name="name" placeholder="name"/>
+                <input type="text" class="backdrop-input" name="screen_name" placeholder="screen name"/>
+                <input type="text" class="backdrop-input" name="email" placeholder="Email"/>
+                <input type="password" class="backdrop-input" name="password" placeholder="password"/>
+                <input type="password" class="backdrop-input" name="password_confirm" placeholder="confirm password"/>
+                <input type="submit" class="backdrop-button" value="Login"/>
+            </form>
+         </div>
+         <div class="backdrop-bottom">Have an account? <a class="backdrop-link" href="/login/">Login</a></div>
     </div>
 </div>
 <% include ../includes/footer.html %>

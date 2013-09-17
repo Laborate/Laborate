@@ -1,124 +1,129 @@
-/* BackDrop Core */
+@import '../compless/all';
+
 #backdrop {
-    position:  absolute;
+    position: absolute;
     width: 100%;
     height: 100%;
-    top: 0px;
-    left: 0px;
-    font-family: "Helvetica Neue";
-    background-color: #F0F1F1;
-    background: -webkit-linear-gradient(315deg, rgba(241, 243, 243, 1), rgba(241, 243, 243, 1) 80%);
     z-index: 100000;
+    top: 0;
+    left: 0;
+    color: #fff;
+    background: #4c5e93;
+    background-repeat: none;
+    background-size: cover;
 }
 
-#backdropCore {
-    display: none;
-}
-
-#backdrop * {
-   font-family: "Helvetica Neue";
-}
-
-#backdrop #backdropLogo {
-    font-family: "Not Just Groovy";
-    font-size: 30px;
-    text-align: center;
-    color: #444;
-}
-
-/* BackDrop Specific */
-#backdrop .backdropContainer {
-    padding: 15px;
-    background: #f8f8f8;
-    width: 250px;
-    margin: 0px auto;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border: solid 1px #ccc;
-    -webkit-box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
-    -moz-box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
-    box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
-}
-
-#backdrop #backdropDocTitle {
-    padding-right: 80px;
-}
-
-/* BackDrop General */
-#backdrop table {
+#backdrop-gradient {
+    position: absolute;
     width: 100%;
-    padding: 0px;
-    margin: 0px;
+    height: 100%;
+    z-index: 100001;
+    .linear-gradient(0deg, rgba(0,0,0,0.85), rgba(0,0,0,0.15));
 }
 
-#backdrop form {
-    padding: 0px;
-    margin: 0px;
+#backdrop-core {
+    z-index: 100002;
 }
 
-#backdrop a {
+#backdrop-logo {
+    font-family: "Not Just Groovy";
+    font-size: 26px;
+    text-align: center;
+}
+
+#backdrop-container {
+    width: 200px;
+    padding: 20px;
+    margin: auto;
+    border: solid 1px #2c3f50;
+    .border-radius(5px);
+    .linear-gradient(0deg, #34495e, #374f68);
+    .box-shadow(0 2px 4px rgba(0,0,0,0.75));
+}
+
+#backdrop-container.larger {
+    width: 250px;
+}
+
+#backdrop-profile {
+    width: 75px;
+    height: 75px;
+    margin-bottom: 10px;
+    outline: none;
+    border: solid 4px #3b5d7b;
+    .border-radius(50%);
+}
+
+.backdrop-link {
+    color: #00bbff;
     text-decoration: none;
 }
 
-#backdrop .backdropContainer a {
-    color: #0073e0;
+.backdrop-link:hover {
+    text-decoration: underline;
 }
 
-#backdrop .backdropContainer a:hover {
-   text-decoration: underline;
+.backdrop-link:hover:active {
+    color: #00a2dd;
+    text-decoration: underline;
 }
 
-#backdrop .seperatorRequired {
-    border-bottom: thin solid #CCC;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-}
-
-#backdrop .backdropInitalWelcome {
-    font-size: 18px;
+.backdrop-text {
+    font-size: 16px;
+    margin-bottom: 10px;
     text-align: center;
-    color: #516067;
+}
+
+.backdrop-input {
     width: 100%;
-    word-wrap: break-word;
-}
-
-#backdrop .backdropInitalWelcomeSmall {
-    font-size: 14px;
-}
-
-#backdrop .backdropInitalWelcomeMedium {
-    font-size: 16px;
-}
-
-#backdrop .backdropButton {
-    margin: 0px !important;
-}
-
-#backdrop input[type=text], #backdrop input[type=password] {
-    outline: none;
-    width: 100%;
-    font-size: 16px;
-    padding: 5px;
-    border: thin solid #999;
-    background: url("/img/tshadow.png") #FFF;
+    border: solid 1px #364d62;
+    .border-radius(4px);
+    padding: 8px 10px;
+    background-color: #fff;
+    background-image: url('/img/tshadow.png');
     background-repeat: repeat-x;
-    background-position: 0px -4px;
-    background-position-x: 0px;
-    background-position-y: -4px;
-    -moz-border-radius: 3px;
-	border-radius: 3px;
-	margin-top: 0px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
-#backdrop input {
-	margin-bottom: 10px;
-	outline: none;
-	border: none;
+.backdrop-input.error {
+    background-color: #fce5e5;
 }
 
-#backdrop .textError {
-    display: none;
-    margin-top: 10px;
+.backdrop-button {
+    width: 100%;
+    background: #0c7bba;
+    border: solid 1px #364d62;
+    padding: 7px 0;
     text-align: center;
-    color:#CC352D;
+    color: #fff;
+    font-size: 14px;
+    .border-radius(4px);
+    cursor: pointer;
+}
+
+.backdrop-button:hover {
+    background: #0a71ac;
+}
+
+.backdrop-button:hover:active {
+    background: #0b689d;
+}
+
+.backdrop-button.error {
+    background: #ef5454;
+}
+
+.backdrop-button.error:hover {
+    background: #ed4747;
+}
+
+.backdrop-button.error:hover:active {
+    background: #ed3b3b;
+}
+
+.backdrop-bottom {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 10px;
 }

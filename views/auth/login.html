@@ -1,23 +1,19 @@
 <% include ../includes/header.html %>
-<div id="backdrop">
-    <div id="backdropCore">
-        <a href="/"><div id="backdropLogo">code-laborate</div></a>
-        <div id="backdropInital">
-            <div class="backdropContainer">
-                <div class="backdropInitalWelcome seperatorRequired">Collaborative software<br>development made easy!</div>
-                <div class="seperatorRequired">
-                    <form action="/auth/login/">
-                        <input type="text" autofocus="on" name="email" placeholder="Email"/>
-                        <input type="password" name="password" placeholder="Password"/>
-                        <input type="submit" class="backdropButton button full blue" value="Sign In"/>
-                    </form>
-                </div>
-                <div class="backdropInitalWelcome backdropInitalWelcomeSmall">
-                    Don't Have An Account? <a href="/register/">Register</a>
-                </div>
+<div id="backdrop" style="background-image: url('<%= backdrop_img %>');">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo">code-laborate</div></a>
+         <div id="backdrop-container">
+            <div class="text-center">
+                <img id="backdrop-profile" src="/img/default_gravatar.jpeg"/>
             </div>
-            <div class="textError"></div>
-        </div>
+             <form action="/auth/login/" autocomplete="off">
+                <input name="email" type="email" id="backdrop-email" class="backdrop-input" placeholder="email address" autofocus="on"/>
+                <input name="password" type="password" class="backdrop-input" placeholder="password" />
+                <input type="submit" class="backdrop-button" value="Login"/>
+             </form>
+         </div>
+         <div class="backdrop-bottom">Want an account? <a class="backdrop-link" href="/register/">Register</a></div>
     </div>
 </div>
 <% include ../includes/footer.html %>

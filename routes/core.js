@@ -12,6 +12,7 @@ exports.config = function(req, res, next) {
     res.locals.site_title = config.general.product + config.general.delimeter.web + config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.sentry = config.sentry.browser;
+    res.locals.backdrop_img = "/img/background.jpg";
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {

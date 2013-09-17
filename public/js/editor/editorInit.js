@@ -3,7 +3,7 @@ window.socketUtil = {
         "sync disconnect on unload": true
     }),
     connect: function() {
-        $(".backdropButton").val("Join Document").attr("disabled", false);
+        $("#backdrop input[type='submit']").val("Join Document").attr("disabled", false);
         window.notification.close();
         if(window.editor) {
             window.editor.options.readOnly = false;
@@ -13,7 +13,7 @@ window.socketUtil = {
     disconnect: function() {
         if(!window.unload) {
             $("#editorCodeMirror").css({"opacity": ".5"});
-            $(".backdropButton").val("Reconnecting...").attr("disabled", "disabled");
+            $("#backdrop input[type='submit']").val("Reconnecting...").attr("disabled", "disabled");
             if(window.editor) {
                 window.editor.options.readOnly = true;
             }

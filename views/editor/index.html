@@ -1,38 +1,33 @@
 <% include ../includes/header.html %>
 <% include ../includes/navigation.html %>
-<div id="backdrop">
-    <div id="backdropCore">
-        <a href="/"><div id="backdropLogo">code-laborate</div></a>
-        <div id="backdropInital">
-            <div class="backdropContainer">
-                <div class="backdropInitalWelcome seperatorRequired"><%= document.name %></div>
+<div id="backdrop" style="background-image: url('<%= backdrop_img %>');">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo">code-laborate</div></a>
+         <div id="backdrop-container">
+            <div class="backdrop-text"><%= document.name %></div>
+            <form action="/editor/<%= document.id %>/join/">
                 <% if(document.password) { %>
-                    <div class="seperatorRequired">
-                        <form action="/editor/<%= document.id %>/join/">
-                            <input type="password" autofocus="on" name="password" placeholder="Password"/>
-                            <input type="submit" class="backdropButton button full blue" value="Connecting..." disabled="disabled"/>
-                        </form>
-                    </div>
-                    <div class="backdropInitalWelcome backdropInitalWelcomeSmall">
-                        <% if(document.owner_id == user.id) { %>
-                            Forgot the password? <a href="mailto:support@laborate.io?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Dear Support Team, %0D%0AI am <%= user.name %> and was wondering if you could reset document #<%= document.id %>'s password?">Email</a> support.
-                        <% } else { %>
-                            Forgot the password? <a href="mailto:<%= user.email %>?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Hey <%= document.owner.name %>,%0D%0AI am <%= user.name %> and was wondering if you knew document #<%= document.id %>'s password?">Email</a> the owner.
-                        <% } %>
-                    </div>
+                    <input type="password" autofocus="on" name="password" class="backdrop-input" placeholder="password"/>
+                    <input type="submit" class="backdrop-button" value="Connecting..."/>
                 <% } else { %>
-                    <div>
-                        <form action="/editor/<%= document.id %>/join/">
-                            <input type="hidden" name="password"/>
-                            <div id="loadingProgressG">
-                                <div id="loadingProgressG_1" class="loadingProgressG"></div>
-                            </div>
-                        </form>
+                    <input type="hidden" name="password"/>
+                    <div class="backdrop-loader">
+                        <div class="backdrop-loader-block"></div>
                     </div>
                 <% } %>
+            </form>
+         </div>
+         <% if(document.password) { %>
+            <div class="backdrop-bottom">
+                Forgot password?
+                <% if(document.owner_id == user.id) { %>
+                    <a class="backdrop-link" href="mailto:support@laborate.io?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Dear Support Team, %0D%0AI am <%= user.name %> and was wondering if you could reset document #<%= document.id %>'s password?">Email</a> support.
+                <% } else { %>
+                    <a class="backdrop-link" href="mailto:<%= user.email %>?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Hey <%= document.owner.name %>,%0D%0AI am <%= user.name %> and was wondering if you knew document #<%= document.id %>'s password?">Email</a> the owner.
+                <% } %>
             </div>
-            <div class="textError"></div>
-        </div>
+         <% } %>
     </div>
 </div>
 <div class="notification"></div>

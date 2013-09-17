@@ -99,7 +99,7 @@ exports.login = function(req, res, next) {
                 next: url
              });
         } else {
-            res.error(200, "Incorrect Email or Password");
+            res.error(200, "Invalid Credentials");
         }
 
     });
@@ -146,7 +146,7 @@ exports.register = function(req, res, next) {
                         }]
                     });
                 } else {
-                    res.error(200, "Please Enter A Valid Email");
+                    res.error(200, "Invalid Email Address");
                 }
             });
         }
