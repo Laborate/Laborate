@@ -92,14 +92,14 @@ workers = function() {
         app.use(error.global);
         app.use(error.handler);
 
-        //Custom Routing Config
-        app.use(require("./routes/core").config);
-        app.use(require("./routes/device"));
-
         //Custom Libraries
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
+
+        //Custom Routing Config
+        app.use(require("./routes/core").config);
+        app.use(require("./routes/device"));
     });
 
     /* Development Only */
