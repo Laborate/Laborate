@@ -12,7 +12,7 @@ exports.config = function(req, res, next) {
     res.locals.site_title = config.general.product + config.general.delimeter.web + config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.sentry = config.sentry.browser;
-    res.locals.backdrop_img = "/img/background.jpg";
+    res.locals.backdrop_img = "";
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {
@@ -28,7 +28,8 @@ exports.login = function(req, res) {
         title: 'Login',
         mode: "login",
         js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop")
+        css: clientCSS.renderTags("backdrop"),
+        backdrop_img: "/img/backgrounds/space/1.jpg"
     });
 };
 
@@ -37,7 +38,8 @@ exports.register = function(req, res) {
         title: 'Register',
         mode: 'register',
         js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop")
+        css: clientCSS.renderTags("backdrop"),
+        backdrop_img: "/img/backgrounds/space/1.jpg"
     });
 };
 
@@ -48,7 +50,8 @@ exports.verify = function(req, res) {
             mode: "verify",
             feedback: 'Verification Email Has Been Sent',
             js: clientJS.renderTags("backdrop"),
-            css: clientCSS.renderTags("backdrop")
+            css: clientCSS.renderTags("backdrop"),
+            backdrop_img: "/img/backgrounds/space/1.jpg"
         });
     } else {
         res.redirect("/documents/");
