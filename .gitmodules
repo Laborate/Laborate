@@ -1,6 +1,3 @@
 [submodule "wiki"]
 	path = wiki
 	url = git@github.com:Laborate/code.wiki.git
-[submodule "public/less/compless"]
-	path = public/less/compless
-	url = git@github.com:neoascetic/compless.git
