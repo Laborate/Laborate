@@ -3,21 +3,23 @@ window.socketUtil = {
         "sync disconnect on unload": true
     }),
     connect: function() {
-        $("#backdrop input[type='submit']").val("Join Document").attr("disabled", false);
-        window.notification.close();
-        if(window.editor) {
-            window.editor.options.readOnly = false;
-        }
-        $("#editorCodeMirror").css({"opacity": ""});
+        $("#backdrop input[type='submit']").ready(function() {
+            $("#backdrop input[type='submit']").val("Join Document").attr("disabled", false);
+            window.notification.close();
+            if(window.editor) {
+                window.editor.options.readOnly = false;
+            }
+            $("#editorCodeMirror").css({"opacity": ""});
+        });
     },
     disconnect: function() {
         if(!window.unload) {
             $("#editorCodeMirror").css({"opacity": ".5"});
-            $("#backdrop input[type='submit']").val("Reconnecting...").attr("disabled", "disabled");
+            $("#backdrop input[type='submit']").val("reconnecting...").attr("disabled", "disabled");
             if(window.editor) {
                 window.editor.options.readOnly = true;
             }
-            window.notification.open("Reconnecting...", true);
+            window.notification.open("reconnecting...", true);
             window.editorUtil.users([]);
             $("title").text([
                 $("title").text().split(window.config.delimeter)[0],

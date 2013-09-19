@@ -53,17 +53,17 @@ exports.update = function(req, res, next) {
 }
 
 exports.backdrop_image = function(theme) {
-    if(theme in backdrop_themes) {
-        var files = backdrop_themes[theme];
-        return "/img/backgrounds/" + theme + "/" + files[Math.floor((Math.random() * files.length))];
-    } else {
-        var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
+    var files = backdrop_themes[theme];
+
+    if(!files) {
+       var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
         if(fs.lstatSync(theme_path).isDirectory()) {
-            var files = fs.readdirSync(theme_path);
+            files = fs.readdirSync(theme_path);
             backdrop_themes[theme] = files;
-            return "/img/backgrounds/" + theme + "/" + files[Math.floor((Math.random() * files.length))];
         } else {
             return "";
         }
     }
+
+    return "/img/backgrounds/" + theme + "/" + files[Math.floor((Math.random() * files.length))];
 }

@@ -9,7 +9,7 @@
             <form action="/editor/<%= document.id %>/join/">
                 <% if(document.password) { %>
                     <input type="password" autofocus="on" name="password" class="backdrop-input" placeholder="password"/>
-                    <input type="submit" class="backdrop-button" value="Connecting..."/>
+                    <input type="submit" class="backdrop-button" value="connecting..." disabled="disabled"/>
                 <% } else { %>
                     <input type="hidden" name="password"/>
                     <div class="backdrop-loader">
