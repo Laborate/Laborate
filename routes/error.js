@@ -53,7 +53,8 @@ var error_handler = function(status, message, req, res) {
                         mode: error_message,
                         js: clientJS.renderTags("backdrop"),
                         css: clientCSS.renderTags("backdrop"),
-                        error_html: error_html
+                        error_html: error_html,
+                        backdrop: req.backdrop("blurry")
                     });
                 }
             },

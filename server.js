@@ -98,6 +98,7 @@ workers = function() {
         app.use(core.device);
 
         //Custom Libraries
+        app.use(core.backdrop);
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));

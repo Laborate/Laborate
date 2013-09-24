@@ -15,7 +15,7 @@ exports.config = function(req, res, next) {
     res.locals.site_title = config.general.product + config.general.delimeter.web + config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.sentry = config.sentry.browser;
-    res.locals.backdrop_styles = "";
+    res.locals.backdrop = "";
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {
@@ -52,33 +52,37 @@ exports.update = function(req, res, next) {
     ], next)
 }
 
-exports.backdrop_image = function(theme) {
-    var files = backdrop_themes[theme];
-    var style_css = "";
+exports.backdrop = function(req, res, next) {
+    req.backdrop = function(theme) {
+        var files = backdrop_themes[theme];
+        var style_css = "";
 
-    if(!files) {
-       var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
-        if(fs.lstatSync(theme_path).isDirectory()) {
-            files = fs.readdirSync(theme_path);
-            backdrop_themes[theme] = files;
-        } else {
-            return "";
+        if(!files) {
+           var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
+            if(fs.lstatSync(theme_path).isDirectory()) {
+                files = fs.readdirSync(theme_path);
+                backdrop_themes[theme] = files;
+            } else {
+                return "";
+            }
         }
+
+        style_css = ("background-image: url('/img/backgrounds/" +
+                    theme + "/" + files[Math.floor((Math.random() * files.length))] +
+                    "');");
+
+        if(theme == "blurry") {
+            var hue = Math.floor((Math.random() * 360)) + "deg";
+            style_css += ("filter: hue-rotate(" + hue + ");         \
+                           -webkit-filter: hue-rotate(" + hue + "); \
+                           -moz-filter: hue-rotate(" + hue + ");    \
+                           -ms-filter: hue-rotate(" + hue + ");     \
+                           -o-filter: hue-rotate(" + hue + ");      \
+                          ");
+        }
+
+        return style_css.replace(/ /g, '');
     }
 
-    style_css = ("background-image: url('/img/backgrounds/" +
-                theme + "/" + files[Math.floor((Math.random() * files.length))] +
-                "');");
-
-    if(theme == "blurry") {
-        var hue = Math.floor((Math.random() * 360)) + "deg";
-        style_css += ("filter: hue-rotate(" + hue + ");         \
-                       -webkit-filter: hue-rotate(" + hue + "); \
-                       -moz-filter: hue-rotate(" + hue + ");    \
-                       -ms-filter: hue-rotate(" + hue + ");     \
-                       -o-filter: hue-rotate(" + hue + ");      \
-                      ");
-    }
-
-    return style_css.replace(/ /g, '');
+    next();
 }

@@ -1,12 +1,10 @@
-var core = require("./core");
-
 exports.login = function(req, res) {
     res.renderOutdated('auth/login', {
         title: 'Login',
         mode: "login",
         js: clientJS.renderTags("backdrop", "crypto"),
         css: clientCSS.renderTags("backdrop"),
-        backdrop_styles: core.backdrop_image("blurry")
+        backdrop: req.backdrop("blurry")
     });
 };
 
@@ -16,7 +14,7 @@ exports.register = function(req, res) {
         mode: 'register',
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
-        backdrop_styles: core.backdrop_image("blurry")
+        backdrop: req.backdrop("blurry")
     });
 };
 
@@ -28,7 +26,7 @@ exports.verify = function(req, res) {
             feedback: 'Verification Email Has Been Sent',
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
-            backdrop_styles: core.backdrop_image("blurry")
+            backdrop: req.backdrop("blurry")
         });
     } else {
         res.redirect("/documents/");
