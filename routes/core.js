@@ -80,5 +80,5 @@ exports.backdrop_image = function(theme) {
                       ");
     }
 
-    return style_css.replace(" ", " ");
+    return style_css.replace(/ /g, '');
 }
