@@ -1,7 +1,8 @@
 <% include ../includes/header.html %>
 <% include ../includes/navigation.html %>
-<div id="backdrop" style="background-image: url('<%= backdrop_img %>');">
+<div id="backdrop">
     <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop_styles %>"></div>
     <div id="backdrop-core">
          <a href="/"><div id="backdrop-logo">laborate.io</div></a>
          <div id="backdrop-container">
@@ -12,8 +13,8 @@
                     <input type="submit" class="backdrop-button" value="connecting..." disabled="disabled"/>
                 <% } else { %>
                     <input type="hidden" name="password"/>
-                    <div class="backdrop-loader">
-                        <div class="backdrop-loader-block"></div>
+                    <div class="loader-bar">
+                        <div class="loader-bar-block"></div>
                     </div>
                 <% } %>
             </form>

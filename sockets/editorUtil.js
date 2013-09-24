@@ -5,7 +5,6 @@ require("../lib/models").socket(function(response) {
 
 exports.redis = require('redis');
 exports.redisClient = exports.redis.createClient();
-exports.redisClient.select(config.redis);
 exports.roomUsers = new Array();
 
 exports.users = function(user, room) {
