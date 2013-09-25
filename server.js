@@ -93,12 +93,14 @@ workers = function() {
         app.use(error.global);
         app.use(error.handler);
 
+        //Custom Backdrop
+        app.use(core.backdrop);
+
         //Custom Routing Config
         app.use(core.config);
         app.use(core.device);
 
         //Custom Libraries
-        app.use(core.backdrop);
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));

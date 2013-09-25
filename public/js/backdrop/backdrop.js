@@ -46,13 +46,11 @@ window.backdrop = {
             $("#backdrop .textError").hide();
             $("body > *").not("#backdrop").remove();
             $("#backdrop").show();
-            $(".backdrop-container")
-                .width("320px")
-                .html(
-                    $(".backdropInitalWelcome")
-                        .removeClass("seperatorRequired")
-                        .html(message)[0]
-                );
+            $(".backdrop-bottom").hide();
+            $("#backdrop-container")
+                .css("text-align", "center")
+                .width("290px")
+                .html(message);
 
             $("#backdrop-core").hAlign().vAlign();
 

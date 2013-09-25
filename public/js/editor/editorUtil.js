@@ -171,7 +171,6 @@ window.editorUtil = {
                             }
                         ]);
                     } else {
-                        window.debug = json;
                         if(json.error_message) {
                             window.editorUtil.error(json.error_message, json.redirect_url);
                         } else {
@@ -184,8 +183,8 @@ window.editorUtil = {
     },
     error: function(message, url) {
         if(message == "You Are Already Editing This Document") {
-            message += "<br><input type='button' id='disconnectAll' \
-                        style='margin:5px 0 0 0;' class='button blue full' value='Disconnect All Other Sessions'/>";
+            message += "<br><button id='disconnectAll' style='margin-top: 5px' \
+                       class='backdrop-button'>Disconnect All Other Sessions</button>";
 
             $("#disconnectAll").live("click", function() {
                 $(this).val("loading...").addClass("disabled");
