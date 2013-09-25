@@ -6,7 +6,7 @@
     "general": {
         "port": 3000,
         "subdomains": ["code"],
-        "environment": "development",
+        "production": false,
         "company": "Laborate",
         "product": "Code",
         "delimeter": {
@@ -25,8 +25,8 @@
         }
     },
     "sentry": {
-        "node": "",
-        "browser": ""
+        "node": "https://beba575a90b44554a7476cd03e1d0c77:1bd6854a99524779963e3e1f71ed7c01@app.getsentry.com/11924",
+        "browser": "https://beba575a90b44554a7476cd03e1d0c77@app.getsentry.com/11924"
     },
     "cookies": {
         "rememberme": "usrr"

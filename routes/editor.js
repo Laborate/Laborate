@@ -19,7 +19,8 @@ exports.index = function(req, res, next) {
                     user: req.session.user,
                     document: document,
                     js: js,
-                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll")
+                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll"),
+                    backdrop: req.backdrop("blurry")
                 });
             } else {
                 res.error(404);
@@ -30,7 +31,8 @@ exports.index = function(req, res, next) {
             title: "Join A Document",
             mode: "editor-join",
             js: clientJS.renderTags("backdrop"),
-            css: clientCSS.renderTags("backdrop")
+            css: clientCSS.renderTags("backdrop"),
+            backdrop: req.backdrop("blurry")
         });
     }
 };

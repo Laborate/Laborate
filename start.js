@@ -23,7 +23,7 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
     }),
 
     env: {
-        'NODE_ENV': config.general.environment
+        'NODE_ENV': (config.general.production) ? "production" : "development"
     },
 
     logFile: __dirname + "/" + config.forever.forever_log,

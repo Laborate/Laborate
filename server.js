@@ -142,7 +142,7 @@ workers = function() {
 
 //Scale With Workers
 //Start forking if you are the master.
-if (cluster.isMaster && config.general.environment == "production") {
+if (cluster.isMaster && config.general.production) {
     for (var i = 0; i < require('os').cpus().length; i++) {
         cluster.fork();
     }

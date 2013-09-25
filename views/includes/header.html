@@ -53,7 +53,7 @@
         <!-- Javascript -->
         <%- js %>
 
-        <% if(environment == "production") { %>
+        <% if(production) { %>
             <!-- Sentry Logging -->
             <script type="text/javascript">
                 Raven.config("<%= sentry %>").install();
