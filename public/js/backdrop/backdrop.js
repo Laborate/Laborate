@@ -73,9 +73,17 @@ window.backdrop = {
         window.location.href = url;
     },
     profileImg: function() {
-        $("#backdrop-profile").attr("src", ("https://www.gravatar.com/avatar/" +
+        $("#backdrop-profile img").fadeOut(200);
+
+            setTimeout(function() {
+                $("#backdrop-profile img")
+                    .attr("src", ("https://www.gravatar.com/avatar/" +
                                             CryptoJS.MD5($("#backdrop-email").val()).toString() +
-                                            "?s=150&d=http%3A%2F%2F" + window.config.host + "%2Fimg%2Fdefault_gravatar.jpeg"));
+                                            "?s=150&d=http%3A%2F%2F" + window.config.host + "%2Fimg%2Fdefault_gravatar.jpeg"))
+                    .load(function() {
+                        $("#backdrop-profile img").fadeIn(200);
+                    });
+            }, 300);
     }
 }
 
