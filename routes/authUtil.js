@@ -1,4 +1,4 @@
-/* Access Checks */
+/* Checks */
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(config.cookies.rememberme in req.cookies) {
@@ -77,7 +77,7 @@ exports.xhr = function(req, res, next) {
     }
 }
 
-/* Access Operations */
+/* Operations */
 exports.login = function(req, res, next) {
     req.models.users.find({
         email: $.trim(req.param('email')),
@@ -115,9 +115,13 @@ exports.logout = function(req, res) {
 };
 
 exports.register = function(req, res, next) {
-    req.models.users.exists({email: req.param('email')}, function(error, exists) {
+    req.models.users.exists({
+        email: req.param('email')
+    }, function(error, exists) {
         if(error || exists) {
             res.error(200, "Email Already Exists");
+        } else if(req.param('password').length <= 7) {
+            res.error(200, "Passwords Is To Short");
         } else if(req.param('password') != req.param('password_confirm')) {
             res.error(200, "Passwords Do Not Match");
         } else {

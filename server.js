@@ -113,11 +113,10 @@ workers = function() {
             panels: config.development.debugger.panels
         });
 
-        if(config.development.basicAuth.username) {
-            app.use(express.basicAuth(
-                config.development.basicAuth.username,
-                config.development.basicAuth.password
-            ));
+        if(Object.keys(config.development.basicAuth).length != 0) {
+            app.use(express.basicAuth(function(username, password) {
+                return(config.development.basicAuth[username] == password);
+            }));
         }
     });
 

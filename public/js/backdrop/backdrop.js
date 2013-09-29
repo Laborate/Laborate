@@ -1,12 +1,15 @@
 window.backdrop = {
+    button: "",
+    timer: null,
     ready: function() {
         $("#backdrop-core").vAlign().hAlign().show();
         $(".backdrop-input").attr({"spellcheck": false});
+        window.backdrop.button = $("#backdrop input[type=submit]").val();
     },
     submit: function() {
         var passed = true;
         var data = { _csrf: window.config.csrf }
-        var submit = $("#backdrop input[type=submit]").val();
+        clearInterval(window.backdrop.timer);
 
         $(".backdrop-input").each(function() {
             passed = (passed) ? !!$(this).val() : passed;
@@ -39,9 +42,9 @@ window.backdrop = {
                         .removeClass("disabled")
                         .addClass("error");
 
-                    setTimeout(function() {
+                    window.backdrop.timer = setTimeout(function() {
                         $("#backdrop input[type=submit]")
-                            .val(submit)
+                            .val(window.backdrop.button)
                             .removeClass("error");
                     }, 5000);
                 }
