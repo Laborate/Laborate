@@ -4,13 +4,8 @@
 body {
     background: @body;
     font-family: 'Helvetica Neue', Helvetica,Arial, sans-serif;
-    min-width: 1050px;
+    min-width: 1077px;
     .reset-box-model();
-}
-
-.clear{
-    float: none;
-    clear: both;
 }
 
 .sidebar {
@@ -24,21 +19,21 @@ body {
 
     .profile {
         background: @sidebar_profile;
-        padding-top: 7px;
+        padding-top: 6px;
         height: 95px;
         .box-sizing(border-box);
 
         .img {
             overflow: hidden;
             margin: 0 auto;
-            width: 76px;
-            height: 76px;
-            border: solid 3px @sidebar_profile_img;
+            width: 75px;
+            height: 75px;
+            border: solid 4px lighten(@sidebar_profile, 5%);
             .border-radius(50%);
 
             img {
-               width: 76px;
-               height: 76px;
+               width: 75px;
+               height: 75px;
             }
         }
     }
@@ -101,6 +96,10 @@ body {
                     font-size: 14px;
                     color: darken(@sidebar_locations_icon, 15%);
                     .float-left();
+
+                    &.notify {
+                        color: darken(@header_button, 10%);
+                    }
                 }
             }
 
@@ -122,6 +121,10 @@ body {
                 .container {
                     .icon {
                         color: @sidebar_locations_icon;
+
+                        &.notify {
+                            color: @header_button;
+                        }
                     }
                 }
 
@@ -246,7 +249,7 @@ body {
 
                 .filter {
                     position: relative;
-                    margin-right: 40px;
+                    margin-right: 51px;
                     .float-left();
 
                     span {
@@ -331,12 +334,13 @@ body {
     }
 
     .files {
-        padding: 0 25px;
+        padding: 0 0 0 25px;
         .clearfix();
 
         .file {
+            position: relative;
             text-align: center;
-            margin: 20px 20px 20px 0;
+            margin: 20px 25px 20px 0;
             .float-left();
 
             .display {
@@ -348,7 +352,7 @@ body {
                 background: @file_display;
                 cursor: pointer;
                 opacity: 0.9;
-                width: 82px;
+                width: 84px;
                 .box-sizing(border-box);
                 .border-radius(2px 0 2px 2px);
 
@@ -389,11 +393,14 @@ body {
             }
 
             .name {
-                color: #484646;
+                position: absolute;
+                bottom: 5px;
+                left: 10px;
+                color: #ededed;
                 margin-top: 3px;
                 font-weight: 500;
                 font-size: 12px;
-                width: 82px;
+                width: 65px;
                 .ellipsis();
             }
         }

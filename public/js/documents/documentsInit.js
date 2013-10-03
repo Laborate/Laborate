@@ -13,11 +13,9 @@ window.url_params = function() {
 
 $(window).ready(function() {
     //Update Location On History Change and Every 2 Minutes
-    window.onpopstate = window.documents.locationReload;
-    setInterval(window.documents.locationReload, 120000);
+    //window.onpopstate = window.documents.locationReload;
+    //setInterval(window.documents.locationReload, 120000);
 
     //Pull Data For The First Time
-    window.documents.locationChange(window.url_params()["location"], window.url_params()["dir"], true);
-    window.documents.locationListing(window.url_params()["location"]);
-    window.documents.githubRepos();
+    window.documents.locations();
 });
