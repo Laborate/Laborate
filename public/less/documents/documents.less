@@ -155,7 +155,7 @@ body {
                     top: 12px;
                     left: 14px;
                     font-size: 26px;
-                    color: @header_bottom_select_border;
+                    color: darken(@header_bottom_select, 20%);
                 }
 
                 input {
@@ -225,9 +225,13 @@ body {
             font-weight: bold;
             background: @header_bottom;
             padding: 8px 25px;
+            height: 45px;
+            .box-sizing(border-box);
 
             .message {
-                font-size: 12px;
+                color: darken(@header_bottom, 50%);
+                padding-top: 5px;
+                font-size: 14px;
                 font-style: italic;
                 text-align: center;
                 width: 100%;
@@ -237,7 +241,7 @@ body {
             .filters {
                 font-size: 14px;
                 line-height: 17px;
-                color: #9a9898;
+                color: darken(@header_bottom, 25%);
                 .clearfix();
 
                 .filter {
@@ -260,9 +264,9 @@ body {
                         position: relative;
                         font-weight: bold;
                         padding: 5px 25px 5px 10px;
-                        background: #c7c6c6;
-                        color: #727070;
-                        border: solid 1px @header_bottom_select_border;
+                        background: @header_bottom_select;
+                        color: darken(@header_bottom_select, 30%);
+                        border: solid 1px darken(@header_bottom_select, 5%);
                         outline: none;
                         cursor: pointer;
 
@@ -274,7 +278,7 @@ body {
                         .border-radius(2px);
 
                         &:hover {
-                            border: solid 1px darken(@header_bottom_select_border, 10%);
+                            border: solid 1px darken(@header_bottom_select, 10%);
                         }
                     }
                 }
@@ -343,7 +347,7 @@ body {
                 padding: 30px 20px;
                 background: @file_display;
                 cursor: pointer;
-                opacity: 0.95;
+                opacity: 0.9;
                 width: 82px;
                 .box-sizing(border-box);
                 .border-radius(2px 0 2px 2px);
