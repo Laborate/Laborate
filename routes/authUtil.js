@@ -159,7 +159,7 @@ exports.register = function(req, res, next) {
 
 exports.verify = function(req, res, next) {
     if(!req.session.user.verified) {
-        res.redirect('/documents/');
+        res.redirect("/documents/");
     } else if($.trim(req.param('code')) != req.session.user.verified) {
         res.error(401);
     } else {

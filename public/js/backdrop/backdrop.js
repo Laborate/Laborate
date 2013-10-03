@@ -1,6 +1,7 @@
 window.backdrop = {
     button: "",
     timer: null,
+    email: null,
     ready: function() {
         $("#backdrop-core").vAlign().hAlign().show();
         $(".backdrop-input").attr({"spellcheck": false});
@@ -85,22 +86,26 @@ window.backdrop = {
         window.location.href = url;
     },
     profileImg: function() {
-        var profile_img = ("https://www.gravatar.com/avatar/" +
-                                            CryptoJS.MD5($("#backdrop-email").val()).toString() +
-                                            "?s=150&d=http%3A%2F%2F" + window.config.host + "%2Fimg%2Fdefault_gravatar.jpeg");
+        if(window.backdrop.email != $("#backdrop-email").val()) {
+            var profile_img = ("https://www.gravatar.com/avatar/" +
+                                                CryptoJS.MD5($("#backdrop-email").val()).toString() +
+                                                "?s=150&d=http%3A%2F%2F" + window.config.host + "%2Fimg%2Fdefault_gravatar.jpeg");
 
-        $.ajax({
-            url: profile_img,
-            complete: function(xhr) {
-                if(xhr.status == 200) {
-                    window.backdrop.profileImgChange(profile_img);
-                } else {
-                    if($("#backdrop-profile img").attr("src") != "/img/default_gravatar.jpeg") {
-                        window.backdrop.profileImgChange("/img/default_gravatar.jpeg");
+            $.ajax({
+                url: profile_img,
+                complete: function(xhr) {
+                    if(xhr.status == 200) {
+                        window.backdrop.profileImgChange(profile_img);
+                    } else {
+                        if($("#backdrop-profile img").attr("src") != "/img/default_gravatar.jpeg") {
+                            window.backdrop.profileImgChange("/img/default_gravatar.jpeg");
+                        }
                     }
+
+                    window.backdrop.email = $("#backdrop-email").val();
                 }
-            }
-        });
+            });
+        }
     },
     profileImgChange: function(url) {
         $("#backdrop-profile img").fadeOut(200);
