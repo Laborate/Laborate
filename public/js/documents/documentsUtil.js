@@ -145,7 +145,7 @@ window.documents = {
         window.cachedLocations["location_" + location][path] = json;
     },
     onlineDirectory: function(history) {
-        window.documents.notification("downloading directory listing...");
+        window.documents.notification(false);
         $.get("/documents/files/", function(json) {
             if(json.success == false) {
                 window.documents.notification(json.error_message);
@@ -214,7 +214,6 @@ window.documents = {
                 });
 
                 $(".files").html(files);
-                window.documents.notification(false);
                 if(history) window.history.pushState(null, null, "/documents/");
                 window.documents.locationActivated = "online";
             }
@@ -268,8 +267,8 @@ window.documents = {
                         item["class"] = "folder";
                         item["icon"] = "icon-folder";
                         break;
-                    case "file-symlink":
-                        item["color"] = "purple";
+                    case "folder-symlink":
+                        item["color"] = "orange";
                         item["class"] = "folder";
                         item["icon"] = "icon-folder";
                         break;

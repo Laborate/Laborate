@@ -91,6 +91,8 @@ exports.contents = function(req, res, next) {
                                     }
                                 } else if(type == "dir") {
                                     return "folder";
+                                } else if(type == "symlink") {
+                                    return "folder-symlink";
                                 } else {
                                     return type;
                                 }

@@ -19,4 +19,8 @@ $(window).ready(function() {
     //Pull Data For The First Time
     window.documents.locations();
     window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
+
+    $(".profile img").load(function() {
+        $(this).fadeIn(200);
+    });
 });
