@@ -69,10 +69,16 @@ window.documents = {
 
             var className = $(".locations .item[data-key='" + location + "']").find(".icon").attr("class");
             if(className.indexOf("icon-number") != -1 || className.indexOf("icon-notice") != -1) {
-                window.documents.locationNotification("online", false);
+                window.documents.locationNotification("online", history);
             }
         } else {
             window.documents.locationDirectory(location, path, history);
+        }
+    },
+    locationActivated: null,
+    locationReload: function() {
+        if(window.documents.locationActivated) {
+            window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
         }
     },
     locationIcons: new Array(),
@@ -116,12 +122,6 @@ window.documents = {
                 .fadeIn(200);
         }, 300);
     },
-    locationActivated: null,
-    locationReload: function() {
-        if(window.documents.locationActivated) {
-            window.documents.location(window.url_params()["location"], window.url_params()["dir"], true);
-        }
-    },
     cachedLocations: function(location) {
         if(window.cachedLocations == undefined) {
            window.cachedLocations = new Array();
@@ -144,7 +144,7 @@ window.documents = {
 
         window.cachedLocations["location_" + location][path] = json;
     },
-    onlineDirectory: function(no_history) {
+    onlineDirectory: function(history) {
         window.documents.notification("downloading directory listing...");
         $.get("/documents/files/", function(json) {
             if(json.success == false) {
@@ -241,10 +241,10 @@ window.documents = {
                         if(json.error_message == "Bad Github Oauth Token") {
                             window.documents.notification("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                         } else {
-                            if(no_history) {
-                                window.documents.location("online");
-                            } else {
+                            if(history) {
                                 window.documents.notification(json.error_message);
+                            } else {
+                                window.documents.location("online");
                             }
                         }
                     } else {
@@ -321,6 +321,7 @@ window.documents = {
             window.documents.notification("feel free to preview and download files into your drive");
         }
     },
+    // To test: window.documents.fileProgress($(".files .file"), 100);
     fileProgress: function(element, percent) {
         if(percent >= 0 && percent <= 100) {
             if(!element.find(".progress").is(":visible")) {
