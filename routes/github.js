@@ -4,7 +4,6 @@ exports.add_token = function(req, res, next) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 user.github = token;
                 req.session.user = user;
-                req.session.save();
                 res.redirect("/account/settings/");
             });
         });
@@ -18,7 +17,6 @@ exports.remove_token = function(req, res, next) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.github = null;
             req.session.user = user;
-            req.session.save();
             res.redirect("/account/settings/");
         });
     } else {
@@ -77,7 +75,30 @@ exports.contents = function(req, res, next) {
                         break;
 
                     case "directory":
-                        res.json(results.contents);
+                        var files = [];
+
+                        $.each(results.contents, function(i, item) {
+                            item.type = function(type, extension) {
+                                if(type == "file") {
+                                    if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                        return "file-image";
+                                    } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                        return "file-template";
+                                    } else if(["zip", "tar", "bzip", "bzip2", "gzip"].indexOf(extension) > -1) {
+                                        return "file-zip";
+                                    } else {
+                                        return "file-script";
+                                    }
+                                } else if(type == "dir") {
+                                    return "folder";
+                                } else {
+                                    return type;
+                                }
+                            }(item.type, item.extension);
+                            files.push(item);
+                        });
+
+                        res.json(files);
                         break;
                 }
             } else {

@@ -13,9 +13,10 @@ window.url_params = function() {
 
 $(window).ready(function() {
     //Update Location On History Change and Every 2 Minutes
-    //window.onpopstate = window.documents.locationReload;
-    //setInterval(window.documents.locationReload, 120000);
+    window.onpopstate = window.documents.locationReload;
+    setInterval(window.documents.locationReload, 120000);
 
     //Pull Data For The First Time
     window.documents.locations();
+    window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
 });

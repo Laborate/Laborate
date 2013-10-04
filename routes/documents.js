@@ -27,9 +27,21 @@ exports.files = function(req, res, next) {
                     files.push({
                         id: value.document_id,
                         name: value.document.name,
-                        password: (value.document.password != null),
+                        protection: (value.document.password != null) ? "password" : "",
                         location: value.document.location,
-                        role: value.permission.name
+                        type: function(name) {
+                            var extension = name.split(".")[name.split(".").length-1];
+
+                            if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                return "file-image";
+                            } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                return "file-template";
+                            } else if(["zip", "tar", "bzip", "bzip2", "gzip"].indexOf(extension) > -1) {
+                                return "file-zip";
+                            } else {
+                                return "file-script";
+                            }
+                        }(value.document.name)
                     });
                 }
             });
