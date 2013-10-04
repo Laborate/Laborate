@@ -9,6 +9,10 @@ $(".files .item").live("click", function() {
         if(["back", "folder", "folder-symlink"].indexOf($(this).data("type")) != -1) {
             window.documents.location(window.documents.locationActivated,
                 $(this).data("path"), true);
+        } else {
+            if(window.documents.mode == "selectFiles") {
+                window.documents.fileSelectClick($(this));
+            }
         }
     }
 });

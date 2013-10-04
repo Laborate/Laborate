@@ -2,6 +2,7 @@
 //          Document Instances
 /////////////////////////////////////////////////
 window.documents = {
+    mode: null,
     notification: function(message) {
         $(".bottom > div").hide();
 
@@ -320,6 +321,43 @@ window.documents = {
             window.documents.notification("feel free to preview and download files into your drive");
         }
     },
+    // To test: window.documents.fileSelect(true);
+    fileSelect: function(show) {
+        if(show) {
+            $(".files .file").each(function() {
+               $(this)
+                .data({ selected: "false" })
+                .find(".icon")
+                    .data({ default: $(this).find(".icon").attr("class") })
+                    .attr("class", "icon icon-add");
+            });
+
+            window.documents.mode = "selectFiles";
+        } else {
+            $(".files .file").each(function() {
+               $(this).data({ selected: "" });
+               $(this).find(".icon")
+                    .attr("class", $(this).find(".icon").data("default"))
+                    .data({ default: "" });
+            });
+            window.documents.mode = null;
+        }
+    },
+    fileSelectClick: function(element) {
+        if(window.documents.mode == "selectFiles") {
+            if(element.data("selected") == "false") {
+                element
+                    .data({ selected: "true" })
+                    .find(".icon")
+                        .attr("class", "icon icon-checked-2");
+            } else {
+                element
+                    .data({ selected: "false" })
+                    .find(".icon")
+                        .attr("class", "icon icon-add");
+            }
+        }
+    },
     // To test: window.documents.fileProgress($(".files .file"), 100);
     fileProgress: function(element, percent) {
         if(percent >= 0 && percent <= 100) {
@@ -363,7 +401,7 @@ window.documents = {
     },
     fileProgressClose: function(element, callback) {
         element.find(".progress").animate({
-            bottom: "-10px",
+            bottom: "0px",
             opacity: 0
         }, 200);
 
