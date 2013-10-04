@@ -1,3 +1,4 @@
+@import '../core/index';
 @import '../compless/all';
 
 #backdrop {
@@ -8,7 +9,7 @@
     top: 0;
     left: 0;
     color: #fff;
-    background: #4c5e93;
+    background: @backdrop;
 }
 
 #backdrop-img {
@@ -28,7 +29,7 @@
     width: 100%;
     height: 100%;
     z-index: 100002;
-    .linear-gradient(0deg, rgba(0,0,0,0.80), rgba(0,0,0,0.15));
+    .linear-gradient(0deg, rgba(0, 0, 0, .80), rgba(0, 0, 0, .15));
 }
 
 #backdrop-core {
@@ -48,8 +49,8 @@
     margin: auto;
     border: solid 1px solid 1px rgba(0,0,0,.2);
     .border-radius(5px);
-    .linear-gradient(0deg, rgba(0,0,0,.3), rgba(0,0,0,.2));
-    .box-shadow(0 1px 10px rgba(0, 0, 0, 0.2));
+    .linear-gradient(0deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .2));
+    .box-shadow(0 1px 10px rgba(0, 0, 0, .2));
 }
 
 #backdrop-container.larger {
@@ -62,8 +63,8 @@
     margin: 0 auto 10px auto;
     outline: none;
     overflow: hidden;
-    border: solid 4px rgba(0,0,0,.10);
-    background: rgba(0,0,0,.1);
+    border: solid 4px rgba(0, 0, 0, .10);
+    background: rgba(0, 0, 0, .1);
     .border-radius(50%);
 }
 
@@ -73,7 +74,7 @@
 }
 
 .backdrop-link {
-    color: #00bbff;
+    color: @backdrop_link;
     text-decoration: none;
 }
 
@@ -82,7 +83,7 @@
 }
 
 .backdrop-link:hover:active {
-    color: #00a2dd;
+    color: darken(@backdrop_link, 5%);
     text-decoration: underline;
 }
 
@@ -112,7 +113,7 @@
 
 .backdrop-button {
     width: 100%;
-    background: #0c7bba;
+    background: @backdrop_button;
     border: none;
     padding: 7px 0;
     text-align: center;
@@ -123,23 +124,23 @@
 }
 
 .backdrop-button:hover {
-    background: #0a71ac;
+    background: darken(@backdrop_button, 2%);
 }
 
 .backdrop-button:hover:active {
-    background: #0b689d;
+    background: darken(@backdrop_button, 5%);
 }
 
 .backdrop-button.error {
-    background: #ef5454;
+    background: @backdrop_error;
 }
 
 .backdrop-button.error:hover {
-    background: #ed4747;
+    background: darken(@backdrop_error, 2%);
 }
 
 .backdrop-button.error:hover:active {
-    background: #ed3b3b;
+    background: darken(@backdrop_error, 5%);
 }
 
 .backdrop-bottom {
