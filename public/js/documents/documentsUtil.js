@@ -46,11 +46,13 @@ window.documents = {
                         break;
                 }
 
-                locations += ('                                                  \
-                    <div class="item" data-key="' + item.key + '">              \
+                locations += ('                                                 \
+                    <div class="item"                                           \
+                        data-key="' + item.key + '"                             \
+                        data-counter="0">                                       \
                         <div class="container">                                 \
                             <div class="name">' + item.name + '</div>           \
-                            <div class="icon ' + item.class + '"></div> \
+                            <div class="icon ' + item.class + '"></div>         \
                         </div>                                                  \
                         <div class="active"></div>                              \
                     </div>                                                      \
@@ -79,7 +81,7 @@ window.documents = {
 
             var className = $(".locations .item[data-key='" + location + "']").find(".icon").attr("class");
             if(className.indexOf("icon-number") != -1 || className.indexOf("icon-notice") != -1) {
-                window.documents.locationNotification("online", history);
+                window.documents.locationNotification("online", false);
             }
         } else {
             window.documents.locationDirectory(location, path, history);
@@ -92,7 +94,7 @@ window.documents = {
         }
     },
     locationIcons: new Array(),
-    locationNotification: function(location, action) {
+    locationNotification: function(location, action, count) {
         var element = $(".locations .item[data-key='" + location + "']").find(".icon");
 
         if(!(location in window.documents.locationIcons)) {
@@ -103,15 +105,18 @@ window.documents = {
             var actions = {
                 "upload": "icon-arrow-up-2",
                 "download": "icon-arrow-down-2",
-                "count": function(className) {
-                    var count = /icon-number.*?(\d)/g.exec(className);
-                    count = ((count != null) ? parseInt(count[1]) : (className.indexOf("icon-number") != -1) ? 1 : 0) + 1;
-                    if(count <= 9 && className.indexOf("icon-notice") == -1) {
-                        return "icon-number" + ((count != 1) ? "-" + count : "");
-                    } else {
-                        return "icon-notice";
+                "counter": function() {
+                    if(count) {
+                        var parentContainer = element.parents(".item");
+                        count += parseInt(parentContainer.attr("data-counter"));
+                        parentContainer.attr("data-counter", count);
+                        if(count <= 9 && element.attr("class").indexOf("icon-notice") == -1) {
+                            return "icon-number" + ((count != 1) ? "-" + count : "");
+                        } else {
+                            return "icon-notice";
+                        }
                     }
-                }(element.attr("class"))
+                }()
             };
 
             if(action in actions) {
@@ -121,6 +126,7 @@ window.documents = {
         } else {
             window.documents.locationNotificationChange(element,
                 window.documents.locationIcons[location], false);
+            element.parents(".item").attr("data-counter", 0);
         }
     },
     locationNotificationChange: function(element, className, active) {
@@ -412,6 +418,7 @@ window.documents = {
                 opacity: 1
             }, 200);
             if(callback) setTimeout(callback, 300);
+            window.documents.locationNotification("online", "upload");
         });
     },
     fileProgressClose: function(element, callback) {
@@ -424,6 +431,7 @@ window.documents = {
             element.find(".progress").hide();
             element.find(".name").fadeIn(200);
             if(callback) setTimeout(callback, 300);
+            window.documents.locationNotification("online", "counter", element.length);
         }, 300);
     }
 }
