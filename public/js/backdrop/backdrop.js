@@ -120,6 +120,7 @@ window.backdrop = {
     }
 }
 
-$(document).ready(window.backdrop.ready);
-$("#backdrop form").live("submit", window.backdrop.submit);
-$("#backdrop-email").live("blur", window.backdrop.profileImg);
+$(document)
+    .ready(window.backdrop.ready)
+    .on("submit", "#backdrop form", window.backdrop.submit)
+    .on("blur", "#backdrop-email", window.backdrop.profileImg);

@@ -2,14 +2,23 @@
 //          Document Instances
 /////////////////////////////////////////////////
 window.documents = {
-    mode: null,
-    notification: function(message) {
+    mode: [],
+    headerBar: function(action, message) {
         $(".bottom > div").hide();
+        $(".actions .action").removeClass("active");
+        $(".actions .confirm").hide();
+        window.documents.mode = [];
 
-        if(message) {
-            $(".bottom .message").html(message).show();
-        } else {
-            $(".bottom .filters, .bottom .add-files").show();
+        switch(action) {
+            case "message":
+                $(".bottom .message").html(message).show();
+                break;
+            case "filters":
+                $(".bottom .filters, .bottom .add-files").show();
+                break;
+            case "actions":
+                $(".bottom .actions").show();
+                break;
         }
     },
     locations: function() {
@@ -146,10 +155,10 @@ window.documents = {
         window.cachedLocations["location_" + location][path] = json;
     },
     onlineDirectory: function(history) {
-        window.documents.notification(false);
+        window.documents.headerBar("filters");
         $.get("/documents/files/", function(json) {
             if(json.success == false) {
-                window.documents.notification(json.error_message);
+                window.documents.headerBar("message", json.error_message);
             } else {
                 var files = "";
                 $.each(json, function(i, item) {
@@ -234,15 +243,15 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            window.documents.notification("downloading directory listing...");
+            window.documents.headerBar("message", "downloading directory listing...");
             $.get("/documents/location/" + location + "/" + path,
                 function(json) {
                     if(json.success == false) {
                         if(json.error_message == "Bad Github Oauth Token") {
-                            window.documents.notification("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
+                            window.documents.headerBar("message", "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                         } else {
                             if(history) {
-                                window.documents.notification(json.error_message);
+                                window.documents.headerBar("message", json.error_message);
                             } else {
                                 window.documents.location("online");
                             }
@@ -318,47 +327,53 @@ window.documents = {
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
             window.documents.locationActivated = location;
-            window.documents.notification("feel free to preview and download files into your drive");
+            window.documents.headerBar("actions");
         }
     },
-    // To test: window.documents.fileSelect(true);
     fileSelect: function(show) {
         if(show) {
             $(".files .file").each(function() {
-               $(this)
-                .data({ selected: "false" })
-                .find(".icon")
-                    .data({ default: $(this).find(".icon").attr("class") })
-                    .attr("class", "icon icon-add");
+                var oldClass = $(this).find(".icon").data("default");
+                var newClass = $(this).find(".icon").attr("class");
+
+                $(this)
+                    .attr("data-selected", "false")
+                    .find(".icon")
+                    .attr({
+                        "data-default": ((!oldClass) ? newClass : oldClass),
+                        "class": "icon icon-add"
+                    });
             });
 
-            window.documents.mode = "selectFiles";
+            window.documents.mode = ["selectFiles"];
         } else {
             $(".files .file").each(function() {
-               $(this).data({ selected: "" });
-               $(this).find(".icon")
-                    .attr("class", $(this).find(".icon").data("default"))
-                    .data({ default: "" });
+                $(this).attr("data-selected", "")
+                $(this).find(".icon")
+                    .attr({
+                        "data-default": "",
+                        "class": $(this).find(".icon").data("default")
+                    });
             });
-            window.documents.mode = null;
+
+            window.documents.mode = [];
         }
     },
     fileSelectClick: function(element) {
-        if(window.documents.mode == "selectFiles") {
-            if(element.data("selected") == "false") {
+        if(window.documents.mode[0] == "selectFiles") {
+            if(element.attr("data-selected") == "true") {
                 element
-                    .data({ selected: "true" })
-                    .find(".icon")
-                        .attr("class", "icon icon-checked-2");
-            } else {
-                element
-                    .data({ selected: "false" })
+                    .attr("data-selected", "false")
                     .find(".icon")
                         .attr("class", "icon icon-add");
+            } else {
+                element
+                    .attr("data-selected", "true")
+                    .find(".icon")
+                        .attr("class", "icon icon-checked-2");
             }
         }
     },
-    // To test: window.documents.fileProgress($(".files .file"), 100);
     fileProgress: function(element, percent) {
         if(percent >= 0 && percent <= 100) {
             if(!element.find(".progress").is(":visible")) {

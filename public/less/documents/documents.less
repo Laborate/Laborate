@@ -242,6 +242,52 @@ body {
                 text-transform: uppercase;
             }
 
+            .actions {
+                display: none;
+
+                .action, .confirm  {
+                    color: #fff;
+                    font-size: 13px;
+                    padding: 5px 8px;
+                    cursor: pointer;
+                    .border-radius(2px);
+                }
+
+                .action {
+                    margin-right: 15px;
+                    background: @header_bottom_button;
+                    border: solid 1px darken(@header_bottom_button, 5%);
+                    .float-left();
+
+                    &:hover {
+                        background: darken(@header_bottom_button, 2%);
+                    }
+
+                    &:active {
+                        background: darken(@header_bottom_button, 3%);
+                    }
+
+                    &.active {
+                        opacity: .6;
+                    }
+                }
+
+                .confirm {
+                    background: @header_bottom_confirm;
+                    border: solid 1px darken(@header_bottom_confirm, 5%);
+                    .float-right();
+                    display: none;
+
+                    &:hover {
+                        background: darken(@header_bottom_confirm, 2%);
+                    }
+
+                    &:active {
+                        background: darken(@header_bottom_confirm, 3%);
+                    }
+                }
+            }
+
             .filters {
                 font-size: 14px;
                 line-height: 17px;
@@ -374,13 +420,23 @@ body {
                     border-color: @body @body transparent transparent;
                     width: 0; // Firefox 3.0 damage limitation
 
+                    .transition(border-width);
                     .border-radius(0 0 0 2px);
                     .box-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+                }
+
+                &:hover:before {
+                    border-width: 12px;
                 }
             }
 
             &.folder {
+                .transition(box-shadow);
                 .box-shadow(~"inset 0 5px 1px rgba(0, 0, 0, 0.2), inset 0 11px 1px rgba(0, 0, 0, 0.1)");
+
+                &:hover {
+                    .box-shadow(~"inset 0 8px 1px rgba(0, 0, 0, 0.2), inset 0 18px 1px rgba(0, 0, 0, 0.1)");
+                }
             }
 
             &.red {
