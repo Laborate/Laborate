@@ -18,9 +18,15 @@ $(document).on("click", ".files .item", function() {
                 $(this).data("path"), true);
         } else {
             if(window.documents.mode[0] == "selectFiles") {
-                window.documents.fileSelectClick($(this));
+                if(["file-template", "file-script"].indexOf($(this).data("type")) != -1) {
+                    window.documents.fileSelectClick($(this));
+                }
             } else {
-                window.documents.fileDownload($(this));
+                if(["file-template", "file-script"].indexOf($(this).data("type")) != -1) {
+                    window.documents.fileDownload($(this));
+                } else if($(this).data("type") == "file-image") {
+                    window.documents.fileImage($(this));
+                }
             }
         }
     }
@@ -49,7 +55,7 @@ $(document).on("keyup", "#search input", function() {
     $(this).parent("form").submit();
 });
 
-$(document).on("submit", "#search", function() {
-    window.documents.fileSearch($(this).find("input").val());
+$(document).on("submit change", "#search, .filters select:visible", function() {
+    window.documents.fileSearch($(this).find("input").val(), $(".filters select:visible"));
     return false;
 });

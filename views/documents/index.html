@@ -45,7 +45,7 @@
                 <!-- Online -->
                 <div class="filter" data-type="online">
                     <span>File Size:</span>
-                    <select>
+                    <select name="size">
                         <option>add filter</option>
                         <option value="0">1k - 10k</option>
                         <option value="1">10k - 100k</option>
@@ -56,17 +56,16 @@
                 </div>
                 <div class="filter" data-type="online">
                     <span>File Type:</span>
-                    <select>
+                    <select name="type">
                         <option>add filter</option>
-                        <option value="file">file</option>
-                        <option value="folder">folder</option>
-                        <option value="file-image">image</option>
+                        <option value="file-script">script file</option>
+                        <option value="file-template">template file</option>
                     </select>
                     <div class="icon icon-menu"></div>
                 </div>
                 <div class="filter" data-type="online">
                     <span>Laborators:</span>
-                    <select>
+                    <select name="laborators">
                         <option>add filter</option>
                         <option value="0">0-2</option>
                         <option value="1">3-5</option>
@@ -80,10 +79,11 @@
                 <!-- Non Online -->
                 <div class="filter" data-type="non-online">
                     <span>File Type:</span>
-                    <select>
+                    <select name="type">
                         <option>add filter</option>
-                        <option value="file">file</option>
                         <option value="folder">folder</option>
+                        <option value="file-script">script file</option>
+                        <option value="file-template">template file</option>
                         <option value="file-zip">zip/archive</option>
                         <option value="file-image">image</option>
                     </select>

@@ -9,6 +9,8 @@ window.documents = {
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
         $(".bottom .filter").hide();
+        $(".bottom .filter select").val("add filter");
+        $(".top input").val("");
         window.documents.mode = [];
 
         $.each(action, function(i, item) {
@@ -355,7 +357,14 @@ window.documents = {
     },
     fileSelect: function(show) {
         if(show) {
-            $(".files .file").each(function() {
+            $(".files .item").filter(function() {
+              if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
+                  $(this).animate({"opacity": .5}, 200);
+                  return false;
+              } else {
+                  return true;
+              }
+            }).each(function() {
                 var oldClass = $(this).find(".icon").data("default");
                 var newClass = $(this).find(".icon").attr("class");
 
@@ -370,7 +379,14 @@ window.documents = {
 
             window.documents.mode = ["selectFiles"];
         } else {
-            $(".files .file").each(function() {
+            $(".files .item").filter(function() {
+              if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
+                  $(this).animate({"opacity": 1}, 200);
+                  return false;
+              } else {
+                  return true;
+              }
+            }).each(function() {
                 $(this).attr("data-selected", "")
                 $(this).find(".icon")
                     .attr({
@@ -451,9 +467,25 @@ window.documents = {
             if(!abort) window.documents.locationNotification("online", "counter", element.length);
         }, 300);
     },
-    fileSearch: function(search, arguments) {
-        $(".files .item").each(function(i, item) {
-            $(this).toggle(($(this).data("name").toLowerCase().indexOf(search) != -1));
+    fileSearch: function(search, filters) {
+        $(".files .item").each(function() {
+            var item = $(this);
+            var show = true;
+
+            if(search && item.data("name").toLowerCase().indexOf(search) == -1) {
+                show = false;
+            }
+
+            window.debug = filters;
+
+            filters.each(function() {
+                var value = $(this).find(":selected").attr("value");
+                if(value && item.data($(this).attr("name")) != value) {
+                    show = false;
+                }
+            });
+
+            $(this).toggle(show);
         });
     },
     fileDownload: function(files) {

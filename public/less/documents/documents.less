@@ -122,7 +122,7 @@ body {
 
             .active {
                 width: 5px;
-                height: 25px;
+                height: 28px;
                 .float-right();
             }
 
@@ -316,6 +316,49 @@ body {
                 }
             }
 
+            .add-files {
+                color: #fff;
+                cursor: pointer;
+                .float-right();
+
+                #create {
+                    font-size: 13px;
+                    background: @header_bottom_button;
+                    padding: 5px 8px;
+                    border: solid 1px #0072bc;
+                    .border-radius(2px 0 0 2px);
+                    .float-left();
+
+                    &:hover {
+                        background: darken(@header_bottom_button, 2%);
+                    }
+
+                    &:active {
+                        background: darken(@header_bottom_button, 3%);
+                    }
+                }
+
+                #upload {
+                    height: 28px;
+                    font-size: 13px;
+                    padding: 7px;
+                    border: solid 1px #0072bc;
+                    border-left: none;
+                    background: darken(@header_bottom_button, 5%);
+                    .box-sizing(border-box);
+                    .border-radius(0 2px 2px 0);
+                    .float-left();
+
+                    &:hover {
+                        background: darken(@header_bottom_button, 7%);
+                    }
+
+                    &:active {
+                        background: darken(@header_bottom_button, 8%);
+                    }
+                }
+            }
+
 
             .filters {
                 font-size: 14px;
@@ -324,7 +367,7 @@ body {
 
                 .filter {
                     position: relative;
-                    margin-right: 50px;
+                    margin-right: 40px;
                     .float-left();
 
                     span {
@@ -358,50 +401,6 @@ body {
                         &:hover {
                             border: solid 1px darken(@header_bottom_select, 10%);
                         }
-                    }
-                }
-            }
-
-            .add-files {
-                position: absolute;
-                top: 6px;
-                right: 25px;
-                font-size: 16px;
-                color: #fff;
-                cursor: pointer;
-
-                #create {
-                    font-size: 13px;
-                    background: @header_bottom_button;
-                    padding: 6px 8px;
-                    border: solid 1px #0072bc;
-                    .border-radius(2px 0 0 2px);
-                    .float-left();
-
-                    &:hover {
-                        background: darken(@header_bottom_button, 2%);
-                    }
-
-                    &:active {
-                        background: darken(@header_bottom_button, 3%);
-                    }
-                }
-
-                #upload {
-                    font-size: 16px;
-                    padding: 6px 7px;
-                    border: solid 1px #0072bc;
-                    border-left: none;
-                    background: darken(@header_bottom_button, 5%);
-                    .border-radius(0 2px 2px 0);
-                    .float-left();
-
-                    &:hover {
-                        background: darken(@header_bottom_button, 7%);
-                    }
-
-                    &:active {
-                        background: darken(@header_bottom_button, 8%);
                     }
                 }
             }
