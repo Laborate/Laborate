@@ -2,8 +2,11 @@
 //          Document Instances
 /////////////////////////////////////////////////
 window.documents = {
-    mode: [],
-    headerBar: function(action, message) {
+    mode: new Array(),
+    locationActivated: null,
+    locationIcons: new Array(),
+    headerBarPrevious: null,
+    headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
         $(".bottom .filter").hide();
         window.documents.mode = [];
@@ -12,6 +15,13 @@ window.documents = {
             switch(item) {
                 case "message":
                     $(".bottom .message").html(message).show();
+
+                    if(window.documents.headerBarPrevious && !permanent) {
+                        setTimeout(function() {
+                           window.documents.headerBar(window.documents.headerBarPrevious);
+                        }, 5000);
+                    }
+
                     break;
                 case "filters-online":
                     $(".bottom .filters, .bottom .filter[data-type='online']").show();
@@ -94,13 +104,11 @@ window.documents = {
             window.documents.locationDirectory(location, path, history);
         }
     },
-    locationActivated: null,
     locationReload: function() {
-        if(window.documents.locationActivated) {
+        if(window.documents.locationActivated && window.documents.mode.length == 0) {
             window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
         }
     },
-    locationIcons: new Array(),
     locationNotification: function(location, action, count) {
         var element = $(".locations .item[data-key='" + location + "']").find(".icon");
 
@@ -183,7 +191,7 @@ window.documents = {
                             item["icon"] = "icon-file-xml";
                             break;
                         case "file-script":
-                            item["color"] = "green";
+                            item["color"] = "blue";
                             item["icon"] = "icon-file-css";
                             break;
 
@@ -389,8 +397,8 @@ window.documents = {
             }
         }
     },
-    fileProgress: function(element, percent) {
-        if(percent >= 0 && percent <= 100) {
+    fileProgress: function(element, percent, abort) {
+        if(percent >= 0 && percent <= 100 && !abort) {
             if(!element.find(".progress").is(":visible")) {
                 window.documents.fileProgressOpen(element, function() {
                     element.find(".bar").animate({
@@ -415,7 +423,7 @@ window.documents = {
                 }
             }
         } else if(element.find(".progress").is(":visible")) {
-            window.documents.fileProgressClose(element);
+            window.documents.fileProgressClose(element, abort);
         }
     },
     fileProgressOpen: function(element, callback) {
@@ -430,7 +438,7 @@ window.documents = {
             window.documents.locationNotification("online", "upload");
         });
     },
-    fileProgressClose: function(element, callback) {
+    fileProgressClose: function(element, abort, callback) {
         element.find(".progress").animate({
             bottom: "0px",
             opacity: 0
@@ -440,7 +448,7 @@ window.documents = {
             element.find(".progress").hide();
             element.find(".name").fadeIn(200);
             if(callback) setTimeout(callback, 300);
-            window.documents.locationNotification("online", "counter", element.length);
+            if(!abort) window.documents.locationNotification("online", "counter", element.length);
         }, 300);
     },
     fileSearch: function(search, arguments) {

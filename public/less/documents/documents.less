@@ -126,7 +126,7 @@ body {
                 .float-right();
             }
 
-            &:hover {
+            &:hover, &.hover {
                 .active {
                     background: darken(@sidebar_locations_active, 15%);
                 }
@@ -248,13 +248,16 @@ body {
             height: 45px;
             .box-sizing(border-box);
 
+            & > div {
+                display: none;
+            }
+
             .message {
                 color: darken(@header_bottom, 50%);
                 padding-top: 7px;
                 font-size: 12px;
                 text-align: center;
                 width: 100%;
-                display: none;
                 text-transform: uppercase;
             }
 

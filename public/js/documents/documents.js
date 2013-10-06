@@ -2,6 +2,13 @@ $(document).on("click", ".locations .item", function() {
     window.documents.location($(this).data("key"), "", true);
 });
 
+$(document).on("mouseover mouseout", ".files .item", function() {
+    if(window.documents.locationActivated == "online") {
+        var location = $(".locations .item[data-key='" + $(this).data("location") + "']")
+        location.toggleClass("hover", (!location.hasClass("hover")));
+    }
+});
+
 $(document).on("click", ".files .item", function() {
     if(window.documents.locationActivated == "online") {
         window.location.href = "/editor/" + $(this).data("id");
