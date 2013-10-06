@@ -24,12 +24,21 @@ body {
         .box-sizing(border-box);
 
         .img {
+            cursor: pointer;
             overflow: hidden;
             margin: 0 auto;
             width: 75px;
             height: 75px;
             border: solid 4px lighten(@sidebar_profile, 5%);
             .border-radius(50%);
+
+            &:hover {
+                border: solid 4px lighten(@sidebar_profile, 8%);
+            }
+
+            &:active {
+                border: solid 4px lighten(@sidebar_profile, 11%);
+            }
 
             img {
                width: 75px;
@@ -80,6 +89,7 @@ body {
             .clearfix();
 
             .container {
+                height: 18px;
                 margin: 6px 0;
                 .float-left();
                 .clearfix();
@@ -93,6 +103,7 @@ body {
                 }
 
                 .icon {
+                    line-height: 18px;
                     margin-left: 10px;
                     font-size: 14px;
                     color: darken(@sidebar_locations_icon, 15%);
@@ -100,6 +111,11 @@ body {
 
                     &.notify {
                         color: darken(@header_button, 10%);
+                    }
+
+                    &.big {
+                        font-size: 18px;
+                        margin-left: 8px;
                     }
                 }
             }
@@ -242,57 +258,66 @@ body {
                 text-transform: uppercase;
             }
 
-            .actions {
-                display: none;
+            .download-files,
+            .confirm-files,
+            .cancel-files  {
+                color: #fff;
+                font-size: 13px;
+                padding: 5px 8px;
+                margin-left: 15px;
+                cursor: pointer;
+                .border-radius(2px);
+                .float-right();
+            }
 
-                .action, .confirm  {
-                    color: #fff;
-                    font-size: 13px;
-                    padding: 5px 8px;
-                    cursor: pointer;
-                    .border-radius(2px);
+            .download-files {
+                background: @header_bottom_button;
+                border: solid 1px darken(@header_bottom_button, 5%);
+
+                &:hover {
+                    background: darken(@header_bottom_button, 2%);
                 }
 
-                .action {
-                    margin-right: 15px;
-                    background: @header_bottom_button;
-                    border: solid 1px darken(@header_bottom_button, 5%);
-                    .float-left();
-
-                    &:hover {
-                        background: darken(@header_bottom_button, 2%);
-                    }
-
-                    &:active {
-                        background: darken(@header_bottom_button, 3%);
-                    }
-
-                    &.active {
-                        opacity: .6;
-                    }
+                &:active {
+                    background: darken(@header_bottom_button, 3%);
                 }
 
-                .confirm {
-                    background: @header_bottom_confirm;
-                    border: solid 1px darken(@header_bottom_confirm, 5%);
-                    .float-right();
-                    display: none;
-
-                    &:hover {
-                        background: darken(@header_bottom_confirm, 2%);
-                    }
-
-                    &:active {
-                        background: darken(@header_bottom_confirm, 3%);
-                    }
+                &.active {
+                    opacity: .6;
                 }
             }
+
+            .confirm-files {
+                background: @header_bottom_confirm;
+                border: solid 1px darken(@header_bottom_confirm, 5%);
+
+                &:hover {
+                    background: darken(@header_bottom_confirm, 2%);
+                }
+
+                &:active {
+                    background: darken(@header_bottom_confirm, 3%);
+                }
+            }
+
+            .cancel-files {
+                background: @header_bottom_cancel;
+                border: solid 1px darken(@header_bottom_cancel, 5%);
+
+                &:hover {
+                    background: darken(@header_bottom_cancel, 2%);
+                }
+
+                &:active {
+                    background: darken(@header_bottom_cancel, 3%);
+                }
+            }
+
 
             .filters {
                 font-size: 14px;
                 line-height: 17px;
                 color: darken(@header_bottom, 25%);
-                .clearfix();
 
                 .filter {
                     position: relative;

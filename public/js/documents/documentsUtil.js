@@ -5,21 +5,28 @@ window.documents = {
     mode: [],
     headerBar: function(action, message) {
         $(".bottom > div").hide();
-        $(".actions .action").removeClass("active");
-        $(".actions .confirm").hide();
+        $(".bottom .filter").hide();
         window.documents.mode = [];
 
-        switch(action) {
-            case "message":
-                $(".bottom .message").html(message).show();
-                break;
-            case "filters":
-                $(".bottom .filters, .bottom .add-files").show();
-                break;
-            case "actions":
-                $(".bottom .actions").show();
-                break;
-        }
+        $.each(action, function(i, item) {
+            switch(item) {
+                case "message":
+                    $(".bottom .message").html(message).show();
+                    break;
+                case "filters-online":
+                    $(".bottom .filters, .bottom .filter[data-type='online']").show();
+                    break;
+                case "filters-non-online":
+                    $(".bottom .filters, .bottom .filter[data-type='non-online']").show();
+                    break;
+                case "add":
+                    $(".bottom .add-files").show();
+                    break;
+                case "download":
+                    $(".bottom .download-files").show();
+                    break;
+            }
+        });
     },
     locations: function() {
         $.get("/documents/locations/", function(json) {
@@ -129,12 +136,13 @@ window.documents = {
             element.parents(".item").attr("data-counter", 0);
         }
     },
-    locationNotificationChange: function(element, className, active) {
+    locationNotificationChange: function(element, className, active, big) {
         element.fadeOut(200);
         setTimeout(function() {
             element
                 .attr("class", className)
                 .toggleClass("notify", active)
+                .toggleClass("big", active)
                 .fadeIn(200);
         }, 300);
     },
@@ -161,10 +169,10 @@ window.documents = {
         window.cachedLocations["location_" + location][path] = json;
     },
     onlineDirectory: function(history) {
-        window.documents.headerBar("filters");
+        window.documents.headerBar(["filters-online", "add"]);
         $.get("/documents/files/", function(json) {
             if(json.success == false) {
-                window.documents.headerBar("message", json.error_message);
+                window.documents.headerBar(["message"], json.error_message);
             } else {
                 var files = "";
                 $.each(json, function(i, item) {
@@ -249,15 +257,15 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            window.documents.headerBar("message", "downloading directory listing...");
+            window.documents.headerBar(["message"], "downloading directory listing...");
             $.get("/documents/location/" + location + "/" + path,
                 function(json) {
                     if(json.success == false) {
                         if(json.error_message == "Bad Github Oauth Token") {
-                            window.documents.headerBar("message", "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
+                            window.documents.headerBar(["message"], "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
                         } else {
                             if(history) {
-                                window.documents.headerBar("message", json.error_message);
+                                window.documents.headerBar(["message"], json.error_message);
                             } else {
                                 window.documents.location("online");
                             }
@@ -319,7 +327,8 @@ window.documents = {
                     <div class="item ' + item.class + ' ' + item.color + '" \
                         data-name="' + item.name + '"                       \
                         data-path="' + item.path + '"                       \
-                        data-type="' + item.type + '">                      \
+                        data-type="' + item.type + '"                       \
+                        data-location="' + location + '">                   \
                         <div class="icon ' + item.icon + '"></div>          \
                         <div class="name">' + item.name + '</div>           \
                         <div class="progress">                              \
@@ -333,7 +342,7 @@ window.documents = {
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
             window.documents.locationActivated = location;
-            window.documents.headerBar("actions");
+            window.documents.headerBar(["filters-non-online", "download"]);
         }
     },
     fileSelect: function(show) {
@@ -433,5 +442,24 @@ window.documents = {
             if(callback) setTimeout(callback, 300);
             window.documents.locationNotification("online", "counter", element.length);
         }, 300);
+    },
+    fileSearch: function(search, arguments) {
+        $(".files .item").each(function(i, item) {
+            $(this).toggle(($(this).data("name").toLowerCase().indexOf(search) != -1));
+        });
+    },
+    fileDownload: function(files) {
+        window.documents.fileProgress(files, 0);
+        files.each(function() {
+            var file = $(this);
+            window.documents.fileProgress(file, 50);
+            $.get("/documents/location/" + file.data("location") + "/" + file.data("path"), function(json) {
+                if(json.success == false) {
+                    window.documents.headerBar(["message"], json.error_message);
+                } else {
+                    window.documents.fileProgress(file, 100);
+                }
+            });
+        });
     }
 }

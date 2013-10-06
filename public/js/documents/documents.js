@@ -12,26 +12,37 @@ $(document).on("click", ".files .item", function() {
         } else {
             if(window.documents.mode[0] == "selectFiles") {
                 window.documents.fileSelectClick($(this));
+            } else {
+                window.documents.fileDownload($(this));
             }
         }
     }
 });
 
-$(document).on("click", ".actions .action", function() {
-    $(".actions .action").removeClass("active");
-    var toggle = (window.documents.mode[1] != $(this).data("action"));
-    window.documents.fileSelect(toggle);
-    window.documents.mode = (toggle) ? [
-        "selectFiles",
-        $(this).data("action")
-    ] : [];
-    $(this).toggleClass("active", toggle);
-    $(".actions .confirm").toggle(toggle);
+$(document).on("click", ".download-files", function() {
+    window.documents.fileSelect(true);
+    window.documents.mode = ["selectFiles", "download"];
+    $(this).hide();
+    $(".confirm-files, .cancel-files").show();
 });
 
-$(document).on("click", ".actions .confirm", function() {
-    $(".actions .action").removeClass("active");
-    $(".confirm").hide();
-    documents.fileProgress($(".files .file[data-selected=true]"), 100);
+$(document).on("click", ".confirm-files, .cancel-files", function() {
+    $(".confirm-files, .cancel-files").hide();
+    $(".download-files").show();
+
+    var files = $(".files .file[data-selected=true]");
+    if($(this).attr("class") == "confirm-files" && files.length != 0) {
+        window.documents.fileDownload(files);
+    }
+
     window.documents.fileSelect(false);
+});
+
+$(document).on("keyup", "#search input", function() {
+    $(this).parent("form").submit();
+});
+
+$(document).on("submit", "#search", function() {
+    window.documents.fileSearch($(this).find("input").val());
+    return false;
 });

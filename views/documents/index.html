@@ -2,7 +2,9 @@
 <div class="sidebar">
     <div class="profile">
         <div class="img">
-            <img src="https://www.gravatar.com/avatar/<%= user.email_hash %>?s=152&d=http%3A%2F%2F<%= host %>%2Fimg%2Fdefault_gravatar.jpeg" />
+            <a href="/account/">
+                <img src="https://www.gravatar.com/avatar/<%= user.email_hash %>?s=152&d=http%3A%2F%2F<%= host %>%2Fimg%2Fdefault_gravatar.jpeg" />
+            </a>
         </div>
     </div>
     <div class="controller">
@@ -24,9 +26,11 @@
     <div class="header">
         <div class="top">
             <div class="search">
-                <div class="icon icon-search"></div>
-                <input type="text" placeholder="Search your files..." />
-                <button type="submit">Search</button>
+                <form id="search">
+                    <div class="icon icon-search"></div>
+                    <input type="text" placeholder="Search your files..." />
+                    <button type="submit">Search</button>
+                </form>
             </div>
             <div class="accounts">
                 <a href="/account/">My Account</a>
@@ -37,22 +41,9 @@
         </div>
         <div class="bottom">
             <div class="message"></div>
-            <div class="actions">
-                <div id="action-select" class="action" data-action="select">
-                    <span class="icon-document-stroke"></span>
-                    <span>Select Files</span>
-                </div>
-                <div id="action-download" class="action" data-action="download">
-                    <span class="icon-download-3"></span>
-                    <span>Download Files</span>
-                </div>
-                <div id="action-confirm" class="confirm">
-                    <span class="icon-thumbs-up-2"></span>
-                    <span>Confirm</span>
-                </div>
-            </div>
             <div class="filters">
-                <div class="filter">
+                <!-- Online -->
+                <div class="filter" data-type="online">
                     <span>File Size:</span>
                     <select>
                         <option>add filter</option>
@@ -63,18 +54,17 @@
                     </select>
                     <div class="icon icon-menu"></div>
                 </div>
-                <div class="filter">
+                <div class="filter" data-type="online">
                     <span>File Type:</span>
                     <select>
                         <option>add filter</option>
                         <option value="file">file</option>
                         <option value="folder">folder</option>
-                        <option value="zip">zip</option>
                         <option value="file-image">image</option>
                     </select>
                     <div class="icon icon-menu"></div>
                 </div>
-                <div class="filter">
+                <div class="filter" data-type="online">
                     <span>Laborators:</span>
                     <select>
                         <option>add filter</option>
@@ -86,6 +76,31 @@
                     </select>
                     <div class="icon icon-menu"></div>
                 </div>
+
+                <!-- Non Online -->
+                <div class="filter" data-type="non-online">
+                    <span>File Type:</span>
+                    <select>
+                        <option>add filter</option>
+                        <option value="file">file</option>
+                        <option value="folder">folder</option>
+                        <option value="file-zip">zip/archive</option>
+                        <option value="file-image">image</option>
+                    </select>
+                    <div class="icon icon-menu"></div>
+                </div>
+            </div>
+            <div class="download-files">
+                <span class="icon-download-3"></span>
+                <span>Download Files</span>
+            </div>
+            <div class="cancel-files">
+                <span class="icon-thumbs-down-2"></span>
+                <span>Cancel</span>
+            </div>
+            <div class="confirm-files">
+                <span class="icon-thumbs-up-2"></span>
+                <span>Confirm</span>
             </div>
             <div class="add-files">
                 <div id="create">Create File</div>
