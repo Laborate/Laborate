@@ -41,7 +41,7 @@ var error_handler = function(status, message, req, res) {
         res.status(status)
         res.format({
             'text/plain': function(){
-                res.send(error_message);
+                res.send(error_message + "\n");
             },
             'text/html': function(){
                 if(redirect_url) {

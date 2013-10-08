@@ -25,7 +25,7 @@ $(document).on("click", ".files .item", function() {
                 if(["file-template", "file-script"].indexOf($(this).data("type")) != -1) {
                     window.documents.fileDownload($(this));
                 } else if($(this).data("type") == "file-image") {
-                    window.documents.fileImage($(this));
+                    window.documents.fileImage($(this).data("path"));
                 }
             }
         }

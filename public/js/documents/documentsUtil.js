@@ -200,7 +200,7 @@ window.documents = {
                         /* When More Products Are Added */
                         case "file-zip":
                             item["color"] = "red";
-                            item["icon"] = "icon-file-zip";
+                            item["icon"] = "icon-file-zip disabled";
                             break;
                         case "file-image":
                             item["color"] = "green";
@@ -318,7 +318,7 @@ window.documents = {
                         break;
                     case "file-zip":
                         item["color"] = "red";
-                        item["class"] = "file";
+                        item["class"] = "file disabled";
                         item["icon"] = "icon-file-zip";
                         break;
                     case "file-image":
@@ -358,12 +358,17 @@ window.documents = {
     fileSelect: function(show) {
         if(show) {
             $(".files .item").filter(function() {
-              if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
-                  $(this).animate({"opacity": .5}, 200);
-                  return false;
-              } else {
-                  return true;
-              }
+                if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
+                    if($(this).hasClass("disabled")) {
+                        $(this).attr("data-disabled", "disabled");
+                    } else {
+                        $(this).addClass("disabled");
+                    }
+
+                    return false;
+                } else {
+                    return true;
+                }
             }).each(function() {
                 var oldClass = $(this).find(".icon").data("default");
                 var newClass = $(this).find(".icon").attr("class");
@@ -380,12 +385,15 @@ window.documents = {
             window.documents.mode = ["selectFiles"];
         } else {
             $(".files .item").filter(function() {
-              if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
-                  $(this).animate({"opacity": 1}, 200);
-                  return false;
-              } else {
-                  return true;
-              }
+                if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
+                    if($(this).data("disabled") != "disabled") {
+                        $(this).removeClass("disabled");
+                    }
+
+                    return false;
+                } else {
+                    return true;
+                }
             }).each(function() {
                 $(this).attr("data-selected", "")
                 $(this).find(".icon")
@@ -501,5 +509,8 @@ window.documents = {
                 }
             });
         });
+    },
+    fileImage: function(url) {
+
     }
 }

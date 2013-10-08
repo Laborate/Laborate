@@ -36,7 +36,7 @@ exports.files = function(req, res, next) {
                                 return "file-image";
                             } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
                                 return "file-template";
-                            } else if(["zip", "tar", "bzip", "bzip2", "gzip", "gz"].indexOf(extension) > -1) {
+                            } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
                                 return "file-zip";
                             } else {
                                 return "file-script";

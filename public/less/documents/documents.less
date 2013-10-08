@@ -421,15 +421,16 @@ body {
             cursor: pointer;
             opacity: 0.9;
             width: 84px;
+            .transition(opacity);
             .box-sizing(border-box);
             .border-radius(2px);
             .float-left();
 
-            &:hover {
+            &:not(.disabled):hover {
                 opacity: .95;
             }
 
-            &:hover:active {
+            &:not(.disabled):hover:active {
                 opacity: 1;
             }
 
@@ -439,8 +440,8 @@ body {
                 &:before {
                     content: "";
                     position: absolute;
-                    top: 0;
-                    right: 0;
+                    top: 0px;
+                    right: 0px;
                     border: solid 9px transparent;
                     background: rgba(0, 0, 0, 0.3);
                     display: block;
@@ -452,7 +453,7 @@ body {
                     .box-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
                 }
 
-                &:hover:before {
+                &:not(.disabled):hover:before {
                     border-width: 12px;
                 }
             }
@@ -461,9 +462,14 @@ body {
                 .transition(box-shadow);
                 .box-shadow(~"inset 0 5px 1px rgba(0, 0, 0, 0.2), inset 0 11px 1px rgba(0, 0, 0, 0.1)");
 
-                &:hover {
+                &:not(.disabled):hover {
                     .box-shadow(~"inset 0 8px 1px rgba(0, 0, 0, 0.2), inset 0 18px 1px rgba(0, 0, 0, 0.1)");
                 }
+            }
+
+            &.disabled {
+                cursor: default;
+                opacity: .5;
             }
 
             &.red {
