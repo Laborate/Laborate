@@ -6,6 +6,30 @@ window.documents = {
     locationActivated: null,
     locationIcons: new Array(),
     headerBarPrevious: null,
+    popup: function(action, data, header) {
+        var container = $(".popup .container");
+        var new_css = {};
+
+        container.find(".action").hide();
+
+        switch(action) {
+            case "image":
+                new_css.width = "280px";
+                container.find("#popup-" + action)
+                    .find("img")
+                    .attr("src", data)
+                    .parent(".action")
+                    .show();
+                break;
+        }
+
+        window.debug = container
+            .css(new_css)
+            .hAlign()
+            .vAlign()
+            .parent(".popup")
+            .show();
+    },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
         $(".bottom .filter").hide();
@@ -509,8 +533,5 @@ window.documents = {
                 }
             });
         });
-    },
-    fileImage: function(url) {
-
     }
 }
