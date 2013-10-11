@@ -9,26 +9,43 @@ window.documents = {
     popup: function(action, data, header) {
         var container = $(".popup .container");
         var new_css = {};
+        var show = true;
 
         container.find(".action").hide();
 
         switch(action) {
             case "image":
-                new_css.width = "280px";
+                new_css.width = "300px";
+                new_css.background = "url('/img/transparent.gif') repeat";
                 container.find("#popup-" + action)
                     .find("img")
                     .attr("src", data)
+                    .load(function() {
+                        container.hAlign("fixed").vAlign("fixed");
+                    })
                     .parent(".action")
                     .show();
                 break;
+
+            default:
+                show = false;
+                break;
         }
 
-        window.debug = container
+        if(header) {
+            container
+                .find(".header .title")
+                .text(header)
+                .parent(".header")
+                .toggle(!!(header));
+        }
+
+        container
             .css(new_css)
-            .hAlign()
-            .vAlign()
+            .hAlign("fixed")
+            .vAlign("fixed")
             .parent(".popup")
-            .show();
+            .toggle(show);
     },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
@@ -166,19 +183,21 @@ window.documents = {
             }
         } else {
             window.documents.locationNotificationChange(element,
-                window.documents.locationIcons[location], false);
+                window.documents.locationIcons[location], false, false);
             element.parents(".item").attr("data-counter", 0);
         }
     },
     locationNotificationChange: function(element, className, active, big) {
-        element.fadeOut(200);
-        setTimeout(function() {
-            element
-                .attr("class", className)
-                .toggleClass("notify", active)
-                .toggleClass("big", active)
-                .fadeIn(200);
-        }, 300);
+        if(element.attr("class").indexOf(className) == -1) {
+            element.fadeOut(200);
+            setTimeout(function() {
+                element
+                    .attr("class", className)
+                    .toggleClass("notify", active)
+                    .toggleClass("big", active)
+                    .fadeIn(200);
+            }, 300);
+        }
     },
     cachedLocations: function(location) {
         if(window.cachedLocations == undefined) {
@@ -301,7 +320,7 @@ window.documents = {
                             if(history) {
                                 window.documents.headerBar(["message"], json.error_message);
                             } else {
-                                window.documents.location("online");
+                                window.documents.location("online", null, true);
                             }
                         }
                     } else {
@@ -471,7 +490,7 @@ window.documents = {
                 }
             }
         } else if(element.find(".progress").is(":visible")) {
-            window.documents.fileProgressClose(element, abort);
+            window.documents.fileProgressClose(element);
         }
     },
     fileProgressOpen: function(element, callback) {
@@ -483,10 +502,9 @@ window.documents = {
                 opacity: 1
             }, 200);
             if(callback) setTimeout(callback, 300);
-            window.documents.locationNotification("online", "upload");
         });
     },
-    fileProgressClose: function(element, abort, callback) {
+    fileProgressClose: function(element, callback) {
         element.find(".progress").animate({
             bottom: "0px",
             opacity: 0
@@ -496,7 +514,6 @@ window.documents = {
             element.find(".progress").hide();
             element.find(".name").fadeIn(200);
             if(callback) setTimeout(callback, 300);
-            if(!abort) window.documents.locationNotification("online", "counter", element.length);
         }, 300);
     },
     fileSearch: function(search, filters) {
@@ -521,8 +538,9 @@ window.documents = {
         });
     },
     fileDownload: function(files) {
+        window.documents.locationNotification("online", "upload");
         window.documents.fileProgress(files, 0);
-        files.each(function() {
+        files.each(function(count) {
             var file = $(this);
             window.documents.fileProgress(file, 50);
             $.get("/documents/location/" + file.data("location") + "/" + file.data("path"), function(json) {
@@ -530,8 +548,12 @@ window.documents = {
                     window.documents.headerBar(["message"], json.error_message);
                 } else {
                     window.documents.fileProgress(file, 100);
+
+                    if((count+1) == files.length) {
+                        window.documents.locationNotification("online", "counter", files.length);
+                    }
                 }
             });
-        });
+        })
     }
 }

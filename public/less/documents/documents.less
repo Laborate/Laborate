@@ -558,10 +558,52 @@ body {
     .container {
         min-width: 280px;
         min-height: 100px;
+        overflow: hidden;
         color: #fff;
         background: @popup;
         border: solid 1px darken(@popup, 10%);
         .border-radius(3px);
         .box-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+
+        .header {
+            font-size: 16px;
+            color: #fff;
+            background: @popup_header;
+            padding: 10px;
+            border-bottom: solid 1px darken(@popup, 10%);
+            .clearfix();
+
+            .title {
+                width: 88%;
+                .ellipsis();
+                .float-left();
+            }
+
+            .close {
+                cursor: pointer;
+                margin: -10px;
+                padding: 10px 12px;
+                font-weight: bold;
+                border-left: solid 1px darken(@popup, 10%);
+                background: darken(@popup_header, 5%);
+                .float-right();
+
+                &:hover {
+                    background: darken(@popup_header, 6%);
+                }
+
+                &:hover:active {
+                    background: darken(@popup_header, 7%);
+                }
+            }
+        }
+
+        .actions {
+            padding: 10px;
+
+            img {
+                max-height: 500px;
+            }
+        }
     }
 }

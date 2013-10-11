@@ -25,11 +25,17 @@ $(document).on("click", ".files .item", function() {
                 if(["file-template", "file-script"].indexOf($(this).data("type")) != -1) {
                     window.documents.fileDownload($(this));
                 } else if($(this).data("type") == "file-image") {
-                    window.documents.popup("image", $(this).data("path"));
+                    window.documents.popup("image",
+                        "/documents/location/" + window.documents.locationActivated + "/" + $(this).data("path"),
+                        $(this).data("name"));
                 }
             }
         }
     }
+});
+
+$(document).on("click", ".popup, .popup .close", function(e) {
+    if(e.target == this) window.documents.popup("close");
 });
 
 $(document).on("click", ".download-files", function() {
