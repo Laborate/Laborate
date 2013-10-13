@@ -48,6 +48,7 @@ exports.contents = function(req, res, next) {
             req.session.user.locations[req.param("0")].repository,
             req.param("1"),
         function(error, results) {
+            console.log(error);
             if(!error) {
                 switch(results.type) {
                     case "image":
@@ -75,9 +76,7 @@ exports.contents = function(req, res, next) {
                         break;
 
                     case "directory":
-                        var files = [];
-
-                        $.each(results.contents, function(i, item) {
+                        res.json($.map(results.contents, function(item) {
                             item.type = function(type, extension) {
                                 if(type == "file") {
                                     if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
@@ -97,10 +96,8 @@ exports.contents = function(req, res, next) {
                                     return type;
                                 }
                             }(item.type, item.extension);
-                            files.push(item);
-                        });
-
-                        res.json(files);
+                            return item;
+                        }));
                         break;
                 }
             } else {

@@ -361,6 +361,20 @@ window.documents = {
 
         function finish(response) {
             $.each(response, function(i, item) {
+                //File Size
+                if(item.size <= 1024) {
+                    item["size"] = 0;
+                } else if(item.size > 1024 && item.size <= 1024 * 10) {
+                    item["size"] = 1;
+                } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
+                    item["size"] = 2;
+                } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
+                    item["size"] = 3;
+                } else {
+                    item["size"] = 4;
+                }
+
+                //File Types
                 switch(item.type) {
                     case "back":
                         item["color"] = "";
@@ -409,6 +423,7 @@ window.documents = {
                         data-name="' + item.name + '"                       \
                         data-path="' + item.path + '"                       \
                         data-type="' + item.type + '"                       \
+                        data-size="' + item.size + '"                       \
                         data-location="' + location + '">                   \
                         <div class="icon ' + item.icon + '"></div>          \
                         <div class="name">' + item.name + '</div>           \
