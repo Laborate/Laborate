@@ -186,7 +186,7 @@ $(window).ready(function() {
     $(window).resize(window.chatRoom.resize);
 
     //Submit New Message
-    $("#messenger").live('keydown', function(e) {
+    $("#messenger").on('keydown', function(e) {
         //Checks if enter key is pressed
         if(e.which == 13) {
         	if($.trim($(this).val()) != "") {

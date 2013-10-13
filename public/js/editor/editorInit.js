@@ -1,5 +1,5 @@
 window.socketUtil = {
-    socket: io.connect(window.config.host+":"+window.config.port, {
+    socket: io.connect(window.config.host + ":" + window.config.port, {
         "sync disconnect on unload": true
     }),
     connect: function() {

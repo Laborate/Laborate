@@ -38,22 +38,23 @@ $(document).on("click", ".popup, .popup .close", function(e) {
     if(e.target == this) window.documents.popup("close");
 });
 
+$(document).on("click", ".select-files", function() {
+    window.documents.fileSelectClick($(".files .file:not(.disabled)"));
+});
+
 $(document).on("click", ".download-files", function() {
     window.documents.fileSelect(true);
+    window.documents.headerBar(["filters-non-online", "side-button"]);
     window.documents.mode = ["selectFiles", "download"];
     $(this).hide();
-    $(".confirm-files, .cancel-files").show();
 });
 
 $(document).on("click", ".confirm-files, .cancel-files", function() {
-    $(".confirm-files, .cancel-files").hide();
-    $(".download-files").show();
-
+    window.documents.headerBar(["filters-non-online", "download"]);
     var files = $(".files .file[data-selected=true]");
-    if($(this).attr("class") == "confirm-files" && files.length != 0) {
+    if($(this).hasClass("confirm-files") && files.length != 0) {
         window.documents.fileDownload(files);
     }
-
     window.documents.fileSelect(false);
 });
 

@@ -87,16 +87,16 @@ $(window).ready(function() {
     });
 
     //Toogle Full Screen Mode
-    $("#full_screen, #chat_bubble").live("click", function() {
+    $("#full_screen, #chat_bubble").on("click", function() {
         window.editorUtil.fullScreen();
     });
 
     //Contributor Events
-    $(".contributor").live("hover", function(){
+    $(".contributor").on("hover", function(){
         window.editorUtil.userHover($(this));
     });
 
-    $(".contributor").live("mouseout", function(){
+    $(".contributor").on("mouseout", function(){
         window.editorUtil.userLeave();
     });
 });

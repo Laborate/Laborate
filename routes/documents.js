@@ -3,6 +3,7 @@ var rand = require("generate-key");
 
 /* Modules: Custom */
 var github = require("./github");
+var file_size = require("../lib/core/file_size");
 
 exports.index = function(req, res, next) {
     res.renderOutdated('documents/index', {
@@ -21,14 +22,14 @@ exports.files = function(req, res, next) {
         user_id: req.session.user.id
     }, function(error, documents) {
         if(!error) {
-            var files = [];
-            $.each(documents, function(key, value) {
+            res.json($.map(documents, function(value) {
                 if(value) {
-                    files.push({
+                    return {
                         id: value.document_id,
                         name: value.document.name,
                         protection: (value.document.password != null) ? "password" : "",
                         location: value.document.location,
+                        size: file_size.bytes(JSON.stringify(value.document.content)),
                         type: function(name) {
                             var extension = name.split(".")[name.split(".").length-1];
 
@@ -41,12 +42,10 @@ exports.files = function(req, res, next) {
                             } else {
                                 return "file-script";
                             }
-                        }(value.document.name)
-                    });
+                        }(value.document.name),
+                    }
                 }
-            });
-
-            res.json(files);
+            }));
         } else {
             res.error(200, "Failed To Load Files");
         }

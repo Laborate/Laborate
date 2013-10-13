@@ -6,6 +6,7 @@ window.documents = {
     locationActivated: null,
     locationIcons: new Array(),
     headerBarPrevious: null,
+    timer: null,
     popup: function(action, data, header) {
         var container = $(".popup .container");
         var new_css = {};
@@ -78,6 +79,9 @@ window.documents = {
                 case "download":
                     $(".bottom .download-files").show();
                     break;
+                case "side-button":
+                    $(".side-button").show();
+                    break
             }
         });
     },
@@ -134,6 +138,8 @@ window.documents = {
         $(".locations .item").removeClass("activated");
         $(".locations .item[data-key='" + location + "']").addClass("activated");
         $(".files").html("");
+
+        if(window.documents.interval) clearTimeout(window.documents.timer);
 
         if(location == "online" || !location) {
             window.documents.onlineDirectory(history);
@@ -223,12 +229,33 @@ window.documents = {
     },
     onlineDirectory: function(history) {
         window.documents.headerBar(["filters-online", "add"]);
+
+        window.documents.timer = setTimeout(function() {
+            window.documents.headerBar(["message"], "downloading directory listing...");
+        }, 5000);
+
         $.get("/documents/files/", function(json) {
             if(json.success == false) {
                 window.documents.headerBar(["message"], json.error_message);
             } else {
+                clearTimeout(window.documents.timer);
+                window.documents.headerBar(["filters-online", "add"]);
+
                 var files = "";
                 $.each(json, function(i, item) {
+                    //File Size
+                    if(item.size <= 1024) {
+                        item["size"] = 0;
+                    } else if(item.size > 1024 && item.size <= 1024 * 10) {
+                        item["size"] = 1;
+                    } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
+                        item["size"] = 2;
+                    } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
+                        item["size"] = 3;
+                    } else {
+                        item["size"] = 4;
+                    }
+
                     // File Type
                     switch(item.type) {
                         case "file-template":
@@ -282,6 +309,7 @@ window.documents = {
                             data-location="' + item.location + '"           \
                             data-id="' + item.id + '"                       \
                             data-protection="' + item.protection + '"       \
+                            data-size="' + item.size + '"                   \
                             data-type="' + item.type + '">                  \
                             <div class="corner ' + item.corner + '"></div>  \
                             <div class="icon ' + item.icon + '"></div>      \
@@ -464,7 +492,7 @@ window.documents = {
             }
         }
     },
-    fileProgress: function(element, percent, abort) {
+    fileProgress: function(element, percent, abort, callback) {
         if(percent >= 0 && percent <= 100 && !abort) {
             if(!element.find(".progress").is(":visible")) {
                 window.documents.fileProgressOpen(element, function() {
@@ -474,8 +502,10 @@ window.documents = {
 
                     if(percent == 100) {
                         setTimeout(function() {
-                            window.documents.fileProgressClose(element)
+                            window.documents.fileProgressClose(element, callback)
                         }, 300);
+                    } else {
+                        if(callback) callback();
                     }
                 });
             } else {
@@ -485,22 +515,28 @@ window.documents = {
 
                 if(percent == 100) {
                     setTimeout(function() {
-                        window.documents.fileProgressClose(element)
+                        window.documents.fileProgressClose(element, callback)
                     }, 300);
+                } else {
+                    if(callback) callback();
                 }
             }
         } else if(element.find(".progress").is(":visible")) {
-            window.documents.fileProgressClose(element);
+            window.documents.fileProgressClose(element, callback);
         }
     },
     fileProgressOpen: function(element, callback) {
         element.find(".bar").width("0%");
         element.find(".name").fadeOut(200);
         setTimeout(function() {
-            element.find(".progress").show().animate({
-                bottom: "8px",
-                opacity: 1
-            }, 200);
+            element
+                .find(".progress")
+                .show()
+                .animate({
+                    bottom: "8px",
+                    opacity: 1
+                }, 200);
+
             if(callback) setTimeout(callback, 300);
         });
     },
@@ -511,8 +547,13 @@ window.documents = {
         }, 200);
 
         setTimeout(function() {
-            element.find(".progress").hide();
-            element.find(".name").fadeIn(200);
+            element
+                .find(".progress")
+                .hide()
+                .parent(".item")
+                .find(".name")
+                .fadeIn(200);
+
             if(callback) setTimeout(callback, 300);
         }, 300);
     },
@@ -539,21 +580,21 @@ window.documents = {
     },
     fileDownload: function(files) {
         window.documents.locationNotification("online", "upload");
-        window.documents.fileProgress(files, 0);
-        files.each(function(count) {
-            var file = $(this);
-            window.documents.fileProgress(file, 50);
-            $.get("/documents/location/" + file.data("location") + "/" + file.data("path"), function(json) {
-                if(json.success == false) {
-                    window.documents.headerBar(["message"], json.error_message);
-                } else {
-                    window.documents.fileProgress(file, 100);
+        window.documents.fileProgress(files, 0, false, function() {
+            files.each(function(count) {
+                var file = $(this);
+                $.get("/documents/location/" + file.data("location") + "/" + file.data("path"), function(json) {
+                    if(json.success == false) {
+                        window.documents.headerBar(["message"], json.error_message);
+                    } else {
+                        window.documents.fileProgress(file, 100);
 
-                    if((count+1) == files.length) {
-                        window.documents.locationNotification("online", "counter", files.length);
+                        if((count+1) == files.length) {
+                            window.documents.locationNotification("online", "counter", files.length);
+                        }
                     }
-                }
+                });
             });
-        })
+        });
     }
 }

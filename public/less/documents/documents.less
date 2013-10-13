@@ -129,6 +129,7 @@ body {
             .active {
                 width: 5px;
                 height: 28px;
+                .transition(background);
                 .float-right();
             }
 
@@ -267,9 +268,7 @@ body {
                 text-transform: uppercase;
             }
 
-            .download-files,
-            .confirm-files,
-            .cancel-files  {
+            .side-button  {
                 color: #fff;
                 font-size: 13px;
                 padding: 5px 8px;
@@ -319,6 +318,19 @@ body {
 
                 &:active {
                     background: darken(@header_bottom_cancel, 3%);
+                }
+            }
+
+            .select-files {
+                background: @header_bottom_button;
+                border: solid 1px darken(@header_bottom_button, 5%);
+
+                &:hover {
+                    background: darken(@header_bottom_button, 2%);
+                }
+
+                &:active {
+                    background: darken(@header_bottom_button, 3%);
                 }
             }
 
@@ -373,7 +385,7 @@ body {
 
                 .filter {
                     position: relative;
-                    margin-right: 40px;
+                    margin-right: 34px;
                     .float-left();
 
                     span {

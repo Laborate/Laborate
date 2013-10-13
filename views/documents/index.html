@@ -47,10 +47,11 @@
                     <span>File Size:</span>
                     <select name="size">
                         <option>add filter</option>
-                        <option value="0">1k - 10k</option>
-                        <option value="1">10k - 100k</option>
-                        <option value="2">100k - 1mb</option>
-                        <option value="3">1mb+</option>
+                        <option value="0">less than 1k</option>
+                        <option value="1">1k - 10k</option>
+                        <option value="2">10k - 100k</option>
+                        <option value="3">100k - 1mb</option>
+                        <option value="4">greater than 1mb</option>
                     </select>
                     <div class="icon icon-menu"></div>
                 </div>
@@ -90,17 +91,21 @@
                     <div class="icon icon-menu"></div>
                 </div>
             </div>
-            <div class="download-files">
+            <div class="download-files side-button">
                 <span class="icon-download-3"></span>
                 <span>Download Files</span>
             </div>
-            <div class="cancel-files">
+            <div class="cancel-files side-button">
                 <span class="icon-thumbs-down-2"></span>
                 <span>Cancel</span>
             </div>
-            <div class="confirm-files">
+            <div class="confirm-files side-button">
                 <span class="icon-thumbs-up-2"></span>
                 <span>Confirm</span>
+            </div>
+            <div class="select-files side-button">
+                <span class="icon-icons"></span>
+                <span>Select All</span>
             </div>
             <div class="add-files">
                 <div id="create">Create File</div>
@@ -119,6 +124,10 @@
             <div class="close">X</div>
         </div>
         <div class="actions">
+            <div class="action" id="popup-create">
+                <input type="text" placeholder="foo.bar"/>
+                <button type="button">Submit</button>
+            </div>
             <div class="action" id="popup-image">
                 <img width="280px"/>
             </div>
