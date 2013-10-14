@@ -106,7 +106,7 @@
 }
 
 .backdrop-input.error {
-    background-color: #fce5e5;
+    background-color: @backdrop_input_error;
 }
 
 .backdrop-button {
@@ -130,15 +130,15 @@
 }
 
 .backdrop-button.error {
-    background: @backdrop_error;
+    background-color: @backdrop_button_error;
 }
 
 .backdrop-button.error:hover {
-    background: darken(@backdrop_error, 2%);
+    background-color: darken(@backdrop_button_error, 2%);
 }
 
 .backdrop-button.error:hover:active {
-    background: darken(@backdrop_error, 5%);
+    background-color: darken(@backdrop_button_error, 5%);
 }
 
 .backdrop-bottom {

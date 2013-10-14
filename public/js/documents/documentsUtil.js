@@ -12,9 +12,20 @@ window.documents = {
         var new_css = {};
         var show = true;
 
-        container.find(".action").hide();
+        container
+            .attr("style", "")
+            .find(".action")
+            .hide()
+            .find("input")
+            .val("")
+            .removeClass("error");
 
         switch(action) {
+            case "create":
+                new_css.height = "142px";
+                container.find("#popup-" + action).show();
+                break;
+
             case "image":
                 new_css.width = "300px";
                 new_css.background = "url('/img/transparent.gif') repeat";
@@ -47,6 +58,44 @@ window.documents = {
             .vAlign("fixed")
             .parent(".popup")
             .toggle(show);
+    },
+    popupSubmit: function(form) {
+        var passed = true;
+        var data = { _csrf: window.config.csrf }
+        var original = form.find("button[type=submit]").val();
+        if(window.documents.timer) clearInterval(window.documents.timer);
+
+        form.find("input").each(function() {
+            if($(this).data("required") && $(this).val() == "") {
+                passed = false;
+                $(this).addClass("error");
+            } else {
+                data[$(this).attr("name")] = ($(this).val()) ? $(this).val() : null;
+                $(this).removeClass("error");
+            }
+        });
+
+        if(passed) {
+            form.find("button[type=submit]").val("loading...").addClass("disabled");
+            $.post(form.attr("action"), data, function(result) {
+                if(result.success) {
+                    window.documents.popup("close");
+                    window.documents[form.data("callback")](data, result);
+                } else {
+                    form.find("button[type=submit]")
+                        .val(result.error_message)
+                        .removeClass("disabled")
+                        .addClass("error");
+
+                    window.documents.timer = setTimeout(function() {
+                        form.find("button[type=submit]")
+                            .val(original)
+                            .removeClass("error");
+                    }, 5000);
+                }
+            });
+        }
+        return false;
     },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
@@ -611,5 +660,55 @@ window.documents = {
                 });
             });
         });
+    },
+    fileCreated: function(submitted, response) {
+        // File Type
+        switch(response.type) {
+            case "file-template":
+                response["color"] = "blue";
+                response["icon"] = "icon-file-xml";
+                break;
+            case "file-script":
+                response["color"] = "blue";
+                response["icon"] = "icon-file-css";
+                break;
+
+            /* When More Products Are Added */
+            case "file-zip":
+                response["color"] = "red";
+                response["icon"] = "icon-file-zip disabled";
+                break;
+            case "file-image":
+                response["color"] = "green";
+                response["icon"] = "icon-image";
+                break;
+            case "file-notebook":
+                response["color"] = "green";
+                response["icon"] = "icon-notebook";
+                break;
+            case "file-math":
+                response["color"] = "purple";
+                response["icon"] = "icon-calculator";
+                break;
+            default:
+                response["color"] = "";
+                response["icon"] = "icon-file";
+                break;
+        }
+
+        file = $('                                              \
+            <div class="item file ' + response.color + '"       \
+                style="opacity:0;"                              \
+                data-name="' + submitted.name + '"              \
+                data-location="online"                          \
+                data-id="' + response.id + '"                   \
+                data-size="0"                                   \
+                data-type="' + response.type + '">              \
+                <div class="icon ' + response.icon + '"></div>  \
+                <div class="name">' + submitted.name + '</div>  \
+            </div>                                              \
+        ')
+        .appendTo(".files")
+        .animate({ opacity: 1 }, 1000);
     }
 }

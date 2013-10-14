@@ -59,8 +59,11 @@
                     <span>File Type:</span>
                     <select name="type">
                         <option>add filter</option>
+                        <!-- <option value="folder">folder</option> -->
                         <option value="file-script">script</option>
                         <option value="file-template">template</option>
+                        <!-- <option value="file-zip">zip/archive</option> -->
+                        <!-- <option value="file-image">image</option> -->
                     </select>
                     <div class="icon icon-menu"></div>
                 </div>
@@ -79,18 +82,6 @@
 
                 <!-- Non Online -->
                 <div class="filter" data-type="non-online">
-                    <span>File Type:</span>
-                    <select name="type">
-                        <option>add filter</option>
-                        <option value="folder">folder</option>
-                        <option value="file-script">script</option>
-                        <option value="file-template">template</option>
-                        <option value="file-zip">zip/archive</option>
-                        <option value="file-image">image</option>
-                    </select>
-                    <div class="icon icon-menu"></div>
-                </div>
-                <div class="filter" data-type="non-online">
                     <span>File Size:</span>
                     <select name="size">
                         <option>add filter</option>
@@ -99,6 +90,18 @@
                         <option value="2">10k - 100k</option>
                         <option value="3">100k - 1mb</option>
                         <option value="4">greater than 1mb</option>
+                    </select>
+                    <div class="icon icon-menu"></div>
+                </div>
+                <div class="filter" data-type="non-online">
+                    <span>File Type:</span>
+                    <select name="type">
+                        <option>add filter</option>
+                        <option value="folder">folder</option>
+                        <option value="file-script">script</option>
+                        <option value="file-template">template</option>
+                        <option value="file-zip">zip/archive</option>
+                        <option value="file-image">image</option>
                     </select>
                     <div class="icon icon-menu"></div>
                 </div>
@@ -137,8 +140,12 @@
         </div>
         <div class="actions">
             <div class="action" id="popup-create">
-                <input type="text" placeholder="foo.bar"/>
-                <button type="button">Submit</button>
+                <form action="/documents/file/create/" name="create" data-callback="fileCreated">
+                    <input name="name" type="text" placeholder="file name" data-required="true"/>
+                    <input name="external_path" type="hidden" value=""/>
+                    <input name="location" type="hidden" value=""/>
+                    <button type="submit">Create File</button>
+                </form>
             </div>
             <div class="action" id="popup-image">
                 <img width="280px"/>

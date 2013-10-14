@@ -61,7 +61,23 @@ exports.file_create = function(req, res, next) {
         location: req.param("location")
     }, function(error, document) {
         if(!error && document) {
-            res.json({document: document.id});
+            res.json({
+                success: true,
+                id: document.id,
+                type: function(name) {
+                    var extension = name.split(".")[name.split(".").length-1];
+
+                    if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                        return "file-image";
+                    } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                        return "file-template";
+                    } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                        return "file-zip";
+                    } else {
+                        return "file-script";
+                    }
+                }(document.name)
+            });
         } else {
             res.error(200, "Failed To Create Document");
         }

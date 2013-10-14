@@ -568,7 +568,7 @@ body {
     .linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
 
     .container {
-        min-width: 280px;
+        width: 280px;
         min-height: 100px;
         overflow: hidden;
         color: #fff;
@@ -615,6 +615,55 @@ body {
 
             img {
                 max-height: 500px;
+            }
+
+            input {
+                width: 100%;
+                border: none;
+                padding: 8px 10px;
+                background-color: #fff;
+                background-image: url('/img/tshadow.png');
+                background-repeat: repeat-x;
+                background-position: 0 -2px;
+                font-size: 14px;
+                margin-bottom: 10px;
+                .border-radius(2px);
+
+                &.error {
+                    background-color: @popup_input_error;
+                }
+            }
+
+            button {
+                width: 100%;
+                background: @popup_button;
+                border: none;
+                padding: 7px 0;
+                text-align: center;
+                color: #fff;
+                font-size: 14px;
+                cursor: pointer;
+                .border-radius(2px);
+
+                &:hover {
+                    background: darken(@popup_button, 2%);
+                }
+
+                &:hover:active {
+                    background: darken(@popup_button, 5%);
+                }
+
+                &.error {
+                    background: @popup_button_error;
+
+                    &:hover {
+                        background: darken(@popup_button_error, 2%);
+                    }
+
+                    &:hover:active {
+                        background: darken(@popup_button_error, 5%);
+                    }
+                }
             }
         }
     }

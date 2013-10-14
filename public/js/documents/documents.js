@@ -66,3 +66,12 @@ $(document).on("submit change", "#search, .filters select:visible", function() {
     window.documents.fileSearch($(this).find("input").val(), $(".filters select:visible"));
     return false;
 });
+
+$(document).on("click", ".add-files #create", function() {
+    window.documents.popup("create", false, "Create File");
+});
+
+$(document).on("submit", ".popup form", function() {
+    window.documents.popupSubmit($(this));
+    return false;
+});
