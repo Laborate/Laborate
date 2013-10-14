@@ -48,7 +48,6 @@ exports.contents = function(req, res, next) {
             req.session.user.locations[req.param("0")].repository,
             req.param("1"),
         function(error, results) {
-            console.log(error);
             if(!error) {
                 switch(results.type) {
                     case "image":
@@ -77,26 +76,28 @@ exports.contents = function(req, res, next) {
 
                     case "directory":
                         res.json($.map(results.contents, function(item) {
-                            item.type = function(type, extension) {
-                                if(type == "file") {
-                                    if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-                                        return "file-image";
-                                    } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
-                                        return "file-template";
-                                    } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
-                                        return "file-zip";
+                            if(item){
+                                item.type = function(type, extension) {
+                                    if(type == "file") {
+                                        if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                            return "file-image";
+                                        } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                            return "file-template";
+                                        } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                                            return "file-zip";
+                                        } else {
+                                            return "file-script";
+                                        }
+                                    } else if(type == "dir") {
+                                        return "folder";
+                                    } else if(type == "symlink") {
+                                        return "folder-symlink";
                                     } else {
-                                        return "file-script";
+                                        return type;
                                     }
-                                } else if(type == "dir") {
-                                    return "folder";
-                                } else if(type == "symlink") {
-                                    return "folder-symlink";
-                                } else {
-                                    return type;
-                                }
-                            }(item.type, item.extension);
-                            return item;
+                                }(item.type, item.extension);
+                                return item;
+                            }
                         }));
                         break;
                 }
@@ -106,6 +107,7 @@ exports.contents = function(req, res, next) {
                 } if(error.message == "This repository is empty.") {
                     res.json([]);
                 } else {
+                    console.error(error);
                     res.error(200, "Failed To Load Github Contents");
                 }
             }

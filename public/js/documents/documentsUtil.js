@@ -316,7 +316,7 @@ window.documents = {
                             item["icon"] = "icon-file-css";
                             break;
 
-                        /* When More Products Are Added */
+                        /* When More Products Are Added
                         case "file-zip":
                             item["color"] = "red";
                             item["icon"] = "icon-file-zip disabled";
@@ -333,8 +333,10 @@ window.documents = {
                             item["color"] = "purple";
                             item["icon"] = "icon-calculator";
                             break;
+                        */
+
                         default:
-                            item["color"] = "";
+                            item["color"] = "blue";
                             item["icon"] = "icon-file";
                             break;
                     }
@@ -673,7 +675,7 @@ window.documents = {
                 response["icon"] = "icon-file-css";
                 break;
 
-            /* When More Products Are Added */
+            /* When More Products Are Added
             case "file-zip":
                 response["color"] = "red";
                 response["icon"] = "icon-file-zip disabled";
@@ -690,8 +692,10 @@ window.documents = {
                 response["color"] = "purple";
                 response["icon"] = "icon-calculator";
                 break;
+            */
+
             default:
-                response["color"] = "";
+                response["color"] = "blue";
                 response["icon"] = "icon-file";
                 break;
         }
