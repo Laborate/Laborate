@@ -136,19 +136,34 @@
     <div class="container">
         <div class="header">
             <div class="title"></div>
-            <div class="close">X</div>
+            <div class="side">
+                <a class="download" target="_blank">
+                    <div class="icon icon-download-3"></div>
+                </a>
+                <div class="icon close">X</div>
+            </div>
         </div>
         <div class="actions">
             <div class="action" id="popup-create">
-                <form action="/documents/file/create/" name="create" data-callback="fileCreated">
+                <form action="/documents/file/create/" data-callback="fileCreated">
                     <input name="name" type="text" placeholder="file name" data-required="true"/>
                     <input name="external_path" type="hidden" value=""/>
                     <input name="location" type="hidden" value=""/>
+                    <input name="content" type="hidden" value=""/>
                     <button type="submit">Create File</button>
                 </form>
             </div>
+            <div class="action" id="popup-upload">
+                <form action="/documents/file/upload/" data-callback="fileCreated">
+                    <input type="file" multiple="multiple"/>
+                    <div class="upload-list">
+                        <div class="upload-listing"></div>
+                    </div>
+                    <button type="submit">Upload Files</button>
+                </form>
+            </div>
             <div class="action" id="popup-image">
-                <img width="280px"/>
+                <img />
             </div>
         </div>
     </div>

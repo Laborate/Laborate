@@ -7,6 +7,7 @@ window.documents = {
     locationIcons: new Array(),
     headerBarPrevious: null,
     timer: null,
+    uploadFiles: [],
     popup: function(action, data, header) {
         var container = $(".popup .container");
         var new_css = {};
@@ -20,23 +21,65 @@ window.documents = {
             .val("")
             .removeClass("error");
 
+        container
+            .find(".header .download")
+            .hide();
+
+        container
+            .find("#popup-" + action)
+            .show();
+
         switch(action) {
             case "create":
+                new_css.width = "250px";
                 new_css.height = "142px";
-                container.find("#popup-" + action).show();
+                break;
+
+            case "upload":
+                new_css.width = "300px";
+                new_css.height = "305px";
+
+                container
+                    .find("#popup-" + action)
+                    .find(".upload-listing")
+                    .html(function() {
+                        return $.map(data, function(item) {
+                            if(item.type.match(/(?:text|application)/)) {
+                                return $('                                              \
+                                    <div class="upload-file">                           \
+                                        <div class="icon icon-file"></div>              \
+                                        <div class="name">' + item.name + '</div>       \
+                                        <div class="progress remove icon-cross"></div>  \
+                                    </div>                                              \
+                                ').attr(function() {
+                                    var attributes = {};
+                                    $.each(item, function(key, value) {
+                                        if(typeof value != "function") {
+                                            attributes["data-" + key] = value;
+                                        }
+                                    })
+                                    return attributes;
+                                }());
+                            }
+                        });
+                    }());
                 break;
 
             case "image":
                 new_css.width = "300px";
                 new_css.background = "url('/img/transparent.gif') repeat";
-                container.find("#popup-" + action)
+                container
+                    .find(".header .download")
+                    .attr("href", data)
+                    .show();
+
+                container
+                    .find("#popup-" + action)
                     .find("img")
                     .attr("src", data)
                     .load(function() {
                         container.hAlign("fixed").vAlign("fixed");
-                    })
-                    .parent(".action")
-                    .show();
+                    });
                 break;
 
             default:
@@ -62,7 +105,9 @@ window.documents = {
     popupSubmit: function(form) {
         var passed = true;
         var data = { _csrf: window.config.csrf }
-        var original = form.find("button[type=submit]").val();
+        var submit =  form.find("button[type=submit]");
+
+        if(!submit.attr("data-original")) submit.attr("data-original", submit.text());
         if(window.documents.timer) clearInterval(window.documents.timer);
 
         form.find("input").each(function() {
@@ -76,26 +121,56 @@ window.documents = {
         });
 
         if(passed) {
-            form.find("button[type=submit]").val("loading...").addClass("disabled");
+            submit.text("loading...").addClass("disabled");
+
             $.post(form.attr("action"), data, function(result) {
                 if(result.success) {
                     window.documents.popup("close");
-                    window.documents[form.data("callback")](data, result);
+                    window.documents[form.data("callback")](result);
+                    submit.text(submit.attr("data-original"));
                 } else {
-                    form.find("button[type=submit]")
-                        .val(result.error_message)
+                    submit
+                        .text(result.error_message)
                         .removeClass("disabled")
                         .addClass("error");
 
                     window.documents.timer = setTimeout(function() {
-                        form.find("button[type=submit]")
-                            .val(original)
+                        submit
+                            .text(submit.attr("data-original"))
                             .removeClass("error");
                     }, 5000);
                 }
             });
         }
-        return false;
+    },
+    popupUpload: function() {
+        $(".popup #popup-upload input[type='file']")
+            .click(function() {
+                $(this).unbind('change');
+            })
+            .click()
+            .change(function() {
+                if($(this)[0].files.length != 0) {
+                    window.documents.popup("upload", $.map($(this)[0].files,
+                        function(item) {
+                            return item;
+                        }
+                    ), "Upload Files");
+                }
+            });
+
+        $(document).on("click", "#popup-upload .progress", function() {
+            var file = $(this).parent(".upload-file");
+
+            if($(".upload-file").length > 1) {
+                file.slideUp(300)
+                setTimeout(function() {
+                    file.remove();
+                }, 400);
+            } else {
+                window.documents.popup("close");
+            }
+        });
     },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
@@ -663,7 +738,7 @@ window.documents = {
             });
         });
     },
-    fileCreated: function(submitted, response) {
+    fileCreated: function(response) {
         // File Type
         switch(response.type) {
             case "file-template":
@@ -703,13 +778,16 @@ window.documents = {
         file = $('                                              \
             <div class="item file ' + response.color + '"       \
                 style="opacity:0;"                              \
-                data-name="' + submitted.name + '"              \
+                data-name="' + response.name + '"               \
                 data-location="online"                          \
                 data-id="' + response.id + '"                   \
-                data-size="0"                                   \
+                data-size="' + response.size + '"               \
                 data-type="' + response.type + '">              \
                 <div class="icon ' + response.icon + '"></div>  \
-                <div class="name">' + submitted.name + '</div>  \
+                <div class="name">' + response.name + '</div>   \
+                <div class="progress">                          \
+                    <div class="bar"></div>                     \
+                </div>                                          \
             </div>                                              \
         ')
         .appendTo(".files")

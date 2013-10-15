@@ -79,7 +79,9 @@ exports.contents = function(req, res, next) {
                             if(item){
                                 item.type = function(type, extension) {
                                     if(type == "file") {
-                                        if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                        if(!extension) {
+                                            return "file";
+                                        }  else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
                                             return "file-image";
                                         } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
                                             return "file-template";

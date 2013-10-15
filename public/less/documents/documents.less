@@ -565,7 +565,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    .linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
+    .linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
 
     .container {
         width: 280px;
@@ -586,26 +586,36 @@ body {
             .clearfix();
 
             .title {
-                width: 88%;
+                width: 73%;
                 .ellipsis();
                 .float-left();
             }
 
-            .close {
-                cursor: pointer;
+            .side {
                 margin: -10px;
-                padding: 10px 12px;
-                font-weight: bold;
-                border-left: solid 1px darken(@popup, 10%);
-                background: darken(@popup_header, 5%);
                 .float-right();
 
-                &:hover {
-                    background: darken(@popup_header, 6%);
+                .icon {
+                    cursor: pointer;
+                    padding: 10px 12px 0 12px;
+                    font-weight: bold;
+                    height: 38px;
+                    border-left: solid 1px darken(@popup, 10%);
+                    background: darken(@popup_header, 5%);
+                    .box-sizing(border-box);
+                    .float-left();
+
+                    &:hover {
+                        background: darken(@popup_header, 8%);
+                    }
+
+                    &:hover:active {
+                        background: darken(@popup_header, 11%);
+                    }
                 }
 
-                &:hover:active {
-                    background: darken(@popup_header, 7%);
+                .download {
+                    display: none;
                 }
             }
         }
@@ -614,10 +624,11 @@ body {
             padding: 10px;
 
             img {
+                max-width: 280px;
                 max-height: 500px;
             }
 
-            input {
+            input[type='text'] {
                 width: 100%;
                 border: none;
                 padding: 8px 10px;
@@ -632,6 +643,10 @@ body {
                 &.error {
                     background-color: @popup_input_error;
                 }
+            }
+
+            input[type='file'] {
+                display: none;
             }
 
             button {
@@ -662,6 +677,78 @@ body {
 
                     &:hover:active {
                         background: darken(@popup_button_error, 5%);
+                    }
+                }
+            }
+
+            #popup-image {
+                text-align: center;
+            }
+
+            .upload-list {
+                background: #fff;
+                background-image: url('/img/tshadow.png');
+                background-repeat: repeat-x;
+                background-position: 0 -2px;
+                border: solid 1px darken(@popup, 10%);
+                height: 200px;
+                margin-bottom: 10px;
+                overflow: hidden;
+                .border-radius(2px);
+
+                .upload-listing {
+                    height: 100%;
+                    overflow: scroll;
+                }
+
+                .upload-file {
+                    font-size: 14px;
+                    padding: 10px;
+                    border-top: solid 1px #ededed;
+                    .clearfix();
+
+                    &:first-child {
+                        border: none;
+                    }
+
+                    &:nth-child(even) {
+                        background: #f8f8f8;
+                    }
+
+                    .icon {
+                        color: @blue;
+                        margin-right: 10px;
+                        .float-left();
+                    }
+
+                    .name {
+                        color: #333;
+                        width: 80%;
+                        .ellipsis();
+                        .float-left();
+                    }
+
+                    .progress {
+                        cursor: pointer;
+                        font-size: 16px;
+                        opacity: .7;
+                        .float-right();
+
+                        &:hover {
+                            opacity: .85;
+                        }
+
+                        &:hover:active {
+                            opacity: 1;
+                        }
+
+                        &.remove {
+                            color: @red;
+                        }
+
+                        &.complete {
+                            color: @green;
+                        }
                     }
                 }
             }

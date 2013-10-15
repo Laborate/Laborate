@@ -29,11 +29,13 @@ exports.files = function(req, res, next) {
                         name: value.document.name,
                         protection: (value.document.password != null) ? "password" : "",
                         location: value.document.location,
-                        size: file_size.bytes(JSON.stringify(value.document.content)),
+                        size: file_size.bytes(value.document.content.join("\n")),
                         type: function(name) {
                             var extension = name.split(".")[name.split(".").length-1];
 
-                            if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                            if(!extension) {
+                                return "file";
+                            } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
                                 return "file-image";
                             } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
                                 return "file-template";
@@ -58,12 +60,15 @@ exports.file_create = function(req, res, next) {
         name: req.param("name"),
         owner_id: req.session.user.id,
         path: (path.slice(-1) == "/") ? path.slice(0, -1) : path,
-        location: req.param("location")
+        location: req.param("location"),
+        content: (req.param("content")) ? req.param("content").split("\n") : null
     }, function(error, document) {
         if(!error && document) {
             res.json({
                 success: true,
                 id: document.id,
+                name: document.name,
+                size: file_size.bytes(value.document.content.join("\n")),
                 type: function(name) {
                     var extension = name.split(".")[name.split(".").length-1];
 

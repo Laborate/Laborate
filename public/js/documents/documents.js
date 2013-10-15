@@ -71,6 +71,10 @@ $(document).on("click", ".add-files #create", function() {
     window.documents.popup("create", false, "Create File");
 });
 
+$(document).on("click", ".add-files #upload", function() {
+    window.documents.popupUpload();
+});
+
 $(document).on("submit", ".popup form", function() {
     window.documents.popupSubmit($(this));
     return false;
