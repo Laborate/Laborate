@@ -124,6 +124,8 @@ exports.file_upload = function(req, res, next) {
                 content: fs.readFileSync(file.path, 'utf8').split("\n")
             }, function(error, document) {
                 if(!error && document) {
+                    fs.unlink(file.path);
+
                     response.documents.push({
                         id: document.id,
                         name: document.name,

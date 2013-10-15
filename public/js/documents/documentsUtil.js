@@ -131,6 +131,7 @@ window.documents = {
                 processData: false
             }, 'json').done(function(result) {
                 if(result.success) {
+                    form.find("input").val("");
                     window.documents.popup("close");
                     window.documents[form.data("callback")](result);
                     submit.text(submit.attr("data-original"));
