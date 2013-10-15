@@ -68,7 +68,7 @@ exports.file_create = function(req, res, next) {
                 success: true,
                 id: document.id,
                 name: document.name,
-                size: file_size.bytes(value.document.content.join("\n")),
+                size: file_size.bytes(document.content.join("\n")),
                 type: function(name) {
                     var extension = name.split(".")[name.split(".").length-1];
 

@@ -108,6 +108,8 @@ workers = function() {
 
     /* Development Only */
     app.configure('development', function() {
+        clientJS.liveUpdate(clientCSS, app.io);
+
         require('express-debug')(app, {
             theme: __dirname + config.development.debugger.theme,
             panels: config.development.debugger.panels

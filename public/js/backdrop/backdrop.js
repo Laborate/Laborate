@@ -123,4 +123,4 @@ window.backdrop = {
 $(document)
     .ready(window.backdrop.ready)
     .on("submit", "#backdrop form", window.backdrop.submit)
-    .on("blur", "#backdrop-email", window.backdrop.profileImg);
+    .on("blur change", "#backdrop-email", window.backdrop.profileImg);
