@@ -65,10 +65,8 @@
         "watch_directory": "./",
         "watch_ignore_dot": true,
         "watch_ignore_patterns": [
-            "**/*.less",
-            "**/*.css",
-            "**/*.html",
-            "**/*.ejs"
+            "public/less/**",
+            "public/js/**"
         ],
         "max_failures": 100000000000000,
         "forever_log": "../logs/code/forever.log",
