@@ -112,7 +112,7 @@ exports.file_upload = function(req, res, next) {
         }, 50);
 
         $.each(req.files.files, function(i, file) {
-            // 10k limit
+            // 100k limit
             if(file.size > 1024 * 100) {
                 file_length -= 1;
                 return true;
