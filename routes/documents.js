@@ -1,4 +1,5 @@
 /* Modules: NPM */
+var fs = require('fs');
 var rand = require("generate-key");
 
 /* Modules: Custom */
@@ -66,28 +67,90 @@ exports.file_create = function(req, res, next) {
         if(!error && document) {
             res.json({
                 success: true,
-                id: document.id,
-                name: document.name,
-                size: file_size.bytes(document.content.join("\n")),
-                type: function(name) {
-                    var extension = name.split(".")[name.split(".").length-1];
+                documents: [{
+                    id: document.id,
+                    name: document.name,
+                    size: file_size.bytes(document.content.join("\n")),
+                    type: function(name) {
+                        var extension = name.split(".")[name.split(".").length-1];
 
-                    if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-                        return "file-image";
-                    } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
-                        return "file-template";
-                    } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
-                        return "file-zip";
-                    } else {
-                        return "file-script";
-                    }
-                }(document.name)
+                        if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                            return "file-image";
+                        } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                            return "file-template";
+                        } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                            return "file-zip";
+                        } else {
+                            return "file-script";
+                        }
+                    }(document.name)
+                }]
             });
         } else {
             res.error(200, "Failed To Create Document");
         }
     });
 };
+
+exports.file_upload = function(req, res, next) {
+    if(req.files) {
+        // Make sure it is a list
+        if(!(req.files.files instanceof Array)) {
+            req.files.files = [req.files.files];
+        }
+
+        var file_length = req.files.files.length;
+        var response = {
+            success: true,
+            documents: []
+        };
+        var timer = setInterval(function() {
+            if(file_length == response.documents.length) {
+                clearInterval(timer);
+                res.json(response);
+            }
+        }, 50);
+
+        $.each(req.files.files, function(i, file) {
+            // 10k limit
+            if(file.size > 1024 * 100) {
+                file_length -= 1;
+                return true;
+            }
+
+            req.models.documents.create({
+                name: file.name,
+                owner_id: req.session.user.id,
+                content: fs.readFileSync(file.path, 'utf8').split("\n")
+            }, function(error, document) {
+                if(!error && document) {
+                    response.documents.push({
+                        id: document.id,
+                        name: document.name,
+                        size: file_size.bytes(document.content.join("\n")),
+                        type: function(name) {
+                            var extension = name.split(".")[name.split(".").length-1];
+
+                            if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                return "file-image";
+                            } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                return "file-template";
+                            } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                                return "file-zip";
+                            } else {
+                                return "file-script";
+                            }
+                        }(document.name)
+                    });
+                } else {
+                    res.error(200, "Failed To Upload Files");
+                }
+            });
+        });
+    } else {
+        res.error(200, "Failed To Upload Files");
+    }
+}
 
 exports.file_rename = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {

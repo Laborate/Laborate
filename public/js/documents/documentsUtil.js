@@ -18,6 +18,7 @@ window.documents = {
             .find(".action")
             .hide()
             .find("input")
+            .not("[type='file']")
             .val("")
             .removeClass("error");
 
@@ -44,23 +45,20 @@ window.documents = {
                     .find(".upload-listing")
                     .html(function() {
                         return $.map(data, function(item) {
-                            if(item.type.match(/(?:text|application)/)) {
-                                return $('                                              \
-                                    <div class="upload-file">                           \
-                                        <div class="icon icon-file"></div>              \
-                                        <div class="name">' + item.name + '</div>       \
-                                        <div class="progress remove icon-cross"></div>  \
-                                    </div>                                              \
-                                ').attr(function() {
-                                    var attributes = {};
-                                    $.each(item, function(key, value) {
-                                        if(typeof value != "function") {
-                                            attributes["data-" + key] = value;
-                                        }
-                                    })
-                                    return attributes;
-                                }());
-                            }
+                            return $('                                              \
+                                <div class="upload-file">                           \
+                                    <div class="icon icon-file"></div>              \
+                                    <div class="name">' + item.name + '</div>       \
+                                </div>                                              \
+                            ').attr(function() {
+                                var attributes = {};
+                                $.each(item, function(key, value) {
+                                    if(typeof value != "function") {
+                                        attributes["data-" + key] = value;
+                                    }
+                                })
+                                return attributes;
+                            }());
                         });
                     }());
                 break;
@@ -104,8 +102,10 @@ window.documents = {
     },
     popupSubmit: function(form) {
         var passed = true;
-        var data = { _csrf: window.config.csrf }
+        var data = new FormData(form[0]);
         var submit =  form.find("button[type=submit]");
+
+        data.append("_csrf", window.config.csrf);
 
         if(!submit.attr("data-original")) submit.attr("data-original", submit.text());
         if(window.documents.timer) clearInterval(window.documents.timer);
@@ -115,7 +115,6 @@ window.documents = {
                 passed = false;
                 $(this).addClass("error");
             } else {
-                data[$(this).attr("name")] = ($(this).val()) ? $(this).val() : null;
                 $(this).removeClass("error");
             }
         });
@@ -123,7 +122,14 @@ window.documents = {
         if(passed) {
             submit.text("loading...").addClass("disabled");
 
-            $.post(form.attr("action"), data, function(result) {
+            $.ajax({
+                url: form.attr("action"),
+                type: 'POST',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false
+            }, 'json').done(function(result) {
                 if(result.success) {
                     window.documents.popup("close");
                     window.documents[form.data("callback")](result);
@@ -149,28 +155,17 @@ window.documents = {
                 $(this).unbind('change');
             })
             .click()
-            .change(function() {
+            .change(function(event) {
                 if($(this)[0].files.length != 0) {
-                    window.documents.popup("upload", $.map($(this)[0].files,
-                        function(item) {
+                    var files = $.map($(this)[0].files, function(item) {
+                        if(item.type.match(/(?:text|application)/) && item.size < 1024 * 100) {
                             return item;
                         }
-                    ), "Upload Files");
+                    });
+
+                    if(files.length != 0) window.documents.popup("upload", files, "Upload Files");
                 }
             });
-
-        $(document).on("click", "#popup-upload .progress", function() {
-            var file = $(this).parent(".upload-file");
-
-            if($(".upload-file").length > 1) {
-                file.slideUp(300)
-                setTimeout(function() {
-                    file.remove();
-                }, 400);
-            } else {
-                window.documents.popup("close");
-            }
-        });
     },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
@@ -738,59 +733,61 @@ window.documents = {
             });
         });
     },
-    fileCreated: function(response) {
-        // File Type
-        switch(response.type) {
-            case "file-template":
-                response["color"] = "blue";
-                response["icon"] = "icon-file-xml";
-                break;
-            case "file-script":
-                response["color"] = "blue";
-                response["icon"] = "icon-file-css";
-                break;
+    fileCreated: function(responses) {
+        $.each(responses.documents, function(i, response) {
+            // File Type
+            switch(response.type) {
+                case "file-template":
+                    response["color"] = "blue";
+                    response["icon"] = "icon-file-xml";
+                    break;
+                case "file-script":
+                    response["color"] = "blue";
+                    response["icon"] = "icon-file-css";
+                    break;
 
-            /* When More Products Are Added
-            case "file-zip":
-                response["color"] = "red";
-                response["icon"] = "icon-file-zip disabled";
-                break;
-            case "file-image":
-                response["color"] = "green";
-                response["icon"] = "icon-image";
-                break;
-            case "file-notebook":
-                response["color"] = "green";
-                response["icon"] = "icon-notebook";
-                break;
-            case "file-math":
-                response["color"] = "purple";
-                response["icon"] = "icon-calculator";
-                break;
-            */
+                /* When More Products Are Added
+                case "file-zip":
+                    response["color"] = "red";
+                    response["icon"] = "icon-file-zip disabled";
+                    break;
+                case "file-image":
+                    response["color"] = "green";
+                    response["icon"] = "icon-image";
+                    break;
+                case "file-notebook":
+                    response["color"] = "green";
+                    response["icon"] = "icon-notebook";
+                    break;
+                case "file-math":
+                    response["color"] = "purple";
+                    response["icon"] = "icon-calculator";
+                    break;
+                */
 
-            default:
-                response["color"] = "blue";
-                response["icon"] = "icon-file";
-                break;
-        }
+                default:
+                    response["color"] = "blue";
+                    response["icon"] = "icon-file";
+                    break;
+            }
 
-        file = $('                                              \
-            <div class="item file ' + response.color + '"       \
-                style="opacity:0;"                              \
-                data-name="' + response.name + '"               \
-                data-location="online"                          \
-                data-id="' + response.id + '"                   \
-                data-size="' + response.size + '"               \
-                data-type="' + response.type + '">              \
-                <div class="icon ' + response.icon + '"></div>  \
-                <div class="name">' + response.name + '</div>   \
-                <div class="progress">                          \
-                    <div class="bar"></div>                     \
-                </div>                                          \
-            </div>                                              \
-        ')
-        .appendTo(".files")
-        .animate({ opacity: 1 }, 1000);
+            file = $('                                              \
+                <div class="item file ' + response.color + '"       \
+                    style="opacity:0;"                              \
+                    data-name="' + response.name + '"               \
+                    data-location="online"                          \
+                    data-id="' + response.id + '"                   \
+                    data-size="' + response.size + '"               \
+                    data-type="' + response.type + '">              \
+                    <div class="icon ' + response.icon + '"></div>  \
+                    <div class="name">' + response.name + '</div>   \
+                    <div class="progress">                          \
+                        <div class="bar"></div>                     \
+                    </div>                                          \
+                </div>                                              \
+            ')
+            .appendTo(".files")
+            .animate({ opacity: 1 }, 1000);
+        });
     }
 }

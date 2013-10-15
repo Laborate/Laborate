@@ -154,8 +154,8 @@
                 </form>
             </div>
             <div class="action" id="popup-upload">
-                <form action="/documents/file/upload/" data-callback="fileCreated">
-                    <input type="file" multiple="multiple"/>
+                <form action="/documents/file/upload/" data-callback="fileCreated" enctype="multipart/form-data">
+                    <input name="files" type="file" multiple="multiple"/>
                     <div class="upload-list">
                         <div class="upload-listing"></div>
                     </div>
