@@ -46,6 +46,7 @@ exports.files = function(req, res, next) {
                                 return "file-script";
                             }
                         }(value.document.name),
+                        users: (value.document.roles.length - 1)
                     }
                 }
             }));
@@ -112,8 +113,8 @@ exports.file_upload = function(req, res, next) {
         }, 50);
 
         $.each(req.files.files, function(i, file) {
-            // 100k limit
-            if(file.size > 1024 * 100) {
+            // Type Casting and 100k limit
+            if(!file.type.match(/(?:text|json)/) || file.size > 1024 * 100) {
                 file_length -= 1;
                 return true;
             }

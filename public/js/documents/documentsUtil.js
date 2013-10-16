@@ -65,7 +65,9 @@ window.documents = {
 
             case "image":
                 new_css.width = "300px";
+                new_css.height = "150px";
                 new_css.background = "url('/img/transparent.gif') repeat";
+
                 container
                     .find(".header .download")
                     .attr("href", data)
@@ -76,8 +78,20 @@ window.documents = {
                     .find("img")
                     .attr("src", data)
                     .load(function() {
-                        container.hAlign("fixed").vAlign("fixed");
+                        container
+                            .css({
+                                "width": "",
+                                "height": ""
+                            })
+                            .hAlign("fixed")
+                            .vAlign("fixed");
+
+                        container
+                            .find("#popup-" + action)
+                            .find("img")
+                            .css("visibility", "visible")
                     });
+
                 break;
 
             default:
@@ -159,7 +173,7 @@ window.documents = {
             .change(function(event) {
                 if($(this)[0].files.length != 0) {
                     var files = $.map($(this)[0].files, function(item) {
-                        if(item.type.match(/(?:text|application)/) && item.size < 1024 * 100) {
+                        if(item.type.match(/(?:text|json)/) && item.size < 1024 * 100) {
                             return item;
                         }
                     });
@@ -363,6 +377,19 @@ window.documents = {
 
                 var files = "";
                 $.each(json, function(i, item) {
+                    //File Users
+                    if(item.users <= 2) {
+                        item["laborators"] = 0;
+                    } else if(item.users >= 3 && item.users <= 5) {
+                        item["laborators"] = 1;
+                    } else if(item.users >= 6 && item.users <= 8) {
+                        item["laborators"] = 2;
+                    } else if(item.users >= 9 && item.users <= 11) {
+                        item["laborators"] = 3;
+                    } else {
+                        item["laborators"] = 4;
+                    }
+
                     //File Size
                     if(item.size <= 1024) {
                         item["size"] = 0;
@@ -432,6 +459,7 @@ window.documents = {
                             data-id="' + item.id + '"                       \
                             data-protection="' + item.protection + '"       \
                             data-size="' + item.size + '"                   \
+                            data-laborators="' + item.laborators + '"       \
                             data-type="' + item.type + '">                  \
                             <div class="corner ' + item.corner + '"></div>  \
                             <div class="icon ' + item.icon + '"></div>      \
