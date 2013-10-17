@@ -77,6 +77,7 @@ window.documents = {
                     .find("#popup-" + action)
                     .find("img")
                     .attr("src", data)
+                    .css("visibility", "hidden")
                     .load(function() {
                         container
                             .css({
@@ -89,7 +90,7 @@ window.documents = {
                         container
                             .find("#popup-" + action)
                             .find("img")
-                            .css("visibility", "visible")
+                            .css("visibility", "")
                     });
 
                 break;
@@ -512,7 +513,9 @@ window.documents = {
         function finish(response) {
             $.each(response, function(i, item) {
                 //File Size
-                if(item.size <= 1024) {
+                if(!item.size) {
+                    item["size"] = "";
+                } else if(item.size <= 1024) {
                     item["size"] = 0;
                 } else if(item.size > 1024 && item.size <= 1024 * 10) {
                     item["size"] = 1;
@@ -563,7 +566,7 @@ window.documents = {
                         break;
                     default:
                         item["color"] = "";
-                        item["class"] = "file";
+                        item["class"] = "file disabled";
                         item["icon"] = "icon-file";
                         break;
                 }
@@ -727,7 +730,7 @@ window.documents = {
             var item = $(this);
             var show = true;
 
-            if(search && item.data("name").toLowerCase().indexOf(search) == -1) {
+            if(search && item.data("name").toLowerCase().indexOf(search.toLowerCase()) == -1) {
                 show = false;
             }
 
@@ -743,7 +746,7 @@ window.documents = {
             $(this).toggle(show);
         });
     },
-    fileDownload: function(files) {
+    fileDownload: function(files, open) {
         window.documents.locationNotification("online", "upload");
         window.documents.fileProgress(files, 0, false, function() {
             files.each(function(count) {
@@ -752,7 +755,11 @@ window.documents = {
                     if(json.success == false) {
                         window.documents.headerBar(["message"], json.error_message);
                     } else {
-                        window.documents.fileProgress(file, 100);
+                        window.documents.fileProgress(file, 100, false, function() {
+                            if(open && (count+1) == files.length) {
+                                window.location.href = "/editor/" + json.document + "/";
+                            }
+                        });
 
                         if((count+1) == files.length) {
                             window.documents.locationNotification("online", "counter", files.length);
@@ -763,57 +770,84 @@ window.documents = {
         });
     },
     fileCreated: function(responses) {
-        $.each(responses.documents, function(i, response) {
+        $.each(responses.documents, function(i, item) {
+            //File Users
+            if(item.users <= 2) {
+                item["laborators"] = 0;
+            } else if(item.users >= 3 && item.users <= 5) {
+                item["laborators"] = 1;
+            } else if(item.users >= 6 && item.users <= 8) {
+                item["laborators"] = 2;
+            } else if(item.users >= 9 && item.users <= 11) {
+                item["laborators"] = 3;
+            } else {
+                item["laborators"] = 4;
+            }
+
+            //File Size
+            if(item.size <= 1024) {
+                item["size"] = 0;
+            } else if(item.size > 1024 && item.size <= 1024 * 10) {
+                item["size"] = 1;
+            } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
+                item["size"] = 2;
+            } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
+                item["size"] = 3;
+            } else {
+                item["size"] = 4;
+            }
+
+
             // File Type
-            switch(response.type) {
+            switch(item.type) {
                 case "file-template":
-                    response["color"] = "blue";
-                    response["icon"] = "icon-file-xml";
+                    item["color"] = "blue";
+                    item["icon"] = "icon-file-xml";
                     break;
                 case "file-script":
-                    response["color"] = "blue";
-                    response["icon"] = "icon-file-css";
+                    item["color"] = "blue";
+                    item["icon"] = "icon-file-css";
                     break;
 
                 /* When More Products Are Added
                 case "file-zip":
-                    response["color"] = "red";
-                    response["icon"] = "icon-file-zip disabled";
+                    item["color"] = "red";
+                    item["icon"] = "icon-file-zip disabled";
                     break;
                 case "file-image":
-                    response["color"] = "green";
-                    response["icon"] = "icon-image";
+                    item["color"] = "green";
+                    item["icon"] = "icon-image";
                     break;
                 case "file-notebook":
-                    response["color"] = "green";
-                    response["icon"] = "icon-notebook";
+                    item["color"] = "green";
+                    item["icon"] = "icon-notebook";
                     break;
                 case "file-math":
-                    response["color"] = "purple";
-                    response["icon"] = "icon-calculator";
+                    item["color"] = "purple";
+                    item["icon"] = "icon-calculator";
                     break;
                 */
 
                 default:
-                    response["color"] = "blue";
-                    response["icon"] = "icon-file";
+                    item["color"] = "blue";
+                    item["icon"] = "icon-file";
                     break;
             }
 
-            file = $('                                              \
-                <div class="item file ' + response.color + '"       \
-                    style="opacity:0;"                              \
-                    data-name="' + response.name + '"               \
-                    data-location="online"                          \
-                    data-id="' + response.id + '"                   \
-                    data-size="' + response.size + '"               \
-                    data-type="' + response.type + '">              \
-                    <div class="icon ' + response.icon + '"></div>  \
-                    <div class="name">' + response.name + '</div>   \
-                    <div class="progress">                          \
-                        <div class="bar"></div>                     \
-                    </div>                                          \
-                </div>                                              \
+            file = $('                                          \
+                <div class="item file ' + item.color + '"       \
+                    style="opacity:0;"                          \
+                    data-name="' + item.name + '"               \
+                    data-id="' + item.id + '"                   \
+                    data-size="' + item.size + '"               \
+                    data-laborators="0"                         \
+                    data-type="' + item.type + '">              \
+                    <div class="icon ' + item.icon + '"></div>  \
+                    <div class="name">' + item.name + '</div>   \
+                    <div class="progress">                      \
+                        <div class="bar"></div>                 \
+                    </div>                                      \
+                </div>                                          \
             ')
             .appendTo(".files")
             .animate({ opacity: 1 }, 1000);

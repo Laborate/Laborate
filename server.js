@@ -70,6 +70,9 @@ workers = function() {
         app.use('/img', express.static(__dirname + '/public/img'));
         app.use('/codemirror', express.static(__dirname + '/node_modules/codemirror'));
 
+        //Express Upload Limit
+        app.use(express.limit('2mb'));
+
         //Express External Addons
         app.use(slashes(true));
         app.use(device.capture());

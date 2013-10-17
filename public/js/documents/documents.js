@@ -23,7 +23,7 @@ $(document).on("click", ".files .item", function() {
                 }
             } else {
                 if(["file-template", "file-script"].indexOf($(this).data("type")) != -1) {
-                    window.documents.fileDownload($(this));
+                    window.documents.fileDownload($(this), true);
                 } else if($(this).data("type") == "file-image") {
                     window.documents.popup("image",
                         "/documents/location/" + window.documents.locationActivated + "/" + $(this).data("path"),
@@ -53,7 +53,7 @@ $(document).on("click", ".confirm-files, .cancel-files", function() {
     window.documents.headerBar(["filters-non-online", "download"]);
     var files = $(".files .file[data-selected=true]");
     if($(this).hasClass("confirm-files") && files.length != 0) {
-        window.documents.fileDownload(files);
+        window.documents.fileDownload(files, false);
     }
     window.documents.fileSelect(false);
 });
