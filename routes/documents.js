@@ -112,11 +112,9 @@ exports.file_upload = function(req, res, next) {
             }
         }, 50);
 
-        console.log(req.files.files);
-
         $.each(req.files.files, function(i, file) {
             // Type Casting and 100k limit
-            if(!file.type.match(/(?:text|json)/) || file.size > 1024 * 100) {
+            if(!((file.type == "" || file.type.match(/(?:text|json|octet-stream)/)) && file.size < 1024 * 100)) {
                 file_length -= 1;
                 return true;
             }
@@ -127,8 +125,6 @@ exports.file_upload = function(req, res, next) {
                 content: fs.readFileSync(file.path, 'utf8').split("\n")
             }, function(error, document) {
                 if(!error && document) {
-                    console.log(document);
-
                     fs.unlink(file.path);
 
                     response.documents.push({

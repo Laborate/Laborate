@@ -174,7 +174,7 @@ window.documents = {
             .change(function(event) {
                 if($(this)[0].files.length != 0) {
                     var files = $.map($(this)[0].files, function(item) {
-                        if(item.type.match(/(?:text|json)/) && item.size < 1024 * 100) {
+                        if((item.type == "" || item.type.match(/(?:text|json)/)) && item.size < 1024 * 100) {
                             return item;
                         }
                     });
