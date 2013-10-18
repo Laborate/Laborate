@@ -109,7 +109,6 @@ exports.contents = function(req, res, next) {
                 } if(error.message == "This repository is empty.") {
                     res.json([]);
                 } else {
-                    console.error(error);
                     res.error(200, "Failed To Load Github Contents");
                 }
             }

@@ -78,28 +78,16 @@ window.documents = {
                     .attr("src", data)
                     .css("visibility", "hidden")
                     .load(function() {
-                        var popup = container
+                        container
                             .css({
                                 "width": "",
                                 "height": ""
                             })
                             .hAlign("fixed")
                             .vAlign("fixed")
-                            .find("#popup-" + action);
-
-                        var image = popup.find("img");
-
-                        image.css({
-                            "visibility": "",
-                            "padding": function() {
-                                if(image.css("width") != popup.css("width") ||
-                                    image.css("height") != popup.css("height")) {
-                                    return "10px";
-                                } else {
-                                    return "";
-                                }
-                            }()
-                        });
+                            .find("#popup-" + action)
+                            .find("img")
+                            .css("visibility", "");
                     });
 
                 break;

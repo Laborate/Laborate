@@ -12,8 +12,8 @@ exports.index = function(req, res, next) {
         navigation: 'Documents Drive',
         mode: "documents",
         user: req.session.user,
-        js: clientJS.renderTags("documents", "header", "download"),
-        css: clientCSS.renderTags("documents", "header")
+        js: clientJS.renderTags("documents", "download"),
+        css: clientCSS.renderTags("documents")
     });
 };
 
@@ -203,7 +203,7 @@ exports.location = function(req, res, next) {
                 github.contents(req, res, next);
                 break;
             default:
-                res.error(200, "Unknown Location Type");
+                res.error(200, "Location Does Not Exist");
                 break;
         }
     } else {
