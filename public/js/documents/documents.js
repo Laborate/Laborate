@@ -38,6 +38,15 @@ $(document).on("click", ".popup, .popup .close", function(e) {
     if(e.target == this) window.documents.popup("close");
 });
 
+$(document).on("click", ".popup .download", function() {
+    window.debug = $(this);
+
+    $.fileDownload($(this)
+        .parents(".popup")
+        .find("#popup-image img")
+        .attr("src"));
+})
+
 $(document).on("click", ".select-files", function() {
     window.documents.fileSelectClick($(".files .file:not(.disabled)"));
 });

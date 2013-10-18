@@ -12,7 +12,7 @@ exports.index = function(req, res, next) {
         navigation: 'Documents Drive',
         mode: "documents",
         user: req.session.user,
-        js: clientJS.renderTags("documents", "header"),
+        js: clientJS.renderTags("documents", "header", "download"),
         css: clientCSS.renderTags("documents", "header")
     });
 };

@@ -70,7 +70,6 @@ window.documents = {
 
                 container
                     .find(".header .download")
-                    .attr("href", data)
                     .show();
 
                 container
@@ -79,18 +78,28 @@ window.documents = {
                     .attr("src", data)
                     .css("visibility", "hidden")
                     .load(function() {
-                        container
+                        var popup = container
                             .css({
                                 "width": "",
                                 "height": ""
                             })
                             .hAlign("fixed")
-                            .vAlign("fixed");
+                            .vAlign("fixed")
+                            .find("#popup-" + action);
 
-                        container
-                            .find("#popup-" + action)
-                            .find("img")
-                            .css("visibility", "")
+                        var image = popup.find("img");
+
+                        image.css({
+                            "visibility": "",
+                            "padding": function() {
+                                if(image.css("width") != popup.css("width") ||
+                                    image.css("height") != popup.css("height")) {
+                                    return "10px";
+                                } else {
+                                    return "";
+                                }
+                            }()
+                        });
                     });
 
                 break;
@@ -272,7 +281,9 @@ window.documents = {
     location: function(location, path, history) {
         $(".locations .item").removeClass("activated");
         $(".locations .item[data-key='" + location + "']").addClass("activated");
-        $(".files").html("");
+        if(location != window.url_params()["location"] || path != window.url_params()["dir"]) {
+            $(".files").html("");
+        }
 
         if(window.documents.interval) clearTimeout(window.documents.timer);
 
