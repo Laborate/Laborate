@@ -31,6 +31,16 @@ window.documents = {
             .show();
 
         switch(action) {
+            case "add-location":
+                new_css.width = "300px";
+                new_css.height = "350px";
+                container
+                    .find("#popup-" + action)
+                    .find(".listing")
+                    .html(data);
+                break;
+
+
             case "create":
                 new_css.width = "250px";
                 new_css.height = "142px";
@@ -42,11 +52,11 @@ window.documents = {
 
                 container
                     .find("#popup-" + action)
-                    .find(".upload-listing")
+                    .find(".listing")
                     .html(function() {
                         return $.map(data, function(item) {
                             return $('                                              \
-                                <div class="upload-file">                           \
+                                <div class="item">                                  \
                                     <div class="icon icon-file"></div>              \
                                     <div class="name">' + item.name + '</div>       \
                                 </div>                                              \
@@ -180,6 +190,49 @@ window.documents = {
                 }
             });
     },
+    popupAddLocation: function(type) {
+        window.documents.popup("add-location", function() {
+            switch(type) {
+                default:
+                    var list = [{
+                        "type": "sftp",
+                        "name": "SFTP Server",
+                        "icon": "icon-drive"
+                    },
+                    {
+                        "type": "github",
+                        "name": "Github Repository",
+                        "icon": "icon-github-3"
+                    },
+                    {
+                        "type": "bitbucket",
+                        "name": "Bitbucket Repository",
+                        "icon": "icon-bitbucket"
+                    },
+                    {
+                        "type": "dropbox",
+                        "name": "Dropbox Account",
+                        "icon": "icon-dropbox-2"
+                    },
+                    {
+                        "type": "drive",
+                        "name": "Google Drive Account",
+                        "icon": "icon-google-drive"
+                    }];
+                    break;
+            }
+
+            return $.map(list, function(item) {
+                return ('                                           \
+                    <div class="item selectable"                    \
+                        data-type="' + item.type + '">              \
+                        <div class="icon ' + item.icon + '"></div>  \
+                        <div class="name">' + item.name + '</div>   \
+                    </div>                                          \
+                ');
+            });
+        }(), "Add Location");
+    },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
         $(".bottom .filter").hide();
@@ -219,11 +272,21 @@ window.documents = {
     },
     locations: function() {
         $.get("/documents/locations/", function(json) {
-            var locations = "";
+            var locations = ('                                        \
+                <div class="item" data-key="online" data-counter="0"> \
+                    <div class="container">                           \
+                        <div class="name">Your Drive</div>            \
+                        <div class="icon icon-briefcase"></div>       \
+                    </div>                                            \
+                    <div class="active"></div>                        \
+                </div>                                                \
+            ');
+
+
             $.each(json, function(i, item) {
                 switch(item.type) {
                     case "sftp":
-                        item["class"] = "icon-install";
+                        item["class"] = "icon-drive";
                         break;
                     case "github":
                         item["class"] = "icon-github-3";
@@ -256,7 +319,7 @@ window.documents = {
             });
 
             $(".locations .item").not("[data-key='online']").remove();
-            $(".locations").append(locations);
+            $(".locations").html(locations);
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {
@@ -280,8 +343,8 @@ window.documents = {
             $(".locations .item[data-key='online']").addClass("activated");
 
             var className = $(".locations .item[data-key='" + location + "']").find(".icon").attr("class");
-            if(className.indexOf("icon-number") != -1 || className.indexOf("icon-notice") != -1) {
-                window.documents.locationNotification("online", false);
+            if(!className || className.indexOf("icon-number") != -1 || className.indexOf("icon-notice") != -1) {
+                if(className) window.documents.locationNotification("online", false);
             }
         } else {
             window.documents.locationDirectory(location, path, history);
@@ -289,6 +352,7 @@ window.documents = {
     },
     locationReload: function() {
         if(window.documents.locationActivated && window.documents.mode.length == 0) {
+            window.documents.locations();
             window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
         }
     },
@@ -566,7 +630,7 @@ window.documents = {
                     default:
                         item["color"] = "";
                         item["class"] = "file disabled";
-                        item["icon"] = "icon-file";
+                        item["icon"] = "icon-document";
                         break;
                 }
 
@@ -829,7 +893,7 @@ window.documents = {
 
                 default:
                     item["color"] = "blue";
-                    item["icon"] = "icon-file";
+                    item["icon"] = "icon-document";
                     break;
             }
 

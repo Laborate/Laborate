@@ -9,18 +9,10 @@
     </div>
     <div class="controller">
         <div class="title">Locations</div>
-        <div class="addition icon-plus"></div>
+        <div id="add-location" class="addition icon-plus"></div>
         <div class="clear"></div>
     </div>
-    <div class="locations">
-        <div class="item" data-key="online" data-counter="0">
-            <div class="container">
-                <div class="name">Your Drive</div>
-                <div class="icon icon-briefcase"></div>
-            </div>
-            <div class="active"></div>
-        </div>
-    </div>
+    <div class="locations"></div>
 </div>
 <div class="content">
     <div class="header">
@@ -141,20 +133,38 @@
             </div>
         </div>
         <div class="actions">
+            <div class="action" id="popup-add-location">
+                <form action="/documents/location/create/">
+                    <input name="name" type="text" placeholder="location name" data-required="true"/>
+                    <div class="form-group">
+                        <input name="type" type="hidden"/>
+
+                        <div class="list">
+                            <div class="shadow-top"></div>
+                            <div class="shadow-bottom"></div>
+                            <div class="listing"></div>
+                        </div>
+                    </div>
+                    <button type="submit">Add Location</button>
+                </form>
+            </div>
+
             <div class="action" id="popup-create">
                 <form action="/documents/file/create/" data-callback="fileCreated">
                     <input name="name" type="text" placeholder="file name" data-required="true"/>
-                    <input name="external_path" type="hidden" value=""/>
-                    <input name="location" type="hidden" value=""/>
-                    <input name="content" type="hidden" value=""/>
+                    <input name="external_path" type="hidden"/>
+                    <input name="location" type="hidden"/>
+                    <input name="content" type="hidden"/>
                     <button type="submit">Create File</button>
                 </form>
             </div>
             <div class="action" id="popup-upload">
                 <form action="/documents/file/upload/" data-callback="fileCreated" enctype="multipart/form-data">
                     <input name="files" type="file" multiple="multiple"/>
-                    <div class="upload-list">
-                        <div class="upload-listing"></div>
+                    <div class="list">
+                        <div class="shadow-top"></div>
+                        <div class="shadow-bottom"></div>
+                        <div class="listing"></div>
                     </div>
                     <button type="submit">Upload Files</button>
                 </form>
