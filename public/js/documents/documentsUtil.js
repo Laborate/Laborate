@@ -34,7 +34,8 @@ window.documents = {
             case "add-location":
                 new_css.width = "300px";
                 new_css.height = "350px";
-                container
+
+                if(data) container
                     .find("#popup-" + action)
                     .find(".listing")
                     .html(data);
@@ -124,7 +125,7 @@ window.documents = {
     },
     popupSubmit: function(form) {
         var passed = true;
-        var data = new FormData(form[0]);
+        var data = new FormData();
         var submit =  form.find("button[type=submit]");
 
         data.append("_csrf", window.config.csrf);
@@ -132,14 +133,28 @@ window.documents = {
         if(!submit.attr("data-original")) submit.attr("data-original", submit.text());
         if(window.documents.timer) clearInterval(window.documents.timer);
 
-        form.find("input").each(function() {
+        form.find("input:visible").each(function() {
             if($(this).data("required") && $(this).val() == "") {
                 passed = false;
                 $(this).addClass("error");
             } else {
+                data.append($(this).attr("name"), $(this).val());
                 $(this).removeClass("error");
             }
         });
+
+        form.find(".list:visible").each(function() {
+            var list = $(this);
+            if(list.find(".item").hasClass("active")) {
+                $.each(list.find(".item.active").data(), function(key, value) {
+                    if(list.data("name") != "next") {
+                        data.append(list.data("name") + "[" + key + "]",  value);
+                    }
+                });
+            }
+        });
+
+        window.debug = data;
 
         if(passed) {
             submit.text("loading...").addClass("disabled");
@@ -155,8 +170,8 @@ window.documents = {
                 if(result.success) {
                     form.find("input").val("");
                     window.documents.popup("close");
-                    window.documents[form.data("callback")](result);
                     submit.text(submit.attr("data-original"));
+                    if(form.data("callback")) window.documents[form.data("callback")](result);
                 } else {
                     submit
                         .text(result.error_message)
@@ -190,48 +205,64 @@ window.documents = {
                 }
             });
     },
-    popupAddLocation: function(type) {
-        window.documents.popup("add-location", function() {
-            switch(type) {
-                default:
-                    var list = [{
-                        "type": "sftp",
-                        "name": "SFTP Server",
-                        "icon": "icon-drive"
-                    },
-                    {
-                        "type": "github",
-                        "name": "Github Repository",
-                        "icon": "icon-github-3"
-                    },
-                    {
-                        "type": "bitbucket",
-                        "name": "Bitbucket Repository",
-                        "icon": "icon-bitbucket"
-                    },
-                    {
-                        "type": "dropbox",
-                        "name": "Dropbox Account",
-                        "icon": "icon-dropbox-2"
-                    },
-                    {
-                        "type": "drive",
-                        "name": "Google Drive Account",
-                        "icon": "icon-google-drive"
-                    }];
-                    break;
-            }
+    popupAddLocation: function(element) {
+        var list, update = true;
 
-            return $.map(list, function(item) {
-                return ('                                           \
-                    <div class="item selectable"                    \
-                        data-type="' + item.type + '">              \
-                        <div class="icon ' + item.icon + '"></div>  \
-                        <div class="name">' + item.name + '</div>   \
-                    </div>                                          \
-                ');
-            });
-        }(), "Add Location");
+        switch(element.data("next")) {
+            case "github":
+                list = window.documents.githubRepos();
+                break;
+
+            case "repo-option":
+                update = false;
+                var name = $("#location-name");
+
+                if(!name.val() || (name.val() == element.siblings(".active").data("repository"))) {
+                    name.val(element.data("repository"));
+                }
+
+                element.siblings().removeClass("active");
+                element.addClass("active");
+                break;
+
+            default:
+                list = [{
+                    "name": "SFTP Server",
+                    "icon": "icon-drive",
+                    "class": "", //Comming Soon
+                    "data": { "data-next": "sftp" }
+                },{
+                    "name": "Github Repository",
+                    "icon": "icon-github-3",
+                    "class": "selectable",
+                    "data": { "data-next": "github" }
+                },{
+                    "name": "Bitbucket Repository",
+                    "icon": "icon-bitbucket",
+                    "class": "", //Comming Soon
+                    "data": { "data-next": "bitbucket" }
+                },{
+                    "name": "Dropbox Account",
+                    "icon": "icon-dropbox-2",
+                    "class": "", //Comming Soon
+                    "data": { "data-next": "dropbox" }
+                },{
+                    "name": "Google Drive Account",
+                    "icon": "icon-google-drive",
+                    "class": "", //Comming Soon
+                    "data": { "data-next": "drive" }
+                }];
+                break;
+        }
+
+        if(update) window.documents.popup("add-location", $.map(list, function(item) {
+            return $('                                          \
+                <div class="item ' + item.class + '">           \
+                    <div class="icon ' + item.icon + '"></div>  \
+                    <div class="name">' + item.name + '</div>   \
+                </div>                                          \
+            ').attr(item.data);
+        }), "Add Location");
     },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
@@ -424,6 +455,36 @@ window.documents = {
         }
 
         window.cachedLocations["location_" + location][path] = json;
+    },
+    githubRepos: function() {
+        var json = $.ajax({
+            type: "GET",
+            url: "/github/repos/",
+            async: false,
+        }).responseJSON;
+
+        if(json.success == false) {
+            if(json.error_message == "Bad Github Oauth Token") {
+                window.documents.headerBar(["message"], "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
+            } else {
+                window.documents.headerBar(["message"], json.error_message);
+            }
+
+        } else {
+            return $.map(json.repos, function(item) {
+                return {
+                    "name": item.user + "/<strong>" + item.repo + "</strong>",
+                    "icon": (item.private) ? "icon-lock" : "icon-lock-open",
+                    "class": "selectable",
+                    "data": {
+                        "data-repository": item.user + "/" + item.repo,
+                        "data-branch": item.branch,
+                        "data-next": "repo-option",
+                        "data-type": "github"
+                    }
+                }
+            });
+        }
     },
     onlineDirectory: function(history) {
         window.documents.headerBar(["filters-online", "add"]);

@@ -134,16 +134,12 @@
         </div>
         <div class="actions">
             <div class="action" id="popup-add-location">
-                <form action="/documents/location/create/">
-                    <input name="name" type="text" placeholder="location name" data-required="true"/>
-                    <div class="form-group">
-                        <input name="type" type="hidden"/>
-
-                        <div class="list">
-                            <div class="shadow-top"></div>
-                            <div class="shadow-bottom"></div>
-                            <div class="listing"></div>
-                        </div>
+                <form action="/documents/location/create/" data-callback="locations">
+                    <input id="location-name" name="location[name]" type="text" value="" placeholder="name" data-required="true"/>
+                    <div class="list" data-name="location" data-required="true" data-required="true">
+                        <div class="shadow-top"></div>
+                        <div class="shadow-bottom"></div>
+                        <div class="listing"></div>
                     </div>
                     <button type="submit">Add Location</button>
                 </form>

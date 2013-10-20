@@ -84,8 +84,8 @@ $(document).on("click", ".add-files #upload", function() {
     window.documents.popupUpload();
 });
 
-$(document).on("click", "#add-location", function() {
-    window.documents.popupAddLocation($(this).data("type"));
+$(document).on("click", "#add-location, #popup-add-location .selectable", function() {
+    window.documents.popupAddLocation($(this));
 });
 
 $(document).on("submit", ".popup form", function() {

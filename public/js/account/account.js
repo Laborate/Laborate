@@ -1,3 +1,3 @@
-$("#navigation ul li").live("click", function() {
+$(document).on("click", "#navigation ul li", function() {
     window.account.navigationChange($(this).attr("id"));
 });

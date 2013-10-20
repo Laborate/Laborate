@@ -28,7 +28,10 @@ exports.repos = function(req, res, next) {
     if(req.session.user.github) {
         req.github.repos(req.session.user.github, function(error, results) {
             if(!error) {
-                res.json(results);
+                res.json({
+                    success: true,
+                    repos: results
+                });
             } else {
                 if(error.message == "Bad credentials") {
                     res.error(200, "Bad Github Oauth Token");
