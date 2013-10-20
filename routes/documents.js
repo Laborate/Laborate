@@ -46,7 +46,8 @@ exports.files = function(req, res, next) {
                                 return "file-script";
                             }
                         }(value.document.name),
-                        users: (value.document.roles.length - 1)
+                        users: (value.document.roles.length - 1),
+                        role: value.permission.name.toLowerCase()
                     }
                 }
             }));
@@ -80,7 +81,8 @@ exports.file_create = function(req, res, next) {
                         } else {
                             return "file-script";
                         }
-                    }(document.name)
+                    }(document.name),
+                    role: "owner"
                 }]
             });
         } else {
@@ -139,7 +141,8 @@ exports.file_upload = function(req, res, next) {
                             } else {
                                 return "file-script";
                             }
-                        }(document.name)
+                        }(document.name),
+                        role: "owner"
                     });
                 } else {
                     res.error(200, "Failed To Upload Files");
@@ -155,7 +158,13 @@ exports.file_rename = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
         if(!error && document) {
             document.name = req.param("name");
-            res.json({ success: true });
+            res.json({
+                success: true,
+                document: {
+                    id: document.id,
+                    name: document.name
+                }
+             });
         } else {
             res.error(200, "Failed To Rename File");
         }

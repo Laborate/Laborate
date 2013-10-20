@@ -147,12 +147,20 @@
                     <button type="submit">Add Location</button>
                 </form>
             </div>
-
             <div class="action" id="popup-create">
                 <form action="/documents/file/create/" data-callback="fileCreated">
                     <input name="name" type="text" placeholder="file name" data-required="true"/>
                     <button type="submit">Create File</button>
                 </form>
+            </div>
+            <div class="action" id="popup-rename">
+                <form action="/documents/file/rename/" data-callback="fileRename">
+                    <input name="name" type="text" placeholder="file name" data-required="true"/>
+                    <button type="submit">Rename File</button>
+                </form>
+            </div>
+            <div class="action" id="popup-url">
+                <input type="text"/>
             </div>
             <div class="action" id="popup-upload">
                 <form action="/documents/file/upload/" data-callback="fileCreated" enctype="multipart/form-data">

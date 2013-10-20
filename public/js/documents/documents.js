@@ -102,6 +102,10 @@ $(document).on("contextmenu",function() {
     return false;
 });
 
+$(document).on("click", ".context-menu .item", function() {
+    window.documents.contextMenu($(this));
+});
+
 $(document).on("click", function() {
     window.documents.contextMenuClose();
 });

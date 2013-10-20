@@ -41,10 +41,31 @@ window.documents = {
                     .html(data);
                 break;
 
-
             case "create":
                 new_css.width = "250px";
                 new_css.height = "142px";
+                break;
+
+            case "rename":
+                new_css.width = "250px";
+                new_css.height = "142px";
+
+                container
+                    .find("#popup-" + action)
+                    .find("form")
+                    .attr("action", "/documents/file/" + data["id"] + "/rename/")
+                    .find("input")
+                    .val(data["name"]);
+                break;
+
+            case "url":
+                new_css.width = "250px";
+                new_css.height = "100px";
+
+                container
+                    .find("#popup-" + action)
+                    .find("input")
+                    .val("http://" + window.config.host + "/editor/" + data + "/");
                 break;
 
             case "upload":
@@ -276,6 +297,37 @@ window.documents = {
             }), "Add Location");
         }
     },
+    contextMenu: function(element) {
+        var menu = element.parent(".context-menu");
+        var file = $(".files .file[data-id='" + menu.attr("data-id") + "']");
+
+        switch(element.data("action")) {
+            case "open":
+                window.location.href = "/editor/" + menu.data("id");
+                break;
+            case "rename":
+                window.documents.popup("rename", file.data(), "Rename File");
+                break;
+            case "remove":
+                $.post("/documents/file/" + file.data("id") + "/remove/", {
+                    _csrf: window.config.csrf
+                }, function(json) {
+                    if(json.success == false) {
+                        window.documents.headerBar(["message"], json.error_message);
+                    } else {
+                        file.css({ "opacity": 0 });
+                        setTimeout(function() {
+                            file.remove();
+                        }, 300);
+                    }
+
+                });
+                break;
+            case "url":
+                window.documents.popup("url", file.data("id"), "Share Url");
+                break;
+        }
+    },
     contextMenuOpen: function(element, event) {
         $("#context-menu-remove").text(function() {
             if(element.data("role") == "owner") {
@@ -297,7 +349,7 @@ window.documents = {
                 }()
             })
             .attr({
-                "data-id": element.attr("data")
+                "data-id": element.data("id")
             })
             .show();
     },
@@ -318,8 +370,8 @@ window.documents = {
 
                     if(window.documents.headerBarPrevious && !permanent) {
                         setTimeout(function() {
-                           window.documents.headerBar(window.documents.headerBarPrevious);
-                        }, 5000);
+                            window.documents.headerBar(window.documents.headerBarPrevious);
+                        }, 10000);
                     }
 
                     break;
@@ -340,6 +392,10 @@ window.documents = {
                     break
             }
         });
+
+        if(action.indexOf("message") == -1) {
+            window.documents.headerBarPrevious = action;
+        }
     },
     locations: function() {
         $.get("/documents/locations/", function(json) {
@@ -620,6 +676,7 @@ window.documents = {
                     files += ('                                             \
                         <div class="item file ' + item.color + '"           \
                             data-name="' + item.name + '"                   \
+                            data-role="' + item.role + '"                   \
                             data-location="' + item.location + '"           \
                             data-id="' + item.id + '"                       \
                             data-protection="' + item.protection + '"       \
@@ -894,7 +951,7 @@ window.documents = {
             var item = $(this);
             var show = true;
 
-            if(search && item.data("name").toLowerCase().indexOf(search.toLowerCase()) == -1) {
+            if(search && item.attr("data-name").toLowerCase().indexOf(search.toLowerCase()) == -1) {
                 show = false;
             }
 
@@ -902,7 +959,7 @@ window.documents = {
 
             filters.each(function() {
                 var value = $(this).find(":selected").attr("value");
-                if(value && item.data($(this).attr("name")) != value) {
+                if(value && item.attr("data-" + $(this).attr("name")) != value) {
                     show = false;
                 }
             });
@@ -1002,6 +1059,7 @@ window.documents = {
                 <div class="item file ' + item.color + '"       \
                     style="opacity:0;"                          \
                     data-name="' + item.name + '"               \
+                    data-role="' + item.role + '"               \
                     data-id="' + item.id + '"                   \
                     data-size="' + item.size + '"               \
                     data-laborators="0"                         \
@@ -1016,5 +1074,11 @@ window.documents = {
             .appendTo(".files")
             .animate({ opacity: 1 }, 1000);
         });
+    },
+    fileRename: function(data) {
+        $(".files .file[data-id='" + data.document.id + "']")
+            .attr("data-name", data.document.name)
+            .find(".name")
+            .text(data.document.name);
     }
 }
