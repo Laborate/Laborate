@@ -789,3 +789,47 @@ body {
         }
     }
 }
+
+.context-menu {
+    display: none;
+    position: absolute;
+    background: @context_menu;
+    overflow: hidden;
+    .border-radius(3px);
+
+    .item {
+        font-size: 14px;
+        padding: 5px 10px;
+        color: #ededed;
+        cursor: pointer;
+        .transition();
+
+        &:not(:first-child) {
+            border-top: solid 1px lighten(@context_menu, 5%);
+        }
+
+        &:hover {
+            background: lighten(@context_menu, 8%);
+
+            &:not(:first-child) {
+                border-top: solid 1px lighten(@context_menu, 13%);
+            }
+
+            & + .item:not(:first-child) {
+                border-top: solid 1px lighten(@context_menu, 13%);
+            }
+
+            &:active {
+                background: lighten(@context_menu, 11%);
+
+                &:not(:first-child) {
+                    border-top: solid 1px lighten(@context_menu, 18%);
+                }
+
+                & + .item:not(:first-child) {
+                    border-top: solid 1px lighten(@context_menu, 18%);
+                }
+            }
+        }
+    }
+}

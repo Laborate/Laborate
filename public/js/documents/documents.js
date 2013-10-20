@@ -39,8 +39,6 @@ $(document).on("click", ".popup, .popup .close", function(e) {
 });
 
 $(document).on("click", ".popup .download", function() {
-    window.debug = $(this);
-
     $.fileDownload($(this)
         .parents(".popup")
         .find("#popup-image img")
@@ -91,4 +89,19 @@ $(document).on("click", "#add-location, #popup-add-location .selectable", functi
 $(document).on("submit", ".popup form", function() {
     window.documents.popupSubmit($(this));
     return false;
+});
+
+//Context Menu System (Right Click Menu)
+$(document).on("contextmenu", ".files .item", function(event) {
+    if(window.documents.locationActivated == "online") {
+        window.documents.contextMenuOpen($(this), event);
+    }
+});
+
+$(document).on("contextmenu",function() {
+    return false;
+});
+
+$(document).on("click", function() {
+    window.documents.contextMenuClose();
 });

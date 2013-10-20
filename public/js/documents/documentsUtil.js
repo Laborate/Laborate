@@ -261,6 +261,7 @@ window.documents = {
                         });
                     }
                 });
+
                 break;
         }
 
@@ -274,6 +275,34 @@ window.documents = {
                 ').attr(item.data);
             }), "Add Location");
         }
+    },
+    contextMenuOpen: function(element, event) {
+        $("#context-menu-remove").text(function() {
+            if(element.data("role") == "owner") {
+                return "Delete";
+            } else {
+                return "Forget";
+            }
+        }());
+
+        $(".context-menu")
+            .css({
+                "top": event.pageY + 16,
+                "left": function() {
+                    if(($(window).width() - event.pageX) <= 130) {
+                        return event.pageX  - $(".context-menu").width();
+                    } else {
+                        return event.pageX + 4;
+                    }
+                }()
+            })
+            .attr({
+                "data-id": element.attr("data")
+            })
+            .show();
+    },
+    contextMenuClose: function() {
+        $(".context-menu").hide();
     },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();
