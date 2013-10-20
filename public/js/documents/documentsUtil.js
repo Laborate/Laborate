@@ -390,7 +390,7 @@ window.documents = {
             });
 
             $(".locations .item").not("[data-key='online']").remove();
-            $(".locations").html(locations);
+            $(".locations .listing").html(locations);
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {
