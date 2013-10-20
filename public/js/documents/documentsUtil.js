@@ -125,7 +125,7 @@ window.documents = {
     },
     popupSubmit: function(form) {
         var passed = true;
-        var data = new FormData();
+        var data = new FormData(form[0]);
         var submit =  form.find("button[type=submit]");
 
         data.append("_csrf", window.config.csrf);
@@ -133,17 +133,16 @@ window.documents = {
         if(!submit.attr("data-original")) submit.attr("data-original", submit.text());
         if(window.documents.timer) clearInterval(window.documents.timer);
 
-        form.find("input:visible").each(function() {
+        form.find("input").each(function() {
             if($(this).data("required") && $(this).val() == "") {
                 passed = false;
                 $(this).addClass("error");
             } else {
-                data.append($(this).attr("name"), $(this).val());
                 $(this).removeClass("error");
             }
         });
 
-        form.find(".list:visible").each(function() {
+        form.find(".list").each(function() {
             var list = $(this);
             if(list.find(".item").hasClass("active")) {
                 $.each(list.find(".item.active").data(), function(key, value) {
@@ -153,8 +152,6 @@ window.documents = {
                 });
             }
         });
-
-        window.debug = data;
 
         if(passed) {
             submit.text("loading...").addClass("disabled");
@@ -206,7 +203,7 @@ window.documents = {
             });
     },
     popupAddLocation: function(element) {
-        var list, update = true;
+        var list = [], update = true;
 
         switch(element.data("next")) {
             case "github":
@@ -226,43 +223,57 @@ window.documents = {
                 break;
 
             default:
-                list = [{
-                    "name": "SFTP Server",
-                    "icon": "icon-drive",
-                    "class": "", //Comming Soon
-                    "data": { "data-next": "sftp" }
-                },{
-                    "name": "Github Repository",
-                    "icon": "icon-github-3",
-                    "class": "selectable",
-                    "data": { "data-next": "github" }
-                },{
-                    "name": "Bitbucket Repository",
-                    "icon": "icon-bitbucket",
-                    "class": "", //Comming Soon
-                    "data": { "data-next": "bitbucket" }
-                },{
-                    "name": "Dropbox Account",
-                    "icon": "icon-dropbox-2",
-                    "class": "", //Comming Soon
-                    "data": { "data-next": "dropbox" }
-                },{
-                    "name": "Google Drive Account",
-                    "icon": "icon-google-drive",
-                    "class": "", //Comming Soon
-                    "data": { "data-next": "drive" }
-                }];
+                $.each(window.config.apps, function(key, value) {
+                    if(key == "sftp" && value) {
+                        list.push({
+                            "name": "SFTP Server",
+                            "icon": "icon-drive",
+                            "class": "", //Comming Soon
+                            "data": { "data-next": "sftp" }
+                        });
+                    } else if(key == "github" && value) {
+                        list.push({
+                            "name": "Github Repository",
+                            "icon": "icon-github-3",
+                            "class": "selectable",
+                            "data": { "data-next": "github" }
+                        });
+                    } else if(key == "bitbucket" && value) {
+                        list.push({
+                            "name": "Bitbucket Repository",
+                            "icon": "icon-bitbucket",
+                            "class": "", //Comming Soon
+                            "data": { "data-next": "bitbucket" }
+                        });
+                    } else if(key == "dropbox" && value) {
+                        list.push({
+                            "name": "Dropbox Account",
+                            "icon": "icon-dropbox-2",
+                            "class": "", //Comming Soon
+                            "data": { "data-next": "dropbox" }
+                        });
+                    } else if(key == "drive" && value) {
+                        list.push({
+                            "name": "Google Drive Account",
+                            "icon": "icon-google-drive",
+                            "class": "", //Comming Soon
+                            "data": { "data-next": "drive" }
+                        });
+                    }
+                });
                 break;
         }
 
-        if(update) window.documents.popup("add-location", $.map(list, function(item) {
-            return $('                                          \
-                <div class="item ' + item.class + '">           \
-                    <div class="icon ' + item.icon + '"></div>  \
-                    <div class="name">' + item.name + '</div>   \
-                </div>                                          \
-            ').attr(item.data);
-        }), "Add Location");
+        if(update && list.length != 0) {
+            window.documents.popup("add-location", $.map(list, function(item) {
+                return $('                                          \
+                    <div class="item ' + item.class + '">           \
+                        <div class="icon ' + item.icon + '"></div>  \
+                        <div class="name">' + item.name + '</div>   \
+                    </div>                                          \
+                ').attr(item.data);
+            }), "Add Location");
+        }
     },
     headerBar: function(action, message, permanent) {
         $(".bottom > div").hide();

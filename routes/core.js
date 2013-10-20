@@ -16,6 +16,13 @@ exports.config = function(req, res, next) {
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.sentry = config.sentry.browser;
     res.locals.backdrop = "";
+    res.locals.apps_enabled = {
+        sftp: false,
+        github: !!(req.session.user && req.session.user.github),
+        bitbucket: false,
+        dropbox: false,
+        drive: false
+    }
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {

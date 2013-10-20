@@ -57,13 +57,9 @@ exports.files = function(req, res, next) {
 };
 
 exports.file_create = function(req, res, next) {
-    var path = req.param("external_path");
     req.models.documents.create({
         name: req.param("name"),
         owner_id: req.session.user.id,
-        path: (path.slice(-1) == "/") ? path.slice(0, -1) : path,
-        location: req.param("location"),
-        content: (req.param("content")) ? req.param("content").split("\n") : null
     }, function(error, document) {
         if(!error && document) {
             res.json({
@@ -71,7 +67,7 @@ exports.file_create = function(req, res, next) {
                 documents: [{
                     id: document.id,
                     name: document.name,
-                    size: file_size.bytes(document.content.join("\n")),
+                    size: file_size.bytes(""),
                     type: function(name) {
                         var extension = name.split(".")[name.split(".").length-1];
 
@@ -234,10 +230,6 @@ exports.locations = function(req, res, next) {
 exports.create_location = function(req, res, next) {
     req.models.users.get(req.session.user.id, function(error, user) {
         if(!error) {
-            if(!req.session.user.locations) {
-                req.session.user.locations = {}
-            }
-
             req.session.user.locations[rand.generateKey(10)] = req.param("location");
             user.locations = req.session.user.locations;
             res.json({success: true});

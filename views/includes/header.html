@@ -51,7 +51,8 @@
                 csrf: "<%= csrf %>",
                 port: "<%= port %>",
                 name: "<%= site_title %>",
-                delimeter: "<%= site_delimeter %>"
+                delimeter: "<%= site_delimeter %>",
+                apps: <%- JSON.stringify(apps_enabled) %>
             }
         </script>
 
