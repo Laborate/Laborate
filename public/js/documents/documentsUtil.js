@@ -53,9 +53,9 @@ window.documents = {
                 container
                     .find("#popup-" + action)
                     .find("form")
-                    .attr("action", "/documents/file/" + data["id"] + "/rename/")
+                    .attr("action", "/documents/file/" + data.id + "/rename/")
                     .find("input")
-                    .val(data["name"]);
+                    .val(data.name);
                 break;
 
             case "url":
@@ -235,8 +235,8 @@ window.documents = {
                 update = false;
                 var name = $("#location-name");
 
-                if(!name.val() || (name.val() == element.siblings(".active").data("repo"))) {
-                    name.val(element.data("repo"));
+                if(!name.val() || (name.val() == element.siblings(".active").data("repo").capitalize())) {
+                    name.val(element.data("repo").capitalize());
                 }
 
                 element.siblings().removeClass("active");
@@ -249,7 +249,7 @@ window.documents = {
                         list.push({
                             "name": "SFTP Server",
                             "icon": "icon-drive",
-                            "class": "", //Comming Soon
+                            "class": "selectable",
                             "data": { "data-next": "sftp" }
                         });
                     } else if(key == "github" && value) {
@@ -263,21 +263,21 @@ window.documents = {
                         list.push({
                             "name": "Bitbucket Repository",
                             "icon": "icon-bitbucket",
-                            "class": "", //Comming Soon
+                            "class": "selectable",
                             "data": { "data-next": "bitbucket" }
                         });
                     } else if(key == "dropbox" && value) {
                         list.push({
                             "name": "Dropbox Account",
                             "icon": "icon-dropbox-2",
-                            "class": "", //Comming Soon
+                            "class": "selectable",
                             "data": { "data-next": "dropbox" }
                         });
                     } else if(key == "drive" && value) {
                         list.push({
                             "name": "Google Drive Account",
                             "icon": "icon-google-drive",
-                            "class": "", //Comming Soon
+                            "class": "selectable",
                             "data": { "data-next": "drive" }
                         });
                     }
@@ -306,10 +306,13 @@ window.documents = {
                 window.location.href = "/editor/" + menu.data("id");
                 break;
             case "rename":
-                window.documents.popup("rename", file.data(), "Rename File");
+                window.documents.popup("rename", {
+                    "id": file.attr("data-id"),
+                    "name": file.attr("data-name")
+                }, "Rename File");
                 break;
             case "remove":
-                $.post("/documents/file/" + file.data("id") + "/remove/", {
+                $.post("/documents/file/" + file.attr("data-id") + "/remove/", {
                     _csrf: window.config.csrf
                 }, function(json) {
                     if(json.success == false) {
@@ -599,80 +602,7 @@ window.documents = {
 
                 var files = "";
                 $.each(json, function(i, item) {
-                    //File Users
-                    if(item.users <= 2) {
-                        item["laborators"] = 0;
-                    } else if(item.users >= 3 && item.users <= 5) {
-                        item["laborators"] = 1;
-                    } else if(item.users >= 6 && item.users <= 8) {
-                        item["laborators"] = 2;
-                    } else if(item.users >= 9 && item.users <= 11) {
-                        item["laborators"] = 3;
-                    } else {
-                        item["laborators"] = 4;
-                    }
-
-                    //File Size
-                    if(item.size <= 1024) {
-                        item["size"] = 0;
-                    } else if(item.size > 1024 && item.size <= 1024 * 10) {
-                        item["size"] = 1;
-                    } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
-                        item["size"] = 2;
-                    } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
-                        item["size"] = 3;
-                    } else {
-                        item["size"] = 4;
-                    }
-
-                    // File Type
-                    switch(item.type) {
-                        case "file-template":
-                            item["color"] = "blue";
-                            item["icon"] = "icon-file-xml";
-                            break;
-                        case "file-script":
-                            item["color"] = "blue";
-                            item["icon"] = "icon-file-css";
-                            break;
-
-                        /* When More Products Are Added
-                        case "file-zip":
-                            item["color"] = "red";
-                            item["icon"] = "icon-file-zip disabled";
-                            break;
-                        case "file-image":
-                            item["color"] = "green";
-                            item["icon"] = "icon-image";
-                            break;
-                        case "file-notebook":
-                            item["color"] = "green";
-                            item["icon"] = "icon-notebook";
-                            break;
-                        case "file-math":
-                            item["color"] = "purple";
-                            item["icon"] = "icon-calculator";
-                            break;
-                        */
-
-                        default:
-                            item["color"] = "blue";
-                            item["icon"] = "icon-file";
-                            break;
-                    }
-
-                    // Protection
-                    switch(item.protection) {
-                        case "password":
-                            item["corner"] = "icon-lock";
-                            break;
-                        case "assigned":
-                            item["corner"] = "icon-users";
-                            break;
-                        default:
-                            item["corner"] = "";
-                            break;
-                    }
+                    window.documents.fileParser(item, true);
 
                     files += ('                                             \
                         <div class="item file ' + item.color + '"           \
@@ -734,64 +664,7 @@ window.documents = {
 
         function finish(response) {
             $.each(response, function(i, item) {
-                //File Size
-                if(!item.size) {
-                    item["size"] = "";
-                } else if(item.size <= 1024) {
-                    item["size"] = 0;
-                } else if(item.size > 1024 && item.size <= 1024 * 10) {
-                    item["size"] = 1;
-                } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
-                    item["size"] = 2;
-                } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
-                    item["size"] = 3;
-                } else {
-                    item["size"] = 4;
-                }
-
-                //File Types
-                switch(item.type) {
-                    case "back":
-                        item["color"] = "";
-                        item["class"] = "back";
-                        item["icon"] = "icon-reply";
-                        break;
-                    case "folder":
-                        item["color"] = "purple";
-                        item["class"] = "folder";
-                        item["icon"] = "icon-folder";
-                        break;
-                    case "folder-symlink":
-                        item["color"] = "orange";
-                        item["class"] = "folder";
-                        item["icon"] = "icon-folder";
-                        break;
-                    case "file-template":
-                        item["color"] = "blue";
-                        item["class"] = "file";
-                        item["icon"] = "icon-file-xml";
-                        break;
-                    case "file-script":
-                        item["color"] = "blue";
-                        item["class"] = "file";
-                        item["icon"] = "icon-file-css";
-                        break;
-                    case "file-zip":
-                        item["color"] = "red";
-                        item["class"] = "file disabled";
-                        item["icon"] = "icon-file-zip";
-                        break;
-                    case "file-image":
-                        item["color"] = "green";
-                        item["class"] = "file";
-                        item["icon"] = "icon-image";
-                        break;
-                    default:
-                        item["color"] = "";
-                        item["class"] = "file disabled";
-                        item["icon"] = "icon-document";
-                        break;
-                }
+                window.documents.fileParser(item, false);
 
                 files += ('                                                 \
                     <div class="item ' + item.class + ' ' + item.color + '" \
@@ -993,6 +866,44 @@ window.documents = {
     },
     fileCreated: function(responses) {
         $.each(responses.documents, function(i, item) {
+            window.documents.fileParser(item, true);
+
+            file = $('                                          \
+                <div class="item file ' + item.color + '"       \
+                    style="opacity:0;"                          \
+                    data-name="' + item.name + '"               \
+                    data-role="' + item.role + '"               \
+                    data-id="' + item.id + '"                   \
+                    data-size="' + item.size + '"               \
+                    data-laborators="0"                         \
+                    data-type="' + item.type + '">              \
+                    <div class="icon ' + item.icon + '"></div>  \
+                    <div class="name">' + item.name + '</div>   \
+                    <div class="progress">                      \
+                        <div class="bar"></div>                 \
+                    </div>                                      \
+                </div>                                          \
+            ')
+            .appendTo(".files")
+            .animate({ opacity: 1 }, 1000);
+        });
+    },
+    fileRename: function(data) {
+        window.documents.fileParser(data.document, true);
+
+        $(".files .file[data-id='" + data.document.id + "']")
+            .attr({
+                "class": "item file " + data.document.color,
+                "data-name": data.document.name,
+                "data-type": data.document.type
+            })
+            .find(".icon")
+            .attr("class", "icon " + data.document.icon)
+            .siblings(".name")
+            .text(data.document.name);
+    },
+    fileParser: function(item, online) {
+        if(online) {
             //File Users
             if(item.users <= 2) {
                 item["laborators"] = 0;
@@ -1018,7 +929,6 @@ window.documents = {
             } else {
                 item["size"] = 4;
             }
-
 
             // File Type
             switch(item.type) {
@@ -1052,34 +962,83 @@ window.documents = {
 
                 default:
                     item["color"] = "blue";
-                    item["icon"] = "icon-document";
+                    item["icon"] = "icon-file";
                     break;
             }
 
-            file = $('                                          \
-                <div class="item file ' + item.color + '"       \
-                    style="opacity:0;"                          \
-                    data-name="' + item.name + '"               \
-                    data-role="' + item.role + '"               \
-                    data-id="' + item.id + '"                   \
-                    data-size="' + item.size + '"               \
-                    data-laborators="0"                         \
-                    data-type="' + item.type + '">              \
-                    <div class="icon ' + item.icon + '"></div>  \
-                    <div class="name">' + item.name + '</div>   \
-                    <div class="progress">                      \
-                        <div class="bar"></div>                 \
-                    </div>                                      \
-                </div>                                          \
-            ')
-            .appendTo(".files")
-            .animate({ opacity: 1 }, 1000);
-        });
-    },
-    fileRename: function(data) {
-        $(".files .file[data-id='" + data.document.id + "']")
-            .attr("data-name", data.document.name)
-            .find(".name")
-            .text(data.document.name);
+            // Protection
+            switch(item.protection) {
+                case "password":
+                    item["corner"] = "icon-lock";
+                    break;
+                case "assigned":
+                    item["corner"] = "icon-users";
+                    break;
+                default:
+                    item["corner"] = "";
+                    break;
+            }
+        }  else {
+            //File Size
+            if(!item.size) {
+                item["size"] = "";
+            } else if(item.size <= 1024) {
+                item["size"] = 0;
+            } else if(item.size > 1024 && item.size <= 1024 * 10) {
+                item["size"] = 1;
+            } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
+                item["size"] = 2;
+            } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
+                item["size"] = 3;
+            } else {
+                item["size"] = 4;
+            }
+
+            //File Types
+            switch(item.type) {
+                case "back":
+                    item["color"] = "";
+                    item["class"] = "back";
+                    item["icon"] = "icon-reply";
+                    break;
+                case "folder":
+                    item["color"] = "purple";
+                    item["class"] = "folder";
+                    item["icon"] = "icon-folder";
+                    break;
+                case "folder-symlink":
+                    item["color"] = "orange";
+                    item["class"] = "folder";
+                    item["icon"] = "icon-folder";
+                    break;
+                case "file-template":
+                    item["color"] = "blue";
+                    item["class"] = "file";
+                    item["icon"] = "icon-file-xml";
+                    break;
+                case "file-script":
+                    item["color"] = "blue";
+                    item["class"] = "file";
+                    item["icon"] = "icon-file-css";
+                    break;
+                case "file-zip":
+                    item["color"] = "red";
+                    item["class"] = "file disabled";
+                    item["icon"] = "icon-file-zip";
+                    break;
+                case "file-image":
+                    item["color"] = "green";
+                    item["class"] = "file";
+                    item["icon"] = "icon-image";
+                    break;
+                default:
+                    item["color"] = "";
+                    item["class"] = "file disabled";
+                    item["icon"] = "icon-document";
+                    break;
+            }
+        }
+
+        return item;
     }
 }

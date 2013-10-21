@@ -27,8 +27,8 @@
     "connect-redis": "1.4.5",
     "codemirror": "3.16.0",
     "raven": "0.5.1",
-    "node-cryptojs-aes": "*",
-    "jquery": "*"
+    "node-cryptojs-aes": "0.3.9",
+    "jquery": "1.8.3"
   },
   "devDependencies": {
     "express-debug": "*"

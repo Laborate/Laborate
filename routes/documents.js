@@ -162,7 +162,22 @@ exports.file_rename = function(req, res, next) {
                 success: true,
                 document: {
                     id: document.id,
-                    name: document.name
+                    name: document.name,
+                    type: function(name) {
+                        var extension = name.split(".")[name.split(".").length-1];
+
+                        if(!extension) {
+                            return "file";
+                        } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                            return "file-image";
+                        } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                            return "file-template";
+                        } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                            return "file-zip";
+                        } else {
+                            return "file-script";
+                        }
+                    }(document.name)
                 }
              });
         } else {
