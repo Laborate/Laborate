@@ -7,7 +7,7 @@ clear
 echo -e "\e[34mPlease fill out the config.json file\033[m"
 echo -e "\e[31mHit enter when finished\033[m"
 read
-cd ~/code;
+cd ~/middleware;
 
 #Activate Submodules
 git submodule init
