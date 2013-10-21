@@ -438,6 +438,7 @@ window.documents = {
                 locations += ('                                                 \
                     <div class="item"                                           \
                         data-key="' + item.key + '"                             \
+                        data-name="' + item.name + '"                           \
                         data-counter="0">                                       \
                         <div class="container">                                 \
                             <div class="name">' + item.name + '</div>           \
@@ -453,7 +454,13 @@ window.documents = {
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {
-                    $(".locations .item[data-key='" + window.documents.locationActivated + "']").addClass("activated");
+                    var location = $(".locations .item[data-key='" + window.documents.locationActivated + "']")
+                        .addClass("activated");
+
+                    if(window.documents.locationActivated != "online") {
+                        $("title").text(location.attr("data-name") + window.config.delimeter + window.config.title);
+                    }
+
                     clearInterval(interval);
                 }
             }, 100);
@@ -461,7 +468,7 @@ window.documents = {
     },
     location: function(location, path, history) {
         $(".locations .item").removeClass("activated");
-        $(".locations .item[data-key='" + location + "']").addClass("activated");
+        var location_element = $(".locations .item[data-key='" + location + "']").addClass("activated");
         if(location != window.url_params()["location"] || path != window.url_params()["dir"]) {
             $(".files").html("");
         }
@@ -469,14 +476,18 @@ window.documents = {
         if(window.documents.interval) clearTimeout(window.documents.timer);
 
         if(location == "online" || !location) {
+            $("title").text(window.config.title);
             window.documents.onlineDirectory(history);
-            $(".locations .item[data-key='online']").addClass("activated");
 
-            var className = $(".locations .item[data-key='" + location + "']").find(".icon").attr("class");
+            var className = location_element.find(".icon").attr("class");
             if(!className || className.indexOf("icon-number") != -1 || className.indexOf("icon-notice") != -1) {
                 if(className) window.documents.locationNotification("online", false);
             }
         } else {
+            if(location_element.length != 0) {
+                $("title").text(location_element.attr("data-name") + window.config.delimeter + window.config.title);
+            }
+
             window.documents.locationDirectory(location, path, history);
         }
     },
