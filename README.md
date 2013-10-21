@@ -4,7 +4,7 @@ Install After [base-init](https://github.com/Laborate/base-init)
 1. **Run Installer Script**
 
    ```bash
-cd ~; git clone -b <branch> git@github.com:Laborate/middleware.git; bash code/shell/initialize.sh;
+cd ~; git clone -b <branch> git@github.com:Laborate/middleware.git; bash middleware/shell/initialize.sh;
    ```
 
 2. **Fill In** ```config.json``` **With Your Info**
