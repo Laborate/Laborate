@@ -15,8 +15,8 @@ module.exports = function() {
             var foreverCommand = path.join(npmBinRoot, 'forever');
             var startLocation = path.join(__dirname, "../start.js");
             var startCommand = util.format('%s && %s start %s', exportCommand, foreverCommand, startLocation);
-            tab.remove(tab.findComment("laborate_code"));
-            tab.create(startCommand, "laborate_code").everyReboot();
+            tab.remove(tab.findComment("laborate_middleware"));
+            tab.create(startCommand, "laborate_middleware").everyReboot();
 
             //Editor Users @30 Seconds
             tab.remove(tab.findComment("editor_users"));
