@@ -235,8 +235,8 @@ window.documents = {
                 update = false;
                 var name = $("#location-name");
 
-                if(!name.val() || (name.val() == element.siblings(".active").data("repository"))) {
-                    name.val(element.data("repository"));
+                if(!name.val() || (name.val() == element.siblings(".active").data("repo"))) {
+                    name.val(element.data("repo"));
                 }
 
                 element.siblings().removeClass("active");
@@ -573,6 +573,7 @@ window.documents = {
                     "icon": (item.private) ? "icon-lock" : "icon-lock-open",
                     "class": "selectable",
                     "data": {
+                        "data-repo": item.repo,
                         "data-repository": item.user + "/" + item.repo,
                         "data-branch": item.branch,
                         "data-next": "repo-option",

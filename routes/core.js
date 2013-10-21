@@ -12,7 +12,7 @@ exports.config = function(req, res, next) {
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
     res.locals.host = req.host;
-    res.locals.site_title = config.general.product + config.general.delimeter.web + config.general.company;
+    res.locals.site_title = config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.sentry = config.sentry.browser;
     res.locals.backdrop = "";
@@ -23,6 +23,7 @@ exports.config = function(req, res, next) {
         dropbox: false,
         drive: false
     }
+    res.locals.rand = Math.floor((Math.random()*1000000000)+1);;
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {
