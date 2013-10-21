@@ -68,8 +68,8 @@
             "public/js/**"
         ],
         "max_failures": 100000000000000,
-        "forever_log": "../logs/code/forever.log",
-        "output_log": "../logs/code/forever.out",
-        "error_log": "../logs/code/forever.error"
+        "forever_log": "../logs/forever.log",
+        "output_log": "../logs/forever.out",
+        "error_log": "../logs/forever.error"
     }
 }
