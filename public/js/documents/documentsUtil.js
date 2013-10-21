@@ -601,7 +601,7 @@ window.documents = {
         window.documents.headerBar(["filters-online", "add"]);
 
         window.documents.timer = setTimeout(function() {
-            window.documents.headerBar(["message"], "downloading directory listing...");
+            window.documents.headerBar(["message"], "downloading directory listing...", true);
         }, 5000);
 
         $.get("/documents/files/", function(json) {
@@ -652,7 +652,7 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            window.documents.headerBar(["message"], "downloading directory listing...");
+            window.documents.headerBar(["message"], "downloading directory listing...", true);
             $.get("/documents/location/" + location + "/" + path,
                 function(json) {
                     if(json.success == false) {

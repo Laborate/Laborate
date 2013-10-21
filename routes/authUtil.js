@@ -109,7 +109,7 @@ exports.logout = function(req, res) {
     req.session.user = null;
     req.session.save();
     res.clearCookie(config.cookies.rememberme, {
-        domain: req.host.replace(/^[^.]+\./g, "")
+        domain: "." + req.host
     });
     res.redirect('/');
 };
