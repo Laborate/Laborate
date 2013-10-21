@@ -5,10 +5,9 @@
     },
     "general": {
         "port": 3000,
-        "subdomains": ["code"],
+        "subdomains": ["", "www"],
         "production": false,
         "company": "Laborate",
-        "product": "Code",
         "delimeter": {
             "web": " · ",
             "email": " - "
