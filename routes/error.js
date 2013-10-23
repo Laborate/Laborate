@@ -40,10 +40,10 @@ var error_handler = function(status, message, req, res) {
     } else {
         res.status(status)
         res.format({
-            'text/plain': function() {
+            'text/plain': function(){
                 res.send(error_message + "\n");
             },
-            'text/html': function() {
+            'text/html': function(){
                 if(redirect_url) {
                     res.redirect(redirect_url);
                 } else {
@@ -58,7 +58,7 @@ var error_handler = function(status, message, req, res) {
                     });
                 }
             },
-            'application/json': function() {
+            'application/json': function(){
                 var data = {
                     success: false,
                     error_message: error_message
