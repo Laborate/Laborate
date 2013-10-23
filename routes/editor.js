@@ -94,9 +94,6 @@ exports.update = function(req, res, next) {
                             } else {
                                 document.password = null;
                             }
-
-                            document.save();
-
                             res.json({
                                 success: true,
                                 hash: document.password

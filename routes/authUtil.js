@@ -177,16 +177,3 @@ exports.verify = function(req, res, next) {
         });
     }
 };
-
-exports.reload = function(req, res, next) {
-    if(req.session.user) {
-        req.models.users.get(req.session.user.id, function(error, user) {
-            user.set_recovery(req, res);
-            req.session.user = user;
-            req.session.save();
-            res.redirect(req.session.last_page[req.session.last_page.length-2] || '/');
-        });
-    } else {
-        res.redirect('/logout/');
-    }
-}
