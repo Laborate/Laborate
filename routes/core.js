@@ -21,12 +21,27 @@ exports.config = function(req, res, next) {
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.sentry = config.sentry.browser;
     res.locals.backdrop = "";
-    res.locals.apps_enabled = {
-        sftp: false,
-        github: !!(req.session.user && req.session.user.github),
-        bitbucket: false,
-        dropbox: false,
-        drive: false
+    res.locals.apps = {
+        sftp: {
+            enabled: false,
+            link: ""
+        },
+        github: {
+            enabled: !!(req.session.user && req.session.user.github),
+            link: req.github.auth_url
+        },
+        bitbucket: {
+            enabled: false,
+            link: ""
+        },
+        dropbox: {
+            enabled: false,
+            link: ""
+        },
+        drive: {
+            enabled: false,
+            link: ""
+        }
     }
     res.locals.rand = Math.floor((Math.random()*1000000000)+1);;
 

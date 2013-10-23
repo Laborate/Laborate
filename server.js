@@ -99,14 +99,14 @@ workers = function() {
         //Custom Backdrop
         app.use(core.backdrop);
 
-        //Custom Routing Config
-        app.use(core.config);
-        app.use(core.device);
-
         //Custom Libraries
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
+
+        //Custom Routing Config
+        app.use(core.config);
+        app.use(core.device);
     });
 
     /* Development Only */

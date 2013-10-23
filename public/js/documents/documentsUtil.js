@@ -4,7 +4,7 @@
 window.documents = {
     mode: new Array(),
     locationActivated: null,
-    locationIcons: new Array(),
+    locationIcons: {},
     headerBarPrevious: null,
     timer: null,
     uploadFiles: [],
@@ -243,42 +243,61 @@ window.documents = {
                 element.addClass("active");
                 break;
 
+            case "link":
+                window.location.href = element.attr("data-link");
+                break;
+
             default:
                 $.each(window.config.apps, function(key, value) {
-                    if(key == "sftp" && value) {
+                    if(key == "sftp") {
                         list.push({
                             "name": "SFTP Server",
                             "icon": "icon-drive",
                             "class": "selectable",
-                            "data": { "data-next": "sftp" }
+                            "data": {
+                                "data-next": (value.enabled) ? "sftp" : "link",
+                                "data-link": value.link
+                            }
                         });
-                    } else if(key == "github" && value) {
+                    } else if(key == "github") {
                         list.push({
                             "name": "Github Repository",
                             "icon": "icon-github-3",
                             "class": "selectable",
-                            "data": { "data-next": "github" }
+                            "data": {
+                                "data-next": (value.enabled) ? "github" : "link",
+                                "data-link": value.link
+                            }
                         });
-                    } else if(key == "bitbucket" && value) {
+                    } else if(key == "bitbucket") {
                         list.push({
                             "name": "Bitbucket Repository",
                             "icon": "icon-bitbucket",
                             "class": "selectable",
-                            "data": { "data-next": "bitbucket" }
+                            "data": {
+                                "data-next": (value.enabled) ? "bitbucket" : "link",
+                                "data-link": value.link
+                            }
                         });
-                    } else if(key == "dropbox" && value) {
+                    } else if(key == "dropbox") {
                         list.push({
                             "name": "Dropbox Account",
                             "icon": "icon-dropbox-2",
                             "class": "selectable",
-                            "data": { "data-next": "dropbox" }
+                            "data": {
+                                "data-next": (value.enabled) ? "dropbox" : "link",
+                                "data-link": value.link
+                            }
                         });
-                    } else if(key == "drive" && value) {
+                    } else if(key == "drive") {
                         list.push({
                             "name": "Google Drive Account",
                             "icon": "icon-google-drive",
                             "class": "selectable",
-                            "data": { "data-next": "drive" }
+                            "data": {
+                                "data-next": (value.enabled) ? "drive" : "link",
+                                "data-link": value.link
+                            }
                         });
                     }
                 });
@@ -365,11 +384,11 @@ window.documents = {
         $(".bottom .filter select").val("add filter");
         $(".top input").val("");
         window.documents.mode = [];
-        window.documents.popup("close");
 
         $.each(action, function(i, item) {
             switch(item) {
                 case "message":
+                    window.documents.popup("close");
                     $(".bottom .message").html(message).show();
 
                     if(window.documents.headerBarPrevious && !permanent) {
@@ -483,11 +502,7 @@ window.documents = {
         if(location == "online" || !location) {
             $("title").text(window.config.title);
             window.documents.onlineDirectory(history);
-
-            var className = location_element.find(".icon").attr("class");
-            if(!className || className.indexOf("icon-number") != -1 || className.indexOf("icon-notice") != -1) {
-                if(className) window.documents.locationNotification("online", false);
-            }
+            window.documents.locationNotification("online", false);
         } else {
             if(location_element.length != 0) {
                 $("title").text(location_element.attr("data-name") + window.config.delimeter + window.config.title);
@@ -505,36 +520,38 @@ window.documents = {
     locationNotification: function(location, action, count) {
         var element = $(".locations .item[data-key='" + location + "']").find(".icon");
 
-        if(!(location in window.documents.locationIcons)) {
-            window.documents.locationIcons[location] = element.attr("class");
-        }
-
-        if(action) {
-            var actions = {
-                "upload": "icon-arrow-up-2",
-                "download": "icon-arrow-down-2",
-                "counter": function() {
-                    if(count) {
-                        var parentContainer = element.parents(".item");
-                        count += parseInt(parentContainer.attr("data-counter"));
-                        parentContainer.attr("data-counter", count);
-                        if(count <= 9 && element.attr("class").indexOf("icon-notice") == -1) {
-                            return "icon-number" + ((count != 1) ? "-" + count : "");
-                        } else {
-                            return "icon-notice";
-                        }
-                    }
-                }()
-            };
-
-            if(action in actions) {
-                window.documents.locationNotificationChange(element,
-                    element.attr("class").replace(/icon-.*/g, actions[action]), true);
+        if(element.length > 0) {
+            if(!(location in window.documents.locationIcons)) {
+                window.documents.locationIcons[location] = element.attr("class");
             }
-        } else {
-            window.documents.locationNotificationChange(element,
-                window.documents.locationIcons[location], false, false);
-            element.parents(".item").attr("data-counter", 0);
+
+            if(action) {
+                var actions = {
+                    "upload": "icon-arrow-up-2",
+                    "download": "icon-arrow-down-2",
+                    "counter": function() {
+                        if(count) {
+                            var parentContainer = element.parents(".item");
+                            count += parseInt(parentContainer.attr("data-counter"));
+                            parentContainer.attr("data-counter", count);
+                            if(count <= 9 && element.attr("class").indexOf("icon-notice") == -1) {
+                                return "icon-number" + ((count != 1) ? "-" + count : "");
+                            } else {
+                                return "icon-notice";
+                            }
+                        }
+                    }()
+                };
+
+                if(action in actions) {
+                    window.documents.locationNotificationChange(element,
+                        element.attr("class").replace(/icon-.*/g, actions[action]), true);
+                }
+            } else {
+                window.documents.locationNotificationChange(element,
+                    window.documents.locationIcons[location], false, false);
+                element.parents(".item").attr("data-counter", 0);
+            }
         }
     },
     locationNotificationChange: function(element, className, active, big) {
