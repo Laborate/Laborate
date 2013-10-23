@@ -4,6 +4,15 @@ var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
 exports.config = function(req, res, next) {
+    //Track Last HTML Page
+    if(!req.xhr) {
+        if(Array.isArray(req.session.last_page)) {
+            req.session.last_page.push(req.url);
+        } else {
+            req.session.last_page = [req.url];
+        }
+    }
+
     //Header Config
     res.setHeader("Server", "Laborate.io");
 
