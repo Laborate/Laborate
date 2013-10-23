@@ -402,10 +402,6 @@ window.documents = {
     },
     locations: function() {
         $.get("/documents/locations/", function(json) {
-            if(json.success == false) {
-                window.documents.headerBar(["message"], json.error_message);
-            }
-
             var locations = ('                                        \
                 <div class="item" data-key="online" data-counter="0"> \
                     <div class="container">                           \
