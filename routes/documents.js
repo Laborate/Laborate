@@ -157,7 +157,7 @@ exports.file_upload = function(req, res, next) {
 exports.file_rename = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
         if(!error && document) {
-            document.name = req.param("name");
+            document.save({ name: req.param("name") });
             res.json({
                 success: true,
                 document: {
@@ -255,7 +255,7 @@ exports.create_location = function(req, res, next) {
     req.models.users.get(req.session.user.id, function(error, user) {
         if(!error) {
             req.session.user.locations[rand.generateKey(10)] = req.param("location");
-            user.locations = req.session.user.locations;
+            user.save({ locations: req.session.user.locations });
             res.json({success: true});
         } else {
             res.error(200, "Failed To Create Location");
@@ -268,7 +268,7 @@ exports.remove_location = function(req, res, next) {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error) {
                 delete req.session.user.locations[req.param("location")];
-                user.locations = req.session.user.locations;
+                user.save({ locations: req.session.user.locations });
                 res.json({success: true});
             } else {
                 res.error(200, "Failed To Remove Location");
