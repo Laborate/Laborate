@@ -5,7 +5,7 @@ var backdrop_themes = {};
 
 exports.config = function(req, res, next) {
     //Track Last HTML Page
-    if(!req.xhr && !req.url.match(/^\/reload/)) {
+    if(!req.xhr && !req.url.match(/^\/reload|^\/github/)) {
         req.session.last_page = req.url
     }
 

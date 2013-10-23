@@ -286,6 +286,18 @@ body {
                 text-align: center;
                 width: 100%;
                 text-transform: uppercase;
+
+                a {
+                    color: darken(@header_bottom, 60%);
+
+                    &:hover {
+                        text-decoration: underline;
+
+                        &:active {
+                            color: darken(@header_bottom, 65%);
+                        }
+                    }
+                }
             }
 
             .side-button  {

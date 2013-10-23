@@ -4,7 +4,7 @@ exports.add_token = function(req, res, next) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 user.github = token;
                 req.session.user = user;
-                res.redirect("/account/settings/");
+                res.redirect(req.session.last_page || "/account/settings/");
             });
         });
     } else {
@@ -36,12 +36,12 @@ exports.repos = function(req, res, next) {
                 if(error.message == "Bad credentials") {
                     res.error(200, "Bad Github Oauth Token");
                 } else {
-                    res.error(200, "Failed To Load Github Contents");
+                    res.error(200, "Failed To Load Github Repos");
                 }
             }
         });
     } else {
-        res.json([]);
+        res.error(200, "Bad Github Oauth Token");
     }
 };
 
@@ -151,6 +151,6 @@ exports.commit = function(req, res, next) {
             }
         });
     } else {
-        res.error(200, "Failed To Commit File");
+        res.error(200, "Bad Github Oauth Token");
     }
 }

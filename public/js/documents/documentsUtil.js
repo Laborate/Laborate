@@ -365,6 +365,7 @@ window.documents = {
         $(".bottom .filter select").val("add filter");
         $(".top input").val("");
         window.documents.mode = [];
+        window.documents.popup("close");
 
         $.each(action, function(i, item) {
             switch(item) {
@@ -579,7 +580,8 @@ window.documents = {
 
         if(json.success == false) {
             if(json.error_message == "Bad Github Oauth Token") {
-                window.documents.headerBar(["message"], "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
+                window.documents.headerBar(["message"],
+                    "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>", true);
             } else {
                 window.documents.headerBar(["message"], json.error_message);
             }
@@ -661,7 +663,8 @@ window.documents = {
                 function(json) {
                     if(json.success == false) {
                         if(json.error_message == "Bad Github Oauth Token") {
-                            window.documents.headerBar(["message"], "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
+                            window.documents.headerBar(["message"],
+                                "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>", true);
                         } else {
                             if(history) {
                                 window.documents.headerBar(["message"], json.error_message);
