@@ -1,4 +1,4 @@
-var error_handler = function(status, message, req, res) {
+var error_handler = function(status, message, home, req, res) {
     var error_message;
     var error_html;
     var redirect_url;
@@ -54,6 +54,7 @@ var error_handler = function(status, message, req, res) {
                         js: clientJS.renderTags("backdrop"),
                         css: clientCSS.renderTags("backdrop"),
                         error_html: error_html,
+                        home: home,
                         backdrop: req.backdrop("blurry")
                     });
                 }
@@ -75,15 +76,15 @@ var error_handler = function(status, message, req, res) {
 
 exports.global = function(error, req, res, next) {
     if(error.status) {
-        error_handler(error.status, error.message, req, res);
+        error_handler(error.status, error.message, true, req, res);
     } else {
         next();
     }
 };
 
 exports.handler = function(req, res, next) {
-    res.error = function(status, message) {
-        error_handler(status, message, req, res);
+    res.error = function(status, message, home) {
+        error_handler(status, message, home, req, res);
     }
     next();
 };

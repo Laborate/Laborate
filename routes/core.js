@@ -43,7 +43,7 @@ exports.device = function(req, res, next) {
         next();
     } else {
         req.device.type = req.device.type.charAt(0).toUpperCase() + req.device.type.slice(1);
-        res.error(200, req.device.type + "'s aren't supported yet");
+        res.error(200, req.device.type + "'s aren't supported yet", false);
     }
 }
 
