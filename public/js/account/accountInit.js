@@ -8,6 +8,6 @@ window.url_params = function() {
     });
 }
 
-$(window).ready(function() {
+$(function() {
     window.account.navigationChange(window.url_params()["mode"], true);
 });

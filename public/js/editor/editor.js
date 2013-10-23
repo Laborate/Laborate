@@ -1,4 +1,4 @@
-$(window).ready(function() {
+$(function() {
     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
 
     window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {

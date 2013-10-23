@@ -11,7 +11,7 @@ window.url_params = function() {
     });
 }
 
-$(window).ready(function() {
+$(function() {
     //Update Location On History Change and Every 2 Minutes
     window.onpopstate = window.documents.locationReload;
     setInterval(window.documents.locationReload, 120000);

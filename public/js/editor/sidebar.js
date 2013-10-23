@@ -1,4 +1,4 @@
-$(window).ready(function() {
+$(function() {
     /* Core Operations */
     $("#sidebar_header .icon").on("click", function() {
         window.sidebarUtil.change($(this).attr("id"), "");

@@ -74,7 +74,7 @@ window.url_params = function() {
     return params_dict;
 }
 
-$(window).ready(function() {
+$(function() {
     //Set Array of Users
     window.users = new Array();
 
