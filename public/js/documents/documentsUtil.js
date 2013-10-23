@@ -235,8 +235,8 @@ window.documents = {
                 update = false;
                 var name = $("#location-name");
 
-                if(!name.val() || (name.val() == element.siblings(".active").data("repo").capitalize())) {
-                    name.val(element.data("repo").capitalize());
+                if(!name.val() || (name.val() == element.siblings(".active").data("repository"))) {
+                    name.val(element.data("repository"));
                 }
 
                 element.siblings().removeClass("active");
@@ -402,6 +402,10 @@ window.documents = {
     },
     locations: function() {
         $.get("/documents/locations/", function(json) {
+            if(json.success == false) {
+                window.documents.headerBar(["message"], json.error_message);
+            }
+
             var locations = ('                                        \
                 <div class="item" data-key="online" data-counter="0"> \
                     <div class="container">                           \
@@ -412,8 +416,7 @@ window.documents = {
                 </div>                                                \
             ');
 
-
-            $.each(json, function(i, item) {
+            if(json.locations) $.each(json.locations, function(i, item) {
                 switch(item.type) {
                     case "sftp":
                         item["class"] = "icon-drive";
@@ -612,7 +615,7 @@ window.documents = {
                 window.documents.headerBar(["filters-online", "add"]);
 
                 var files = "";
-                $.each(json, function(i, item) {
+                if(json.documents) $.each(json.documents, function(i, item) {
                     window.documents.fileParser(item, true);
 
                     files += ('                                             \

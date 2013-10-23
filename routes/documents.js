@@ -23,34 +23,37 @@ exports.files = function(req, res, next) {
         user_id: req.session.user.id
     }, function(error, documents) {
         if(!error) {
-            res.json($.map(documents, function(value) {
-                if(value) {
-                    return {
-                        id: value.document_id,
-                        name: value.document.name,
-                        protection: (value.document.password != null) ? "password" : "",
-                        location: value.document.location,
-                        size: file_size.bytes(value.document.content.join("\n")),
-                        type: function(name) {
-                            var extension = name.split(".")[name.split(".").length-1];
+            res.json({
+                success: true,
+                documents: $.map(documents, function(value) {
+                    if(value) {
+                        return {
+                            id: value.document_id,
+                            name: value.document.name,
+                            protection: (value.document.password != null) ? "password" : "",
+                            location: value.document.location,
+                            size: file_size.bytes(value.document.content.join("\n")),
+                            type: function(name) {
+                                var extension = name.split(".")[name.split(".").length-1];
 
-                            if(!extension) {
-                                return "file";
-                            } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-                                return "file-image";
-                            } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
-                                return "file-template";
-                            } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
-                                return "file-zip";
-                            } else {
-                                return "file-script";
-                            }
-                        }(value.document.name),
-                        users: (value.document.roles.length - 1),
-                        role: value.permission.name.toLowerCase()
+                                if(!extension) {
+                                    return "file";
+                                } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                    return "file-image";
+                                } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                    return "file-template";
+                                } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                                    return "file-zip";
+                                } else {
+                                    return "file-script";
+                                }
+                            }(value.document.name),
+                            users: (value.document.roles.length - 1),
+                            role: value.permission.name.toLowerCase()
+                        }
                     }
-                }
-            }));
+                })
+            });
         } else {
             res.error(200, "Failed To Load Files");
         }
@@ -158,6 +161,8 @@ exports.file_rename = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
         if(!error && document) {
             document.name = req.param("name");
+            document.save();
+
             res.json({
                 success: true,
                 document: {
@@ -233,19 +238,18 @@ exports.location = function(req, res, next) {
 
 exports.locations = function(req, res, next) {
     if(req.session.user.locations) {
-        locations = [];
-        $.each(req.session.user.locations, function(key, value) {
-            if(!req.session.user.github && value.type == "github") {
-                return;
-            }
-
-            locations.push({
-                key: key,
-                name: value.name,
-                type: value.type
+        res.json({
+            success: true,
+            locations: $.map(req.session.user.locations, function(key, value) {
+                if(req.session.user.github && value.type == "github") {
+                    return {
+                        key: key,
+                        name: value.name,
+                        type: value.type
+                    }
+                }
             })
         });
-        res.json(locations);
     } else {
         res.json([]);
     }
@@ -256,6 +260,7 @@ exports.create_location = function(req, res, next) {
         if(!error) {
             req.session.user.locations[rand.generateKey(10)] = req.param("location");
             user.locations = req.session.user.locations;
+            user.save();
             res.json({success: true});
         } else {
             res.error(200, "Failed To Create Location");
@@ -269,6 +274,7 @@ exports.remove_location = function(req, res, next) {
             if(!error) {
                 delete req.session.user.locations[req.param("location")];
                 user.locations = req.session.user.locations;
+                user.save();
                 res.json({success: true});
             } else {
                 res.error(200, "Failed To Remove Location");

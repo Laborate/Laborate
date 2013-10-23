@@ -15,6 +15,14 @@ module.exports = function(app) {
     app.get('/login', authUtil.loginCheck, auth.login);
     app.post('/auth/login', authUtil.login);
 
+    /* Logout */
+    app.get('/logout', authUtil.logout);
+
+    /* Reload User Account */
+    if(!config.general.production) {
+        app.get('/reload', authUtil.reload);
+    }
+
     /* Register */
     app.get('/register', authUtil.loginCheck, auth.register);
     app.post('/auth/register', authUtil.register);
@@ -22,9 +30,6 @@ module.exports = function(app) {
     /* Verify Email */
     app.get('/verify', authUtil.restrictAccess, auth.verify);
     app.get('/verify/:code', authUtil.restrictAccess, authUtil.verify);
-
-    /* Logout */
-    app.get('/logout', authUtil.logout);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.update, account.index);
