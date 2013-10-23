@@ -184,7 +184,7 @@ exports.reload = function(req, res, next) {
             user.set_recovery(req, res);
             req.session.user = user;
             req.session.save();
-            res.redirect(req.session.last_page[req.session.last_page.length-2] || '/');
+            res.redirect(req.session.last_page || '/');
         });
     } else {
         res.redirect('/logout/');

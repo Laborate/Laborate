@@ -5,12 +5,8 @@ var backdrop_themes = {};
 
 exports.config = function(req, res, next) {
     //Track Last HTML Page
-    if(!req.xhr) {
-        if(Array.isArray(req.session.last_page)) {
-            req.session.last_page.push(req.url);
-        } else {
-            req.session.last_page = [req.url];
-        }
+    if(!req.xhr && !req.url.match(/^\/reload/)) {
+        req.session.last_page = req.url
     }
 
     //Header Config
