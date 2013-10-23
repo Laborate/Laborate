@@ -39,7 +39,10 @@ exports.config = function(req, res, next) {
 }
 
 exports.device = function(req, res, next) {
-    if(["desktop", "bot"].indexOf(req.device.type.toLowerCase()) != -1) {
+    if(req.headers['user-agent'].toLowerCase().indexOf("msie") != -1) {
+        res.error(200, "Internet Explorer browsers aren't supported yet. \
+            Try <a class='backdrop-link' href='http://www.google.com/chrome'>Chrome</a>.", false);
+    } else if(["desktop", "bot"].indexOf(req.device.type.toLowerCase()) != -1) {
         next();
     } else {
         req.device.type = req.device.type.charAt(0).toUpperCase() + req.device.type.slice(1);
