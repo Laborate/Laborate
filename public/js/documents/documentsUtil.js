@@ -249,17 +249,16 @@ window.documents = {
 
             default:
                 $.each(window.config.apps, function(key, value) {
-                    if(key == "sftp") {
+                    if(key == "sftp" && value.show) {
                         list.push({
                             "name": "SFTP Server",
                             "icon": "icon-drive",
                             "class": "selectable",
                             "data": {
-                                "data-next": (value.enabled) ? "sftp" : "link",
-                                "data-link": value.link
+                                "data-next": "sftp"
                             }
                         });
-                    } else if(key == "github") {
+                    } else if(key == "github" && value.show) {
                         list.push({
                             "name": "Github Repository",
                             "icon": "icon-github-3",
@@ -269,7 +268,7 @@ window.documents = {
                                 "data-link": value.link
                             }
                         });
-                    } else if(key == "bitbucket") {
+                    } else if(key == "bitbucket" && value.show) {
                         list.push({
                             "name": "Bitbucket Repository",
                             "icon": "icon-bitbucket",
@@ -279,7 +278,7 @@ window.documents = {
                                 "data-link": value.link
                             }
                         });
-                    } else if(key == "dropbox") {
+                    } else if(key == "dropbox" && value.show) {
                         list.push({
                             "name": "Dropbox Account",
                             "icon": "icon-dropbox-2",
@@ -289,7 +288,7 @@ window.documents = {
                                 "data-link": value.link
                             }
                         });
-                    } else if(key == "drive") {
+                    } else if(key == "drive" && value.show) {
                         list.push({
                             "name": "Google Drive Account",
                             "icon": "icon-google-drive",

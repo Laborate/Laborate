@@ -12,6 +12,8 @@ exports.config = function(req, res, next) {
     //Header Config
     res.setHeader("Server", "Laborate.io");
 
+    console.log(req);
+
     //Response Locals
     res.locals.csrf = req.session._csrf;
     res.locals.port = config.general.port;
@@ -19,31 +21,35 @@ exports.config = function(req, res, next) {
     res.locals.host = req.host;
     res.locals.site_title = config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
+    res.locals.description = config.general.description.join("");
     res.locals.sentry = config.sentry.browser;
+    res.locals.google_verification = config.google.verification;
     res.locals.backdrop = "";
     res.locals.apps = {
         sftp: {
-            enabled: false,
-            link: ""
+            show: false
         },
         github: {
+            show: true,
             enabled: !!(req.session.user && req.session.user.github),
             link: req.github.auth_url
         },
         bitbucket: {
-            enabled: false,
+            show: true,
+            enabled: !!(req.session.user && req.session.user.bitbucket),
             link: ""
         },
         dropbox: {
-            enabled: false,
+            show: true,
+            enabled: !!(req.session.user && req.session.user.dropbox),
             link: ""
         },
         drive: {
-            enabled: false,
+            show: true,
+            enabled: !!(req.session.user && req.session.user.drive),
             link: ""
         }
     }
-    res.locals.rand = Math.floor((Math.random()*1000000000)+1);;
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {

@@ -7,11 +7,16 @@
         "port": 3000,
         "subdomains": ["", "www"],
         "production": false,
-        "company": "Laborate",
+        "company": "Laborate.io",
         "delimeter": {
             "web": " · ",
             "email": " - "
-        }
+        },
+        "description": [
+            "Collaborative software development made easy! Upload ",
+            "files manually, from Github repositories or SFTP Servers in seconds ",
+            "and start editing in realtime with your team."
+        ]
     },
     "development" : {
         "basicAuth": {
@@ -45,7 +50,10 @@
     "github": {
         "id": "",
         "secret": "",
-        "scope": ["user", "repo", "gist"]
+        "scope": ["repo"]
+    },
+    "google": {
+        "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY"
     },
     "email": {
         "mode": "smtp",
@@ -68,8 +76,7 @@
             "public/js/**"
         ],
         "max_failures": 100000000000000,
-        "forever_log": "../logs/forever.log",
-        "output_log": "../logs/forever.out",
-        "error_log": "../logs/forever.error"
+        "output_log": "../logs/middleware/log.out",
+        "error_log": "../logs/middleware/log.error"
     }
 }
