@@ -3,7 +3,10 @@ var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
-exports.config = function(req, res, next) {
+exports.setup = function(req, res, next) {
+    //Set Server Root For Non Express Calls
+    config.general.server = req.protocol + "://" + req.host;
+
     //Track Last HTML Page
     if(!req.xhr && !req.url.match(/^\/reload|^\/github/)) {
         req.session.last_page = req.url
@@ -12,9 +15,15 @@ exports.config = function(req, res, next) {
     //Header Config
     res.setHeader("Server", "Laborate.io");
 
-    console.log(req);
+    //Replace Views Elements For Compatibility With IE
+    res.renderOutdated = function(view, data) {
+        res.render(view, data, outdatedhtml.makeoutdated(req, res));
+    }
 
-    //Response Locals
+    next();
+}
+
+exports.locals = function(req, res, next) {
     res.locals.csrf = req.session._csrf;
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
@@ -32,28 +41,23 @@ exports.config = function(req, res, next) {
         github: {
             show: true,
             enabled: !!(req.session.user && req.session.user.github),
-            link: req.github.auth_url
+            link: "/github/token/"
         },
         bitbucket: {
             show: true,
             enabled: !!(req.session.user && req.session.user.bitbucket),
-            link: ""
+            link: "/bitbucket/token/"
         },
         dropbox: {
             show: true,
             enabled: !!(req.session.user && req.session.user.dropbox),
-            link: ""
+            link: "/dropbox/token/"
         },
         drive: {
             show: true,
             enabled: !!(req.session.user && req.session.user.drive),
-            link: ""
+            link: "/drive/token/"
         }
-    }
-
-    //Replace Views Elements For Compatibility With IE
-    res.renderOutdated = function(view, data) {
-        res.render(view, data, outdatedhtml.makeoutdated(req, res));
     }
 
     next();

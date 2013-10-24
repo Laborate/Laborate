@@ -6,6 +6,7 @@ var account = require('./account');
 var documents = require('./documents');
 var editor = require('./editor');
 var github = require('./github');
+var bitbucket = require('./bitbucket');
 
 module.exports = function(app) {
     /* Root */
@@ -61,9 +62,15 @@ module.exports = function(app) {
     app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.invite);
 
     /* Github */
+    app.get('/github/token', authUtil.restrictAccess, github.token);
     app.get('/github/token/add', authUtil.restrictAccess, github.add_token);
     app.get('/github/token/remove', authUtil.restrictAccess, github.remove_token);
     app.get('/github/repos', authUtil.restrictAccess, authUtil.xhr, github.repos);
+
+    /* Bitbucket */
+    app.get('/bitbucket/token', authUtil.restrictAccess, bitbucket.token);
+    app.get('/bitbucket/token/add', authUtil.restrictAccess, bitbucket.add_token);
+    app.get('/bitbucket/token/remove', authUtil.restrictAccess, bitbucket.remove_token);
 
     /* Not Found Page */
     app.all('*', function(req, res, next) {

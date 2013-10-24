@@ -1,3 +1,7 @@
+exports.token = function(req, res, next) {
+    res.redirect(req.github.auth_url);
+}
+
 exports.add_token = function(req, res, next) {
     if(req.param("code")) {
         req.github.get_token(req.param("code"), function (error, token) {
@@ -8,7 +12,7 @@ exports.add_token = function(req, res, next) {
             });
         });
     } else {
-        res.redirect("/account/settings/");
+        res.redirect(req.session.last_page || "/account/settings/");
     }
 };
 

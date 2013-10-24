@@ -9,10 +9,6 @@ var cluster    = require('cluster');
 var raven      = require('raven');
 var device     = require('express-device');
 
-/* Modules: Custom */
-var core = require("./routes/core");
-var error = require("./routes/error");
-
 /* IMPORTANT - No VAR Makes Variables Global */
 $         = require("jquery");
 config    = require('./config');
@@ -92,21 +88,25 @@ workers = function() {
         }));
         app.use(express.csrf());
 
+        //Custom Setup
+        app.use(require("./routes/core").setup);
+
         //Error Handlers
-        app.use(error.global);
-        app.use(error.handler);
+        app.use(require("./routes/error").global);
+        app.use(require("./routes/error").handler);
 
         //Custom Backdrop
-        app.use(core.backdrop);
+        app.use(require("./routes/core").backdrop);
 
         //Custom Libraries
         app.use(require("./lib/models").express);
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
+        app.use(require("./lib/bitbucket"));
 
-        //Custom Routing Config
-        app.use(core.config);
-        app.use(core.device);
+        //Custom Routing
+        app.use(require("./routes/core").locals);
+        app.use(require("./routes/core").device);
     });
 
     /* Development Only */
@@ -123,6 +123,7 @@ workers = function() {
         }
     });
 
+    /* Production Only */
     app.configure('production', function() {
         //Send Error Logging To Sentry
         app.use(raven.middleware.express(config.sentry.node));
