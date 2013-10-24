@@ -52,6 +52,10 @@
         "secret": "",
         "scope": ["repo"]
     },
+    "bitbucket": {
+        "id": "",
+        "secret": ""
+    },
     "google": {
         "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY"
     },
