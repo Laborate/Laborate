@@ -8,7 +8,7 @@ exports.setup = function(req, res, next) {
     config.general.server = req.protocol + "://" + req.host;
 
     //Track Last HTML Page
-    if(!req.xhr && !req.url.match(/^\/reload|^\/github/)) {
+    if(!req.xhr && !req.url.match(/^\/reload|^\/github|^\/bitbucket/)) {
         req.session.last_page = req.url
     }
 

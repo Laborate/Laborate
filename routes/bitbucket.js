@@ -1,14 +1,17 @@
 exports.token = function(req, res, next) {
-    req.bitbucket.auth_url(function(error, url) {
+    req.bitbucket.auth_url(function(error, url, secret) {
+        req.session.bitbucket_oauth = secret;
         res.redirect(url);
     });
 }
 
 exports.add_token = function(req, res, next) {
     if(req.param("oauth_token") && req.param("oauth_verifier")) {
-        req.bitbucket.get_token(req.param("oauth_token"), req.param("oauth_verifier"),
+        req.bitbucket.get_token(
+            req.param("oauth_token"), req.session.bitbucket_oauth, req.param("oauth_verifier"),
             function (error, token, secret) {
                 req.models.users.get(req.session.user.id, function(error, user) {
+                    delete req.session.bitbucket_oauth;
                     req.session.user.bitbucket = {
                         token: token,
                         secret: secret
