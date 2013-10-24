@@ -228,15 +228,19 @@ window.documents = {
 
         switch(element.data("next")) {
             case "github":
-                list = window.documents.githubRepos();
+                list = window.documents.repoListing("github");
+                break;
+
+            case "bitbucket":
+                list = window.documents.repoListing("bitbucket");
                 break;
 
             case "repo-option":
                 update = false;
                 var name = $("#location-name");
 
-                if(!name.val() || (name.val() == element.siblings(".active").data("repo").capitalize())) {
-                    name.val(element.data("repo").capitalize());
+                if(!name.val() || (name.val() == element.siblings(".active").data("repository"))) {
+                    name.val(element.data("repository"));
                 }
 
                 element.siblings().removeClass("active");
@@ -587,21 +591,20 @@ window.documents = {
 
         window.cachedLocations["location_" + location][path] = json;
     },
-    githubRepos: function() {
+    repoListing: function(type) {
         var json = $.ajax({
             type: "GET",
-            url: "/github/repos/",
+            url: "/" + type + "/repos/",
             async: false,
         }).responseJSON;
 
         if(json.success == false) {
-            if(json.error_message == "Bad Github Oauth Token") {
+            if(json.error_message == "Bad " + type.capitalize() + " Oauth Token") {
                 window.documents.headerBar(["message"],
-                    "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>", true);
+                    "Opps! " + type.capitalize() + " Needs To Be <a href='" + config.apps[type].link + "'>Reauthorized</a>", true);
             } else {
                 window.documents.headerBar(["message"], json.error_message);
             }
-
         } else {
             return $.map(json.repos, function(item) {
                 return {
@@ -613,7 +616,7 @@ window.documents = {
                         "data-repository": item.user + "/" + item.repo,
                         "data-branch": item.branch,
                         "data-next": "repo-option",
-                        "data-type": "github"
+                        "data-type": type
                     }
                 }
             });

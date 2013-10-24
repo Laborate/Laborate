@@ -9,13 +9,10 @@ exports.add_token = function(req, res, next) {
     if(req.param("oauth_token") && req.param("oauth_verifier")) {
         req.bitbucket.get_token(
             req.param("oauth_token"), req.session.bitbucket_oauth, req.param("oauth_verifier"),
-            function (error, token, secret) {
+            function (error, token) {
                 req.models.users.get(req.session.user.id, function(error, user) {
                     delete req.session.bitbucket_oauth;
-                    req.session.user.bitbucket = {
-                        token: token,
-                        secret: secret
-                    };
+                    req.session.user.bitbucket = token;
                     user.save({ bitbucket: req.session.user.bitbucket });
                     res.redirect(req.session.last_page || "/account/settings/");
                 });
