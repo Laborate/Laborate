@@ -8,6 +8,7 @@ require("./cron")();
 
 //Create Logs Folder
 fs.mkdirSync(__dirname + '/../logs/' + config.forever.uid, 0775, true);
+fs.mkdirSync(__dirname + '/../logs/' + config.forever.uid, 0775, true);
 
 //Configure Forever
 var child = new (forever.Monitor)(__dirname + '/server.js', {
@@ -26,7 +27,6 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
         'NODE_ENV': (config.general.production) ? "production" : "development"
     },
 
-    logFile: __dirname + "/" + config.forever.forever_log,
     outFile: __dirname + "/" + config.forever.output_log,
     errFile: __dirname + "/" + config.forever.error_log,
 
