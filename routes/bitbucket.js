@@ -9,10 +9,10 @@ exports.add_token = function(req, res, next) {
     if(req.param("oauth_token") && req.param("oauth_verifier")) {
         req.bitbucket.get_token(
             req.param("oauth_token"), req.session.bitbucket_oauth, req.param("oauth_verifier"),
-            function (error, token) {
+            function (error, oauth) {
                 req.models.users.get(req.session.user.id, function(error, user) {
                     delete req.session.bitbucket_oauth;
-                    req.session.user.bitbucket = token;
+                    req.session.user.bitbucket = oauth;
                     user.save({ bitbucket: req.session.user.bitbucket });
                     res.redirect(req.session.last_page || "/account/settings/");
                 });
@@ -32,5 +32,26 @@ exports.remove_token = function(req, res, next) {
         });
     } else {
         res.redirect("/account/settings/");
+    }
+};
+
+exports.repos = function(req, res, next) {
+    if(req.session.user.bitbucket) {
+        req.bitbucket.repos(req.session.user.bitbucket, function(error, results) {
+            if(!error) {
+                res.json({
+                    success: true,
+                    repos: results
+                });
+            } else {
+                if(error.message == "Bad credentials") {
+                    res.error(200, "Bad Bitbucket Oauth Token");
+                } else {
+                    res.error(200, "Failed To Load Bitbucket Repos");
+                }
+            }
+        });
+    } else {
+        res.error(200, "Bad Bitbucket Oauth Token");
     }
 };

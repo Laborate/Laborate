@@ -49,12 +49,12 @@ exports.locals = function(req, res, next) {
             link: "/bitbucket/token/"
         },
         dropbox: {
-            show: true,
+            show: false,
             enabled: !!(req.session.user && req.session.user.dropbox),
             link: "/dropbox/token/"
         },
         drive: {
-            show: true,
+            show: false,
             enabled: !!(req.session.user && req.session.user.drive),
             link: "/drive/token/"
         }

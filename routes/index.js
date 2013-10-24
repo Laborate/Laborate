@@ -71,6 +71,7 @@ module.exports = function(app) {
     app.get('/bitbucket/token', authUtil.restrictAccess, bitbucket.token);
     app.get('/bitbucket/token/add', authUtil.restrictAccess, bitbucket.add_token);
     app.get('/bitbucket/token/remove', authUtil.restrictAccess, bitbucket.remove_token);
+    app.get('/bitbucket/repos', authUtil.restrictAccess, authUtil.xhr, bitbucket.repos);
 
     /* Not Found Page */
     app.all('*', function(req, res, next) {
