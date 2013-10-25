@@ -27,51 +27,37 @@ var error_handler = function(status, message, home, req, res) {
         error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
     }
 
-    if(req.xhr) {
-        var data = {
-            success: false,
-            error_message: error_message
-        }
-        if(error_message == "Bad Github Oauth Token") {
-            data["github_oath"] = req.github.auth_url;
-        }
-
-        res.json(data);
-    } else {
-        res.status(status)
-        res.format({
-            'text/plain': function(){
-                res.send(error_message + "\n");
-            },
-            'text/html': function(){
-                if(redirect_url) {
-                    res.redirect(redirect_url);
-                } else {
-                    res.renderOutdated('core/error', {
-                        host: req.host,
-                        title: error_message,
-                        mode: error_message,
-                        js: clientJS.renderTags("backdrop"),
-                        css: clientCSS.renderTags("backdrop"),
-                        error_html: error_html,
-                        home: home,
-                        backdrop: req.backdrop("blurry")
-                    });
-                }
-            },
-            'application/json': function(){
-                var data = {
-                    success: false,
-                    error_message: error_message
-                }
-                if(error_message == "Bad Github Oauth Token") {
-                    data["github_oath"] = req.github.auth_url;
-                }
-
-                res.json(data);
-            }
-        });
+    if(!req.xhr) {
+        res.status(status);
     }
+
+    res.format({
+        'text/plain': function(){
+            res.send(error_message + "\n");
+        },
+        'text/html': function(){
+            if(redirect_url) {
+                res.redirect(redirect_url);
+            } else {
+                res.renderOutdated('core/error', {
+                    host: req.host,
+                    title: error_message,
+                    mode: error_message,
+                    js: clientJS.renderTags("backdrop"),
+                    css: clientCSS.renderTags("backdrop"),
+                    error_html: error_html,
+                    home: home,
+                    backdrop: req.backdrop("blurry")
+                });
+            }
+        },
+        'application/json': function(){
+            res.json({
+                success: false,
+                error_message: error_message
+            });
+        }
+    });
 }
 
 exports.global = function(error, req, res, next) {

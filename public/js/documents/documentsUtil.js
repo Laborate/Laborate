@@ -692,8 +692,8 @@ window.documents = {
                             }
                         }
                     } else {
-                        window.documents.addcachedLocation(location, path, json);
-                        finish(json);
+                        window.documents.addcachedLocation(location, path, json.contents);
+                        finish(json.contents);
                     }
                 }
             );

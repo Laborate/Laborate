@@ -74,7 +74,10 @@ exports.contents = function(req, res, next) {
                             location: req.param("0"),
                         }, function(error, document) {
                             if(!error) {
-                                res.json({document: document.id});
+                                res.json({
+                                    success: true,
+                                    document: document.id
+                                });
                             } else {
                                 res.error(200, "Failed To Create Document");
                             }
@@ -82,32 +85,35 @@ exports.contents = function(req, res, next) {
                         break;
 
                     case "directory":
-                        res.json($.map(results.contents, function(item) {
-                            if(item){
-                                item.type = function(type, extension) {
-                                    if(type == "file") {
-                                        if(!extension) {
-                                            return "file";
-                                        }  else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-                                            return "file-image";
-                                        } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
-                                            return "file-template";
-                                        } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
-                                            return "file-zip";
+                        res.json({
+                            success: true,
+                            contents: $.map(results.contents, function(item) {
+                                if(item){
+                                    item.type = function(type, extension) {
+                                        if(type == "file") {
+                                            if(!extension) {
+                                                return "file";
+                                            }  else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                                return "file-image";
+                                            } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                                return "file-template";
+                                            } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                                                return "file-zip";
+                                            } else {
+                                                return "file-script";
+                                            }
+                                        } else if(type == "dir") {
+                                            return "folder";
+                                        } else if(type == "symlink") {
+                                            return "folder-symlink";
                                         } else {
-                                            return "file-script";
+                                            return type;
                                         }
-                                    } else if(type == "dir") {
-                                        return "folder";
-                                    } else if(type == "symlink") {
-                                        return "folder-symlink";
-                                    } else {
-                                        return type;
-                                    }
-                                }(item.type, item.extension);
-                                return item;
-                            }
-                        }));
+                                    }(item.type, item.extension);
+                                    return item;
+                                }
+                            })
+                        });
                         break;
                 }
             } else {
