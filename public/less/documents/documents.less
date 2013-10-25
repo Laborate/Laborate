@@ -798,9 +798,35 @@ body {
                         }
 
                         .icon {
+                            width: 20px;
+                            text-align: center;
                             color: lighten(@popup_header, 20%);
                             margin-right: 10px;
                             .float-left();
+                        }
+
+                        .notification {
+                            width: 20px;
+                            text-align: center;
+                            opacity: .8;
+                            .float-right();
+                            .transform(rotate(90deg));
+
+                            &.green {
+                                font-size: 18px;
+                                margin-top: -2px;
+                                color: darken(@green, 15%);
+                            }
+
+                            &.blue {
+                                font-size: 16px;
+                                margin-top: -2px;
+                                color: darken(@blue, 15%);
+                            }
+
+                            &.red {
+                                color: darken(@red, 15%);
+                            }
                         }
 
                         .name {

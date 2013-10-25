@@ -79,7 +79,7 @@ window.documents = {
                         return $.map(data, function(item) {
                             return $('                                              \
                                 <div class="item">                                  \
-                                    <div class="icon icon-file"></div>              \
+                                    <div class="left icon icon-file"></div>              \
                                     <div class="name">' + item.name + '</div>       \
                                 </div>                                              \
                             ').attr(function() {
@@ -260,7 +260,8 @@ window.documents = {
                             "class": "selectable",
                             "data": {
                                 "data-next": "sftp"
-                            }
+                            },
+                            "notification": "blue icon-forward"
                         });
                     } else if(key == "github" && value.show) {
                         list.push({
@@ -270,7 +271,8 @@ window.documents = {
                             "data": {
                                 "data-next": (value.enabled) ? "github" : "link",
                                 "data-link": value.link
-                            }
+                            },
+                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });
                     } else if(key == "bitbucket" && value.show) {
                         list.push({
@@ -280,7 +282,8 @@ window.documents = {
                             "data": {
                                 "data-next": (value.enabled) ? "bitbucket" : "link",
                                 "data-link": value.link
-                            }
+                            },
+                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });
                     } else if(key == "dropbox" && value.show) {
                         list.push({
@@ -290,7 +293,8 @@ window.documents = {
                             "data": {
                                 "data-next": (value.enabled) ? "dropbox" : "link",
                                 "data-link": value.link
-                            }
+                            },
+                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });
                     } else if(key == "drive" && value.show) {
                         list.push({
@@ -300,7 +304,8 @@ window.documents = {
                             "data": {
                                 "data-next": (value.enabled) ? "drive" : "link",
                                 "data-link": value.link
-                            }
+                            },
+                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });
                     }
                 });
@@ -310,11 +315,12 @@ window.documents = {
 
         if(update && list.length != 0) {
             window.documents.popup("add-location", $.map(list, function(item) {
-                return $('                                          \
-                    <div class="item ' + item.class + '">           \
-                        <div class="icon ' + item.icon + '"></div>  \
-                        <div class="name">' + item.name + '</div>   \
-                    </div>                                          \
+                return $('                                                              \
+                    <div class="item ' + item.class + '">                               \
+                        <div class="icon ' + item.icon + '"></div>                      \
+                        <div class="name">' + item.name + '</div>                       \
+                        <div class="notification ' + item["notification"]  + '"></div>  \
+                    </div>                                                              \
                 ').attr(item.data);
             }), "Add Location");
         }

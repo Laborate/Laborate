@@ -54,7 +54,7 @@ exports.locals = function(req, res, next) {
             link: "/dropbox/token/"
         },
         drive: {
-            show: false,
+            show: true,
             enabled: !!(req.session.user && req.session.user.drive),
             link: "/drive/token/"
         }
