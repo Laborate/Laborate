@@ -164,8 +164,11 @@ exports.verify = function(req, res, next) {
         res.error(401);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
-            user.verified = null;
-            req.session.user = user;
+            req.session.user.verified = null;
+            user.save({
+                verified: req.session.user.verified
+            });
+
             if(req.session.redirect_url) {
                 var url = req.session.redirect_url;
                 delete req.session.redirect_url;
