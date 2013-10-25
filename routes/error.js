@@ -27,37 +27,41 @@ var error_handler = function(status, message, home, req, res) {
         error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
     }
 
-    if(!req.xhr) {
+    if(req.xhr) {
+        res.json({
+            success: false,
+            error_message: error_message
+        });
+    } else {
         res.status(status);
-    }
-
-    res.format({
-        'text/plain': function(){
-            res.send(error_message + "\n");
-        },
-        'text/html': function(){
-            if(redirect_url) {
-                res.redirect(redirect_url);
-            } else {
-                res.renderOutdated('core/error', {
-                    host: req.host,
-                    title: error_message,
-                    mode: error_message,
-                    js: clientJS.renderTags("backdrop"),
-                    css: clientCSS.renderTags("backdrop"),
-                    error_html: error_html,
-                    home: home,
-                    backdrop: req.backdrop("blurry")
+        res.format({
+            'text/plain': function() {
+                res.send(error_message + "\n");
+            },
+            'text/html': function() {
+                if(redirect_url) {
+                    res.redirect(redirect_url);
+                } else {
+                    res.renderOutdated('core/error', {
+                        host: req.host,
+                        title: error_message,
+                        mode: error_message,
+                        js: clientJS.renderTags("backdrop"),
+                        css: clientCSS.renderTags("backdrop"),
+                        error_html: error_html,
+                        home: home,
+                        backdrop: req.backdrop("blurry")
+                    });
+                }
+            },
+            'application/json': function() {
+                res.json({
+                    success: false,
+                    error_message: error_message
                 });
             }
-        },
-        'application/json': function(){
-            res.json({
-                success: false,
-                error_message: error_message
-            });
-        }
-    });
+        });
+    }
 }
 
 exports.global = function(error, req, res, next) {
