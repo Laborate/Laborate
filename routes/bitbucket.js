@@ -55,3 +55,29 @@ exports.repos = function(req, res, next) {
         res.error(200, "Bad Bitbucket Oauth Token");
     }
 };
+
+exports.contents = function(req, res, next) {
+    if(req.session.user.bitbucket) {
+        req.bitbucket.contents(req.session.user.bitbucket,
+            req.session.user.locations[req.param("0")].repository,
+            req.session.user.locations[req.param("0")].branch,
+            req.param("1"),
+        function(error, results) {
+            if(!error) {
+                res.json({
+                    success: true,
+                    repos: results
+                });
+            } else {
+                if(error.message == "Bad credentials") {
+                    res.error(200, "Bad Bitbucket Oauth Token");
+                } else {
+                    res.error(200, "Failed To Load Bitbucket Repos");
+                }
+            }
+        });
+    } else {
+        res.error(200, "Bad Bitbucket Oauth Token");
+    }
+
+}

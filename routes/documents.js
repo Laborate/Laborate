@@ -4,6 +4,7 @@ var rand = require("generate-key");
 
 /* Modules: Custom */
 var github = require("./github");
+var bitbucket = require("./bitbucket");
 var file_size = require("../lib/core/file_size");
 
 exports.index = function(req, res, next) {
@@ -221,6 +222,9 @@ exports.location = function(req, res, next) {
         switch(req.session.user.locations[req.param("0")].type) {
             case "github":
                 github.contents(req, res, next);
+                break;
+            case "bitbucket":
+                bitbucket.contents(req, res, next);
                 break;
             default:
                 res.error(200, "Location Does Not Exist");
