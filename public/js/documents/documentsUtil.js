@@ -33,7 +33,7 @@ window.documents = {
         switch(action) {
             case "add-location":
                 new_css.width = "300px";
-                new_css.height = "350px";
+                new_css.height = "310px";
 
                 if(data) container
                     .find("#popup-" + action)
@@ -226,16 +226,30 @@ window.documents = {
     popupAddLocation: function(element) {
         var list = [],
             update = true,
-            name = element.parents("form").find("#location-name");
+            container = $(".popup .container"),
+            name = $("#popup-add-location #location-name"),
+            button = $("#popup-add-location button");
+
         name.removeClass("error");
+        button.hide();
 
         switch(element.data("next")) {
             case "github":
                 list = window.documents.repoListing("github");
+                container.animate({ height: "350px" }, 500);
+                setTimeout(function() {
+                    container.vAlign();
+                    button.fadeIn(200);
+                }, 600);
                 break;
 
             case "bitbucket":
                 list = window.documents.repoListing("bitbucket");
+                container.animate({ height: "350px" }, 500);
+                setTimeout(function() {
+                    container.vAlign();
+                    button.fadeIn(200);
+                }, 600);
                 break;
 
             case "repo-option":
