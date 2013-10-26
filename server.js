@@ -42,20 +42,6 @@ workers = function() {
         }));
     });
 
-    /* Development Only */
-    app.configure('development', function() {
-        require('express-debug')(app, {
-            theme: __dirname + config.development.debugger.theme,
-            panels: config.development.debugger.panels
-        });
-
-        if(Object.keys(config.development.basicAuth).length != 0) {
-            app.use(express.basicAuth(function(username, password) {
-                return(config.development.basicAuth[username] == password);
-            }));
-        }
-    });
-
     /* Production Only */
     app.configure('production', function() {
         //Send Error Logging To Sentry
@@ -123,10 +109,25 @@ workers = function() {
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
         app.use(require("./lib/bitbucket"));
+        app.use(require("./lib/google"));
 
         //Custom Routing
         app.use(require("./routes/core").locals);
         app.use(require("./routes/core").device);
+    });
+
+    /* Development Only */
+    app.configure('development', function() {
+        require('express-debug')(app, {
+            theme: __dirname + config.development.debugger.theme,
+            panels: config.development.debugger.panels
+        });
+
+        if(Object.keys(config.development.basicAuth).length != 0) {
+            app.use(express.basicAuth(function(username, password) {
+                return(config.development.basicAuth[username] == password);
+            }));
+        }
     });
 
     /* Express: Start Router */

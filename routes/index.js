@@ -7,6 +7,7 @@ var documents = require('./documents');
 var editor = require('./editor');
 var github = require('./github');
 var bitbucket = require('./bitbucket');
+var google = require('./google');
 
 module.exports = function(app) {
     /* Root */
@@ -72,6 +73,11 @@ module.exports = function(app) {
     app.get('/bitbucket/token/add', authUtil.restrictAccess, bitbucket.add_token);
     app.get('/bitbucket/token/remove', authUtil.restrictAccess, bitbucket.remove_token);
     app.get('/bitbucket/repos', authUtil.restrictAccess, authUtil.xhr, bitbucket.repos);
+
+    /* Google Drive */
+    app.get('/google/token/add', authUtil.restrictAccess, google.add_token);
+    app.get('/google/token/remove', authUtil.restrictAccess, google.remove_token);
+    app.get('/google/token/:name', authUtil.restrictAccess, google.token);
 
     /* Not Found Page */
     app.all('*', function(req, res, next) {

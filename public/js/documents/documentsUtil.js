@@ -224,7 +224,10 @@ window.documents = {
             });
     },
     popupAddLocation: function(element) {
-        var list = [], update = true;
+        var list = [],
+            update = true,
+            name = element.parents("form").find("#location-name");
+        name.removeClass("error");
 
         switch(element.data("next")) {
             case "github":
@@ -248,7 +251,16 @@ window.documents = {
                 break;
 
             case "link":
-                window.location.href = element.attr("data-link");
+                var name = element.parents(".actions").find("#location-name");
+                if(element.data("name-required") && name.val()) {
+                    window.location.href = element.attr("data-link") + encodeURI(name.val()) + "/";
+                } else {
+                    if(!element.data("name-required")) {
+                         window.location.href = element.attr("data-link");
+                    } else {
+                        name.addClass("error");
+                    }
+                }
                 break;
 
             default:
@@ -270,7 +282,7 @@ window.documents = {
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "github" : "link",
-                                "data-link": value.link
+                                "data-link": value.link,
                             },
                             "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });
@@ -292,7 +304,8 @@ window.documents = {
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "dropbox" : "link",
-                                "data-link": value.link
+                                "data-link": value.link,
+                                "data-name-required": "true"
                             },
                             "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });
@@ -303,7 +316,8 @@ window.documents = {
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "drive" : "link",
-                                "data-link": value.link
+                                "data-link": value.link,
+                                "data-name-required": "true"
                             },
                             "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });

@@ -8,7 +8,7 @@ exports.setup = function(req, res, next) {
     config.general.server = req.protocol + "://" + req.host;
 
     //Track Last HTML Page
-    if(!req.xhr && !req.url.match(/^\/reload|^\/github|^\/bitbucket/)) {
+    if(!req.xhr && !req.url.match(/^\/reload|^\/github|^\/bitbucket|^\/google/)) {
         req.session.last_page = req.url
     }
 
@@ -50,13 +50,13 @@ exports.locals = function(req, res, next) {
         },
         dropbox: {
             show: false,
-            enabled: !!(req.session.user && req.session.user.dropbox),
+            enabled: false,
             link: "/dropbox/token/"
         },
         drive: {
             show: true,
-            enabled: !!(req.session.user && req.session.user.drive),
-            link: "/drive/token/"
+            enabled: false,
+            link: "/google/token/"
         }
     }
 
