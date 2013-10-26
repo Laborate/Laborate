@@ -48,6 +48,11 @@ exports.remove_token = function(req, res, next) {
 };
 
 exports.contents = function(req, res, next) {
-    req.google.contents(req.session.user.google[req.param("0")], req.param("1"));
-    res.error(200, "Failed To Load Google Drive Contents");
+    req.google.contents(
+        req.session.user.google[req.param("0")],
+        req.param("1"),
+        function(error, results) {
+            res.error(200, "Failed To Load Google Drive Contents");
+        }
+    );
 }
