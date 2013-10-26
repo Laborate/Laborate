@@ -33,7 +33,7 @@ window.documents = {
         switch(action) {
             case "add-location":
                 new_css.width = "300px";
-                new_css.height = "310px";
+                new_css.height = "350px";
 
                 if(data) container
                     .find("#popup-" + action)
@@ -164,13 +164,16 @@ window.documents = {
         });
 
         form.find(".list").each(function() {
-            var list = $(this);
+            var list = $(this).removeClass("error");
             if(list.find(".item").hasClass("active")) {
                 $.each(list.find(".item.active").data(), function(key, value) {
                     if(list.data("name") != "next") {
                         data.append(list.data("name") + "[" + key + "]",  value);
                     }
                 });
+            } else {
+                list.addClass("error");
+                passed = false;
             }
         });
 
@@ -226,30 +229,19 @@ window.documents = {
     popupAddLocation: function(element) {
         var list = [],
             update = true,
-            container = $(".popup .container"),
-            name = $("#popup-add-location #location-name"),
-            button = $("#popup-add-location button");
+            listing = $("#popup-add-location .list"),
+            name = $("#popup-add-location #location-name");
 
+        listing.removeClass("error");
         name.removeClass("error");
-        button.hide();
 
         switch(element.data("next")) {
             case "github":
                 list = window.documents.repoListing("github");
-                container.animate({ height: "350px" }, 500);
-                setTimeout(function() {
-                    container.vAlign();
-                    button.fadeIn(200);
-                }, 600);
                 break;
 
             case "bitbucket":
                 list = window.documents.repoListing("bitbucket");
-                container.animate({ height: "350px" }, 500);
-                setTimeout(function() {
-                    container.vAlign();
-                    button.fadeIn(200);
-                }, 600);
                 break;
 
             case "repo-option":
