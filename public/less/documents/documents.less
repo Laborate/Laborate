@@ -621,7 +621,7 @@ body {
             .clearfix();
 
             .title {
-                width: 73%;
+                width: 80%;
                 .ellipsis();
                 .float-left();
             }
@@ -651,6 +651,10 @@ body {
 
                 .download {
                     display: none;
+
+                    &:visible ~ .title {
+                        width: 73%;
+                    }
                 }
             }
         }

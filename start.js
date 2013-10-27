@@ -16,6 +16,8 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
     max: config.forever.max_failures,
     silent: config.forever.silent,
 
+    spinSleepTime: 0,
+
     watch: config.forever.watch,
     watchDirectory: __dirname + "/" + config.forever.watch_directory,
     watchIgnoreDotFiles: config.forever.watch_ignore_dot,
@@ -30,8 +32,8 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
     outFile: __dirname + "/" + config.forever.output_log,
     errFile: __dirname + "/" + config.forever.error_log,
 
-    killTree: true
+    killTree: false
 });
 
 //Start Forver
-child.start();
+child.start()

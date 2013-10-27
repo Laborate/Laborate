@@ -172,8 +172,10 @@ window.documents = {
                     }
                 });
             } else {
-                list.addClass("error");
-                passed = false;
+                if(list.data("required")) {
+                    list.addClass("error");
+                    passed = false;
+                }
             }
         });
 
@@ -222,7 +224,7 @@ window.documents = {
                         }
                     });
 
-                    if(files.length != 0) window.documents.popup("upload", files, "Upload Files");
+                    if(files.length != 0) window.documents.popup("upload", files, "Upload Files (1mb limit)");
                 }
             });
     },
