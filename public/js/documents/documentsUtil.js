@@ -410,7 +410,7 @@ window.documents = {
         $(".context-menu").hide();
     },
     headerBar: function(action, message, permanent) {
-        $(".bottom > div").hide();
+        $(".bottom > div:not(.clear)").hide();
         $(".bottom .filter").hide();
         $(".bottom .filter select").val("add filter");
         $(".top input").val("");
