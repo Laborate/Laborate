@@ -186,7 +186,7 @@ window.editorUtil = {
             message += "<br><button id='disconnectAll' style='margin-top: 5px' \
                        class='backdrop-button'>Disconnect All Other Sessions</button>";
 
-            $("#disconnectAll").live("click", function() {
+            $(document).on("click", "#disconnectAll", function() {
                 $(this).val("loading...").addClass("disabled");
                  window.socketUtil.socket.emit("editorDisconnectAll", {}, function(json) {
                     if(json.success) {
