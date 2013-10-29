@@ -42,12 +42,6 @@ workers = function() {
         }));
     });
 
-    /* Production Only */
-    app.configure('production', function() {
-        //Send Error Logging To Sentry
-        app.use(raven.middleware.express(config.sentry.node));
-    });
-
     /* Express: Configuration */
     app.configure(function() {
         //Assests
@@ -97,8 +91,7 @@ workers = function() {
         //Custom Setup
         app.use(require("./routes/core").setup);
 
-        //Error Handlers
-        app.use(require("./routes/error").global);
+        //Error Handler (Routes)
         app.use(require("./routes/error").handler);
 
         //Custom Backdrop
@@ -132,6 +125,15 @@ workers = function() {
 
     /* Express: Start Router */
     app.use(app.router);
+
+    /* Production Only */
+    app.configure('production', function() {
+        //Send Error Logging To Sentry
+        app.use(raven.middleware.express(config.sentry.node));
+    });
+
+    //Error Handler (Globally)
+    app.use(require("./routes/error").global);
 
     /* Express: Import Routes */
     require('./routes')(app);

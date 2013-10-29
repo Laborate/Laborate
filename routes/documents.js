@@ -88,7 +88,7 @@ exports.file_create = function(req, res, next) {
                 }]
             });
         } else {
-            res.error(200, "Failed To Create Document");
+            res.error(200, "Failed To Create Document", true, error);
         }
     });
 };

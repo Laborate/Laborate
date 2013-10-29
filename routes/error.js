@@ -1,3 +1,7 @@
+/* NPM Modules */
+var raven = require('raven');
+var raven_client = new raven.Client(config.sentry.node);
+
 var error_handler = function(status, message, home, req, res) {
     var error_message;
     var error_html;
@@ -64,17 +68,27 @@ var error_handler = function(status, message, home, req, res) {
     }
 }
 
+var raise_error = function(error) {
+    console.error(error);
+
+    if(config.general.production) {
+        raven_client.captureError((typeof error == "object") ? JSON.stringify(error) : error);
+    }
+}
+
 exports.global = function(error, req, res, next) {
     if(error.status) {
         error_handler(error.status, error.message, true, req, res);
+        raise_error(error);
     } else {
         next();
     }
 };
 
 exports.handler = function(req, res, next) {
-    res.error = function(status, message, home) {
+    res.error = function(status, message, home, error) {
         error_handler(status, message, home, req, res);
+        raise_error(error);
     }
     next();
 };
