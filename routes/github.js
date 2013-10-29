@@ -38,9 +38,9 @@ exports.repos = function(req, res, next) {
                 });
             } else {
                 if(error.message == "Bad credentials") {
-                    res.error(200, "Bad Github Oauth Token");
+                    res.error(200, "Bad Github Oauth Token", true, error);
                 } else {
-                    res.error(200, "Failed To Load Github Repos");
+                    res.error(200, "Failed To Load Github Repos", true, error);
                 }
             }
         });
@@ -79,7 +79,7 @@ exports.contents = function(req, res, next) {
                                     document: document.id
                                 });
                             } else {
-                                res.error(200, "Failed To Create Document");
+                                res.error(200, "Failed To Create Document", true, error);
                             }
                         });
                         break;
@@ -118,11 +118,11 @@ exports.contents = function(req, res, next) {
                 }
             } else {
                 if(error.message == "Bad credentials") {
-                    res.error(200, "Bad Github Oauth Token");
+                    res.error(200, "Bad Github Oauth Token", true, error);
                 } if(error.message == "This repository is empty.") {
                     res.json([]);
                 } else {
-                    res.error(200, "Failed To Load Github Contents");
+                    res.error(200, "Failed To Load Github Contents", true, error);
                 }
             }
         });
@@ -157,7 +157,7 @@ exports.commit = function(req, res, next) {
                     res.error(200, "Failed To Commit File");
                 }
             } else {
-                res.error(200, "Failed To Commit File");
+                res.error(200, "Failed To Commit File", true, error);
             }
         });
     } else {

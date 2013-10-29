@@ -13,7 +13,7 @@ exports.restrictAccess = function(req, res, next) {
                     user.set_recovery(req, res);
                     if(next) next();
                 } else {
-                    res.error(401);
+                    res.error(401, false, true, error);
                 }
             });
         }
@@ -27,7 +27,7 @@ exports.restrictAccess = function(req, res, next) {
                         req.session.save();
                         if(next) next();
                     } else {
-                        res.error(401);
+                        res.error(401, false, true, error);
                     }
             });
         } else {
@@ -99,7 +99,7 @@ exports.login = function(req, res, next) {
                 next: url
              });
         } else {
-            res.error(200, "Invalid Credentials");
+            res.error(200, "Invalid Credentials", true, error);
         }
 
     });
@@ -124,41 +124,45 @@ exports.register = function(req, res, next) {
             req.models.users.exists({
                 screen_name: req.param('screen_name')
             }, function(error, exists) {
-                if(error || exists) {
-                    res.error(200, "Screen Name Already Exists");
-                } else if(req.param('password').length <= 6) {
-                    res.error(200, "Passwords Is To Short");
-                } else if(req.param('password') != req.param('password_confirm')) {
-                    res.error(200, "Passwords Do Not Match");
-                } else {
-                    req.models.users.create({
-                        name: $.trim(req.param('name')),
-                        screen_name: $.trim(req.param('screen_name')),
-                        email: $.trim(req.param('email')),
-                        password: $.trim(req.param('password'))
-                    }, function(error, user) {
-                        if(!error) {
-                            user.set_recovery(req, res);
-                            req.session.user = user;
-                            req.session.save();
-                            res.json({
-                                success: true,
-                                next: "/verify/"
-                            });
+                if(!error) {
+                    if(exists) {
+                        res.error(200, "Screen Name Already Exists");
+                    } else if(req.param('password').length <= 6) {
+                        res.error(200, "Passwords Is To Short");
+                    } else if(req.param('password') != req.param('password_confirm')) {
+                        res.error(200, "Passwords Do Not Match");
+                    } else {
+                        req.models.users.create({
+                            name: $.trim(req.param('name')),
+                            screen_name: $.trim(req.param('screen_name')),
+                            email: $.trim(req.param('email')),
+                            password: $.trim(req.param('password'))
+                        }, function(error, user) {
+                            if(!error) {
+                                user.set_recovery(req, res);
+                                req.session.user = user;
+                                req.session.save();
+                                res.json({
+                                    success: true,
+                                    next: "/verify/"
+                                });
 
-                            req.email("verify", {
-                                from: "support@laborate.io",
-                                subject: "Please Verify Your Email",
-                                users: [{
-                                    name: user.name,
-                                    email: user.email,
-                                    code: user.verified
-                                }]
-                            });
-                        } else {
-                            res.error(200, "Invalid Email Address");
-                        }
-                    });
+                                req.email("verify", {
+                                    from: "support@laborate.io",
+                                    subject: "Please Verify Your Email",
+                                    users: [{
+                                        name: user.name,
+                                        email: user.email,
+                                        code: user.verified
+                                    }]
+                                });
+                            } else {
+                                res.error(200, "Invalid Email Address", true, error);
+                            }
+                        });
+                    }
+                } else {
+                    res.error(200, "Failed To Register", true, error);
                 }
             });
         }

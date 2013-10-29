@@ -1,7 +1,7 @@
 exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.get(req.param("document"), function(error, document) {
-            if(document) {
+            if(!error && document) {
                 if(document.password == null) {
                     var js = clientJS.renderTags("backdrop", "codemirror", "editor",
                                                     "aysnc", "copy", "download",
@@ -23,7 +23,7 @@ exports.index = function(req, res, next) {
                     backdrop: req.backdrop("blurry")
                 });
             } else {
-                res.error(404);
+                res.error(404, false, true, error);
             }
         });
     } else {
@@ -50,14 +50,14 @@ exports.exists = function(req, res, next) {
                 }
             });
         } else {
-            res.error(200, "Document Doesn't Exist");
+            res.error(200, "Document Doesn't Exist", true, error);
         }
     });
 }
 
 exports.join = function(req, res, next) {
     req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error) {
+        if(!error && document) {
             if(!document.password || document.hash(req.param("password")) == document.password) {
                 document.join(req.session.user.id, 2);
                 res.json({
@@ -71,7 +71,7 @@ exports.join = function(req, res, next) {
                 res.error(200, "Incorrect Password");
             }
         } else {
-            res.error(404);
+            res.error(404, false, true, error);
         }
     });
 }
@@ -111,7 +111,7 @@ exports.update = function(req, res, next) {
                     res.error(200, "Failed To Update File");
                 }
             } else {
-                res.error(200, "Failed To Update File");
+                res.error(200, "Failed To Update File", true, error);
             }
         } else {
             res.error(404);
@@ -124,8 +124,8 @@ exports.download = function(req, res, next) {
         user_id: req.session.user.id,
         document_id: req.param("document")
     }, function(error, documents) {
-        if(documents.length == 1) {
-            if(!error) {
+        if(!error) {
+            if(documents.length == 1) {
                 var document = documents[0].document;
                 if(document.password == req.access_token) {
                     res.cookie("fileDownload", true, {path: "/"});
@@ -135,10 +135,10 @@ exports.download = function(req, res, next) {
                     res.error(404);
                 }
             } else {
-                res.error(400, "Failed To Download File");
+                res.error(404);
             }
         } else {
-            res.error(404);
+            res.error(400, "Failed To Download File", true, error);
         }
     });
 }
@@ -151,7 +151,7 @@ exports.remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true, master: true });
                     } else {
-                        res.error(200, "Failed To Remove File");
+                        res.error(200, "Failed To Remove File", true, error);
                     }
                 });
             } else {
@@ -162,7 +162,7 @@ exports.remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true, master: false });
                     } else {
-                        res.error(200, "Failed To Remove File");
+                        res.error(200, "Failed To Remove File", true, error);
                     }
                 });
             }
@@ -177,8 +177,8 @@ exports.invite = function(req, res, next) {
         user_id: req.session.user.id,
         document_id: req.param("document")
     }, function(error, documents) {
-        if(documents.length == 1) {
-            if(!error) {
+        if(!error) {
+            if(documents.length == 1) {
                 var document = documents[0].document;
                 if(document.password == req.access_token) {
                     req.email("document_invite", {
@@ -204,17 +204,17 @@ exports.invite = function(req, res, next) {
                         if(errors.length == 0) {
                             res.json({ success: true });
                         } else {
-                            res.error(200, "Failed To Send Invite");
+                            res.error(200, "Failed To Send Invite", true, errors);
                         }
                     });
                 } else {
                     res.error(200, "Failed To Send Invite");
                 }
             } else {
-                res.error(200, "Failed To Send Invite");
+                res.error(404);
             }
         } else {
-            res.error(404);
+            res.error(200, "Failed To Send Invite", true, error);
         }
     });
 }

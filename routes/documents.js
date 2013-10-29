@@ -54,7 +54,7 @@ exports.files = function(req, res, next) {
                 }
             }));
         } else {
-            res.error(200, "Failed To Load Files");
+            res.error(200, "Failed To Load Files", true, error);
         }
     });
 };
@@ -147,7 +147,7 @@ exports.file_upload = function(req, res, next) {
                         role: "owner"
                     });
                 } else {
-                    res.error(200, "Failed To Upload Files");
+                    res.error(200, "Failed To Upload Files", true, error);
                 }
             });
         });
@@ -183,7 +183,7 @@ exports.file_rename = function(req, res, next) {
                 }
              });
         } else {
-            res.error(200, "Failed To Rename File");
+            res.error(200, "Failed To Rename File", true, error);
         }
     });
 };
@@ -196,7 +196,7 @@ exports.file_remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.error(200, "Failed To Remove File");
+                        res.error(200, "Failed To Remove File", true, error);
                     }
                 });
             } else {
@@ -207,12 +207,12 @@ exports.file_remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.error(200, "Failed To Remove File");
+                        res.error(200, "Failed To Remove File", true, error);
                     }
                 });
             }
         } else {
-            res.error(200, "Failed To Remove File");
+            res.error(200, "Failed To Remove File", true, error);
         }
     });
 };
@@ -266,7 +266,7 @@ exports.create_location = function(req, res, next) {
             user.save({ locations: req.session.user.locations });
             res.json({success: true});
         } else {
-            res.error(200, "Failed To Create Location");
+            res.error(200, "Failed To Create Location", true, error);
         }
     });
 };
@@ -279,7 +279,7 @@ exports.remove_location = function(req, res, next) {
                 user.save({ locations: req.session.user.locations });
                 res.json({success: true});
             } else {
-                res.error(200, "Failed To Remove Location");
+                res.error(200, "Failed To Remove Location", true, error);
             }
         });
     } else {
