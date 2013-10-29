@@ -375,6 +375,7 @@ body {
 
                 #create {
                     font-size: 13px;
+                    line-height: 16px;
                     background: @header_bottom_button;
                     padding: 5px 8px;
                     border: solid 1px #0072bc;
@@ -391,13 +392,12 @@ body {
                 }
 
                 #upload {
-                    height: 28px;
                     font-size: 13px;
-                    padding: 7px;
+                    line-height: 16px;
+                    padding: 5px 7px;
                     border: solid 1px #0072bc;
                     border-left: none;
                     background: darken(@header_bottom_button, 5%);
-                    .box-sizing(border-box);
                     .border-radius(0 2px 2px 0);
                     .float-left();
 
@@ -605,7 +605,7 @@ body {
 
     .container {
         width: auto;
-        min-width: 350px;
+        min-width: 250px;
         min-height: 100px;
         overflow: hidden;
         color: #fff;
@@ -623,7 +623,7 @@ body {
             .clearfix();
 
             .title {
-                width: 80%;
+                .calc-width(~"100% - 80px");
                 .ellipsis();
                 .float-left();
             }
@@ -653,10 +653,6 @@ body {
 
                 .download {
                     display: none;
-
-                    &:visible ~ .title {
-                        width: 73%;
-                    }
                 }
             }
         }

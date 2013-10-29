@@ -31,10 +31,10 @@ exports.add_token = function(req, res, next) {
     }
 };
 
-exports.refresh_token = function(req, location, token) {
+exports.refresh_token = function(req, location, token, next) {
     req.models.users.get(req.session.user.id, function(error, user) {
         req.session.user.google[location].access_token = token;
-        user.save({ google: req.session.user.google });
+        user.save({ google: req.session.user.google }, next);
     });
 }
 
@@ -54,19 +54,22 @@ exports.remove_token = function(req, res, next) {
     }
 };
 
-exports.contents = function(req, res, next) {
+exports.contents = function(req, res, next, refreshed) {
     var _this = this;
     req.google.contents(
         req.session.user.google[req.param("0")],
         req.param("1"),
         function(error, results) {
-            if(error) {
+            if((error || typeof results == "string") && !refreshed) {
                 req.google.refresh_token(function(token) {
-                    _this.refresh_token(req, req.param("0"), token);
-                    _this.contents(req, res, next);
+                    _this.refresh_token(req, req.param("0"), token, function() {
+                        _this.contents(req, res, next, true);
+                    });
                 });
+            } else {
+                res.json(results);
             }
-            res.error(200, "Failed To Load Google Drive Contents");
+
         }
     );
 }

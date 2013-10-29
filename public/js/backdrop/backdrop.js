@@ -89,7 +89,7 @@ window.backdrop = {
         if(window.backdrop.email != $("#backdrop-email").val()) {
             var profile_img = ("https://www.gravatar.com/avatar/" +
                                                 CryptoJS.MD5($("#backdrop-email").val()).toString() +
-                                                "?s=150&d=http%3A%2F%2F" + window.config.host + "%2Fimg%2Fdefault_gravatar.jpeg");
+                                                "?s=150&d=" + encodeURI(window.config.host) + "%2Fimg%2Fdefault_gravatar.jpeg");
 
             $.ajax({
                 url: profile_img,

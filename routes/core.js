@@ -5,10 +5,15 @@ var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
     //Set Server Root For Non Express Calls
-    config.general.server = req.protocol + "://" + req.host;
+    if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
+    if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
     //Track Last HTML Page
-    if(!req.xhr && !req.url.match(/^\/reload|^\/github|^\/bitbucket|^\/google/)) {
+    if(!req.xhr && [
+        "reload", "img", "fonts",
+        "github", "bitbucket",
+        "google", "dropbox"
+    ].indexOf(req.url.split("/")[1]) == -1) {
         req.session.last_page = req.url
     }
 
@@ -27,7 +32,7 @@ exports.locals = function(req, res, next) {
     res.locals.csrf = req.session._csrf;
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
-    res.locals.host = req.host;
+    res.locals.host = config.general.server;
     res.locals.site_title = config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.description = config.general.description.join("");

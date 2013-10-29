@@ -65,7 +65,7 @@ window.documents = {
                 container
                     .find("#popup-" + action)
                     .find("input")
-                    .val("http://" + window.config.host + "/editor/" + data + "/");
+                    .val(window.config.host + "/editor/" + data + "/");
                 break;
 
             case "upload":
