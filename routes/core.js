@@ -4,6 +4,8 @@ var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
+    console.log(req.referrer);
+
     //Set Server Root For Non Express Calls
     if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
     if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
@@ -29,7 +31,7 @@ exports.setup = function(req, res, next) {
 }
 
 exports.locals = function(req, res, next) {
-    res.locals.csrf = req.session._csrf;
+    res.locals.csrf = req.csrfToken();
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
     res.locals.host = config.general.server;

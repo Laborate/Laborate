@@ -5,7 +5,7 @@ window.socketUtil = {
     connect: function() {
         $("#backdrop input[type='submit']").ready(function() {
             $("#backdrop input[type='submit']").val("Join Document").attr("disabled", false);
-            window.notification.close();
+            //window.notification.close();
             if(window.editor) {
                 window.editor.options.readOnly = false;
             }
@@ -19,7 +19,7 @@ window.socketUtil = {
             if(window.editor) {
                 window.editor.options.readOnly = true;
             }
-            window.notification.open("reconnecting...", true);
+            //window.notification.open("reconnecting...", true);
             window.editorUtil.users([]);
             $("title").text([
                 $("title").text().split(window.config.delimeter)[0],
