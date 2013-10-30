@@ -15,7 +15,13 @@ config    = require('./config');
 clientJS  = piler.createJSManager({urlRoot: "/js/"});
 clientCSS = piler.createCSSManager({urlRoot: "/css/"});
 
-//Configure Workers
+/* Update Crontab */
+require("./cron")();
+
+/* Update Config Template */
+require("./lib/core/config_template")(__dirname);
+
+/* Configure Workers */
 workers = function() {
     var app = express().http().io();
     var srv = app.server;
