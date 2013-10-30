@@ -71,7 +71,7 @@ var error_handler = function(status, message, home, req, res) {
 var raise_error = function(error) {
     if(error) {
         console.error(error);
-        raven_client.captureError((typeof error == "object") ? JSON.stringify(error) : error);
+        raven_client.captureError(error);
     }
 }
 

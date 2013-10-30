@@ -28,7 +28,7 @@ exports.files = function(req, res, next) {
             res.json($.map(documents, function(value) {
                 if(value) {
                     return {
-                        id: value.document_id,
+                        id: value.document.slug,
                         name: value.document.name,
                         protection: (value.document.password != null) ? "password" : "",
                         location: value.document.location,
@@ -68,7 +68,7 @@ exports.file_create = function(req, res, next) {
             res.json({
                 success: true,
                 documents: [{
-                    id: document.id,
+                    id: document.slug,
                     name: document.name,
                     size: file_size.bytes(""),
                     type: function(name) {
@@ -128,7 +128,7 @@ exports.file_upload = function(req, res, next) {
                     fs.unlink(file.path);
 
                     response.documents.push({
-                        id: document.id,
+                        id: document.slug,
                         name: document.name,
                         size: file_size.bytes(document.content.join("\n")),
                         type: function(name) {
@@ -157,8 +157,12 @@ exports.file_upload = function(req, res, next) {
 }
 
 exports.file_rename = function(req, res, next) {
-    req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error && document) {
+    req.models.documents_roles.find({
+        user_id: req.session.user.id,
+        document_slug: req.param("document")
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            document = documents[0].document;
             document.save({ name: req.param("name") });
             res.json({
                 success: true,
@@ -189,8 +193,12 @@ exports.file_rename = function(req, res, next) {
 };
 
 exports.file_remove = function(req, res, next) {
-    req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error && document) {
+     req.models.documents_roles.find({
+        user_id: req.session.user.id,
+        document_slug: req.param("document")
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            document = documents[0].document;
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {

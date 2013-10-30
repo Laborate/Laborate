@@ -7,7 +7,7 @@
          <a href="/"><div id="backdrop-logo">laborate.io</div></a>
          <div id="backdrop-container">
             <div class="backdrop-text"><%= document.name %></div>
-            <form action="/editor/<%= document.id %>/join/">
+            <form action="/editor/<%= document.slug %>/join/">
                 <% if(document.password) { %>
                     <input type="password" autofocus="on" name="password" class="backdrop-input" placeholder="password"/>
                     <input type="submit" class="backdrop-button" value="connecting..." disabled="disabled"/>

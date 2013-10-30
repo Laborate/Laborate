@@ -68,7 +68,7 @@ window.socketUtil.socket.on('error', function (reason) {
 
 //Url Parameters
 window.url_params = function() {
-    params = /\/editor\/(\d*)/.exec(window.location.href);
+    params = /\/editor\/(.*?)\//.exec(window.location.href);
     params_dict = {};
     params_dict["document"] = (params) ? params[1] : null;
     return params_dict;

@@ -26,7 +26,7 @@ exports.users = function(user, room) {
 exports.accessCheck = function(user, room, token, callback) {
     exports.models.documents_roles.find({
         user_id: user,
-        document_id: room[0]
+        document_slug: room[0]
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             var document = documents[0].document;
@@ -110,7 +110,7 @@ exports.removeUser = function(req, user, room) {
                 delete exports.roomUsers[room];
                 exports.models.documents_roles.find({
                     user_id: req.session.user.id,
-                    document_id: exports.room(req)
+                    document_slug: exports.room(req)
                 }, function(error, documents) {
                     if(!error && documents.length == 1) {
                         var document = documents[0].document;

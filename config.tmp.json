@@ -87,6 +87,7 @@
         "watch_directory": "./",
         "watch_ignore_dot": true,
         "watch_ignore_patterns": [
+            "config.tmp.json",
             "node_modules/**",
             "public/less/**",
             "public/js/**",

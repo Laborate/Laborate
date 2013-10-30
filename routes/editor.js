@@ -1,8 +1,12 @@
 exports.index = function(req, res, next) {
     if(req.param("document")) {
-        req.models.documents.get(req.param("document"), function(error, document) {
+        req.models.documents_roles.find({
+            user_id: req.session.user.id,
+            document_slug: req.param("document")
+        }, function(error, documents) {
             if(!error) {
-                if(document) {
+                if(documents.length == 1) {
+                    document = documents[0].document;
                     if(document.password == null) {
                         var js = clientJS.renderTags("backdrop", "codemirror", "editor",
                                                         "aysnc", "copy", "download",
@@ -43,7 +47,7 @@ exports.index = function(req, res, next) {
 
 exports.exists = function(req, res, next) {
     req.models.documents.exists({
-        id: req.param("document")
+        slug: req.param("document")
     }, function(error, exists) {
         if(!error && exists) {
             res.json({
@@ -60,8 +64,11 @@ exports.exists = function(req, res, next) {
 }
 
 exports.join = function(req, res, next) {
-    req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error && document) {
+    req.models.documents.find({
+        slug: req.param("document")
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            document = documents[0];
             if(!document.password || document.hash(req.param("password")) == document.password) {
                 document.join(req.session.user.id, 2);
                 res.json({
@@ -83,7 +90,7 @@ exports.join = function(req, res, next) {
 exports.update = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_id: req.param("document")
+        document_slug: req.param("document")
     }, function(error, documents) {
         if(documents.length == 1) {
             if(!error) {
@@ -127,7 +134,7 @@ exports.update = function(req, res, next) {
 exports.download = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_id: req.param("document")
+        document_slug: req.param("document")
     }, function(error, documents) {
         if(!error) {
             if(documents.length == 1) {
@@ -149,30 +156,38 @@ exports.download = function(req, res, next) {
 }
 
 exports.remove = function(req, res, next) {
-    req.models.documents.get(req.param("document"), function(error, document) {
-        if(!error && document.password == req.access_token) {
-            if(document.owner_id == req.session.user.id) {
-                document.remove(function(error) {
-                    if(!error) {
-                        res.json({ success: true, master: true });
-                    } else {
-                        res.error(200, "Failed To Remove File", true, error);
-                    }
-                });
+    req.models.documents_roles.find({
+        user_id: req.session.user.id,
+        document_slug: req.param("document")
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            var document = documents[0].document;
+            if(document.password == req.access_token) {
+                if(document.owner_id == req.session.user.id) {
+                    document.remove(function(error) {
+                        if(!error) {
+                            res.json({ success: true, master: true });
+                        } else {
+                            res.error(200, "Failed To Remove File", true, error);
+                        }
+                    });
+                } else {
+                    req.models.documents_roles.find({
+                        user_id: req.session.user.id,
+                        document_id: req.param("document")
+                    }).remove(function(error) {
+                        if(!error) {
+                            res.json({ success: true, master: false });
+                        } else {
+                            res.error(200, "Failed To Remove File", true, error);
+                        }
+                    });
+                }
             } else {
-                req.models.documents_roles.find({
-                    user_id: req.session.user.id,
-                    document_id: req.param("document")
-                }).remove(function(error) {
-                    if(!error) {
-                        res.json({ success: true, master: false });
-                    } else {
-                        res.error(200, "Failed To Remove File", true, error);
-                    }
-                });
+                res.error(404);
             }
         } else {
-            res.error(404);
+            res.error(400, false, true, error);
         }
     });
 }
@@ -180,7 +195,7 @@ exports.remove = function(req, res, next) {
 exports.invite = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_id: req.param("document")
+        document_slug: req.param("document")
     }, function(error, documents) {
         if(!error) {
             if(documents.length == 1) {

@@ -63,7 +63,6 @@ exports.chatRoom = function(req) {
 }
 
 exports.document = function(req) {
-    console.log(req.data["changes"]);
     if(req.session.user) {
         req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
