@@ -12,10 +12,3 @@ cd ~; git clone -b <branch> git@github.com:Laborate/middleware.git; bash middlew
     ```
 profile name must be lowercase a-z with no spaces
     ```
-
-Start Tracking ```config.json```
-------------------------------------
-
-```bash
-git update-index --no-assume-unchanged ~/middleware/config.json;
-```
