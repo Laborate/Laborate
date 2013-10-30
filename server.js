@@ -126,13 +126,10 @@ workers = function() {
     /* Express: Start Router */
     app.use(app.router);
 
-    /* Production Only */
-    app.configure('production', function() {
-        //Send Error Logging To Sentry
-        app.use(raven.middleware.express(config.sentry.node));
-    });
+    /* Send Error Logging To Sentry */
+    app.use(raven.middleware.express(config.sentry.node));
 
-    //Error Handler (Globally)
+    /* Error Handler (Globally) */
     app.use(require("./routes/error").global);
 
     /* Express: Import Routes */

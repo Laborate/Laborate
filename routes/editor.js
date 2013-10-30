@@ -1,27 +1,31 @@
 exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.get(req.param("document"), function(error, document) {
-            if(!error && document) {
-                if(document.password == null) {
-                    var js = clientJS.renderTags("backdrop", "codemirror", "editor",
-                                                    "aysnc", "copy", "download",
-                                                    "header", "jscroll", "editor-auto-join");
-                } else {
-                    var js = clientJS.renderTags("backdrop", "codemirror", "editor",
-                                                    "aysnc", "copy", "download",
-                                                    "header", "jscroll")
-                }
+            if(!error) {
+                if(document) {
+                    if(document.password == null) {
+                        var js = clientJS.renderTags("backdrop", "codemirror", "editor",
+                                                        "aysnc", "copy", "download",
+                                                        "header", "jscroll", "editor-auto-join");
+                    } else {
+                        var js = clientJS.renderTags("backdrop", "codemirror", "editor",
+                                                        "aysnc", "copy", "download",
+                                                        "header", "jscroll")
+                    }
 
-                res.renderOutdated('editor/index', {
-                    title: document.name,
-                    navigation: document.name,
-                    mode: "editor",
-                    user: req.session.user,
-                    document: document,
-                    js: js,
-                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll"),
-                    backdrop: req.backdrop("blurry")
-                });
+                    res.renderOutdated('editor/index', {
+                        title: document.name,
+                        navigation: document.name,
+                        mode: "editor",
+                        user: req.session.user,
+                        document: document,
+                        js: js,
+                        css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll"),
+                        backdrop: req.backdrop("blurry")
+                    });
+                } else {
+                   res.error(404);
+                }
             } else {
                 res.error(404, false, true, error);
             }
@@ -106,6 +110,7 @@ exports.update = function(req, res, next) {
                         }
                     } else {
                         res.json({ success: true });
+                        document.save();
                     }
                 } else {
                     res.error(200, "Failed To Update File");

@@ -63,12 +63,10 @@
         <!-- Javascript -->
         <%- js %>
 
-        <% if(production) { %>
-            <!-- Sentry Logging -->
-            <script type="text/javascript">
-                Raven.config("<%= sentry %>").install();
-                window.onerror = Raven.process;
-            </script>
-        <% } %>
+        <!-- Raven Exception Handling -->
+        <script type="text/javascript">
+            Raven.config("<%= sentry %>").install();
+            window.onerror = Raven.process;
+        </script>
     </head>
     <body>

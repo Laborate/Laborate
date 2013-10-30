@@ -1,3 +1,5 @@
+var jsdom = require("jsdom");
+
 exports.models;
 require("../lib/models").socket(function(response) {
     exports.models = response;
@@ -114,11 +116,13 @@ exports.removeUser = function(req, user, room) {
                         var document = documents[0].document;
                         exports.redisClient.get(room, function(error, reply) {
                             reply = JSON.parse(reply);
-                            exports.applyChanges(document, reply.changes, function(content) {
-                                document.content = (content) ? content : null,
-                                document.breakpoints = (reply.breakpoints.length != 0) ? reply.breakpoints : null
+                            exports.applyChanges(document.content, reply.changes, function(content) {
+                                document.save({
+                                    content: (content) ? content.split("\n") : null,
+                                    breakpoints: (reply.breakpoints.length != 0) ? reply.breakpoints : null
+                                });
+                                exports.redisClient.del(room);
                             });
-                            exports.redisClient.del(room);
                         });
                     } else  {
                         exports.redisClient.del(room);
@@ -129,23 +133,20 @@ exports.removeUser = function(req, user, room) {
     }
 }
 
-exports.applyChanges =  function(document, changes, callback) {
-    //Hot Patch Util Jsdom Works
-    return callback(document.content);
-
+exports.applyChanges =  function(content, changes, callback) {
     var html = "<html><head></head><body><textarea id='code'></textarea></body></html>";
-    var jsdom = require("jsdom").env(html, {
+    jsdom.env(html, {
         scripts: ['../node_modules/codemirror/lib/codemirror.js'],
         done: function(errors, window) {
             var document = window.document;
 
             //Create Virtual Editor
             var editor = window.CodeMirror(document.getElementById("code"), {
-                value: (document.content) ? document.content.join("\n") : ""
+                value: (content) ? content.join("\n") : ""
             });
 
             //Apply Change Objects
-            $.each(document.breakpoints, function(index, value) {
+            $.each(changes, function(index, value) {
                 editor.replaceRange(value['text'], value['from'], value['to']);
             });
 

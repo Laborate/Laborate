@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express.io": "1.1.12",
+    "express.io": "1.1.13",
     "express-outdatedhtml": "0.0.1",
     "express-device": "0.3.7",
     "connect-slashes": "0.0.10",
@@ -31,7 +31,8 @@
     "jquery": "1.8.3",
     "oauth": "0.9.10 ",
     "bitbucket": "0.0.1",
-    "googleapis": "0.4.5"
+    "googleapis": "0.4.5",
+    "jsdom": "0.8.8"
   },
   "devDependencies": {
     "express-debug": "*"
