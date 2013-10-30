@@ -23,7 +23,10 @@
         ]
     },
     "development": {
-        "basicAuth": {},
+        "basicAuth": {
+            "<username 1>": "<password>",
+            "<username 2>": "<password>"
+        },
         "debugger": {
             "theme": "/lib/debugger/edt.css",
             "panels": [
