@@ -76,7 +76,7 @@ exports.contents = function(req, res, next) {
                             if(!error) {
                                 res.json({
                                     success: true,
-                                    document: document.id
+                                    document: document.slug
                                 });
                             } else {
                                 res.error(200, "Failed To Create Document", true, error);
@@ -135,7 +135,7 @@ exports.commit = function(req, res, next) {
     if(req.session.user.github) {
         req.models.documents_roles.find({
             user_id: req.session.user.id,
-            document_id: req.param("document")
+            document_slug: req.param("document")
         }, function(error, documents) {
             if(!error && documents.length == 1 && documents[0].permission_id != 3) {
                 var document = documents[0].document;
