@@ -4,8 +4,6 @@ var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
-    console.log(req.referrer);
-
     //Set Server Root For Non Express Calls
     if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
     if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);

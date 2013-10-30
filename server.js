@@ -67,7 +67,7 @@ workers = function() {
         app.use('/codemirror', express.static(__dirname + '/node_modules/codemirror'));
 
         //Express Upload Limit
-        app.use(express.limit('2mb'));
+        app.use(express.limit('10mb'));
 
         //Express External Addons
         app.use(slashes(true));

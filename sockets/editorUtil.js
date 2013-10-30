@@ -61,7 +61,7 @@ exports.clientData = function(room, document, callback) {
         } else {
             document.changes = [];
             exports.redisClient.set(room, JSON.stringify({
-                breakpoints: (document.breakpoints) ? document.breakpoints : [],
+                breakpoints: document.breakpoints,
                 changes: [],
                 users: []
             }));
@@ -118,8 +118,8 @@ exports.removeUser = function(req, user, room) {
                             reply = JSON.parse(reply);
                             exports.applyChanges(document.content, reply.changes, function(content) {
                                 document.save({
-                                    content: (content) ? content.split("\n") : null,
-                                    breakpoints: (reply.breakpoints.length != 0) ? reply.breakpoints : null
+                                    content: content.split("\n"),
+                                    breakpoints: reply.breakpoints
                                 });
                                 exports.redisClient.del(room);
                             });

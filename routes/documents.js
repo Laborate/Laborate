@@ -113,8 +113,8 @@ exports.file_upload = function(req, res, next) {
         }, 50);
 
         $.each(req.files.files, function(i, file) {
-            // Type Casting and 100k limit
-            if(!((file.type == "" || file.type.match(/(?:text|json|octet-stream)/)) && file.size < 1024 * 100)) {
+            // Type Casting and 1mb limit
+            if(!((file.type == "" || file.type.match(/(?:text|json|octet-stream)/)) && file.size < 1024 * 2000)) {
                 file_length -= 1;
                 return true;
             }
