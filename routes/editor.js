@@ -207,7 +207,7 @@ exports.invite = function(req, res, next) {
                         users: $.map(req.param("addresses").split(","), function(address) {
                             return {
                                 email: $.trim(address),
-                                id: document.id,
+                                id: document.slug,
                                 name: document.name,
                                 access: (document.password) ? "Password" : "Open",
                                 collaborators: $.map(document.roles, function(role) {
