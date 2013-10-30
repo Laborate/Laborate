@@ -94,7 +94,6 @@
             "node_modules/**",
             "public/less/**",
             "public/js/**",
-            "cron/**",
             "shell/**",
             "wiki/**",
             ".*/**",

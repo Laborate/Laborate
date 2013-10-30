@@ -16,7 +16,7 @@ clientJS  = piler.createJSManager({urlRoot: "/js/"});
 clientCSS = piler.createCSSManager({urlRoot: "/css/"});
 
 /* Update Crontab */
-require("./cron")();
+require("./cron")(__dirname);
 
 /* Update Config Template */
 require("./lib/core/config_template")(__dirname);

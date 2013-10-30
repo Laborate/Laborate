@@ -2,7 +2,7 @@ var crontab = require('crontab');
 var path = require('path');
 var util = require('util');
 
-module.exports = function() {
+module.exports = function(root_dir) {
     crontab.load(function(err, tab) {
         require('npm').load(function (err, npm) {
             //Get Path
@@ -13,18 +13,18 @@ module.exports = function() {
 
             //Start @Reboot
             var foreverCommand = path.join(npmBinRoot, 'forever');
-            var startLocation = path.join(__dirname, "../start.js");
+            var startLocation = path.join(root_dir, "/start.js");
             var startCommand = util.format('%s && %s start %s', exportCommand, foreverCommand, startLocation);
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
 
             //Editor Users @30 Seconds
             tab.remove(tab.findComment("editor_users"));
-            tab.create(exportCommand + " && sleep 30; " + path.join(__dirname, "editor/users.js"), "editor_users");
+            tab.create(exportCommand + " && sleep 30; " + path.join(root_dir, "/cron/editor/users.js"), "editor_users");
 
             //Editor Changes @5 Minutes
             tab.remove(tab.findComment("editor_changes"));
-            tab.create(exportCommand + " && " + path.join(__dirname, "editor/changes.js"), "editor_changes").minute().every(5);
+            tab.create(exportCommand + " && " + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(5);
 
             //Save Crontab
             tab.save();
