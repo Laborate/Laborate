@@ -28,7 +28,7 @@ exports.files = function(req, res, next) {
             res.json($.map(documents, function(value) {
                 if(value) {
                     return {
-                        id: value.document.slug,
+                        id: value.document.pub_id,
                         name: value.document.name,
                         protection: (value.document.password != null) ? "password" : "",
                         location: value.document.location,
@@ -68,7 +68,7 @@ exports.file_create = function(req, res, next) {
             res.json({
                 success: true,
                 documents: [{
-                    id: document.slug,
+                    id: document.pub_id,
                     name: document.name,
                     size: file_size.bytes(""),
                     type: function(name) {
@@ -128,7 +128,7 @@ exports.file_upload = function(req, res, next) {
                     fs.unlink(file.path);
 
                     response.documents.push({
-                        id: document.slug,
+                        id: document.pub_id,
                         name: document.name,
                         size: file_size.bytes(document.content.join("\n")),
                         type: function(name) {
@@ -159,7 +159,7 @@ exports.file_upload = function(req, res, next) {
 exports.file_rename = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_slug: req.param("document")
+        document_pub_id: req.param("document")
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             document = documents[0].document;
@@ -167,7 +167,7 @@ exports.file_rename = function(req, res, next) {
             res.json({
                 success: true,
                 document: {
-                    id: document.slug,
+                    id: document.pub_id,
                     name: document.name,
                     type: function(name) {
                         var extension = name.split(".")[name.split(".").length-1];
@@ -195,7 +195,7 @@ exports.file_rename = function(req, res, next) {
 exports.file_remove = function(req, res, next) {
      req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_slug: req.param("document")
+        document_pub_id: req.param("document")
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             document = documents[0].document;

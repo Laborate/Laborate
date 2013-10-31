@@ -84,7 +84,7 @@ exports.contents = function(req, res, next) {
                             if(!error) {
                                 res.json({
                                     success: true,
-                                    document: document.slug
+                                    document: document.pub_id
                                 });
                             } else {
                                 res.error(200, "Failed To Create Document", true, error);

@@ -2,7 +2,7 @@ exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents_roles.find({
             user_id: req.session.user.id,
-            document_slug: req.param("document")
+            document_pub_id: req.param("document")
         }, function(error, documents) {
             if(!error) {
                 if(documents.length == 1) {
@@ -47,7 +47,7 @@ exports.index = function(req, res, next) {
 
 exports.exists = function(req, res, next) {
     req.models.documents.exists({
-        slug: req.param("document")
+        pub_id: req.param("document")
     }, function(error, exists) {
         if(!error && exists) {
             res.json({
@@ -65,7 +65,7 @@ exports.exists = function(req, res, next) {
 
 exports.join = function(req, res, next) {
     req.models.documents.find({
-        slug: req.param("document")
+        pub_id: req.param("document")
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             document = documents[0];
@@ -90,7 +90,7 @@ exports.join = function(req, res, next) {
 exports.update = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_slug: req.param("document")
+        document_pub_id: req.param("document")
     }, function(error, documents) {
         if(documents.length == 1) {
             if(!error) {
@@ -134,7 +134,7 @@ exports.update = function(req, res, next) {
 exports.download = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_slug: req.param("document")
+        document_pub_id: req.param("document")
     }, function(error, documents) {
         if(!error) {
             if(documents.length == 1) {
@@ -158,7 +158,7 @@ exports.download = function(req, res, next) {
 exports.remove = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_slug: req.param("document")
+        document_pub_id: req.param("document")
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             var document = documents[0].document;
@@ -195,7 +195,7 @@ exports.remove = function(req, res, next) {
 exports.invite = function(req, res, next) {
     req.models.documents_roles.find({
         user_id: req.session.user.id,
-        document_slug: req.param("document")
+        document_pub_id: req.param("document")
     }, function(error, documents) {
         if(!error) {
             if(documents.length == 1) {
@@ -207,7 +207,7 @@ exports.invite = function(req, res, next) {
                         users: $.map(req.param("addresses").split(","), function(address) {
                             return {
                                 email: $.trim(address),
-                                id: document.slug,
+                                id: document.pub_id,
                                 name: document.name,
                                 access: (document.password) ? "Password" : "Open",
                                 collaborators: $.map(document.roles, function(role) {

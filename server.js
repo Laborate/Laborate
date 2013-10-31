@@ -10,10 +10,11 @@ var raven      = require('raven');
 var device     = require('express-device');
 
 /* IMPORTANT - No VAR Makes Variables Global */
-$         = require("jquery");
-config    = require('./config');
-clientJS  = piler.createJSManager({urlRoot: "/js/"});
-clientCSS = piler.createCSSManager({urlRoot: "/css/"});
+$              = require("jquery");
+config         = require('./config');
+clientJS       = piler.createJSManager({urlRoot: "/js/"});
+clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
+blank_function = function() { return undefined; }
 
 /* Update Crontab */
 require("./cron")(__dirname);
