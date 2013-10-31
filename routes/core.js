@@ -41,25 +41,25 @@ exports.locals = function(req, res, next) {
     res.locals.backdrop = "";
     res.locals.apps = {
         sftp: {
-            show: false
+            show: config.apps.sftp
         },
         github: {
-            show: true,
+            show: config.apps.github,
             enabled: !!(req.session.user && req.session.user.github),
             link: "/github/token/"
         },
         bitbucket: {
-            show: true,
-            enabled: !!(req.session.user && req.session.user.bitbucket),
+            show: config.apps.bitbucket,
+            enabled: !$.isEmptyObject(req.session.user && req.session.user.bitbucket),
             link: "/bitbucket/token/"
         },
         dropbox: {
-            show: false,
+            show: config.apps.dropbox,
             enabled: false,
             link: "/dropbox/token/"
         },
-        drive: {
-            show: true,
+        google: {
+            show: config.apps.google,
             enabled: false,
             link: "/google/token/"
         }

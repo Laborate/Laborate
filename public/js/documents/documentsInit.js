@@ -1,6 +1,6 @@
 //Url Parameters
 window.url_params = function() {
-    params = /\/documents\/([\w\d]{10})\/(.*)/.exec(window.location.href);
+    params = /\/documents\/([\w\d]*?)\/(.*)/.exec(window.location.href);
 
     return ((params) ? {
         location: params[1],

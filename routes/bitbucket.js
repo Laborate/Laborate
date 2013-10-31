@@ -57,7 +57,7 @@ exports.repos = function(req, res, next) {
 };
 
 exports.contents = function(req, res, next) {
-    if(req.session.user.bitbucket) {
+    if(!$.isEmptyObject(req.session.user.bitbucket)) {
         req.bitbucket.contents(req.session.user.bitbucket,
             req.session.user.locations[req.param("0")].repository,
             req.session.user.locations[req.param("0")].branch,

@@ -21,9 +21,9 @@ module.exports = function(app) {
     app.get('/logout', authUtil.logout);
 
     /* Reload User Account */
-    app.configure('development', function() {
+    if(!config.general.production) {
         app.get('/reload', authUtil.reload);
-    });
+    }
 
     /* Register */
     app.get('/register', authUtil.loginCheck, auth.register);
@@ -41,8 +41,8 @@ module.exports = function(app) {
     app.get('/documents', authUtil.restrictAccess, documents.index);
     app.get('/documents/files', authUtil.restrictAccess, authUtil.xhr, documents.files);
     app.get('/documents/locations', authUtil.restrictAccess, authUtil.xhr, documents.locations);
-    app.get(/^\/documents\/([\w\d]{10})\/(.*?)/, authUtil.restrictAccess, documents.index);
-    app.get(/^\/documents\/location\/([\w\d]{10})\/(.*)/, authUtil.restrictAccess, documents.location);
+    app.get(/^\/documents\/location\/([\w\d]*?)\/(.*)/, authUtil.restrictAccess, documents.location);
+    app.get(/^\/documents\/([\w\d]*?)\/(.*?)/, authUtil.restrictAccess, documents.index);
     app.post('/documents/file/create', authUtil.restrictAccess, authUtil.xhr, documents.file_create);
     app.post('/documents/file/upload', authUtil.restrictAccess, authUtil.xhr, documents.file_upload);
     app.post('/documents/file/:document/rename', authUtil.restrictAccess, authUtil.xhr, documents.file_rename);
@@ -63,21 +63,27 @@ module.exports = function(app) {
     app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.invite);
 
     /* Github */
-    app.get('/github/token', authUtil.restrictAccess, github.token);
-    app.get('/github/token/add', authUtil.restrictAccess, github.add_token);
-    app.get('/github/token/remove', authUtil.restrictAccess, github.remove_token);
-    app.get('/github/repos', authUtil.restrictAccess, authUtil.xhr, github.repos);
+    if(config.apps.github) {
+        app.get('/github/token', authUtil.restrictAccess, github.token);
+        app.get('/github/token/add', authUtil.restrictAccess, github.add_token);
+        app.get('/github/token/remove', authUtil.restrictAccess, github.remove_token);
+        app.get('/github/repos', authUtil.restrictAccess, authUtil.xhr, github.repos);
+    }
 
     /* Bitbucket */
-    app.get('/bitbucket/token', authUtil.restrictAccess, bitbucket.token);
-    app.get('/bitbucket/token/add', authUtil.restrictAccess, bitbucket.add_token);
-    app.get('/bitbucket/token/remove', authUtil.restrictAccess, bitbucket.remove_token);
-    app.get('/bitbucket/repos', authUtil.restrictAccess, authUtil.xhr, bitbucket.repos);
+    if(config.apps.bitbucket) {
+        app.get('/bitbucket/token', authUtil.restrictAccess, bitbucket.token);
+        app.get('/bitbucket/token/add', authUtil.restrictAccess, bitbucket.add_token);
+        app.get('/bitbucket/token/remove', authUtil.restrictAccess, bitbucket.remove_token);
+        app.get('/bitbucket/repos', authUtil.restrictAccess, authUtil.xhr, bitbucket.repos);
+    }
 
     /* Google Drive */
-    app.get('/google/token/add', authUtil.restrictAccess, google.add_token);
-    app.get('/google/token/remove', authUtil.restrictAccess, google.remove_token);
-    app.get('/google/token/:name', authUtil.restrictAccess, google.token);
+    if(config.apps.google) {
+        app.get('/google/token/add', authUtil.restrictAccess, google.add_token);
+        app.get('/google/token/remove', authUtil.restrictAccess, google.remove_token);
+        app.get('/google/token/:name', authUtil.restrictAccess, google.token);
+    }
 
     /* Not Found Page */
     app.all('*', function(req, res, next) {

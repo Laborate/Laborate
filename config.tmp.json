@@ -59,6 +59,13 @@
         "password": "",
         "query": {}
     },
+    "apps": {
+        "sftp": "",
+        "github": "",
+        "bitbucket": "",
+        "dropbox": "",
+        "google": ""
+    },
     "github": {
         "id": "",
         "secret": "",

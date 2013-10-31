@@ -39,7 +39,7 @@ exports.refresh_token = function(req, location, token, next) {
 }
 
 exports.remove_token = function(req, res, next) {
-    if(req.session.user.google.length != 0) {
+    if(Object.keys(req.session.user.google).length != 0) {
         req.models.users.get(req.session.user.id, function(error, user) {
             delete req.session.user.google[req.param("location")];
             delete req.session.user.locations[req.param("location")];
@@ -55,21 +55,23 @@ exports.remove_token = function(req, res, next) {
 };
 
 exports.contents = function(req, res, next, refreshed) {
-    var _this = this;
-    req.google.contents(
-        req.session.user.google[req.param("0")],
-        req.param("1"),
-        function(error, results) {
-            if((error || typeof results == "string") && !refreshed) {
-                req.google.refresh_token(function(token) {
-                    _this.refresh_token(req, req.param("0"), token, function() {
-                        _this.contents(req, res, next, true);
+    if(!$.isEmptyObject(req.session.user.bitbucket)) {
+        var _this = this;
+        req.google.contents(
+            req.session.user.google[req.param("0")],
+            req.param("1"),
+            function(error, results) {
+                if((error || typeof results == "string") && !refreshed) {
+                    req.google.refresh_token(function(token) {
+                        _this.refresh_token(req, req.param("0"), token, function() {
+                            _this.contents(req, res, next, true);
+                        });
                     });
-                });
-            } else {
-                res.json(results);
+                } else {
+                    res.json(results);
+                }
+    
             }
-
-        }
-    );
+        );
+    }
 }

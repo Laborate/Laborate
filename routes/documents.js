@@ -229,13 +229,13 @@ exports.file_remove = function(req, res, next) {
 exports.location = function(req, res, next) {
     if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
         switch(req.session.user.locations[req.param("0")].type) {
-            case "github":
+            case (!config.apps.github || "github"):
                 github.contents(req, res, next);
                 break;
-            case "bitbucket":
+            case (!config.apps.bitbucket || "bitbucket"):
                 bitbucket.contents(req, res, next);
                 break;
-            case "google":
+            case (!config.apps.google || "google"):
                 google.contents(req, res, next);
                 break;
             default:
@@ -250,16 +250,22 @@ exports.location = function(req, res, next) {
 exports.locations = function(req, res, next) {
     if(req.session.user.locations) {
         locations = [];
-        $.each(req.session.user.locations, function(key, value) {
-            if(!req.session.user.github && value.type == "github") {
-                return;
+        $.each(req.session.user.locations, function(key, value) {            
+            switch(value.type) {
+                case ((config.apps.github && req.session.user.github) || "github"):
+                    return;
+                case ((config.apps.bitbucket && !$.isEmptyObject(req.session.user.bitbucket)) || "bitbucket"):
+                    return;
+                case ((config.apps.google && !$.isEmptyObject(req.session.user.google)) || "google"):
+                    return;
+                default:
+                    locations.push({
+                        key: key,
+                        name: value.name,
+                        type: value.type
+                    });
+                    break;
             }
-
-            locations.push({
-                key: key,
-                name: value.name,
-                type: value.type
-            })
         });
         res.json(locations);
     } else {

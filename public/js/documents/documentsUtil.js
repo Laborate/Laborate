@@ -281,7 +281,7 @@ window.documents = {
                             "data": {
                                 "data-next": "sftp"
                             },
-                            "notification": "blue icon-forward"
+                            "notification": "blue blue icon-arrow-up-2"
                         });
                     } else if(key == "github" && value.show) {
                         list.push({
@@ -317,7 +317,7 @@ window.documents = {
                             },
                             "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
                         });
-                    } else if(key == "drive" && value.show) {
+                    } else if(key == "google" && value.show) {
                         list.push({
                             "name": "Google Drive Account",
                             "icon": "icon-google-drive",
