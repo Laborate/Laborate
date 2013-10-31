@@ -51,20 +51,23 @@
         "secret": ""
     },
     "orm": {
-        "protocol": "",
+        "protocol": "mysql",
         "port": 3306,
         "host": "localhost",
         "database": "",
         "user": "",
         "password": "",
-        "query": {}
+        "query": {
+            "pool": true,
+            "debug": false
+        }
     },
     "apps": {
-        "sftp": "",
-        "github": "",
-        "bitbucket": "",
-        "dropbox": "",
-        "google": ""
+        "sftp": false,
+        "github": true,
+        "bitbucket": true,
+        "dropbox": false,
+        "google": false
     },
     "github": {
         "id": "",
@@ -80,7 +83,7 @@
     "google": {
         "id": "",
         "secret": "",
-        "verification": ""
+        "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY"
     },
     "email": {
         "mode": "smtp",
