@@ -11,7 +11,7 @@
             "",
             "www"
         ],
-        "production": false,
+        "production": true,
         "company": "Laborate.io",
         "delimeter": {
             "web": " · ",

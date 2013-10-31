@@ -15,7 +15,7 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
 
     spinSleepTime: 0,
 
-    watch: config.forever.watch,
+    watch: (config.general.production) ? false : config.forever.watch,
     watchDirectory: __dirname + "/" + config.forever.watch_directory,
     watchIgnoreDotFiles: config.forever.watch_ignore_dot,
     watchIgnorePatterns: $.map(config.forever.watch_ignore_patterns, function(value) {
