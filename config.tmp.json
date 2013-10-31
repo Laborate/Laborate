@@ -2,7 +2,8 @@
     "profile": {
         "name": "",
         "full_name": "",
-        "email": ""
+        "email": "",
+        "password": ""
     },
     "general": {
         "port": 3000,
@@ -50,12 +51,13 @@
         "secret": ""
     },
     "orm": {
-        "dialect": "mysql",
+        "protocol": "",
         "port": 3306,
         "host": "localhost",
         "database": "",
-        "username": "",
-        "password": ""
+        "user": "",
+        "password": "",
+        "query": {}
     },
     "github": {
         "id": "",

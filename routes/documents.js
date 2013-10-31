@@ -167,7 +167,7 @@ exports.file_rename = function(req, res, next) {
             res.json({
                 success: true,
                 document: {
-                    id: document.id,
+                    id: document.slug,
                     name: document.name,
                     type: function(name) {
                         var extension = name.split(".")[name.split(".").length-1];
