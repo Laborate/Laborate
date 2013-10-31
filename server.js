@@ -14,7 +14,13 @@ $              = require("jquery");
 config         = require('./config');
 clientJS       = piler.createJSManager({urlRoot: "/js/"});
 clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
-blank_function = function() { return undefined; }
+raven_client   = new raven.Client(config.sentry.node);
+blank_function = function(error) { 
+    if(error) {
+        console.error(error);
+        raven_client.captureError(error);
+    }
+}
 
 /* Update Crontab */
 require("./cron")(__dirname);

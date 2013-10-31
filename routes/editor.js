@@ -1,11 +1,10 @@
 exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents_roles.find({
-            user_id: req.session.user.id,
             document_pub_id: req.param("document")
         }, function(error, documents) {
             if(!error) {
-                if(documents.length == 1) {
+                if(documents.length != 0) {
                     document = documents[0].document;
                     if(document.password == null) {
                         var js = clientJS.renderTags("backdrop", "codemirror", "editor",
@@ -67,7 +66,7 @@ exports.join = function(req, res, next) {
     req.models.documents.find({
         pub_id: req.param("document")
     }, function(error, documents) {
-        if(!error && documents.length == 1) {
+        if(!error && documents.length != 0) {
             document = documents[0];
             if(!document.password || document.hash(req.param("password")) == document.password) {
                 document.join(req.session.user.id, 2);

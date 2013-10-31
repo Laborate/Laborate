@@ -1,7 +1,3 @@
-/* NPM Modules */
-var raven = require('raven');
-var raven_client = new raven.Client(config.sentry.node);
-
 var error_handler = function(status, message, home, req, res) {
     var error_message;
     var error_html;
