@@ -51,6 +51,7 @@
         "secret": ""
     },
     "orm": {
+        "reset": false,
         "protocol": "mysql",
         "port": 3306,
         "host": "localhost",

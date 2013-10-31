@@ -1,6 +1,6 @@
 exports.index = function(req, res, next) {
     if(req.param("document")) {
-        req.models.documents_roles.find({
+        req.models.documents.roles.find({
             document_pub_id: req.param("document")
         }, function(error, documents) {
             if(!error) {
@@ -87,7 +87,7 @@ exports.join = function(req, res, next) {
 }
 
 exports.update = function(req, res, next) {
-    req.models.documents_roles.find({
+    req.models.documents.roles.find({
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -131,7 +131,7 @@ exports.update = function(req, res, next) {
 }
 
 exports.download = function(req, res, next) {
-    req.models.documents_roles.find({
+    req.models.documents.roles.find({
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -155,7 +155,7 @@ exports.download = function(req, res, next) {
 }
 
 exports.remove = function(req, res, next) {
-    req.models.documents_roles.find({
+    req.models.documents.roles.find({
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -171,7 +171,7 @@ exports.remove = function(req, res, next) {
                         }
                     });
                 } else {
-                    req.models.documents_roles.find({
+                    req.models.documents.roles.find({
                         user_id: req.session.user.id,
                         document_id: req.param("document")
                     }).remove(function(error) {
@@ -192,7 +192,7 @@ exports.remove = function(req, res, next) {
 }
 
 exports.invite = function(req, res, next) {
-    req.models.documents_roles.find({
+    req.models.documents.roles.find({
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {

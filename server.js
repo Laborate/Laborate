@@ -15,10 +15,21 @@ config         = require('./config');
 clientJS       = piler.createJSManager({urlRoot: "/js/"});
 clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 raven_client   = new raven.Client(config.sentry.node);
-blank_function = function(error) { 
-    if(error) {
-        console.error(error);
-        raven_client.captureError(error);
+blank_function = function(data) {
+    /* True Means It Is On Init */
+    if(data == true) {
+        /* Return Blank Function */
+        return function() {};
+    } else {
+        /*
+            var data is now seen as
+            error. Now check if it
+            contains an error.
+        */
+        if(data) {
+            console.error(data);
+            raven_client.captureError(data);
+        }
     }
 }
 

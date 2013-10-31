@@ -21,7 +21,7 @@ exports.index = function(req, res, next) {
 
 /* Online Files */
 exports.files = function(req, res, next) {
-    req.models.documents_roles.find({
+    req.models.documents.roles.find({
         user_id: req.session.user.id
     }, function(error, documents) {
         if(!error) {
@@ -157,7 +157,7 @@ exports.file_upload = function(req, res, next) {
 }
 
 exports.file_rename = function(req, res, next) {
-    req.models.documents_roles.find({
+    req.models.documents.roles.find({
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -193,7 +193,7 @@ exports.file_rename = function(req, res, next) {
 };
 
 exports.file_remove = function(req, res, next) {
-     req.models.documents_roles.find({
+     req.models.documents.roles.find({
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -208,7 +208,7 @@ exports.file_remove = function(req, res, next) {
                     }
                 });
             } else {
-                req.models.documents_roles.find({
+                req.models.documents.roles.find({
                     user_id: req.session.user.id,
                     document_id: req.param("0")
                 }).remove(function(error) {
@@ -250,7 +250,7 @@ exports.location = function(req, res, next) {
 exports.locations = function(req, res, next) {
     if(req.session.user.locations) {
         locations = [];
-        $.each(req.session.user.locations, function(key, value) {            
+        $.each(req.session.user.locations, function(key, value) {
             switch(value.type) {
                 case ((config.apps.github && req.session.user.github) || "github"):
                     return;
