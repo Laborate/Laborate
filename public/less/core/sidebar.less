@@ -1,0 +1,174 @@
+@import './index';
+@import '../compless/all';
+
+.sidebar {
+    width: 180px;
+    height: 100%;
+    color: #fff;
+    background: @color_sidebar;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    .profile {
+        height: 95px;
+        background: @color_sidebar_profile;
+        padding: 6px 0;
+        .box-sizing(border-box);
+
+        .img {
+            cursor: pointer;
+            overflow: hidden;
+            margin: 0 auto;
+            width: 75px;
+            height: 75px;
+            border: solid 4px lighten(@color_sidebar_profile, 5%);
+            .border-radius(50%);
+
+            &:hover {
+                border: solid 4px lighten(@color_sidebar_profile, 8%);
+            }
+
+            &:active {
+                border: solid 4px lighten(@color_sidebar_profile, 11%);
+            }
+
+            img {
+               width: 75px;
+               height: 75px;
+            }
+        }
+    }
+
+    .controller {
+        background: @color_sidebar_header;
+        padding: 13px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: -1px;
+        .clearfix();
+
+        .title {
+           .float-left();
+        }
+
+        .addition {
+            font-size: 18px;
+            color: @color_sidebar_header_icon;
+            cursor: pointer;
+            .float-right();
+
+            &:hover {
+                color: lighten(@color_sidebar_header_icon, 5%);
+            }
+
+            &:active {
+                color: lighten(@color_sidebar_header_icon, 10%);
+            }
+        }
+    }
+
+    .locations {
+        position: relative;
+        color: darken(#fff, 15%);
+        font-size: 14px;
+        line-height: 14px;
+        overflow: hidden;
+        .calc-height(~"100% - 140px");
+        .box-sizing(border-box);
+
+        .shadow-top {
+            position: absolute;
+            top: -4px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: url('/img/tshadow.png') repeat-x;
+        }
+
+        .listing {
+            padding: 0 0 20px 12px;
+            overflow: auto;
+            overflow-x: hidden;
+            height: 100%;
+            .box-sizing(border-box);
+
+            .item {
+                position: relative;
+                width: 100%;
+                cursor: pointer;
+                margin-top: 10px;
+                .clearfix();
+
+                .container {
+                    width: 100%;
+                    height: 18px;
+                    margin: 6px 0;
+                    .clearfix();
+
+                    .name {
+                        height: 15px;
+                        font-weight: bold;
+                        .calc-width(~"100% - 35px");
+                        .ellipsis();
+                        .float-left();
+                    }
+
+                    .icon {
+                        line-height: 18px;
+                        margin-left: 5px;
+                        font-size: 14px;
+                        width: 18px;
+                        text-align: center;
+                        color: darken(@color_sidebar_locations_icon, 15%);
+                        .float-left();
+
+                        &.notify {
+                            color: darken(@color_header_button, 10%);
+                        }
+
+                        &.big {
+                            font-size: 18px;
+                            margin-left: 8px;
+                        }
+                    }
+                }
+
+                .active {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 0;
+                    height: 28px;
+                    .transition();
+                }
+
+                &:hover, &.hover {
+                    .active {
+                        width: 5px;
+                        background: darken(@color_sidebar_locations_active, 15%);
+                    }
+                }
+
+                &.activated {
+                    color: darken(#fff, 5%);
+
+                    .container {
+                        .icon {
+                            color: @color_sidebar_locations_icon;
+
+                            &.notify {
+                                color: @color_header_button;
+                            }
+                        }
+                    }
+
+                    .active {
+                        width: 5px;
+                        background: @color_sidebar_locations_active;
+                    }
+                }
+            }
+        }
+    }
+}

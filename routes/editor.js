@@ -6,15 +6,7 @@ exports.index = function(req, res, next) {
             if(!error) {
                 if(documents.length != 0) {
                     document = documents[0].document;
-                    if(document.password == null) {
-                        var js = clientJS.renderTags("backdrop", "codemirror", "editor",
-                                                        "aysnc", "copy", "download",
-                                                        "header", "jscroll", "editor-auto-join");
-                    } else {
-                        var js = clientJS.renderTags("backdrop", "codemirror", "editor",
-                                                        "aysnc", "copy", "download",
-                                                        "header", "jscroll")
-                    }
+                    password = (document.password == null);
 
                     res.renderOutdated('editor/index', {
                         title: document.name,
@@ -22,9 +14,12 @@ exports.index = function(req, res, next) {
                         mode: "editor",
                         user: req.session.user,
                         document: document,
-                        js: js,
+                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy",
+                                                "download", "header", "jscroll"),
                         css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll"),
-                        backdrop: req.backdrop("blurry")
+                        backdrop: req.backdrop("blurry"),
+                        private: !password,
+                        config: { autoJoin: password }
                     });
                 } else {
                    res.error(404);

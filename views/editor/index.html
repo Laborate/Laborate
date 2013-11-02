@@ -130,8 +130,8 @@
                 <div class="header">Document Title</div>
                 <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
             </div>
-            <% if(document.owner_id == user.id && user.code_pricing) { %>
-                    <% if(user.code_pricing.documents == null || user.pass_documents < user.code_pricing.documents) { %>
+            <% if(document.owner_id == user.id && user.pricing) { %>
+                    <% if(user.pricing.documents == null || user.pass_documents < user.pricing.documents) { %>
                         <div id="password_container">
                             <div class="header">Document Password</div>
                             <div style="position:relative">

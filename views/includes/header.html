@@ -31,8 +31,15 @@
         <!-- Robot Meta Tags -->
         <meta name="revisit-after" content="5 days">
         <meta name="distribution" content="web">
-        <meta name="ROBOTS" content="INDEX, FOLLOW">
 
+        <% if(private) { %>
+            <meta name="robots" content="noindex">
+        <% } else { %>
+            <meta name="robots" content="index, follow">
+        <% } %>
+
+        <!-- Favicon ICO -->
+        <link rel="shortcut icon" href="/favicon/icon.ico<%= random %>" />
         <!-- Standard Favicon -->
         <link rel="icon" type="image/png" href="/favicon/196.png<%= random %>" />
         <!-- Opera Speed Dial Favicon -->
@@ -43,6 +50,7 @@
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/favicon/72.png<%= random %>">
         <!-- For iPhone: -->
         <link rel="apple-touch-icon-precomposed" href="/favicon/57.png<%= random %>">
+
 
         <!-- CSS -->
         <%- css %>
@@ -56,7 +64,19 @@
                 title: "<%= title %>",
                 name: "<%= site_title %>",
                 delimeter: "<%= site_delimeter %>",
-                apps: <%- JSON.stringify(apps) %>
+                apps: <%- JSON.stringify(apps) %>,
+
+                <% $.each(config, function(key, value) { %>
+                    <% if(typeof value == "boolean") { %>
+                        <%= key %>: <%- value %>,
+                    <% } else if(typeof value == "object") { %>
+                        <%= key %>: <%- JSON.stringify(value) %>,
+                    <% } else if(typeof value == "number") { %>
+                        <%= key %>: <%= value %>,
+                    <% } else  { %>
+                        <%= key %>: "<%= value %>",
+                    <% } %>
+                <% }); %>
             }
         </script>
 

@@ -83,4 +83,8 @@ $(function() {
 
     //Refresh Editor
     window.editorUtil.refresh();
+
+    if(config.autoJoin)  {
+        $('#backdrop form').submit();
+    }
 });

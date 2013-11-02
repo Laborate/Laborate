@@ -39,6 +39,7 @@ exports.locals = function(req, res, next) {
     res.locals.sentry = config.sentry.browser;
     res.locals.google_verification = config.google.verification;
     res.locals.backdrop = "";
+    res.locals.private = false;
     res.locals.apps = {
         sftp: {
             show: config.apps.sftp
