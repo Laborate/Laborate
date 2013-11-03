@@ -1,4 +1,4 @@
-var jsdom = require("jsdom");
+var editorJsdom = require("../lib/jsdom/editor");
 
 exports.models;
 require("../lib/models").socket(function(response) {
@@ -116,7 +116,7 @@ exports.removeUser = function(req, user, room) {
                         var document = documents[0].document;
                         exports.redisClient.get(room, function(error, reply) {
                             reply = JSON.parse(reply);
-                            exports.applyChanges(document.content, reply.changes, function(content) {
+                            editorJsdom(document.content, reply.changes, function(content) {
                                 document.save({
                                     content: content.split("\n"),
                                     breakpoints: reply.breakpoints
@@ -131,28 +131,6 @@ exports.removeUser = function(req, user, room) {
             }
         }
     }
-}
-
-exports.applyChanges =  function(content, changes, callback) {
-    var html = "<html><head></head><body><textarea id='code'></textarea></body></html>";
-    jsdom.env(html, {
-        scripts: ['../node_modules/codemirror/lib/codemirror.js'],
-        done: function(errors, window) {
-            var document = window.document;
-
-            //Create Virtual Editor
-            var editor = window.CodeMirror(document.getElementById("code"), {
-                value: (content) ? content.join("\n") : ""
-            });
-
-            //Apply Change Objects
-            $.each(changes, function(index, value) {
-                editor.replaceRange(value['text'], value['from'], value['to']);
-            });
-
-            callback(editor.getValue());
-        }
-    });
 }
 
 exports.userSocket = function(user, room) {
