@@ -38,7 +38,7 @@ exports.accessCheck = function(user, room, token, callback) {
             } else {
                 callback({
                     success: false,
-                    error_message: "Incorrect Password",
+                    error_message: "Invalid Credentials",
                     redirect_url: "/documents/"
                 });
             }

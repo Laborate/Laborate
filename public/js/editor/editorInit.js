@@ -4,7 +4,11 @@ window.socketUtil = {
     }),
     connect: function() {
         $("#backdrop input[type='submit']").ready(function() {
-            $("#backdrop input[type='submit']").val("Join Document").attr("disabled", false);
+            $("#backdrop input[type='submit']")
+                .val("Join Document")
+                .attr("disabled", false);
+
+            window.backdrop.button = "Join Document";
             //window.notification.close();
             if(window.editor) {
                 window.editor.options.readOnly = false;
