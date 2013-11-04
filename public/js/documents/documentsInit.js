@@ -12,6 +12,9 @@ window.url_params = function() {
 }
 
 $(function() {
+    //Show Sidebar Counter
+    $(".sidebar .info").show();
+
     //Update Location On History Change and Every 2 Minutes
     window.onpopstate = window.documents.locationReload;
     setInterval(window.documents.locationReload, 120000);

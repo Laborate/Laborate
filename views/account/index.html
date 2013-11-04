@@ -1,69 +1,62 @@
 <% include ../includes/header.html %>
-<% include ../includes/navigation.html %>
-<div id="navigation">
-    <div id="navigation_header">
-        <div id="navigation_header_gravatar">
-            <a href="http://gravatar.com/emails/" target="_blank">
-                <img src="https://www.gravatar.com/avatar/<%= user.email_hash %>?s=30&d=http%3A%2F%2F<%= host %>%2Fimg%2Fdefault_gravatar.jpeg" width="30px" height="30px">
+<div class="sidebar">
+    <div class="profile">
+        <div class="img">
+            <a href="/account/">
+                <img src="<%= gravatar %>" />
             </a>
         </div>
-        <div id="navigation_header_screen_name"><%= user.screen_name %></div>
+    </div>
+    <div class="controller">
+        <div class="title">User Settings</div>
         <div class="clear"></div>
     </div>
-    <% if(user.pricing) { %>
-    <div id="navigation_password_left">
-        <div id="navigation_password_header" class="left">PRIVATE DOCUMENTS</div>
-        <div id="navigation_password_header_light" class="right">
-            <% if(user.pricing.documents) { %>
-                <%= user.pass_documents + " of " + user.pricing.documents %>
-            <% } else { %>
-                <%= user.pass_documents %>
-            <% } %>
+    <div class="locations">
+        <div class="shadow-top"></div>
+        <div class="listing">
+            <div class="item" data-key="profile">
+                <div class="container">
+                    <div class="name">Profile</div>
+                    <div class="icon icon-users"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="account">
+                <div class="container">
+                    <div class="name">Account Settings</div>
+                    <div class="icon icon-cog"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="locations">
+                <div class="container">
+                    <div class="name">Manage Locations</div>
+                    <div class="icon icon-layers"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="notifications">
+                <div class="container">
+                    <div class="name">Notifications</div>
+                    <div class="icon icon-paperplane"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="billing">
+                <div class="container">
+                    <div class="name">Billing</div>
+                    <div class="icon icon-credit-card"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="payments">
+                <div class="container">
+                    <div class="name">Payment History</div>
+                    <div class="icon icon-book-2"></div>
+                </div>
+                <div class="active"></div>
+            </div>
         </div>
-        <div class="clear"></div>
-    </div>
-    <% } %>
-    <ul>
-        <li id="profile">Profile</li>
-        <li id="settings">Settings</li>
-        <li id="emails">Emails</li>
-        <li id="notifications">Notifications</li>
-        <li id="billing">Billing Options</li>
-        <li id="payments">Payment History</li>
-    </ul>
-</div>
-<div id="setting_pane">
-    <div class="notification"></div>
-
-    <div id="settings_profile" class="settings">
-        <div class="settings_header">Public Profile</div>
-        <div class="settings_content">
-        </div>
-    </div>
-    <div id="settings_settings" class="settings">
-        <div class="settings_header">Account Settings</div>
-            <% if(user.github) { %>
-                <a class="button red" href="/github/token/remove/">Disconnect With Github</a>
-            <% } else { %>
-                <a class="button green" href="<%= github_auth_url %>">Connect With Github</a>
-            <% } %>
-        <div class="settings_content"></div>
-    </div>
-    <div id="settings_emails" class="settings">
-        <div class="settings_header">Emails</div>
-        <div class="settings_content"></div>
-    </div>
-    <div id="settings_notifications" class="settings">
-        <div class="settings_header">Notification Center</div>
-        <div class="settings_content"></div>
-    </div>
-    <div id="settings_billing" class="settings">
-        <div class="settings_header">Billing Options</div>
-        <div class="settings_content"></div>
-    </div>
-    <div id="settings_payments" class="settings">
-        <div class="settings_header">Payment History</div>
-        <div class="settings_content"></div>
     </div>
 </div>
 <% include ../includes/footer.html %>

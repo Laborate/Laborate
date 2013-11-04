@@ -522,7 +522,7 @@ window.documents = {
         });
     },
     location: function(location, path, history) {
-        $(".counter").text("");
+        $(".sidebar .info").text("");
         $(".locations .item").removeClass("activated");
         var location_element = $(".locations .item[data-key='" + location + "']").addClass("activated");
         if(location != window.url_params()["location"] || path != window.url_params()["dir"]) {
@@ -687,7 +687,7 @@ window.documents = {
                 });
 
                 $(".files").html(files);
-                $(".counter").text(json.length + " files");
+                $(".sidebar .info").text(json.length + " files");
                 if(history) window.history.pushState(null, null, "/documents/");
                 window.documents.locationActivated = "online";
             }
@@ -750,7 +750,7 @@ window.documents = {
             });
 
             $(".files").html(files);
-            $(".counter").text(response.length + " files");
+            $(".sidebar .info").text(response.length + " files");
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
             window.documents.locationActivated = location;
