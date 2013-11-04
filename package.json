@@ -32,7 +32,8 @@
     "oauth": "0.9.10 ",
     "bitbucket": "0.0.1",
     "googleapis": "0.4.5",
-    "jsdom": "0.8.8"
+    "jsdom": "0.8.8",
+    "winston": "0.7.2"
   },
   "devDependencies": {
     "express-debug": "*"

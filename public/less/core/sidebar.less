@@ -74,7 +74,7 @@
         font-size: 14px;
         line-height: 14px;
         overflow: hidden;
-        .calc-height(~"100% - 140px");
+        .calc-height(~"100% - 180px");
         .box-sizing(border-box);
 
         .shadow-top {
@@ -170,5 +170,21 @@
                 }
             }
         }
+    }
+
+    .counter {
+        border-top: solid 1px darken(@color_sidebar_footer, 5%);
+        height: 36px;
+        font-size: 14px;
+        text-align: center;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background: @color_sidebar_footer;
+        padding: 10px 15px;
+        color: darken(#fff, 15%);
+        .ellipsis();
+        .box-sizing(border-box);
     }
 }

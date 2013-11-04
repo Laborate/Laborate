@@ -61,6 +61,7 @@ exports.clientData = function(room, document, callback) {
         } else {
             document.changes = [];
             exports.redisClient.set(room, JSON.stringify({
+                id: document.id,
                 breakpoints: document.breakpoints,
                 changes: [],
                 users: []
