@@ -7,7 +7,7 @@ require('../init')(function() {
                     var reply = JSON.parse(reply);
 
                     _this.models.documents.get(reply.id, function(error, document) {
-                        if(!error & document) {
+                        if(!error && document) {
                             _this.editorJsdom(document.content, reply.changes, function(content) {
                                 document.save({
                                     content: content.split("\n"),

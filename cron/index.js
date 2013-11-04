@@ -20,11 +20,11 @@ module.exports = function(root_dir) {
 
             //Editor Users @30 Seconds
             tab.remove(tab.findComment("editor_users"));
-            tab.create(exportCommand + " && sleep 30; " + path.join(root_dir, "/cron/editor/users.js"), "editor_users");
+            tab.create(exportCommand + " && sleep 30; node " + path.join(root_dir, "/cron/editor/users.js"), "editor_users");
 
             //Editor Changes @5 Minutes
             tab.remove(tab.findComment("editor_changes"));
-            tab.create(exportCommand + " && " + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(5);
+            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(5);
 
             //Save Crontab
             tab.save();
