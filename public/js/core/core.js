@@ -49,7 +49,7 @@ function createRange() {
   return array;
 }
 
-$(document).ready(function() {
+$(function() {
     //Prevent Rewriting Of Document
     setInterval(function() {
         $("body").attr("contenteditable", "false");

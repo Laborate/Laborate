@@ -170,14 +170,14 @@ window.chatRoom = {
 //          Chat Room Control Functions
 /////////////////////////////////////////////////
 $(function() {
-	var pane = $('.scroll-pane');
-	pane.jScrollPane({
-	    showArrows: false,
-	    animateScroll: true,
-	    autoReinitialise: true,
-	    hideFocus: true
-    });
-	window.jscrollData = $('.scroll-pane').data('jsp');
+	window.jscrollData = $('.scroll-pane')
+	    .jScrollPane({
+    	    showArrows: false,
+    	    animateScroll: true,
+    	    autoReinitialise: true,
+    	    hideFocus: true
+        })
+        .data('jsp');
 
     setTimeout(window.chatRoom.help, 10);
     setInterval(window.chatRoom.resize, 1000);

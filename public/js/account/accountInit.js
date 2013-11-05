@@ -9,5 +9,5 @@ window.url_params = function() {
 }
 
 $(function() {
-    window.account.navigationChange(window.url_params()["mode"], true);
+    window.account.location(window.url_params()["mode"], true);
 });

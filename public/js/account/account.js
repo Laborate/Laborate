@@ -1,3 +1,3 @@
-$(document).on("click", "#navigation ul li", function() {
-    window.account.navigationChange($(this).attr("id"));
+$(document).on("click", ".locations .item", function() {
+    window.account.location($(this).data("key"), true);
 });

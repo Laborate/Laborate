@@ -2,14 +2,14 @@ $(document).on("click", ".locations .item", function() {
     window.documents.location($(this).data("key"), "", true);
 });
 
-$(document).on("mouseover mouseout", ".files .item", function() {
+$(document).on("mouseover mouseout", ".pane .item", function() {
     if(window.documents.locationActivated == "online") {
         var location = $(".locations .item[data-key='" + $(this).data("location") + "']")
         location.toggleClass("hover", (!location.hasClass("hover")));
     }
 });
 
-$(document).on("click", ".files .item", function() {
+$(document).on("click", ".pane .item", function() {
     if(window.documents.locationActivated == "online") {
         window.location.href = "/editor/" + $(this).data("id");
     } else {
@@ -46,7 +46,7 @@ $(document).on("click", ".popup .download", function() {
 })
 
 $(document).on("click", ".select-files", function() {
-    window.documents.fileSelectClick($(".files .file:not(.disabled)"));
+    window.documents.fileSelectClick($(".pane .file:not(.disabled)"));
 });
 
 $(document).on("click", ".download-files", function() {
@@ -58,7 +58,7 @@ $(document).on("click", ".download-files", function() {
 
 $(document).on("click", ".confirm-files, .cancel-files", function() {
     window.documents.headerBar(["filters-non-online", "download"]);
-    var files = $(".files .file[data-selected=true]");
+    var files = $(".pane .file[data-selected=true]");
     if($(this).hasClass("confirm-files") && files.length != 0) {
         window.documents.fileDownload(files, false);
     }
@@ -92,7 +92,7 @@ $(document).on("submit", ".popup form", function() {
 });
 
 //Context Menu System (Right Click Menu)
-$(document).on("contextmenu", ".files .item", function(event) {
+$(document).on("contextmenu", ".pane .item", function(event) {
     if(window.documents.locationActivated == "online") {
         window.documents.contextMenuOpen($(this), event);
     }

@@ -30,7 +30,11 @@
                 </form>
             </div>
             <div class="accounts">
-                <a href="/account/"><%= user.screen_name %></a>
+                <% if(user.admin) { %>
+                    <a href="/admin/">Admin</a>
+                    <span>|</span>
+                <% } %>
+                <a href="/account/">Account</a>
                 <span>|</span>
                 <a href="/logout/">Sign Out</a>
             </div>
@@ -127,7 +131,7 @@
             <div class="clear"></div>
         </div>
     </div>
-    <div class="files"></div>
+    <div class="pane"></div>
 </div>
 <div class="popup">
     <div class="container">

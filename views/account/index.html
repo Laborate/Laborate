@@ -7,16 +7,12 @@
             </a>
         </div>
     </div>
-    <div class="controller">
-        <div class="title">User Settings</div>
-        <div class="clear"></div>
-    </div>
     <div class="locations">
         <div class="shadow-top"></div>
         <div class="listing">
             <div class="item" data-key="profile">
                 <div class="container">
-                    <div class="name">Profile</div>
+                    <div class="name">Public Profile</div>
                     <div class="icon icon-users"></div>
                 </div>
                 <div class="active"></div>
@@ -55,6 +51,109 @@
                     <div class="icon icon-book-2"></div>
                 </div>
                 <div class="active"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="header">
+        <div class="top">
+            <div class="search">
+                <form id="search">
+                    <div class="icon icon-search"></div>
+                    <input type="text" placeholder="Search your files..." />
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="accounts">
+                <% if(user.admin) { %>
+                    <a href="/admin/">Admin</a>
+                    <span>|</span>
+                <% } %>
+                <a href="/documents/">Documents</a>
+                <span>|</span>
+                <a href="/logout/">Sign Out</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="pane">
+            <div class="selection" data-key="profile">
+                <form action="/account/profile/">
+                    <div class="item">
+                        <div class="name">Full Name</div>
+                        <input class="input" type="text" name="name" value="<%= user.name %>" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Screen Name</div>
+                        <input class="input" type="text" name="screen_name" value="<%= user.screen_name %>" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Email Address</div>
+                        <input class="input" type="text" name="email" value="<%= user.email %>" />
+                    </div>
+                    <input class="button" type="submit" value="Update Profile" />
+                </form>
+            </div>
+            <div class="selection" data-key="account">
+                <form action="/account/password/">
+                    <div class="item">
+                        <div class="name">Old Password</div>
+                        <input class="input" type="password" name="old_password" />
+                    </div>
+                    <div class="item">
+                        <div class="name">New Password</div>
+                        <input class="input" type="password" name="new_password" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Confirm Password</div>
+                        <input class="input" type="password" name="confirm_password" />
+                    </div>
+                    <input class="button" type="submit" value="Change Password" />
+                </form>
+                <form action="/account/delete/">
+                    <div class="item">
+                        <div class="name">Password</div>
+                        <input class="input" type="password" name="password" />
+                    </div>
+                    <input class="button red" type="submit" value="Delete Account" />
+                </form>
+            </div>
+            <div class="selection" data-key="locations">
+                <div class="listing" data-id="adsfasf">
+                    <div class="item header">
+                        <div class="icon">App</div>
+                        <div class="name">Location Name</div>
+                        <div class="remove">Action</div>
+                    </div>
+                    <% $.each(user.locations, function(key, item) {
+                        switch(item.type) {
+                            case "sftp":
+                                item["class"] = "icon-drive";
+                                break;
+                            case "github":
+                                item["class"] = "icon-github-3";
+                                break;
+                            case "bitbucket":
+                                item["class"] = "icon-bitbucket";
+                                break;
+                            case "dropbox":
+                                item["class"] = "icon-dropbox-2";
+                                break;
+                            case "google":
+                                item["class"] = "icon-google-drive";
+                                break;
+                            default:
+                                item["class"] = "";
+                                break;
+                        }
+                    %>
+                        <div class="item" data-id="<%= key %>">
+                            <div class="icon <%= item.class %>"></div>
+                            <div class="name"><%= item.name %></div>
+                            <div class="remove">Remove</div>
+                        </div>
+                    <% }); %>
+                </div>
             </div>
         </div>
     </div>

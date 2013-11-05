@@ -15,7 +15,7 @@ exports.index = function(req, res, next) {
                         user: req.session.user,
                         document: document,
                         js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy",
-                                                "download", "header", "jscroll"),
+                                                "download", "jscroll"),
                         css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll"),
                         backdrop: req.backdrop("blurry"),
                         private: !password,

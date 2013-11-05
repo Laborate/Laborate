@@ -349,7 +349,7 @@ window.documents = {
     },
     contextMenu: function(element) {
         var menu = element.parent(".context-menu");
-        var file = $(".files .file[data-id='" + menu.attr("data-id") + "']");
+        var file = $(".pane .file[data-id='" + menu.attr("data-id") + "']");
 
         switch(element.data("action")) {
             case "open":
@@ -526,7 +526,7 @@ window.documents = {
         $(".locations .item").removeClass("activated");
         var location_element = $(".locations .item[data-key='" + location + "']").addClass("activated");
         if(location != window.url_params()["location"] || path != window.url_params()["dir"]) {
-            $(".files").html("");
+            $(".pane").html("");
         }
 
         if(window.documents.interval) clearTimeout(window.documents.timer);
@@ -686,7 +686,7 @@ window.documents = {
                     ');
                 });
 
-                $(".files").html(files);
+                $(".pane").html(files);
                 $(".sidebar .info").text(json.length + " files");
                 if(history) window.history.pushState(null, null, "/documents/");
                 window.documents.locationActivated = "online";
@@ -749,7 +749,7 @@ window.documents = {
                 ');
             });
 
-            $(".files").html(files);
+            $(".pane").html(files);
             $(".sidebar .info").text(response.length + " files");
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
@@ -759,7 +759,7 @@ window.documents = {
     },
     fileSelect: function(show) {
         if(show) {
-            $(".files .item").filter(function() {
+            $(".pane .item").filter(function() {
                 if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
                     if($(this).hasClass("disabled")) {
                         $(this).attr("data-disabled", "disabled");
@@ -786,7 +786,7 @@ window.documents = {
 
             window.documents.mode = ["selectFiles"];
         } else {
-            $(".files .item").filter(function() {
+            $(".pane .item").filter(function() {
                 if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
                     if($(this).data("disabled") != "disabled") {
                         $(this).removeClass("disabled");
@@ -889,7 +889,7 @@ window.documents = {
         }, 300);
     },
     fileSearch: function(search, filters) {
-        $(".files .item").each(function() {
+        $(".pane .item").each(function() {
             var item = $(this);
             var show = true;
 
@@ -952,14 +952,14 @@ window.documents = {
                     </div>                                      \
                 </div>                                          \
             ')
-            .appendTo(".files")
+            .appendTo(".pane")
             .animate({ opacity: 1 }, 1000);
         });
     },
     fileRename: function(data) {
         window.documents.fileParser(data.document, true);
 
-        $(".files .file[data-id='" + data.document.id + "']")
+        $(".pane .file[data-id='" + data.document.id + "']")
             .attr({
                 "class": "item file " + data.document.color,
                 "data-name": data.document.name,
