@@ -284,19 +284,3 @@ exports.create_location = function(req, res, next) {
         }
     });
 };
-
-exports.remove_location = function(req, res, next) {
-    if(req.session.user.locations && (req.param("locations_remove") in req.session.user.locations)) {
-        req.models.users.get(req.session.user.id, function(error, user) {
-            if(!error) {
-                delete req.session.user.locations[req.param("location")];
-                user.save({ locations: req.session.user.locations });
-                res.json({success: true});
-            } else {
-                res.error(200, "Failed To Remove Location", true, error);
-            }
-        });
-    } else {
-        res.error(200, "Failed To Remove Location");
-    }
-};

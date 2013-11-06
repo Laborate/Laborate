@@ -531,10 +531,15 @@ window.documents = {
 
         if(window.documents.interval) clearTimeout(window.documents.timer);
 
-        if(location == "online" || !location) {
+        if(location == "popup" || location == "online" || !location) {
             $("title").text(window.config.title);
             window.documents.onlineDirectory(history);
             window.documents.locationNotification("online", false);
+            if(location == "popup") {
+                window.documents.mode = null;
+                window.documents.popupAddLocation($(".popup"));
+                window.history.pushState(null, null, "/documents/");
+            }
         } else {
             if(location_element.length != 0) {
                 $("title").text(location_element.attr("data-name") + window.config.delimeter + window.config.title);

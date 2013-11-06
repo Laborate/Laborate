@@ -8,11 +8,11 @@ exports.add_token = function(req, res, next) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 user.save({ github: token });
                 req.session.user.github = token;
-                res.redirect(req.session.last_page || "/account/settings/");
+                res.redirect("/documents/popup/");
             });
         });
     } else {
-        res.redirect(req.session.last_page || "/account/settings/");
+        res.redirect("/documents/popup/");
     }
 };
 

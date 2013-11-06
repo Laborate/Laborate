@@ -17,7 +17,7 @@
                 </div>
                 <div class="active"></div>
             </div>
-            <div class="item" data-key="account">
+            <div class="item" data-key="settings">
                 <div class="container">
                     <div class="name">Account Settings</div>
                     <div class="icon icon-cog"></div>
@@ -31,6 +31,7 @@
                 </div>
                 <div class="active"></div>
             </div>
+            <!-- TODO: Notification Center
             <div class="item" data-key="notifications">
                 <div class="container">
                     <div class="name">Notifications</div>
@@ -38,6 +39,8 @@
                 </div>
                 <div class="active"></div>
             </div>
+            -->
+            <!-- TODO: Organizations / Billing
             <div class="item" data-key="billing">
                 <div class="container">
                     <div class="name">Billing</div>
@@ -52,6 +55,7 @@
                 </div>
                 <div class="active"></div>
             </div>
+            -->
         </div>
     </div>
 </div>
@@ -87,15 +91,19 @@
                         <div class="name">Screen Name</div>
                         <input class="input" type="text" name="screen_name" value="<%= user.screen_name %>" />
                     </div>
+                    <!--
+                        Disable email address if account
+                        is created by organization
+                    -->
                     <div class="item">
                         <div class="name">Email Address</div>
                         <input class="input" type="text" name="email" value="<%= user.email %>" />
                     </div>
-                    <input class="button" type="submit" value="Update Profile" />
+                    <input class="button" type="submit" value="Update Profile" data-success="Profile Updated" />
                 </form>
             </div>
-            <div class="selection" data-key="account">
-                <form action="/account/password/">
+            <div class="selection" data-key="settings">
+                <form action="/account/settings/password/">
                     <div class="item">
                         <div class="name">Old Password</div>
                         <input class="input" type="password" name="old_password" />
@@ -108,9 +116,9 @@
                         <div class="name">Confirm Password</div>
                         <input class="input" type="password" name="confirm_password" />
                     </div>
-                    <input class="button" type="submit" value="Change Password" />
+                    <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
                 </form>
-                <form action="/account/delete/">
+                <form action="/account/settings/delete/">
                     <div class="item">
                         <div class="name">Password</div>
                         <input class="input" type="password" name="password" />
@@ -119,40 +127,51 @@
                 </form>
             </div>
             <div class="selection" data-key="locations">
-                <div class="listing" data-id="adsfasf">
-                    <div class="item header">
-                        <div class="icon">App</div>
-                        <div class="name">Location Name</div>
-                        <div class="remove">Action</div>
-                    </div>
-                    <% $.each(user.locations, function(key, item) {
-                        switch(item.type) {
-                            case "sftp":
-                                item["class"] = "icon-drive";
-                                break;
-                            case "github":
-                                item["class"] = "icon-github-3";
-                                break;
-                            case "bitbucket":
-                                item["class"] = "icon-bitbucket";
-                                break;
-                            case "dropbox":
-                                item["class"] = "icon-dropbox-2";
-                                break;
-                            case "google":
-                                item["class"] = "icon-google-drive";
-                                break;
-                            default:
-                                item["class"] = "";
-                                break;
-                        }
-                    %>
-                        <div class="item" data-id="<%= key %>">
-                            <div class="icon <%= item.class %>"></div>
-                            <div class="name"><%= item.name %></div>
-                            <div class="remove">Remove</div>
+                <div class="listing">
+                    <% if(!$.isEmptyObject(user.locations)) { %>
+                        <div class="item header">
+                            <div class="icon">App</div>
+                            <div class="name">Location Name</div>
+                            <div class="remove">Action</div>
                         </div>
-                    <% }); %>
+                        <% $.each(user.locations, function(key, item) {
+                            var name = item["name"];
+                            switch(item.type) {
+                                case "sftp":
+                                    item["class"] = "icon-drive";
+                                    break;
+                                case "github":
+                                    item["class"] = "icon-github-3";
+                                    name = name.split("/");
+                                    name = name[0] + "/<strong>" + name[1] + "</strong>";
+                                    break;
+                                case "bitbucket":
+                                    item["class"] = "icon-bitbucket";
+                                    name = name.split("/");
+                                    name = name[0] + "/<strong>" + name[1] + "</strong>";
+                                    break;
+                                case "dropbox":
+                                    item["class"] = "icon-dropbox-2";
+                                    break;
+                                case "google":
+                                    item["class"] = "icon-google-drive";
+                                    break;
+                                default:
+                                    item["class"] = "";
+                                    break;
+                            }
+                        %>
+                            <div class="item" data-id="<%= key %>">
+                                <div class="icon <%= item.class %>"></div>
+                                <div class="name"><%- name %></div>
+                                <div class="remove">Remove</div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="item empty">
+                            You Don't Have Any Locations. <a href="/documents/">Add One</a>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         </div>

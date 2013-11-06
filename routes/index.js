@@ -36,6 +36,10 @@ module.exports = function(app) {
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.update, account.index);
     app.get("/account/:panel", authUtil.restrictAccess, core.update, account.index);
+    app.post("/account/profile", authUtil.restrictAccess, authUtil.xhr, account.profile);
+    app.post("/account/settings/password", authUtil.restrictAccess, authUtil.xhr, account.change_password);
+    app.post("/account/settings/delete", authUtil.restrictAccess, authUtil.xhr, account.delete_account);
+    app.post("/account/location/remove", authUtil.restrictAccess, authUtil.xhr, account.remove_location);
 
     /* Documents */
     app.get('/documents', authUtil.restrictAccess, documents.index);
@@ -48,7 +52,6 @@ module.exports = function(app) {
     app.post('/documents/file/:document/rename', authUtil.restrictAccess, authUtil.xhr, documents.file_rename);
     app.post('/documents/file/:document/remove', authUtil.restrictAccess, authUtil.xhr, documents.file_remove);
     app.post('/documents/location/create', authUtil.restrictAccess, authUtil.xhr, documents.create_location);
-    app.post('/documents/location/remove', authUtil.restrictAccess, authUtil.xhr, documents.remove_location);
 
     /* Editor */
     app.get('/editor', authUtil.restrictAccess, editor.access_token, editor.index);

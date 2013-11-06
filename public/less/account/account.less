@@ -51,7 +51,7 @@
                         background: darken(#fff, 1%) url("/img/tshadow.png") repeat-x 0 -5px;
                         .border-radius(2px);
 
-                        &:not(:disabled):hover {
+                        &:hover {
                            border: solid 1px darken(@color_body, 25%);
                         }
 
@@ -62,6 +62,19 @@
 
                         &:disabled {
                             opacity: .8;
+                        }
+
+                        &.error {
+                            border: solid 1px @color_red;
+
+                            &:hover {
+                               border: solid 1px darken(@color_red, 25%);
+                            }
+
+                            &:focus {
+                                background-color: #fff;
+                                border: solid 1px @color_blue;
+                            }
                         }
                     }
                 }
@@ -97,6 +110,18 @@
                             }
                         }
                     }
+
+                    &.error {
+                        background: darken(@color_red, 20%);
+
+                        &:hover {
+                            background: darken(@color_red, 25%);
+
+                            &:active {
+                                background: darken(@color_red, 30%);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -108,12 +133,33 @@
                     .clearfix();
                     .box-sizing(border-box);
 
+                    &.error {
+                        opacity: .5;
+                    }
+
+                    &.empty {
+                        font-size: 14px;
+                        color: darken(@color_header_bottom, 70%);
+                        text-align: center;
+                        font-weight: bold;
+                        border: none !important;
+
+                        a {
+                            color: darken(@color_header_bottom, 50%);
+
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+
                     &.header {
                         font-size: 14px;
                         font-weight: bold;
                         background: @color_header_bottom;
                         color: darken(@color_header_bottom, 50%);
                         border-bottom: solid 1px darken(@color_body, 10%);
+                        .box-shadow(0 1px 1px #C7C7C7);
 
                         .icon {
                             margin-right: 20px;
@@ -136,7 +182,7 @@
                         .clearfix();
                         .box-sizing(border-box);
 
-                        &:nth-child(even) {
+                        &:nth-child(odd) {
                             background: darken(@color_body, 3%);
                             border-top: solid 1px darken(@color_body, 10%);
                             border-bottom: solid 1px darken(@color_body, 10%);
