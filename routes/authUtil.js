@@ -2,7 +2,7 @@
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(config.cookies.rememberme in req.cookies) {
-            if(req.session.user.verified && req.url.indexOf("verify") == -1) {
+            if(req.session.user.verify && req.url.indexOf("verify") == -1) {
                 res.redirect("/verify/");
             } else {
                 if(next) next();
@@ -138,15 +138,15 @@ exports.register = function(req, res, next) {
                             name: $.trim(req.param('name')),
                             screen_name: $.trim(req.param('screen_name')),
                             email: $.trim(req.param('email')),
-                            password: $.trim(req.param('password'))
+                            password: $.trim(req.param('password')),
+                            pricing_id: 1
                         }, function(error, user) {
                             if(!error) {
-                                user.set_recovery(req, res);
                                 req.session.user = user;
                                 req.session.save();
                                 res.json({
                                     success: true,
-                                    next: "/verify/"
+                                    next: "/reload/"
                                 });
 
                                 req.email("verify", {
@@ -155,7 +155,7 @@ exports.register = function(req, res, next) {
                                     users: [{
                                         name: user.name,
                                         email: user.email,
-                                        code: user.verified
+                                        code: user.verify
                                     }]
                                 });
                             } else {
@@ -172,25 +172,23 @@ exports.register = function(req, res, next) {
 };
 
 exports.verify = function(req, res, next) {
-    if(!req.session.user.verified) {
+    if(!req.session.user.verify) {
         res.redirect("/documents/");
-    } else if($.trim(req.param('code')) != req.session.user.verified) {
+    } else if($.trim(req.param('code')) != req.session.user.verify) {
         res.error(401);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
-            req.session.user.verified = null;
-            user.save({
-                verified: req.session.user.verified
-            });
-
             if(req.session.redirect_url) {
                 var url = req.session.redirect_url;
                 delete req.session.redirect_url;
             } else {
                 var url = '/documents/';
             }
-            req.session.save();
-            res.redirect(url);
+            user.verified(req, function(user) {
+                req.session.user = user;
+                req.session.save();
+                res.redirect(url);
+            });
         });
     }
 };

@@ -52,7 +52,7 @@
         "secret": ""
     },
     "orm": {
-        "reset": false,
+        "reset": true,
         "protocol": "mysql",
         "port": 3306,
         "host": "localhost",
@@ -64,7 +64,10 @@
             "debug": false
         }
     },
-    "stripe": "",
+    "stripe": {
+        "reset": true,
+        "id": ""
+    },
     "apps": {
         "sftp": false,
         "github": true,

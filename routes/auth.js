@@ -19,7 +19,7 @@ exports.register = function(req, res) {
 };
 
 exports.verify = function(req, res) {
-    if(req.session.user.verified) {
+    if(req.session.user.verify) {
         res.renderOutdated('auth/verify', {
             title: 'Verify Your Account',
             mode: "verify",
