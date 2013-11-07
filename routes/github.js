@@ -133,7 +133,7 @@ exports.contents = function(req, res, next) {
 
 exports.commit = function(req, res, next) {
     if(req.session.user.github) {
-        req.models.documents_roles.find({
+        req.models.documents.roles.find({
             user_id: req.session.user.id,
             document_pub_id: req.param("document")
         }, function(error, documents) {

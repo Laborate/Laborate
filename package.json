@@ -33,7 +33,8 @@
     "bitbucket": "0.0.1",
     "googleapis": "0.4.5",
     "jsdom": "0.8.8",
-    "winston": "0.7.2"
+    "winston": "0.7.2",
+    "stripe": "2.1.0-rc3"
   },
   "devDependencies": {
     "express-debug": "*"

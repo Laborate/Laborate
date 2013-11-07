@@ -64,6 +64,7 @@
             "debug": false
         }
     },
+    "stripe": "",
     "apps": {
         "sftp": false,
         "github": true,

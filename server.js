@@ -123,6 +123,7 @@ workers = function() {
 
         //Custom Libraries
         app.use(require("./lib/models").express);
+        app.use(require("./lib/stripe"));
         app.use(require("./lib/email"));
         app.use(require("./lib/github"));
         app.use(require("./lib/bitbucket"));
