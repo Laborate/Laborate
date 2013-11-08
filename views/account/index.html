@@ -13,21 +13,21 @@
             <div class="item" data-key="profile">
                 <div class="container">
                     <div class="name">Public Profile</div>
-                    <div class="icon icon-users"></div>
+                    <div class="icon <%= icons.profile %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
             <div class="item" data-key="settings">
                 <div class="container">
                     <div class="name">Account Settings</div>
-                    <div class="icon icon-cog"></div>
+                    <div class="icon <%= icons.settings %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
             <div class="item" data-key="locations">
                 <div class="container">
                     <div class="name">Manage Locations</div>
-                    <div class="icon icon-layers"></div>
+                    <div class="icon <%= icons.locations %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
@@ -35,7 +35,7 @@
             <div class="item" data-key="notifications">
                 <div class="container">
                     <div class="name">Notifications</div>
-                    <div class="icon icon-paperplane"></div>
+                    <div class="icon <%= icons.notifications %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
@@ -44,14 +44,14 @@
             <div class="item" data-key="billing">
                 <div class="container">
                     <div class="name">Billing</div>
-                    <div class="icon icon-credit-card"></div>
+                    <div class="icon <%= icons.billing %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
             <div class="item" data-key="payments">
                 <div class="container">
                     <div class="name">Payment History</div>
-                    <div class="icon icon-book-2"></div>
+                    <div class="icon <%= icons.payment_history %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
@@ -64,7 +64,7 @@
         <div class="top">
             <div class="search">
                 <form id="search">
-                    <div class="icon icon-search"></div>
+                    <div class="icon <%= icons.search %>"></div>
                     <input type="text" placeholder="Search your settings..." />
                     <button type="submit">Search</button>
                 </form>
@@ -136,33 +136,13 @@
                         </div>
                         <% $.each(user.locations, function(key, item) {
                             var name = item["name"];
-                            switch(item.type) {
-                                case "sftp":
-                                    item["class"] = "icon-drive";
-                                    break;
-                                case "github":
-                                    item["class"] = "icon-github-3";
-                                    name = name.split("/");
-                                    name = name[0] + "/<strong>" + name[1] + "</strong>";
-                                    break;
-                                case "bitbucket":
-                                    item["class"] = "icon-bitbucket";
-                                    name = name.split("/");
-                                    name = name[0] + "/<strong>" + name[1] + "</strong>";
-                                    break;
-                                case "dropbox":
-                                    item["class"] = "icon-dropbox-2";
-                                    break;
-                                case "google":
-                                    item["class"] = "icon-google-drive";
-                                    break;
-                                default:
-                                    item["class"] = "";
-                                    break;
+                            if(["github", "bitbucket"].indexOf(item.type) != -1) {
+                                name = name.split("/");
+                                name = name[0] + "/<strong>" + name[1] + "</strong>";
                             }
                         %>
                             <div class="item" data-id="<%= key %>">
-                                <div class="icon <%= item.class %>"></div>
+                                <div class="icon <%= icons[item.type] %>"></div>
                                 <div class="name"><%- name %></div>
                                 <div class="remove">Remove</div>
                             </div>

@@ -205,6 +205,14 @@
             .icon {
                 color: rgba(0, 0, 0, 0.5);
                 font-size: 42px;
+
+                &.spin {
+                    .animation(spin 1s linear infinite);
+
+                    @-moz-keyframes spin { 100% { .transform(rotate(360deg)); } }
+                    @-webkit-keyframes spin { 100% { .transform(rotate(360deg)); } }
+                    @keyframes spin spin { 100% { .transform(rotate(360deg)); } }
+                }
             }
 
             .name {

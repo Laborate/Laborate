@@ -65,6 +65,7 @@
                 name: "<%= site_title %>",
                 delimeter: "<%= site_delimeter %>",
                 apps: <%- JSON.stringify(apps) %>,
+                icons: <%- JSON.stringify(icons) %>,
 
                 <% $.each(config, function(key, value) { %>
                     <% if(typeof value == "boolean") { %>

@@ -77,11 +77,11 @@ window.documents = {
                     .find(".listing")
                     .html(function() {
                         return $.map(data, function(item) {
-                            return $('                                              \
-                                <div class="item">                                  \
-                                    <div class="left icon icon-file"></div>              \
-                                    <div class="name">' + item.name + '</div>       \
-                                </div>                                              \
+                            return $('                                                               \
+                                <div class="item">                                                   \
+                                    <div class="left icon ' + config.icons.file_small + '"></div>    \
+                                    <div class="name">' + item.name + '</div>                        \
+                                </div>                                                               \
                             ').attr(function() {
                                 var attributes = {};
                                 $.each(item, function(key, value) {
@@ -273,61 +273,65 @@ window.documents = {
 
             default:
                 $.each(window.config.apps, function(key, value) {
+                    var add_icon =  ("green " + config.icons.add_circle);
+                    var arrow_icon = ("blue " + config.icons.circle_arrow_up);
+
+
                     if(key == "sftp" && value.show) {
                         list.push({
                             "name": "SFTP Server",
-                            "icon": "icon-drive",
+                            "icon": config.icons.sftp,
                             "class": "selectable",
                             "data": {
                                 "data-next": "sftp"
                             },
-                            "notification": "blue blue icon-arrow-up-2"
+                            "notification": arrow_icon
                         });
                     } else if(key == "github" && value.show) {
                         list.push({
                             "name": "Github Repository",
-                            "icon": "icon-github-3",
+                            "icon": config.icons.github,
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "github" : "link",
                                 "data-link": value.link,
                             },
-                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
                         });
                     } else if(key == "bitbucket" && value.show) {
                         list.push({
                             "name": "Bitbucket Repository",
-                            "icon": "icon-bitbucket",
+                            "icon": config.icons.bitbucket,
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "bitbucket" : "link",
                                 "data-link": value.link
                             },
-                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
                         });
                     } else if(key == "dropbox" && value.show) {
                         list.push({
                             "name": "Dropbox Account",
-                            "icon": "icon-dropbox-2",
+                            "icon": config.icons.dropbox,
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "dropbox" : "link",
                                 "data-link": value.link,
                                 "data-name-required": "true"
                             },
-                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
                         });
                     } else if(key == "google" && value.show) {
                         list.push({
                             "name": "Google Drive Account",
-                            "icon": "icon-google-drive",
+                            "icon": config.icons.drive,
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "drive" : "link",
                                 "data-link": value.link,
                                 "data-name-required": "true"
                             },
-                            "notification": (!value.enabled) ? "green icon-plus-3" : "blue icon-arrow-up-2"
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
                         });
                     }
                 });
@@ -457,50 +461,29 @@ window.documents = {
                 window.documents.headerBar(["message"], json.error_message);
             }
 
-            var locations = ('                                        \
-                <div class="item" data-key="online" data-counter="0"> \
-                    <div class="container">                           \
-                        <div class="name">Your Drive</div>            \
-                        <div class="icon icon-briefcase"></div>       \
-                    </div>                                            \
-                    <div class="active"></div>                        \
-                </div>                                                \
+            var locations = ('                                                \
+                <div class="item" data-key="online" data-counter="0">         \
+                    <div class="container">                                   \
+                        <div class="name">Your Drive</div>                    \
+                        <div class="icon ' + config.icons.online + '"></div>  \
+                    </div>                                                    \
+                    <div class="active"></div>                                \
+                </div>                                                        \
             ');
 
 
             $.each(json, function(i, item) {
-                switch(item.type) {
-                    case "sftp":
-                        item["class"] = "icon-drive";
-                        break;
-                    case "github":
-                        item["class"] = "icon-github-3";
-                        break;
-                    case "bitbucket":
-                        item["class"] = "icon-bitbucket";
-                        break;
-                    case "dropbox":
-                        item["class"] = "icon-dropbox-2";
-                        break;
-                    case "google":
-                        item["class"] = "icon-google-drive";
-                        break;
-                    default:
-                        item["class"] = "";
-                        break;
-                }
-
-                locations += ('                                                 \
-                    <div class="item"                                           \
-                        data-key="' + item.key + '"                             \
-                        data-name="' + item.name + '"                           \
-                        data-counter="0">                                       \
-                        <div class="container">                                 \
-                            <div class="name">' + item.name + '</div>           \
-                            <div class="icon ' + item.class + '"></div>         \
-                        </div>                                                  \
-                        <div class="active"></div>                              \
-                    </div>                                                      \
+                locations += ('                                                         \
+                    <div class="item"                                                   \
+                        data-key="' + item.key + '"                                     \
+                        data-name="' + item.name + '"                                   \
+                        data-counter="0">                                               \
+                        <div class="container">                                         \
+                            <div class="name">' + item.name + '</div>                   \
+                            <div class="icon ' + config.icons[item.type] + '"></div>    \
+                        </div>                                                          \
+                        <div class="active"></div>                                      \
+                    </div>                                                              \
                 ');
             });
 
@@ -564,17 +547,17 @@ window.documents = {
 
             if(action) {
                 var actions = {
-                    "upload": "icon-arrow-up-2",
-                    "download": "icon-arrow-down-2",
+                    "upload": config.icons.circle_arrow_up,
+                    "download": config.icons.circle_arrow_down,
                     "counter": function() {
                         if(count) {
                             var parentContainer = element.parents(".item");
                             count += parseInt(parentContainer.attr("data-counter"));
                             parentContainer.attr("data-counter", count);
-                            if(count <= 9 && element.attr("class").indexOf("icon-notice") == -1) {
-                                return "icon-number" + ((count != 1) ? "-" + count : "");
+                            if(count <= 9 && element.attr("class").indexOf(config.icons.circle_notice) == -1) {
+                                return config.icons.number + ((count != 1) ? "-" + count : "");
                             } else {
-                                return "icon-notice";
+                                return config.icons.circle_notice;
                             }
                         }
                     }()
@@ -643,7 +626,7 @@ window.documents = {
             return $.map(json.repos, function(item) {
                 return {
                     "name": item.user + "/<strong>" + item.repo + "</strong>",
-                    "icon": (item.private) ? "icon-lock" : "icon-lock-open",
+                    "icon": (item.private) ? config.icons.locked : config.icons.unlocked,
                     "class": "selectable",
                     "data": {
                         "data-repo": item.repo,
@@ -674,20 +657,20 @@ window.documents = {
                 $.each(json, function(i, item) {
                     window.documents.fileParser(item, true);
 
-                    files += ('                                             \
-                        <div class="item file ' + item.color + '"           \
-                            data-name="' + item.name + '"                   \
-                            data-role="' + item.role + '"                   \
-                            data-location="' + item.location + '"           \
-                            data-id="' + item.id + '"                       \
-                            data-protection="' + item.protection + '"       \
-                            data-size="' + item.size + '"                   \
-                            data-laborators="' + item.laborators + '"       \
-                            data-type="' + item.type + '">                  \
-                            <div class="corner ' + item.corner + '"></div>  \
-                            <div class="icon ' + item.icon + '"></div>      \
-                            <div class="name">' + item.name + '</div>       \
-                        </div>                                              \
+                    files += ('                                                       \
+                        <div class="item ' + item.class + " " + item.color + '"       \
+                            data-name="' + item.name + '"                             \
+                            data-role="' + item.role + '"                             \
+                            data-location="' + item.location + '"                     \
+                            data-id="' + item.id + '"                                 \
+                            data-protection="' + item.protection + '"                 \
+                            data-size="' + item.size + '"                             \
+                            data-laborators="' + item.laborators + '"                 \
+                            data-type="' + item.type + '">                            \
+                            <div class="corner ' + item.corner + '"></div>            \
+                            <div class="icon ' + item.icon + '"></div>                \
+                            <div class="name">' + item.name + '</div>                 \
+                        </div>                                                        \
                     ');
                 });
 
@@ -785,7 +768,7 @@ window.documents = {
                     .find(".icon")
                     .attr({
                         "data-default": ((!oldClass) ? newClass : oldClass),
-                        "class": "icon icon-add"
+                        "class": "icon " + config.icons.dashed_add
                     });
             });
 
@@ -819,12 +802,12 @@ window.documents = {
                 element
                     .attr("data-selected", "false")
                     .find(".icon")
-                        .attr("class", "icon icon-add");
+                        .attr("class", "icon " + config.icons.dashed_add);
             } else {
                 element
                     .attr("data-selected", "true")
                     .find(".icon")
-                        .attr("class", "icon icon-checked-2");
+                        .attr("class", "icon " + config.icons.dashed_check);
             }
         }
     },
@@ -915,6 +898,12 @@ window.documents = {
         });
     },
     fileDownload: function(files, open) {
+        if(open) {
+            files
+                .find(".icon")
+                .attr("class", "icon spin " + config.icons.spinner);
+        }
+
         window.documents.locationNotification("online", "upload");
         window.documents.fileProgress(files, 0, false, function() {
             files.each(function(count) {
@@ -941,21 +930,21 @@ window.documents = {
         $.each(responses.documents, function(i, item) {
             window.documents.fileParser(item, true);
 
-            file = $('                                          \
-                <div class="item file ' + item.color + '"       \
-                    style="opacity:0;"                          \
-                    data-name="' + item.name + '"               \
-                    data-role="' + item.role + '"               \
-                    data-id="' + item.id + '"                   \
-                    data-size="' + item.size + '"               \
-                    data-laborators="0"                         \
-                    data-type="' + item.type + '">              \
-                    <div class="icon ' + item.icon + '"></div>  \
-                    <div class="name">' + item.name + '</div>   \
-                    <div class="progress">                      \
-                        <div class="bar"></div>                 \
-                    </div>                                      \
-                </div>                                          \
+            file = $('                                                       \
+                <div class="item file ' + item.color + ' ' + item.class + '" \
+                    style="opacity:0;"                                       \
+                    data-name="' + item.name + '"                            \
+                    data-role="' + item.role + '"                            \
+                    data-id="' + item.id + '"                                \
+                    data-size="' + item.size + '"                            \
+                    data-laborators="0"                                      \
+                    data-type="' + item.type + '">                           \
+                    <div class="icon ' + item.icon + '"></div>               \
+                    <div class="name">' + item.name + '</div>                \
+                    <div class="progress">                                   \
+                        <div class="bar"></div>                              \
+                    </div>                                                   \
+                </div>                                                       \
             ')
             .appendTo(".pane")
             .animate({ opacity: 1 }, 1000);
@@ -1006,46 +995,51 @@ window.documents = {
             // File Type
             switch(item.type) {
                 case "file-template":
+                    item["class"] = "file";
                     item["color"] = "blue";
-                    item["icon"] = "icon-file-xml";
+                    item["icon"] = config.icons.file_template;
                     break;
                 case "file-script":
+                    item["class"] = "file";
                     item["color"] = "blue";
-                    item["icon"] = "icon-file-css";
+                    item["icon"] =  config.icons.file_script;
                     break;
 
-                /* When More Products Are Added
                 case "file-zip":
+                    item["class"] = "zip disabled";
                     item["color"] = "red";
-                    item["icon"] = "icon-file-zip disabled";
+                    item["icon"] = config.icons.file_zip;
                     break;
                 case "file-image":
+                    item["class"] = "file";
                     item["color"] = "green";
-                    item["icon"] = "icon-image";
+                    item["icon"] = config.icons.file_image;
                     break;
                 case "file-notebook":
+                    item["class"] = "file";
                     item["color"] = "green";
-                    item["icon"] = "icon-notebook";
+                    item["icon"] = config.icons.file_notebook;
                     break;
                 case "file-math":
+                    item["class"] = "file";
                     item["color"] = "purple";
-                    item["icon"] = "icon-calculator";
+                    item["icon"] = config.icons.file_math;
                     break;
-                */
 
                 default:
-                    item["color"] = "blue";
-                    item["icon"] = "icon-file";
+                    item["class"] = "file disabled";
+                    item["color"] = "";
+                    item["icon"] = config.icons.file;
                     break;
             }
 
             // Protection
             switch(item.protection) {
                 case "password":
-                    item["corner"] = "icon-lock";
+                    item["corner"] = config.icons.lock;
                     break;
                 case "assigned":
-                    item["corner"] = "icon-users";
+                    item["corner"] = config.icons.profile;
                     break;
                 default:
                     item["corner"] = "";
@@ -1072,42 +1066,42 @@ window.documents = {
                 case "back":
                     item["color"] = "";
                     item["class"] = "back";
-                    item["icon"] = "icon-reply";
+                    item["icon"] = config.icons.file_back;
                     break;
                 case "folder":
                     item["color"] = "purple";
                     item["class"] = "folder";
-                    item["icon"] = "icon-folder";
+                    item["icon"] = config.icons.folder;
                     break;
                 case "folder-symlink":
                     item["color"] = "orange";
                     item["class"] = "folder";
-                    item["icon"] = "icon-folder";
+                    item["icon"] = config.icons.folder;
                     break;
                 case "file-template":
                     item["color"] = "blue";
                     item["class"] = "file";
-                    item["icon"] = "icon-file-xml";
+                    item["icon"] = config.icons.file_template;
                     break;
                 case "file-script":
                     item["color"] = "blue";
                     item["class"] = "file";
-                    item["icon"] = "icon-file-css";
+                    item["icon"] = config.icons.file_script;
                     break;
                 case "file-zip":
                     item["color"] = "red";
                     item["class"] = "file disabled";
-                    item["icon"] = "icon-file-zip";
+                    item["icon"] = config.icons.file_zip;
                     break;
                 case "file-image":
                     item["color"] = "green";
                     item["class"] = "file";
-                    item["icon"] = "icon-image";
+                    item["icon"] = config.icons.file_image;
                     break;
                 default:
                     item["color"] = "";
                     item["class"] = "file disabled";
-                    item["icon"] = "icon-document";
+                    item["icon"] = config.icons.file;
                     break;
             }
         }
