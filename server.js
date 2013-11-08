@@ -9,13 +9,13 @@ var cluster    = require('cluster');
 var raven      = require('raven');
 var device     = require('express-device');
 
-/* IMPORTANT - No VAR Makes Variables Global */
+/* IMPORTANT - Global Variables */
 $              = require("jquery");
-config         = require('./config');
-clientJS       = piler.createJSManager({urlRoot: "/js/"});
-clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
-raven_client   = new raven.Client(config.sentry.node);
-blank_function = function(data) {
+GLOBAL.config         = require('./config');
+GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
+GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
+GLOBAL.raven_client   = new raven.Client(config.sentry.node);
+GLOBAL.blank_function = function(data, callback) {
     /* True Means It Is On Init */
     if(data == true) {
         /* Return Blank Function */
@@ -31,6 +31,8 @@ blank_function = function(data) {
             raven_client.captureError(data);
         }
     }
+
+    if(typeof callback == "function") callback();
 }
 
 /* Update Crontab */
