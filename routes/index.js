@@ -40,6 +40,8 @@ module.exports = function(app) {
     app.post("/account/settings/password", authUtil.restrictAccess, authUtil.xhr, account.change_password);
     app.post("/account/settings/delete", authUtil.restrictAccess, authUtil.xhr, account.delete_account);
     app.post("/account/location/remove", authUtil.restrictAccess, authUtil.xhr, account.remove_location);
+    app.post("/account/billing/card/add", authUtil.restrictAccess, authUtil.xhr, account.add_card);
+    app.post("/account/billing/card/remove", authUtil.restrictAccess, authUtil.xhr, account.remove_card);
 
     /* Documents */
     app.get('/documents', authUtil.restrictAccess, documents.index);

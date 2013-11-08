@@ -26,8 +26,35 @@ window.account = {
                 passed = false;
                 $(this).addClass("error");
             } else {
-                data[$(this).attr("name")] = $(this).val();
-                $(this).removeClass("error");
+                if($(this).attr("id") == "card") {
+                    if(Stripe.card.validateCardNumber($(this).val())) {
+                        data[$(this).attr("name")] = $(this).val();
+                        $(this).removeClass("error");
+                    } else {
+                        passed = false;
+                        $(this).addClass("error");
+                    }
+                } else if($(this).attr("id") == "expiration") {
+                    var expiration = $(this).val().split("/");
+                    if(Stripe.card.validateExpiry(expiration[0], expiration[1])) {
+                        data[$(this).attr("name")] = $(this).val();
+                        $(this).removeClass("error");
+                    } else {
+                        passed = false;
+                        $(this).addClass("error");
+                    }
+                } else if($(this).attr("id") == "cvc") {
+                    if(Stripe.card.validateCVC($(this).val())) {
+                        data[$(this).attr("name")] = $(this).val();
+                        $(this).removeClass("error");
+                    } else {
+                        passed = false;
+                        $(this).addClass("error");
+                    }
+                } else {
+                    data[$(this).attr("name")] = $(this).val();
+                    $(this).removeClass("error");
+                }
             }
         });
 
@@ -82,5 +109,32 @@ window.account = {
                     .text("Failded")
             }
         });
-    }
+    },
+    cardType: function() {
+        var type = Stripe.card.cardType($(this).val()).toLowerCase();
+
+        if(type != "unknown") {
+            $("#card-company")
+                .attr("src", "/img/cards/" + type.split(" ")[0] + ".png")
+                .load(function() {
+                    $("#card-company").fadeIn(200);
+                });
+        } else {
+            $("#card-company").fadeOut(200);
+        }
+    },
+    cardRemove: function(item) {
+        $.post("/account/billing/card/remove", {
+            _csrf: window.config.csrf
+        }, function(result) {
+            if(result.success) {
+                window.location.reload();
+            } else {
+                item
+                    .addClass("error")
+                    .find(".remove")
+                    .text("Failded")
+            }
+        });
+    },
 }

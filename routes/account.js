@@ -122,3 +122,73 @@ exports.remove_location = function(req, res) {
         res.error(200, "Failed To Remove Location");
     }
 };
+
+exports.add_card = function(req, res) {
+    req.models.users.get(req.session.user.id, function(error, user) {
+        if(!error) {
+            req.stripe.customers.createCard(req.session.user.stripe, {
+                card: {
+                    name: req.param("name"),
+                    number: req.param("card"),
+                    exp_month: req.param("expiration").split("/")[0],
+                    exp_year: req.param("expiration").split("/")[1],
+                    cvc: req.param("cvc")
+                }
+            }, function(error, card) {
+                if(!error) {
+                    req.session.user.card = {
+                        stripe: card.id,
+                        name: req.param("name"),
+                        card: req.param("card").substr(req.param("card").length - 4),
+                        type: card.type.toLowerCase()
+                    };
+
+                    user.save({ card: req.session.user.card }, function(error) {
+                        if(!error) {
+                            res.json({
+                                success: true,
+                                callback: "window.location.reload();"
+                            });
+                            req.session.save();
+                        } else {
+                            res.error(200, "Failed To Add Credit Card", error);
+                        }
+                    });
+                } else {
+                    res.error(200, error.message, error);
+                }
+            });
+        } else {
+            res.error(200, "Failed To Add Credit Card", error);
+        }
+    });
+}
+
+exports.remove_card = function(req, res) {
+    req.models.users.get(req.session.user.id, function(error, user) {
+        if(!error) {
+            req.stripe.customers.deleteCard(
+                req.session.user.stripe,
+                req.session.user.card.stripe,
+            function(error) {
+                if(!error) {
+                    req.session.user.card = {};
+
+                    user.save({ card: req.session.user.card }, function(error) {
+                        if(!error) {
+                            res.json({ success: true });
+                            req.session.save();
+
+                        } else {
+                            res.error(200, "Failed To Remove Credit Card", error);
+                        }
+                    });
+                } else {
+                    res.error(200, error.message, error);
+                }
+            });
+        } else {
+            res.error(200, "Failed To Remove Credit Card", error);
+        }
+    });
+}

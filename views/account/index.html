@@ -125,7 +125,7 @@
                 </form>
             </div>
             <div class="selection" data-key="locations">
-                <div class="listing">
+                <div id="locations" class="listing">
                     <% if(!$.isEmptyObject(user.locations)) { %>
                         <div class="item header">
                             <div class="icon">App</div>
@@ -151,6 +151,50 @@
                         </div>
                     <% } %>
                 </div>
+            </div>
+            <div class="selection" data-key="billing">
+                <% if($.isEmptyObject(user.card)) { %>
+                    <form action="/account/billing/card/add" autocomplete="off">
+                        <div class="item">
+                            <div class="name">Name On Card</div>
+                            <input class="input" type="text" name="name" />
+                        </div>
+                        <div class="item half">
+                            <div class="name">Credit Card</div>
+                            <input id="card" class="input" type="text" name="card" />
+                            <img id="card-company" class="card-type">
+                        </div>
+                        <div class="item quarter">
+                            <div class="name">Expiration</div>
+                            <input id="expiration" class="input" type="text" name="expiration" placeholder="MM/YYYY" />
+                        </div>
+                        <div class="item quarter">
+                            <div class="name">CVC</div>
+                            <input id="cvc" class="input" type="text" name="cvc" />
+                        </div>
+                        <div class="clear"></div>
+                        <input class="button" type="submit" value="Add Credit Card" data-success="Credit Card Added"/>
+                    </form>
+                <% } else { %>
+                    <div id="credit-cards" class="listing">
+                        <div class="item header">
+                            <div class="icon">Type</div>
+                            <div class="user">Name on Card</div>
+                            <div class="card">Credit Card</div>
+                            <div class="remove">Action</div>
+                        </div>
+                        <div class="item">
+                            <div class="icon">
+                                <img class="card-type" src="/img/cards/<%= user.card.type %>.png">
+                            </div>
+                            <div class="user"><%= user.card.name %></div>
+                            <div class="card">
+                                <span class="big">····</span> <%= user.card.card %>
+                            </div>
+                            <div class="remove">Remove</div>
+                        </div>
+                    </div>
+                <% } %>
             </div>
         </div>
     </div>
