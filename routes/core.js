@@ -35,8 +35,6 @@ exports.locals = function(req, res, next) {
     res.locals.config = {};
     res.locals.icons = config.icons;
 
-    console.log(req.session);
-
     res.locals.gravatar = (req.session.user) ? ("https://www.gravatar.com/avatar/" + req.session.user.email_hash +
                           "?s=152&d=http%3A%2F%2F" + config.general.server +
                           "%2Fimg%2Fdefault_gravatar.jpeg") : "/img/default_gravatar.jpeg";

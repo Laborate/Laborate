@@ -28,12 +28,10 @@
                 right: 8px;
             }
 
-            form {
-                width: 100%;
-
+            .container {
                 &:nth-child(even) {
-                    margin: 20px 0;
-                    padding: 20px 0;
+                    margin: 30px 0;
+                    padding: 30px 0;
                     border-top: solid 1px darken(@color_body, 5%);
                     border-bottom: solid 1px darken(@color_body, 5%);
                 }
@@ -43,6 +41,10 @@
                     padding-bottom: 0;
                     border-bottom: none;
                 }
+            }
+
+            form {
+                width: 100%;
 
                 .item {
                     position: relative;
@@ -177,14 +179,7 @@
                         }
                     }
 
-                    &.header {
-                        font-size: 14px;
-                        font-weight: bold;
-                        background: @color_header_bottom;
-                        color: darken(@color_header_bottom, 50%);
-                        border-bottom: solid 1px darken(@color_body, 10%);
-                        .box-shadow(0 1px 1px #C7C7C7);
-
+                    & {
                         .icon {
                             margin-right: 20px;
                             .float-left();
@@ -197,10 +192,12 @@
                         }
 
                         .name {
+                            width: 65%;
+                            .ellipsis();
                             .float-left();
                         }
 
-                        .user {
+                        .title {
                             width: 40%;
                             .ellipsis();
                             .float-left();
@@ -210,6 +207,15 @@
                             width: 25%;
                             .float-left();
                         }
+                    }
+
+                    &.header {
+                        font-size: 14px;
+                        font-weight: bold;
+                        background: @color_header_bottom;
+                        color: darken(@color_header_bottom, 50%);
+                        border-bottom: solid 1px darken(@color_body, 10%);
+                        .box-shadow(0 1px 1px #C7C7C7);
                     }
 
                     &:not(.header) {
@@ -228,23 +234,11 @@
                         }
 
                         .icon {
-                            width: 20px;
-                            text-align: center;
-                            color: lighten(@color_popup_header, 5%);
-                            margin-right: 30px;
-                            .float-left();
-                        }
-
-                        .user {
-                            width: 40%;
-                            .ellipsis();
-                            .float-left();
+                            color: darken(@color_blue, 15%);
                         }
 
                         .card {
                             line-height: 14px;
-                            width: 25%;
-                            .float-left();
 
                             .big {
                                 line-height: 0;
@@ -254,13 +248,11 @@
                         }
 
                         .remove {
-                            width: 60px;
                             font-size: 14px;
                             font-weight: bold;
                             cursor: pointer;
                             text-align: left;
                             color: darken(@color_red, 15%);
-                            .float-right();
 
                             &:hover {
                                color: darken(@color_red, 25%);
@@ -273,12 +265,13 @@
 
                         .name {
                             color: #333;
-                            width: 65%;
-                            .ellipsis();
-                            .float-left();
                         }
                     }
                 }
+            }
+
+            .pills {
+
             }
         }
     }

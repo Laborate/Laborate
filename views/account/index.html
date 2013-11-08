@@ -80,7 +80,7 @@
         </div>
         <div class="pane">
             <div class="selection" data-key="profile">
-                <form action="/account/profile/">
+                <form class="container" action="/account/profile/">
                     <div class="item">
                         <div class="name">Full Name</div>
                         <input class="input" type="text" name="name" value="<%= user.name %>" />
@@ -101,7 +101,7 @@
                 </form>
             </div>
             <div class="selection" data-key="settings">
-                <form action="/account/settings/password/" autocomplete="off">
+                <form class="container" action="/account/settings/password/" autocomplete="off">
                     <div class="item">
                         <div class="name">Old Password</div>
                         <input class="input" type="password" name="old_password" />
@@ -116,7 +116,7 @@
                     </div>
                     <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
                 </form>
-                <form action="/account/settings/delete/" autocomplete="off">
+                <form class="container" action="/account/settings/delete/" autocomplete="off">
                     <div class="item">
                         <div class="name">Password</div>
                         <input class="input" type="password" name="password" />
@@ -125,7 +125,7 @@
                 </form>
             </div>
             <div class="selection" data-key="locations">
-                <div id="locations" class="listing">
+                <div id="locations" class="listing container">
                     <% if(!$.isEmptyObject(user.locations)) { %>
                         <div class="item header">
                             <div class="icon">App</div>
@@ -154,7 +154,7 @@
             </div>
             <div class="selection" data-key="billing">
                 <% if($.isEmptyObject(user.card)) { %>
-                    <form action="/account/billing/card/add" autocomplete="off">
+                    <form class="container" action="/account/billing/card/add" autocomplete="off">
                         <div class="item">
                             <div class="name">Name On Card</div>
                             <input class="input" type="text" name="name" />
@@ -176,18 +176,18 @@
                         <input class="button" type="submit" value="Add Credit Card" data-success="Credit Card Added"/>
                     </form>
                 <% } else { %>
-                    <div id="credit-cards" class="listing">
+                    <div id="credit-cards" class="listing container">
                         <div class="item header">
                             <div class="icon">Type</div>
-                            <div class="user">Name on Card</div>
+                            <div class="title">Name on Card</div>
                             <div class="card">Credit Card</div>
                             <div class="remove">Action</div>
                         </div>
                         <div class="item">
                             <div class="icon">
-                                <img class="card-type" src="/img/cards/<%= user.card.type %>.png">
+                                <img class="card-type" src="/img/cards/<%= user.card.type.split(" ")[0] %>.png">
                             </div>
-                            <div class="user"><%= user.card.name %></div>
+                            <div class="title"><%= user.card.name %></div>
                             <div class="card">
                                 <span class="big">····</span> <%= user.card.card %>
                             </div>
@@ -195,6 +195,10 @@
                         </div>
                     </div>
                 <% } %>
+
+                <div class="pills container">
+                    <div class="item"></div>
+                </div>
             </div>
         </div>
     </div>
