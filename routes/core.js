@@ -8,15 +8,6 @@ exports.setup = function(req, res, next) {
     if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
     if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
-    //Track Last HTML Page
-    if(!req.xhr && [
-        "reload", "img", "fonts",
-        "github", "bitbucket",
-        "google", "dropbox"
-    ].indexOf(req.url.split("/")[1]) == -1) {
-        req.session.last_page = req.url
-    }
-
     //Header Config
     res.setHeader("Server", "Laborate.io");
 

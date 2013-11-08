@@ -38,6 +38,7 @@ exports.profile = function(req, res) {
                                 res.error(200, "Failed To Update Profile", error);
                             } else {
                                 req.session.user = user;
+                                req.session.save();
                                 res.json({ success: true });
                             }
                         });
@@ -66,6 +67,7 @@ exports.change_password = function(req, res) {
                     }, function(error) {
                         if(!error) {
                             req.session.user = user;
+                            req.session.save();
                             res.json({ success: true });
                         } else {
                             res.error(200, "Failed To Change Password", error);
@@ -111,6 +113,7 @@ exports.remove_location = function(req, res) {
                 delete req.session.user.locations[req.param("location")];
                 user.save({ locations: req.session.user.locations });
                 res.json({success: true});
+                req.session.save();
             } else {
                 res.error(200, "Failed To Remove Location", true, error);
             }

@@ -532,6 +532,7 @@ window.documents = {
         }
     },
     locationReload: function() {
+        window.socketUtil.pageTrack();
         if(window.documents.locationActivated && window.documents.mode.length == 0) {
             window.documents.locations();
             window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
@@ -677,6 +678,7 @@ window.documents = {
                 $(".pane").html(files);
                 $(".sidebar .info").text(json.length + " files");
                 if(history) window.history.pushState(null, null, "/documents/");
+                window.socketUtil.pageTrack();
                 window.documents.locationActivated = "online";
             }
         });
@@ -741,6 +743,7 @@ window.documents = {
             $(".sidebar .info").text(response.length + " files");
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
+            window.socketUtil.pageTrack();
             window.documents.locationActivated = location;
             window.documents.headerBar(["filters-non-online", "download"]);
         }
@@ -899,6 +902,10 @@ window.documents = {
     },
     fileDownload: function(files, open) {
         if(open) {
+            $(".pane .item")
+                .not(files)
+                .addClass("disabled");
+
             files
                 .find(".icon")
                 .attr("class", "icon spin " + config.icons.spinner);
@@ -1006,7 +1013,7 @@ window.documents = {
                     break;
 
                 case "file-zip":
-                    item["class"] = "zip disabled";
+                    item["class"] = "file disabled";
                     item["color"] = "red";
                     item["icon"] = config.icons.file_zip;
                     break;
@@ -1027,8 +1034,8 @@ window.documents = {
                     break;
 
                 default:
-                    item["class"] = "file disabled";
-                    item["color"] = "";
+                    item["class"] = "file";
+                    item["color"] = "blue";
                     item["icon"] = config.icons.file;
                     break;
             }
@@ -1036,7 +1043,7 @@ window.documents = {
             // Protection
             switch(item.protection) {
                 case "password":
-                    item["corner"] = config.icons.lock;
+                    item["corner"] = config.icons.locked;
                     break;
                 case "assigned":
                     item["corner"] = config.icons.profile;

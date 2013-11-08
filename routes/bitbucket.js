@@ -14,6 +14,7 @@ exports.add_token = function(req, res, next) {
                     delete req.session.bitbucket_oauth;
                     req.session.user.bitbucket = oauth;
                     user.save({ bitbucket: req.session.user.bitbucket });
+                    req.session.save();
                     res.redirect("/documents/popup/");
                 });
             }
@@ -28,6 +29,7 @@ exports.remove_token = function(req, res, next) {
         req.models.users.get(req.session.user.id, function(error, user) {
             req.session.user.bitbucket = null;
             user.save({ bitbucket: req.session.user.bitbucket });
+            req.session.save();
             res.redirect("/account/settings/");
         });
     } else {

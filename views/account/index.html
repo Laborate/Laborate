@@ -40,7 +40,6 @@
                 <div class="active"></div>
             </div>
             -->
-            <!-- TODO: Organizations / Billing
             <div class="item" data-key="billing">
                 <div class="container">
                     <div class="name">Billing</div>
@@ -55,7 +54,6 @@
                 </div>
                 <div class="active"></div>
             </div>
-            -->
         </div>
     </div>
 </div>
@@ -63,7 +61,7 @@
     <div class="header">
         <div class="top">
             <div class="search">
-                <form id="search">
+                <form id="search" autocomplete="off">
                     <div class="icon <%= icons.search %>"></div>
                     <input type="text" placeholder="Search your settings..." />
                     <button type="submit">Search</button>
@@ -93,7 +91,7 @@
                     </div>
                     <!--
                         Disable email address if account
-                        is created by organization
+                        is maintained by organization
                     -->
                     <div class="item">
                         <div class="name">Email Address</div>
@@ -103,7 +101,7 @@
                 </form>
             </div>
             <div class="selection" data-key="settings">
-                <form action="/account/settings/password/">
+                <form action="/account/settings/password/" autocomplete="off">
                     <div class="item">
                         <div class="name">Old Password</div>
                         <input class="input" type="password" name="old_password" />
@@ -118,7 +116,7 @@
                     </div>
                     <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
                 </form>
-                <form action="/account/settings/delete/">
+                <form action="/account/settings/delete/" autocomplete="off">
                     <div class="item">
                         <div class="name">Password</div>
                         <input class="input" type="password" name="password" />

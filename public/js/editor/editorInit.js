@@ -1,9 +1,6 @@
-window.socketUtil = {
-    socket: io.connect(window.config.host + ":" + window.config.port, {
-        "sync disconnect on unload": true
-    }),
+$.extend(window.socketUtil, {
     connect: function() {
-        $("#backdrop input[type='submit']").ready(function() {
+        $(function() {
             $("#backdrop input[type='submit']")
                 .val("Join Document")
                 .attr("disabled", false);
@@ -45,29 +42,6 @@ window.socketUtil = {
         window.unload = true;
         window.socketUtil.socket.socket.disconnect();
     }
-}
-
-//Socket Events
-window.socketUtil.socket.on("connect", window.socketUtil.connect);
-window.socketUtil.socket.on("reconnect", window.socketUtil.reconnect);
-window.socketUtil.socket.on("reconnecting", window.socketUtil.disconnect);
-window.socketUtil.socket.on("disconnect", window.socketUtil.disconnect);
-window.onoffline = window.socketUtil.disconnect;
-window.onbeforeunload = window.socketUtil.unload;
-window.onunload = window.socketUtil.unload;
-
-window.socketUtil.socket.on('connect_failed', function () {
-    window.backdrop.error("Failed To Connect. Retrying now...", true);
-});
-
-window.socketUtil.socket.on('reconnect_failed', function () {
-    window.backdrop.error("Failed To Reconnect. Retrying now...", true);
-});
-
-window.socketUtil.socket.on('error', function (reason) {
-    if(reason) {
-        window.editorUtil.error(reason, true);
-    }
 });
 
 //Url Parameters
@@ -79,6 +53,36 @@ window.url_params = function() {
 }
 
 $(function() {
+    //Socket Events
+    window.socketUtil.socket.on("connect", window.socketUtil.connect);
+    window.socketUtil.socket.on("reconnect", window.socketUtil.reconnect);
+    window.socketUtil.socket.on("reconnecting", window.socketUtil.disconnect);
+    window.socketUtil.socket.on("disconnect", window.socketUtil.disconnect);
+    window.onoffline = window.socketUtil.disconnect;
+    window.onbeforeunload = window.socketUtil.unload;
+    window.onunload = window.socketUtil.unload;
+
+    window.socketUtil.socket.on('connect_failed', function () {
+        window.backdrop.error("Failed To Connect. Retrying now...", true);
+    });
+
+    window.socketUtil.socket.on('reconnect_failed', function () {
+        window.backdrop.error("Failed To Reconnect. Retrying now...", true);
+    });
+
+    window.socketUtil.socket.on('error', function (reason) {
+        if(reason) {
+            window.editorUtil.error(reason, true);
+        }
+    });
+
+    var interval = setInterval(function() {
+        if(window.socketUtil.socket.socket.connected) {
+            clearInterval(interval);
+            window.socketUtil.connect();
+        }
+    })
+
     //Set Array of Users
     window.users = new Array();
 

@@ -23,6 +23,7 @@ exports.add_token = function(req, res, next) {
                     locations: req.session.user.locations
                 });
                 delete req.session.google_oauth;
+                req.session.save();
                 res.redirect(req.session.last_page || "/account/settings/");
             });
         });
@@ -35,6 +36,7 @@ exports.refresh_token = function(req, location, token, next) {
     req.models.users.get(req.session.user.id, function(error, user) {
         req.session.user.google[location].access_token = token;
         user.save({ google: req.session.user.google }, next);
+        req.session.save();
     });
 }
 
@@ -47,6 +49,7 @@ exports.remove_token = function(req, res, next) {
                 google: req.session.user.google,
                 locations: req.session.user.locations
             });
+            req.session.save();
             res.redirect("/account/settings/");
         });
     } else {
@@ -70,7 +73,7 @@ exports.contents = function(req, res, next, refreshed) {
                 } else {
                     res.json(results);
                 }
-    
+
             }
         );
     }

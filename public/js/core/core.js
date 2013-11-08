@@ -55,3 +55,15 @@ $(function() {
         $("body").attr("contenteditable", "false");
     }, 500);
 });
+
+window.socketUtil = {
+    socket: io.connect(window.config.host + ":" + window.config.port, {
+        "sync disconnect on unload": true
+    }),
+    pageTrack: function() {
+        window.socketUtil.socket.emit("pageTrack", window.location.href);
+    }
+}
+
+window.onpopstate = window.socketUtil.pageTrack;
+window.socketUtil.socket.on("connect", window.socketUtil.pageTrack);

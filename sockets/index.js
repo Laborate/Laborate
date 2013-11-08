@@ -2,6 +2,9 @@ var core = require("./core");
 var editor = require("./editor");
 
 module.exports = function(app) {
+    /* Core */
+    app.io.route('pageTrack', core.pageTrack);
+
     /* Editor */
     app.io.route('editorJoin', editor.join);
     app.io.route('editorChatRoom', editor.chatRoom);

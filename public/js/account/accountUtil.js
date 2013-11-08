@@ -10,6 +10,7 @@ window.account = {
         $(".pane .selection").hide();
         $(".pane .selection[data-key='" + location + "']").show();
         if(history) window.history.pushState(null, null, "/account/" + location + "/");
+        window.socketUtil.pageTrack();
         window.account.activated = location;
     },
     locationSubmit: function(form) {
