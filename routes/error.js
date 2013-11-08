@@ -8,11 +8,13 @@ var error_handler = function(status, message, home, req, res) {
             error_message = "Login Required";
             redirect_url = "/logout/";
             req.session.redirect_url = req.originalUrl;
+            req.session.save();
             break;
         case 403:
             error_message = "Access Forbidden";
             error_html = 'You are not authorized to view this page.';
             delete req.session._csrf;
+            req.session.save();
             break;
         default:
             error_message = "Page Not Found";

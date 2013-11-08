@@ -61,9 +61,12 @@ window.socketUtil = {
         "sync disconnect on unload": true
     }),
     pageTrack: function() {
-        window.socketUtil.socket.emit("pageTrack", window.location.href);
+        if(config.pageTrack) {
+            window.socketUtil.socket.emit("pageTrack", window.location.href);
+        }
     }
 }
 
 window.onpopstate = window.socketUtil.pageTrack;
 window.socketUtil.socket.on("connect", window.socketUtil.pageTrack);
+window.socketUtil.socket.on("reconnect", window.socketUtil.pageTrack);

@@ -4,7 +4,8 @@ exports.login = function(req, res) {
         mode: "login",
         js: clientJS.renderTags("backdrop", "crypto"),
         css: clientCSS.renderTags("backdrop"),
-        backdrop: req.backdrop("blurry")
+        backdrop: req.backdrop("blurry"),
+        pageTrack: false
     });
 };
 
@@ -14,7 +15,8 @@ exports.register = function(req, res) {
         mode: 'register',
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
-        backdrop: req.backdrop("blurry")
+        backdrop: req.backdrop("blurry"),
+        pageTrack: false
     });
 };
 
@@ -26,7 +28,8 @@ exports.verify = function(req, res) {
             feedback: 'Verification Email Has Been Sent',
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
-            backdrop: req.backdrop("blurry")
+            backdrop: req.backdrop("blurry"),
+            pageTrack: false
         });
     } else {
         res.redirect("/documents/");

@@ -21,9 +21,7 @@ module.exports = function(app) {
     app.get('/logout', authUtil.logout);
 
     /* Reload User Account */
-    if(!config.general.production) {
-        app.get('/reload', authUtil.reload);
-    }
+    app.get('/reload', authUtil.reload);
 
     /* Register */
     app.get('/register', authUtil.loginCheck, auth.register);

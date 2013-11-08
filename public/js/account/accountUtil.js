@@ -21,6 +21,8 @@ window.account = {
         if(!submit.attr("data-original")) submit.attr("data-original", submit.val());
         if(window.account.timer) clearInterval(window.account.timer);
 
+        submit.val("loading...");
+
         form.find("input").each(function() {
             if(!$(this).val()) {
                 passed = false;

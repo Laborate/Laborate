@@ -25,7 +25,7 @@ exports.restrictAccess = function(req, res, next) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
                         req.session.save();
-                        if(next) next();
+                        res.redirect(req.originalUrl);
                     } else {
                         res.error(401, false, true, error);
                     }
@@ -38,13 +38,7 @@ exports.restrictAccess = function(req, res, next) {
 
 exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
-        if(req.session.redirect_url) {
-            res.redirect(req.session.redirect_url);
-            delete req.session.redirect_url;
-            req.session.save();
-        } else {
-            res.redirect('/documents/');
-        }
+        res.redirect(req.session.last_page || '/documents');
     } else {
         if(config.cookies.rememberme in req.cookies) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
@@ -52,13 +46,7 @@ exports.loginCheck = function(req, res, next) {
                     if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
-                        if(req.session.redirect_url) {
-                            res.redirect(req.session.redirect_url);
-                            delete req.session.redirect_url;
-                            req.session.save();
-                        } else {
-                            res.redirect('/documents/');
-                        }
+                        res.redirect(req.session.last_page || '/documents');
                     } else {
                         if(next) next();
                     }
@@ -84,20 +72,25 @@ exports.login = function(req, res, next) {
         password: req.models.users.hash($.trim(req.param('password')))
     }, function(error, users) {
         if(!error && users.length == 1) {
-            users[0].set_recovery(req, res);
-            req.session.user = users[0];
+            if(users[0].admin && $.isEmptyObject(users[0].stripe)) {
+                users[0].verified(req, function(user) {
+                    req.session.user = user;
+                    req.session.save();
 
-            if(req.session.redirect_url) {
-                var url = req.session.redirect_url;
-                delete req.session.redirect_url;
+                    res.json({
+                        success: true,
+                        next: "/reload/"
+                     });
+                });
             } else {
-                var url = '/documents/';
+                req.session.user = users[0];
+                req.session.save();
+
+                res.json({
+                    success: true,
+                    next: "/reload/"
+                 });
             }
-            req.session.save();
-            res.json({
-                success: true,
-                next: url
-             });
         } else {
             res.error(200, "Invalid Credentials", true, error);
         }
@@ -106,7 +99,7 @@ exports.login = function(req, res, next) {
 }
 
 exports.logout = function(req, res) {
-    req.session.user = null;
+    delete req.session.user;
     req.session.save();
     res.clearCookie(config.cookies.rememberme, {
         domain: "." + req.host
@@ -178,16 +171,10 @@ exports.verify = function(req, res, next) {
         res.error(401);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
-            if(req.session.redirect_url) {
-                var url = req.session.redirect_url;
-                delete req.session.redirect_url;
-            } else {
-                var url = '/documents/';
-            }
             user.verified(req, function(user) {
                 req.session.user = user;
                 req.session.save();
-                res.redirect(url);
+                res.redirect("/reload/");
             });
         });
     }
@@ -200,7 +187,7 @@ exports.reload = function(req, res, next) {
                 user.set_recovery(req, res);
                 req.session.user = user;
                 req.session.save();
-                res.redirect(req.session.last_page || '/');
+                res.redirect(req.session.redirect_url || req.session.last_page || '/documents');
             } else {
                 res.redirect('/logout/');
             }
