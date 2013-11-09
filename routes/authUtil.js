@@ -94,7 +94,6 @@ exports.login = function(req, res, next) {
         } else {
             res.error(200, "Invalid Credentials", true, error);
         }
-
     });
 }
 

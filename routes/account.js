@@ -136,8 +136,8 @@ exports.add_card = function(req, res) {
                 card: {
                     name: req.param("name"),
                     number: req.param("card"),
-                    exp_month: req.param("expiration").split("/")[0],
-                    exp_year: req.param("expiration").split("/")[1],
+                    exp_month: req.param("expiration").month,
+                    exp_year: req.param("expiration").year,
                     cvc: req.param("cvc")
                 }
             }, function(error, card) {

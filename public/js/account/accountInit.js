@@ -9,5 +9,8 @@ window.url_params = function() {
 }
 
 $(function() {
+    $('#card').payment('formatCardNumber');
+    $('#expiration').payment('formatCardExpiry');
+    $('#cvc').payment('formatCardCVC');
     window.account.location(window.url_params()["mode"], true);
 });
