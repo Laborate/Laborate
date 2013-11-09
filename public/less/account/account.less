@@ -16,6 +16,11 @@
         .selection {
             width: 500px;
 
+            .powered_stripe {
+                margin: 10px auto 0 auto;
+                display: block;
+            }
+
             .card-type {
                 width: 32px;
                 height: 20px;
@@ -180,13 +185,18 @@
                     }
 
                     & {
+                        /* General */
                         .icon {
+                            width: 35px;
                             margin-right: 20px;
                             .float-left();
                         }
 
-                        .remove {
-                            width: 60px;
+                        .action {
+                            font-size: 14px;
+                            font-weight: bold;
+                            cursor: pointer;
+                            width: 80px;
                             text-align: left;
                             .float-right();
                         }
@@ -203,8 +213,34 @@
                             .float-left();
                         }
 
+                        /* Billing */
                         .card {
                             width: 25%;
+                            .float-left();
+                        }
+
+                        /* Plans */
+                        .small-text {
+                            .calc-width(~"25% - 15px");
+                            margin-right: 15px;
+                            .float-left();
+                        }
+
+                        .smaller-text {
+                            .calc-width(~"20% - 15px");
+                            margin-right: 15px;
+                            .float-left();
+                        }
+
+                        .smallest-text {
+                            .calc-width(~"15% - 15px");
+                            margin-right: 15px;
+                            .float-left();
+                        }
+
+                        .tiny-text {
+                            .calc-width(~"12% - 15px");
+                            margin-right: 15px;
                             .float-left();
                         }
                     }
@@ -225,12 +261,15 @@
 
                         &:nth-child(odd) {
                             background: darken(@color_body, 3%);
-                            border-top: solid 1px darken(@color_body, 10%);
-                            border-bottom: solid 1px darken(@color_body, 10%);
+
+                            &:not(:only-child) {
+                                border-top: solid 1px darken(@color_body, 10%);
+                                border-bottom: solid 1px darken(@color_body, 10%);
+                            }
                         }
 
                         &:last-child {
-                            border-bottom: none;
+                            border-bottom: none !important;
                         }
 
                         .icon {
@@ -248,10 +287,6 @@
                         }
 
                         .remove {
-                            font-size: 14px;
-                            font-weight: bold;
-                            cursor: pointer;
-                            text-align: left;
                             color: darken(@color_red, 15%);
 
                             &:hover {
@@ -265,6 +300,39 @@
 
                         .name {
                             color: #333;
+                        }
+
+                        .checked {
+                            color: darken(@color_green, 8%);
+                        }
+
+                        .unchecked {
+                            color: @color_red;
+                        }
+
+                        .button {
+                            font-size: 12px;
+                            text-align: center;
+                            cursor: default;
+                            color: #fff;
+                            background: @color_green;
+                            margin-top: -3px;
+                            padding: 4px 6px;
+                            text-transform: uppercase;
+                            .border-radius(3px);
+
+                            &.selectable {
+                                cursor: pointer;
+                                background: darken(@color_blue, 2%);
+
+                                &:hover {
+                                    background: darken(@color_blue, 8%);
+
+                                    &:active {
+                                        background: darken(@color_blue, 14%);
+                                    }
+                                }
+                            }
                         }
                     }
                 }

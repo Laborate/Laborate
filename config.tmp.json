@@ -115,7 +115,9 @@
         "file_image": "",
         "file_notebook": "",
         "file_math": "",
-        "folder": ""
+        "folder": "",
+        "checked": "",
+        "unchecked": ""
     },
     "github": {
         "id": "",

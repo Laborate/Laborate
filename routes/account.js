@@ -1,14 +1,17 @@
 var orm = require("orm");
 
 exports.index = function(req, res) {
-    res.renderOutdated('account/index', {
-        title: 'Account',
-        navigation: 'User Settings',
-        mode: "account",
-        user: req.session.user,
-        github_auth_url: req.github.auth_url,
-        js: clientJS.renderTags("account", "header"),
-        css: clientCSS.renderTags("account", "header"),
+    req.models.users.pricing.all(function(error, plans) {
+        res.renderOutdated('account/index', {
+            title: 'Account',
+            navigation: 'User Settings',
+            mode: "account",
+            user: req.session.user,
+            plans: plans,
+            github_auth_url: req.github.auth_url,
+            js: clientJS.renderTags("account", "header"),
+            css: clientCSS.renderTags("account", "header"),
+        });
     });
 };
 

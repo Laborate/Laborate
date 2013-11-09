@@ -124,11 +124,11 @@ window.account = {
         });
     },
     cardType: function() {
-        var type = $.payment.cardType($(this).val()).toLowerCase();
+        var type = $.payment.cardType($(this).val());
 
-        if(type != "unknown") {
+        if(type != "Unknown") {
             $("#card-company")
-                .attr("src", "/img/cards/" + type.split(" ")[0] + ".png")
+                .attr("src", "/img/cards/" + type.toLowerCase().split(" ")[0] + ".png")
                 .load(function() {
                     $("#card-company").fadeIn(200);
                 });

@@ -9,7 +9,7 @@ $(document).on("mouseover mouseout", ".pane .item", function() {
     }
 });
 
-$(document).on("click", ".pane .item", function() {
+$(document).on("click", ".pane .item:not(.disabled)", function() {
     if(window.documents.locationActivated == "online") {
         window.location.href = "/editor/" + $(this).data("id");
     } else {

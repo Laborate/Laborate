@@ -130,7 +130,6 @@
                         <div class="item header">
                             <div class="icon">App</div>
                             <div class="name">Location Name</div>
-                            <div class="remove">Action</div>
                         </div>
                         <% $.each(user.locations, function(key, item) {
                             var name = item["name"];
@@ -142,7 +141,7 @@
                             <div class="item" data-id="<%= key %>">
                                 <div class="icon <%= icons[item.type] %>"></div>
                                 <div class="name"><%- name %></div>
-                                <div class="remove">Remove</div>
+                                <div class="action remove">Remove</div>
                             </div>
                         <% }); %>
                     <% } else { %>
@@ -174,15 +173,10 @@
                         </div>
                         <div class="clear"></div>
                         <input class="button" type="submit" value="Add Credit Card" data-success="Credit Card Added"/>
+                        <img class="powered_stripe" src="/img/stripe.png" height="25px" />
                     </form>
                 <% } else { %>
                     <div id="credit-cards" class="listing container">
-                        <div class="item header">
-                            <div class="icon">Type</div>
-                            <div class="title">Name on Card</div>
-                            <div class="card">Credit Card</div>
-                            <div class="remove">Action</div>
-                        </div>
                         <div class="item">
                             <div class="icon">
                                 <img class="card-type" src="/img/cards/<%= user.card.type.split(" ")[0] %>.png">
@@ -191,13 +185,57 @@
                             <div class="card">
                                 <span class="big">····</span> <%= user.card.card %>
                             </div>
-                            <div class="remove">Remove</div>
+                            <div class="action remove">Remove</div>
                         </div>
                     </div>
                 <% } %>
+                <div id="plans" class="listing container">
+                    <div class="item header">
+                        <div class="small-text">Plan</div>
+                        <div class="smaller-text">Billing</div>
+                        <div class="tiny-text">Cost</div>
+                        <div class="icon">Pro</div>
+                        <div class="left">Private Documents</div>
+                    </div>
 
-                <div class="pills container">
-                    <div class="item"></div>
+                    <% $.each(plans, function(key, pricing) {
+                        var interval = pricing.interval_count + " " + pricing.interval;
+
+                        if(pricing.pro) {
+                            var icon_class = icons.checked + " checked";
+                        } else {
+                            var icon_class = icons.unchecked + " unchecked";
+                        }
+
+                        if(pricing.id == user.pricing.id) {
+                            var item = "active";
+                            var button = "current";
+                            var button_class = "";
+                        } else {
+                            var item = "";
+                            var button = (pricing.id > user.pricing.id) ? "upgrade" : "downgrade";
+                            var button_class = "selectable";
+                        }
+
+                        if(pricing.documents) {
+                            var documents = pricing.documents;
+                        } else {
+                            var documents = "&infin;";
+                        }
+
+                        if(pricing.student != user.pricing.student) {
+                            return true;
+                        }
+                    %>
+                        <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
+                            <div class="small-text"><%= pricing.name %></div>
+                            <div class="smaller-text"><%= interval %></div>
+                            <div class="tiny-text">$<%= pricing.amount %></div>
+                            <div class="icon <%= icon_class %>"></div>
+                            <div class="tiny-text"><%- documents %></div>
+                            <div class="action button <%= button_class %>"><%= button %></div>
+                        </div>
+                    <% }); %>
                 </div>
             </div>
         </div>
