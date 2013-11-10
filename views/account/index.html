@@ -118,6 +118,11 @@
                 </form>
                 <form class="container" action="/account/settings/delete/" autocomplete="off">
                     <div class="item">
+                        <div class="message">
+                            Deleting your account will delete all files you own. Please
+                            transfer ownership of your files if you want other people
+                            to still edit them.
+                        </div>
                         <div class="name">Password</div>
                         <input class="input" type="password" name="password" />
                     </div>
@@ -203,15 +208,15 @@
                             var icon_class = icons.unchecked + " unchecked";
                         }
 
-                        if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
-                            var item = "";
-                            var button = "Card Required";
-                            var button_class = "error";
+                        if(pricing.id == user.pricing.id) {
+                            var item = "active";
+                            var button = "current";
+                            var button_class = "";
                         } else {
-                            if(pricing.id == user.pricing.id) {
-                                var item = "active";
-                                var button = "current";
-                                var button_class = "";
+                            if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
+                                var item = "";
+                                var button = "Card Required";
+                                var button_class = "error";
                             } else {
                                 var item = "";
                                 var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
