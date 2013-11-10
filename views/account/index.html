@@ -191,7 +191,7 @@
                 <div id="plans" class="listing container">
                     <div class="item header">
                         <div class="small-text">Plan</div>
-                        <div class="tiny-text">Cost</div>
+                        <div class="tiny-text">Price</div>
                         <div class="icon">Pro</div>
                         <div class="left">Private Documents</div>
                     </div>
@@ -208,9 +208,15 @@
                             var button = "current";
                             var button_class = "";
                         } else {
-                            var item = "";
-                            var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
-                            var button_class = "selectable";
+                            if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
+                                var item = "";
+                                var button = "Credit Card Required";
+                                var button_class = "error";
+                            } else {
+                                var item = "";
+                                var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
+                                var button_class = "selectable";
+                            }
                         }
 
                         if(pricing.documents) {
@@ -219,7 +225,7 @@
                             var documents = "Unlimited";
                         }
 
-                        if(pricing.student && key == 0) {
+                        if(pricing.amount == 0) {
                             var amount = "Free";
                         } else {
                             var amount = "$" + pricing.amount;
@@ -236,7 +242,7 @@
                         <% if(user.pricing.student && key == 0) { %>
                             <div class="banner">
                                 <div class="arrow"></div>
-                                <span class="<%= icons.student %>"></span> cost included within tuition
+                                <span class="<%= icons.student %>"></span> price included within tuition
                             </div>
                         <% } %>
                     <% }); %>

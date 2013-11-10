@@ -2,7 +2,8 @@ var orm = require("orm");
 
 exports.index = function(req, res) {
     req.models.users.pricing.find({
-        student: req.session.user.pricing.student
+        student: req.session.user.pricing.student,
+        organization: false
     }, [ "priority", "A" ], function(error, plans) {
         res.renderOutdated('account/index', {
             title: 'Account',
@@ -187,19 +188,53 @@ exports.remove_card = function(req, res) {
 
                     user.save({ card: req.session.user.card }, function(error) {
                         if(!error) {
-                            res.json({ success: true });
                             req.session.save();
-
+                            res.json({ success: true });
                         } else {
                             res.error(200, "Failed To Remove Credit Card", error);
                         }
                     });
                 } else {
-                    res.error(200, error.message, error);
+                    res.error(200, "Failed To Remove Credit Card", error);
                 }
             });
         } else {
             res.error(200, "Failed To Remove Credit Card", error);
+        }
+    });
+}
+
+exports.plan_change = function(req, res) {
+    req.models.users.get(req.session.user.id, function(error, user) {
+        if(!error) {
+            req.stripe.customers.updateSubscription(user.stripe, {
+                plan: req.param("plan"),
+                prorate: true
+            }, function(error) {
+                if(!error) {
+                    req.models.users.pricing.find({
+                        plan: req.param("plan")
+                    }, function(error, plans) {
+                        if(!error && plans.length != 0) {
+                            user.setPricing(plans[0], function(error, user) {
+                                if(!error) {
+                                    req.session.user = user;
+                                    req.session.save();
+                                    res.json({ success: true });
+                                } else {
+                                    res.error(200, "Failed To Change Plan", error);
+                                }
+                            });
+                        } else {
+                            res.error(200, "Failed To Change Plan", error);
+                        }
+                    });
+                } else {
+                    res.error(200, "Failed To Change Plan", error);
+                }
+            });
+        } else {
+            res.error(200, "Failed To Change Plan", error);
         }
     });
 }

@@ -99,6 +99,7 @@ exports.login = function(req, res, next) {
 
 exports.logout = function(req, res) {
     delete req.session.user;
+    delete req.session.last_page;
     req.session.save();
     res.clearCookie(config.cookies.rememberme, {
         domain: "." + req.host

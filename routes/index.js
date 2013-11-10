@@ -40,6 +40,7 @@ module.exports = function(app) {
     app.post("/account/location/remove", authUtil.restrictAccess, authUtil.xhr, account.remove_location);
     app.post("/account/billing/card/add", authUtil.restrictAccess, authUtil.xhr, account.add_card);
     app.post("/account/billing/card/remove", authUtil.restrictAccess, authUtil.xhr, account.remove_card);
+    app.post("/account/billing/plan", authUtil.restrictAccess, authUtil.xhr, account.plan_change);
 
     /* Documents */
     app.get('/documents', authUtil.restrictAccess, documents.index);

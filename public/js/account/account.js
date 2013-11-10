@@ -17,4 +17,9 @@ $(function() {
     });
 
     $(document).on("keyup", ".pane #card", window.account.cardType);
+
+    $(document).on("click", ".pane #plans .button.selectable", function() {
+        window.account.planChange($(this).parents(".item"));
+    });
+
 });

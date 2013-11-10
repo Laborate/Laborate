@@ -136,18 +136,34 @@ window.account = {
             $("#card-company").fadeOut(200);
         }
     },
-    cardRemove: function(item) {
+    cardRemove: function(element) {
         $.post("/account/billing/card/remove", {
             _csrf: window.config.csrf
         }, function(result) {
             if(result.success) {
                 window.location.reload();
             } else {
-                item
+                element
                     .addClass("error")
                     .find(".remove")
                     .text("Failded")
             }
         });
     },
+    planChange: function(element) {
+        element.find(".button").text("loading");
+        $.post("/account/billing/plan/", {
+            plan: element.attr("data-plan"),
+            _csrf: window.config.csrf
+        }, function(result) {
+            if(result.success) {
+                window.location.reload();
+            } else {
+                element
+                    .find(".button")
+                    .addClass("error")
+                    .text("Failded");
+            }
+        });
+    }
 }
