@@ -16,11 +16,6 @@
         .selection {
             width: 500px;
 
-            .powered_stripe {
-                margin: 10px auto 0 auto;
-                display: block;
-            }
-
             .card-type {
                 width: 32px;
                 height: 20px;
@@ -158,6 +153,27 @@
 
             .listing {
                 width: 100%;
+
+                .banner {
+                    position: relative;
+                    font-size: 14px;
+                    color: #fff;
+                    background: #69C83A;
+                    padding: 10px;
+                    text-align: center;
+                    .box-sizing(border-box);
+
+                    .arrow {
+                        position: absolute;
+                        top: -7px;
+                        left: 30px;
+                        width: 0;
+                    	height: 0;
+                    	border-left: 8px solid transparent;
+                    	border-right: 8px solid transparent;
+                    	border-bottom: 8px solid #69C83A;
+                    }
+                }
 
                 .item {
                     padding: 15px 10px;
@@ -307,7 +323,7 @@
                         }
 
                         .unchecked {
-                            color: @color_red;
+                            color: @color_grey;
                         }
 
                         .button {
@@ -336,10 +352,6 @@
                         }
                     }
                 }
-            }
-
-            .pills {
-
             }
         }
     }

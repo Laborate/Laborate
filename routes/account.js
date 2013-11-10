@@ -1,7 +1,9 @@
 var orm = require("orm");
 
 exports.index = function(req, res) {
-    req.models.users.pricing.all(function(error, plans) {
+    req.models.users.pricing.find({
+        student: req.session.user.pricing.student
+    }, [ "priority", "A" ], function(error, plans) {
         res.renderOutdated('account/index', {
             title: 'Account',
             navigation: 'User Settings',

@@ -126,9 +126,9 @@ window.account = {
     cardType: function() {
         var type = $.payment.cardType($(this).val());
 
-        if(type != "Unknown") {
+        if(type && type != "Unknown") {
             $("#card-company")
-                .attr("src", "/img/cards/" + type.toLowerCase().split(" ")[0] + ".png")
+                .attr("src", "/img/cards/" + type.toLowerCase().replace(" ", "") + ".png")
                 .load(function() {
                     $("#card-company").fadeIn(200);
                 });

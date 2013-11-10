@@ -165,7 +165,7 @@
                         </div>
                         <div class="item quarter">
                             <div class="name">Expiration</div>
-                            <input id="expiration" class="input" type="text" name="expiration" placeholder="MM/YYYY" />
+                            <input id="expiration" class="input" type="text" name="expiration" placeholder="MM / YYYY" />
                         </div>
                         <div class="item quarter">
                             <div class="name">CVC</div>
@@ -173,13 +173,12 @@
                         </div>
                         <div class="clear"></div>
                         <input class="button" type="submit" value="Add Credit Card" data-success="Credit Card Added"/>
-                        <img class="powered_stripe" src="/img/stripe.png" height="25px" />
                     </form>
                 <% } else { %>
                     <div id="credit-cards" class="listing container">
                         <div class="item">
                             <div class="icon">
-                                <img class="card-type" src="/img/cards/<%= user.card.type.split(" ")[0] %>.png">
+                                <img class="card-type" src="/img/cards/<%= user.card.type.replace(" ", "") %>.png">
                             </div>
                             <div class="title"><%= user.card.name %></div>
                             <div class="card">
@@ -192,15 +191,12 @@
                 <div id="plans" class="listing container">
                     <div class="item header">
                         <div class="small-text">Plan</div>
-                        <div class="smaller-text">Billing</div>
                         <div class="tiny-text">Cost</div>
                         <div class="icon">Pro</div>
                         <div class="left">Private Documents</div>
                     </div>
 
                     <% $.each(plans, function(key, pricing) {
-                        var interval = pricing.interval_count + " " + pricing.interval;
-
                         if(pricing.pro) {
                             var icon_class = icons.checked + " checked";
                         } else {
@@ -213,28 +209,36 @@
                             var button_class = "";
                         } else {
                             var item = "";
-                            var button = (pricing.id > user.pricing.id) ? "upgrade" : "downgrade";
+                            var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
                             var button_class = "selectable";
                         }
 
                         if(pricing.documents) {
                             var documents = pricing.documents;
                         } else {
-                            var documents = "&infin;";
+                            var documents = "Unlimited";
                         }
 
-                        if(pricing.student != user.pricing.student) {
-                            return true;
+                        if(pricing.student && key == 0) {
+                            var amount = "Free";
+                        } else {
+                            var amount = "$" + pricing.amount;
                         }
                     %>
                         <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
                             <div class="small-text"><%= pricing.name %></div>
-                            <div class="smaller-text"><%= interval %></div>
-                            <div class="tiny-text">$<%= pricing.amount %></div>
+                            <div class="tiny-text"><%= amount %></div>
                             <div class="icon <%= icon_class %>"></div>
                             <div class="tiny-text"><%- documents %></div>
                             <div class="action button <%= button_class %>"><%= button %></div>
                         </div>
+
+                        <% if(user.pricing.student && key == 0) { %>
+                            <div class="banner">
+                                <div class="arrow"></div>
+                                <span class="<%= icons.student %>"></span> cost included within tuition
+                            </div>
+                        <% } %>
                     <% }); %>
                 </div>
             </div>
