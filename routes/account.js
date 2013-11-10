@@ -149,7 +149,7 @@ exports.add_card = function(req, res) {
             }, function(error, card) {
                 if(!error) {
                     req.session.user.card = {
-                        stripe: card.id,
+                        id: card.id,
                         name: req.param("name"),
                         card: req.param("card").substr(req.param("card").length - 4),
                         type: card.type.toLowerCase()
@@ -181,7 +181,7 @@ exports.remove_card = function(req, res) {
         if(!error) {
             req.stripe.customers.deleteCard(
                 req.session.user.stripe,
-                req.session.user.card.stripe,
+                req.session.user.card.id,
             function(error) {
                 if(!error) {
                     req.session.user.card = {};

@@ -181,12 +181,13 @@ exports.verify = function(req, res, next) {
 };
 
 exports.reload = function(req, res, next) {
-    if(req.session.user) {
+  if(req.session.user) {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error && user) {
                 user.set_recovery(req, res);
                 req.session.user = user;
                 res.redirect(req.session.redirect_url || req.session.last_page || '/documents');
+		delete req.session.last_page;
                 delete req.session.redirect_url;
                 req.session.save();
             } else {
