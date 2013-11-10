@@ -121,7 +121,7 @@
                         <div class="message">
                             Deleting your account will delete all files you own. Please
                             transfer ownership of your files if you want other people
-                            to still edit them.
+                            to be able to access them.
                         </div>
                         <div class="name">Password</div>
                         <input class="input" type="password" name="password" />
@@ -210,8 +210,18 @@
 
                         if(pricing.id == user.pricing.id) {
                             var item = "active";
-                            var button = "current";
-                            var button_class = "";
+                            var button = function() {
+                                if(user.trial) {
+                                    var now = new Date();
+                                    var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+                                    next_month = (now.getUTCMonth() == 12) ? 0 : now.getUTCMonth() + 1;
+                                    return "trials ends " + monthNames[next_month] + " 1st";
+                                } else {
+                                    return "current";
+                                }
+                            }();
+                            var button_class = (!user.trial && $.isEmptyObject(user.card)) ? "error" : "";
                         } else {
                             if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
                                 var item = "";
