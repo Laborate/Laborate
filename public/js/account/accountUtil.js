@@ -151,7 +151,11 @@ window.account = {
         });
     },
     planChange: function(element) {
-        element.find(".button").text("loading");
+        element
+            .find(".button")
+            .addClass("disabled")
+            .text("loading");
+
         $.post("/account/billing/plan/", {
             plan: element.attr("data-plan"),
             _csrf: window.config.csrf
@@ -162,6 +166,7 @@ window.account = {
                 element
                     .find(".button")
                     .addClass("error")
+                    .removeClass("disabled")
                     .text("Failded");
             }
         });
