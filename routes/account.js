@@ -2,7 +2,7 @@ var orm = require("orm");
 
 exports.index = function(req, res) {
     req.models.users.pricing.find({
-        student: req.session.user.pricing.student,
+        student: req.session.user.pricing.student || false,
         organization: false
     }, [ "priority", "A" ], function(error, plans) {
         res.renderOutdated('account/index', {
@@ -148,10 +148,11 @@ exports.add_card = function(req, res) {
                 }
             }, function(error, card) {
                 if(!error) {
+                    var number = req.param("card").replace(/ /g, "");
                     req.session.user.card = {
                         id: card.id,
                         name: req.param("name"),
-                        card: req.param("card").substr(req.param("card").length - 4),
+                        card: number.substr(number.length - 4),
                         type: card.type.toLowerCase()
                     };
 
