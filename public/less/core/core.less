@@ -12,6 +12,12 @@ body {
     min-height: 100%;
     position: relative;
     .reset-box-model();
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+        min-width: 320px;
+    }
 }
 
 * {
