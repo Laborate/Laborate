@@ -210,7 +210,8 @@ exports.plan_change = function(req, res) {
         if(!error) {
             req.stripe.customers.updateSubscription(user.stripe, {
                 plan: req.param("plan"),
-                prorate: true
+                prorate: true,
+                trial_end: req.stripe.next_month()
             }, function(error) {
                 if(!error) {
                     req.models.users.pricing.find({

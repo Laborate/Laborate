@@ -82,6 +82,12 @@ exports.device = function(req, res, next) {
 exports.update = function(req, res, next) {
     async.series([
         function(callback) {
+            req.models.users.get(req.session.user.id, function(error, user) {
+                req.session.user = user;
+                callback(error);
+            });
+        },
+        function(callback) {
             req.models.documents.count({
                 owner_id: req.session.user.id,
                 password: req.db.tools.ne(null)
@@ -93,6 +99,9 @@ exports.update = function(req, res, next) {
                 }
                 callback(error);
             });
+        },
+        function(callback) {
+            req.session.save(callback);
         }
     ], next)
 }
