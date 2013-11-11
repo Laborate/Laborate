@@ -146,3 +146,43 @@
     font-size: 16px;
     margin-top: 10px;
 }
+
+#backdrop-footer {
+    display: none;
+    position: absolute;
+    bottom: 30px;
+    color: #e0e0e0;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 100002;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        outline: 0;
+        display: block;
+        list-style: disc;
+
+        li {
+            margin: 0 13px;
+            float: left;
+
+            &:first-child {
+                margin-left: 0;
+                list-style: none;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            a {
+                color: #fff;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

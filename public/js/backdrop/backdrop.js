@@ -3,6 +3,7 @@ window.backdrop = {
     timer: null,
     email: null,
     ready: function() {
+        $("#backdrop-footer").hAlign().show();
         $("#backdrop-core").vAlign().hAlign().show();
         $(".backdrop-input").attr({"spellcheck": false});
         window.backdrop.button = $("#backdrop input[type=submit]").val();

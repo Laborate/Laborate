@@ -2,11 +2,11 @@
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
         if(config.cookies.rememberme in req.cookies) {
-            if(req.session.user.deliquent && !(/^\/account/.exec(req.url))) {
-                res.redirect("/account/billing/");
-            } else {
-                if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
+            if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
                     res.redirect("/verify/");
+            } else {
+                if(req.session.user.deliquent && !(/^\/account/.exec(req.url))) {
+                    res.redirect("/account/billing/");
                 } else {
                     if(next) next();
                 }
@@ -15,11 +15,11 @@ exports.restrictAccess = function(req, res, next) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 if(!error && user) {
                     user.set_recovery(req, res);
-                    if(req.session.user.deliquent && !(/^\/account/.exec(req.url))) {
-                        res.redirect("/account/billing/");
-                    } else {
-                        if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
+                    if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
                             res.redirect("/verify/");
+                    } else {
+                        if(req.session.user.deliquent && !(/^\/account/.exec(req.url))) {
+                            res.redirect("/account/billing/");
                         } else {
                             if(next) next();
                         }
