@@ -18,7 +18,7 @@ $(function() {
 
     $(document).on("keyup", ".pane #card", window.account.cardType);
 
-    $(document).on("click", ".pane #plans .button.selectable", function() {
+    $(document).on("click", ".pane #plans .button.clickable", function() {
         window.account.planChange($(this).parents(".item"));
     });
 

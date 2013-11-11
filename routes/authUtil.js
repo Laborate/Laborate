@@ -74,22 +74,24 @@ exports.login = function(req, res, next) {
         if(!error && users.length == 1) {
             if(users[0].admin && $.isEmptyObject(users[0].stripe)) {
                 users[0].verified(req, function(user) {
+                    user.set_recovery(req, res);
                     req.session.user = user;
-                    req.session.save();
-
                     res.json({
                         success: true,
-                        next: "/reload/"
+                        next: req.session.redirect_url || "/documents/"
                      });
+                     delete req.session.redirect_url;
+                     req.session.save();
                 });
             } else {
                 req.session.user = users[0];
-                req.session.save();
-
                 res.json({
                     success: true,
-                    next: "/reload/"
+                    next: req.session.redirect_url || "/documents/"
                  });
+                 delete req.session.redirect_url;
+                 req.session.save();
+
             }
         } else {
             res.error(200, "Invalid Credentials", true, error);
@@ -112,7 +114,7 @@ exports.register = function(req, res, next) {
         email: req.param('email')
     }, function(error, exists) {
         if(error || exists) {
-            res.error(200, "Email Already Exists");
+            res.error(200, "Email Already Exists", error);
         } else {
             req.models.users.exists({
                 screen_name: req.param('screen_name')
@@ -135,11 +137,12 @@ exports.register = function(req, res, next) {
                             pricing_id: 1
                         }, function(error, user) {
                             if(!error) {
+                                user.set_recovery(req, res);
                                 req.session.user = user;
                                 req.session.save();
                                 res.json({
                                     success: true,
-                                    next: "/reload/"
+                                    next: "/verify/"
                                 });
 
                                 req.email("verify", {
@@ -173,8 +176,9 @@ exports.verify = function(req, res, next) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified(req, function(user) {
                 req.session.user = user;
+                res.redirect(req.session.redirect_url || "/documents/");
+                delete req.session.redirect_url;
                 req.session.save();
-                res.redirect("/reload/");
             });
         });
     }
@@ -186,9 +190,8 @@ exports.reload = function(req, res, next) {
             if(!error && user) {
                 user.set_recovery(req, res);
                 req.session.user = user;
-                res.redirect(req.session.redirect_url || req.session.last_page || '/documents');
-		delete req.session.last_page;
-                delete req.session.redirect_url;
+                res.redirect(req.session.last_page || '/documents');
+                delete req.session.last_page;
                 req.session.save();
             } else {
                 res.redirect('/logout/');

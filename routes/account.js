@@ -21,40 +21,43 @@ exports.index = function(req, res) {
 exports.profile = function(req, res) {
     req.models.users.exists({
         id: orm.ne(req.session.user.id),
-        screen_name: req.param('screen_name')
+        email: req.param('email')
     }, function(error, exists) {
-        if(!error) {
-            if(exists) {
-                res.error(200, "Screen Name Already Exists");
-            } else if(req.param('screen_name').length > 30) {
-                res.error(200, "Screen Name Is To Long");
-            } else if(!req.param("name")) {
-                res.error(200, "Name Is Required");
-            } else if(!req.param("email")) {
-                res.error(200, "Email Is Required");
-            } else {
-                req.models.users.get(req.session.user.id, function(error, user) {
-                    if(!error && user) {
-                        user.save({
-                            name: req.param("name"),
-                            screen_name: req.param("screen_name"),
-                            email: req.param("email")
-                        }, function(error) {
-                            if(error) {
-                                res.error(200, "Failed To Update Profile", error);
+        if(error || exists) {
+            res.error(200, "Email Already Exists", error);
+        } else {
+            req.models.users.exists({
+                id: orm.ne(req.session.user.id),
+                screen_name: req.param('screen_name')
+            }, function(error, exists) {
+                if(!error) {
+                    if(exists) {
+                        res.error(200, "Screen Name Already Exists");
+                    } else if(req.param('screen_name').length > 30) {
+                        res.error(200, "Screen Name Is To Long");
+                    } else {
+                        req.models.users.get(req.session.user.id, function(error, user) {
+                            if(!error && user) {
+                                user.save({
+                                    name: req.param("name"),
+                                    screen_name: req.param("screen_name"),
+                                    email: req.param("email")
+                                }, function(error) {
+                                    if(error) {
+                                        res.error(200, "Failed To Update Profile", error);
+                                    } else {
+                                        res.json({ success: true });
+                                    }
+                                });
                             } else {
-                                req.session.user = user;
-                                req.session.save();
-                                res.json({ success: true });
+                                res.error(200, "Failed To Update Profile", error);
                             }
                         });
-                    } else {
-                        res.error(200, "Failed To Update Profile", error);
                     }
-                });
-            }
-        } else {
-            res.error(200, "Failed To Update Profile");
+                } else {
+                    res.error(200, "Failed To Update Profile", error);
+                }
+            });
         }
     });
 }
@@ -72,8 +75,6 @@ exports.change_password = function(req, res) {
                         password: req.models.users.hash($.trim(req.param('new_password')))
                     }, function(error) {
                         if(!error) {
-                            req.session.user = user;
-                            req.session.save();
                             res.json({ success: true });
                         } else {
                             res.error(200, "Failed To Change Password", error);
@@ -122,10 +123,9 @@ exports.remove_location = function(req, res) {
     if(req.session.user.locations && (req.param("location") in req.session.user.locations)) {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error) {
-                delete req.session.user.locations[req.param("location")];
-                user.save({ locations: req.session.user.locations });
+                delete user.locations[req.param("location")];
+                user.save({ locations: user.locations });
                 res.json({success: true});
-                req.session.save();
             } else {
                 res.error(200, "Failed To Remove Location", true, error);
             }
@@ -149,20 +149,19 @@ exports.add_card = function(req, res) {
             }, function(error, card) {
                 if(!error) {
                     var number = req.param("card").replace(/ /g, "");
-                    req.session.user.card = {
-                        id: card.id,
-                        name: req.param("name"),
-                        card: number.substr(number.length - 4),
-                        type: card.type.toLowerCase()
-                    };
-
-                    user.save({ card: req.session.user.card }, function(error) {
+                    user.save({
+                        card: {
+                            id: card.id,
+                            name: req.param("name"),
+                            card: number.substr(number.length - 4),
+                            type: card.type.toLowerCase()
+                        }
+                    }, function(error) {
                         if(!error) {
                             res.json({
                                 success: true,
                                 callback: "window.location.reload();"
                             });
-                            req.session.save();
                         } else {
                             res.error(200, "Failed To Add Credit Card", error);
                         }
@@ -185,11 +184,8 @@ exports.remove_card = function(req, res) {
                 req.session.user.card.id,
             function(error) {
                 if(!error) {
-                    req.session.user.card = {};
-
-                    user.save({ card: req.session.user.card }, function(error) {
+                    user.save({ card: {} }, function(error) {
                         if(!error) {
-                            req.session.save();
                             res.json({ success: true });
                         } else {
                             res.error(200, "Failed To Remove Credit Card", error);
@@ -220,8 +216,6 @@ exports.plan_change = function(req, res) {
                         if(!error && plans.length != 0) {
                             user.setPricing(plans[0], function(error, user) {
                                 if(!error) {
-                                    req.session.user = user;
-                                    req.session.save();
                                     res.json({ success: true });
                                 } else {
                                     res.error(200, "Failed To Change Plan", error);
