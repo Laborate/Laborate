@@ -78,7 +78,7 @@
         </div>
     </div>
     <%  if(user.deliquent) { %>
-        <div class="notification">Your account is suspended until a valid credit card is provided.</div>
+        <div class="notification">Your account is suspended until a valid credit card is provided</div>
     <%  } else {
             if(user.notifications.length != 0) {
                 $.each(user.notifications, function(key, notification) {
