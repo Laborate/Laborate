@@ -9,7 +9,7 @@ var raven      = require('raven');
 var device     = require('express-device');
 
 /* IMPORTANT - Global Variables */
-$              = require("jquery");
+GLOBAL.$              = require("jquery");
 GLOBAL.config         = require('./config');
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});

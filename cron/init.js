@@ -4,10 +4,10 @@ var raven = require('raven');
 var winston = require('winston');
 
 /* Global Variables */
-$ = require("jquery");
-config = require('../config');
-ravenClient = new raven.Client(config.sentry.node);
-logger = new (winston.Logger)({
+GLOBAL.$ = require("jquery");
+GLOBAL.config = require('../config');
+GLOBAL.ravenClient = new raven.Client(config.sentry.node);
+GLOBAL.logger = new (winston.Logger)({
     transports: [
         new winston.transports.Console({
           handleExceptions: false,
@@ -17,7 +17,7 @@ logger = new (winston.Logger)({
     ],
     exitOnError: true
 });
-blank_function = function(data) {
+GLOBAL.blank_function = function(data) {
     /* True Means It Is On Init */
     if(data == true) {
         /* Return Blank Function */
