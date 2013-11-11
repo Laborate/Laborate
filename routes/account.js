@@ -135,7 +135,7 @@ exports.remove_location = function(req, res) {
                 user.save({ locations: user.locations });
                 res.json({success: true});
             } else {
-                res.error(200, "Failed To Remove Location", true, error);
+                res.error(200, "Failed To Remove Location", error);
             }
         });
     } else {

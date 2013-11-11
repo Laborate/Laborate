@@ -13,7 +13,7 @@ exports.restrictAccess = function(req, res, next) {
                     user.set_recovery(req, res);
                     if(next) next();
                 } else {
-                    res.error(401, false, true, error);
+                    res.error(401, false, error);
                 }
             });
         }
@@ -27,7 +27,7 @@ exports.restrictAccess = function(req, res, next) {
                         req.session.save();
                         res.redirect(req.originalUrl);
                     } else {
-                        res.error(401, false, true, error);
+                        res.error(401, false, error);
                     }
             });
         } else {
@@ -38,7 +38,7 @@ exports.restrictAccess = function(req, res, next) {
 
 exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
-        res.redirect(req.session.last_page || '/documents');
+        res.redirect('/documents');
     } else {
         if(config.cookies.rememberme in req.cookies) {
             req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
@@ -46,7 +46,7 @@ exports.loginCheck = function(req, res, next) {
                     if(!error && user.length == 1) {
                         user[0].set_recovery(req, res);
                         req.session.user = user[0];
-                        res.redirect(req.session.last_page || '/documents');
+                        res.redirect('/documents');
                     } else {
                         if(next) next();
                     }
@@ -94,7 +94,7 @@ exports.login = function(req, res, next) {
 
             }
         } else {
-            res.error(200, "Invalid Credentials", true, error);
+            res.error(200, "Invalid Credentials", error);
         }
     });
 }
@@ -155,12 +155,12 @@ exports.register = function(req, res, next) {
                                     }]
                                 });
                             } else {
-                                res.error(200, "Invalid Email Address", true, error);
+                                res.error(200, "Invalid Email Address", error);
                             }
                         });
                     }
                 } else {
-                    res.error(200, "Failed To Register", true, error);
+                    res.error(200, "Failed To Register", error);
                 }
             });
         }

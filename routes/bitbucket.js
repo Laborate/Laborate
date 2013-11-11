@@ -47,9 +47,9 @@ exports.repos = function(req, res, next) {
                 });
             } else {
                 if(error.message == "Bad credentials") {
-                    res.error(200, "Bad Bitbucket Oauth Token", true, error);
+                    res.error(200, "Bad Bitbucket Oauth Token", error);
                 } else {
-                    res.error(200, "Failed To Load Bitbucket Repos", true, error);
+                    res.error(200, "Failed To Load Bitbucket Repos", error);
                 }
             }
         });
@@ -89,7 +89,7 @@ exports.contents = function(req, res, next) {
                                     document: document.pub_id
                                 });
                             } else {
-                                res.error(200, "Failed To Create Document", true, error);
+                                res.error(200, "Failed To Create Document", error);
                             }
                         });
                         break;
@@ -128,9 +128,9 @@ exports.contents = function(req, res, next) {
                 }
             } else {
                 if(error.message == "Bad credentials") {
-                    res.error(200, "Bad Bitbucket Oauth Token", true, error);
+                    res.error(200, "Bad Bitbucket Oauth Token", error);
                 } else {
-                    res.error(200, "Failed To Load Bitbucket Repos", true, error);
+                    res.error(200, "Failed To Load Bitbucket Repos", error);
                 }
             }
         });

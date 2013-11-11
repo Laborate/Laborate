@@ -16,14 +16,16 @@ var error_handler = function(status, message, home, req, res) {
             delete req.session._csrf;
             req.session.save();
             break;
+        case 500:
+            error_message = "Internal Server Error";
+            error_html = 'Sorry we are having technical difficulties. \
+                         The problem has been reported and will be fixed soon.';
+            break;
         default:
-            error_message = "Page Not Found";
-            error_html = 'Sorry, this page is not available.';
+            error_message = (message) ? message : "Page Not Found";
+            error_html = (message) ? message : 'Sorry, this page is not available.';
             break;
     }
-
-    error_message = (message) ? message : error_message;
-    error_html = (message) ? message : error_html;
 
     if(error_html) {
         error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
@@ -75,7 +77,7 @@ var raise_error = function(error) {
 }
 
 exports.global = function(error, req, res, next) {
-    if(error.status) {
+    if(error) {
         error_handler(error.status, error.message, true, req, res);
         raise_error(error);
     } else {
@@ -84,7 +86,7 @@ exports.global = function(error, req, res, next) {
 };
 
 exports.handler = function(req, res, next) {
-    res.error = function(status, message, home, error) {
+    res.error = function(status, message, error, home) {
         error_handler(status, message, home, req, res);
         raise_error(error);
     }

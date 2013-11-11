@@ -25,7 +25,7 @@ exports.index = function(req, res, next) {
                    res.error(404);
                 }
             } else {
-                res.error(404, false, true, error);
+                res.error(404, false, error);
             }
         });
     } else {
@@ -52,7 +52,7 @@ exports.exists = function(req, res, next) {
                 }
             });
         } else {
-            res.error(200, "Document Doesn't Exist", true, error);
+            res.error(200, "Document Doesn't Exist", error);
         }
     });
 }
@@ -76,7 +76,7 @@ exports.join = function(req, res, next) {
                 res.error(200, "Incorrect Password");
             }
         } else {
-            res.error(404, false, true, error);
+            res.error(404, false,error);
         }
     });
 }
@@ -117,7 +117,7 @@ exports.update = function(req, res, next) {
                     res.error(200, "Failed To Update File");
                 }
             } else {
-                res.error(200, "Failed To Update File", true, error);
+                res.error(200, "Failed To Update File", error);
             }
         } else {
             res.error(404);
@@ -144,7 +144,7 @@ exports.download = function(req, res, next) {
                 res.error(404);
             }
         } else {
-            res.error(400, "Failed To Download File", true, error);
+            res.error(400, "Failed To Download File", error);
         }
     });
 }
@@ -162,7 +162,7 @@ exports.remove = function(req, res, next) {
                         if(!error) {
                             res.json({ success: true, master: true });
                         } else {
-                            res.error(200, "Failed To Remove File", true, error);
+                            res.error(200, "Failed To Remove File", error);
                         }
                     });
                 } else {
@@ -173,7 +173,7 @@ exports.remove = function(req, res, next) {
                         if(!error) {
                             res.json({ success: true, master: false });
                         } else {
-                            res.error(200, "Failed To Remove File", true, error);
+                            res.error(200, "Failed To Remove File", error);
                         }
                     });
                 }
@@ -181,7 +181,7 @@ exports.remove = function(req, res, next) {
                 res.error(404);
             }
         } else {
-            res.error(400, false, true, error);
+            res.error(400, false, error);
         }
     });
 }
@@ -218,7 +218,7 @@ exports.invite = function(req, res, next) {
                         if(errors.length == 0) {
                             res.json({ success: true });
                         } else {
-                            res.error(200, "Failed To Send Invite", true, errors);
+                            res.error(200, "Failed To Send Invite", errors);
                         }
                     });
                 } else {
@@ -228,7 +228,7 @@ exports.invite = function(req, res, next) {
                 res.error(404);
             }
         } else {
-            res.error(200, "Failed To Send Invite", true, error);
+            res.error(200, "Failed To Send Invite", error);
         }
     });
 }

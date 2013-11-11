@@ -54,7 +54,7 @@ exports.files = function(req, res, next) {
                 }
             }));
         } else {
-            res.error(200, "Failed To Load Files", true, error);
+            res.error(200, "Failed To Load Files", error);
         }
     });
 };
@@ -88,7 +88,7 @@ exports.file_create = function(req, res, next) {
                 }]
             });
         } else {
-            res.error(200, "Failed To Create Document", true, error);
+            res.error(200, "Failed To Create Document", error);
         }
     });
 };
@@ -147,7 +147,7 @@ exports.file_upload = function(req, res, next) {
                         role: "owner"
                     });
                 } else {
-                    res.error(200, "Failed To Upload Files", true, error);
+                    res.error(200, "Failed To Upload Files", error);
                 }
             });
         });
@@ -187,7 +187,7 @@ exports.file_rename = function(req, res, next) {
                 }
              });
         } else {
-            res.error(200, "Failed To Rename File", true, error);
+            res.error(200, "Failed To Rename File", error);
         }
     });
 };
@@ -204,7 +204,7 @@ exports.file_remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.error(200, "Failed To Remove File", true, error);
+                        res.error(200, "Failed To Remove File", error);
                     }
                 });
             } else {
@@ -215,12 +215,12 @@ exports.file_remove = function(req, res, next) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
-                        res.error(200, "Failed To Remove File", true, error);
+                        res.error(200, "Failed To Remove File", error);
                     }
                 });
             }
         } else {
-            res.error(200, "Failed To Remove File", true, error);
+            res.error(200, "Failed To Remove File", error);
         }
     });
 };
@@ -281,7 +281,7 @@ exports.create_location = function(req, res, next) {
             res.json({ success: true });
             req.session.save();
         } else {
-            res.error(200, "Failed To Create Location", true, error);
+            res.error(200, "Failed To Create Location", error);
         }
     });
 };

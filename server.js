@@ -148,13 +148,22 @@ app.configure('development', function() {
     }
 });
 
+/* Production Only */
+app.configure('development', function() {
+    /* Last Resort Error Handling */
+    process.on('uncaughtException', function (exception) {
+        console.error(exception);
+        raven_client.captureError(exception);
+    });
+});
+
 /* Express: Start Router */
 app.use(app.router);
 
 /* Send Error Logging To Sentry */
 app.use(raven.middleware.express(config.sentry.node));
 
-/* Error Handler (Globally) */
+/* Error Handler (Express) */
 app.use(require("./routes/error").global);
 
 /* Express: Import Routes */
