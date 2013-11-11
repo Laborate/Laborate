@@ -172,7 +172,11 @@ window.account = {
         });
     },
     notificationClose: function(element) {
-        element.slideUp(200);
+        element.animate({ opacity: 0 }, 200);
+        setTimeout(function() {
+            element.slideUp(200);
+        }, 250);
+
         $.post("/account/notifications/hide/", {
             notification: element.attr("data-id"),
             _csrf: window.config.csrf
