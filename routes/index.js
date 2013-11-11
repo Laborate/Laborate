@@ -41,6 +41,8 @@ module.exports = function(app) {
     app.post("/account/billing/card/add", authUtil.restrictAccess, authUtil.xhr, account.add_card);
     app.post("/account/billing/card/remove", authUtil.restrictAccess, authUtil.xhr, account.remove_card);
     app.post("/account/billing/plan", authUtil.restrictAccess, authUtil.xhr, account.plan_change);
+    app.post("/account/notifications/hide", authUtil.restrictAccess, authUtil.xhr, account.notification_hide);
+    app.post("/account/notifications/remove", authUtil.restrictAccess, authUtil.xhr, account.notification_remove);
 
     /* Documents */
     app.get('/documents', authUtil.restrictAccess, documents.index);

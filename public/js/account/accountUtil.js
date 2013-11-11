@@ -170,5 +170,37 @@ window.account = {
                     .text("Failded");
             }
         });
+    },
+    notificationClose: function(element) {
+        element.slideUp(200);
+        $.post("/account/notifications/hide/", {
+            notification: element.attr("data-id"),
+            _csrf: window.config.csrf
+        });
+    },
+    notificationRemove: function(element) {
+        var listing = $("#notifications");
+        $.post("/account/notifications/remove/", {
+            notification: element.attr("data-id"),
+            _csrf: window.config.csrf
+        }, function(result) {
+            if(result.success) {
+                element.slideUp(200);
+                setTimeout(function() {
+                    element.remove();
+
+                    if(listing.find(".item:not(.header)").length == 0) {
+                        listing.html("<div class='item empty'> \
+                            Congratulations you are all up to date! \
+                        </div>");
+                    }
+                }, 350);
+            } else {
+                element
+                    .addClass("error")
+                    .find(".remove")
+                    .text("Failded")
+            }
+        });
     }
 }

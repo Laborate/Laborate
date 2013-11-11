@@ -22,4 +22,11 @@ $(function() {
         window.account.planChange($(this).parents(".item"));
     });
 
+    $(document).on("click", ".notification .close", function() {
+        window.account.notificationClose($(this).parents(".notification"));
+    });
+
+    $(document).on("click", ".pane #notifications .remove", function() {
+        window.account.notificationRemove($(this).parents(".item"));
+    });
 });

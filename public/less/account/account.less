@@ -6,6 +6,37 @@
 }
 
 .content {
+    .notification {
+        position: relative;
+        text-align: center;
+        font-size: 14px;
+        width: 500px;
+        padding: 10px 15px;
+        margin: 20px 0 10px 25px;
+        font-weight: bold;
+        color: darken(@color_red, 25%);
+        background: lighten(@color_red, 30%);
+        border: solid 1px lighten(@color_red, 20%);
+        .box-sizing(border-box);
+        .border-radius(2px);
+
+        .close {
+            position: absolute;
+            top: 9px;
+            right: 10px;
+            font-size: 18px;
+            cursor: pointer;
+
+            &:hover {
+                color: darken(@color_red, 20%);
+
+                &:active {
+                    color: darken(@color_red, 15%);
+                }
+            }
+        }
+    }
+
     .pane {
         padding: 25px;
 
@@ -223,7 +254,7 @@
                             font-weight: bold;
                             cursor: pointer;
                             width: 80px;
-                            text-align: left;
+                            text-align: right;
                             .float-right();
                         }
 
@@ -236,6 +267,12 @@
                         .title {
                             width: 40%;
                             .ellipsis();
+                            .float-left();
+                        }
+
+                        /* Notifications */
+                        .message {
+                            .calc-width(~"100% - 105px");
                             .float-left();
                         }
 
@@ -294,6 +331,10 @@
                             }
                         }
 
+                        &:first-child {
+                            border-top: none !important;
+                        }
+
                         &:last-child {
                             border-bottom: none !important;
                         }
@@ -313,6 +354,7 @@
                         }
 
                         .remove {
+                            margin-right: 10px;
                             color: darken(@color_red, 15%);
 
                             &:hover {
@@ -354,7 +396,7 @@
                                 .box-shadow(~"none !important");
                             }
 
-                            &.selectable {
+                            &.clickable {
                                 cursor: pointer;
                                 background: darken(@color_blue, 2%);
                                 .box-shadow(0 3px 0 darken(@color_blue, 5%));
