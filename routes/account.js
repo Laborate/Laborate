@@ -36,17 +36,25 @@ exports.profile = function(req, res) {
                     } else if(req.param('screen_name').length > 30) {
                         res.error(200, "Screen Name Is To Long");
                     } else {
-                        req.models.users.get(req.session.user.id, function(error, user) {
-                            if(!error && user) {
-                                user.save({
-                                    name: req.param("name"),
-                                    screen_name: req.param("screen_name"),
-                                    email: req.param("email")
-                                }, function(error) {
-                                    if(error) {
-                                        res.error(200, "Failed To Update Profile", error);
+                        req.stripe.customers.update(req.session.user.stripe, {
+                            email: req.param("email")
+                        }, function(error) {
+                            if(!error) {
+                                req.models.users.get(req.session.user.id, function(error, user) {
+                                    if(!error && user) {
+                                        user.save({
+                                            name: req.param("name"),
+                                            screen_name: req.param("screen_name"),
+                                            email: req.param("email")
+                                        }, function(error) {
+                                            if(error) {
+                                                res.error(200, "Failed To Update Profile", error);
+                                            } else {
+                                                res.json({ success: true });
+                                            }
+                                        });
                                     } else {
-                                        res.json({ success: true });
+                                        res.error(200, "Failed To Update Profile", error);
                                     }
                                 });
                             } else {
