@@ -3,10 +3,12 @@ window.backdrop = {
     timer: null,
     email: null,
     ready: function() {
-        $("#backdrop-footer").hAlign().show();
         $("#backdrop-core").vAlign().hAlign().show();
         $(".backdrop-input").attr({"spellcheck": false});
         window.backdrop.button = $("#backdrop input[type=submit]").val();
+    },
+    load: function() {
+        $("#backdrop-footer").hAlign().show();
     },
     submit: function() {
         var passed = true;
@@ -125,3 +127,5 @@ $(document)
     .ready(window.backdrop.ready)
     .on("submit", "#backdrop form", window.backdrop.submit)
     .on("blur change", "#backdrop-email", window.backdrop.profileImg);
+
+$(window).load(window.backdrop.load);
