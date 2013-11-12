@@ -88,7 +88,7 @@ exports.update = function(req, res, next) {
         function(callback) {
             req.models.documents.roles.find({
                 user_id: req.session.user.id
-            }, "viewed", function(error, roles) {
+            }, ["viewed", "Z"], function(error, roles) {
                 if(!error) {
                     req.session.user.documents = {
                         total: roles.length,
