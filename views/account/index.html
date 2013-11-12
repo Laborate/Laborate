@@ -10,6 +10,13 @@
     <div class="locations">
         <div class="shadow-top"></div>
         <div class="listing">
+            <div class="item" data-key="dashboard">
+                <div class="container">
+                    <div class="name">Dashboard</div>
+                    <div class="icon <%= icons.dashboard %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
             <div class="item" data-key="profile">
                 <div class="container">
                     <div class="name">Public Profile</div>
@@ -40,7 +47,7 @@
             </div>
             <div class="item" data-key="billing">
                 <div class="container">
-                    <div class="name">Billing</div>
+                    <div class="name">Plans & Billing</div>
                     <div class="icon <%= icons.billing %>"></div>
                 </div>
                 <div class="active"></div>
@@ -95,6 +102,26 @@
         }
     %>
     <div class="pane">
+        <div class="selection dashboard" data-key="dashboard">
+            <div class="container">
+                <div class="side">
+                    <div class="data"><%= user.documents.total %></div>
+                    <div class="label">document<%= (user.documents.total > 1) ?  "s" : "" %></div>
+                </div>
+                <div class="side">
+                    <% if(user.pricing.documents) { %>
+                        <div class="data"><%= user.documents.password %> of <%= user.pricing.documents %></div>
+                    <% } else { %>
+                        <div class="data"><%= user.documents.password %></div>
+                    <% } %>
+                    <div class="label">protected</div>
+                </div>
+                <div class="side">
+                    <div class="data"><%= user.notifications.length %></div>
+                    <div class="label">notifications</div>
+                </div>
+            </div>
+        </div>
         <div class="selection" data-key="profile">
             <form class="container" action="/account/profile/">
                 <div class="item">
@@ -173,7 +200,7 @@
             </div>
         </div>
         <div class="selection" data-key="billing">
-            <% if($.isEmptyObject(user.card)) { %>
+            <% if($.isEmptyObject(user.card) || user.deliquent) { %>
                 <form class="container" action="/account/billing/card/add" autocomplete="off">
                     <div class="item">
                         <div class="name">Name On Card</div>
@@ -209,82 +236,84 @@
                     </div>
                 </div>
             <% } %>
-            <div class="container">
-                <% if(user.trial) { %>
-                    <div class="comment">
-                        Changing your plan will end your current trial.
-                    </div>
-                <% } %>
-                <div id="plans" class="listing">
-                    <div class="item header">
-                        <div class="small-text">Plan</div>
-                        <div class="tiny-text">Price</div>
-                        <div class="icon">Pro</div>
-                        <div class="left">Private Documents</div>
-                    </div>
-
-                    <% $.each(plans, function(key, pricing) {
-                        if(pricing.pro) {
-                            var icon_class = icons.checked + " checked";
-                        } else {
-                            var icon_class = icons.unchecked + " unchecked";
-                        }
-
-                        if(pricing.id == user.pricing.id) {
-                            var item = "active";
-                            var button = function() {
-                                if(user.trial) {
-                                    var now = new Date();
-                                    var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-                                    next_month = (now.getUTCMonth() == 12) ? 0 : now.getUTCMonth() + 1;
-                                    return "trial ends " + monthNames[next_month] + " 1st";
-                                } else {
-                                    return "current";
-                                }
-                            }();
-                            var button_class = (!user.trial && $.isEmptyObject(user.card)) ? "error" : "";
-                        } else {
-                            if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
-                                var item = "";
-                                var button = "Card Required";
-                                var button_class = "error";
-                            } else {
-                                var item = "";
-                                var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
-                                var button_class = "clickable";
-                            }
-                        }
-
-                        if(pricing.documents) {
-                            var documents = pricing.documents;
-                        } else {
-                            var documents = "Unlimited";
-                        }
-
-                        if(pricing.amount == 0) {
-                            var amount = "Free";
-                        } else {
-                            var amount = "$" + pricing.amount;
-                        }
-                    %>
-                        <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
-                            <div class="small-text"><%= pricing.name %></div>
-                            <div class="tiny-text"><%= amount %></div>
-                            <div class="icon <%= icon_class %>"></div>
-                            <div class="tiny-text"><%- documents %></div>
-                            <div class="action button <%= button_class %>"><%= button %></div>
+            <% if(!user.deliquent) { %>
+                <div class="container">
+                    <% if(user.trial) { %>
+                        <div class="comment">
+                            Changing your plan will end your current trial.
+                        </div>
+                    <% } %>
+                    <div id="plans" class="listing">
+                        <div class="item header">
+                            <div class="small-text">Plan</div>
+                            <div class="tiny-text">Price</div>
+                            <div class="icon">Pro</div>
+                            <div class="left">Private Documents</div>
                         </div>
 
-                        <% if(user.pricing.student && key == 0) { %>
-                            <div class="banner">
-                                <div class="arrow"></div>
-                                <span class="<%= icons.student %>"></span> price included within tuition
+                        <% $.each(plans, function(key, pricing) {
+                            if(pricing.pro) {
+                                var icon_class = icons.checked + " checked";
+                            } else {
+                                var icon_class = icons.unchecked + " unchecked";
+                            }
+
+                            if(pricing.id == user.pricing.id) {
+                                var item = "active";
+                                var button = function() {
+                                    if(user.trial) {
+                                        var now = new Date();
+                                        var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+                                        next_month = (now.getUTCMonth() == 12) ? 0 : now.getUTCMonth() + 1;
+                                        return "trial ends " + monthNames[next_month] + " 1st";
+                                    } else {
+                                        return "current";
+                                    }
+                                }();
+                                var button_class = (!user.trial && $.isEmptyObject(user.card)) ? "error" : "";
+                            } else {
+                                if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
+                                    var item = "";
+                                    var button = "Card Required";
+                                    var button_class = "error";
+                                } else {
+                                    var item = "";
+                                    var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
+                                    var button_class = "clickable";
+                                }
+                            }
+
+                            if(pricing.documents) {
+                                var documents = pricing.documents;
+                            } else {
+                                var documents = "Unlimited";
+                            }
+
+                            if(pricing.amount == 0) {
+                                var amount = "Free";
+                            } else {
+                                var amount = "$" + pricing.amount;
+                            }
+                        %>
+                            <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
+                                <div class="small-text"><%= pricing.name %></div>
+                                <div class="tiny-text"><%= amount %></div>
+                                <div class="icon <%= icon_class %>"></div>
+                                <div class="tiny-text"><%- documents %></div>
+                                <div class="action button <%= button_class %>"><%= button %></div>
                             </div>
-                        <% } %>
-                    <% }); %>
+
+                            <% if(user.pricing.student && key == 0) { %>
+                                <div class="banner">
+                                    <div class="arrow"></div>
+                                    <span class="<%= icons.student %>"></span> price included within tuition
+                                </div>
+                            <% } %>
+                        <% }); %>
+                    </div>
                 </div>
-            </div>
+            <% } %>
         </div>
         <div class="selection" data-key="notifications">
             <div id="notifications" class="listing container">
