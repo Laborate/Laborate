@@ -110,16 +110,19 @@
                 </div>
                 <div class="side">
                     <% if(user.pricing.documents) { %>
-                        <div class="data"><%= user.documents.password %> of <%= user.pricing.documents %></div>
+                        <div class="data"><%= user.documents.private %> of <%= user.pricing.documents %></div>
                     <% } else { %>
-                        <div class="data"><%= user.documents.password %></div>
+                        <div class="data"><%= user.documents.private %></div>
                     <% } %>
-                    <div class="label">protected</div>
+                    <div class="label">private document<%= (user.documents.private > 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
                     <div class="data"><%= user.notifications.length %></div>
                     <div class="label">notifications</div>
                 </div>
+            </div>
+            <div class="container">
+                a
             </div>
         </div>
         <div class="selection" data-key="profile">

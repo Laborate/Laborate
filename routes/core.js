@@ -86,14 +86,25 @@ exports.update = function(req, res, next) {
             });
         },
         function(callback) {
-            req.models.documents.count({
-                owner_id: req.session.user.id,
-                password: req.db.tools.ne(null)
-            }, function(error, count) {
+            req.models.documents.roles.find({
+                user_id: req.session.user.id
+            }, "viewed", function(error, roles) {
                 if(!error) {
-                    req.session.user.pass_documents = count;
+                    req.session.user.documents = {
+                        total: roles.length,
+                        private: $.map(roles, function(role) {
+                            if(role.document.password) return true;
+                        }).length,
+                        top_viewed: $.map(roles.slice(0, 10), function(role) {
+                            return role.document;
+                        })
+                    }
                 } else {
-                    req.session.user.pass_documents = null;
+                    req.session.user.documents = {
+                        total: 0,
+                        password: 0,
+                        top_viewed: []
+                    }
                 }
                 callback(error);
             });

@@ -5,12 +5,6 @@ exports.index = function(req, res, next) {
         exports.remove_card(req, res, next, false);
     }
 
-    req.session.user.documents = {
-        total: 0,
-        password: 0,
-        top_viewed: []
-    }
-
     req.models.users.pricing.find({
         student: req.session.user.pricing.student || false,
         organization: false
