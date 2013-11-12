@@ -77,31 +77,11 @@ exports.device = function(req, res, next) {
     }
 }
 
-exports.update = function(req, res, next) {
-    async.series([
-        function(callback) {
-            req.models.users.get(req.session.user.id, function(error, user) {
-                req.session.user = user;
-                callback(error);
-            });
-        },
-        function(callback) {
-            req.models.documents.count({
-                owner_id: req.session.user.id,
-                password: req.db.tools.ne(null)
-            }, function(error, count) {
-                if(!error) {
-                    req.session.user.pass_documents = count;
-                } else {
-                    req.session.user.pass_documents = null;
-                }
-                callback(error);
-            });
-        },
-        function(callback) {
-            req.session.save(callback);
-        }
-    ], next)
+exports.reload = function(req, res, next) {
+    req.models.users.get(req.session.user.id, function(error, user) {
+        req.session.user = user;
+        next(error);
+    });
 }
 
 exports.backdrop = function(req, res, next) {
