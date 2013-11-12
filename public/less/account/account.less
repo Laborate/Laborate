@@ -247,6 +247,10 @@
                     }
                 }
 
+                &.compact .item {
+                    padding: 10px !important;
+                }
+
                 .item {
                     padding: 15px 10px;
                     .clearfix();
@@ -339,6 +343,10 @@
                         }
                     }
 
+                    &.center {
+                        text-align: center;
+                    }
+
                     &.header {
                         font-size: 14px;
                         font-weight: bold;
@@ -353,21 +361,41 @@
                         .clearfix();
                         .box-sizing(border-box);
 
-                        &:nth-child(odd) {
-                            background: darken(@color_body, 3%);
+                        &.selectable {
+                            cursor: pointer;
+                            .transition(background);
 
-                            &:not(:only-child) {
-                                border-top: solid 1px darken(@color_body, 10%);
-                                border-bottom: solid 1px darken(@color_body, 10%);
+                            &:hover {
+                                background: #d0f0ff;
+
+                                &:not(:first-child) {
+                                    border-top: solid 1px darken(#d0f0ff, 5%);
+                                }
+
+                                & + .item:not(:first-child) {
+                                    border-top: solid 1px darken(#d0f0ff, 5%);
+                                }
+                            }
+
+                            &:active {
+                               background: darken(#d0f0ff, 5%);
+
+                                &:not(:first-child) {
+                                    border-top: solid 1px darken(#d0f0ff, 10%);
+                                }
+
+                                & + .item:not(:first-child) {
+                                    border-top: solid 1px darken(#d0f0ff, 10%);
+                                }
                             }
                         }
 
-                        &:first-child {
-                            border-top: none !important;
+                        &:not(:first-child) {
+                            border-top: solid 1px darken(@color_body, 10%);
                         }
 
-                        &:last-child {
-                            border-bottom: none !important;
+                        &:nth-child(odd) {
+                            background: darken(@color_body, 3%);
                         }
 
                         .icon {
@@ -407,6 +435,16 @@
 
                         .unchecked {
                             color: @color_grey;
+                        }
+
+                        .locked {
+                            margin-top: 2px;
+                            color: darken(@color_grey, 10%);
+                        }
+
+                        .users {
+                            margin-top: 2px;
+                            color: darken(@color_blue, 10%);
                         }
 
                         .button {

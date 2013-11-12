@@ -102,6 +102,7 @@
         "billing": "icon-credit-card",
         "payment_history": "icon-book-2",
         "locked": "icon-lock",
+        "locked_defined": "icon-lock-2",
         "unlocked": "icon-lock-open",
         "number": "icon-number",
         "dashed_add": "icon-add",

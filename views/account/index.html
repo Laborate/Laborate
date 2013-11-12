@@ -122,7 +122,24 @@
                 </div>
             </div>
             <div class="container">
-                a
+                <div id="plans" class="listing compact">
+                    <div class="item header center">Popular Files</div>
+
+                    <% $.each(user.documents.top_viewed, function(key, document) { %>
+                        <div class="item selectable">
+                            <a href="/editor/<%= document.pub_id %>/">
+                                <div class="name"><%= document.name %></div>
+                                <div class="action <%= (document.password) ? icons.locked_defined + " locked" : "users" %>">
+                                    <% if(!document.password && document.roles.length - 1 != 0) { %>
+                                        <%= document.roles.length - 1 %>
+                                        <span class="<%= icons.profile %>"></span>
+                                    <% } %>
+                                </div>
+                                <div class="clear"></div>
+                            </a>
+                        </div>
+                    <% }); %>
+                </div>
             </div>
         </div>
         <div class="selection" data-key="profile">
