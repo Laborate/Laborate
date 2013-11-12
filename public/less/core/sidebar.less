@@ -67,6 +67,10 @@
                 color: lighten(@color_sidebar_header_icon, 10%);
             }
         }
+
+        & + .locations {
+            .calc-height(~"100% - 140px");
+        }
     }
 
     .locations {
@@ -75,7 +79,7 @@
         font-size: 14px;
         line-height: 14px;
         overflow: hidden;
-        .calc-height(~"100% - 140px");
+        .calc-height(~"100% - 95px");
         .box-sizing(border-box);
 
         .shadow-top {

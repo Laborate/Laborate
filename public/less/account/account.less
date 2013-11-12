@@ -47,6 +47,16 @@
         .selection {
             width: 500px;
 
+            .comment {
+                margin-bottom: 30px;
+                padding: 0 25px;
+                font-size: 14px;
+                font-weight: bold;
+                color: darken(@color_body, 60%);
+                text-align: center;
+                text-shadow: 1px -1px 0 darken(@color_body, 5%);
+            }
+
             .card-type {
                 width: 32px;
                 height: 20px;
@@ -90,16 +100,6 @@
                         margin-left: 10px;
                         .calc-width(~"25% - 10px");
                         .float-left();
-                    }
-
-                    .message {
-                        margin-bottom: 30px;
-                        padding: 0 25px;
-                        font-size: 14px;
-                        font-style: italic;
-                        font-weight: bold;
-                        color: darken(@color_body, 60%);
-                        text-align: center;
                     }
 
                     .name {
@@ -199,7 +199,7 @@
                     position: relative;
                     font-size: 14px;
                     color: #fff;
-                    background: #48c10c;
+                    background: #42b409;
                     padding: 10px;
                     text-align: center;
                     .box-sizing(border-box);
@@ -212,7 +212,7 @@
                     	height: 0;
                     	border-left: 8px solid transparent;
                     	border-right: 8px solid transparent;
-                    	border-bottom: 8px solid #48c10c;
+                    	border-bottom: 8px solid #42b409;
                     }
                 }
 

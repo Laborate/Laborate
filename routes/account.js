@@ -224,6 +224,7 @@ exports.plan_change = function(req, res) {
                         if(!error && plans.length != 0) {
                             user.setPricing(plans[0], function(error, user) {
                                 if(!error) {
+                                    user.save({ trial: false });
                                     res.json({ success: true });
                                 } else {
                                     res.error(200, "Failed To Change Plan", error);
