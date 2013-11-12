@@ -1,6 +1,16 @@
 var orm = require("orm");
 
-exports.index = function(req, res) {
+exports.index = function(req, res, next) {
+    if(req.session.user.deliquent) {
+        exports.remove_card(req, res, next, false);
+    }
+
+    req.session.user.documents = {
+        total: 0,
+        password: 0,
+        top_viewed: []
+    }
+
     req.models.users.pricing.find({
         student: req.session.user.pricing.student || false,
         organization: false
@@ -158,6 +168,7 @@ exports.add_card = function(req, res) {
                 if(!error) {
                     var number = req.param("card").replace(/ /g, "");
                     user.save({
+                        deliquent: false,
                         card: {
                             id: card.id,
                             name: req.param("name"),
@@ -184,29 +195,31 @@ exports.add_card = function(req, res) {
     });
 }
 
-exports.remove_card = function(req, res) {
-    req.models.users.get(req.session.user.id, function(error, user) {
-        if(!error) {
-            req.stripe.customers.deleteCard(
-                req.session.user.stripe,
-                req.session.user.card.id,
-            function(error) {
-                if(!error) {
-                    user.save({ card: {} }, function(error) {
-                        if(!error) {
-                            res.json({ success: true });
-                        } else {
-                            res.error(200, "Failed To Remove Credit Card", error);
-                        }
-                    });
-                } else {
-                    res.error(200, "Failed To Remove Credit Card", error);
-                }
-            });
-        } else {
-            res.error(200, "Failed To Remove Credit Card", error);
-        }
-    });
+exports.remove_card = function(req, res, next, response) {
+    if(!$.isEmptyObject(req.session.user.card)) {
+        req.models.users.get(req.session.user.id, function(error, user) {
+            if(!error) {
+                req.stripe.customers.deleteCard(
+                    req.session.user.stripe,
+                    req.session.user.card.id,
+                function(error) {
+                    if(!error) {
+                        user.save({ card: {} }, function(error) {
+                            if(!error) {
+                                if(response) res.json({ success: true });
+                            } else {
+                                if(response) res.error(200, "Failed To Remove Credit Card", error);
+                            }
+                        });
+                    } else {
+                        if(response) res.error(200, "Failed To Remove Credit Card", error);
+                    }
+                });
+            } else {
+                if(response) res.error(200, "Failed To Remove Credit Card", error);
+            }
+        });
+    }
 }
 
 exports.plan_change = function(req, res) {
