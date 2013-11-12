@@ -4,7 +4,7 @@ window.url_params = function() {
     return ((params) ? {
         mode: params[1]
     } : {
-        mode: "dashboard"
+        mode: "profile"
     });
 }
 
