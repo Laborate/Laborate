@@ -70,8 +70,6 @@
             }
 
             .container {
-                .clearfix();
-
                 &:nth-child(even) {
                     margin: 30px 0;
                     padding: 30px 0;
@@ -83,35 +81,6 @@
                     margin-bottom: 0;
                     padding-bottom: 0;
                     border-bottom: none;
-                }
-
-                .side {
-                    text-align: center;
-                    padding: 10px;
-                    border-left: solid 1px darken(@color_body, 5%);
-                    min-height: 50px;
-                    width: 33.33%;
-                    .float-left();
-                    .box-sizing(border-box);
-
-                    &:first-child {
-                        border-left: none;
-                    }
-
-                    .data {
-                        text-transform: lowercase;
-                        font-size: 32px;
-                        color: darken(@color_body, 65%);
-                        font-weight: bold;
-                        margin-bottom: 2px;
-                    }
-
-                    .label {
-                        font-weight: bold;
-                        text-transform: uppercase;
-                        font-size: 12px;
-                        color: darken(@color_body, 50%);
-                    }
                 }
             }
 
