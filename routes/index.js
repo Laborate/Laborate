@@ -32,8 +32,8 @@ module.exports = function(app) {
     app.get('/verify/:code', authUtil.restrictAccess, authUtil.verify);
 
     /* Account */
-    app.get("/account", authUtil.restrictAccess, core.reload, account.index);
-    app.get("/account/:panel", authUtil.restrictAccess, core.reload, account.index);
+    app.get("/account", authUtil.restrictAccess, core.update, account.index);
+    app.get("/account/:panel", authUtil.restrictAccess, core.update, account.index);
     app.post("/account/profile", authUtil.restrictAccess, authUtil.xhr, account.profile);
     app.post("/account/settings/password", authUtil.restrictAccess, authUtil.xhr, account.change_password);
     app.post("/account/settings/delete", authUtil.restrictAccess, authUtil.xhr, account.delete_account);
@@ -58,7 +58,7 @@ module.exports = function(app) {
 
     /* Editor */
     app.get('/editor', authUtil.restrictAccess, editor.access_token, editor.index);
-    app.get('/editor/:document', authUtil.restrictAccess, core.reload, editor.access_token, editor.index);
+    app.get('/editor/:document', authUtil.restrictAccess, core.update, editor.access_token, editor.index);
     app.get('/editor/:document/download/:access_token', authUtil.restrictAccess, editor.access_token, editor.download);
     app.get('/editor/:document/download', authUtil.restrictAccess, editor.access_token, editor.download);
     app.post('/editor/exists', authUtil.restrictAccess, editor.access_token, editor.exists);
