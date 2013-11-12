@@ -77,11 +77,53 @@ exports.device = function(req, res, next) {
     }
 }
 
-exports.reload = function(req, res, next) {
-    req.models.users.get(req.session.user.id, function(error, user) {
-        req.session.user = user;
-        next(error);
-    });
+exports.realtime = function(req, res, next) {
+    /*
+    async.series([
+        function(callback) {
+            req.models.users.get(req.session.user.id, function(error, user) {
+                console.log(1);
+                 req.session.user = user;
+                 req.session.user.documents = {};
+                 callback(error);
+            });
+        },
+        function(callback) {
+            req.models.documents.count({
+                owner_id: req.session.user.id
+            }, function(error, count) {
+                console.log(2);
+                 req.session.user.documents.total = (!error) ? count : 0;
+                 callback(error);
+            });
+        },
+        function(callback) {
+            req.models.documents.count({
+                owner_id: req.session.user.id,
+                password: req.db.tools.ne(null)
+            }, function(error, count) {
+                 console.log(3);
+                 req.session.user.documents.password = (!error) ? count : 0;
+                 callback(error);
+            });
+        },
+        function(callback) {
+            req.models.documents.roles.find({
+                user_id: req.session.user.id
+            }, 10, "viewed",
+            function(error, documents) {
+                 console.log(4);
+                 req.session.user.documents.top_viewed = (!error) ? documents : [];
+                 callback(error);
+            });
+        },
+        function(callback) {
+            console.log(5);
+            req.session.save();
+            callback(null);
+        }
+    ], next);
+    */
 }
 
 exports.backdrop = function(req, res, next) {
