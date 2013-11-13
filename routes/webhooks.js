@@ -1,5 +1,4 @@
 exports.stripe = function(req, res) {
-    console.log(req.body);
     switch(req.body.type) {
         /* Trial Ending Soon */
         case "customer.subscription.trial_will_end":
