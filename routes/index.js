@@ -8,6 +8,7 @@ var editor = require('./editor');
 var github = require('./github');
 var bitbucket = require('./bitbucket');
 var google = require('./google');
+var webhooks = require('./webhooks');
 
 module.exports = function(app) {
     /* Root */
@@ -67,6 +68,9 @@ module.exports = function(app) {
     app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.remove);
     app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.access_token, github.commit);
     app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.invite);
+
+    /* Webhooks */
+    app.post("/webhook/stripe", webhooks.stripe);
 
     /* Github */
     if(config.apps.github) {

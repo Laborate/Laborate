@@ -3,24 +3,38 @@ var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
-exports.setup = function(req, res, next) {
-    //Set Server Root For Non Express Calls
-    if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
-    if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
+exports.setup = function(crsf, basicAuth) {
+    return function(req, res, next) {
+        //Set Server Root For Non Express Calls
+        if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
+        if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
-    //Header Config
-    res.setHeader("Server", "Laborate.io");
+        //Header Config
+        res.setHeader("Server", "Laborate.io");
 
-    //Replace Views Elements For Compatibility With IE
-    res.renderOutdated = function(view, data) {
-        res.render(view, data, outdatedhtml.makeoutdated(req, res));
+        //Replace Views Elements For Compatibility With IE
+        res.renderOutdated = function(view, data) {
+            res.render(view, data, outdatedhtml.makeoutdated(req, res));
+        }
+
+        if(!(/^\/webhook\/.*/.exec(req.url))) {
+            if(Object.keys(config.development.basicAuth).length != 0) {
+                crsf(req, res, function() {
+                    basicAuth(function(username, password) {
+                        return(config.development.basicAuth[username] == password);
+                    })(req, res, next);
+                });
+            } else {
+                crsf(req, res, next);
+            }
+        } else {
+            next();
+        }
     }
-
-    next();
 }
 
 exports.locals = function(req, res, next) {
-    res.locals.csrf = req.csrfToken();
+    res.locals.csrf = (req.csrfToken) ? req.csrfToken() : "";
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
     res.locals.host = config.general.server;
@@ -66,14 +80,17 @@ exports.locals = function(req, res, next) {
 }
 
 exports.device = function(req, res, next) {
-    if(req.headers['user-agent'].toLowerCase().indexOf("msie") != -1) {
+    var device = req.device.type.toLowerCase();
+    var user_agent = req.headers['user-agent'].toLowerCase();
+
+    if(user_agent.indexOf("msie") != -1) {
         res.error(200, "Internet Explorer browsers aren't supported yet. \
             Try <a class='backdrop-link' href='http://www.google.com/chrome'>Chrome</a>.", null, false);
-    } else if(["desktop", "bot"].indexOf(req.device.type.toLowerCase()) != -1) {
+    } else if(["desktop", "bot"].indexOf(device) != -1 || user_agent == "ruby") {
         next();
     } else {
-        req.device.type = req.device.type.charAt(0).toUpperCase() + req.device.type.slice(1);
-        res.error(200, req.device.type + "'s aren't supported yet", null, false);
+        device = device.charAt(0).toUpperCase() + device.slice(1);
+        res.error(200, device + "'s aren't supported yet", null, false);
     }
 }
 

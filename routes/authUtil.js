@@ -85,8 +85,8 @@ exports.login = function(req, res, next) {
     }, function(error, users) {
         if(!error && users.length == 1) {
             if(users[0].admin && $.isEmptyObject(users[0].stripe)) {
+                users[0].set_recovery(req, res);
                 users[0].verified(req, function(user) {
-                    user.set_recovery(req, res);
                     req.session.user = user;
                     res.json({
                         success: true,

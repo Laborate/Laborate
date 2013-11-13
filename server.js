@@ -43,6 +43,8 @@ require("./lib/core/config_template")(__dirname);
 /* Set App & Server Variables */
 var app = express().http().io();
 var srv = app.server;
+var crsf = express.csrf();
+var basic_auth = express.basicAuth;
 
 /* Socket IO: Configuration */
 app.io.configure(function() {
@@ -110,10 +112,9 @@ app.configure(function() {
             client: redis.createClient()
         })
     }));
-    app.use(express.csrf());
 
     //Custom Setup
-    app.use(require("./routes/core").setup);
+    app.use(require("./routes/core").setup(crsf, basic_auth));
 
     //Error Handler (Routes)
     app.use(require("./routes/error").handler);
@@ -140,12 +141,6 @@ app.configure('development', function() {
         theme: __dirname + config.development.debugger.theme,
         panels: config.development.debugger.panels
     });
-
-    if(Object.keys(config.development.basicAuth).length != 0) {
-        app.use(express.basicAuth(function(username, password) {
-            return(config.development.basicAuth[username] == password);
-        }));
-    }
 });
 
 /* Production Only */
