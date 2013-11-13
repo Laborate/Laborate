@@ -9,7 +9,7 @@
     "general": {
         "production": false,
         "port": 3000,
-        "host": "",
+        "host": "laborate.io",
         "subdomains": [
             "",
             "www"
