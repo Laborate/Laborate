@@ -3,34 +3,20 @@ var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
-exports.setup = function(crsf, basicAuth) {
-    return function(req, res, next) {
-        //Set Server Root For Non Express Calls
-        if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
-        if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
+exports.setup = function(req, res, next) {
+    //Set Server Root For Non Express Calls
+    if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
+    if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
-        //Header Config
-        res.setHeader("Server", "Laborate.io");
+    //Header Config
+    res.setHeader("Server", "Laborate.io");
 
-        //Replace Views Elements For Compatibility With IE
-        res.renderOutdated = function(view, data) {
-            res.render(view, data, outdatedhtml.makeoutdated(req, res));
-        }
-
-        if(!(/^\/webhook\/.*/.exec(req.url))) {
-            if(Object.keys(config.development.basicAuth).length != 0) {
-                crsf(req, res, function() {
-                    basicAuth(function(username, password) {
-                        return(config.development.basicAuth[username] == password);
-                    })(req, res, next);
-                });
-            } else {
-                crsf(req, res, next);
-            }
-        } else {
-            next();
-        }
+    //Replace Views Elements For Compatibility With IE
+    res.renderOutdated = function(view, data) {
+        res.render(view, data, outdatedhtml.makeoutdated(req, res));
     }
+
+    next();
 }
 
 exports.locals = function(req, res, next) {
@@ -134,6 +120,7 @@ exports.update = function(req, res, next) {
 
 exports.backdrop = function(req, res, next) {
     req.backdrop = function(theme) {
+        theme = (theme) ? theme : "blurry";
         var files = backdrop_themes[theme];
         var style_css = "";
 
@@ -143,7 +130,7 @@ exports.backdrop = function(req, res, next) {
                 files = fs.readdirSync(theme_path);
                 backdrop_themes[theme] = files;
             } else {
-                return "";
+                return req.backdrop("blurry");
             }
         }
 

@@ -5,7 +5,7 @@ exports.index = function(req, res, next) {
         exports.remove_card(req, res, next, false);
     }
 
-    req.models.users.pricing.find({
+    req.models.pricing.find({
         student: req.session.user.pricing.student || false,
         organization: false
     }, [ "priority", "A" ], function(error, plans) {
@@ -225,7 +225,7 @@ exports.plan_change = function(req, res) {
                 trial_end: req.stripe.next_month()
             }, function(error) {
                 if(!error) {
-                    req.models.users.pricing.find({
+                    req.models.pricing.find({
                         plan: req.param("plan")
                     }, function(error, plans) {
                         if(!error && plans.length != 0) {
@@ -252,7 +252,7 @@ exports.plan_change = function(req, res) {
 }
 
 exports.notification_hide = function(req, res) {
-    req.models.users.notifications.get(req.param("notification"), function(error, notification) {
+    req.models.notifications.get(req.param("notification"), function(error, notification) {
         notification.save({
             priority: false
         }, function(error) {
@@ -266,7 +266,7 @@ exports.notification_hide = function(req, res) {
 }
 
 exports.notification_remove = function(req, res) {
-    req.models.users.notifications.get(req.param("notification"), function(error, notification) {
+    req.models.notifications.get(req.param("notification"), function(error, notification) {
         notification.remove(function(error) {
             if(!error) {
                 res.json({ success: true });

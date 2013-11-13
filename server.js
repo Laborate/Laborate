@@ -114,7 +114,7 @@ app.configure(function() {
     }));
 
     //Custom Setup
-    app.use(require("./routes/core").setup(crsf, basic_auth));
+    app.use(require("./routes/core").setup);
 
     //Error Handler (Routes)
     app.use(require("./routes/error").handler);
@@ -129,6 +129,9 @@ app.configure(function() {
     app.use(require("./lib/github"));
     app.use(require("./lib/bitbucket"));
     app.use(require("./lib/google"));
+
+    //Custom Authentication
+    app.use(require("./routes/security").core(crsf, basic_auth));
 
     //Custom Routing
     app.use(require("./routes/core").locals);

@@ -7,7 +7,7 @@ exports.stripe = function(req, res) {
             }, function(error, users) {
                 if(!error && users.length == 1) {
                     if(users[0].trial) {
-                        req.models.users.notifications.create({
+                        req.models.notifications.create({
                             message: "Your trial is ending soon, please enter a valid credit card",
                             priority: true,
                             user_id: users[0].id
@@ -45,7 +45,7 @@ exports.stripe = function(req, res) {
             }, function(error, users) {
                 if(!error && users.length == 1) {
                     if(req.body.data.object.next_payment_attempt) {
-                        req.models.users.notifications.create({
+                        req.models.notifications.create({
                             message: "Your last payment failed, please enter a valid credit card. \
                                      We will try charging your card again in 3 days.",
                             priority: true,
