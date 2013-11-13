@@ -7,11 +7,13 @@ exports.stripe = function(req, res) {
                 stripe: req.body.data.object.customer
             }, function(error, users) {
                 if(!error && users.length == 1) {
-                    req.models.users.notifications.create({
-                        message: "Your trial is ending soon, please enter a valid credit card",
-                        priority: true,
-                        user_id: users[0].id
-                    }, blank_function);
+                    if(users[0].trial) {
+                        req.models.users.notifications.create({
+                            message: "Your trial is ending soon, please enter a valid credit card",
+                            priority: true,
+                            user_id: users[0].id
+                        }, blank_function);
+                    }
 
                     res.send(200);
                 } else {
