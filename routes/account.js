@@ -2,7 +2,7 @@ var orm = require("orm");
 
 exports.index = function(req, res, next) {
     if(req.session.user.deliquent) {
-        exports.remove_card(req, res, next, false);
+        exports.remove_card(req, res, false);
     }
 
     req.models.pricing.find({
@@ -189,7 +189,7 @@ exports.add_card = function(req, res) {
     });
 }
 
-exports.remove_card = function(req, res, next, response) {
+exports.remove_card = function(req, res, next) {
     if(!$.isEmptyObject(req.session.user.card)) {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error) {
@@ -200,19 +200,29 @@ exports.remove_card = function(req, res, next, response) {
                     if(!error) {
                         user.save({ card: {} }, function(error) {
                             if(!error) {
-                                if(response) res.json({ success: true });
+                                if(next) res.json({ success: true });
+
+                                if(req.session.user.pricing.documents != 0) {
+                                    req.models.notifications.create({
+                                        message: "Please enter a credit card, you plan requires a card on file.",
+                                        priority: true,
+                                        user_id: user.id
+                                    }, blank_function);
+                                }
                             } else {
-                                if(response) res.error(200, "Failed To Remove Credit Card", error);
+                                if(next) res.error(200, "Failed To Remove Credit Card", error);
                             }
                         });
                     } else {
-                        if(response) res.error(200, "Failed To Remove Credit Card", error);
+                        if(next) res.error(200, "Failed To Remove Credit Card", error);
                     }
                 });
             } else {
-                if(response) res.error(200, "Failed To Remove Credit Card", error);
+                if(next) res.error(200, "Failed To Remove Credit Card", error);
             }
         });
+    } else {
+        if(next) res.error(200, "Failed To Remove Credit Card", error);
     }
 }
 
