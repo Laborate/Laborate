@@ -27,10 +27,25 @@ exports.stripe = function(req, res) {
                 stripe: req.body.data.object.customer
             }, function(error, users) {
                 if(!error && users.length == 1) {
+                    var date = new Date(req.body.data.object.lines.data[0].period.start * 1000);
+                    var monthNames = [ "January", "Feburary", "March", "April", "May", "June",
+                                       "July", "August", "September", "October", "November", "December" ];
+                    var month = (date.getUTCMonth() == 12) ? 0 : date.getUTCMonth();
+
                     users[0].save({
                         trial: false,
                         deliquent: false
                     }, blank_function);
+
+                    req.models.payments.create({
+                        description: "Invoice for " + monthNames[month] + " " + date.getFullYear(),
+                        amount: req.body.data.object.lines.data[0].amount/100,
+                        currency: req.body.data.object.lines.data[0].currency,
+                        plan: req.body.data.object.lines.data[0].plan.name,
+                        user_id: users[0].id
+                    }, blank_function);
+
+
                     res.send(200);
                 } else {
                     res.error(200, false, error);
