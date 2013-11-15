@@ -52,7 +52,7 @@
                 </div>
                 <div class="active"></div>
             </div>
-            <div class="item" data-key="history">
+            <div class="item" data-key="payments">
                 <div class="container">
                     <div class="name">Payment History</div>
                     <div class="icon <%= icons.payment_history %>"></div>
@@ -346,18 +346,40 @@
         <div class="selection" data-key="notifications">
             <div id="notifications" class="listing container">
                 <% if(!$.isEmptyObject(user.notifications)) { %>
-                    <div class="item header" data-id="">
-                        <div class="message">Notification Message</div>
+                    <div class="item header">
+                        <div class="message">Notification Messages</div>
                     </div>
                     <% $.each(user.notifications, function(key, item) { %>
                         <div class="item" data-id="<%= item.id %>">
-                            <div class="message"><%- item.message %></div>
+                            <div class="message"><%= item.message %></div>
                             <div class="action remove">Remove</div>
                         </div>
                     <% }); %>
                 <% } else { %>
                     <div class="item empty">
                         Congratulations you are all up to date!
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="selection" data-key="payments">
+            <div class="listing container">
+                <% if(!$.isEmptyObject(user.payments)) { %>
+                    <div class="item header">
+                        <div class="description">Description</div>
+                        <div class="smaller-text">Plan</div>
+                        <div class="smaller-text">Amount</div>
+                    </div>
+                    <% $.each(user.payments, function(key, item) { %>
+                        <div class="item" data-id="<%= item.pub_id %>">
+                            <div class="description"><%= item.description %></div>
+                            <div class="smaller-text"><%= item.plan %></div>
+                            <div class="smaller-text">$<%= item.amount %></div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="item empty">
+                        You do not have payment history yet. Check back in a month!
                     </div>
                 <% } %>
             </div>
