@@ -54,7 +54,7 @@ var error_handler = function(status, message, home, req, res) {
                         css: clientCSS.renderTags("backdrop"),
                         error_html: error_html,
                         home: home,
-                        backdrop: req.backdrop("blurry"),
+                        backdrop: req.backdrop(req.session.theme),
                         pageTrack: false
                     });
                 }

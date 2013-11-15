@@ -126,9 +126,14 @@ exports.backdrop = function(req, res, next) {
 
         if(!files) {
            var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
-            if(fs.lstatSync(theme_path).isDirectory()) {
+            if(fs.existsSync(theme_path) && fs.lstatSync(theme_path).isDirectory()) {
                 files = fs.readdirSync(theme_path);
-                backdrop_themes[theme] = files;
+
+                if(files.length != 0) {
+                    backdrop_themes[theme] = files;
+                } else {
+                    return req.backdrop("blurry");
+                }
             } else {
                 return req.backdrop("blurry");
             }
