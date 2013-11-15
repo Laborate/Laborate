@@ -109,11 +109,7 @@
                     <div class="label">document<%= (user.documents.total != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
-                    <% if(user.pricing.documents) { %>
-                        <div class="data"><%= user.documents.private %> of <%= user.pricing.documents %></div>
-                    <% } else { %>
-                        <div class="data"><%= user.documents.private %></div>
-                    <% } %>
+                    <div class="data"><%= user.documents.private %></div>
                     <div class="label">private document<%= (user.documents.private != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
@@ -312,7 +308,7 @@
                                 <div class="small-text"><%= pricing.name %></div>
                                 <div class="tiny-text"><%= amount %></div>
                                 <div class="icon <%= icon_class %>"></div>
-                                <div class="tiny-text"><%- documents %></div>
+                                <div class="small-text"><%- documents %></div>
                                 <div class="action button <%= button_class %>"><%= button %></div>
                             </div>
 
@@ -363,7 +359,7 @@
                     <% }); %>
                 <% } else { %>
                     <div class="item empty">
-                        You do not have payment history yet. Check back in a month!
+                        The billing cycle starts on the first of the month. Check back soon!
                     </div>
                 <% } %>
             </div>
