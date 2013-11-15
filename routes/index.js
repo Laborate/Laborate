@@ -25,12 +25,12 @@ module.exports = function(app) {
     app.get('/reload', authUtil.reload);
 
     /* Register */
-    app.get('/register', authUtil.loginCheck, auth.register);
-    app.post('/auth/register', authUtil.register);
+    app.get('/register', authUtil.loginCheck, core.organization, auth.register);
+    app.post('/auth/register', core.organization, authUtil.register);
 
     /* Verify Email */
-    app.get('/verify', authUtil.restrictAccess, auth.verify);
-    app.get('/verify/:code', authUtil.restrictAccess, authUtil.verify);
+    app.get('/verify', authUtil.restrictAccess, core.organization, auth.verify);
+    app.get('/verify/:code', authUtil.restrictAccess, core.organization, authUtil.verify);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.update, account.index);

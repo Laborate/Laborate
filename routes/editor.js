@@ -12,12 +12,11 @@ exports.index = function(req, res, next) {
                         title: document.name,
                         navigation: document.name,
                         mode: "editor",
-                        user: req.session.user,
                         document: document,
                         js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy",
                                                 "download", "jscroll"),
                         css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll"),
-                        backdrop: req.backdrop(req.session.theme),
+                        backdrop: req.backdrop(),
                         private: !password,
                         config: { autoJoin: password }
                     });
@@ -34,7 +33,7 @@ exports.index = function(req, res, next) {
             mode: "editor-join",
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
-            backdrop: req.backdrop(req.session.theme)
+            backdrop: req.backdrop()
         });
     }
 };

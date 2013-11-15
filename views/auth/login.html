@@ -3,7 +3,7 @@
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
     <div id="backdrop-core">
-         <a href="/"><div id="backdrop-logo">laborate.io</div></a>
+         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
          <div id="backdrop-container">
             <div class="text-center">
                 <div id="backdrop-profile">
@@ -16,11 +16,22 @@
                 <input type="submit" class="backdrop-button" value="Login"/>
              </form>
          </div>
-         <div class="backdrop-bottom">Want an account? <a class="backdrop-link" href="/register/">Register</a></div>
+         <% if(!organization) { %>
+            <div class="backdrop-bottom">
+                Want an account? <a class="backdrop-link" href="/register/">Register</a>
+            </div>
+        <% } else { %>
+            <div class="backdrop-bottom">
+                Forgot your password? <a class="backdrop-link" href="/reset/">Reset</a>
+            </div>
+        <% } %>
+
     </div>
     <div id="backdrop-footer">
         <ul>
-            <li><a href="/reset/">Forgot your password?</a></li>
+            <% if(!organization) { %>
+                <li><a href="/reset/">Forgot your password?</a></li>
+            <% } %>
             <li><a href="/privacy/">Privacy Policy</a></li>
             <li><a href="/contact/">Contact Us</a></li>
             <li><a href="/">© Laborate.io</a></li>

@@ -10,7 +10,7 @@ exports.core = function(crsf, basicAuth) {
                     dns: req.host
                 }, function(error, organizations) {
                     if(!error && organizations.length == 1) {
-                        req.session.theme = organizations[0].theme;
+                        req.session.organization = organizations[0];
                         exports.finish(req, res, next, crsf, basicAuth);
                     } else {
                         res.send(403);

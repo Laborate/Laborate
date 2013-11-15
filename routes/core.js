@@ -29,11 +29,14 @@ exports.locals = function(req, res, next) {
     res.locals.description = config.general.description.join("");
     res.locals.sentry = config.sentry.browser;
     res.locals.google_verification = config.google.verification;
+    res.locals.logo = (req.session.organization) ? req.session.organization.logo : config.general.company;
     res.locals.backdrop = "";
     res.locals.private = false;
     res.locals.pageTrack = true;
     res.locals.config = {};
     res.locals.icons = config.icons;
+    res.locals.user = req.session.user;
+    res.locals.organization = req.session.organization;
     res.locals.gravatar = (req.session.user) ? ("https://www.gravatar.com/avatar/" + req.session.user.email_hash +
                           "?s=152&d=" + config.general.server + "%2Fimg%2Fdefault_gravatar.jpeg") : "/img/default_gravatar.jpeg";
     res.locals.apps = {
@@ -120,7 +123,7 @@ exports.update = function(req, res, next) {
 
 exports.backdrop = function(req, res, next) {
     req.backdrop = function(theme) {
-        theme = (theme) ? theme : "blurry";
+        theme = (theme) ? theme : (req.session.organization) ? req.session.organization.theme : "blurry";
         var files = backdrop_themes[theme];
         var style_css = "";
 
@@ -157,4 +160,18 @@ exports.backdrop = function(req, res, next) {
     }
 
     next();
+}
+
+exports.organization = function(req, res, next) {
+    if(req.session.organization) {
+        if(/^\/register\/.*/.exec(req.url) || /^\/verify\/.*/.exec(req.url)) {
+            if(req.session.organization.register) {
+                next();
+            } else {
+                res.error(404);
+            }
+        }
+    } else {
+        next();
+    }
 }
