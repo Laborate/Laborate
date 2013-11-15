@@ -106,7 +106,7 @@
             <div class="container">
                 <div class="side">
                     <div class="data"><%= user.documents.total %></div>
-                    <div class="label">document<%= (user.documents.total > 1) ?  "s" : "" %></div>
+                    <div class="label">document<%= (user.documents.total != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
                     <% if(user.pricing.documents) { %>
@@ -114,7 +114,7 @@
                     <% } else { %>
                         <div class="data"><%= user.documents.private %></div>
                     <% } %>
-                    <div class="label">private document<%= (user.documents.private > 1) ?  "s" : "" %></div>
+                    <div class="label">private document<%= (user.documents.private != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
                     <div class="data"><%= user.notifications.length %></div>
@@ -192,7 +192,7 @@
                     <div class="comment">
                         Deleting your account will delete all files you own. Please
                         transfer ownership of your files if you want other people
-                        to be able to access them.
+                        to be able to access them. This action is irreversible.
                     </div>
                     <div class="name">Password</div>
                     <input class="input" type="password" name="password" />
@@ -266,11 +266,6 @@
             <% } %>
             <% if(!user.deliquent) { %>
                 <div class="container">
-                    <% if(user.trial) { %>
-                        <div class="comment">
-                            Changing your plan will end your current trial.
-                        </div>
-                    <% } %>
                     <div id="plans" class="listing">
                         <div class="item header">
                             <div class="small-text">Plan</div>
@@ -288,18 +283,7 @@
 
                             if(pricing.id == user.pricing.id) {
                                 var item = "active";
-                                var button = function() {
-                                    if(user.trial) {
-                                        var now = new Date();
-                                        var monthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-                                        next_month = (now.getUTCMonth() == 12) ? 0 : now.getUTCMonth() + 1;
-                                        return "trial ends " + monthNames[next_month] + " 1st";
-                                    } else {
-                                        return "current";
-                                    }
-                                }();
-                                var button_class = (!user.trial && $.isEmptyObject(user.card)) ? "error" : "";
+                                var button = "current";
                             } else {
                                 if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
                                     var item = "";
@@ -312,7 +296,7 @@
                                 }
                             }
 
-                            if(pricing.documents) {
+                            if(pricing.documents != null) {
                                 var documents = pricing.documents;
                             } else {
                                 var documents = "Unlimited";
@@ -367,13 +351,13 @@
                 <% if(!$.isEmptyObject(user.payments)) { %>
                     <div class="item header">
                         <div class="description">Description</div>
-                        <div class="smaller-text">Plan</div>
+                        <div class="small-text">Plan</div>
                         <div class="smaller-text">Amount</div>
                     </div>
                     <% $.each(user.payments, function(key, item) { %>
                         <div class="item" data-id="<%= item.pub_id %>">
                             <div class="description"><%= item.description %></div>
-                            <div class="smaller-text"><%= item.plan %></div>
+                            <div class="small-text"><%= item.plan %></div>
                             <div class="smaller-text">$<%= item.amount %></div>
                         </div>
                     <% }); %>
