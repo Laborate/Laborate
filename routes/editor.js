@@ -12,6 +12,7 @@ exports.index = function(req, res, next) {
                         title: document.name,
                         navigation: document.name,
                         mode: "editor",
+                        user: req.session.user,
                         document: document,
                         js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy",
                                                 "download", "jscroll"),

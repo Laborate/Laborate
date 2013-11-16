@@ -99,6 +99,7 @@ exports.update = function(req, res, next) {
                     req.session.user.documents = {
                         total: roles.length,
                         private: $.map(roles, function(role) {
+                            console.log(123);
                             if(role.document.password) return true;
                         }).length,
                         top_viewed: $.map(roles.slice(0, 10), function(role) {
@@ -116,9 +117,10 @@ exports.update = function(req, res, next) {
             });
         },
         function(callback) {
-            req.session.save(callback);
+            req.session.save();
+            callback(null);
         }
-    ], next)
+    ], next);
 }
 
 exports.backdrop = function(req, res, next) {
