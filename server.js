@@ -40,6 +40,9 @@ require("./cron")(__dirname);
 /* Update Config Template */
 require("./lib/core/config_template")(__dirname);
 
+/* Prototype Extensions */
+require("./lib/core/extensions")();
+
 /* Set App & Server Variables */
 var app = express().http().io();
 var srv = app.server;

@@ -136,7 +136,7 @@ exports.remove_location = function(req, res) {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error) {
                 delete user.locations[req.param("location")];
-                user.save({ locations: user.locations }, function(error, user) {
+                user.save({ locations: JSON.cycle(user.locations) }, function(error, user) {
                     if(!error) {
                         req.session.user = user;
                         req.session.save();

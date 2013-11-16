@@ -277,7 +277,7 @@ exports.create_location = function(req, res, next) {
         if(!error) {
             var key = rand.generateKey(Math.floor(Math.random() * 15) + 15);
             user.locations[key] = req.param("location");
-            user.save({ locations: user.locations }, function(error, user) {
+            user.save({ locations: JSON.cycle(user.locations) }, function(error, user) {
                 if(!error) {
                     req.session.user = user;
                     req.session.save();
