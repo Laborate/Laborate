@@ -14,7 +14,8 @@
             "",
             "www"
         ],
-        "company": "laborate.io",
+        "company": "Laborate.io",
+        "logo": "laborate.io",
         "delimeter": {
             "web": " · ",
             "email": " - "

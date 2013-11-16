@@ -59,7 +59,7 @@ window.documents = {
                 break;
 
             case "url":
-                new_css.width = "250px";
+                new_css.width = "300px";
                 new_css.height = "100px";
 
                 container

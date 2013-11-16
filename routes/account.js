@@ -1,5 +1,3 @@
-var orm = require("orm");
-
 exports.index = function(req, res, next) {
     if(req.session.user.deliquent) {
         exports.remove_card(req, res, false);
@@ -24,14 +22,14 @@ exports.index = function(req, res, next) {
 
 exports.profile = function(req, res) {
     req.models.users.exists({
-        id: orm.ne(req.session.user.id),
+        id: req.db.tools.ne(req.session.user.id),
         email: req.param('email')
     }, function(error, exists) {
         if(error || exists) {
             res.error(200, "Email Already Exists", error);
         } else {
             req.models.users.exists({
-                id: orm.ne(req.session.user.id),
+                id: req.db.tools.ne(req.session.user.id),
                 screen_name: req.param('screen_name')
             }, function(error, exists) {
                 if(!error) {
@@ -50,10 +48,12 @@ exports.profile = function(req, res) {
                                             name: req.param("name"),
                                             screen_name: req.param("screen_name"),
                                             email: req.param("email")
-                                        }, function(error) {
+                                        }, function(error, user) {
                                             if(error) {
                                                 res.error(200, "Failed To Update Profile", error);
                                             } else {
+                                                req.session.user = user;
+                                                req.session.save();
                                                 res.json({ success: true });
                                             }
                                         });
@@ -137,9 +137,14 @@ exports.remove_location = function(req, res) {
             if(!error) {
                 delete user.locations[req.param("location")];
                 user.save({ locations: user.locations }, function(error, user) {
-                    console.log(user.locations)
+                    if(!error) {
+                        req.session.user = user;
+                        req.session.save();
+                        res.json({ success: true });
+                    } else {
+                        res.error(200, "Failed To Remove Location", error);
+                    }
                 });
-                res.json({success: true});
             } else {
                 res.error(200, "Failed To Remove Location", error);
             }
@@ -243,8 +248,15 @@ exports.plan_change = function(req, res) {
                         if(!error && plans.length != 0) {
                             user.setPricing(plans[0], function(error, user) {
                                 if(!error) {
-                                    user.save({ trial: false });
-                                    res.json({ success: true });
+                                    user.save({ trial: false }, function(error, user) {
+                                        if(!error) {
+                                            req.session.user = user;
+                                            req.session.save();
+                                            res.json({ success: true });
+                                        } else {
+                                            res.error(200, "Failed To Change Plan", error);
+                                        }
+                                    });
                                 } else {
                                     res.error(200, "Failed To Change Plan", error);
                                 }

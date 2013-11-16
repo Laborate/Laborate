@@ -275,11 +275,13 @@ exports.locations = function(req, res, next) {
 exports.create_location = function(req, res, next) {
     req.models.users.get(req.session.user.id, function(error, user) {
         if(!error) {
-            req.session.user.locations[rand.generateKey(Math.floor(Math.random() * 15) + 15)] = req.param("location");
-            user.save({ locations: req.session.user.locations }, function(error, user) {
+            var key = rand.generateKey(Math.floor(Math.random() * 15) + 15);
+            user.locations[key] = req.param("location");
+            user.save({ locations: user.locations }, function(error, user) {
                 if(!error) {
-                    res.json({ success: true });
+                    req.session.user = user;
                     req.session.save();
+                    res.json({ success: true });
                 } else {
                     res.error(200, "Failed To Create Location", error);
                 }
