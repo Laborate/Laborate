@@ -277,6 +277,9 @@ exports.create_location = function(req, res, next) {
         if(!error) {
             var key = rand.generateKey(Math.floor(Math.random() * 15) + 15);
             user.locations[key] = req.param("location");
+
+            // JSON.cycle is a patch til I figure out why the orm
+            // was not saving the changed locations object
             user.save({ locations: JSON.cycle(user.locations) }, function(error, user) {
                 if(!error) {
                     req.session.user = user;

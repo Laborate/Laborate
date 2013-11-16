@@ -136,6 +136,9 @@ exports.remove_location = function(req, res) {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error) {
                 delete user.locations[req.param("location")];
+
+                // JSON.cycle is a patch til I figure out why the orm
+                // was not saving the changed locations object
                 user.save({ locations: JSON.cycle(user.locations) }, function(error, user) {
                     if(!error) {
                         req.session.user = user;
