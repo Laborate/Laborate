@@ -171,5 +171,5 @@
         "output_log": "../logs/middleware/log.out",
         "error_log": "../logs/middleware/log.error"
     },
-    "cron": ""
+    "cron": "../../logs/middleware/cron.log"
 }

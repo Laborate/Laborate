@@ -1,7 +1,7 @@
 exports.core = function(crsf, basicAuth) {
     return function(req, res, next) {
         if(req.session.allowed) {
-            next();
+            exports.finish(req, res, next, crsf, basicAuth);
         } else {
             if(req.host.split(".").slice(-2).join(".") == config.general.host) {
                 exports.finish(req, res, next, crsf, basicAuth);
