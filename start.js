@@ -5,7 +5,6 @@ var forever = require('forever-monitor');
 
 //Create Logs Folder
 fs.mkdirSync(__dirname + '/../logs/' + config.forever.uid, 0775, true);
-fs.mkdirSync(__dirname + '/../logs/' + config.forever.uid, 0775, true);
 
 //Configure Forever
 var child = new (forever.Monitor)(__dirname + '/server.js', {
