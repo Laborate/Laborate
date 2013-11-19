@@ -396,9 +396,15 @@ window.documents = {
 
         $(".context-menu")
             .css({
-                "top": event.pageY + 16,
+                "top": function() {
+                    if(($(window).height() - event.pageY) <= 150) {
+                        return event.pageY  - $(".context-menu").height();
+                    } else {
+                        return event.pageY + 16;
+                    }
+                }(),
                 "left": function() {
-                    if(($(window).width() - event.pageX) <= 130) {
+                    if(($(window).width() - event.pageX) <= 150) {
                         return event.pageX  - $(".context-menu").width();
                     } else {
                         return event.pageX + 4;
