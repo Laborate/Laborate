@@ -254,7 +254,11 @@ exports.reset_password = function(req, res, next) {
         reset: req.param("code")
     }, function(error, users) {
         if(!error && users.length == 1) {
-            if(req.param("password") == req.param("password_confirm")) {
+            if($.trim(req.param("password")) != $.trim(req.param("password_confirm"))) {
+                res.error(200, "Passwords Do Not Match");
+            } else if($.trim(req.param('password')).length <= 6) {
+                res.error(200, "Password Is To Short");
+            } else {
                 var user = users[0];
 
                 user.save({
@@ -274,8 +278,6 @@ exports.reset_password = function(req, res, next) {
                         res.error(200, "Failed To Reset Password", error);
                     }
                 });
-            } else {
-                res.error(200, "Passwords Do Not Match");
             }
         } else {
             res.error(200, "Failed To Reset Password", error);

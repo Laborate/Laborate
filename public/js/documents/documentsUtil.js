@@ -356,9 +356,6 @@ window.documents = {
         var file = $(".pane .file[data-id='" + menu.attr("data-id") + "']");
 
         switch(element.data("action")) {
-            case "open":
-                window.location.href = "/editor/" + menu.data("id");
-                break;
             case "rename":
                 window.documents.popup("rename", {
                     "id": file.attr("data-id"),
@@ -386,6 +383,9 @@ window.documents = {
         }
     },
     contextMenuOpen: function(element, event) {
+        $(".context-menu-open")
+            .attr("href", "/editor/" + element.data("id"));
+
         $("#context-menu-remove").text(function() {
             if(element.data("role") == "owner") {
                 return "Delete";
