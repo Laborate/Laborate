@@ -24,7 +24,7 @@ exports.core = function(crsf, basicAuth) {
 
 exports.finish = function(req, res, next, crsf, basicAuth) {
     if(!(/^\/webhook\/.*/.exec(req.url))) {
-        if(Object.keys(config.development.basicAuth).length != 0) {
+        if(!config.general.production && Object.keys(config.development.basicAuth).length != 0) {
             crsf(req, res, function() {
                 basicAuth(function(username, password) {
                     return (config.development.basicAuth[username] == password);

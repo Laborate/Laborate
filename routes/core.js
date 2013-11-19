@@ -37,7 +37,7 @@ exports.locals = function(req, res, next) {
     res.locals.config = {};
     res.locals.icons = config.icons;
     res.locals.user = req.session.user;
-    res.locals.organization = req.session.organization;
+    res.locals.organization = req.session.organization || { register: true };
     res.locals.gravatar = (req.session.user) ? ("https://www.gravatar.com/avatar/" + req.session.user.email_hash +
                           "?s=152&d=" + config.general.server + "%2Fimg%2Fdefault_gravatar.jpeg") : "/img/default_gravatar.jpeg";
     res.locals.apps = {
@@ -167,12 +167,14 @@ exports.backdrop = function(req, res, next) {
 
 exports.organization = function(req, res, next) {
     if(req.session.organization) {
-        if(/^\/register\/.*/.exec(req.url) || /^\/verify\/.*/.exec(req.url)) {
+        if(["register", "verify", "reset"].indexOf(req.url.split("/")[1]) != -1) {
             if(req.session.organization.register) {
                 next();
             } else {
                 res.error(404);
             }
+        } else {
+            next();
         }
     } else {
         next();
