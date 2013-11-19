@@ -100,7 +100,6 @@ exports.update = function(req, res, next) {
                     req.session.user.documents = {
                         total: roles.length,
                         private: $.map(roles, function(role) {
-                            console.log(123);
                             if(role.document.password) return true;
                         }).length,
                         top_viewed: $.map(roles.slice(0, 10), function(role) {
