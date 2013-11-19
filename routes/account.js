@@ -84,7 +84,7 @@ exports.change_password = function(req, res) {
                         res.error(200, "Password Is To Short");
                 } else {
                     user.save({
-                        password: req.models.users.hash($.trim(req.param('new_password')))
+                        password: user.hash($.trim(req.param('new_password')))
                     }, function(error) {
                         if(!error) {
                             res.json({ success: true });

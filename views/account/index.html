@@ -262,6 +262,12 @@
             <% } %>
             <% if(!user.deliquent) { %>
                 <div class="container">
+                    <% if(user.pricing.priority > 0) { %>
+                        <div class="comment">
+                            When downgrading your plan all documents that
+                            currently have passwords will not be affected.
+                        </div>
+                    <% } %>
                     <div id="plans" class="listing">
                         <div class="item header">
                             <div class="small-text">Plan</div>

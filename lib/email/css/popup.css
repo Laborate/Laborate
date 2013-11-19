@@ -44,6 +44,11 @@
     color: #333333;
 }
 
+.link {
+    max-width: 100%;
+    word-wrap: normal;
+}
+
 .footer {
     padding: 5px 0 30px 0;
     color: #767676;

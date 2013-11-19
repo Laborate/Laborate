@@ -32,6 +32,12 @@ module.exports = function(app) {
     app.get('/verify', authUtil.restrictAccess, core.organization, auth.verify);
     app.get('/verify/:code', authUtil.restrictAccess, core.organization, authUtil.verify);
 
+    /* Reset Email */
+    app.get('/reset', authUtil.loginCheck, core.organization, auth.reset);
+    app.get('/reset/:code', authUtil.loginCheck, core.organization, auth.reset_password);
+    app.post('/auth/reset', authUtil.loginCheck, core.organization, authUtil.reset);
+    app.post('/auth/reset/:code', authUtil.loginCheck, core.organization, authUtil.reset_password);
+
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.update, account.index);
     app.get("/account/:panel", authUtil.restrictAccess, core.update, account.index);

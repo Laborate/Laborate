@@ -92,6 +92,7 @@ exports.login = function(req, res, next) {
                         success: true,
                         next: req.session.redirect_url || "/documents/"
                      });
+                     delete req.session.reset;
                      delete req.session.redirect_url;
                      req.session.save();
                 });
@@ -114,6 +115,7 @@ exports.login = function(req, res, next) {
 exports.logout = function(req, res) {
     delete req.session.user;
     delete req.session.last_page;
+    delete req.session.reset;
     req.session.save();
     res.clearCookie(config.cookies.rememberme, {
         domain: "." + req.host
@@ -203,6 +205,7 @@ exports.reload = function(req, res, next) {
                 user.set_recovery(req, res);
                 req.session.user = user;
                 res.redirect(req.session.last_page || '/documents');
+                delete req.session.reset;
                 delete req.session.last_page;
                 req.session.save();
             } else {
@@ -212,4 +215,70 @@ exports.reload = function(req, res, next) {
     } else {
         res.redirect('/logout/');
     }
+}
+
+exports.reset = function(req, res, next) {
+    req.models.users.find({
+        email: req.param("email")
+    }, function(error, users) {
+        if(!error && users.length == 1) {
+            var user = users[0];
+            user.set_reset();
+
+            req.session.reset = true;
+            req.session.save();
+
+            res.json({
+                success: true,
+                next: "/reset"
+            });
+
+            req.email("reset", {
+                from: "support@laborate.io",
+                subject: "Reset Password Link",
+                users: [{
+                    name: user.name,
+                    email: user.email,
+                    code: user.reset
+                }]
+            });
+        } else {
+            res.error(200, "Email Address Not Found", error);
+        }
+    });
+
+}
+
+exports.reset_password = function(req, res, next) {
+    req.models.users.find({
+        reset: req.param("code")
+    }, function(error, users) {
+        if(!error && users.length == 1) {
+            if(req.param("password") == req.param("password_confirm")) {
+                var user = users[0];
+
+                user.save({
+                    reset: null,
+                    password: user.hash($.trim(req.param('password')))
+                }, function(error, user) {
+                    if(!error) {
+                        req.session.user = user;
+                        delete req.session.reset;
+                        req.session.save();
+
+                        res.json({
+                            success: true,
+                            next: "/"
+                        });
+                    } else {
+                        res.error(200, "Failed To Reset Password", error);
+                    }
+                });
+            } else {
+                res.error(200, "Passwords Do Not Match");
+            }
+        } else {
+            res.error(200, "Failed To Reset Password", error);
+        }
+    });
 }
