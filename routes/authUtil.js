@@ -86,16 +86,20 @@ exports.login = function(req, res, next) {
         if(!error && users.length == 1) {
             var user = users[0];
 
-            if(req.session.organization && user.organizations.length != 0) {
-                $.each(user.organizations, function(key, role) {
-                    if(req.session.organization.id == role.organization_id) {
-                        finish(user);
-                        return false;
-                    } else {
-                        res.error(200, "Invalid Credentials", error);
-                        return true;
-                    }
-                });
+            if(req.session.organization) {
+                if(user.organizations.length != 0) {
+                    $.each(user.organizations, function(key, role) {
+                        if(req.session.organization.id == role.organization_id) {
+                            finish(user);
+                            return false;
+                        } else {
+                            res.error(200, "Invalid Credentials", error);
+                            return true;
+                        }
+                    });
+                } else {
+                    res.error(200, "Invalid Credentials", error);
+                }
             } else {
                 finish(user);
             }
