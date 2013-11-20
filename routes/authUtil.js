@@ -84,32 +84,49 @@ exports.login = function(req, res, next) {
         password: req.models.users.hash($.trim(req.param('password')))
     }, function(error, users) {
         if(!error && users.length == 1) {
-            if(users[0].admin && $.isEmptyObject(users[0].stripe)) {
-                users[0].set_recovery(req, res);
-                users[0].verified(req, function(user) {
-                    req.session.user = user;
-                    res.json({
-                        success: true,
-                        next: req.session.redirect_url || "/documents/"
-                     });
-                     delete req.session.reset;
-                     delete req.session.redirect_url;
-                     req.session.save();
+            var user = users[0];
+
+            if(req.session.organization && user.organizations.length != 0) {
+                $.each(user.organizations, function(key, role) {
+                    if(req.session.organization.id == role.organization_id) {
+                        finish(user);
+                        return false;
+                    } else {
+                        res.error(200, "Invalid Credentials", error);
+                        return true;
+                    }
                 });
             } else {
-                req.session.user = users[0];
-                res.json({
-                    success: true,
-                    next: req.session.redirect_url || "/documents/"
-                 });
-                 delete req.session.redirect_url;
-                 req.session.save();
-
+                finish(user);
             }
         } else {
             res.error(200, "Invalid Credentials", error);
         }
     });
+
+    function finish(user) {
+        if(user.admin && $.isEmptyObject(user.stripe)) {
+            user.set_recovery(req, res);
+            user.verified(req, function(user) {
+                req.session.user = user;
+                res.json({
+                    success: true,
+                    next: req.session.redirect_url || "/documents/"
+                 });
+                 delete req.session.reset;
+                 delete req.session.redirect_url;
+                 req.session.save();
+            });
+        } else {
+            req.session.user = user;
+            res.json({
+                success: true,
+                next: req.session.redirect_url || "/documents/"
+            });
+            delete req.session.redirect_url;
+            req.session.save();
+        }
+    }
 }
 
 exports.logout = function(req, res) {

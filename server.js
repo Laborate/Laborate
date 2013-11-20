@@ -150,7 +150,7 @@ app.configure('development', function() {
 });
 
 /* Production Only */
-app.configure('development', function() {
+app.configure('production', function() {
     /* Last Resort Error Handling */
     process.on('uncaughtException', function (exception) {
         console.error(exception);

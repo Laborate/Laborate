@@ -19,16 +19,6 @@
                 <% } %>
             </form>
          </div>
-         <% if(document.password) { %>
-            <div class="backdrop-bottom">
-                Forgot password?
-                <% if(document.owner_id == user.id) { %>
-                    <a class="backdrop-link" href="mailto:support@laborate.io?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Dear Support Team, %0D%0AI am <%= user.name %> and was wondering if you could reset document #<%= document.id %>'s password?">Email</a> support.
-                <% } else { %>
-                    <a class="backdrop-link" href="mailto:<%= user.email %>?subject=Document #<%= document.id %>'s Password?<%= site_delimeter + site_title %>&body=Hey <%= document.owner.name %>,%0D%0AI am <%= user.name %> and was wondering if you knew document #<%= document.id %>'s password?">Email</a> the owner.
-                <% } %>
-            </div>
-         <% } %>
     </div>
     <div id="backdrop-footer">
         <ul>

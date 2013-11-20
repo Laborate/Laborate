@@ -158,7 +158,9 @@ window.editorUtil = {
                             },
                             function(next) {
                                 window.editor.clearHistory();
-
+                                setTimeout(next, 1000);
+                            },
+                            function(next) {
                                 if(callback) {
                                     callback();
                                 } else {

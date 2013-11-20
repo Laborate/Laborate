@@ -214,7 +214,7 @@ exports.remove_card = function(req, res, next) {
 
                                 if(req.session.user.pricing.documents != 0) {
                                     req.models.notifications.create({
-                                        message: "Please enter a credit card, you plan requires a card on file.",
+                                        message: "Please enter a credit card, your plan requires a card on file",
                                         priority: true,
                                         user_id: user.id
                                     }, blank_function);
