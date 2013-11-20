@@ -9,7 +9,7 @@ exports.setup = function(req, res, next) {
     if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
     //Header Config
-    res.setHeader("Server", "Laborate.io");
+    res.setHeader("Server", config.general.company);
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {
