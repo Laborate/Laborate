@@ -19,7 +19,7 @@
          <div class="backdrop-bottom">
             <% if(organization.register) { %>
                 Want an account? <a class="backdrop-link" href="/register/">Register</a>
-            <% } else if(organization.id) { %>
+            <% } else if(organization.id && organization.reset) { %>
                 Forgot your password? <a class="backdrop-link" href="<%= organization.reset %>">Reset</a>
             <% } %>
          </div>

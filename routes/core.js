@@ -167,10 +167,10 @@ exports.backdrop = function(req, res, next) {
 exports.organization = function(req, res, next) {
     if(req.session.organization) {
         if(["register", "verify", "reset"].indexOf(req.url.split("/")[1]) != -1) {
-            if(req.session.organization.register) {
-                next();
-            } else {
+            if(!req.session.organization.register) {
                 res.error(404);
+            } else {
+                next();
             }
         } else {
             next();

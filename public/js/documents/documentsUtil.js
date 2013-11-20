@@ -520,7 +520,7 @@ window.documents = {
 
         if(window.documents.interval) clearTimeout(window.documents.timer);
 
-        if(location == "popup" || location == "online" || !location) {
+        if(!location || ["popup", "search", "online"].indexOf(location) != -1) {
             $("title").text(window.config.title);
             window.documents.onlineDirectory(history);
             window.documents.locationNotification("online", false);
@@ -528,6 +528,18 @@ window.documents = {
                 window.documents.mode = null;
                 window.documents.popupAddLocation($(".popup"));
                 window.history.pushState(null, null, "/documents/");
+            } else if(location == "search") {
+                var interval = setInterval(function() {
+                    if(window.documents.locationActivated) {
+                        window.documents.mode = null;
+                        window.history.pushState(null, null, "/documents/");
+                        clearInterval(interval);
+                        $("#search input")
+                            .val(decodeURI(path.substring(0, path.length - 1)))
+                            .parents("form")
+                            .submit();
+                    }
+                }, 100);
             }
         } else {
             if(location_element.length != 0) {

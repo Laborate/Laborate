@@ -280,7 +280,7 @@ exports.create_location = function(req, res, next) {
 
             // JSON.cycle is a patch til I figure out why the orm
             // was not saving the changed locations object
-            user.save({ locations: JSON.cycle(user.locations) }, function(error) {
+            user.save({ locations: JSON.cycle(user.locations) }, function(error, user) {
                 if(!error) {
                     req.session.user = user;
                     req.session.save();

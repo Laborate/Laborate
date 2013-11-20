@@ -111,7 +111,7 @@ window.account = {
 
                     if(listing.find(".item:not(.header)").length == 0) {
                         listing.html("<div class='item empty'> \
-                            You Don't Have Any Locations. <a href='/documents/'>Add Some</a> \
+                            You Don't Have Any Locations. <a href='/documents/popup/'>Add Some</a> \
                         </div>");
                     }
                 }, 350);
@@ -206,5 +206,8 @@ window.account = {
                     .text("Failded")
             }
         });
+    },
+    fileSearch: function(search) {
+        window.location.href = "/documents/search/" + encodeURI(search) + "/";
     }
 }
