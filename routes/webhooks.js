@@ -1,4 +1,6 @@
 exports.stripe = function(req, res) {
+    res.send(200);
+
     switch(req.body.type) {
         /* Payment Succeeded */
         case "invoice.payment_succeeded":
@@ -23,11 +25,8 @@ exports.stripe = function(req, res) {
                             plan: req.body.data.object.lines.data[0].plan.name,
                             user_id: users[0].id
                         }, blank_function);
-
-
-                        res.send(200);
                     } else {
-                        res.error(200, false, error);
+                        blank_function(error);
                     }
                 });
             }
@@ -49,16 +48,10 @@ exports.stripe = function(req, res) {
                     } else {
                         users[0].save({ deliquent: true }, blank_function);
                     }
-
-                    res.send(200);
                 } else {
-                    res.error(200, false, error);
+                    blank_function(error);
                 }
             });
-            break;
-
-        default:
-            res.send(200);
             break;
     }
 }
