@@ -13,14 +13,14 @@ window.chat = {
     	window.chat.helper([
             ['Console Commands', 'bold underline'],
             ['1 command per message', 'indent small'],
-            [':c = clear screen', 'indent'],
+            [':c = clear history', 'indent'],
             [':h = console commands', 'indent'],
             [':n = toggle notifications', 'indent'],
             ['', 'seperator'],
             ['Message References', 'bold underline'],
-            ['&number = scroll to line', 'indent'],
-            ['#number = highlight line', 'indent'],
-            ['^pattern = search for word', 'indent']
+            ['&number = scroll', 'indent'],
+            ['#number / range = highlight', 'indent'],
+            ['^word = search', 'indent']
     	]);
     },
     toggle: function() {
