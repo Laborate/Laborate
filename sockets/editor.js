@@ -55,8 +55,7 @@ exports.leave = function(req, override) {
 
 exports.chatRoom = function(req) {
     if(req.session.user) {
-        req.data.from = req.session.user.screen_name;
-        req.data.gravatar = req.session.user.gravatar;
+        req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', req.data);
     } else {
         editorUtil.kickOut(req);
@@ -65,8 +64,7 @@ exports.chatRoom = function(req) {
 
 exports.document = function(req) {
     if(req.session.user) {
-        req.data.from = req.session.user.screen_name;
-        req.data.gravatar = req.session.user.gravatar;
+        req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 
         editorUtil.redisClient.get(editorUtil.socketRoom(req), function(error, reply) {
@@ -79,8 +77,7 @@ exports.document = function(req) {
 
 exports.cursors = function(req) {
     if(req.session.user) {
-        req.data.from = req.session.user.screen_name;
-        req.data.gravatar = req.session.user.gravatar;
+        req.data["from"] = req.session.user.screen_name;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorCursors', req.data);
     } else {
         editorUtil.kickOut(req);
@@ -115,8 +112,6 @@ exports.extras = function(req) {
 
     //Logic
     if(req.session.user) {
-        req.data.from = req.session.user.screen_name;
-        req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', req.data);
 
         if("breakpoint" in req.data) {
