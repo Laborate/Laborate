@@ -54,6 +54,45 @@ $(function() {
     setInterval(function() {
         $("body").attr("contenteditable", "false");
     }, 500);
+
+
+    //Setup Jscroll
+    $(".scroll-pane").each(function() {
+		var _this = $(this);
+
+		_this.jScrollPane({
+			showArrows: false,
+    	    animateScroll: false,
+    	    autoReinitialise: true,
+    	    hideFocus: true
+		});
+
+		if(_this.parent('.pane').length) {
+		    $(".pane .scroll-pane").css("height", function() {
+                return $(window).height() - $(".header").height();
+            }());
+		}
+
+		var api = _this.data('jsp');
+		var throttleTimeout;
+		$(window).bind('resize', function() {
+			// IE fires multiple resize events while you are dragging the browser window which
+			// causes it to crash if you try to update the scrollpane on every one. So we need
+			// to throttle it to fire a maximum of once every 50 milliseconds...
+			if (!throttleTimeout) {
+				throttleTimeout = setTimeout(function() {
+					api.reinitialise();
+					throttleTimeout = null;
+                }, 50);
+			}
+
+			if(_this.parent('.pane').length) {
+    		   _this.css("height", function() {
+                    return $(window).height() - $(".header").height();
+                }());
+    		}
+        });
+    });
 });
 
 window.socketUtil = {

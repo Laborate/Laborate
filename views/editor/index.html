@@ -62,14 +62,14 @@
             <div class="item" data-key="upload">
                 <div class="container">
                     <div class="name">Upload</div>
-                    <div class="icon <%= icons.upload %>"></div>
+                    <div class="icon <%= icons.circle_arrow_up %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
             <div class="item" data-key="download">
                 <div class="container">
                     <div class="name">Download</div>
-                    <div class="icon <%= icons.download %>"></div>
+                    <div class="icon <%= icons.circle_arrow_down %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
@@ -109,6 +109,12 @@
     <div class="pane">
         <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
         <div class="shadow-top"></div>
+    </div>
+    <div class="chat">
+        <div class="conversation scroll-pane"></div>
+        <div class="messenger">
+            <textarea placeholder="message goes here"></textarea>
+        </div>
     </div>
 </div>
 <% include ../includes/footer.html %>

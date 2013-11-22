@@ -2,14 +2,16 @@
 @import '../compless/all';
 
 html, body {
-    overflow: hidden;
+    overflow-y: hidden;
 }
 
 .content {
     .pane {
+        overflow: hidden;
         margin: 0;
         padding: 0 0 0 5px;
-        position: relative;
+        position: absolute;
+        .calc-width(~"100% - 250px");
         .box-sizing(border-box);
 
         .shadow-top {
@@ -22,54 +24,38 @@ html, body {
             .transition(top);
         }
     }
-}
 
-@media print {
-    html, body {
-        margin: 0px !important;
-        padding: 0px !important;
-    }
+    .chat {
+        position: absolute;
+        right: 0;
+        width: 250px;
+        height: 100%;
+        background: @color_chat;
 
-    #express-debug, #sidebar,
-    #tshadow, #full_screen,
-    #chatRoom, #header_navigation {
-        display: none !important;
-    }
+        .messenger {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: @color_chat_messenger;
+            height: 100px;
 
-    #header {
-        background: none !important;
-        position: relative !important;
-        display: inherit !important;
-    }
+            textarea {
+                background-color: darken(#fff, 5%);
+                background-image: url('/img/tshadow.png');
+                background-repeat: repeat-x;
+                background-position: 0 -3px;
+                border: none;
+                width: 230px;
+                height: 80px;
+                margin: 10px;
+                padding: 5px;
 
-    #logo {
-        text-shadow: none !important;
-        color: #333 !important;
-    }
-
-    #editorCodeMirror {
-        margin: 10px !important;
-        overflow: visible !important;
-        width: 100% !important;
-    }
-
-    .CodeMirror[style], .CodeMirror-scroll {
-        width: 100% !important;
-        height: auto !important;
-        margin-bottom: 10px !important;
-    }
-
-    .CodeMirror-scroll {
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-    }
-
-    .CodeMirror-gutter {
-        background: none !important;
-        padding-right: 10px !important;
-    }
-
-    .CodeMirror-gutter-text {
-        color: #333 !important;
+                &:focus {
+                    background-color: #fff;
+                }
+            }
+        }
     }
 }

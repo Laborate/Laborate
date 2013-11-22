@@ -88,9 +88,7 @@ window.editorUtil = {
         }
     },
     refresh: function() {
-        var header = $(".header").height();
-        var window_height = window.innerHeight;
-        window.editor.setSize("", (window_height - header - 2) + "px")
+        window.editor.setSize("", $(window).height() - $(".header").height());
         editor.refresh();
     },
     fullScreen: function() {

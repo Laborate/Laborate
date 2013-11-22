@@ -66,10 +66,7 @@ window.chatRoom = {
         window.chatRoom._scrollToBottom();
     },
     resize: function() {
-        var header = $("#header").height();
-        var chatroom_messenger = $("#chatBox").height();
-        var window_height = window.innerHeight;
-        $("#chatConversation").height((window_height - (header + chatroom_messenger + 30)) + "px");
+        $(".chat").height($(window).height() - $(".header").height());
     },
     signIn: function(screenName) {
         window.screenName = screenName;
@@ -170,16 +167,9 @@ window.chatRoom = {
 //          Chat Room Control Functions
 /////////////////////////////////////////////////
 $(function() {
-	window.jscrollData = $('.scroll-pane')
-	    .jScrollPane({
-    	    showArrows: false,
-    	    animateScroll: true,
-    	    autoReinitialise: true,
-    	    hideFocus: true
-        })
-        .data('jsp');
+     $('.chat .conversation').data("jsp");
 
-    setTimeout(window.chatRoom.help, 10);
+    //setTimeout(window.chatRoom.help, 10);
     setInterval(window.chatRoom.resize, 1000);
     $(window).resize(window.chatRoom.resize);
 
