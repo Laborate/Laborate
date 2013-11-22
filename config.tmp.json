@@ -124,7 +124,8 @@
         "unchecked": "icon-unchecked",
         "student": "icon-graduation",
         "dashboard": "icon-painting",
-        "share": "icon-user-add"
+        "share": "icon-user-add",
+        "users": "icon-users"
     },
     "github": {
         "id": "",

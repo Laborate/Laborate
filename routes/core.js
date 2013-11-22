@@ -38,8 +38,7 @@ exports.locals = function(req, res, next) {
     res.locals.icons = config.icons;
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization || { register: true };
-    res.locals.gravatar = (req.session.user) ? ("https://www.gravatar.com/avatar/" + req.session.user.email_hash +
-                          "?s=152&d=" + config.general.server + "%2Fimg%2Fdefault_gravatar.jpeg") : "/img/default_gravatar.jpeg";
+    res.locals.gravatar = (req.session.user) ? (req.session.user.gravatar) : "/img/default_gravatar.jpeg";
     res.locals.apps = {
         sftp: {
             show: config.apps.sftp

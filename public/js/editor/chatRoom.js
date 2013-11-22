@@ -46,7 +46,7 @@ window.chat = {
         $("#sidebar").toggle();
         window.editor.refresh();
     },
-    message: function(from, message, direction) {
+    message: function(from, message, direction, gravatar) {
         if(!window.chat._check(message, "commands", from)) {
             if(window.chat._check(message, "js")) {
                 if(direction == "out") {
@@ -57,7 +57,7 @@ window.chat = {
                 var searchContent = window.chat._check(lineContent, "search");
                 var scrollContent = window.chat._check(searchContent, "scroll");
                 var linkContent = window.chat._check(scrollContent, "links");
-                window.chat._inputMessage(from, linkContent, direction);
+                window.chat._inputMessage(from, linkContent, direction, gravatar);
             }
         }
         window.chat.resize();
@@ -142,10 +142,24 @@ window.chat = {
         	}
         }
     },
-    _inputMessage: function(from, message, direction) {
-        var html = '<div class="item ' + direction + '"><div class="name">';
-        html += from +'</div><div class="message">' + message +'</div></div>';
-        $(".jspPane").append(html);
+    _inputMessage: function(from, message, direction, gravatar) {
+        var last_message = $(".jspPane .item:last-child");
+        if(last_message.attr("data-direction") == direction) {
+            last_message
+                .find(".bubble")
+                .append('<div class="separator"></div>' + message);
+        } else {
+            var html = ('                                       \
+                <div data-direction="' + direction + '"         \
+                    class="item ' + direction + '">             \
+                    <div class="gravatar">                      \
+                        <img src="' + gravatar + '" />          \
+                    </div>                                      \
+                    <div class="bubble">' + message + '</div>   \
+                </div>                                          \
+            ');
+            $(".jspPane").append(html);
+        }
     },
     _inputStatus: function(status) {
         if(window.notifications != false) {
@@ -174,7 +188,7 @@ $(function() {
         if(e.which == 13) {
             var _this = $(this);
         	if($.trim(_this.val()) != "") {
-        		  window.chat.message("me", $.trim(_this.val()), "out");
+        		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar);
         	}
 
         	setTimeout(function() {
@@ -185,11 +199,11 @@ $(function() {
 
     //Pull Message
     window.socketUtil.socket.on('editorChatRoom', function (data) {
-        if(data['isStatus']) {
-            window.chat.status(data['message']);
+        if(data.isStatus) {
+            window.chat.status(data.message);
         }
         else {
-            window.chat.message(data['from'], data['message'], "in");
+            window.chat.message(data.from, data.message, "in", data.gravatar);
         }
 
         if($("#header").is(":visible") == false) {
