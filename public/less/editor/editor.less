@@ -70,13 +70,55 @@ html, body {
             .scroll-pane {
                 height: 100%;
 
+                .item {
+                    margin: 15px 10px;
+                    .box-sizing(border-box);
+                }
+
+                .status {
+                    font-weight: bold;
+                    font-size: 11px;
+                    color: darken(#fff, 15%);
+                    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+                    text-align: center;
+                }
+
+                .helper {
+                    font-size: 13px;
+                    color: darken(#fff, 15%);
+
+                    & > div {
+                        margin: 5px 0;
+                    }
+
+                    .underline {
+                        text-decoration: underline;
+                    }
+
+                    .bold {
+                        font-weight: bold;
+                    }
+
+                    .indent {
+                        text-indent: 5px;
+                    }
+
+                    .small {
+                        color: darken(#fff, 30%);
+                        font-size: 12px;
+                        margin-bottom: 10px;
+                    }
+
+                    .seperator {
+                        height: 15px;
+                    }
+                }
+
                 .message {
                     font-size: 12px;
                     color: #fff;
                     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-                    margin: 10px;
                     .clearfix();
-                    .box-sizing(border-box);
 
                     &.in {
                         .gravatar {

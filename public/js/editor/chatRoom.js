@@ -10,19 +10,18 @@ window.chat = {
          window.chat.resize();
     },
     help: function() {
-        help = '<strong><div class="helper" style="text-align:left; text-decoration:underline; margin: 5px 0px 0px 0px;">Console Commands</div></strong>';
-        help += '<div style="text-align:left; font-size:12px; color:#666; margin: 5px 0px;" class="chatRoomHelper">1 command per message</div>';
-        help += '<div class="helper" style="text-align:left; text-indent: 10px;">:c = clear screen</div>';
-        help += '<div class="helper" style="text-align:left; text-indent: 10px;">:h = console commands</div>';
-        help += '<div class="helper" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>';
-        help += '<div class="helper" style="text-align:left; text-indent: 10px; margin-bottom: 30px;">:s = toggle sidebar visibility</div>';
-        help += '<strong><div class="helper" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
-        help += '<div class="helper" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
-        help += '<div class="helper" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
-        help += '<div class="helper" style="text-align:left; text-indent: 10px;">^pattern = search for word</div>';
-    	$(".jspPane").append(help);
-    	window.chat.resize();
-    	window.chat._scrollToBottom();
+    	window.chat.helper([
+            ['Console Commands', 'bold underline'],
+            ['1 command per message', 'indent small'],
+            [':c = clear screen', 'indent'],
+            [':h = console commands', 'indent'],
+            [':n = toggle notifications', 'indent'],
+            ['', 'seperator'],
+            ['Message References', 'bold underline'],
+            ['&number = scroll to line', 'indent'],
+            ['#number = highlight line', 'indent'],
+            ['^pattern = search for word', 'indent']
+    	]);
     },
     toggle: function() {
         if(window.notifications == false) {
@@ -36,15 +35,6 @@ window.chat = {
         window.chat.resize();
         window.chat._scrollToBottom();
 
-    },
-    sidebar: function() {
-        if($("#sidebar").is(":visible")) {
-            $("#editorCodeMirror").css("margin-left", "5px");
-        } else {
-            $("#editorCodeMirror").css("margin-left", "");
-        }
-        $("#sidebar").toggle();
-        window.editor.refresh();
     },
     message: function(from, message, direction, gravatar) {
         if(!window.chat._check(message, "commands", from)) {
@@ -65,6 +55,11 @@ window.chat = {
     },
     status: function(message) {
         window.chat._inputStatus(message);
+        window.chat.resize();
+        window.chat._scrollToBottom();
+    },
+    helper: function(messages) {
+        window.chat._inputHelper(messages);
         window.chat.resize();
         window.chat._scrollToBottom();
     },
@@ -89,8 +84,7 @@ window.chat = {
             commands = {
                 ":c": "clear",
 		        ":h": "help",
-		        ":n": "toggle",
-		        ":s": "sidebar"
+		        ":n": "toggle"
             }
 
         	for(var command in commands) {
@@ -143,7 +137,7 @@ window.chat = {
         }
     },
     _inputMessage: function(from, message, direction, gravatar) {
-        var last_message = $(".jspPane .message").eq(-1);
+        var last_message = $(".jspPane .item").eq(-1);
         if(last_message.attr("data-direction") == direction) {
             last_message
                 .find(".bubble")
@@ -151,7 +145,7 @@ window.chat = {
         } else {
             var html = ('                                       \
                 <div data-direction="' + direction + '"         \
-                    class="message ' + direction + '">             \
+                    class="item message ' + direction + '">             \
                     <div class="gravatar">                      \
                         <img src="' + gravatar + '" />          \
                     </div>                                      \
@@ -163,8 +157,21 @@ window.chat = {
     },
     _inputStatus: function(status) {
         if(window.notifications != false) {
-    	   $(".jspPane").append('<div class="status">' + status + '</div>');
+    	   $(".jspPane").append('<div class="item status">' + status + '</div>');
         }
+    },
+    _inputHelper: function(helpers) {
+        var html = '<div class="item helper">';
+
+        $.each(helpers, function(key, helper) {
+            html += "<div class='" + (helper[1] || "") + "'>" + helper[0] + "</div>";
+
+            if(key == helpers.length-1) {
+                html += "</div>";
+            }
+        })
+
+        $(".jspPane").append(html);
     },
     _pushMessage: function(message) {
         window.socketUtil.socket.emit('editorChatRoom', {
@@ -178,7 +185,7 @@ window.chat = {
 //          Chat Room Control Functions
 /////////////////////////////////////////////////
 $(function() {
-    //setTimeout(window.chat.help, 10);
+    setTimeout(window.chat.help, 10);
     setInterval(window.chat.resize, 1000);
     $(window).resize(window.chat.resize);
 
