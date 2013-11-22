@@ -1,7 +1,7 @@
-module.exports = function() {
-    var css_path   = __dirname + '/../../public/less/';
-    var js_path    = __dirname + '/../../public/js/';
-    var node_modules = __dirname + '/../../node_modules/';
+module.exports = function(root) {
+    var css_path   = __dirname + '/less/';
+    var js_path    = __dirname + '/js/';
+    var node_modules = root + '/node_modules/';
     var codemirror_path = node_modules + 'codemirror/';
 
     /* Core */
@@ -25,7 +25,7 @@ module.exports = function() {
     clientJS.addFile(js_path + 'core/mousewheel.js');
 
     /* EDT Debugger */
-    clientJS.addFile(__dirname + '/../debugger/edt.js');
+    clientJS.addFile(root + '/lib/debugger/edt.js');
 
     /* Backdrop */
     clientCSS.addFile("backdrop", css_path + 'backdrop/backdrop.less');

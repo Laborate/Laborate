@@ -76,7 +76,7 @@ app.configure(function() {
     //Assests
     clientJS.bind(app, srv);
     clientCSS.bind(app, srv);
-    require("./lib/core/dependencies")();
+    require("./public")(__dirname);
 
     //Express Engines
     app.engine('html', ejs.renderFile);
