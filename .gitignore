@@ -3,3 +3,5 @@
 node_modules
 tmp
 config.json
+dump.rdb
+* copy*
