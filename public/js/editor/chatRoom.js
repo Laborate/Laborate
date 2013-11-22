@@ -1,37 +1,40 @@
 //////////////////////////////////////////////////
 //          Chat Room Instances
 /////////////////////////////////////////////////
-window.chatRoom = {
+window.chat = {
+    conversation: function() {
+        return $('.chat .scroll-pane').data("jsp")
+    },
     clear: function() {
-        $(".jspPane").html('<div id="chatBottom"></div>');
-         window.chatRoom.resize();
+        $(".jspPane").html("");
+         window.chat.resize();
     },
     help: function() {
-        help = '<strong><div class="chatRoomHelper" style="text-align:left; text-decoration:underline; margin: 5px 0px 0px 0px;">Console Commands</div></strong>';
+        help = '<strong><div class="helper" style="text-align:left; text-decoration:underline; margin: 5px 0px 0px 0px;">Console Commands</div></strong>';
         help += '<div style="text-align:left; font-size:12px; color:#666; margin: 5px 0px;" class="chatRoomHelper">1 command per message</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:c = clear screen</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:h = console commands</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px; margin-bottom: 30px;">:s = toggle sidebar visibility</div>';
-        help += '<strong><div class="chatRoomHelper" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">^pattern = search for word</div>';
+        help += '<div class="helper" style="text-align:left; text-indent: 10px;">:c = clear screen</div>';
+        help += '<div class="helper" style="text-align:left; text-indent: 10px;">:h = console commands</div>';
+        help += '<div class="helper" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>';
+        help += '<div class="helper" style="text-align:left; text-indent: 10px; margin-bottom: 30px;">:s = toggle sidebar visibility</div>';
+        help += '<strong><div class="helper" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
+        help += '<div class="helper" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
+        help += '<div class="helper" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
+        help += '<div class="helper" style="text-align:left; text-indent: 10px;">^pattern = search for word</div>';
     	$(".jspPane").append(help);
-    	window.chatRoom.resize();
-    	window.chatRoom._scrollToBottom();
+    	window.chat.resize();
+    	window.chat._scrollToBottom();
     },
     toggle: function() {
         if(window.notifications == false) {
             window.notifications = true;
-            window.chatRoom.status("Chat Notifications Turned On");
+            window.chat.status("Chat Notifications Turned On");
         }
         else {
-            window.chatRoom.status("Chat Notifications Turned Off");
+            window.chat.status("Chat Notifications Turned Off");
             window.notifications = false;
         }
-        window.chatRoom.resize();
-        window.chatRoom._scrollToBottom();
+        window.chat.resize();
+        window.chat._scrollToBottom();
 
     },
     sidebar: function() {
@@ -44,26 +47,26 @@ window.chatRoom = {
         window.editor.refresh();
     },
     message: function(from, message, direction) {
-        if(!window.chatRoom._check(message, "commands", from)) {
-            if(window.chatRoom._check(message, "js")) {
+        if(!window.chat._check(message, "commands", from)) {
+            if(window.chat._check(message, "js")) {
                 if(direction == "out") {
-                    window.chatRoom._pushMessage(message);
+                    window.chat._pushMessage(message);
                 }
 
-                var lineContent = window.chatRoom._check(message, "line");
-                var searchContent = window.chatRoom._check(lineContent, "search");
-                var scrollContent = window.chatRoom._check(searchContent, "scroll");
-                var linkContent = window.chatRoom._check(scrollContent, "links");
-                window.chatRoom._inputMessage(from, linkContent, direction);
+                var lineContent = window.chat._check(message, "line");
+                var searchContent = window.chat._check(lineContent, "search");
+                var scrollContent = window.chat._check(searchContent, "scroll");
+                var linkContent = window.chat._check(scrollContent, "links");
+                window.chat._inputMessage(from, linkContent, direction);
             }
         }
-        window.chatRoom.resize();
-        window.chatRoom._scrollToBottom();
+        window.chat.resize();
+        window.chat._scrollToBottom();
     },
     status: function(message) {
-        window.chatRoom._inputStatus(message);
-        window.chatRoom.resize();
-        window.chatRoom._scrollToBottom();
+        window.chat._inputStatus(message);
+        window.chat.resize();
+        window.chat._scrollToBottom();
     },
     resize: function() {
         $(".chat").height($(window).height() - $(".header").height());
@@ -71,14 +74,14 @@ window.chatRoom = {
     signIn: function(screenName) {
         window.screenName = screenName;
         $.cookie("screenName", screenName);
-        window.chatRoom.status(screenName + " has signed in");
+        window.chat.status(screenName + " has signed in");
     },
     signOut: function(screenName) {
-        window.chatRoom.status(screenName + " has signed out");
+        window.chat.status(screenName + " has signed out");
     },
     _scrollToBottom: function() {
-        //window.jscrollData.reinitialise();
-        //window.jscrollData.scrollToPercentY("100");
+        window.window.chat.conversation().reinitialise();
+        window.window.chat.conversation().scrollToPercentY("100");
     },
     _check: function(message, type) {
         if(type == "commands") {
@@ -92,7 +95,7 @@ window.chatRoom = {
 
         	for(var command in commands) {
         		if(message == command) {
-                    window.chatRoom[commands[command]](message);
+                    window.chat[commands[command]](message);
                     return true
         		}
         	}
@@ -140,20 +143,14 @@ window.chatRoom = {
         }
     },
     _inputMessage: function(from, message, direction) {
-        var html = '<div class="chatRoomMessage ' + direction + '"><div class="chatRoomName">';
-        html += from +'</div><div class="chatRoomBubble">' + message +'</div></div>';
+        var html = '<div class="item ' + direction + '"><div class="name">';
+        html += from +'</div><div class="message">' + message +'</div></div>';
         $(".jspPane").append(html);
     },
     _inputStatus: function(status) {
         if(window.notifications != false) {
-    	   $(".jspPane").append('<div class="chatRoomStatus">' + status + '</div>');
+    	   $(".jspPane").append('<div class="status">' + status + '</div>');
         }
-    },
-    _reset: function() {
-        $("#messenger").blur();
-        setTimeout(function() {
-            $("#messenger").val('').focus()
-        }, 05);
     },
     _pushMessage: function(message) {
         window.socketUtil.socket.emit('editorChatRoom', {
@@ -167,30 +164,32 @@ window.chatRoom = {
 //          Chat Room Control Functions
 /////////////////////////////////////////////////
 $(function() {
-     $('.chat .conversation').data("jsp");
-
-    //setTimeout(window.chatRoom.help, 10);
-    setInterval(window.chatRoom.resize, 1000);
-    $(window).resize(window.chatRoom.resize);
+    //setTimeout(window.chat.help, 10);
+    setInterval(window.chat.resize, 1000);
+    $(window).resize(window.chat.resize);
 
     //Submit New Message
-    $("#messenger").on('keydown', function(e) {
+    $(".messenger textarea").on('keydown', function(e) {
         //Checks if enter key is pressed
         if(e.which == 13) {
-        	if($.trim($(this).val()) != "") {
-        		  window.chatRoom.message("me", $.trim($(this).val()), "out");
+            var _this = $(this);
+        	if($.trim(_this.val()) != "") {
+        		  window.chat.message("me", $.trim(_this.val()), "out");
         	}
-        	window.chatRoom._reset();
+
+        	setTimeout(function() {
+        	    _this.val("");
+            }, 50);
     	}
     });
 
     //Pull Message
     window.socketUtil.socket.on('editorChatRoom', function (data) {
         if(data['isStatus']) {
-            window.chatRoom.status(data['message']);
+            window.chat.status(data['message']);
         }
         else {
-            window.chatRoom.message(data['from'], data['message'], "in");
+            window.chat.message(data['from'], data['message'], "in");
         }
 
         if($("#header").is(":visible") == false) {

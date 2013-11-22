@@ -2,7 +2,7 @@
 @import '../compless/all';
 
 html, body {
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 .content {
@@ -34,26 +34,71 @@ html, body {
 
         .messenger {
             position: absolute;
-            bottom: 0;
+            bottom: 0px;
             width: 100%;
-            margin: 0;
-            padding: 0;
+            height: 115px;
+            margin-bottom: -5px;
             background: @color_chat_messenger;
-            height: 100px;
 
             textarea {
                 background-color: darken(#fff, 5%);
                 background-image: url('/img/tshadow.png');
                 background-repeat: repeat-x;
                 background-position: 0 -3px;
-                border: none;
                 width: 230px;
-                height: 80px;
+                height: 90px;
                 margin: 10px;
+                outline: none;
                 padding: 5px;
+                resize: vertical;
+                .transition(background-color);
 
                 &:focus {
                     background-color: #fff;
+                }
+            }
+        }
+
+        .conversation {
+            padding: 0 10px;
+            .box-sizing(border-box);
+            .calc-height(~"100% - 115px");
+
+            .scroll-pane {
+                height: 100%;
+
+                .item {
+                    font-size: 14px;
+                    color: #fff;
+                    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.9);
+                    margin: 10px 0;
+
+                    .header {
+                        .gravatar {
+                            width: 40px;
+                            height: 40px;
+                            overflow: hidden;
+                            border: solid 1px darken(@color_chat, 5%);
+                            .border-radius(2px);
+
+                            img {
+                                width: 40px;
+                                height: 40px;
+
+                                &:before {
+                                    content: '';
+                                    position: absolute;
+                                	top: 1px;
+                                	left: 1px;
+                                	bottom: 1px;
+                                	right: 1px;
+                                	.border-radius(2px);
+                                	.box-shadow(~"inset 0 0 1px 1px rgba(255,255,255,.3)");
+                                	.linear-gradient(0deg, rgba(255, 255, 255, .3), transparent);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

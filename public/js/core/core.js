@@ -62,7 +62,7 @@ $(function() {
 
 		_this.jScrollPane({
 			showArrows: false,
-    	    animateScroll: false,
+    	    animateScroll: true,
     	    autoReinitialise: true,
     	    hideFocus: true
 		});
