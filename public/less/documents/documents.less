@@ -121,20 +121,11 @@
             padding: 30px 20px 35px 20px;
             background: @color_grey;
             cursor: pointer;
-            opacity: 0.9;
             width: 84px;
             .transition(opacity);
             .box-sizing(border-box);
             .border-radius(2px);
             .float-left();
-
-            &:not(.disabled):hover {
-                opacity: .95;
-            }
-
-            &:not(.disabled):hover:active {
-                opacity: 1;
-            }
 
             &.file {
                 .border-radius(2px, 0, 2px, 2px);
