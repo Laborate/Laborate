@@ -17,12 +17,12 @@ module.exports = function(root) {
     clientJS.addUrl('http://d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js');
     clientJS.addUrl('/socket.io/socket.io.js');
 
-    clientJS.addFile(js_path + 'core/core.js');
+    clientJS.addFile(js_path + 'core/jscrollpane.js');
+    clientJS.addFile(js_path + 'core/mousewheel.js');
     clientJS.addFile(js_path + 'core/center.js');
     clientJS.addFile(js_path + 'core/colors.js');
     clientJS.addFile(js_path + 'core/cookie.js');
-    clientJS.addFile(js_path + 'core/jscrollpane.js');
-    clientJS.addFile(js_path + 'core/mousewheel.js');
+    clientJS.addFile(js_path + 'core/core.js');
 
     /* EDT Debugger */
     clientJS.addFile(root + '/lib/debugger/edt.js');
