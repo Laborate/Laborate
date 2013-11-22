@@ -1,5 +1,4 @@
 <% include ../includes/header.html %>
-<% include ../includes/navigation.html %>
 <div id="backdrop">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
@@ -28,158 +27,88 @@
         </ul>
     </div>
 </div>
-<div class="notification"></div>
-<div id="sidebar">
-    <div id="sidebar_header">
-        <div id="document" class="left icon icon-file"></div>
-        <div id="find" class="left icon icon-search"></div>
-        <div id="share" class="left default icon icon-user-add"></div>
-        <div id="download" class="left icon icon-cloud"></div>
-        <div id="settings" class="left icon icon-settings"></div>
-        <div class="clear"></div>
+<div class="sidebar">
+    <div class="profile">
+        <div class="img">
+            <a href="/account/notifications/">
+                <img src="<%= gravatar %>" />
+            </a>
+        </div>
     </div>
-    <div id="sidebar_content">
-        <div id="sidebar_document" class="sidebar_content_inner">
-            <div>
-                <input id="document_undo" type="button" value="Undo" class="button blue pull_left"/>
-                <input id="document_redo" type="button" value="Redo" class="button blue pull_right"/>
-                <div class="clear"></div>
-            </div>
-            <hr/>
-            <div>
-                <input id="document_deminify" type="button" value="Deminify" class="button blue pull_left"/>
-                <input id="document_minify" type="button" value="Minify" class="button blue pull_right"/>
-                <div class="clear"></div>
-            </div>
-            <hr/>
-            <div>
-                <input id="document_format" type="button" value="Auto Format" class="button blue full"/>
-            </div>
-        </div>
-        <div id="sidebar_find" class="sidebar_content_inner">
-        	<div>
-                <div class="header">Jump To A Line</div>
-                <form id="lineNumberJumpForm">
-                    <input id="lineNumberJump" class="left input" style="width:120px;" type="text" placeholder="5" spellcheck="false"/>
-                    <input type="submit" class="button blue right" id="lineNumberJumpGo" value="Jump">
-                    <div class="clear"></div>
-                </form>
-             </div>
-             <hr/>
-             <div>
-                <div class="header">Line Number (s)</div>
-                <form id="lineNumberForm">
-                    <input id="lineNumber" class="left input" style="width:120px;" type="text" placeholder="1, 15-40, 55" spellcheck="false"/>
-                    <input type="submit" class="button blue right" id="lineNumberGo" value="Find">
-                    <div class="clear"></div>
-                </form>
-                <div id="lineNumberList" style="margin-top:15px;"></div>
-            </div>
-            <hr/>
-            <div>
-                <div class="header">Find Words</div>
-                <form id="findWordsForm">
-                    <input id="findWords" type="text"  class="left input" style="width:120px;"  placeholder="function()" spellcheck="false"/>
-                    <input type="submit" class="button blue right" id="findWordsGo" value="Find">
-                    <div class="clear"></div>
-                </form>
-                <div id="findList" style="margin-top:15px;"></div>
-            </div>
-        </div>
-        <div id="sidebar_share" class="sidebar_content_inner">
-            <form id="email_share">
-                <div>
-                   <div class="header">Email Address(s)</div>
-                   <div class="header left" style="color: #666; font-size: 12px;">Comma Delimiter</div>
-                   <div class="header right" style="color: #888; font-size: 12px;">20 Max</div>
-                   <div class="clear"></div>
-                   <div><textarea id="emailAddresses" rows="1" style="height:40px;" class="input textarea" placeholder="john@doe.com, doe@jon.com"></textarea></div>
+    <div class="locations">
+        <div class="shadow-top"></div>
+        <div class="listing">
+            <div class="item" data-key="document">
+                <div class="container">
+                    <div class="name">File</div>
+                    <div class="icon <%= icons.file %>"></div>
                 </div>
-                <div>
-                   <div class="header">Additional Message</div>
-                   <div><textarea id="emailMessage" spellcheck="false" class="input textarea" placeholder="Welcome to the team!"></textarea></div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="search">
+                <div class="container">
+                    <div class="name">Search</div>
+                    <div class="icon <%= icons.search %>"></div>
                 </div>
-                <input type="submit" value="Send Email" id="emailSend" class="button green full"/>
-            </form>
-            <hr/>
-            <input type="button" value="Copy Invite Url" id="shareCopy" class="button blue full"/>
-        </div>
-        <div id="sidebar_download" class="sidebar_content_inner">
-            <% if(document.owner.locations && document.location in document.owner.locations) { %>
-                <% if(document.owner.locations[document.location].type == "github") { %>
-                    <form id="commitFile">
-                        <div>
-                            <div class="header">Commit Message</div>
-                            <div><textarea id="githubMessage" placeholder="Fixed problems with the search algorithm. ISSUE: #143" class="input textarea" style="height:60px;"></textarea></div>
-                        </div>
-                        <input type="submit" id="githubCommit" value="Commit File" class="button green full"/>
-                    </form>
-                    <hr>
-                <% } else if(document.owner.locations[document.location].type == "sftp") { %>
-                    <input type="button" value="Save To Server" id="saveToServer" class="button green full"/>
-                    <hr>
-                <% } %>
-            <% } %>
-            <input type="button" value="Download File" id="downloadFile" class="button blue full"/>
-        </div>
-        <div id="sidebar_settings" class="sidebar_content_inner">
-            <div>
-                <div class="header">Document Title</div>
-                <div><input id="documentTitle" type="text" placeholder="test.html" spellcheck="false" class="input"/></div>
+                <div class="active"></div>
             </div>
-            <% if(document.owner_id == user.id) { %>
-                <% if(document.password || user.pricing.documents != 0) { %>
-                    <% if(document.password || (user.documents.private < user.pricing.documents || user.pricing.documents == null)) { %>
-                        <div id="password_container">
-                            <div class="header">Document Password</div>
-                            <div style="position:relative">
-                                <input id="documentPassword" type="password" placeholder="leave blank for no password"
-                                            spellcheck="false" class="input" disabled="disabled"/>
-                                <input id="change_password" value="false" type="hidden"/>
-                                <div id="password_change" class="icon-pencil grey"></div>
-                            </div>
-                        </div>
-                    <% } %>
-                <% } %>
-            <% } %>
-            <div>
-                <div class="header">Key Mapping</div>
-                <div>
-                    <select id="keyMap" class="select full">
-                        <option id="keyMap_default" value="default">None</option>
-                        <option id="keyMap_vim" value="vim">Vim</option>
-                        <option id="keyMap_emacs" value="emacs">Emacs</option>
-                    </select>
+            <div class="item" data-key="share">
+                <div class="container">
+                    <div class="name">Share</div>
+                    <div class="icon <%= icons.share %>"></div>
                 </div>
+                <div class="active"></div>
             </div>
-            <div>
-                <input type="button" id="settingsSave" value="Save Settings" class="button green full"/>
+            <div class="item" data-key="upload">
+                <div class="container">
+                    <div class="name">Upload</div>
+                    <div class="icon <%= icons.upload %>"></div>
+                </div>
+                <div class="active"></div>
             </div>
-            <hr/>
-            <input type="button" id="removeDoc" value="<%=
-                (document.owner_id == user.id) ? "Delete" : "Forget"
-            %> Document" class="button red full"/>
-            <div id="removeConfirm">
-                <span class="a" id="removeConfirmClick">Yes</span> I am sure. <span class="a" id="actionConfirmCancel">Cancel</span>
+            <div class="item" data-key="download">
+                <div class="container">
+                    <div class="name">Download</div>
+                    <div class="icon <%= icons.download %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="settings">
+                <div class="container">
+                    <div class="name">Settings</div>
+                    <div class="icon <%= icons.settings %>"></div>
+                </div>
+                <div class="active"></div>
             </div>
         </div>
+        <div class="shadow-bottom"></div>
     </div>
 </div>
-<div id="editorCodeMirror">
-    <div class="full_screen">
-        <div id="full_screen" class="full_screen_item icon-expand-2"></div>
-        <div id="chat_bubble" class="hidden full_screen_item">
-            <div id="chat_bubble_icon" class="right icon-bubble"></div>
-            <div id="chat_bubble_count" class="right"></div>
+<div class="content">
+    <div class="header">
+        <div class="top">
+            <div class="search">
+                <form id="search" autocomplete="off">
+                    <div class="icon <%= icons.search %>"></div>
+                    <input type="text" placeholder="Search your document..." />
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="accounts">
+                <% if(user.admin) { %>
+                    <a href="/admin/">Admin</a>
+                    <span>|</span>
+                <% } %>
+                <a href="/documents/">Documents</a>
+                <span>|</span>
+                <a href="/logout/">Sign Out</a>
+            </div>
             <div class="clear"></div>
         </div>
     </div>
-    <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
-</div>
-<div id="chatRoom">
-    <div id="chatConversation" class="scroll-pane"></div>
-    <div id="chatBox">
-        <textarea id="messenger" placeholder="Enter Message Here"></textarea>
+    <div class="pane">
+        <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
+        <div class="shadow-top"></div>
     </div>
 </div>
 <% include ../includes/footer.html %>

@@ -6,12 +6,12 @@
 .CodeMirror-activeline-background {background: rgba(213,238,250,0.2);}
 .CodeMirror pre.CodeMirror-placeholder { color: #999; }
 
-.cm-s-laborate {background: #fff;; color: #323231;}
+.cm-s-laborate {background: transparent; color: #000;}
 .cm-s-laborate .CodeMirror-selected {background: rgba(176,208,255,0.61);}
 .cm-s-laborate .CodeMirror-highlighted {background: #b0d0ff;}
-.cm-s-laborate .CodeMirror-linejump {background: #b4d9f2;}
+.cm-s-laborate .CodeMirror-linejump {background: #b3d9f3;}
 .cm-s-laborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
-.cm-s-laborate .CodeMirror-linenumber {cursor: pointer;}
+.cm-s-laborate .CodeMirror-linenumber {cursor: pointer; color: #666;}
 .cm-s-laborate .CodeMirror-cursor {border-left: 1px solid #666;}
 .cm-s-laborate .CodeMirror-breakpoint {color: #56606E;}
 .cm-s-laborate .CodeMirror-dialog {
@@ -25,6 +25,10 @@
     left: 211px !important;
     right: 245px !important;
     border-bottom: solid 1px #ccc !important;
+}
+
+.cm-s-laborate .CodeMirror-lines:first-child {
+    margin-top: 20px;
 }
 
 .cm-s-laborate .CodeMirror-dialog-top {

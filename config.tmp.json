@@ -123,7 +123,8 @@
         "checked": "icon-checked",
         "unchecked": "icon-unchecked",
         "student": "icon-graduation",
-        "dashboard": "icon-painting"
+        "dashboard": "icon-painting",
+        "share": "icon-user-add"
     },
     "github": {
         "id": "",

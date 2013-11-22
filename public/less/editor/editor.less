@@ -1,43 +1,28 @@
+@import '../core/index';
+@import '../compless/all';
+
 html, body {
     overflow: hidden;
-    background: #fff;
 }
 
-.notification {
-    top: 34px;
-}
+.content {
+    .pane {
+        margin: 0;
+        padding: 0 0 0 5px;
+        position: relative;
+        .box-sizing(border-box);
 
-#editorCodeMirror {
-    overflow: hidden;
-	clear: none;
-	margin: 0px 245px 0px 211px;
-    padding: 0px;
-    position: relative;
+        .shadow-top {
+            position: absolute;
+            top: -4px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: url('/img/tshadow.png') repeat-x;
+            .transition(top);
+        }
+    }
 }
-
-.full_screen {
-    cursor: pointer;
-    font-size: 16px;
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    z-index: 100;
-    color: #777;
-    text-align: right;
-}
-
-.full_screen_item {
-    margin-bottom: 20px;
-}
-
-.full_screen_item:hover {
-    color: #000;
-}
-
-#chat_bubble_count {
-    margin: -2px 5px 0 0;
-}
-
 
 @media print {
     html, body {

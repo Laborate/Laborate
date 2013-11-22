@@ -80,8 +80,8 @@ window.chatRoom = {
         window.chatRoom.status(screenName + " has signed out");
     },
     _scrollToBottom: function() {
-        window.jscrollData.reinitialise();
-        window.jscrollData.scrollToPercentY("100");
+        //window.jscrollData.reinitialise();
+        //window.jscrollData.scrollToPercentY("100");
     },
     _check: function(message, type) {
         if(type == "commands") {

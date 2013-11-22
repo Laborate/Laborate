@@ -87,7 +87,7 @@ $(function() {
     window.users = new Array();
 
     //Set Title
-    window.sidebarUtil.setTitle("in", $("#document_title").text());
+    window.sidebarUtil.setTitle("in", $("#backdrop .backdrop-text").text().trim());
 
     //Refresh Editor
     window.editorUtil.refresh();

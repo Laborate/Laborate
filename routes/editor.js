@@ -14,9 +14,8 @@ exports.index = function(req, res, next) {
                         mode: "editor",
                         user: req.session.user,
                         document: document,
-                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy",
-                                                "download", "jscroll"),
-                        css: clientCSS.renderTags("backdrop", "codemirror", "editor", "header", "jscroll"),
+                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
+                        css: clientCSS.renderTags("backdrop", "codemirror", "editor"),
                         backdrop: req.backdrop(),
                         private: !password,
                         config: { autoJoin: password }
