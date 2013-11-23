@@ -44,11 +44,34 @@ html, body {
         left: 110%;
         width: 80%;
         opacity: 0;
-        margin: 15px 5px 15px 0;
+        padding: 15px 10px 15px 0;
         .transition();
+        .box-sizing(border-box);
 
         & > .item {
             display: none;
+
+            .button {
+                font-size: 12px;
+                padding: 5px 0;
+                width: 100%;
+                text-align: center;
+                background: @color_blue;
+                cursor: pointer;
+                .border-radius(2px);
+
+                &:hover {
+                    background: darken(@color_blue, 5%);
+
+                    &:active {
+                        background: darken(@color_blue, 10%);
+                    }
+                }
+
+                .icon {
+                    margin-right: 5px;
+                }
+            }
         }
     }
 }

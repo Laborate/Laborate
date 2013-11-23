@@ -125,7 +125,8 @@
         "student": "icon-graduation",
         "dashboard": "icon-painting",
         "share": "icon-user-add",
-        "users": "icon-users"
+        "users": "icon-users",
+        "print": "icon-print-2"
     },
     "github": {
         "id": "",

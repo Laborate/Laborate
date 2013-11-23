@@ -1,9 +1,9 @@
 window.sidebarUtil = {
 	change: function(element, focusElement) {
 	    $(".sidebar").toggleClass("menu", (element && !element.hasClass("activated")));
-	    $(".sidebar .pane .item").hide();
 
 	    if(element && !element.hasClass("activated")) {
+	        $(".sidebar .pane .item").hide();
 	        $(".sidebar .list .item").removeClass("activated");
 	        element.addClass("activated");
             $(".sidebar .pane .item[data-key='" + element.attr("data-key") + "']").show();
