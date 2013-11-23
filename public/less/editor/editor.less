@@ -49,8 +49,11 @@ html, body {
         width: 80%;
         opacity: 0;
         padding: 15px 10px 15px 0;
+        overflow: auto;
+        overflow-x: hidden;
         .transition();
         .box-sizing(border-box);
+        .calc-height(~"100% - 95px");
 
         & > .item {
             display: none;
