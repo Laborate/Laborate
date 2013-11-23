@@ -1,10 +1,15 @@
 window.sidebarUtil = {
-	change: function(module, focusElement) {
-		$(".sidebar_content_inner").hide();
-		$("#sidebar_header .icon").removeClass("state_active");
-		$("#sidebar_header #" + module).addClass("state_active");
-		$("#sidebar_"+ module).show();
-		$("#" + focusElement).focus();
+	change: function(element, focusElement) {
+	    $(".sidebar").toggleClass("menu", (element && !element.hasClass("activated")));
+	    $(".sidebar .pane .item").hide();
+
+	    if(element && !element.hasClass("activated")) {
+	        $(".sidebar .list .item").removeClass("activated");
+	        element.addClass("activated");
+            $(".sidebar .pane .item[data-key='" + element.attr("data-key") + "']").show();
+        } else {
+            $(".sidebar .list .item").removeClass("activated");
+        }
 	},
 	keyMap: function(map) {
 		if(map != "" && map != undefined) {
@@ -13,7 +18,7 @@ window.sidebarUtil = {
 		}
 	},
 	format: function(whole_document) {
-		for(var i=0; i<=window.editor.lineCount(); i++) {
+		for(var i = 0; i<= window.editor.lineCount(); i++) {
 			window.editor.indentLine(i);
 		}
 

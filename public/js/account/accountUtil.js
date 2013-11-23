@@ -5,8 +5,8 @@ window.account = {
     timer: null,
     activated: null,
     location: function(location, history) {
-        $(".locations .item").removeClass("activated");
-        $(".locations .item[data-key='" + location + "']").addClass("activated");
+        $(".list .item").removeClass("activated");
+        $(".list .item[data-key='" + location + "']").addClass("activated");
         $(".pane .selection").hide();
         $(".pane .selection[data-key='" + location + "']").show();
         if(history) window.history.pushState(null, null, "/account/" + location + "/");

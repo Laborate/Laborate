@@ -1,15 +1,15 @@
-$(document).on("click", ".locations .item", function() {
+$(document).on("click", ".sidebar .list .item", function() {
     window.documents.location($(this).data("key"), "", true);
 });
 
 $(document).on("mouseover mouseout", ".pane .item", function() {
     if(window.documents.locationActivated == "online") {
-        var location = $(".locations .item[data-key='" + $(this).data("location") + "']")
+        var location = $(".list .item[data-key='" + $(this).data("location") + "']")
         location.toggleClass("hover", (!location.hasClass("hover")));
     }
 });
 
-$(document).on("click", ".pane .item:not(.disabled)", function() {
+$(document).on("click", ".content .pane .item:not(.disabled)", function() {
     if(window.documents.locationActivated == "online") {
         window.location.href = "/editor/" + $(this).data("id");
     } else {

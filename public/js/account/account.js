@@ -1,5 +1,5 @@
 $(function() {
-    $(document).on("click", ".locations .item", function() {
+    $(document).on("click", ".list .item", function() {
         window.account.location($(this).data("key"), true);
     });
 

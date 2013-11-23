@@ -5,13 +5,61 @@ html, body {
     overflow: hidden;
 }
 
+.sidebar {
+    overflow-x: hidden;
+
+    &.menu {
+        .list {
+            right: 80%;
+
+            .item {
+
+                &.activated {
+                    .icon {
+                        color: #fff !important;
+                    }
+                }
+
+                .active {
+                    opacity: 0;
+                }
+            }
+        }
+
+        .pane {
+            left: 20%;
+            opacity: 1;
+        }
+    }
+
+
+    .list {
+        position: absolute;
+        width: 100%;
+        .transition(right);
+    }
+
+    .pane {
+        position: absolute;
+        left: 110%;
+        width: 80%;
+        opacity: 0;
+        margin: 15px 5px 15px 0;
+        .transition();
+
+        & > .item {
+            display: none;
+        }
+    }
+}
+
 .content {
     .pane {
         overflow: hidden;
         margin: 0;
         padding: 0 0 0 5px;
         position: absolute;
-        .calc-width(~"100% - 200px");
+        .calc-width(~"100% - 220px");
         .box-sizing(border-box);
 
         .shadow-top {
@@ -21,14 +69,13 @@ html, body {
             width: 100%;
             height: 10px;
             background: url('/img/tshadow.png') repeat-x;
-            .transition(top);
         }
     }
 
     .chat {
         position: absolute;
         right: 0;
-        width: 200px;
+        width: 220px;
         height: 100%;
         background: @color_chat;
 
@@ -38,8 +85,10 @@ html, body {
             width: 100%;
             height: 95px;
             margin-bottom: -5px;
+            padding: 10px;
             background: @color_chat_messenger;
             border-top: solid 1px darken(@color_chat_messenger, 15%);
+            .box-sizing(border-box);
 
             textarea {
                 border: solid 1px darken(@color_chat_messenger, 15%);
@@ -47,9 +96,9 @@ html, body {
                 background-image: url('/img/tshadow.png');
                 background-repeat: repeat-x;
                 background-position: 0 -3px;
-                width: 180px;
+                width: 100%;
                 height: 70px;
-                margin: 10px;
+                margin: 0;
                 outline: none;
                 padding: 5px;
                 resize: none;
@@ -62,10 +111,31 @@ html, body {
         }
 
         .conversation {
+            position: relative;
             overflow: hidden;
             padding: 0;
             .box-sizing(border-box);
             .calc-height(~"100% - 90px");
+
+            .shadow-top {
+                position: absolute;
+                top: -4px;
+                left: 0;
+                width: 100%;
+                height: 10px;
+                background: url('/img/tshadow.png') repeat-x;
+                z-index: 1000;
+            }
+
+            .shadow-bottom {
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 100%;
+                height: 10px;
+                background: url('/img/tshadowUp.png') repeat-x;
+                z-index: 1000;
+            }
 
             .scroll-pane {
                 height: 100%;
@@ -148,14 +218,14 @@ html, body {
                     }
 
                     .gravatar {
-                        width: 25px;
-                        height: 25px;
+                        width: 30px;
+                        height: 30px;
                         overflow: hidden;
                         .border-radius(2px);
 
                         img {
-                            width: 25px;
-                            height: 25px;
+                            width: 30px;
+                            height: 30px;
 
                             &:before {
                                 content: '';
@@ -178,12 +248,12 @@ html, body {
                         word-break: break-word;
                         word-wrap: break-word;
                         .border-radius(2px);
-                        .calc-width(~"100% - 50px");
+                        .calc-width(~"100% - 55px");
 
                         &:before {
                             content: "";
                             position: absolute;
-                            top: 6px;
+                            top: 5px;
                             border: solid 4px transparent;
                             background: @color_chat_bubble;
                             display: block;

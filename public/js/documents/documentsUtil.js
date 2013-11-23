@@ -493,12 +493,12 @@ window.documents = {
                 ');
             });
 
-            $(".locations .item").not("[data-key='online']").remove();
-            $(".locations .listing").html(locations);
+            $(".list .item").not("[data-key='online']").remove();
+            $(".list .listing").html(locations);
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {
-                    var location = $(".locations .item[data-key='" + window.documents.locationActivated + "']")
+                    var location = $(".list .item[data-key='" + window.documents.locationActivated + "']")
                         .addClass("activated");
 
                     if(window.documents.locationActivated != "online") {
@@ -512,8 +512,8 @@ window.documents = {
     },
     location: function(location, path, history) {
         $(".sidebar .info").text("");
-        $(".locations .item").removeClass("activated");
-        var location_element = $(".locations .item[data-key='" + location + "']").addClass("activated");
+        $(".list .item").removeClass("activated");
+        var location_element = $(".list .item[data-key='" + location + "']").addClass("activated");
         if(location != window.url_params()["location"] || path != window.url_params()["dir"]) {
             $(".pane").html("");
         }
@@ -557,7 +557,7 @@ window.documents = {
         }
     },
     locationNotification: function(location, action, count) {
-        var element = $(".locations .item[data-key='" + location + "']").find(".icon");
+        var element = $(".list .item[data-key='" + location + "']").find(".icon");
 
         if(element.length > 0) {
             if(!(location in window.documents.locationIcons)) {
