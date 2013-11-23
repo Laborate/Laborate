@@ -201,7 +201,24 @@
             <div class="clear"></div>
         </div>
         <div class="bottom">
-            <div class="message">asdf</div>
+            <div class="filters">
+                <div class="filter">
+                    <span>Name:</span>
+                    <strong><%= document.name %></strong>
+                </div>
+            </div>
+            <div class="filters">
+                <div class="filter">
+                    <span>Size:</span>
+                    <strong><%= document.size(true) %></strong>
+                </div>
+            </div>
+            <div class="filters">
+                <div class="filter">
+                    <span>Language:</span>
+                    <strong>Javascript</strong>
+                </div>
+            </div>
         </div>
     </div>
     <div class="pane">

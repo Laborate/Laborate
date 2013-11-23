@@ -6,7 +6,6 @@ var rand = require("generate-key");
 var github = require("./github");
 var bitbucket = require("./bitbucket");
 var google = require("./google");
-var file_size = require("../lib/core/file_size");
 
 exports.index = function(req, res, next) {
     res.renderOutdated('documents/index', {
@@ -31,7 +30,7 @@ exports.files = function(req, res, next) {
                         name: value.document.name,
                         protection: (value.document.password != null) ? "password" : "",
                         location: value.document.location,
-                        size: file_size.bytes(value.document.content.join("\n")),
+                        size: value.document.size(),
                         type: function(name) {
                             var extension = name.split(".")[name.split(".").length-1];
 
@@ -69,7 +68,7 @@ exports.file_create = function(req, res, next) {
                 documents: [{
                     id: document.pub_id,
                     name: document.name,
-                    size: file_size.bytes(""),
+                    size: document.size(),
                     type: function(name) {
                         var extension = name.split(".")[name.split(".").length-1];
 
@@ -129,7 +128,7 @@ exports.file_upload = function(req, res, next) {
                     response.documents.push({
                         id: document.pub_id,
                         name: document.name,
-                        size: file_size.bytes(document.content.join("\n")),
+                        size: document.size(),
                         type: function(name) {
                             var extension = name.split(".")[name.split(".").length-1];
 

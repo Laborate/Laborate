@@ -201,6 +201,18 @@ html, body {
 .content {
     .header .bottom {
         .calc-width(~"100% - 220px");
+
+        .filters .filter {
+            margin: 5px 34px 0 0;
+
+            span {
+                top: inherit;
+            }
+
+            strong {
+                color: darken(@color_header_bottom, 45%);
+            }
+        }
     }
 
     .pane {
