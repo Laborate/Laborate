@@ -7,8 +7,10 @@ window.sidebarUtil = {
 	        $(".sidebar .list .item").removeClass("activated");
 	        element.addClass("activated");
             $(".sidebar .pane .item[data-key='" + module + "']").show();
+            $(".sidebar .controller .title").text(element.find(".name").text());
         } else {
             $(".sidebar").removeClass("menu");
+            $(".sidebar .controller .title").text("Menu Panel");
             $(".sidebar .list .item").removeClass("activated");
         }
 	},

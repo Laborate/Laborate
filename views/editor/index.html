@@ -35,6 +35,9 @@
             </a>
         </div>
     </div>
+    <div class="controller">
+        <div class="title">Settings</div>
+    </div>
     <div class="list">
         <div class="shadow-top"></div>
         <div class="listing">
@@ -49,13 +52,6 @@
                 <div class="container">
                     <div class="name">Search</div>
                     <div class="icon <%= icons.search %>"></div>
-                </div>
-                <div class="active"></div>
-            </div>
-            <div class="item" data-key="share">
-                <div class="container">
-                    <div class="name">Share</div>
-                    <div class="icon <%= icons.share %>"></div>
                 </div>
                 <div class="active"></div>
             </div>
@@ -92,15 +88,15 @@
     </div>
     <div class="pane">
         <div class="item" data-key="document">
-            <div class="form pair">
+            <form class="form pair">
                 <button class="button" data-key="undo">
                     <span class="icon <%= icons.undo %>"></span>Undo
                 </button>
                 <button class="button" data-key="redo">
                     <span class="icon <%= icons.redo %>"></span>Redo
                 </button>
-            </div>
-            <div class="form" data-key="beautify">
+            </form>
+            <form class="form collection" data-key="beautify">
                 <div class="select">
                     <div class="icon <%= icons.menu_arrows %>"></div>
                     <select name="spacing">
@@ -109,31 +105,77 @@
                         <option value="4spaces">4 Spaces</option>
                     </select>
                 </div>
-                <button class="button">
+                <button type="submit" class="button">
                     <span class="icon <%= icons.beautify %>"></span>Beautify
                 </button>
-            </div>
-            <div class="form">
-                <button class="form button" data-key="print">
-                    <span class="icon <%= icons.print %>"></span>Print
-                </button>
-            </div>
+            </form>
         </div>
         <div class="item" data-key="search">
-            <div class="form connected" data-key="line-jump">
+            <form class="form connected" data-key="line-jump">
                 <input class="input" type="text" placeholder="Jump To Line"/>
-                <button class="button">Go</button>
-            </div>
-            <div class="form connected" data-key="highlight-line">
+                <button type="submit" class="button">Go</button>
+            </form>
+            <form class="form connected" data-key="highlight-line">
                 <input class="input" type="text" placeholder="Find Line(s)"/>
-                <button class="button">Go</button>
+                <button type="submit" class="button">Go</button>
                 <div class="listing"></div>
-            </div>
-            <div class="form connected" data-key="highlight-word">
+            </form>
+            <form class="form connected" data-key="highlight-word">
                 <input class="input" type="text" placeholder="Find Word(s)"/>
-                <button class="button">Go</button>
+                <button type="submit" class="button">Go</button>
                 <div class="listing"></div>
-            </div>
+            </form>
+        </div>
+        <div class="item" data-key="laborators">
+            <form class="form connected" data-key="invite">
+                <input class="input" type="text" placeholder="screen name"/>
+                <button type="submit" class="button">Go</button>
+                <div class="listing"></div>
+            </form>
+        </div>
+        <div class="item" data-key="upload">
+            <form class="form collection" data-key="commit">
+                <div>Laborate/<strong>Middleware</strong></div>
+                <textarea class="textarea" placeholder="message"></textarea>
+                <button type="submit" class="button">Commit To Github</button>
+            </form>
+            <form class="form collection" data-key="save">
+                <button type="submit" class="button">Save To Dropbox</button>
+            </form>
+        </div>
+        <div class="item" data-key="download">
+            <form class="form">
+                <button type="submit" class="button" data-key="print">
+                    <span class="icon <%= icons.print %>"></span>Print
+                </button>
+            </form>
+            <form class="form">
+                <button type="submit" class="button" data-key="download">
+                    <span class="icon <%= icons.download %>"></span>Download
+                </button>
+            </form>
+        </div>
+        <div class="item" data-key="settings">
+            <form class="form collection" data-key="settings">
+                <input class="input" type="text" placeholder="file name"/>
+                <div class="select">
+                    <div class="icon <%= icons.menu_arrows %>"></div>
+                    <select>
+                        <option value="None">KeyMappings</option>
+                        <option value="Vim">Vim</option>
+                        <option value="Emacs">Emacs</option>
+                    </select>
+                </div>
+                <div class="select">
+                    <div class="icon <%= icons.menu_arrows %>"></div>
+                    <select>
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+                <input class="input" type="password" placeholder="password"/>
+                <button type="submit" class="button">Save</button>
+            </form>
         </div>
     </div>
 </div>
@@ -158,12 +200,16 @@
             </div>
             <div class="clear"></div>
         </div>
+        <div class="bottom">
+            <div class="message">asdf</div>
+        </div>
     </div>
     <div class="pane">
         <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
         <div class="shadow-top"></div>
     </div>
     <div class="chat">
+        <div class="controller">5 editors<span><%= site_delimeter %></span>6 viewers</div>
         <div class="conversation">
             <div class="shadow-top"></div>
             <div class="scroll-pane"></div>

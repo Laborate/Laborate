@@ -1,4 +1,5 @@
 @import '../core/index';
+@import '../core/sidebar';
 @import '../compless/all';
 
 html, body {
@@ -44,6 +45,7 @@ html, body {
     }
 
     .pane {
+        font-size: 12px;
         position: absolute;
         left: 110%;
         width: 80%;
@@ -53,7 +55,7 @@ html, body {
         overflow-x: hidden;
         .transition();
         .box-sizing(border-box);
-        .calc-height(~"100% - 95px");
+        .calc-height(~"100% - 140px");
 
         & > .item {
             display: none;
@@ -97,8 +99,17 @@ html, body {
                     }
                 }
 
+                &.collection {
+                    & > * {
+                        margin-bottom: 8px;
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+
                 .select {
-                    margin-bottom: 8px;
                     position: relative;
 
                     .icon {
@@ -161,7 +172,8 @@ html, body {
                     }
                 }
 
-                .input {
+                .input, .textarea {
+                    width: 100%;
                     color: #333;
                     background: darken(#fff, 5%);
                     font-size: 12px;
@@ -170,10 +182,16 @@ html, body {
                     outline: none;
                     .border-radius(2px);
                     .transition(background);
+                    .box-sizing(border-box);
 
                     &:focus {
                         background-color: #fff;
                     }
+                }
+
+                .textarea {
+                    height: 80px;
+                    resize: none;
                 }
             }
         }
@@ -181,6 +199,10 @@ html, body {
 }
 
 .content {
+    .header .bottom {
+        .calc-width(~"100% - 220px");
+    }
+
     .pane {
         overflow: hidden;
         margin: 0;
@@ -201,10 +223,21 @@ html, body {
 
     .chat {
         position: absolute;
+        top: 95px;
         right: 0;
         width: 220px;
         height: 100%;
         background: @color_chat;
+
+        .controller {
+            color: #fff;
+            text-align: center;
+            .sidebar .controller;
+
+            span {
+                margin: 0 5px;
+            }
+        }
 
         .messenger {
             position: absolute;
@@ -242,11 +275,11 @@ html, body {
             overflow: hidden;
             padding: 0;
             .box-sizing(border-box);
-            .calc-height(~"100% - 90px");
+            .calc-height(~"100% - 135px");
 
             .shadow-top {
                 position: absolute;
-                top: -4px;
+                top: -3px;
                 left: 0;
                 width: 100%;
                 height: 10px;
