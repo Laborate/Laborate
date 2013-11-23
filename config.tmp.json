@@ -126,7 +126,10 @@
         "dashboard": "icon-painting",
         "share": "icon-user-add",
         "users": "icon-users",
-        "print": "icon-print-2"
+        "print": "icon-print-2",
+        "undo": "icon-reply",
+        "redo": "icon-forward",
+        "beautify": "icon-document-fill"
     },
     "github": {
         "id": "",

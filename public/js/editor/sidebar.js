@@ -1,7 +1,7 @@
 $(function() {
     /* Core Operations */
     $(".sidebar .list .item").on("click", function() {
-        window.sidebarUtil.change($(this), true);
+        window.sidebarUtil.change($(this).attr("data-key"), false);
     });
 
     $("#sidebar form").on("submit", function() {

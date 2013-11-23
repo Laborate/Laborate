@@ -1,13 +1,14 @@
 window.sidebarUtil = {
-	change: function(element, focusElement) {
-	    $(".sidebar").toggleClass("menu", (element && !element.hasClass("activated")));
-
-	    if(element && !element.hasClass("activated")) {
+	change: function(module, permanent) {
+	    var element = $(".sidebar .list .item[data-key='" + module + "']");
+	    if(permanent || !element.hasClass("activated")) {
+	        $(".sidebar").addClass("menu");
 	        $(".sidebar .pane .item").hide();
 	        $(".sidebar .list .item").removeClass("activated");
 	        element.addClass("activated");
-            $(".sidebar .pane .item[data-key='" + element.attr("data-key") + "']").show();
+            $(".sidebar .pane .item[data-key='" + module + "']").show();
         } else {
+            $(".sidebar").removeClass("menu");
             $(".sidebar .list .item").removeClass("activated");
         }
 	},
@@ -25,7 +26,7 @@ window.sidebarUtil = {
 		window.editor.refresh();
 	},
 	highlight: function(line) {
-		this.change('find');
+		this.change('search', true);
 		if(line.length != 0 && window.editor.getValue().length != 0 && /[^0-9,-]/.test(line) == false) {
 			var lines = line.split(",");
 			var part1 = "<div class='header clear'>";
@@ -76,7 +77,7 @@ window.sidebarUtil = {
 		}
 	},
 	search: function(pattern) {
-		this.change('find');
+		this.change('search', true);
 		var alreadyThere = false;
 
 		$.each($("#findList .header"), function() {
@@ -127,6 +128,7 @@ window.sidebarUtil = {
 		element.parent().remove();
 	},
 	jumpToLine: function(line) {
+	    this.change('search', true);
 		window.editor.scrollIntoView({"line": (line - 1), "ch":0});
 		window.editor.addLineClass((line - 1), "", "CodeMirror-linejump ");
 

@@ -12,16 +12,20 @@ html, body {
         .list {
             right: 80%;
 
-            .item {
+            .listing {
+                overflow: hidden;
 
-                &.activated {
-                    .icon {
-                        color: #fff !important;
+                .item {
+
+                    &.activated {
+                        .icon {
+                            color: #fff !important;
+                        }
                     }
-                }
 
-                .active {
-                    opacity: 0;
+                    .active {
+                        opacity: 0;
+                    }
                 }
             }
         }
@@ -51,25 +55,122 @@ html, body {
         & > .item {
             display: none;
 
-            .button {
-                font-size: 12px;
-                padding: 5px 0;
-                width: 100%;
-                text-align: center;
-                background: @color_blue;
-                cursor: pointer;
-                .border-radius(2px);
+            .form {
+                border-bottom: solid 1px @color_sidebar_header;
+                padding-bottom: 15px;
+                margin-bottom: 15px;
 
-                &:hover {
-                    background: darken(@color_blue, 5%);
+                &:last-child {
+                    padding: 0;
+                    margin: 0;
+                    border: none;
+                }
 
-                    &:active {
-                        background: darken(@color_blue, 10%);
+                &.pair {
+                    .clearfix();
+
+                    .button {
+                        .float-left();
+                        .calc-width(~"50% - 5px");
+
+                        &:first-child {
+                            margin-right: 10px;
+                        }
                     }
                 }
 
-                .icon {
-                    margin-right: 5px;
+                &.connected {
+                    .clearfix();
+
+                    .input {
+                        margin-right: 10px;
+                        .float-left();
+                        .calc-width(~"75% - 5px");
+                    }
+
+                    .button {
+                        .float-left();
+                        .calc-width(~"25% - 5px");
+                    }
+                }
+
+                .select {
+                    margin-bottom: 8px;
+                    position: relative;
+
+                    .icon {
+                        font-size: 14px;
+                        position: absolute;
+                        top: 8px;
+                        right: 2px;
+                        z-index: 2;
+                        color: darken(@color_header_bottom_select, 15%);
+                    }
+
+                    select {
+                        position: relative;
+                        font-weight: bold;
+                        margin: 1px 0;
+                        padding: 6px 25px 6px 10px;
+                        background: lighten(@color_header_bottom_select, 10%);
+                        color: darken(@color_header_bottom_select, 30%);
+                        border: none;
+                        outline: none;
+                        cursor: pointer;
+                        width: 100%;
+
+                        //Mozila Arrow Fix
+                        text-indent: 0.01px;
+                        text-overflow: '';
+
+                        .appearance(none);
+                        .border-radius(2px);
+                        .box-sizing(border-box);
+
+                        &:hover {
+                            background: lighten(@color_header_bottom_select, 5%);
+                        }
+                    }
+                }
+
+                .button {
+                    border: none;
+                    outline: none;
+                    color: #fff;
+                    font-size: 12px;
+                    padding: 5px 0;
+                    width: 100%;
+                    text-align: center;
+                    background: @color_blue;
+                    cursor: pointer;
+                    .border-radius(2px);
+
+                    &:hover {
+                        background: darken(@color_blue, 5%);
+
+                        &:active {
+                            background: darken(@color_blue, 10%);
+                        }
+                    }
+
+                    .icon {
+                        margin-right: 5px;
+                    }
+                }
+
+                .input {
+                    color: #333;
+                    background: darken(#fff, 5%);
+                    font-size: 12px;
+                    padding: 5px 10px;
+                    border: none;
+                    outline: none;
+                    .border-radius(2px);
+                    .transition(background);
+
+                    &:focus {
+                        background-color: #fff;
+                    }
                 }
             }
         }
