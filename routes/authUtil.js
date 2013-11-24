@@ -94,7 +94,7 @@ exports.login = function(req, res, next) {
         if(!error && users.length == 1) {
             var user = users[0];
 
-            if(req.session.organization) {
+            if(req.session.organization.id) {
                 if(user.organizations.length != 0) {
                     $.each(user.organizations, function(key, role) {
                         if(req.session.organization.id == role.organization_id) {

@@ -4,6 +4,7 @@ exports.core = function(crsf, basicAuth) {
             exports.finish(req, res, next, crsf, basicAuth);
         } else {
             if(req.host.split(".").slice(-2).join(".") == config.general.host) {
+                req.session.organization = { register: true, icons: {} };
                 exports.finish(req, res, next, crsf, basicAuth);
             } else {
                 req.models.organizations.find({
