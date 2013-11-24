@@ -6,21 +6,17 @@ $.extend(window.socketUtil, {
                 .attr("disabled", false);
 
             window.backdrop.button = "Join Document";
-            //window.notification.close();
-            if(window.editor) {
-                window.editor.options.readOnly = false;
-            }
-            $("#editorCodeMirror").css({"opacity": ""});
+            window.editorUtil.notification(false);
+            if(window.editor) window.editor.options.readOnly = false;
+            $(".pane").css({"opacity": ""});
         });
     },
     disconnect: function() {
         if(!window.unload) {
-            $("#editorCodeMirror").css({"opacity": ".5"});
+            $(".pane").css({"opacity": ".5"});
             $("#backdrop input[type='submit']").val("reconnecting...").attr("disabled", "disabled");
-            if(window.editor) {
-                window.editor.options.readOnly = true;
-            }
-            //window.notification.open("reconnecting...", true);
+            window.editorUtil.notification("reconnecting...", true);
+            if(window.editor) window.editor.options.readOnly = true;
             window.editorUtil.users([]);
             $("title").text([
                 $("title").text().split(window.config.delimeter)[0],

@@ -3,6 +3,19 @@
 /////////////////////////////////////////////////
 window.editorUtil = {
     clean: true,
+    notification: function(message, permanent) {
+        $(".header .bottom .filters")
+            .toggle(!message)
+            .next(".message")
+            .text(message)
+            .toggle(!!message) ;
+
+        if(!permanent && message) {
+            setTimeout(function() {
+                window.editorUtil.notification(false);
+            }, 15000);
+        }
+    },
     setChanges: function(direction, data, override) {
         if(data['origin'] != "setValue") {
             window.editorUtil.setInfo();
@@ -202,6 +215,8 @@ window.editorUtil = {
                     }
                  });
             });
+        } else {
+            window.socketUtil.socket.removeAllListeners();
         }
 
         window.backdrop.error(message, url);
