@@ -1,7 +1,7 @@
 window.sidebarUtil = {
 	change: function(module, permanent) {
 	    var element = $(".sidebar .list .item[data-key='" + module + "']");
-	    if(permanent || !element.hasClass("activated")) {
+	    if(module != false && (permanent || !element.hasClass("activated"))) {
 	        $(".sidebar").addClass("menu");
 	        $(".sidebar .pane .item").hide();
 	        $(".sidebar .list .item").removeClass("activated");

@@ -4,6 +4,10 @@ $(function() {
         window.sidebarUtil.change($(this).attr("data-key"), false);
     });
 
+    $(".sidebar .back").on("click", function() {
+        window.sidebarUtil.change(false);
+    });
+
     $("#sidebar form").on("submit", function() {
         return false;
     });

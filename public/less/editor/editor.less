@@ -10,6 +10,10 @@ html, body {
     overflow-x: hidden;
 
     &.menu {
+        .controller .back {
+            margin-left: -5px;
+        }
+
         .list {
             right: 80%;
 
@@ -34,6 +38,29 @@ html, body {
         .pane {
             left: 20%;
             opacity: 1;
+        }
+    }
+
+    .controller {
+        overflow: hidden;
+
+        .back {
+            cursor: pointer;
+            color: lighten(@color_blue, 10%);
+            font-size: 14px;
+            overflow: hidden;
+            float: left;
+            margin: 3px 10px 0 -35px;
+            .transition();
+            .transform(rotate(-90deg));
+
+            &:hover {
+                color: lighten(@color_blue, 5%);
+
+                &:active {
+                    color: @color_blue;
+                }
+            }
         }
     }
 
