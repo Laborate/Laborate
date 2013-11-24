@@ -72,6 +72,10 @@ module.exports = function(root) {
     clientJS.addFile("editor", codemirror_path + 'keymap/vim.js');
     clientJS.addFile("editor", codemirror_path + 'keymap/emacs.js');
 
+    clientJS.addOb({
+        file_size: require(root + "/lib/core/file_size")
+    });
+
     clientJS.addFile("editor", js_path + 'editor/editor.js');
     clientJS.addFile("editor", js_path + 'editor/editorUtil.js');
     clientJS.addFile("editor", js_path + 'editor/editorInit.js');
@@ -95,5 +99,4 @@ module.exports = function(root) {
     clientJS.addFile("account", js_path + 'account/account.js');
     clientJS.addFile("account", js_path + 'account/accountUtil.js');
     clientJS.addFile("account", js_path + 'account/accountInit.js');
-
 };

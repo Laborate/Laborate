@@ -129,7 +129,9 @@
         "print": "icon-print-2",
         "undo": "icon-reply",
         "redo": "icon-forward",
-        "beautify": "icon-document-fill"
+        "beautify": "icon-document-fill",
+        "expand": "icon-expand",
+        "contract": "icon-contract"
     },
     "github": {
         "id": "",

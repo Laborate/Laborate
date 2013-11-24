@@ -5,6 +5,8 @@ window.editorUtil = {
     clean: true,
     setChanges: function(direction, data, override) {
         if(data['origin'] != "setValue") {
+            window.editorUtil.setInfo();
+
             if(direction == "out" && window.editorUtil.initialized) {
                 if(window.editorUtil.clean) {
                     window.socketUtil.socket.emit('editorDocument', {
@@ -87,6 +89,15 @@ window.editorUtil = {
             }
         }
     },
+    setInfo: function() {
+        var file = window.editor.getValue();
+
+        //File Size
+        $(".filter[data-key='file-size'] strong").text(file_size.size(file));
+
+        //File Line Count
+        $(".filter[data-key='file-lines'] strong").text(file.split("\n").length);
+    },
     refresh: function() {
         window.editor.setSize("", $(window).height() - $(".header").height());
         editor.refresh();
@@ -151,6 +162,7 @@ window.editorUtil = {
                                 }
                             },
                             function(next) {
+                                window.editorUtil.setInfo();
                                 window.editor.clearHistory();
                                 setTimeout(next, 1000);
                             },

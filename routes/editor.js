@@ -1,7 +1,8 @@
 exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.roles.find({
-            document_pub_id: req.param("document")
+            document_pub_id: req.param("document"),
+            access: true
         }, function(error, documents) {
             if(!error) {
                 if(documents.length != 0) {
@@ -63,25 +64,31 @@ exports.join = function(req, res, next) {
         if(!error && documents.length != 0) {
             document = documents[0];
             if(!document.password || document.hash(req.param("password")) == document.password) {
-                document.join(req.session.user.id, 2);
-                res.json({
-                    success: true,
-                    next: {
-                        function: "window.editorUtil.join",
-                        arguments: document.password
+                document.join(req.session.user.id, 2, function(access) {
+                    if(access) {
+                        res.json({
+                            success: true,
+                            next: {
+                                function: "window.editorUtil.join",
+                                arguments: document.password
+                            }
+                        });
+                    } else {
+                        res.error("Document Doesn't Exist");
                     }
                 });
             } else {
                 res.error(200, "Incorrect Password");
             }
         } else {
-            res.error(404, false,error);
+            res.error(404, "Document Doesn't Exist", error);
         }
     });
 }
 
 exports.update = function(req, res, next) {
     req.models.documents.roles.find({
+        access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -126,6 +133,7 @@ exports.update = function(req, res, next) {
 
 exports.download = function(req, res, next) {
     req.models.documents.roles.find({
+        access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -150,6 +158,7 @@ exports.download = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.documents.roles.find({
+        access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {
@@ -187,6 +196,7 @@ exports.remove = function(req, res, next) {
 
 exports.invite = function(req, res, next) {
     req.models.documents.roles.find({
+        access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, documents) {

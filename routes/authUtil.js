@@ -69,6 +69,14 @@ exports.loginCheck = function(req, res, next) {
     }
 };
 
+exports.loginDenied = function(req, res, next) {
+    if(req.session.user) {
+        res.error(404);
+    } else {
+        next();
+    }
+}
+
 exports.xhr = function(req, res, next) {
     if(req.xhr) {
         next();

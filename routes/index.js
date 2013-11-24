@@ -76,7 +76,7 @@ module.exports = function(app) {
     app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.invite);
 
     /* Webhooks */
-    app.post("/webhook/stripe", webhooks.stripe);
+    app.post("/webhook/stripe", authUtil.loginDenied, webhooks.stripe);
 
     /* Github */
     if(config.apps.github) {

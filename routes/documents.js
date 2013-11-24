@@ -20,7 +20,8 @@ exports.index = function(req, res, next) {
 /* Online Files */
 exports.files = function(req, res, next) {
     req.models.documents.roles.find({
-        user_id: req.session.user.id
+        user_id: req.session.user.id,
+        access: true
     }, function(error, documents) {
         if(!error) {
             res.json($.map(documents, function(value) {
@@ -157,7 +158,8 @@ exports.file_upload = function(req, res, next) {
 exports.file_rename = function(req, res, next) {
     req.models.documents.roles.find({
         user_id: req.session.user.id,
-        document_pub_id: req.param("document")
+        document_pub_id: req.param("document"),
+        access: true
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             document = documents[0].document;
@@ -193,7 +195,8 @@ exports.file_rename = function(req, res, next) {
 exports.file_remove = function(req, res, next) {
      req.models.documents.roles.find({
         user_id: req.session.user.id,
-        document_pub_id: req.param("document")
+        document_pub_id: req.param("document"),
+        access: true
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             document = documents[0].document;
