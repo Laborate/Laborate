@@ -215,8 +215,6 @@ window.editorUtil = {
                     }
                  });
             });
-        } else {
-            window.socketUtil.socket.removeAllListeners();
         }
 
         window.backdrop.error(message, url);
