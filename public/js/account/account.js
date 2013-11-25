@@ -13,7 +13,7 @@ $(function() {
     });
 
     $(document).on("click", ".pane #credit-cards .remove", function() {
-        window.account.cardRemove($(this).parents(".item"));
+        window.account.cardRemove($(this));
     });
 
     $(document).on("keyup", ".pane #card", window.account.cardType);

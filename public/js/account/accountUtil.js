@@ -101,6 +101,11 @@ window.account = {
     },
     locationRemove: function(item) {
         var listing = $(".selection[data-key=locations] .listing");
+        item
+            .find(".action")
+            .text("loading")
+            .addClass("loading");
+
         $.post("/account/location/remove", {
             location: item.attr("data-id"),
             _csrf: window.config.csrf
@@ -138,16 +143,17 @@ window.account = {
         }
     },
     cardRemove: function(element) {
+        element
+            .text("loading")
+            .addClass("loading");
+
         $.post("/account/billing/card/remove", {
             _csrf: window.config.csrf
         }, function(result) {
             if(result.success) {
                 window.location.reload();
             } else {
-                element
-                    .addClass("error")
-                    .find(".remove")
-                    .text("Failded")
+                element.text("Failded");
             }
         });
     },
