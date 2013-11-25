@@ -136,6 +136,11 @@ html, body {
                     }
                 }
 
+
+                .disabled {
+                    opacity: .8;
+                }
+
                 .select {
                     position: relative;
 
@@ -186,6 +191,10 @@ html, body {
                     cursor: pointer;
                     .border-radius(2px);
 
+                    &:disabled {
+                        .disabled;
+                    }
+
                     &:hover {
                         background: darken(@color_blue, 5%);
 
@@ -210,6 +219,10 @@ html, body {
                     .border-radius(2px);
                     .transition(background);
                     .box-sizing(border-box);
+
+                    &:disabled {
+                        .disabled;
+                    }
 
                     &:focus {
                         background-color: #fff;

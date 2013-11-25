@@ -148,21 +148,31 @@
         </div>
         <div class="selection" data-key="profile">
             <form class="container" action="/account/profile/">
-                <div class="item">
-                    <div class="name">Full Name</div>
-                    <input class="input" type="text" name="name" value="<%= user.name %>" />
+                <div class="gravatar">
+                    <div class="img">
+                        <img src="<%= gravatar %>"/>
+                    </div>
+                    <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+                        <div class="link">
+                            <a href="http://gravatar.com" target="_blank">Change Gravatar</a>
+                        </div>
+                    <% } %>
                 </div>
-                <div class="item">
-                    <div class="name">Screen Name</div>
-                    <input class="input" type="text" name="screen_name" value="<%= user.screen_name %>" />
-                </div>
-                <!--
-                    Disable email address if account
-                    is maintained by organization
-                -->
-                <div class="item">
-                    <div class="name">Email Address</div>
-                    <input class="input" type="text" name="email" value="<%= user.email %>" />
+                <div class="profile">
+                    <div class="item">
+                        <div class="name">Full Name</div>
+                        <input class="input" type="text" name="name" value="<%= user.name %>" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Screen Name</div>
+                        <input class="input" type="text" name="screen_name" value="<%= user.screen_name %>" />
+                    </div>
+                    <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+                        <div class="item">
+                            <div class="name">Email Address</div>
+                            <input class="input" type="text" name="email" value="<%= user.email %>" />
+                        </div>
+                    <% } %>
                 </div>
                 <input class="button" type="submit" value="Update Profile" data-success="Profile Updated" />
             </form>

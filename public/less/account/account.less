@@ -116,6 +116,46 @@
                 }
             }
 
+            .gravatar {
+                .float-left();
+
+                & + .profile {
+                    .calc-width(~"100% - 165px");
+                    .float-right();
+                }
+
+                .img {
+                    width: 135px;
+                    height: 135px;
+                    overflow: hidden;
+                    margin-bottom: 10px;
+                    .border-radius(2px);
+
+                    img {
+                        width: 135px;
+                        height: 135px;
+                    }
+                }
+
+                .link {
+                    text-align: center;
+
+                    a {
+                        font-size: 14px;
+                        color: darken(@color_blue, 10%);
+                        font-weight: bold;
+
+                        &:hover {
+                            color: darken(@color_blue, 15%);
+
+                            &:active {
+                                color: darken(@color_blue, 20%);
+                            }
+                        }
+                    }
+                }
+            }
+
             form {
                 width: 100%;
 

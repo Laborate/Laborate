@@ -190,7 +190,7 @@ exports.add_card = function(req, res) {
                         }
                     });
                 } else {
-                    res.error(200, error.message, error);
+                    res.error(200, error.message.split(".")[0], error);
                 }
             });
         } else {

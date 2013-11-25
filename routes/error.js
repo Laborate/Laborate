@@ -71,8 +71,12 @@ var error_handler = function(status, message, home, req, res) {
 
 var raise_error = function(error) {
     if(error) {
-        console.error(error);
-        raven_client.captureError(error, "middleware");
+        try {
+            console.error(error);
+            raven_client.captureError(error, "middleware");
+        } catch(error) {
+            raise_error(error);
+        }
     }
 }
 
