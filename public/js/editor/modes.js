@@ -126,7 +126,7 @@ $(function() {
         "less":"LESS",
         "lua":"Lua",
         "markdown":"Markdown", "mdown":"Markdown",
-        "mkdn":"Github Markdown", "md":"Markdown",
+        "mkdn":"Github Markdown", "md":"Github Markdown",
         "mkd":"Markdown", "mdwn":"Markdown", "mdtxt":"Markdown",
         "mdtext":"Markdown", "text":"Markdown",
         "frm":"MYSQL", "myd":"MYSQL", "myi":"MYSQL",
