@@ -14,6 +14,9 @@ window.sidebarUtil = {
             $(".sidebar .list .item").removeClass("activated");
         }
 	},
+	submit: function(form) {
+        console.log(form);
+	},
 	populateLanguages: function() {
         var languages = "";
         $.each(window.editorUtil.languages, function(language, mode) {

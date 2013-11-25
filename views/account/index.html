@@ -193,18 +193,20 @@
                 </div>
                 <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
             </form>
-            <form class="container" action="/account/settings/delete/" autocomplete="off">
-                <div class="item">
-                    <div class="comment">
-                        Deleting your account will delete all files you own. Please
-                        transfer ownership of your files if you want other people
-                        to be able to access them. This action is irreversible.
+            <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+                <form class="container" action="/account/settings/delete/" autocomplete="off">
+                    <div class="item">
+                        <div class="comment">
+                            Deleting your account will delete all files you own. Please
+                            transfer ownership of your files if you want other people
+                            to be able to access them. This action is irreversible.
+                        </div>
+                        <div class="name">Password</div>
+                        <input class="input" type="password" name="password" />
                     </div>
-                    <div class="name">Password</div>
-                    <input class="input" type="password" name="password" />
-                </div>
-                <input class="button red" type="submit" value="Delete Account" />
-            </form>
+                    <input class="button red" type="submit" value="Delete Account" />
+                </form>
+            <% } %>
         </div>
         <div class="selection" data-key="locations">
             <div id="locations" class="listing container">

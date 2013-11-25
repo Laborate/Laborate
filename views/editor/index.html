@@ -89,15 +89,19 @@
     </div>
     <div class="pane">
         <div class="item" data-key="document">
-            <form class="form pair">
-                <button class="button" data-key="undo">
-                    <span class="icon <%= icons.undo %>"></span>Undo
-                </button>
-                <button class="button" data-key="redo">
-                    <span class="icon <%= icons.redo %>"></span>Redo
-                </button>
-            </form>
-            <form class="form collection" data-key="beautify">
+            <div class="form pair">
+                <form name="undo">
+                    <button class="button">
+                        <span class="icon <%= icons.undo %>"></span>Undo
+                    </button>
+                </form>
+                <form name="redo">
+                    <button class="button">
+                        <span class="icon <%= icons.redo %>"></span>Redo
+                    </button>
+                </form>
+            </div>
+            <form class="form collection" name="beautify">
                 <div class="select">
                     <div class="icon <%= icons.menu_arrows %>"></div>
                     <select name="spacing">
@@ -112,52 +116,52 @@
             </form>
         </div>
         <div class="item" data-key="search">
-            <form class="form connected" data-key="line-jump">
+            <form class="form connected" name="line-jump">
                 <input class="input" type="text" placeholder="Jump To Line"/>
                 <button type="submit" class="button">Go</button>
             </form>
-            <form class="form connected" data-key="highlight-line">
+            <form class="form connected" name="highlight-line">
                 <input class="input" type="text" placeholder="Find Line(s)"/>
                 <button type="submit" class="button">Go</button>
                 <div class="listing"></div>
             </form>
-            <form class="form connected" data-key="highlight-word">
+            <form class="form connected" name="highlight-word">
                 <input class="input" type="text" placeholder="Find Word(s)"/>
                 <button type="submit" class="button">Go</button>
                 <div class="listing"></div>
             </form>
         </div>
         <div class="item" data-key="laborators">
-            <form class="form connected" data-key="invite">
+            <form class="form connected" name="invite">
                 <input class="input" type="text" placeholder="screen name"/>
                 <button type="submit" class="button">Go</button>
                 <div class="listing"></div>
             </form>
         </div>
         <div class="item" data-key="upload">
-            <form class="form collection" data-key="commit">
+            <form class="form collection" name="commit">
                 <div>Laborate/<strong>Middleware</strong></div>
                 <textarea class="textarea" placeholder="message"></textarea>
                 <button type="submit" class="button">Commit To Github</button>
             </form>
-            <form class="form collection" data-key="save">
+            <form class="form collection" name="save">
                 <button type="submit" class="button">Save To Dropbox</button>
             </form>
         </div>
         <div class="item" data-key="download">
-            <form class="form">
-                <button type="submit" class="button" data-key="print">
+            <form class="form" data-key="print">
+                <button type="submit" class="button">
                     <span class="icon <%= icons.print %>"></span>Print
                 </button>
             </form>
-            <form class="form">
-                <button type="submit" class="button" data-key="download">
+            <form class="form" name="download">
+                <button type="submit" class="button">
                     <span class="icon <%= icons.download %>"></span>Download
                 </button>
             </form>
         </div>
         <div class="item" data-key="settings">
-            <form class="form collection" data-key="settings">
+            <form class="form collection" name="settings">
                 <input class="input" type="text" placeholder="file name"/>
                 <div class="select">
                     <div class="icon <%= icons.menu_arrows %>"></div>
@@ -190,7 +194,7 @@
     <div class="header">
         <div class="top">
             <div class="search">
-                <form id="search" autocomplete="off">
+                <form name="highlight-word" autocomplete="off">
                     <div class="icon <%= icons.search %>"></div>
                     <input type="text" placeholder="Search your document..." />
                     <button type="submit">Search</button>
