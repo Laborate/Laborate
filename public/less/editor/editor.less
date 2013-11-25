@@ -239,22 +239,28 @@ html, body {
 }
 
 .content {
-    .header .bottom {
-        .calc-width(~"100% - 220px");
-
-        .message {
-            display: none;
+    .header {
+        .top .search {
+            .calc-width(~"100% - 450px");
         }
 
-        .filters .filter {
-            margin: 5px 30px 0 0;
+        .bottom {
+            .calc-width(~"100% - 220px");
 
-            span {
-                top: inherit;
+            .message {
+                display: none;
             }
 
-            strong {
-                color: darken(@color_header_bottom, 45%);
+            .filters .filter {
+                margin: 5px 30px 0 0;
+
+                span {
+                    top: inherit;
+                }
+
+                strong {
+                    color: darken(@color_header_bottom, 45%);
+                }
             }
         }
     }
