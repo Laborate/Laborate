@@ -2,7 +2,7 @@
 //          Account Instances
 /////////////////////////////////////////////////
 window.account = {
-    timer: null,
+    timer: {},
     activated: null,
     location: function(location, history) {
         $(".list .item").removeClass("activated");
@@ -14,12 +14,13 @@ window.account = {
         window.account.activated = location;
     },
     locationSubmit: function(form) {
+        var timer = null;
         var passed = true;
         var data = { _csrf: window.config.csrf };
         var submit =  form.find("input[type=submit]");
 
         if(!submit.attr("data-original")) submit.attr("data-original", submit.val());
-        if(window.account.timer) clearInterval(window.account.timer);
+        if(window.account.timer[form.attr("action")]) clearInterval(window.account.timer[form.attr("action")]);
 
         submit.val("loading...");
 
@@ -67,7 +68,7 @@ window.account = {
                 if(result.success) {
                     submit.val(submit.attr("data-success"));
 
-                    window.account.timer = setTimeout(function() {
+                    window.account.timer[form.attr("action")] = setTimeout(function() {
                         submit.val(submit.attr("data-original"))
                     }, 5000);
 
@@ -78,7 +79,7 @@ window.account = {
                         .removeClass("disabled")
                         .addClass("error");
 
-                    window.account.timer = setTimeout(function() {
+                    window.account.timer[form.attr("action")] = setTimeout(function() {
                         submit
                             .val(submit.attr("data-original"))
                             .removeClass("error");
@@ -91,7 +92,7 @@ window.account = {
                 .removeClass("disabled")
                 .addClass("error");
 
-            window.account.timer = setTimeout(function() {
+            window.account.timer[form.attr("action")] = setTimeout(function() {
                 submit
                     .val(submit.attr("data-original"))
                     .removeClass("error");

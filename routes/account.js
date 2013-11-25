@@ -44,11 +44,16 @@ exports.profile = function(req, res) {
                             if(!error) {
                                 req.models.users.get(req.session.user.id, function(error, user) {
                                     if(!error && user) {
-                                        user.save({
+                                        var profile = {
                                             name: req.param("name"),
-                                            screen_name: req.param("screen_name"),
-                                            email: req.param("email")
-                                        }, function(error, user) {
+                                            screen_name: req.param("screen_name")
+                                        }
+
+                                        if(user.organizations.length == 0 || !user.organizations[0].permission.owned) {
+                                            profile.email = req.param("email");
+                                        }
+
+                                        user.save(profile, function(error, user) {
                                             if(error) {
                                                 res.error(200, "Failed To Update Profile", error);
                                             } else {
