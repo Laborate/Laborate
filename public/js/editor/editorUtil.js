@@ -175,6 +175,7 @@ window.editorUtil = {
                                 }
                             },
                             function(next) {
+                                window.sidebarUtil.setTitle("in", json.name);
                                 window.editorUtil.setInfo();
                                 window.editor.clearHistory();
                                 setTimeout(next, 1000);

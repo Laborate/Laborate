@@ -82,9 +82,6 @@ $(function() {
     //Set Array of Users
     window.users = new Array();
 
-    //Set Title
-    window.sidebarUtil.setTitle("in", $("#backdrop .backdrop-text").text().trim());
-
     //Refresh Editor
     window.editorUtil.refresh();
 

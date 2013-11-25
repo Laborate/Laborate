@@ -51,6 +51,7 @@ module.exports = function(root) {
     clientJS.addFile("codemirror", codemirror_path + 'lib/codemirror.js');
     clientJS.addFile("codemirror", codemirror_path + 'addon/mode/loadmode.js');
     clientJS.addFile("codemirror", codemirror_path + 'addon/display/placeholder.js');
+    clientJS.addFile("codemirror", codemirror_path + 'mode/meta.js');
     clientJS.addFile("codemirror", js_path + 'editor/modes.js');
 
     /* Editor */

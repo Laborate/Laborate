@@ -161,6 +161,10 @@
                 <input class="input" type="text" placeholder="file name"/>
                 <div class="select">
                     <div class="icon <%= icons.menu_arrows %>"></div>
+                    <select name="languages"></select>
+                </div>
+                <div class="select">
+                    <div class="icon <%= icons.menu_arrows %>"></div>
                     <select>
                         <option value="None">KeyMappings</option>
                         <option value="Vim">Vim</option>
@@ -173,10 +177,6 @@
                         <option value="public">Public</option>
                         <option value="private" <%= (document.password) ? "checked" : "" %>>Private</option>
                     </select>
-                </div>
-                <div class="select">
-                    <div class="icon <%= icons.menu_arrows %>"></div>
-                    <select></select>
                 </div>
                 <input class="input" type="password" placeholder="password" <%= (!document.password) ? "disabled" : "" %>/>
                 <button type="submit" class="button">Save</button>
@@ -221,9 +221,9 @@
                     <span>Lines:</span>
                     <strong></strong>
                 </div>
-                <div class="filter">
+                <div class="filter" data-key="file-language">
                     <span>Language:</span>
-                    <strong>Javascript</strong>
+                    <strong></strong>
                 </div>
             </div>
             <div class="message"></div>

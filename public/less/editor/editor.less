@@ -46,16 +46,16 @@ html, body {
 
         .back {
             cursor: pointer;
-            color: lighten(@color_blue, 10%);
+            color: darken(@color_blue, 10%);
             font-size: 14px;
             overflow: hidden;
             float: left;
             margin: 3px 10px 0 -35px;
-            .transition();
+            .transition(margin-left);
             .transform(rotate(-90deg));
 
             &:hover {
-                color: lighten(@color_blue, 5%);
+                color: darken(@color_blue, 5%);
 
                 &:active {
                     color: @color_blue;

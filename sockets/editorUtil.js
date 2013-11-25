@@ -70,6 +70,7 @@ exports.clientData = function(room, document, callback) {
 
         callback({
             success: true,
+            name: document.name,
             content: (document.content) ? document.content.join("\n") : "",
             breakpoints: ((document.breakpoints) ? $.map(document.breakpoints, function(value) {
                 return {"line": value};

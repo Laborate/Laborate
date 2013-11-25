@@ -14,6 +14,24 @@ window.sidebarUtil = {
             $(".sidebar .list .item").removeClass("activated");
         }
 	},
+	populateLanguages: function() {
+        var languages = "";
+        $.each(window.editorUtil.languages, function(language, mode) {
+            languages += "<option value='" + mode + "'>" + language + "</option>";
+        });
+
+        $(".form[data-key='settings'] select[name='languages']").html(languages);
+	},
+	setLanguage: function(language) {
+        $(".filter[data-key='file-language'] strong").text(language);
+        $(".form[data-key='settings'] select[name='languages']")
+
+        $(".form[data-key='settings'] select[name='languages'] option")
+            .filter(function() {
+                return ($(this).text() == language);
+            })
+            .prop('selected', true);
+	},
 	keyMap: function(map) {
 		if(map != "" && map != undefined) {
 			window.editor.setOption("keyMap", map);
