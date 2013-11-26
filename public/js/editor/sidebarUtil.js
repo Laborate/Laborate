@@ -15,44 +15,7 @@ window.sidebarUtil = {
         }
 	},
 	submit: function(form) {
-        switch(form.attr("name")) {
-            case "undo":
-                window.editor.undo();
-                break;
-            case "redo":
-                window.editor.redo();
-                break;
-            case "beautify":
-                this.beautify(form);
-                break;
-            case "line-jump":
-                this.jumpToLine(form);
-                break;
-            case "highlight-line":
-                this.highlight(form);
-                break;
-            case "highlight-word":
-                this.search(form);
-                break;
-            case "invite":
-                this.invite(form);
-                break;
-            case "commit":
-                this.commit(form);
-                break;
-            case "save":
-                this.save(form);
-                break;
-            case "print":
-                this.print(form);
-                break;
-            case "download":
-                this.download(form);
-                break;
-            case "settings":
-                this.settings(form);
-                break;
-        }
+        console.log(form);
 	},
 	populateLanguages: function() {
         var languages = "";
@@ -296,7 +259,7 @@ window.sidebarUtil = {
                 .css("cssText", "border: solid 1px #999 !important;");
         }
 	},
-	invite: function() {
+	email_invite: function() {
     	if($("#emailAddresses").val() != "") {
             $("#emailSend").addClass("disabled").val("Sending...");
             $("#sidebar_share .header").eq(0).css("color", "");
