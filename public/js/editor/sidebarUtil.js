@@ -60,13 +60,11 @@ window.sidebarUtil = {
             languages += "<option value='" + mode + "'>" + language + "</option>";
         });
 
-        $(".form[data-key='settings'] select[name='languages']").html(languages);
+        $(".form[name='settings'] select[name='languages']").html(languages);
 	},
 	setLanguage: function(language) {
         $(".filter[data-key='file-language'] strong").text(language);
-        $(".form[data-key='settings'] select[name='languages']")
-
-        $(".form[data-key='settings'] select[name='languages'] option")
+        $(".form[name='settings'] select[name='languages'] option")
             .filter(function() {
                 return ($(this).text() == language);
             })
@@ -279,22 +277,9 @@ window.sidebarUtil = {
             }
         });
 	},
-	togglePassword: function(reset) {
-        if(!$("#documentPassword").is(":disabled") || reset == true) {
-            $("#documentPassword").attr("disabled", "disabled").val("");
-            $("#change_password").val("false");
-            $("#password_change")
-                .removeClass("icon-cancel")
-                .addClass("icon-pencil")
-                .css("cssText", "");
-        } else {
-            $("#documentPassword").removeAttr("disabled").val("");
-            $("#change_password").val("true");
-            $("#password_change")
-                .removeClass("icon-pencil")
-                .addClass("icon-cancel")
-                .css("cssText", "border: solid 1px #999 !important;");
-        }
+	togglePassword: function(active) {
+        $(".form[name='settings'] input[name='password']")
+            .prop("disabled", active);
 	},
 	invite: function() {
     	if($("#emailAddresses").val() != "") {

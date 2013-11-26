@@ -169,7 +169,7 @@
                 </div>
                 <div class="select">
                     <div class="icon <%= icons.menu_arrows %>"></div>
-                    <select>
+                    <select >
                         <option value="None">KeyMappings</option>
                         <option value="Vim">Vim</option>
                         <option value="Emacs">Emacs</option>
@@ -178,12 +178,13 @@
                 <% if(user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
                     <div class="select">
                         <div class="icon <%= icons.menu_arrows %>"></div>
-                        <select>
+                        <select name="security">
                             <option value="false">Public</option>
                             <option value="true" <%= (document.password) ? "checked" : "" %>>Private</option>
                         </select>
                     </div>
-                    <input class="input" type="password" placeholder="password" <%= (!document.password) ? "disabled" : "" %>/>
+                    <input class="input" name="password"
+                        type="password" placeholder="password" <%= (!document.password) ? "disabled" : "" %>/>
                 <% } %>
                 <button type="submit" class="button">Save</button>
             </form>

@@ -24,13 +24,15 @@
                 </div>
                 <div class="active"></div>
             </div>
-            <div class="item" data-key="settings">
-                <div class="container">
-                    <div class="name">Account Settings</div>
-                    <div class="icon <%= icons.settings %>"></div>
+            <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+                <div class="item" data-key="settings">
+                    <div class="container">
+                        <div class="name">Account Settings</div>
+                        <div class="icon <%= icons.settings %>"></div>
+                    </div>
+                    <div class="active"></div>
                 </div>
-                <div class="active"></div>
-            </div>
+            <% } %>
             <div class="item" data-key="locations">
                 <div class="container">
                     <div class="name">Manage Locations</div>
@@ -177,23 +179,23 @@
                 <input class="button" type="submit" value="Update Profile" data-success="Profile Updated" />
             </form>
         </div>
-        <div class="selection" data-key="settings">
-            <form class="container" action="/account/settings/password/" autocomplete="off">
-                <div class="item">
-                    <div class="name">Old Password</div>
-                    <input class="input" type="password" name="old_password" />
-                </div>
-                <div class="item">
-                    <div class="name">New Password</div>
-                    <input class="input" type="password" name="new_password" />
-                </div>
-                <div class="item">
-                    <div class="name">Confirm Password</div>
-                    <input class="input" type="password" name="confirm_password" />
-                </div>
-                <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
-            </form>
-            <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+        <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+            <div class="selection" data-key="settings">
+                <form class="container" action="/account/settings/password/" autocomplete="off">
+                    <div class="item">
+                        <div class="name">Old Password</div>
+                        <input class="input" type="password" name="old_password" />
+                    </div>
+                    <div class="item">
+                        <div class="name">New Password</div>
+                        <input class="input" type="password" name="new_password" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Confirm Password</div>
+                        <input class="input" type="password" name="confirm_password" />
+                    </div>
+                    <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
+                </form>
                 <form class="container" action="/account/settings/delete/" autocomplete="off">
                     <div class="item">
                         <div class="comment">
@@ -206,8 +208,8 @@
                     </div>
                     <input class="button red" type="submit" value="Delete Account" />
                 </form>
-            <% } %>
-        </div>
+            </div>
+        <% } %>
         <div class="selection" data-key="locations">
             <div id="locations" class="listing container">
                 <% if(!$.isEmptyObject(user.locations)) { %>

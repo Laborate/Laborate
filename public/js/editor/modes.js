@@ -1,28 +1,36 @@
-function setEditorMode(mode) {
-    if(mode in window.editorUtil.extensions) {
-        var modeName = window.editorUtil.extensions[mode];
-        var mode = window.editorUtil.languages[modeName];
-    } else {
-        var modeName = "None";
-        var mode = null;
+function setEditorMode(extension) {
+    if(extension in window.editorUtil.extensions) {
+        var modeName = window.editorUtil.extensions[extension];
+        var modeObject = window.editorUtil.languages[modeName];
     }
 
-    if(mode) {
-        if(mode == "gfm") {
-            CodeMirror.autoLoadMode(window.editor, "javascript");
-            CodeMirror.autoLoadMode(window.editor, "css");
-            CodeMirror.autoLoadMode(window.editor, "htmlmixed");
-            CodeMirror.autoLoadMode(window.editor, "clike");
-        } else if(["m", "h", "c", "cc", "cpp", "cxx", "java", "jar", "scala", "pch"].indexOf(mode) != -1) {
-            CodeMirror.autoLoadMode(window.editor, "clike");
-        } else if(mode == "application/json") {
-            CodeMirror.autoLoadMode(window.editor, "javascript");
+    if(!extension || !modeObject) {
+        if(!extension) {
+            Raven.captureMessage("Unknown Code Editor Extension: " + extension);
+        } else if(!modeObject) {
+            Raven.captureMessage("Unknown Code Editor Mode: " + modeName);
         }
 
-        if(["application/json"].indexOf(mode) == -1) {
-            CodeMirror.autoLoadMode(window.editor, mode);
-        }
-        window.editor.setOption("mode", mode);
+        var modeName = "None";
+        var modeObject = null;
+    } else {
+        CodeMirror.autoLoadMode(window.editor, $.trim(modeObject.mode));
+
+        setTimeout(function() {
+            window.editor.setOption("mode", $.trim(modeObject.mime));
+
+            setTimeout(function() {
+                if(editor.getMode().name == "null") {
+                    window.editor.setOption("mode", $.trim(modeObject.mode));
+                }
+            }, 100);
+        }, 100);
+
+        setTimeout(function() {
+            if(editor.getMode().name == "null") {
+                window.editor.setOption("mode", $.trim(modeObject.mode));
+            }
+        }, 300);
     }
 
     window.sidebarUtil.setLanguage(modeName);
@@ -30,76 +38,13 @@ function setEditorMode(mode) {
 }
 
 $(function() {
-    window.editorUtil.languages = {
-        "None": null,
-        "Javascript": "javascript",
-        "JSON": "application/json",
-        "PHP": "php",
-        "CSS":"css",
-        "C": "text/x-csrc",
-        "C++": "text/x-c++src",
-        "Java": "text/x-java",
-        "Scala": "text/x-c++src",
-        "Matlab": {
-            name: "octave",
-            version: 2,
-            singleLineStringErrors: false
-        },
-        "Coffee Script": "text/x-coffeescript",
-        "Common Lisp": "commonlisp",
-        "Clojure": "clojure",
-        "Diff": "diff",
-        "ELC": "elc",
-        "Erlang": "erlang",
-        "Go": "Go",
-        "Groovy": "groovy",
-        "Haskell": "haskell",
-        "Haxe": "haxe",
-        "Asp.net": "application/x-aspx",
-        "Asp.net HTML": "htmlembedded",
-        "Java Server Pages": "application/x-jsp",
-        "EJS": "application/x-ejs",
-        "Jade": "text/x-jade",
-        "HTML": "htmlmixed",
-        "PLIST": "htmlmixed",
-        "LESS": "less",
-        "Lua": "lua",
-        "Github Markdown": "gfm",
-        "Markdown": "markdown",
-        "MYSQL": "mysql",
-        "Ntriples": "nt",
-        "Ocaml": "ocaml",
-        "Pascal": "pascal",
-        "Perl": "perl",
-        "SQL": "sql",
-        "Properties": "properties",
-        "R": "r",
-        "Spec": "spec",
-        "Change Log": "changes",
-        "RST": "rst",
-        "Ruby": "ruby",
-        "Rust": "rust",
-        "Scheme": "scheme",
-        "Bash": "shell",
-        "Shell": "shell",
-        "Sieve": "sieve",
-        "Smalltalk": "smalltalk",
-        "Smarty": "smarty",
-        "Sparql": "sparql",
-        "Stex": "stex",
-        "Tiddly Wiki": "tiddlywiki",
-        "VB": "vb",
-        "VBS": "vbscript",
-        "Velocity": "velocity",
-        "Verilog": "verilog",
-        "XML": "xml",
-        "XQuery": "xquery",
-        "Yaml": "yaml",
-        "Python": "python",
-        "Pig": "pig",
-        "PSQL": "psql",
-        "Sqlite3": "sqlite3"
-    }
+    window.editorUtil.languages = { None: null };
+    $.each(CodeMirror.modeInfo, function(key, value) {
+        window.editorUtil.languages[value.name] = {
+            mime: value.mime,
+            mode: value.mode
+        }
+    });
 
     window.editorUtil.extensions =  {
         "js":"Javascript", "json":"JSON",
@@ -108,7 +53,7 @@ $(function() {
         "h":"C", "c":"C", "cc":"C", "cpp":"C++",
         "cxx":"C++", "java":"Java", "jar":"Java","scala":"Scala",
         "pch":"C++",
-        "m": "Matlab",
+        "m": "Octave",
         "coffee":"Coffee Script",
         "lisp":"Common Lisp",
         "clj":"Clojure",
@@ -120,13 +65,13 @@ $(function() {
         "lhs":"Haskell",
         "zip":"Haxe",
         "net":"Asp.net", "asp":"Asp.net HTML",
-        "jsp":"Java Server Pages", "aspx":"Java Server Pages",
-        "ejs": "EJS", "jade": "JADE",
-        "html":"HTML","plist":"Plist",
+        "jsp":"Java Server Pages", "aspx":"JavaServer Pages",
+        "ejs": "Embedded Javascript", "jade": "Jade",
+        "html":"Embedded Javascript","plist":"Plist",
         "less":"LESS",
         "lua":"Lua",
         "markdown":"Markdown", "mdown":"Markdown",
-        "mkdn":"Github Markdown", "md":"Github Markdown",
+        "mkdn":"GitHub Flavored Markdown", "md":"GitHub Flavored Markdown",
         "mkd":"Markdown", "mdwn":"Markdown", "mdtxt":"Markdown",
         "mdtext":"Markdown", "text":"Markdown",
         "frm":"MYSQL", "myd":"MYSQL", "myi":"MYSQL",
@@ -144,7 +89,7 @@ $(function() {
         "rb":"Ruby",
         "rs":"Rust",
         "ss":"Scheme",
-        "sh":"Bash",
+        "sh":"Shell",
         "sieve":"Sieve",
         "stinit":"Smalltalk", "im":"Smalltalk", "st":"Smalltalk",
         "tpl":"Smarty",
