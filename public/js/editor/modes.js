@@ -33,16 +33,25 @@ function setEditorMode(extension) {
         }, 300);
     }
 
-    window.sidebarUtil.setLanguage(modeName);
+    window.sidebarUtil.defaultLanguage(modeName);
     setTimeout(function () { window.editor.refresh(); }, 100);
 }
 
 $(function() {
     window.editorUtil.languages = {};
     $.each(CodeMirror.modeInfo, function(key, value) {
-        window.editorUtil.languages[value.name] = {
-            mime: value.mime,
-            mode: value.mode
+        if(value.name != "HTML") {
+            window.editorUtil.languages[value.name] = {
+                mime: value.mime,
+                mode: value.mode
+            }
+
+            if(value.name == "Embedded Javascript") {
+                window.editorUtil.languages["HTML"] = {
+                    mime: value.mime,
+                    mode: value.mode
+                }
+            }
         }
     });
 
@@ -67,7 +76,7 @@ $(function() {
         "net":"Asp.net", "asp":"Asp.net HTML",
         "jsp":"Java Server Pages", "aspx":"JavaServer Pages",
         "ejs": "Embedded Javascript", "jade": "Jade",
-        "html":"Embedded Javascript","plist":"Plist",
+        "html":"HTML","plist":"Plist",
         "less":"LESS",
         "lua":"Lua",
         "markdown":"Markdown", "mdown":"Markdown",

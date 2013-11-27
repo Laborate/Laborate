@@ -60,11 +60,11 @@ window.sidebarUtil = {
             languages += "<option value='" + mode + "'>" + language + "</option>";
         });
 
-        $(".form[name='settings'] select[name='languages']").html(languages);
+        $(".form[name='type-mode'] select[name='languages']").html(languages);
 	},
-	setLanguage: function(language) {
+	defaultLanguage: function(language) {
         $(".filter[data-key='file-language'] strong").text(language);
-        $(".form[name='settings'] select[name='languages'] option")
+        $(".form[name='type-mode'] select[name='languages'] option")
             .filter(function() {
                 return ($(this).text() == language);
             })

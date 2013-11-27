@@ -203,6 +203,30 @@ html, body {
                         }
                     }
 
+                    &.red {
+                        background: @color_red;
+
+                        &:hover {
+                            background: darken(@color_red, 5%);
+
+                            &:active {
+                                background: darken(@color_red, 10%);
+                            }
+                        }
+                    }
+
+                    &.error {
+                        background: darken(@color_red, 5%);
+
+                        &:hover {
+                            background: darken(@color_red, 10%);
+
+                            &:active {
+                                background: darken(@color_red, 15%);
+                            }
+                        }
+                    }
+
                     .icon {
                         margin-right: 5px;
                     }
