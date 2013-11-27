@@ -7,12 +7,12 @@ function setEditorMode(extension) {
     if(!extension || !modeObject) {
         if(!extension) {
             Raven.captureMessage("Unknown Code Editor Extension: " + extension);
-        } else if(!modeObject) {
+        } else if(!modeObject && modeName) {
             Raven.captureMessage("Unknown Code Editor Mode: " + modeName);
         }
 
-        var modeName = "None";
-        var modeObject = null;
+        var modeName = "Plain Text";
+        var modeObject = window.editorUtil.languages[modeName];
     } else {
         CodeMirror.autoLoadMode(window.editor, $.trim(modeObject.mode));
 
@@ -38,7 +38,7 @@ function setEditorMode(extension) {
 }
 
 $(function() {
-    window.editorUtil.languages = { None: null };
+    window.editorUtil.languages = {};
     $.each(CodeMirror.modeInfo, function(key, value) {
         window.editorUtil.languages[value.name] = {
             mime: value.mime,
@@ -47,7 +47,7 @@ $(function() {
     });
 
     window.editorUtil.extensions =  {
-        "js":"Javascript", "json":"JSON",
+        "js":"JavaScript", "json":"JSON",
         "php":"PHP",
         "css":"CSS",
         "h":"C", "c":"C", "cc":"C", "cpp":"C++",

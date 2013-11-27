@@ -493,8 +493,8 @@ window.documents = {
                 ');
             });
 
-            $(".list .item").not("[data-key='online']").remove();
-            $(".list .listing").html(locations);
+            $(".sidebar .list .item").not("[data-key='online']").remove();
+            $(".sidebar .list .listing").html(locations);
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {

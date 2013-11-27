@@ -13,7 +13,6 @@ exports.index = function(req, res, next) {
             mode: "account",
             plans: plans,
             user: req.session.user,
-            github_auth_url: req.github.auth_url,
             js: clientJS.renderTags("account", "header"),
             css: clientCSS.renderTags("account", "header"),
         });
