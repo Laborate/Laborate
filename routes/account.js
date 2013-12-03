@@ -4,7 +4,7 @@ exports.index = function(req, res, next) {
     }
 
     req.models.pricing.find({
-        student: req.session.user.pricing.student || false,
+        student: req.session.user.pricing.student,
         organization: false
     }, [ "priority", "A" ], function(error, plans) {
         res.renderOutdated('account/index', {
@@ -216,7 +216,7 @@ exports.remove_card = function(req, res, next) {
                             if(!error) {
                                 if(next) res.json({ success: true });
 
-                                if(req.session.user.pricing.documents != 0) {
+                                if(req.session.user.pricing.amount != 0) {
                                     req.models.notifications.create({
                                         message: "Please enter a credit card, your plan requires a card on file",
                                         priority: true,

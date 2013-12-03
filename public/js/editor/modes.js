@@ -1,42 +1,3 @@
-function setEditorMode(extension) {
-    if(extension in window.editorUtil.extensions) {
-        var modeName = window.editorUtil.extensions[extension];
-        var modeObject = window.editorUtil.languages[modeName];
-    }
-
-    if(!extension || !modeObject) {
-        if(!extension) {
-            Raven.captureMessage("Unknown Code Editor Extension: " + extension);
-        } else if(!modeObject && modeName) {
-            Raven.captureMessage("Unknown Code Editor Mode: " + modeName);
-        }
-
-        var modeName = "Plain Text";
-        var modeObject = window.editorUtil.languages[modeName];
-    } else {
-        CodeMirror.autoLoadMode(window.editor, $.trim(modeObject.mode));
-
-        setTimeout(function() {
-            window.editor.setOption("mode", $.trim(modeObject.mime));
-
-            setTimeout(function() {
-                if(editor.getMode().name == "null") {
-                    window.editor.setOption("mode", $.trim(modeObject.mode));
-                }
-            }, 100);
-        }, 100);
-
-        setTimeout(function() {
-            if(editor.getMode().name == "null") {
-                window.editor.setOption("mode", $.trim(modeObject.mode));
-            }
-        }, 300);
-    }
-
-    window.sidebarUtil.defaultLanguage(modeName);
-    setTimeout(function () { window.editor.refresh(); }, 100);
-}
-
 $(function() {
     window.editorUtil.languages = {};
     $.each(CodeMirror.modeInfo, function(key, value) {
@@ -54,6 +15,13 @@ $(function() {
             }
         }
     });
+
+    window.sidebarUtil.beautifiable = [
+        "JSON", "JavaScript",
+        "CSS", "LESS", "Sass", "SCSS",
+        "HTML", "Plist", "XML", "Embedded Javascript",
+        "Asp.net HTML", "Jade", "PHP"
+    ]
 
     window.editorUtil.extensions =  {
         "js":"JavaScript", "json":"JSON",
@@ -77,7 +45,7 @@ $(function() {
         "jsp":"Java Server Pages", "aspx":"JavaServer Pages",
         "ejs": "Embedded Javascript", "jade": "Jade",
         "html":"HTML","plist":"Plist",
-        "less":"LESS",
+        "less":"LESS", "sass": "Sass", "scss": "SCSS",
         "lua":"Lua",
         "markdown":"Markdown", "mdown":"Markdown",
         "mkdn":"GitHub Flavored Markdown", "md":"GitHub Flavored Markdown",

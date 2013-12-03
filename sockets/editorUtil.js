@@ -118,13 +118,15 @@ exports.removeUser = function(req, user, room) {
                         var document = documents[0].document;
                         exports.redisClient.get(room, function(error, reply) {
                             reply = JSON.parse(reply);
-                            editorJsdom(document.content, reply.changes, function(content) {
-                                document.save({
-                                    content: content.split("\n"),
-                                    breakpoints: reply.breakpoints
+                            if(reply.changes) {
+                                editorJsdom(document.content, reply.changes, function(content) {
+                                    document.save({
+                                        content: content.split("\n"),
+                                        breakpoints: reply.breakpoints
+                                    });
+                                    exports.redisClient.del(room);
                                 });
-                                exports.redisClient.del(room);
-                            });
+                            }
                         });
                     } else  {
                         exports.redisClient.del(room);

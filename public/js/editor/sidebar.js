@@ -16,4 +16,8 @@ $(function() {
     $(".sidebar .form[name='settings'] select[name='security']").on("change", function() {
         window.sidebarUtil.togglePassword($(this).val() == "false");
     });
+
+    $(".sidebar .form[name='type-mode'] select").on("change", function() {
+        $(this).parents("form").submit();
+    });
 });

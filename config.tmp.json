@@ -68,7 +68,8 @@
     },
     "stripe": {
         "reset": true,
-        "id": ""
+        "id": "",
+        "description": ""
     },
     "apps": {
         "sftp": false,

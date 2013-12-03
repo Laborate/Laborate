@@ -62,16 +62,18 @@
 }
 
 .cm-s-laborate .CodeMirror-dialog {
-    position: fixed !important;
-    padding: 10px 0px 10px 10px !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding: 10px 0px 10px 15px !important;
+    margin-left: -5px !important;
     font-size: 24px !important;
     overflow: visible !important;
     z-index: 100 !important;
     height: auto !important;
-    margin-right: -15px !important;
-    left: 211px !important;
-    right: 245px !important;
     border-bottom: solid 1px #ccc !important;
+    .box-sizing(border-box);
 }
 
 .cm-s-laborate .CodeMirror-vscrollbar {
@@ -82,14 +84,12 @@
     margin: 20px 0 10px 0;
 }
 
-.cm-s-laborate .CodeMirror-dialog-top {
-    top: 50px !important;
-    border-bottom: solid 1px #ccc !important;
-}
-
+.cm-s-laborate .CodeMirror-dialog-top,
 .cm-s-laborate .CodeMirror-dialog-bottom {
+    top: inherit !important;
     bottom: 0 !important;
     border-top: solid 1px #ccc !important;
+    border-bottom: none;
 }
 
 .cm-s-laborate .CodeMirror-dialog input {

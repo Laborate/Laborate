@@ -275,30 +275,35 @@ html, body {
                 display: none;
             }
 
-            .filters .filter {
-                margin: 5px 30px 0 0;
-                max-width: 230px;
-                .ellipsis();
+            .filters {
+                width: 100%;
+                display: block;
+                clear: both;
 
-                &:last-child {
-                    margin-right: 0;
-                }
+                .filter {
+                    margin: 5px 30px 0 0;
+                    max-width: 33%;
+                    .ellipsis();
 
-                span {
-                    top: inherit;
-                }
+                    &:last-child {
+                        margin-right: 0;
+                    }
 
-                strong {
-                    color: darken(@color_header_bottom, 45%);
+                    span {
+                        top: inherit;
+                    }
+
+                    strong {
+                        color: darken(@color_header_bottom, 45%);
+                    }
                 }
             }
         }
     }
 
     .pane {
-        overflow: hidden;
         margin: 0;
-        padding: 0 0 0 5px;
+        padding: 0;
         position: absolute;
         .calc-width(~"100% - 220px");
         .box-sizing(border-box);

@@ -136,6 +136,56 @@ window.editorUtil = {
         window.editor.refresh();
         window.editorUtil.refresh();
     },
+    setMode: function(name, object) {
+        window.sidebarUtil.defaultLanguage(name);
+        CodeMirror.autoLoadMode(window.editor, $.trim(object.mode));
+
+        setTimeout(function() {
+            window.editor.setOption("mode", $.trim(object.mime));
+
+            setTimeout(function() {
+                if(editor.getMode().name == "null") {
+                    window.editor.setOption("mode", $.trim(object.mode));
+                    setTimeout(function () {
+                        window.editor.refresh();
+                    }, 100);
+                }
+            }, 100);
+        }, 100);
+    },
+    setModeExtension: function(extension) {
+        if(extension in window.editorUtil.extensions) {
+            var modeName = window.editorUtil.extensions[extension];
+            var modeObject = window.editorUtil.languages[modeName];
+        }
+
+        if(!extension || !modeObject) {
+            if(!extension) {
+                Raven.captureMessage("Unknown Code Editor Extension: " + extension);
+            } else if(!modeObject && modeName) {
+                Raven.captureMessage("Unknown Code Editor Mode: " + modeName);
+            }
+
+            var modeName = "Plain Text";
+            var modeObject = window.editorUtil.languages[modeName];
+        }
+
+        this.setMode(modeName, modeObject);
+        return modeName;
+    },
+    setModeLanguage: function(language) {
+        var modeName = language;
+        var modeObject = window.editorUtil.languages[language];
+
+        if(!language || !modeObject) {
+            Raven.captureMessage("Unknown Code Editor Language: " + language);
+
+            var modeName = "Plain Text";
+            var modeObject = window.editorUtil.languages[modeName];
+        }
+
+        this.setMode(modeName, modeObject);
+    },
     join: function(password, reconnect, callback) {
         //Have to wait for the socket to initialize
         interval = setInterval(function() {

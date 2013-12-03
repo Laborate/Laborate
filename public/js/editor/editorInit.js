@@ -15,7 +15,7 @@ $.extend(window.socketUtil, {
         if(!window.unload) {
             $(".pane").css({"opacity": ".5"});
             $("#backdrop input[type='submit']").val("reconnecting...").attr("disabled", "disabled");
-            window.editorUtil.notification("reconnecting...", true);
+            window.editorUtil.notification("Reconnecting...", true);
             if(window.editor) window.editor.options.readOnly = true;
             window.editorUtil.users([]);
             $("title").text([
