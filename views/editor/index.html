@@ -175,17 +175,18 @@
         </div>
         <div class="item" data-key="settings">
             <form class="form collection" name="settings">
-                <input class="input" type="text" placeholder="file name"/>
+                <input class="input" type="text" placeholder="file name" value="<%= document.name %>"/>
                 <% if(user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
                     <div class="select">
                         <div class="icon <%= icons.menu_arrows %>"></div>
                         <select name="security">
                             <option value="false">Public</option>
-                            <option value="true" <%= (document.password) ? "checked" : "" %>>Private</option>
+                            <option value="true" <%= (document.password) ? "selected" : "" %>>Private</option>
                         </select>
                     </div>
-                    <input class="input" name="password"
-                        type="password" placeholder="password" <%= (!document.password) ? "disabled" : "" %>/>
+                    <input class="input" name="password" type="password"
+                        placeholder="password" <%= (!document.password) ? "disabled" : "" %>
+                    />
                 <% } %>
                 <button type="submit" class="button">Save</button>
             </form>
