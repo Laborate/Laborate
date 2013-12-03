@@ -174,7 +174,7 @@ exports.register = function(req, res, next) {
                     } else {
                         req.models.users.create({
                             name: $.trim(req.param('name')),
-                            screen_name: $.trim(req.param('screen_name')),
+                            screen_name: $.trim(req.param('screen_name')).toLowerCase(),
                             email: $.trim(req.param('email')),
                             password: $.trim(req.param('password')),
                             pricing_id: 1

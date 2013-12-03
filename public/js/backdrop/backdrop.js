@@ -60,7 +60,9 @@ window.backdrop = {
     error: function(message, url) {
         if(message) {
             $("#backdrop .textError").hide();
-            $("body > *").not("#backdrop").remove();
+            $("body > *")
+                .not("#backdrop")
+                .remove();
             $("#backdrop").show();
             $(".backdrop-bottom").hide();
             $("#backdrop-container")
@@ -68,7 +70,9 @@ window.backdrop = {
                 .width("290px")
                 .html(message);
 
-            $("#backdrop-core").hAlign().vAlign();
+            $("#backdrop-core")
+                .hAlign()
+                .vAlign();
 
             if(url) {
                 if(url == true) {
@@ -82,7 +86,7 @@ window.backdrop = {
                 }
             }
         } else {
-            window.location.href = (url) ? url : "/documents/";
+            window.location.href = (url) ? url : "/";
         }
     },
     urlChange: function(url) {

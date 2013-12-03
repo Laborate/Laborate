@@ -176,22 +176,24 @@
         <div class="item" data-key="settings">
             <form class="form collection" name="settings">
                 <input class="input" type="text" placeholder="file name" value="<%= document.name %>"/>
-                <% if(user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
-                    <div class="select">
-                        <div class="icon <%= icons.menu_arrows %>"></div>
-                        <select name="security">
-                            <option value="false">Public</option>
-                            <option value="true" <%= (document.password) ? "selected" : "" %>>Private</option>
-                        </select>
-                    </div>
-                    <input class="input" name="password" type="password"
-                        placeholder="password" <%= (!document.password) ? "disabled" : "" %>
-                    />
+                <% if(document.owner.id == user.id) { %>
+                    <% if(user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
+                        <div class="select">
+                            <div class="icon <%= icons.menu_arrows %>"></div>
+                            <select name="security">
+                                <option value="false">Public</option>
+                                <option value="true" <%= (document.password) ? "selected" : "" %>>Private</option>
+                            </select>
+                        </div>
+                        <input class="input" name="password" type="password"
+                            placeholder="password" <%= (!document.password) ? "disabled" : "" %>
+                        />
+                    <% } %>
                 <% } %>
                 <button type="submit" class="button">Save</button>
             </form>
             <form class="form collection" name="delete">
-                <button type="submit" class="button red">Delete</button>
+                <button type="submit" class="button red"><%= (document.owner.id == user.id) ? "Delete" : "Forget" %></button>
             </form>
         </div>
     </div>

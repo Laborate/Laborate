@@ -17,24 +17,22 @@ window.editorUtil = {
         }
     },
     setChanges: function(direction, data, override) {
-        if(data['origin'] != "setValue") {
-            window.editorUtil.setInfo();
+        window.editorUtil.setInfo();
 
-            if(direction == "out" && window.editorUtil.initialized) {
-                if(window.editorUtil.clean) {
-                    window.socketUtil.socket.emit('editorDocument', {
-                        "changes": data
-                    });
-                } else {
-                    window.editorUtil.clean = true;
-                }
-            } else if(direction == "in") {
-                if(window.editorUtil.clean || override) {
-                    window.editorUtil.clean = false;
-                    window.editor.replaceRange(data['text'], data['from'], data['to']);
-                } else {
-                    window.editorUtil.clean = true;
-                }
+        if(direction == "out" && window.editorUtil.initialized) {
+            if(window.editorUtil.clean) {
+                window.socketUtil.socket.emit('editorDocument', {
+                    "changes": data
+                });
+            } else {
+                window.editorUtil.clean = true;
+            }
+        } else if(direction == "in") {
+            if(window.editorUtil.clean || override) {
+                window.editorUtil.clean = false;
+                window.editor.replaceRange(data['text'], data['from'], data['to']);
+            } else {
+                window.editorUtil.clean = true;
             }
         }
     },
