@@ -85,10 +85,6 @@ module.exports = function(root) {
     clientJS.addFile("editor", js_path + 'editor/sidebarUtil.js');
     clientJS.addFile("editor", js_path + 'editor/chatRoom.js');
 
-    clientJS.addFile("editor", node_modules + 'js-beautify/js/lib/beautify.js');
-    clientJS.addFile("editor", node_modules + 'js-beautify/js/lib/beautify-css.js');
-    clientJS.addFile("editor", node_modules + 'js-beautify/js/lib/beautify-html.js');
-
     /* Documents */
     clientCSS.addFile("documents", css_path + 'documents/documents.less');
 

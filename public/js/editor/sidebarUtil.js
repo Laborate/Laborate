@@ -94,13 +94,11 @@ window.sidebarUtil = {
 	},
 	setTitle: function(direction, title) {
 	    var extension = title.split(".")[title.split(".").length - 1];
-	    var mode = window.editorUtil.setModeExtension(extension);
-	    var beautifiable = (window.sidebarUtil.beautifiable.indexOf(mode) != -1);
+	    window.editorUtil.setModeExtension(extension);
 
 		$("#documentTitle").val(title);
 		$("#document_title").text(title);
 		$("title").text(title + window.config.delimeter + window.config.name);
-		$(".sidebar .form[name='beautify']").toggle(beautifiable);
 		if(direction == "out") {
     		window.socketUtil.socket.emit('editorExtras' , {
     		    "docName": $("#documentTitle").val()
@@ -109,23 +107,25 @@ window.sidebarUtil = {
 	},
 	togglePassword: function(active) {
         $(".form[name='settings'] input[name='password']")
+            .val("")
             .prop("disabled", active);
 	},
 	beautify: function(form) {
-	    var value = window.editor.getValue(),
-	        mode = window.editor.getMode().name,
-	        select = form.find("select").val(),
-	        options = {
-	            indent_size: parseInt(select),
-	            preserve_newlines: true
-	       };
+	    window.editor.operation(function() {
+	        if(form.find("select").val() == "selection") {
+                var start = window.editor.getCursor("start").line;
+                var end = window.editor.getCursor("end").line;
+	        } else {
+    	        var start = window.editor.firstLine();
+                var end = window.editor.lastLine();
+	        }
 
-	    if(["javascript"].indexOf(mode) != -1) {
-            window.editor.setValue(js_beautify(value, options));
-	    } else if(["php", "jade", "htmlembedded", "xml"].indexOf(mode) != -1) {
-    	    window.editor.setValue(html_beautify(value, options));
-	    } else if(["css", "less", "sass"].indexOf(mode) != -1) {
-    	    window.editor.setValue(css_beautify(value, options));
-	    }
+            window.editor.eachLine(start, end, function(line) {
+                window.editor.indentLine(
+                    window.editor.getLineNumber(line),
+                    "smart"
+                );
+            });
+	    });
 	}
 }

@@ -16,13 +16,6 @@ $(function() {
         }
     });
 
-    window.sidebarUtil.beautifiable = [
-        "JSON", "JavaScript",
-        "CSS", "LESS", "Sass", "SCSS",
-        "HTML", "Plist", "XML", "Embedded Javascript",
-        "Asp.net HTML", "Jade", "PHP"
-    ]
-
     window.editorUtil.extensions =  {
         "js":"JavaScript", "json":"JSON",
         "php":"PHP",
