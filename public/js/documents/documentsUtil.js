@@ -905,20 +905,24 @@ window.documents = {
             var item = $(this);
             var show = true;
 
-            if(search && item.attr("data-name").toLowerCase().indexOf(search.toLowerCase()) == -1) {
-                show = false;
-            }
-
-            window.debug = filters;
-
-            filters.each(function() {
-                var value = $(this).find(":selected").attr("value");
-                if(value && item.attr("data-" + $(this).attr("name")) != value) {
-                    show = false;
+            $.when(Function)
+            .then(function() {
+                if(search) {
+                    if(item.attr("data-name").toLowerCase().indexOf(search.toLowerCase()) == -1) {
+                        show = false;
+                    }
                 }
+            })
+            .then(function() {
+                filters.each(function() {
+                    var value = $(this).find(":selected").attr("value");
+                    if(value && item.attr("data-" + $(this).attr("name")) != value) {
+                        show = false;
+                    }
+                });
+            }).done(function() {
+                item.toggle(show);
             });
-
-            $(this).toggle(show);
         });
     },
     fileDownload: function(files, open) {

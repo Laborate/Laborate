@@ -70,7 +70,7 @@ $(document).on("keyup", "#search input", function() {
 });
 
 $(document).on("submit change", "#search, .filters select:visible", function() {
-    window.documents.fileSearch($(this).find("input").val(), $(".filters select:visible"));
+    window.documents.fileSearch($("#search").find("input").val(), $(".filters select:visible"));
     return false;
 });
 
