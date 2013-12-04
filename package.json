@@ -8,7 +8,7 @@
     "express-device": "0.3.7",
     "connect-slashes": "0.0.10",
     "ejs": "0.8.4",
-    "less": "1.4.2",
+    "less": "1.5.1",
     "piler": "0.5.0",
     "forever-monitor": "1.2.3",
     "crontab": "0.3.4",

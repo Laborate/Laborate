@@ -27,16 +27,48 @@
             .border-radius(50%);
 
             &:hover {
-                border: solid 4px lighten(@color_sidebar_profile, 8%);
+                border-color: lighten(@color_sidebar_profile, 8%);
             }
 
             &:active {
-                border: solid 4px lighten(@color_sidebar_profile, 11%);
+                border-color: lighten(@color_sidebar_profile, 11%);
             }
 
             img {
                width: 75px;
                height: 75px;
+            }
+
+            &.blink {
+                .animation(fade 2s ease 0.5s normal infinite);
+
+                @-webkit-keyframes fade {
+                    0% {
+                        border-color: lighten(@color_sidebar_profile, 5%);
+                    }
+
+                    50% {
+                        border-color: desaturate(darken(#00ADF2, 15%), 15%);
+                    }
+
+                    100% {
+                        border-color: lighten(@color_sidebar_profile, 5%);
+                    }
+                }
+
+                @-moz-keyframes fade {
+                    0% {
+                        border-color: lighten(@color_sidebar_profile, 5%);
+                    }
+
+                    50% {
+                        border-color: desaturate(darken(#00ADF2, 15%), 15%);
+                    }
+
+                    100% {
+                        border-color: lighten(@color_sidebar_profile, 5%);
+                    }
+                }
             }
         }
     }
