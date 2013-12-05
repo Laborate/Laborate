@@ -96,7 +96,7 @@ window.backdrop = {
         if(window.backdrop.email != $("#backdrop-email").val()) {
             var profile_img = ("https://www.gravatar.com/avatar/" +
                                                 CryptoJS.MD5($("#backdrop-email").val()).toString() +
-                                                "?s=150&d=" + encodeURI(window.config.host) + "%2Fimg%2Fdefault_gravatar.jpeg");
+                                                "?s=150&d=404");
 
             $.ajax({
                 url: profile_img,
@@ -104,8 +104,8 @@ window.backdrop = {
                     if(xhr.status == 200) {
                         window.backdrop.profileImgChange(profile_img);
                     } else {
-                        if($("#backdrop-profile img").attr("src") != "/img/default_gravatar.jpeg") {
-                            window.backdrop.profileImgChange("/img/default_gravatar.jpeg");
+                        if($("#backdrop-profile img").attr("src") != "https://www.gravatar.com/avatar/?d=mm") {
+                            window.backdrop.profileImgChange("https://www.gravatar.com/avatar/?d=mm");
                         }
                     }
 

@@ -2,7 +2,7 @@
 var rand = require("generate-key");
 
 exports.token = function(req, res, next) {
-    req.google.auth_url(function(url) {
+    req.google.auth_url(req.session.server, function(url) {
         req.session.google_oauth = req.param("name");
         res.redirect(url);
     });
@@ -10,23 +10,27 @@ exports.token = function(req, res, next) {
 
 exports.add_token = function(req, res, next) {
     if(req.param("code")) {
-        req.google.get_token(req.param("code"), function (error, tokens) {
-            req.models.users.get(req.session.user.id, function(error, user) {
-                var location = rand.generateKey(10);
-                req.session.user.google[location] = tokens;
-                req.session.user.locations[location] = {
-                    name: req.session.google_oauth,
-                    type: "google"
-                };
-                user.save({
-                    google: req.session.user.google,
-                    locations: req.session.user.locations
+        req.google.get_token(
+            req.session.server,
+            req.param("code"),
+            function (error, tokens) {
+                req.models.users.get(req.session.user.id, function(error, user) {
+                    var location = rand.generateKey(10);
+                    req.session.user.google[location] = tokens;
+                    req.session.user.locations[location] = {
+                        name: req.session.google_oauth,
+                        type: "google"
+                    };
+                    user.save({
+                        google: req.session.user.google,
+                        locations: req.session.user.locations
+                    });
+                    delete req.session.google_oauth;
+                    req.session.save();
+                    res.redirect(req.session.last_page || "/account/settings/");
                 });
-                delete req.session.google_oauth;
-                req.session.save();
-                res.redirect(req.session.last_page || "/account/settings/");
-            });
-        });
+            }
+        );
     } else {
         res.redirect(req.session.last_page || "/account/settings/");
     }
@@ -61,6 +65,7 @@ exports.contents = function(req, res, next, refreshed) {
     if(!$.isEmptyObject(req.session.user.bitbucket)) {
         var _this = this;
         req.google.contents(
+            req.session.server,
             req.session.user.google[req.param("0")],
             req.param("1"),
             function(error, results) {

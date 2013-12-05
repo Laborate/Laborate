@@ -209,10 +209,7 @@ exports.file_remove = function(req, res, next) {
                     }
                 });
             } else {
-                req.models.documents.roles.find({
-                    user_id: req.session.user.id,
-                    document_id: req.param("0")
-                }).remove(function(error) {
+                documents[0].remove(function(error) {
                     if(!error) {
                         res.json({ success: true });
                     } else {

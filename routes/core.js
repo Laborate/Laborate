@@ -5,7 +5,8 @@ var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
     //Set Server Root For Non Express Calls
-    if(!config.general.server) config.general.server = req.protocol + "://" + req.host;
+    req.session.server = req.protocol + "://" + req.host;
+    req.session.save();
     if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
     //Header Config
@@ -23,7 +24,7 @@ exports.locals = function(req, res, next) {
     res.locals.csrf = (req.csrfToken) ? req.csrfToken() : "";
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
-    res.locals.host = config.general.server;
+    res.locals.host = req.session.server;
     res.locals.site_title = req.session.organization.logo || config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.description = config.general.description.join("");
@@ -39,7 +40,7 @@ exports.locals = function(req, res, next) {
     res.locals.icons = config.icons;
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization;
-    res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : "/img/default_gravatar.jpeg";
+    res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : "https://www.gravatar.com/avatar/?d=mm";
     res.locals.apps = {
         sftp: {
             show: config.apps.sftp
@@ -66,12 +67,12 @@ exports.locals = function(req, res, next) {
         }
     };
     res.locals.favicons = (!$.isEmptyObject(req.session.organization.icons)) ? req.session.organization.icons : {
-        "ico": config.general.server + "/favicon/icon.ico",
-        "196": config.general.server + "/favicon/196.png",
-        "160": config.general.server + "/favicon/160.png",
-        "114": config.general.server + "/favicon/114.png",
-        "72": config.general.server + "/favicon/72.png",
-        "57": config.general.server + "/favicon/57.png"
+        "ico": res.locals.host + "/favicon/icon.ico",
+        "196": res.locals.host + "/favicon/196.png",
+        "160": res.locals.host + "/favicon/160.png",
+        "114": res.locals.host + "/favicon/114.png",
+        "72": res.locals.host + "/favicon/72.png",
+        "57": res.locals.host + "/favicon/57.png"
     };
 
     next();

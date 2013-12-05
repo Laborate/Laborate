@@ -9,14 +9,18 @@ exports.pageTrack = function(req) {
 }
 
 exports.notifications = function(req) {
-    var url = req.headers.referer.replace(config.general.server + "/", "");
-    if(!(/^account\/.*/.test(url))) {
-        models.notifications.exists({
-            user_id: req.session.user.id,
-            priority: true
-        }, function(error, exists) {
-            req.io.respond(!error && exists);
-        });
+    if(req.session.user) {
+        var url = req.headers.referer.replace(req.session.server + "/", "");
+        if(!(/^account\/.*/.test(url))) {
+            models.notifications.exists({
+                user_id: req.session.user.id,
+                priority: true
+            }, function(error, exists) {
+                req.io.respond(!error && exists);
+            });
+        } else {
+            req.io.respond(false);
+        }
     } else {
         req.io.respond(false);
     }
