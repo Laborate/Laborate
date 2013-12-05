@@ -36,7 +36,7 @@ $.extend(window.socketUtil, {
     },
     unload: function() {
         window.unload = true;
-        window.socketUtil.socket.socket.disconnect();
+        window.socketUtil.socket.disconnect();
     }
 });
 

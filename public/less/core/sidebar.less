@@ -40,34 +40,33 @@
             }
 
             &.blink {
-                .animation(fade 2s ease 0.5s normal infinite);
+                .animation(fade 2s ease 1.5s normal infinite);
+
+                @blink_from: lighten(@color_sidebar_profile, 5%);
+                @blink_to: saturate(darken(@color_sidebar_locations_active, 15%), 25%);
 
                 @-webkit-keyframes fade {
-                    0% {
-                        border-color: lighten(@color_sidebar_profile, 5%);
-                    }
-
-                    50% {
-                        border-color: desaturate(darken(#00ADF2, 15%), 15%);
-                    }
-
-                    100% {
-                        border-color: lighten(@color_sidebar_profile, 5%);
-                    }
+                    0% { border-color: @blink_from; }
+                    50% { border-color: @blink_to; }
+                    100% { border-color: @blink_from; }
                 }
 
                 @-moz-keyframes fade {
-                    0% {
-                        border-color: lighten(@color_sidebar_profile, 5%);
-                    }
+                    0% { border-color: @blink_from; }
+                    50% { border-color: @blink_to; }
+                    100% { border-color: @blink_from; }
+                }
 
-                    50% {
-                        border-color: desaturate(darken(#00ADF2, 15%), 15%);
-                    }
+                @-o-keyframes fade {
+                    0% { border-color: @blink_from; }
+                    50% { border-color: @blink_to; }
+                    100% { border-color: @blink_from; }
+                }
 
-                    100% {
-                        border-color: lighten(@color_sidebar_profile, 5%);
-                    }
+                @keyframes fade {
+                    0% { border-color: @blink_from; }
+                    50% { border-color: @blink_to; }
+                    100% { border-color: @blink_from; }
                 }
             }
         }

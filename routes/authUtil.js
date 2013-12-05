@@ -180,6 +180,10 @@ exports.register = function(req, res, next) {
                             pricing_id: 1
                         }, function(error, user) {
                             if(!error) {
+                                if(req.session.organization.id) {
+                                    user.add_organization(req.session.organization.id);
+                                }
+
                                 user.set_recovery(req, res);
                                 req.session.user = user;
                                 req.session.save();
