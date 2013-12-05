@@ -4,6 +4,7 @@ var editor = require("./editor");
 module.exports = function(app) {
     /* Core */
     app.io.route('pageTrack', core.pageTrack);
+    app.io.route('notifications', core.notifications);
 
     /* Editor */
     app.io.route('editorJoin', editor.join);

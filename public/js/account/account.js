@@ -26,6 +26,10 @@ $(function() {
         window.account.notificationClose($(this).parents(".notification"));
     });
 
+    $(document).on("click", ".pane #notifications .priority", function() {
+        window.account.notificationPriority($(this).parents(".item"));
+    });
+
     $(document).on("click", ".pane #notifications .remove", function() {
         window.account.notificationRemove($(this).parents(".item"));
     });

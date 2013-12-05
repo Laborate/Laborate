@@ -9,6 +9,7 @@ window.account = {
         $(".list .item[data-key='" + location + "']").addClass("activated");
         $(".pane .selection").hide();
         $(".pane .selection[data-key='" + location + "']").show();
+        $(".notification").toggle(location != "notifications");
         if(history) window.history.pushState(null, null, "/account/" + location + "/");
         window.socketUtil.pageTrack();
         window.account.activated = location;
@@ -184,6 +185,13 @@ window.account = {
             element.slideUp(200);
         }, 250);
 
+        $.post("/account/notifications/hide/", {
+            notification: element.attr("data-id"),
+            _csrf: window.config.csrf
+        });
+    },
+    notificationPriority: function(element) {
+        element.find(".priority").removeClass("active");
         $.post("/account/notifications/hide/", {
             notification: element.attr("data-id"),
             _csrf: window.config.csrf

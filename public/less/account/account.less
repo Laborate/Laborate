@@ -321,6 +321,7 @@
                         /* General */
                         .icon {
                             width: 35px;
+                            height: 16px;
                             margin-right: 20px;
                             .float-left();
                         }
@@ -351,8 +352,34 @@
                         }
 
                         /* Notifications */
+                        .priority {
+                            margin-top: 5px;
+                            width: 8px;
+                            height: 8px;
+                            margin-right: 10px;
+                            background: #ededed;
+                            border: solid 1px #ccc;
+                            .float-left();
+                            .border-radius(50%);
+                            .transition(all);
+
+                            &.active {
+                                cursor: pointer;
+                                background: #FFFBBF;
+                                border-color: #F0C600;
+
+                                &:hover {
+                                    border-color: darken(#F0C600, 3%);
+
+                                    &:active {
+                                        border-color: darken(#F0C600, 5%);
+                                    }
+                                }
+                            }
+                        }
+
                         .message {
-                            .calc-width(~"100% - 105px");
+                            .calc-width(~"100% - 135px");
                             .float-left();
                         }
 

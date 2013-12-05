@@ -50,6 +50,10 @@ function createRange() {
 }
 
 $(function() {
+    //Check For Notifications
+    window.socketUtil.notifications();
+    setInterval(window.socketUtil.notifications, 10000);
+
     //Prevent Rewriting Of Document
     setInterval(function() {
         $("body").attr("contenteditable", "false");
@@ -103,6 +107,11 @@ window.socketUtil = {
         if(config.pageTrack) {
             window.socketUtil.socket.emit("pageTrack", window.location.href);
         }
+    },
+    notifications: function() {
+        window.socketUtil.socket.emit("notifications", function(notifications) {
+            $(".sidebar .profile .img").toggleClass("blink", notifications);
+        });
     }
 }
 

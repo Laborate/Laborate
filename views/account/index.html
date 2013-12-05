@@ -360,6 +360,7 @@
                     </div>
                     <% $.each(user.notifications, function(key, item) { %>
                         <div class="item" data-id="<%= item.id %>">
+                            <div class="priority <%= (item.priority) ? "active" : "" %>"></div>
                             <div class="message"><%= item.message %></div>
                             <div class="action remove">Remove</div>
                         </div>

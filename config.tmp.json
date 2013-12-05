@@ -133,7 +133,8 @@
         "redo": "icon-forward",
         "beautify": "icon-document-fill",
         "expand": "icon-expand",
-        "contract": "icon-contract"
+        "contract": "icon-contract",
+        "priority": "icon-warning"
     },
     "github": {
         "id": "",
