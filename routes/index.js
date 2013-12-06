@@ -39,8 +39,8 @@ module.exports = function(app) {
     app.post('/auth/reset/:code', authUtil.loginCheck, core.organization, authUtil.reset_password);
 
     /* Account */
-    app.get("/account", authUtil.restrictAccess, core.update(true), account.index);
-    app.get("/account/:panel", authUtil.restrictAccess, core.update(true), account.index);
+    app.get("/account", authUtil.restrictAccess, core.reload(true), account.index);
+    app.get("/account/:panel", authUtil.restrictAccess, core.reload(true), account.index);
     app.post("/account/profile", authUtil.restrictAccess, authUtil.xhr, account.profile);
     app.post("/account/settings/password", authUtil.restrictAccess, authUtil.xhr, account.change_password);
     app.post("/account/settings/delete", authUtil.restrictAccess, authUtil.xhr, account.delete_account);
@@ -54,8 +54,8 @@ module.exports = function(app) {
     /* Documents */
     app.get('/documents', authUtil.restrictAccess, documents.index);
     app.get('/documents/files', authUtil.restrictAccess, authUtil.xhr, documents.files);
-    app.get('/documents/locations', authUtil.restrictAccess, authUtil.xhr, core.update(false), documents.locations);
-    app.get(/^\/documents\/location\/([\w\d]*?)\/(.*)/, authUtil.restrictAccess, core.update(false), documents.location);
+    app.get('/documents/locations', authUtil.restrictAccess, authUtil.xhr, core.reload(false), documents.locations);
+    app.get(/^\/documents\/location\/([\w\d]*?)\/(.*)/, authUtil.restrictAccess, core.reload(false), documents.location);
     app.get(/^\/documents\/([\w\d]*?)\/(.*?)/, authUtil.restrictAccess, documents.index);
     app.post('/documents/file/create', authUtil.restrictAccess, authUtil.xhr, documents.file_create);
     app.post('/documents/file/upload', authUtil.restrictAccess, authUtil.xhr, documents.file_upload);
@@ -65,7 +65,7 @@ module.exports = function(app) {
 
     /* Editor */
     app.get('/editor', authUtil.restrictAccess, editor.access_token, editor.index);
-    app.get('/editor/:document', authUtil.restrictAccess, core.update(true), editor.access_token, editor.index);
+    app.get('/editor/:document', authUtil.restrictAccess, core.reload(true), editor.access_token, editor.index);
     app.get('/editor/:document/download/:access_token', authUtil.restrictAccess, editor.access_token, editor.download);
     app.get('/editor/:document/download', authUtil.restrictAccess, editor.access_token, editor.download);
     app.post('/editor/exists', authUtil.restrictAccess, editor.access_token, editor.exists);

@@ -525,8 +525,17 @@ window.documents = {
             window.documents.locationNotification("online", false);
             if(location == "popup") {
                 window.documents.mode = null;
-                window.documents.popupAddLocation($(".popup"));
                 window.history.pushState(null, null, "/documents/");
+
+                switch(path) {
+                    case "add/document/":
+                        window.documents.popup("create", false, "Create File");
+                        break;
+                    case "add/location/":
+                        window.documents.popupAddLocation($(".popup"));
+                        break;
+                }
+
                 window.documents.onlineDirectory(history);
             } else if(location == "search") {
                 window.documents.onlineDirectory(history, true);

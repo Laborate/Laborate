@@ -118,7 +118,7 @@ window.account = {
 
                     if(listing.find(".item:not(.header)").length == 0) {
                         listing.html("<div class='item empty'> \
-                            You Don't Have Any Locations. <a href='/documents/popup/'>Add Some</a> \
+                            You Don't Have Any Locations. <a href='/documents/popup/add/location/'>Add Some</a> \
                         </div>");
                     }
                 }, 350);

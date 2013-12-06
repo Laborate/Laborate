@@ -93,7 +93,7 @@ exports.device = function(req, res, next) {
     }
 }
 
-exports.update = function(documents) {
+exports.reload = function(documents) {
     return function(req, res, next) {
         async.series([
             function(callback) {
