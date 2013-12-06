@@ -180,7 +180,7 @@
                     </div>
                     <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
                         <div class="item">
-                            <div class="name">Email Address</div>
+                            <div class="name">Email Address (Affects Login)</div>
                             <input class="input" type="text" name="email" value="<%= user.email %>" />
                         </div>
                     <% } %>
