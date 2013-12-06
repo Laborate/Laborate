@@ -93,43 +93,49 @@ exports.device = function(req, res, next) {
     }
 }
 
-exports.update = function(req, res, next) {
-    async.series([
-        function(callback) {
-            req.models.users.get(req.session.user.id, function(error, user) {
-                req.session.user = user;
-                callback(error);
-            });
-        },
-        function(callback) {
-            req.models.documents.roles.find({
-                user_id: req.session.user.id
-            }, ["viewed", "Z"], function(error, roles) {
-                if(!error) {
-                    req.session.user.documents = {
-                        total: roles.length,
-                        private: $.map(roles, function(role) {
-                            if(role.document.password) return true;
-                        }).length,
-                        top_viewed: $.map(roles.slice(0, 10), function(role) {
-                            return role.document;
-                        })
-                    }
+exports.update = function(documents) {
+    return function(req, res, next) {
+        async.series([
+            function(callback) {
+                req.models.users.get(req.session.user.id, function(error, user) {
+                    req.session.user = user;
+                    callback(error);
+                });
+            },
+            function(callback) {
+                if(documents) {
+                    req.models.documents.roles.find({
+                        user_id: req.session.user.id
+                    }, ["viewed", "Z"], function(error, roles) {
+                        if(!error) {
+                            req.session.user.documents = {
+                                total: roles.length,
+                                private: $.map(roles, function(role) {
+                                    if(role.document.password) return true;
+                                }).length,
+                                top_viewed: $.map(roles.slice(0, 10), function(role) {
+                                    return role.document;
+                                })
+                            }
+                        } else {
+                            req.session.user.documents = {
+                                total: 0,
+                                password: 0,
+                                top_viewed: []
+                            }
+                        }
+                        callback(error);
+                    });
                 } else {
-                    req.session.user.documents = {
-                        total: 0,
-                        password: 0,
-                        top_viewed: []
-                    }
+                    callback(null);
                 }
-                callback(error);
-            });
-        },
-        function(callback) {
-            req.session.save();
-            callback(null);
-        }
-    ], next);
+            },
+            function(callback) {
+                req.session.save();
+                callback(null);
+            }
+        ], next);
+    }
 }
 
 exports.backdrop = function(req, res, next) {
