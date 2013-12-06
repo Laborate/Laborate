@@ -104,19 +104,34 @@ exports.update = function(documents) {
             },
             function(callback) {
                 if(documents) {
-                    req.models.documents.roles.find({
-                        user_id: req.session.user.id
-                    }, ["viewed", "Z"], function(error, roles) {
-                        if(!error) {
-                            req.session.user.documents = {
-                                total: roles.length,
-                                private: $.map(roles, function(role) {
-                                    if(role.document.password) return true;
-                                }).length,
-                                top_viewed: $.map(roles.slice(0, 10), function(role) {
+                    async.parallel({
+                        total: function(callback) {
+                            req.models.documents.roles.count({
+                                user_id: req.session.user.id
+                            }, function(error, count) {
+                                callback(error, count);
+                            });
+                        },
+                        private: function(callback) {
+                            req.models.documents.count({
+                                owner_id: req.session.user.id,
+                                password: req.db.tools.ne(null)
+                            }, function(error, count) {
+                                callback(error, count);
+                            });
+                        },
+                        top_viewed: function(callback) {
+                            req.models.documents.roles.find({
+                                user_id: req.session.user.id
+                            }, ["viewed", "Z"], 10, function(error, roles) {
+                                callback(error, $.map(roles, function(role) {
                                     return role.document;
-                                })
-                            }
+                                }));
+                            });
+                        }
+                    }, function(errors, documents) {
+                        if(!errors) {
+                            req.session.user.documents = documents;
                         } else {
                             req.session.user.documents = {
                                 total: 0,
@@ -124,7 +139,7 @@ exports.update = function(documents) {
                                 top_viewed: []
                             }
                         }
-                        callback(error);
+                        callback(errors);
                     });
                 } else {
                     callback(null);
