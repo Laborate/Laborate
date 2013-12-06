@@ -183,7 +183,14 @@ window.account = {
         element.animate({ opacity: 0 }, 200);
         setTimeout(function() {
             element.slideUp(200);
+            setTimeout(function() {
+                element.remove();
+            }, 300);
         }, 250);
+
+        $(".pane #notifications")
+            .find(".item[data-id='" + element.attr("data-id") + "'] .priority")
+            .removeClass("active");
 
         $.post("/account/notifications/hide/", {
             notification: element.attr("data-id"),
@@ -192,6 +199,7 @@ window.account = {
     },
     notificationPriority: function(element) {
         element.find(".priority").removeClass("active");
+        $(".notification[data-id='" + element.attr("data-id") + "']").remove();
         $.post("/account/notifications/hide/", {
             notification: element.attr("data-id"),
             _csrf: window.config.csrf
