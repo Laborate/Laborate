@@ -38,18 +38,11 @@ GLOBAL.blank_function = function(data) {
 /* Exports */
 module.exports = function(callback) {
     var _this = this;
-    this.editorJsdom = require("../lib/jsdom/editor");
+    this.lib = require("../lib")
+    this.editorJsdom = this.lib.jsdom.editor;
     this.redisClient = redis.createClient(),
-    require("../lib/models").socket(function(response) {
-        _this.models = response;
-    });
-
-    interval = setInterval(function() {
-        if(_this.models) {
-            clearInterval(interval);
-            callback();
-        }
-    }, 10);
+    this.lib.models(this);
+    callback();
 }
 
 /* Error Handling */

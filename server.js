@@ -11,6 +11,7 @@ var device     = require('express-device');
 /* IMPORTANT - Global Variables */
 GLOBAL.$              = require("jquery");
 GLOBAL.config         = require('./config');
+GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 GLOBAL.raven_client   = new raven.Client(config.sentry.node);
@@ -38,10 +39,13 @@ GLOBAL.blank_function = function(data, callback) {
 require("./cron")(__dirname);
 
 /* Update Config Template */
-require("./lib/core/config_template")(__dirname);
+lib.core.config_template(__dirname);
 
 /* Prototype Extensions */
-require("./lib/core/extensions")();
+lib.core.extensions();
+
+/* Ejs Filters */
+lib.core.ejs_filters(ejs);
 
 /* Set App & Server Variables */
 var app = express().http().io();
@@ -126,12 +130,7 @@ app.configure(function() {
     app.use(require("./routes/core").backdrop);
 
     //Custom Libraries
-    app.use(require("./lib/models").express);
-    app.use(require("./lib/stripe"));
-    app.use(require("./lib/email"));
-    app.use(require("./lib/github"));
-    app.use(require("./lib/bitbucket"));
-    app.use(require("./lib/google"));
+    app.use(lib.express);
 
     //Custom Authentication
     app.use(require("./routes/security").core(crsf, basic_auth));
@@ -172,9 +171,6 @@ require('./routes')(app);
 
 /* Socket IO: Import Routes */
 require('./sockets')(app);
-
-/* Ejs: Import Filters */
-require('./lib/core/ejs_filters')(ejs);
 
 /* Listen To Server */
 app.listen(config.general.port);

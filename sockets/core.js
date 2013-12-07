@@ -1,7 +1,4 @@
-var models;
-require("../lib/models").socket(function(response) {
-    models = response;
-});
+require("../lib").models(exports);
 
 exports.pageTrack = function(req) {
     req.session.last_page = req.data;
@@ -12,7 +9,7 @@ exports.notifications = function(req) {
     if(req.session.user) {
         var url = req.headers.referer.replace(req.session.server + "/", "");
         if(!(/^account\/.*/.test(url))) {
-            models.notifications.exists({
+            exports.models.notifications.exists({
                 user_id: req.session.user.id,
                 priority: true
             }, function(error, exists) {

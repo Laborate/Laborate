@@ -1,9 +1,6 @@
-var editorJsdom = require("../lib/jsdom/editor");
-
-exports.models;
-require("../lib/models").socket(function(response) {
-    exports.models = response;
-});
+var lib = require("../lib/");
+var editorJsdom = lib.jsdom.editor;
+lib.models(exports);
 
 exports.redis = require('redis');
 exports.redisClient = exports.redis.createClient();
