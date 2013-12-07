@@ -1,6 +1,4 @@
 exports.login = function(req, res) {
-    console.log(req.db);
-    console.log(req.models);
     res.renderOutdated('auth/login', {
         title: 'Login',
         mode: "login",

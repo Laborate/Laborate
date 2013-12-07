@@ -41,8 +41,9 @@ module.exports = function(callback) {
     this.lib = require("../lib")
     this.editorJsdom = this.lib.jsdom.editor;
     this.redisClient = redis.createClient(),
-    this.lib.models(this);
-    callback();
+    this.lib.models(this, function(){
+        callback();
+    });
 }
 
 /* Error Handling */
