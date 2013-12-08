@@ -562,10 +562,12 @@ window.documents = {
         }
     },
     locationReload: function() {
-        window.socketUtil.pageTrack();
-        if(window.documents.locationActivated && window.documents.mode.length == 0) {
-            window.documents.locations();
-            window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
+        if(window.navigator.onLine) {
+            window.socketUtil.pageTrack();
+            if(window.documents.locationActivated && window.documents.mode.length == 0) {
+                window.documents.locations();
+                window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
+            }
         }
     },
     locationNotification: function(location, action, count) {
