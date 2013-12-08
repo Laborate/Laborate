@@ -87,16 +87,7 @@ $(function() {
     });
 
     //Toogle Full Screen Mode
-    $("#full_screen, #chat_bubble").on("click", function() {
-        window.editorUtil.fullScreen();
-    });
-
-    //Contributor Events
-    $(".contributor").on("hover", function(){
-        window.editorUtil.userHover($(this));
-    });
-
-    $(".contributor").on("mouseout", function(){
-        window.editorUtil.userLeave();
+    $(".fullscreen").on("click", function() {
+        window.editorUtil.fullscreen(window.editorUtil.fullscreenActive);
     });
 });

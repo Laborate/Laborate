@@ -274,14 +274,46 @@ html, body {
         .bottom {
             .calc-width(~"100% - 220px");
 
+            .fullscreen {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                padding: 5px;
+                color: darken(@color_header_bottom, 40%);
+                background: darken(@color_header_bottom, 10%);
+                cursor: pointer;
+                .border-radius(2px);
+
+                &:hover {
+                    background: darken(@color_header_bottom, 15%);
+
+                    &:active {
+                        background: darken(@color_header_bottom, 20%);
+                    }
+                }
+
+                &.active {
+                    color: darken(@color_header_bottom, 10%);
+                    background: darken(@color_header_bottom, 50%);
+
+                    &:hover {
+                        background: darken(@color_header_bottom, 55%);
+
+                        &:active {
+                            background: darken(@color_header_bottom, 60%);
+                        }
+                    }
+                }
+            }
+
             .message {
                 display: none;
             }
 
             .filters {
-                width: 100%;
                 display: block;
                 clear: both;
+                .calc-width(~"100% - 30px");
 
                 .filter {
                     margin: 5px 30px 0 0;

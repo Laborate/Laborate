@@ -3,6 +3,7 @@
 /////////////////////////////////////////////////
 window.editorUtil = {
     clean: true,
+    fullscreenActive: false,
     notification: function(message, permanent) {
         $(".header .bottom .filters")
             .toggle(!message)
@@ -15,6 +16,31 @@ window.editorUtil = {
                 window.editorUtil.notification(false);
             }, 15000);
         }
+    },
+    fullscreen: function(show) {
+        window.editorUtil.fullscreenActive = !show;
+
+        if(show) {
+            $(".fullscreen")
+                .removeClass(window.config.icons.contract + " active")
+                .addClass(window.config.icons.expand);
+            $(".sidebar .profile , .header .top").slideDown(500);
+            $(".chat").animate({
+                top: 95,
+                height: $(window).height() - $(".header .top").outerHeight()
+            }, 500);
+        } else {
+            $(".fullscreen")
+                .removeClass(window.config.icons.expand)
+                .addClass(window.config.icons.contract + " active");
+            $(".sidebar .profile , .header .top").slideUp(500);
+            $(".chat").animate({
+                top: 0,
+                height: $(window).height()
+            }, 500);
+        }
+
+        setTimeout(window.editorUtil.refresh, 600);
     },
     setChanges: function(direction, data, override) {
         window.editorUtil.setInfo();
@@ -112,27 +138,6 @@ window.editorUtil = {
     refresh: function() {
         window.editor.setSize("", $(window).height() - $(".header").height());
         editor.refresh();
-    },
-    fullScreen: function() {
-        if($("#header").is(":visible")) {
-            $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%"});
-            $("#full_screen").addClass("icon-contract-2");
-            $("#full_screen").removeClass("icon-expand-2");
-            $("#full_screen, #chat_bubble").css({"font-size": "24px"}).show();
-            $("#sidebar, #header, #chatRoom").hide();
-            $("#chat_bubble_count").text("");
-        } else {
-            $("#editorCodeMirror").css({"margin": "", "width": ""});
-            $("#full_screen").addClass("icon-expand-2");
-            $("#full_screen").removeClass("icon-contract-2");
-            $("#full_screen").css({"font-size": "", "margin": ""});
-            $("#sidebar, #header, #chatRoom").show();
-            $("#chat_bubble").hide();
-            setTimeout(window.chatRoom._scrollToBottom, 600);
-        }
-
-        window.editor.refresh();
-        window.editorUtil.refresh();
     },
     setMode: function(name, object) {
         window.sidebarUtil.defaultLanguage(name);

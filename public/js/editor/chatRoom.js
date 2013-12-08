@@ -64,7 +64,11 @@ window.chat = {
         window.chat._scrollToBottom();
     },
     resize: function() {
-        $(".chat").height($(window).height() - $(".header .top").outerHeight());
+        if($(".header .top").is(":visible")) {
+            $(".chat").height($(window).height() - $(".header .top").outerHeight());
+        } else {
+            $(".chat").height($(window).height());
+        }
     },
     signIn: function(screenName) {
         window.screenName = screenName;
