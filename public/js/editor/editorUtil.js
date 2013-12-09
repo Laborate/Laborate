@@ -41,7 +41,10 @@ window.editorUtil = {
             }, 500);
         }
 
-        setTimeout(window.editorUtil.refresh, 600);
+        setTimeout(function() {
+            window.editorUtil.refresh();
+            window.chat.resize();
+        }, 600);
     },
     setChanges: function(direction, data, override) {
         window.editorUtil.setInfo();
