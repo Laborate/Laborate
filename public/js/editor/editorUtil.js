@@ -19,6 +19,7 @@ window.editorUtil = {
     },
     fullscreen: function(show) {
         window.editorUtil.fullscreenActive = !show;
+        $.cookie("fullscreen", !show);
 
         if(show) {
             $(".fullscreen")

@@ -85,6 +85,11 @@ $(function() {
     //Refresh Editor
     window.editorUtil.refresh();
 
+    //Setup Fullscreen
+    if($.cookie("fullscreen") != null) {
+        window.editorUtil.fullscreen($.cookie("fullscreen") == "false");
+    }
+
     if(config.autoJoin)  {
         $('#backdrop form').submit();
     }
