@@ -150,30 +150,35 @@ window.sidebarUtil = {
 	    if(lines && window.editor.getValue().length != 0) {
     	    var _this = this;
     	    _this.change("search", true);
-            $.each(_this.highlightRange(lines), function(key, value) {
-                if(typeof value == "number") {
-                    _this.highlightListing(value);
-                    window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
-                } else if(typeof value == "object") {
-                    _this.highlightListing(value);
-                    for (var line = value.from; line < value.to; line++) {
-                        window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+    	    window.editor.operation(function() {
+                $.each(_this.highlightRange(lines), function(key, value) {
+                    if(typeof value == "number") {
+                        _this.highlightListing(value);
+                        window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
+                    } else if(typeof value == "object") {
+                        _this.highlightListing(value);
+                        for (var line = value.from; line < value.to; line++) {
+                            window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+                        }
                     }
-                }
+                });
             });
         }
 	},
 	highlightRemove: function(lines) {
-	    this.change("search", true);
+	    var _this = this;
+	    _this.change("search", true);
 	    $(".sidebar .form[name='highlight-line'] .item[data-lines='" + lines + "']").remove();
-        $.each(this.highlightRange(lines), function(key, value) {
-            if(typeof value == "number") {
-                window.editor.removeLineClass(value, "text", "CodeMirror-highlighted");
-            } else if(typeof value == "object") {
-                for (var line = value.from; line < value.to; line++) {
-                    window.editor.removeLineClass(line, "text", "CodeMirror-highlighted");
+        window.editor.operation(function() {
+            $.each(_this.highlightRange(lines), function(key, value) {
+                if(typeof value == "number") {
+                    window.editor.removeLineClass(value, "text", "CodeMirror-highlighted");
+                } else if(typeof value == "object") {
+                    for (var line = value.from; line < value.to; line++) {
+                        window.editor.removeLineClass(line, "text", "CodeMirror-highlighted");
+                    }
                 }
-            }
+            });
         });
 	},
 	highlightRange: function(lines) {
@@ -208,44 +213,49 @@ window.sidebarUtil = {
 	},
 	search: function(search) {
     	if(search && window.editor.getValue().length != 0) {
+    	    var _this = this;
     	    this.change("search", true);
 
-            var key = Math.floor((Math.random()*10000)+1);
-            var color = randomFunctionalColor();
+    	    window.editor.operation(function() {
+                var key = Math.floor((Math.random()*10000)+1);
+                var color = randomFunctionalColor();
 
-            this.searchList[key] = [];
-            $("<style type='text/css'>.s" + key + "{background:" + color + ";}</style>").appendTo("head");
+                _this.searchList[key] = [];
+                $("<style type='text/css'>.s" + key + "{background:" + color + ";}</style>").appendTo("head");
 
-            for (var cursor = window.editor.getSearchCursor(search); cursor.findNext();) {
-                var marked = window.editor.markText(cursor.from(), cursor.to(), {
-                    "className": "s" + key
-                });
+                for (var cursor = window.editor.getSearchCursor(search); cursor.findNext();) {
+                    var marked = window.editor.markText(cursor.from(), cursor.to(), {
+                        "className": "s" + key
+                    });
 
-                this.searchList[key].push(marked);
-                this.searchGetState().marked.push(marked);
-            }
+                    _this.searchList[key].push(marked);
+                    _this.searchGetState().marked.push(marked);
+                }
 
-            $(".sidebar .form[name='highlight-word'] .listing")
-        	    .append("                                                                       \
-                    <div class='item' data-search='" + key + "'>                                \
-                        <div class='name'>" + search + "</div>                                  \
-                        <div class='remove " + window.config.icons.cross_square + "'></div>     \
-                    </div>                                                                      \
-        	    ");
+                $(".sidebar .form[name='highlight-word'] .listing")
+            	    .append("                                                                       \
+                        <div class='item' data-search='" + key + "'>                                \
+                            <div class='name'>" + search + "</div>                                  \
+                            <div class='remove " + window.config.icons.cross_square + "'></div>     \
+                        </div>                                                                      \
+            	    ");
 
-            var state = this.searchGetState();
-            state.query = null;
-            state.marked.length = 0;
+                var state = _this.searchGetState();
+                state.query = null;
+                state.marked.length = 0;
+            });
         }
 	},
 	searchRemove: function(search) {
         var state = this.searchList[parseInt(search)];
-        for (var i = 0; i < state.length; ++i) {
-                state[i].clear();
-        }
-        delete state;
-        $(".sidebar .form[name='highlight-word'] .item[data-search='" + search + "']")
-            .remove();
+        window.editor.operation(function() {
+            for (var i = 0; i < state.length; ++i) {
+                    state[i].clear();
+            }
+            delete state;
+            $(".sidebar .form[name='highlight-word'] .item[data-search='" + search + "']")
+                .remove();
+        });
 	},
 	searchList: {},
 	searchNewState: function() {
