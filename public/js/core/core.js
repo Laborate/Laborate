@@ -113,7 +113,7 @@ window.socketUtil = {
     },
     notifications: function() {
         var _this = this;
-        window.socketUtil.socket.emit("notifications", function(notifications) {
+        window.socketUtil.socket.emit("notifications", function(notification) {
             _this.notification(notification);
         });
     }
