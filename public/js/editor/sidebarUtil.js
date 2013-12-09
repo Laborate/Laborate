@@ -147,6 +147,7 @@ window.sidebarUtil = {
 	},
 	highlight: function(lines) {
 	    var _this = this;
+	    _this.change("search", true);
         $.each(_this.highlightRange(lines), function(key, value) {
             if(typeof value == "number") {
                 _this.highlightListing(value);
@@ -160,6 +161,7 @@ window.sidebarUtil = {
         });
 	},
 	highlightRemove: function(lines) {
+	    this.change("search", true);
 	    $(".sidebar .form[name='highlight-line'] .item[data-lines='" + lines + "']").remove();
         $.each(this.highlightRange(lines), function(key, value) {
             if(typeof value == "number") {
@@ -197,7 +199,7 @@ window.sidebarUtil = {
     	    .append("                                                                       \
                 <div class='item' data-lines='" + lines + "'>                               \
                     <div class='name'>" + lines_formatted + "</div>                         \
-                    <div class='remove " + window.config.icons.subtract_square + "'></div>  \
+                    <div class='remove " + window.config.icons.cross_square + "'></div>  \
                 </div>                                                                      \
     	    ");
 	}
