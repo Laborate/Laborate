@@ -225,11 +225,13 @@ window.editorUtil = {
                             },
                             function(next) {
                                 if(json.changes.length != 0) {
-                                    $.each(json.changes, function(index, value) {
-                                        window.editorUtil.setChanges("in", value, true);
-                                        if (index == json.changes.length-1) {
-                                            next();
-                                        }
+                                    window.editor.operation(function() {
+                                        $.each(json.changes, function(index, value) {
+                                            window.editorUtil.setChanges("in", value, true);
+                                            if (index == json.changes.length-1) {
+                                                next();
+                                            }
+                                        });
                                     });
                                 } else {
                                     next();
