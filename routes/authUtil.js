@@ -193,14 +193,14 @@ exports.register = function(req, res, next) {
                                 });
 
                                 req.email("verify", {
-                                    from: "support@laborate.io",
+                                    from: config.email.auth.user,
                                     subject: "Please Verify Your Email",
                                     users: [{
                                         name: user.name,
                                         email: user.email,
                                         code: user.verify
                                     }]
-                                });
+                                }, blank_function);
                             } else {
                                 res.error(200, "Invalid Email Address", error);
                             }

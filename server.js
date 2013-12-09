@@ -26,7 +26,12 @@ GLOBAL.blank_function = function(data, callback) {
             error. Now check if it
             contains an error.
         */
-        if(data) {
+        if(typeof data == "object") {
+            if((Array.isArray(data) && data.length != 0) || !$.isEmptyObject(data)) {
+                console.error(data);
+                raven_client.captureError(data);
+            }
+        } else if(data) {
             console.error(data);
             raven_client.captureError(data);
         }

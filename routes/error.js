@@ -70,7 +70,15 @@ var error_handler = function(status, message, home, req, res) {
 }
 
 var raise_error = function(error) {
-    if(error) {
+    if(typeof error == "object") {
+        if((Array.isArray(error) && error.length != 0) || !$.isEmptyObject(error)) {
+            finish();
+        }
+    } else if(error) {
+        finish();
+    }
+
+    function finish() {
         try {
             console.error(error);
             raven_client.captureError(error, "middleware");
