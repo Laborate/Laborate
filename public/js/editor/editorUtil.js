@@ -22,7 +22,7 @@ window.editorUtil = {
         var _this = this;
         _this.fullscreenActive = !show;
         _this.fullscreeenTransitioning = true;
-        $.cookie("fullscreen", !show);
+        $.cookie("fullscreen", !show, { path: '/editor' });
 
         if(show) {
             $(".fullscreen")
