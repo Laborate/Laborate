@@ -95,7 +95,10 @@ window.sidebarUtil = {
 	keyMap: function(keymap) {
 	    if(keymap) {
     		window.editor.setOption("keyMap", keymap);
-    		$.cookie("keyMap", keymap);
+    		$.cookie("keyMap", keymap, {
+                path: '/editor',
+                expires: 365
+            });
         }
 	},
 	setTitle: function(direction, title) {

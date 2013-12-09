@@ -1,3 +1,5 @@
+var querystring = require('querystring');
+
 exports.token = function(req, res, next) {
     res.redirect(req.github.auth_url);
 }
