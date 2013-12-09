@@ -93,6 +93,7 @@
         "grid_square": "icon-icons",
         "cross_square": "icon-cross",
         "add_square": "icon-plus",
+        "subtract_square": "icon-minus",
         "add_circle": "icon-plus-3",
         "circle_arrow_up": "icon-arrow-up-2",
         "circle_arrow_down": "icon-arrow-down-2",

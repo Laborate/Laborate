@@ -3,10 +3,10 @@ window.sidebarUtil = {
 	    var element = $(".sidebar .list .item[data-key='" + module + "']");
 	    if(module != false && (permanent || !element.hasClass("activated"))) {
 	        $(".sidebar").addClass("menu");
-	        $(".sidebar .pane .item").hide();
+	        $(".sidebar .pane > .item").hide();
 	        $(".sidebar .list .item").removeClass("activated");
 	        element.addClass("activated");
-            $(".sidebar .pane .item[data-key='" + module + "']").show();
+            $(".sidebar .pane > .item[data-key='" + module + "']").show();
             $(".sidebar .controller .title").text(element.find(".name").text());
         } else {
             $(".sidebar").removeClass("menu");
@@ -23,16 +23,21 @@ window.sidebarUtil = {
                 window.editor.redo();
                 break;
             case "type-mode":
-                this.typeMode(form);
+                this.typeMode(
+                    form.find("select[name='languages']").val(),
+                    form.find("select[name='keymapping']").val()
+                );
                 break;
             case "beautify":
-                this.beautify(form);
+                this.beautify(form.find("select").val());
                 break;
             case "line-jump":
-                this.jumpToLine(form);
+                this.jumpToLine(form.find("input").val());
+                form.find("input").val("");
                 break;
             case "highlight-line":
-                this.highlight(form);
+                this.highlight(form.find("input").val());
+                form.find("input").val("");
                 break;
             case "highlight-word":
                 this.search(form);
@@ -82,9 +87,9 @@ window.sidebarUtil = {
                 .prop('selected', true);
         }
 	},
-	typeMode: function(form) {
-	    window.editorUtil.setModeLanguage(form.find("select[name='languages']").val());
-        this.keyMap(form.find("select[name='keymapping']").val());
+	typeMode: function(languages, keymapping) {
+	    window.editorUtil.setModeLanguage(languages);
+        this.keyMap(keymapping);
 	},
 	keyMap: function(keymap) {
 	    if(keymap) {
@@ -110,9 +115,9 @@ window.sidebarUtil = {
             .val("")
             .prop("disabled", active);
 	},
-	beautify: function(form) {
+	beautify: function(select) {
 	    window.editor.operation(function() {
-	        if(form.find("select").val() == "selection") {
+	        if(select == "selection") {
                 var start = window.editor.getCursor("start").line;
                 var end = window.editor.getCursor("end").line;
 	        } else {
@@ -127,5 +132,73 @@ window.sidebarUtil = {
                 );
             });
 	    });
+	},
+	jumpToLine: function(line) {
+	    line -= 1;
+        window.editor.scrollIntoView({
+            line: line,
+            ch: 0
+        });
+
+        window.editor.addLineClass(line, "text", "CodeMirror-linejump");
+        setTimeout(function() {
+            window.editor.removeLineClass(line, "text", "CodeMirror-linejump");
+        }, 5000);
+	},
+	highlight: function(lines) {
+	    var _this = this;
+        $.each(_this.highlightRange(lines), function(key, value) {
+            if(typeof value == "number") {
+                _this.highlightListing(value);
+                window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
+            } else if(typeof value == "object") {
+                _this.highlightListing(value);
+                for (var line = value.from; line < value.to; line++) {
+                    window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+                }
+            }
+        });
+	},
+	highlightRemove: function(lines) {
+	    $(".sidebar .form[name='highlight-line'] .item[data-lines='" + lines + "']").remove();
+        $.each(this.highlightRange(lines), function(key, value) {
+            if(typeof value == "number") {
+                window.editor.removeLineClass(value, "text", "CodeMirror-highlighted");
+            } else if(typeof value == "object") {
+                for (var line = value.from; line < value.to; line++) {
+                    window.editor.removeLineClass(line, "text", "CodeMirror-highlighted");
+                }
+            }
+        });
+	},
+	highlightRange: function(lines) {
+        return $.map(lines.split(","), function(line) {
+            if(line.indexOf("-") != -1) {
+                line = line.split("-");
+                return {
+                    from: parseInt(line[0]-1),
+                    to: parseInt(line[1])
+                }
+            } else {
+                return parseInt(line-1);
+            }
+        });
+	},
+	highlightListing: function(lines) {
+	    if(typeof lines == "number") {
+	        lines += 1;
+	        var lines_formatted = "Line: " + lines;
+	    } else {
+	        lines = (lines.from + 1) + " - " + lines.to;
+	        var lines_formatted = "Lines: " + lines;
+	    }
+
+    	$(".sidebar .form[name='highlight-line'] .listing")
+    	    .append("                                                                       \
+                <div class='item' data-lines='" + lines + "'>                               \
+                    <div class='name'>" + lines_formatted + "</div>                         \
+                    <div class='remove " + window.config.icons.subtract_square + "'></div>  \
+                </div>                                                                      \
+    	    ");
 	}
 }

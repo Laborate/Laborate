@@ -136,6 +136,33 @@ html, body {
                     }
                 }
 
+                .listing {
+                    .item {
+                        width: 100%;
+                        padding-top: 10px;
+                        .clearfix();
+
+                        .name {
+                            font-size: 14px;
+                            color: lighten(@color_sidebar_header, 50%);
+                            .float-left();
+                            .ellipsis();
+                            .calc-width(~"100% - 16px");
+                        }
+
+                        .remove {
+                            color: lighten(@color_red, 5%);
+                            font-size: 16px;
+                            cursor: pointer;
+                            .float-right();
+
+                            &:hover {
+                                color: @color_red;
+                            }
+                        }
+                    }
+                }
+
 
                 .disabled {
                     opacity: .5;
@@ -293,14 +320,14 @@ html, body {
                 }
 
                 &.active {
-                    color: darken(@color_header_bottom, 10%);
-                    background: darken(@color_header_bottom, 50%);
+                    color: darken(@color_header_bottom, 55%);
+                    background: darken(@color_header_bottom, 25%);
 
                     &:hover {
-                        background: darken(@color_header_bottom, 55%);
+                        background: darken(@color_header_bottom, 30%);
 
                         &:active {
-                            background: darken(@color_header_bottom, 60%);
+                            background: darken(@color_header_bottom, 35%);
                         }
                     }
                 }

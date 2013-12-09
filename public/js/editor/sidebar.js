@@ -20,4 +20,8 @@ $(function() {
     $(".sidebar .form[name='type-mode'] select").on("change", function() {
         $(this).parents("form").submit();
     });
+
+    $(".sidebar .form[name='highlight-line'] .listing").on("click", ".remove", function() {
+        window.sidebarUtil.highlightRemove($(this).parents(".item").attr("data-lines"));
+    });
 });
