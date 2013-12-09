@@ -935,6 +935,8 @@ window.documents = {
                 item.toggle(show);
             });
         });
+
+        $(".sidebar .info").text($(".pane .item:visible").length + " files");
     },
     fileDownload: function(files, open) {
         if(open) {
