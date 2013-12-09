@@ -94,51 +94,37 @@ exports.login = function(req, res, next) {
         if(!error && users.length == 1) {
             var user = users[0];
 
-            if(req.session.organization.id) {
-                if(user.organizations.length != 0) {
-                    $.each(user.organizations, function(key, role) {
-                        if(req.session.organization.id == role.organization_id) {
-                            finish(user);
-                            return false;
-                        } else {
-                            res.error(200, "Invalid Credentials", error);
-                            return true;
-                        }
-                    });
+            user.has_organization(req.session.organization.id, function(has_organization) {
+                if(has_organization) {
+                    if(user.admin && $.isEmptyObject(user.stripe)) {
+                        user.set_recovery(req, res);
+                        user.verified(req, function(user) {
+                            req.session.user = user;
+                            res.json({
+                                success: true,
+                                next: req.session.redirect_url || "/documents/"
+                             });
+                             delete req.session.reset;
+                             delete req.session.redirect_url;
+                             req.session.save();
+                        });
+                    } else {
+                        req.session.user = user;
+                        res.json({
+                            success: true,
+                            next: req.session.redirect_url || "/documents/"
+                        });
+                        delete req.session.redirect_url;
+                        req.session.save();
+                    }
                 } else {
-                    res.error(200, "Invalid Credentials", error);
+                    res.error(200, "Invalid Credentials");
                 }
-            } else {
-                finish(user);
-            }
+            });
         } else {
             res.error(200, "Invalid Credentials", error);
         }
     });
-
-    function finish(user) {
-        if(user.admin && $.isEmptyObject(user.stripe)) {
-            user.set_recovery(req, res);
-            user.verified(req, function(user) {
-                req.session.user = user;
-                res.json({
-                    success: true,
-                    next: req.session.redirect_url || "/documents/"
-                 });
-                 delete req.session.reset;
-                 delete req.session.redirect_url;
-                 req.session.save();
-            });
-        } else {
-            req.session.user = user;
-            res.json({
-                success: true,
-                next: req.session.redirect_url || "/documents/"
-            });
-            delete req.session.redirect_url;
-            req.session.save();
-        }
-    }
 }
 
 exports.logout = function(req, res) {
@@ -256,24 +242,31 @@ exports.reset = function(req, res, next) {
     }, function(error, users) {
         if(!error && users.length == 1) {
             var user = users[0];
-            user.set_reset();
 
-            req.session.reset = true;
-            req.session.save();
+            user.has_organization(req.session.organization.id, function(has_organization) {
+                if(has_organization) {
+                    user.set_reset();
 
-            res.json({
-                success: true,
-                next: "/reset"
-            });
+                    req.session.reset = true;
+                    req.session.save();
 
-            req.email("reset", {
-                from: "support@laborate.io",
-                subject: "Reset Password Link",
-                users: [{
-                    name: user.name,
-                    email: user.email,
-                    code: user.reset
-                }]
+                    res.json({
+                        success: true,
+                        next: "/reset"
+                    });
+
+                    req.email("reset", {
+                        from: config.email.auth.user,
+                        subject: "Reset Password Link",
+                        users: [{
+                            name: user.name,
+                            email: user.email,
+                            code: user.reset
+                        }]
+                    });
+                } else {
+                    res.error(200, "Email Address Not Found");
+                }
             });
         } else {
             res.error(200, "Email Address Not Found", error);
