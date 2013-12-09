@@ -40,7 +40,8 @@ window.sidebarUtil = {
                 form.find("input").val("");
                 break;
             case "highlight-word":
-                this.search(form);
+                this.search(form.find("input").val());
+                form.find("input").val("");
                 break;
             case "invite":
                 this.invite(form);
@@ -146,19 +147,21 @@ window.sidebarUtil = {
         }, 5000);
 	},
 	highlight: function(lines) {
-	    var _this = this;
-	    _this.change("search", true);
-        $.each(_this.highlightRange(lines), function(key, value) {
-            if(typeof value == "number") {
-                _this.highlightListing(value);
-                window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
-            } else if(typeof value == "object") {
-                _this.highlightListing(value);
-                for (var line = value.from; line < value.to; line++) {
-                    window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+	    if(lines && window.editor.getValue().length != 0) {
+    	    var _this = this;
+    	    _this.change("search", true);
+            $.each(_this.highlightRange(lines), function(key, value) {
+                if(typeof value == "number") {
+                    _this.highlightListing(value);
+                    window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
+                } else if(typeof value == "object") {
+                    _this.highlightListing(value);
+                    for (var line = value.from; line < value.to; line++) {
+                        window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+                    }
                 }
-            }
-        });
+            });
+        }
 	},
 	highlightRemove: function(lines) {
 	    this.change("search", true);
@@ -199,8 +202,57 @@ window.sidebarUtil = {
     	    .append("                                                                       \
                 <div class='item' data-lines='" + lines + "'>                               \
                     <div class='name'>" + lines_formatted + "</div>                         \
-                    <div class='remove " + window.config.icons.cross_square + "'></div>  \
+                    <div class='remove " + window.config.icons.cross_square + "'></div>     \
                 </div>                                                                      \
     	    ");
+	},
+	search: function(search) {
+    	if(search && window.editor.getValue().length != 0) {
+    	    this.change("search", true);
+
+            var key = Math.floor((Math.random()*10000)+1);
+            var color = randomFunctionalColor();
+
+            this.searchList[key] = [];
+            $("<style type='text/css'>.s" + key + "{background:" + color + ";}</style>").appendTo("head");
+
+            for (var cursor = window.editor.getSearchCursor(search); cursor.findNext();) {
+                var marked = window.editor.markText(cursor.from(), cursor.to(), {
+                    "className": "s" + key
+                });
+
+                this.searchList[key].push(marked);
+                this.searchGetState().marked.push(marked);
+            }
+
+            $(".sidebar .form[name='highlight-word'] .listing")
+        	    .append("                                                                       \
+                    <div class='item' data-search='" + key + "'>                                \
+                        <div class='name'>" + search + "</div>                                  \
+                        <div class='remove " + window.config.icons.cross_square + "'></div>     \
+                    </div>                                                                      \
+        	    ");
+
+            var state = this.searchGetState();
+            state.query = null;
+            state.marked.length = 0;
+        }
+	},
+	searchRemove: function(search) {
+        var state = this.searchList[parseInt(search)];
+        for (var i = 0; i < state.length; ++i) {
+                state[i].clear();
+        }
+        delete state;
+        $(".sidebar .form[name='highlight-word'] .item[data-search='" + search + "']")
+            .remove();
+	},
+	searchList: {},
+	searchNewState: function() {
+    	this.posFrom = this.posTo = this.query = null;
+        this.marked = [];
+	},
+	searchGetState: function() {
+    	return window.editor._searchState || (window.editor._searchState = new this.searchNewState());
 	}
 }

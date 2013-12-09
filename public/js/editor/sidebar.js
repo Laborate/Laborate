@@ -24,4 +24,8 @@ $(function() {
     $(".sidebar .form[name='highlight-line'] .listing").on("click", ".remove", function() {
         window.sidebarUtil.highlightRemove($(this).parents(".item").attr("data-lines"));
     });
+
+    $(".sidebar .form[name='highlight-word'] .listing").on("click", ".remove", function() {
+        window.sidebarUtil.searchRemove($(this).parents(".item").attr("data-search"));
+    });
 });
