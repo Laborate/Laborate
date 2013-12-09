@@ -191,22 +191,24 @@ window.sidebarUtil = {
 	},
 	highlightRange: function(lines) {
         return $.map(lines.split(","), function(line) {
-            if(line.indexOf("-") != -1) {
-                line = line.split("-");
+            if(line) {
+                if(line.indexOf("-") != -1) {
+                    line = line.split("-");
 
-                if(isNaN(line[0]) || isNaN(line[1])) {
-                    throw Error("Invalid Lines");
-                } else {
-                    return {
-                        from: parseInt(line[0]-1),
-                        to: parseInt(line[1])
+                    if(isNaN(line[0]) || isNaN(line[1])) {
+                        throw Error("Invalid Lines");
+                    } else {
+                        return {
+                            from: parseInt(line[0]-1),
+                            to: parseInt(line[1])
+                        }
                     }
-                }
-            } else {
-                if(isNaN(line)) {
-                    throw Error("Invalid Lines");
                 } else {
-                    return parseInt(line-1);
+                    if(isNaN(line)) {
+                        throw Error("Invalid Lines");
+                    } else {
+                        return parseInt(line-1);
+                    }
                 }
             }
         });
