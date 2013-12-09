@@ -108,9 +108,13 @@ window.socketUtil = {
             window.socketUtil.socket.emit("pageTrack", window.location.href);
         }
     },
+    notification: function(notification) {
+        $(".sidebar .profile .img").toggleClass("blink", notification);
+    },
     notifications: function() {
+        var _this = this;
         window.socketUtil.socket.emit("notifications", function(notifications) {
-            $(".sidebar .profile .img").toggleClass("blink", notifications);
+            _this.notification(notification);
         });
     }
 }
@@ -118,3 +122,4 @@ window.socketUtil = {
 window.onpopstate = window.socketUtil.pageTrack;
 window.socketUtil.socket.on("connect", window.socketUtil.pageTrack);
 window.socketUtil.socket.on("reconnect", window.socketUtil.pageTrack);
+window.socketUtil.socket.on("notification", window.socketUtil.notification);
