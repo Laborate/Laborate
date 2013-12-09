@@ -4,6 +4,7 @@
 window.editorUtil = {
     clean: true,
     fullscreenActive: false,
+    fullscreeenTransitioning: false,
     notification: function(message, permanent) {
         $(".header .bottom .filters")
             .toggle(!message)
@@ -18,7 +19,9 @@ window.editorUtil = {
         }
     },
     fullscreen: function(show) {
-        window.editorUtil.fullscreenActive = !show;
+        var _this = this;
+        _this.fullscreenActive = !show;
+        _this.fullscreeenTransitioning = true;
         $.cookie("fullscreen", !show);
 
         if(show) {
@@ -42,7 +45,8 @@ window.editorUtil = {
         }
 
         setTimeout(function() {
-            window.editorUtil.refresh();
+            _this.fullscreeenTransitioning = false;
+            _this.refresh();
             window.chat.resize();
         }, 600);
     },
