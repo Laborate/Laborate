@@ -135,34 +135,42 @@ window.sidebarUtil = {
 	    });
 	},
 	jumpToLine: function(line) {
-	    line -= 1;
-        window.editor.scrollIntoView({
-            line: line,
-            ch: 0
-        });
+	    try {
+    	    line -= 1;
+            window.editor.scrollIntoView({
+                line: line,
+                ch: 0
+            });
 
-        window.editor.addLineClass(line, "text", "CodeMirror-linejump");
-        setTimeout(function() {
-            window.editor.removeLineClass(line, "text", "CodeMirror-linejump");
-        }, 5000);
+            window.editor.addLineClass(line, "text", "CodeMirror-linejump");
+            setTimeout(function() {
+                window.editor.removeLineClass(line, "text", "CodeMirror-linejump");
+            }, 5000);
+        } catch(error) {
+            return error;
+        }
 	},
 	highlight: function(lines) {
 	    if(lines && window.editor.getValue().length != 0) {
-    	    var _this = this;
-    	    _this.change("search", true);
-    	    window.editor.operation(function() {
-                $.each(_this.highlightRange(lines), function(key, value) {
-                    if(typeof value == "number") {
-                        _this.highlightListing(value);
-                        window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
-                    } else if(typeof value == "object") {
-                        _this.highlightListing(value);
-                        for (var line = value.from; line < value.to; line++) {
-                            window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+    	    try {
+        	    var _this = this;
+        	    _this.change("search", true);
+        	    window.editor.operation(function() {
+                    $.each(_this.highlightRange(lines), function(key, value) {
+                        if(typeof value == "number") {
+                            _this.highlightListing(value);
+                            window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
+                        } else if(typeof value == "object") {
+                            _this.highlightListing(value);
+                            for (var line = value.from; line < value.to; line++) {
+                                window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            } catch(error) {
+                return error;
+            }
         }
 	},
 	highlightRemove: function(lines) {
@@ -185,12 +193,21 @@ window.sidebarUtil = {
         return $.map(lines.split(","), function(line) {
             if(line.indexOf("-") != -1) {
                 line = line.split("-");
-                return {
-                    from: parseInt(line[0]-1),
-                    to: parseInt(line[1])
+
+                if(isNaN(line[0]) || isNaN(line[1])) {
+                    throw Error("Invalid Lines");
+                } else {
+                    return {
+                        from: parseInt(line[0]-1),
+                        to: parseInt(line[1])
+                    }
                 }
             } else {
-                return parseInt(line-1);
+                if(isNaN(line)) {
+                    throw Error("Invalid Lines");
+                } else {
+                    return parseInt(line-1);
+                }
             }
         });
 	},
@@ -213,37 +230,35 @@ window.sidebarUtil = {
 	},
 	search: function(search) {
     	if(search && window.editor.getValue().length != 0) {
-    	    var _this = this;
-    	    this.change("search", true);
+    	    try {
+        	    var _this = this;
+        	    this.change("search", true);
 
-    	    window.editor.operation(function() {
-                var key = Math.floor((Math.random()*10000)+1);
-                var color = randomFunctionalColor();
+        	    window.editor.operation(function() {
+                    var key = Math.floor((Math.random()*10000)+1);
+                    var color = randomFunctionalColor();
 
-                _this.searchList[key] = [];
-                $("<style type='text/css'>.s" + key + "{background:" + color + ";}</style>").appendTo("head");
+                    _this.searchList[key] = [];
+                    _this.searchListing(key, search);
 
-                for (var cursor = window.editor.getSearchCursor(search); cursor.findNext();) {
-                    var marked = window.editor.markText(cursor.from(), cursor.to(), {
-                        "className": "s" + key
-                    });
+                    $("<style type='text/css'>.s" + key + "{background:" + color + ";}</style>").appendTo("head");
 
-                    _this.searchList[key].push(marked);
-                    _this.searchGetState().marked.push(marked);
-                }
+                    for (var cursor = window.editor.getSearchCursor(search); cursor.findNext();) {
+                        var marked = window.editor.markText(cursor.from(), cursor.to(), {
+                            "className": "s" + key
+                        });
 
-                $(".sidebar .form[name='highlight-word'] .listing")
-            	    .append("                                                                       \
-                        <div class='item' data-search='" + key + "'>                                \
-                            <div class='name'>" + search + "</div>                                  \
-                            <div class='remove " + window.config.icons.cross_square + "'></div>     \
-                        </div>                                                                      \
-            	    ");
+                        _this.searchList[key].push(marked);
+                        _this.searchGetState().marked.push(marked);
+                    }
 
-                var state = _this.searchGetState();
-                state.query = null;
-                state.marked.length = 0;
-            });
+                    var state = _this.searchGetState();
+                    state.query = null;
+                    state.marked.length = 0;
+                });
+            } catch(error) {
+                return error;
+            }
         }
 	},
 	searchRemove: function(search) {
@@ -256,6 +271,15 @@ window.sidebarUtil = {
             $(".sidebar .form[name='highlight-word'] .item[data-search='" + search + "']")
                 .remove();
         });
+	},
+	searchListing: function(key, search) {
+    	$(".sidebar .form[name='highlight-word'] .listing")
+    	    .append("                                                                       \
+                <div class='item' data-search='" + key + "'>                                \
+                    <div class='name'>" + search + "</div>                                  \
+                    <div class='remove " + window.config.icons.cross_square + "'></div>     \
+                </div>                                                                      \
+    	    ");
 	},
 	searchList: {},
 	searchNewState: function() {
