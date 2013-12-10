@@ -189,6 +189,17 @@
                             placeholder="password" <%= (!document.password) ? "disabled" : "" %>
                         />
                     <% } %>
+                    <% if(user.organizations.length != 0) { %>
+                        <% if(!user.organizations[0].permission.student) { %>
+                            <div class="select">
+                                <div class="icon <%= icons.menu_arrows %>"></div>
+                                <select name="readonly">
+                                    <option value="false">Collaborating</option>
+                                    <option value="true">Presenting</option>
+                                </select>
+                            </div>
+                        <% } %>
+                    <% } %>
                 <% } %>
                 <button type="submit" class="button">Save</button>
             </form>
