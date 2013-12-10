@@ -18,9 +18,9 @@ exports.stripe = function(req, res) {
                             currency: req.body.data.object.currency,
                             plan: "Charge",
                             user_id: users[0].id
-                        }, blank_function);
+                        }, capture_error);
                     } else {
-                        blank_function(error);
+                        capture_error(error);
                     }
                 });
             }
@@ -42,9 +42,9 @@ exports.stripe = function(req, res) {
                             currency: req.body.data.object.currency,
                             plan: "Refund",
                             user_id: users[0].id
-                        }, blank_function);
+                        }, capture_error);
                     } else {
-                        blank_function(error);
+                        capture_error(error);
                     }
                 });
             }
@@ -64,7 +64,7 @@ exports.stripe = function(req, res) {
 
                         users[0].save({
                             deliquent: false
-                        }, blank_function);
+                        }, capture_error);
 
                         req.models.payments.create({
                             description: "Invoice for " + monthNames[month] + " " + date.getFullYear(),
@@ -72,9 +72,9 @@ exports.stripe = function(req, res) {
                             currency: req.body.data.object.lines.data[0].currency,
                             plan: req.body.data.object.lines.data[0].plan.name,
                             user_id: users[0].id
-                        }, blank_function);
+                        }, capture_error);
                     } else {
-                        blank_function(error);
+                        capture_error(error);
                     }
                 });
             }
@@ -92,12 +92,12 @@ exports.stripe = function(req, res) {
                                      We will try charging your card again in 3 days.",
                             priority: true,
                             user_id: users[0].id
-                        }, blank_function);
+                        }, capture_error);
                     } else {
-                        users[0].save({ deliquent: true }, blank_function);
+                        users[0].save({ deliquent: true }, capture_error);
                     }
                 } else {
-                    blank_function(error);
+                    capture_error(error);
                 }
             });
             break;

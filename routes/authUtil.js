@@ -186,7 +186,7 @@ exports.register = function(req, res, next) {
                                         email: user.email,
                                         code: user.verify
                                     }]
-                                }, blank_function);
+                                }, capture_error);
                             } else {
                                 res.error(200, "Invalid Email Address", error);
                             }

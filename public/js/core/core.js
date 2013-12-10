@@ -112,9 +112,8 @@ window.socketUtil = {
         $(".sidebar .profile .img").toggleClass("blink", notification);
     },
     notifications: function() {
-        var _this = this;
         window.socketUtil.socket.emit("notifications", function(notification) {
-            _this.notification(notification);
+            window.socketUtil.notification(notification);
         });
     }
 }

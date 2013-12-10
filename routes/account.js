@@ -221,7 +221,7 @@ exports.remove_card = function(req, res, next) {
                                         message: "Please enter a credit card, your plan requires a card on file",
                                         priority: true,
                                         user_id: user.id
-                                    }, blank_function);
+                                    }, capture_error);
                                 }
                             } else {
                                 if(next) res.error(200, "Failed To Remove Credit Card", error);

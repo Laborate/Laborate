@@ -46,7 +46,7 @@ html, body {
 
         .back {
             cursor: pointer;
-            color: darken(@color_blue, 10%);
+            color: @color_blue;
             font-size: 14px;
             overflow: hidden;
             float: left;
@@ -58,7 +58,7 @@ html, body {
                 color: darken(@color_blue, 5%);
 
                 &:active {
-                    color: @color_blue;
+                    color: darken(@color_blue, 10%);
                 }
             }
         }

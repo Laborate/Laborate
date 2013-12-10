@@ -15,7 +15,7 @@ exports.core = function(crsf, basicAuth) {
                         exports.finish(req, res, next, crsf, basicAuth);
                     } else {
                         res.send(403);
-                        blank_function(error);
+                        capture_error(error);
                     }
                 });
             }

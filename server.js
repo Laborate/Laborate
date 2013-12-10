@@ -15,7 +15,7 @@ GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 GLOBAL.raven_client   = new raven.Client(config.sentry.node);
-GLOBAL.blank_function = function(data, callback) {
+GLOBAL.capture_error = function(data, callback) {
     /* True Means It Is On Init */
     if(data == true) {
         /* Return Blank Function */

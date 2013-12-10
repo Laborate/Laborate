@@ -6,8 +6,8 @@ exports.index = function(req, res, next) {
         }, function(error, documents) {
             if(!error) {
                 if(documents.length != 0) {
-                    document = documents[0].document;
-                    password = (document.password == null);
+                    var document = documents[0].document;
+                    var password = (document.password == null);
 
                     res.renderOutdated('editor/index', {
                         title: document.name,
