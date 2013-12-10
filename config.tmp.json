@@ -183,5 +183,6 @@
         "output_log": "../logs/middleware/log.out",
         "error_log": "../logs/middleware/log.error"
     },
-    "cron": "../../logs/middleware/cron.log"
+    "cron": "../../logs/middleware/cron.log",
+    "gravatar": "https://www.gravatar.com/avatar/?d=mm"
 }

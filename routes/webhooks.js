@@ -1,8 +1,10 @@
 exports.stripe = function(req, res) {
     res.send(200);
 
-    console.log(req.body.type);
-    console.log(req.body.data);
+    if(!config.general.production) {
+        console.log(req.body.type);
+        console.log(req.body.data);
+    }
 
     switch(req.body.type) {
         /* Charge Succeeded */
