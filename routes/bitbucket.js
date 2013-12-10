@@ -18,12 +18,12 @@ exports.add_token = function(req, res, next) {
                     req.session.user.bitbucket = oauth;
                     user.save({ bitbucket: req.session.user.bitbucket });
                     req.session.save();
-                    res.redirect("/documents/popup/");
+                    res.redirect("/documents/popup/add/location/");
                 });
             }
         );
     } else {
-        res.redirect("/documents/popup/");
+        res.redirect("/documents/popup/add/location/");
     }
 };
 

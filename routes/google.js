@@ -27,12 +27,12 @@ exports.add_token = function(req, res, next) {
                     });
                     delete req.session.google_oauth;
                     req.session.save();
-                    res.redirect(req.session.last_page || "/account/settings/");
+                    res.redirect("/documents/popup/add/location/");
                 });
             }
         );
     } else {
-        res.redirect(req.session.last_page || "/account/settings/");
+        res.redirect("/documents/popup/add/location/");
     }
 };
 

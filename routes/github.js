@@ -11,11 +11,11 @@ exports.add_token = function(req, res, next) {
                 user.save({ github: token });
                 req.session.user.github = token;
                 req.session.save();
-                res.redirect("/documents/popup/");
+                res.redirect("/documents/popup/add/location/");
             });
         });
     } else {
-        res.redirect("/documents/popup/");
+        res.redirect("/documents/popup/add/location/");
     }
 };
 

@@ -244,6 +244,6 @@ exports.invite = function(req, res, next) {
 
 
 exports.access_token = function(req, res, next) {
-    req.access_token = (req.param("access_token")) ? req.param("access_token") : null;
+    req.access_token = req.param("access_token") || null;
     next();
 }
