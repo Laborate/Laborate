@@ -1,7 +1,55 @@
 exports.stripe = function(req, res) {
     res.send(200);
 
+    console.log(req.body.type);
+    console.log(req.body.data);
+
     switch(req.body.type) {
+        /* Charge Succeeded */
+        case "charge.succeeded":
+            if(req.body.data.object.amount != 0) {
+                req.models.users.find({
+                    stripe: req.body.data.object.customer
+                }, function(error, users) {
+                    if(!error && users.length == 1) {
+                        req.models.payments.create({
+                            description: "Charge: " + req.body.data.object.description,
+                            amount: req.body.data.object.amount/100,
+                            currency: req.body.data.object.currency,
+                            plan: "Charge",
+                            user_id: users[0].id
+                        }, blank_function);
+                    } else {
+                        blank_function(error);
+                    }
+                });
+            }
+            break;
+
+        /* Charge Refunded */
+        case "charge.refunded":
+            if(req.body.data.object.amount != 0) {
+                req.models.users.find({
+                    stripe: req.body.data.object.customer
+                }, function(error, users) {
+                    if(!error && users.length == 1) {
+                        var amount = req.body.data.object.amount_refunded;
+                        amount -= req.body.data.previous_attributes.amount_refunded;
+
+                        req.models.payments.create({
+                            description: "Refund: " + req.body.data.object.description,
+                            amount: amount/100,
+                            currency: req.body.data.object.currency,
+                            plan: "Refund",
+                            user_id: users[0].id
+                        }, blank_function);
+                    } else {
+                        blank_function(error);
+                    }
+                });
+            }
+            break;
+
         /* Payment Succeeded */
         case "invoice.payment_succeeded":
             if(req.body.data.object.lines.data[0].amount != 0) {
