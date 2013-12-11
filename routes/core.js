@@ -40,18 +40,7 @@ exports.locals = function(req, res, next) {
     res.locals.icons = config.icons;
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization;
-    res.locals.gravatar = function() {
-        var user = req.session.user;
-        if(user) {
-            if(user.organizations && user.organizations.length != 0) {
-                return user.organizations[0].gravatar || user.gravatar;
-            } else {
-                return user.gravatar;
-            }
-        } else {
-            return config.gravatar;
-        }
-    }();
+    res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
     res.locals.apps = {
         sftp: {
             show: config.apps.sftp
