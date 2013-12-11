@@ -163,7 +163,7 @@
                     <div class="img">
                         <img src="<%= gravatar %>"/>
                     </div>
-                    <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+                    <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned || !user.organizations[0].gravatar) { %>
                         <div class="link">
                             <a href="http://gravatar.com" target="_blank">Change Avatar</a>
                         </div>
