@@ -354,7 +354,7 @@
         </div>
         <div class="selection" data-key="notifications">
             <div id="notifications" class="listing container">
-                <% if(!$.isEmptyObject(user.notifications)) { %>
+                <% if(user.notifications.length != 0) { %>
                     <div class="item header">
                         <div class="message">Notification Messages</div>
                     </div>
@@ -374,7 +374,7 @@
         </div>
         <div class="selection" data-key="payments">
             <div class="listing container">
-                <% if(!$.isEmptyObject(user.payments)) { %>
+                <% if(user.payments.length != 0) { %>
                     <div class="item header">
                         <div class="description">Description</div>
                         <div class="small-text">Plan</div>
