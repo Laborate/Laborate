@@ -83,7 +83,7 @@ $(function() {
     window.users = new Array();
 
     //Refresh Editor
-    window.editorUtil.refresh();
+    window.editorUtil.resize();
 
     //Setup Fullscreen
     if($.cookie("fullscreen") != null) {

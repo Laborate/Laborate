@@ -49,7 +49,7 @@ window.editorUtil = {
 
         setTimeout(function() {
             _this.fullscreeenTransitioning = false;
-            _this.refresh();
+            _this.resize();
             window.chat.resize();
         }, 600);
     },
@@ -146,9 +146,11 @@ window.editorUtil = {
         //File Line Count
         $(".filter[data-key='file-lines'] strong").text(file.split("\n").length);
     },
-    refresh: function() {
-        window.editor.setSize("", $(window).height() - $(".header").height());
-        editor.refresh();
+    resize: function() {
+        if(!window.editorUtil.fullscreeenTransitioning) {
+            window.editor.setSize("", $(window).height() - $(".header").height());
+            editor.refresh();
+        }
     },
     setMode: function(name, object) {
         window.sidebarUtil.defaultLanguage(name);

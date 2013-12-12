@@ -83,7 +83,7 @@ $(function() {
 
     //Resize Editor on Window Resize
     $(window).resize(function() {
-        window.editorUtil.refresh();
+        window.editorUtil.resize();
     });
 
     //Toogle Full Screen Mode
