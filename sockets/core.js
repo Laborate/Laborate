@@ -23,6 +23,11 @@ exports.notifications = function(req) {
     }
 }
 
+exports.connect = function(req) {
+    var address = req.handshake.address;
+    console.log("Socket IP: " + address.address + ":" + address.port);
+}
+
 exports.leave = function(req) {
     switch(true) {
         case /.*\/editor\/\d*/g.test(req.headers.referer):

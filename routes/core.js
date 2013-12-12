@@ -4,6 +4,9 @@ var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
+    //Log IP Address
+    console.log("Web IP: " + req.headers['x-forwarded-for'] + ":" + req.headers['x-forwarded-port']);
+
     //Set Server Root For Non Express Calls
     req.session.server = req.protocol + "://" + req.host;
     req.session.save();
