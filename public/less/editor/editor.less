@@ -71,6 +71,11 @@ html, body {
         .transition(right);
     }
 
+    &.fullscreen .pane,
+    &.fullscreen .list {
+        .calc-height(~"100% - 45px");
+    }
+
     .pane {
         font-size: 12px;
         position: absolute;

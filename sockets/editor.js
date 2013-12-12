@@ -6,7 +6,7 @@ exports.join = function(req) {
         editorUtil.accessCheck(req.session.user.id, editorUtil.room(req), req.data[0], function(access_object) {
             if(access_object.success) {
                 if(!editorUtil.inRoom(req.data[1], req.session.user.screen_name, editorUtil.socketRoom(req))) {
-                    editorUtil.clientData(editorUtil.socketRoom(req), access_object.document, function(data) {
+                    editorUtil.clientData(editorUtil.socketRoom(req), access_object, function(data) {
                         editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
                         req.io.respond(data);
                     });

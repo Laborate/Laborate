@@ -28,16 +28,21 @@ window.editorUtil = {
         });
 
         if(show) {
-            $(".fullscreen")
-                .removeClass(window.config.icons.contract + " active")
-                .addClass(window.config.icons.expand);
-            $(".sidebar .profile , .header .top").slideDown(500);
-            $(".chat").animate({
-                top: 95,
-                height: $(window).height() - $(".header .top").outerHeight()
-            }, 500);
+            $(".sidebar")
+                .removeClass("fullscreen");
+
+            setTimeout(function() {
+                $(".content .fullscreen")
+                    .removeClass(window.config.icons.contract + " active")
+                    .addClass(window.config.icons.expand);
+                $(".sidebar .profile , .header .top").slideDown(500);
+                $(".chat").animate({
+                    top: 95,
+                    height: $(window).height() - $(".header .top").outerHeight()
+                }, 500);
+            }, 100);
         } else {
-            $(".fullscreen")
+            $(".content .fullscreen")
                 .removeClass(window.config.icons.expand)
                 .addClass(window.config.icons.contract + " active");
             $(".sidebar .profile , .header .top").slideUp(500);
@@ -45,6 +50,11 @@ window.editorUtil = {
                 top: 0,
                 height: $(window).height()
             }, 500);
+
+            setTimeout(function() {
+                $(".sidebar")
+                    .addClass("fullscreen");
+            }, 600);
         }
 
         setTimeout(function() {
@@ -243,6 +253,7 @@ window.editorUtil = {
                                 }
                             },
                             function(next) {
+                                window.sidebarUtil.setAccess(json.access);
                                 window.sidebarUtil.setTitle("in", json.name);
                                 window.editorUtil.setInfo();
                                 window.editor.clearHistory();

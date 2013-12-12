@@ -72,7 +72,6 @@ window.sidebarUtil = {
         $(".form[name='type-mode'] select[name='languages']").html(languages);
 	},
 	defaultLanguage: function(language) {
-        $(".filter[data-key='file-language'] strong").text(language);
         $(".form[name='type-mode'] select[name='languages'] option")
             .filter(function() {
                 return ($(this).text() == language);
@@ -100,6 +99,9 @@ window.sidebarUtil = {
                 expires: 365
             });
         }
+	},
+	setAccess: function(access) {
+        $(".filter[data-key='file-access'] strong").text(access);
 	},
 	setTitle: function(direction, title) {
 	    var extension = title.split(".")[title.split(".").length - 1];

@@ -29,6 +29,7 @@ exports.accessCheck = function(user, room, token, callback) {
                 callback({
                     success: true,
                     document: document,
+                    permission: documents[0].permission
                 });
             } else {
                 callback({
@@ -47,7 +48,10 @@ exports.accessCheck = function(user, room, token, callback) {
     });
 }
 
-exports.clientData = function(room, document, callback) {
+exports.clientData = function(room, document_role, callback) {
+    var document = document_role.document;
+    var permission = document_role.permission;
+
     exports.redisClient.get(room, function(error, reply) {
         if(!error && reply) {
             reply = JSON.parse(reply);
@@ -70,7 +74,8 @@ exports.clientData = function(room, document, callback) {
             breakpoints: ((document.breakpoints) ? $.map(document.breakpoints, function(value) {
                 return {"line": value};
             }) : []),
-            changes: document.changes
+            changes: document.changes,
+            access: permission.name
         });
     });
 }
