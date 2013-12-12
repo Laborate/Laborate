@@ -263,7 +263,7 @@ exports.reset = function(req, res, next) {
                             email: user.email,
                             code: user.reset
                         }]
-                    });
+                    }, capture_error);
                 } else {
                     res.error(200, "Email Address Not Found");
                 }

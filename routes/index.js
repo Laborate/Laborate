@@ -9,6 +9,7 @@ var github = require('./github');
 var bitbucket = require('./bitbucket');
 var google = require('./google');
 var webhooks = require('./webhooks');
+var email = require('./email');
 
 module.exports = function(app) {
     /* Root */
@@ -99,6 +100,12 @@ module.exports = function(app) {
         app.get('/google/token/add', authUtil.restrictAccess, google.add_token);
         app.get('/google/token/remove', authUtil.restrictAccess, google.remove_token);
         app.get('/google/token/:name', authUtil.restrictAccess, google.token);
+    }
+
+
+    /* Test Emails */
+    if(!config.general.production) {
+        app.get(/^\/email\/(.*)\//, email.index);
     }
 
     /* Not Found Page */
