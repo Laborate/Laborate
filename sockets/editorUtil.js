@@ -1,9 +1,7 @@
 var lib = require("../lib/");
 var editorJsdom = lib.jsdom.editor;
 lib.models(exports);
-
-exports.redis = require('redis');
-exports.redisClient = exports.redis.createClient();
+exports.redisClient = lib.redis;
 exports.roomUsers = new Array();
 
 exports.users = function(user, room) {

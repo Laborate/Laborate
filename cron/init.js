@@ -1,5 +1,4 @@
 /* NPM Modules */
-var redis = require('redis');
 var raven = require('raven');
 var winston = require('winston');
 
@@ -40,8 +39,8 @@ module.exports = function(callback) {
     var _this = this;
     this.lib = require("../lib")
     this.editorJsdom = this.lib.jsdom.editor;
-    this.redisClient = redis.createClient(),
-    this.lib.models(this, function(){
+    this.redisClient = this.lib.redis,
+    this.lib.models(this, function() {
         callback();
     });
 }
