@@ -9,14 +9,12 @@ require('../init')(function() {
                     student: user.pricing.student,
                     organization: false
                 }, [ "id", "A" ], 1, function(error, pricings) {
-                    console.log(pricings[0].id);
                     if(!error && pricings.length == 1) {
-                        user.save({
-                            deliquent: false,
-                            pricing_id: pricings[0].id
-                        }, function(error) {
-                            console.log(error);
-                        });
+                        //Delay To Prevent Database Overload
+                        setTimeout(function() {
+                            user.setPricing(pricings[0], lib.error.capture);
+                            user.save({ deliquent: false },  lib.error.capture);
+                        }, 100);
                     } else {
                         lib.error.capture(error);
                     }

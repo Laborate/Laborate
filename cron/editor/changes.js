@@ -9,10 +9,13 @@ require('../init')(function() {
                     _this.models.documents.get(reply.id, function(error, document) {
                         if(!error && document) {
                             _this.editorJsdom(document.content, reply.changes, function(content) {
-                                document.save({
-                                    content: content.split("\n"),
-                                    breakpoints: reply.breakpoints
-                                }, lib.error.capture);
+                                //Delay To Prevent Database Overload
+                                setTimeout(function() {
+                                    document.save({
+                                        content: content.split("\n"),
+                                        breakpoints: reply.breakpoints
+                                    }, lib.error.capture);
+                                }, 100);
                             });
                         } else {
                             lib.error.capture(error);
