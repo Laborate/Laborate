@@ -15,6 +15,9 @@ require('../init')(function() {
                                         content: content.split("\n"),
                                         breakpoints: reply.breakpoints
                                     }, lib.error.capture);
+
+                                    reply.changes = [];
+                                    _this.redisClient.set(room, JSON.stringify(reply));
                                 }, 100);
                             });
                         } else {
