@@ -35,7 +35,8 @@
     "jsdom": "0.8.8",
     "winston": "0.7.2",
     "stripe": "2.1.0-rc3",
-    "jquery.payment": "0.0.1"
+    "jquery.payment": "0.0.1",
+    "node-watch": "0.3.4"
   },
   "devDependencies": {
     "express-debug": "*"

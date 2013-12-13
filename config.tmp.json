@@ -172,6 +172,8 @@
         "watch_ignore_patterns": [
             "config.tmp.json",
             "node_modules/**",
+            "lib/email/index.less",
+            "lib/email/**/html.ejs",
             "lib/email/**/style.css",
             "public/less/**",
             "public/js/**",
