@@ -95,6 +95,10 @@ exports.stripe = function(req, res) {
                             priority: true,
                             user_id: users[0].id
                         }, req.error.capture);
+
+                        req.email("payment_failed", {
+                            name: users[0].name
+                        }, req.error.capture);
                     } else {
                         users[0].save({ deliquent: true }, req.error.capture);
                     }

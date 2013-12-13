@@ -3,7 +3,6 @@ exports.index = function(req, res, next) {
         case "verify":
             req.email_test("verify", {
                 name: config.profile.name,
-                email: config.profile.email,
                 code: "abcasdfjkl0324halsdf"
             }, render(res));
             break;
@@ -11,7 +10,6 @@ exports.index = function(req, res, next) {
         case "reset":
             req.email_test("reset", {
                 name: config.profile.name,
-                email: config.profile.email,
                 code: "abcasdfjkl0324halsdf"
             }, render(res));
             break;
@@ -23,6 +21,12 @@ exports.index = function(req, res, next) {
                 access: "Open",
                 collaborators: config.profile.screen_name,
                 message: req.param("message")
+            }, render(res));
+            break;
+
+        case "payment/failed":
+            req.email_test("payment_failed", {
+                name: config.profile.name
             }, render(res));
             break;
         default:
