@@ -1,7 +1,6 @@
 exports.login = function(req, res) {
     res.renderOutdated('auth/login', {
         title: 'Login',
-        mode: "login",
         js: clientJS.renderTags("backdrop", "crypto"),
         css: clientCSS.renderTags("backdrop"),
         backdrop: req.backdrop(),
@@ -12,7 +11,6 @@ exports.login = function(req, res) {
 exports.register = function(req, res) {
     res.renderOutdated('auth/register', {
         title: 'Register',
-        mode: 'register',
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
         backdrop: req.backdrop(),
@@ -24,7 +22,6 @@ exports.verify = function(req, res) {
     if(req.session.user.verify) {
         res.renderOutdated('auth/verify', {
             title: 'Verify Your Account',
-            mode: "verify",
             feedback: 'Verification Email Has Been Sent',
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
@@ -42,7 +39,6 @@ exports.reset = function(req, res) {
 
     res.renderOutdated(view, {
         title: 'Reset Password',
-        mode: 'reset',
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
         backdrop: req.backdrop(),
@@ -57,8 +53,7 @@ exports.reset_password = function(req, res) {
         }, function(error, users) {
             if(!error && users.length == 1) {
                 res.renderOutdated('auth/reset/password', {
-                    title: 'Change Password',
-                    mode: 'reset_password',
+                    title: 'Reset Password',
                     code: req.param("code"),
                     js: clientJS.renderTags("backdrop"),
                     css: clientCSS.renderTags("backdrop"),

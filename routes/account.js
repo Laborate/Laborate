@@ -9,8 +9,6 @@ exports.index = function(req, res, next) {
     }, [ "priority", "A" ], function(error, plans) {
         res.renderOutdated('account/index', {
             title: 'Account',
-            navigation: 'User Settings',
-            mode: "account",
             plans: plans,
             user: req.session.user,
             js: clientJS.renderTags("account", "header"),

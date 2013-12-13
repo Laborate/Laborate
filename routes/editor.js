@@ -11,8 +11,6 @@ exports.index = function(req, res, next) {
 
                     res.renderOutdated('editor/index', {
                         title: document.name,
-                        navigation: document.name,
-                        mode: "editor",
                         user: req.session.user,
                         document: document,
                         js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
@@ -31,7 +29,6 @@ exports.index = function(req, res, next) {
     } else {
        res.renderOutdated('editor/join', {
             title: "Join A Document",
-            mode: "editor-join",
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
             backdrop: req.backdrop()

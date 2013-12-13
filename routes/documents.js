@@ -10,8 +10,6 @@ var google = require("./google");
 exports.index = function(req, res, next) {
     res.renderOutdated('documents/index', {
         title: 'Documents',
-        navigation: 'Documents Drive',
-        mode: "documents",
         js: clientJS.renderTags("documents", "download"),
         css: clientCSS.renderTags("documents")
     });
