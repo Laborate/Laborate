@@ -214,7 +214,7 @@ exports.remove_card = function(req, res, next) {
                             if(!error) {
                                 if(next) res.json({ success: true });
 
-                                if(req.session.user.pricing.amount != 0) {
+                                if(!req.session.user.deliquent && req.session.user.pricing.amount != 0) {
                                     req.models.notifications.create({
                                         message: "Please enter a credit card, your plan requires a card on file",
                                         priority: true,
@@ -253,7 +253,10 @@ exports.plan_change = function(req, res) {
                         if(!error && plans.length != 0) {
                             user.setPricing(plans[0], function(error, user) {
                                 if(!error) {
-                                    user.save({ trial: false }, function(error, user) {
+                                    user.save({
+                                        trial: false,
+                                        deliquent: (plans[0].amount == 0) ? false : user.deliquent
+                                    }, function(error, user) {
                                         if(!error) {
                                             req.session.user = user;
                                             req.session.save();

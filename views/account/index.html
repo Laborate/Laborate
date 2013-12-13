@@ -96,7 +96,10 @@
         </div>
     </div>
     <%  if(user.deliquent) { %>
-        <div class="notification">Your account is suspended until a valid credit card is provided</div>
+        <div class="notification">
+            Unless a valid credit card is provided,
+            your account will be downgraded to the free plan at the end of the billing cycle.
+        </div>
     <%  } else {
             if(user.notifications.length != 0) {
                 $.each(user.notifications, function(key, notification) {
@@ -283,74 +286,72 @@
                     </div>
                 </div>
             <% } %>
-            <% if(!user.deliquent) { %>
-                <div class="container">
-                    <% if(user.pricing.priority > 0) { %>
-                        <div class="comment">
-                            When downgrading your plan, all documents that
-                            currently have passwords will not be affected.
-                        </div>
-                    <% } %>
-                    <div id="plans" class="listing">
-                        <div class="item header">
-                            <div class="small-text">Plan</div>
-                            <div class="tiny-text">Price</div>
-                            <div class="icon">Pro</div>
-                            <div class="left">Private Documents</div>
-                        </div>
-
-                        <% $.each(plans, function(key, pricing) {
-                            if(pricing.pro) {
-                                var icon_class = icons.checked + " checked";
-                            } else {
-                                var icon_class = icons.unchecked + " unchecked";
-                            }
-
-                            if(pricing.id == user.pricing.id) {
-                                var item = "active";
-                                var button = "current";
-                            } else {
-                                if(pricing.amount != 0 && $.isEmptyObject(user.card)) {
-                                    var item = "";
-                                    var button = "Card Required";
-                                    var button_class = "error";
-                                } else {
-                                    var item = "";
-                                    var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
-                                    var button_class = "clickable";
-                                }
-                            }
-
-                            if(pricing.documents != null) {
-                                var documents = pricing.documents;
-                            } else {
-                                var documents = "Unlimited";
-                            }
-
-                            if(pricing.amount == 0) {
-                                var amount = "Free";
-                            } else {
-                                var amount = "$" + pricing.amount;
-                            }
-                        %>
-                            <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
-                                <div class="small-text"><%= pricing.name %></div>
-                                <div class="tiny-text"><%= amount %></div>
-                                <div class="icon <%= icon_class %>"></div>
-                                <div class="small-text"><%- documents %></div>
-                                <div class="action button <%= button_class %>"><%= button %></div>
-                            </div>
-
-                            <% if(user.pricing.student && key == 0) { %>
-                                <div class="banner">
-                                    <div class="arrow"></div>
-                                    <span class="<%= icons.student %>"></span> price included within tuition
-                                </div>
-                            <% } %>
-                        <% }); %>
+            <div class="container">
+                <% if(user.pricing.priority > 0) { %>
+                    <div class="comment">
+                        When downgrading your plan, all documents that
+                        currently have passwords will not be affected.
                     </div>
+                <% } %>
+                <div id="plans" class="listing">
+                    <div class="item header">
+                        <div class="small-text">Plan</div>
+                        <div class="tiny-text">Price</div>
+                        <div class="icon">Pro</div>
+                        <div class="left">Private Documents</div>
+                    </div>
+
+                    <% $.each(plans, function(key, pricing) {
+                        if(pricing.pro) {
+                            var icon_class = icons.checked + " checked";
+                        } else {
+                            var icon_class = icons.unchecked + " unchecked";
+                        }
+
+                        if(pricing.id == user.pricing.id) {
+                            var item = "active";
+                            var button = "current";
+                        } else {
+                            if(user.deliquent || (pricing.amount != 0 && $.isEmptyObject(user.card))) {
+                                var item = "";
+                                var button = (key == 0) ? "downgrade" : "Card Required";
+                                var button_class =  (key == 0) ? "clickable" : "error";
+                            } else {
+                                var item = "";
+                                var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
+                                var button_class = "clickable";
+                            }
+                        }
+
+                        if(pricing.documents != null) {
+                            var documents = pricing.documents;
+                        } else {
+                            var documents = "Unlimited";
+                        }
+
+                        if(pricing.amount == 0) {
+                            var amount = "Free";
+                        } else {
+                            var amount = "$" + pricing.amount;
+                        }
+                    %>
+                        <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
+                            <div class="small-text"><%= pricing.name %></div>
+                            <div class="tiny-text"><%= amount %></div>
+                            <div class="icon <%= icon_class %>"></div>
+                            <div class="small-text"><%- documents %></div>
+                            <div class="action button <%= button_class %>"><%= button %></div>
+                        </div>
+
+                        <% if(user.pricing.student && key == 0) { %>
+                            <div class="banner">
+                                <div class="arrow"></div>
+                                <span class="<%= icons.student %>"></span> price included within tuition
+                            </div>
+                        <% } %>
+                    <% }); %>
                 </div>
-            <% } %>
+            </div>
         </div>
         <div class="selection" data-key="notifications">
             <div id="notifications" class="listing container">

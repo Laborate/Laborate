@@ -12,8 +12,22 @@ require('../init')(function() {
                     if(!error && pricings.length == 1) {
                         //Delay To Prevent Database Overload
                         setTimeout(function() {
-                            user.setPricing(pricings[0], lib.error.capture);
-                            user.save({ deliquent: false },  lib.error.capture);
+                            user.setPricing(pricings[0], function(error, user) {
+                                if(!error) {
+                                    user.save({
+                                        deliquent: false
+                                    },  lib.error.capture);
+
+                                    _this.models.notifications.create({
+                                        message: "Your account has been downgraded to the free plan \
+                                        becuase we attempted to charge your card 3 times and all failed.",
+                                        priority: true,
+                                        user_id: users[0].id
+                                    }, lib.error.capture);
+                                } else {
+                                    lib.error.capture(error);
+                                }
+                            });
                         }, 100);
                     } else {
                         lib.error.capture(error);

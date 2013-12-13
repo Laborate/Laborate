@@ -5,11 +5,7 @@ exports.restrictAccess = function(req, res, next) {
             if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
                     res.redirect("/verify/");
             } else {
-                if(req.session.user.deliquent && !(/^\/account/.exec(req.url))) {
-                    res.redirect("/account/billing/");
-                } else {
-                    if(next) next();
-                }
+                if(next) next();
             }
         } else {
             req.models.users.get(req.session.user.id, function(error, user) {
@@ -18,11 +14,7 @@ exports.restrictAccess = function(req, res, next) {
                     if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
                             res.redirect("/verify/");
                     } else {
-                        if(req.session.user.deliquent && !(/^\/account/.exec(req.url))) {
-                            res.redirect("/account/billing/");
-                        } else {
-                            if(next) next();
-                        }
+                        if(next) next();
                     }
                 } else {
                     res.error(401, false, error);
