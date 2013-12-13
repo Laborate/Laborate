@@ -20,8 +20,7 @@ module.exports = function(root_dir) {
 
             //Users Deliquent @1 Month
             tab.remove(tab.findComment("users_deliquent"));
-            var a = tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/deliquent.js"), "users_deliquent");
-            console.error(a.dom().on(1));
+            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/deliquent.js"), "users_deliquent").dom().on(1);
 
             //Editor Users @30 Seconds
             tab.remove(tab.findComment("editor_users"));
