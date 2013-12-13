@@ -12,33 +12,16 @@ require('../init')(function() {
                                 document.save({
                                     content: content.split("\n"),
                                     breakpoints: reply.breakpoints
-                                }, function() {
-                                    if(key == (documents.length - 1)) {
-                                        _this.redisClient.end();
-                                        process.exit(code=0);
-                                    }
-                                });
+                                }, lib.error.capture);
                             });
                         } else {
-                            if(error) {
-                                ravenClient.captureError(error, "cron");
-                            }
-
-                            if(key == (documents.length - 1)) {
-                                _this.redisClient.end();
-                                process.exit(code=0);
-                            }
+                            lib.error.capture(error);
                         }
                     })
                 });
             });
         } else {
-            if(error) {
-                ravenClient.captureError(error, "cron");
-            }
-
-            _this.redisClient.end();
-            process.exit(code=0);
+            lib.error.capture(error);
         }
     });
 });

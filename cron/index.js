@@ -18,6 +18,11 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
 
+            //Users Deliquent @1 Month
+            tab.remove(tab.findComment("users_deliquent"));
+            var a = tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/deliquent.js"), "users_deliquent");
+            console.error(a.dom().on(1));
+
             //Editor Users @30 Seconds
             tab.remove(tab.findComment("editor_users"));
             tab.create(exportCommand + " && sleep 30; node " + path.join(root_dir, "/cron/editor/users.js"), "editor_users");
