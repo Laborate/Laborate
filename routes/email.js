@@ -2,14 +2,14 @@ exports.index = function(req, res, next) {
     switch(req.param(0)) {
         case "verify":
             req.email_test("verify", {
-                name: config.profile.name,
+                name: config.profile.name.capitalize(),
                 code: "abcasdfjkl0324halsdf"
             }, render(res));
             break;
 
         case "reset":
             req.email_test("reset", {
-                name: config.profile.name,
+                name: config.profile.name.capitalize(),
                 code: "abcasdfjkl0324halsdf"
             }, render(res));
             break;
@@ -26,7 +26,7 @@ exports.index = function(req, res, next) {
 
         case "payment/failed":
             req.email_test("payment_failed", {
-                name: config.profile.name
+                name: config.profile.name.capitalize()
             }, render(res));
             break;
         default:
