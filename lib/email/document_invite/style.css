@@ -29,15 +29,11 @@ body {
 #wrapper #core #header #logo {
   width: 150px;
 }
-#wrapper #core #header #date .link {
-  color: #ededed;
-  font-size: 18px;
-}
 #wrapper #core #content {
   color: #000000;
   background: #ffffff;
   width: 100%;
-  border-radius: 8px;
+  border-radius: 6px;
   min-height: 220px;
   overflow: hidden;
 }
