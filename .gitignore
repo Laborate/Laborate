@@ -5,3 +5,4 @@ tmp
 config.json
 dump.rdb
 * copy*
+lib/email/**/style.css

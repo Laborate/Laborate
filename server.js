@@ -52,6 +52,9 @@ lib.core.extensions();
 /* Ejs Filters */
 lib.core.ejs_filters(ejs);
 
+/* Init Email */
+lib.email_init();
+
 /* Set App & Server Variables */
 var app = express().http().io();
 var srv = app.server;
