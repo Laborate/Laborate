@@ -15,30 +15,6 @@ GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 GLOBAL.raven_client   = new raven.Client(config.sentry.node);
-GLOBAL.capture_error = function(data, callback) {
-    /* True Means It Is On Init */
-    if(data == true) {
-        /* Return Blank Function */
-        return function() {};
-    } else {
-        /*
-            var data is now seen as
-            error. Now check if it
-            contains an error.
-        */
-        if(typeof data == "object") {
-            if((Array.isArray(data) && data.length != 0) || !$.isEmptyObject(data)) {
-                console.error(data);
-                raven_client.captureError(data);
-            }
-        } else if(data) {
-            console.error(data);
-            raven_client.captureError(data);
-        }
-    }
-
-    if(typeof callback == "function") callback();
-}
 
 /* Update Crontab */
 require("./cron")(__dirname);

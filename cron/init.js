@@ -16,7 +16,7 @@ GLOBAL.logger = new (winston.Logger)({
     ],
     exitOnError: true
 });
-GLOBAL.capture_error = function(data) {
+GLOBAL.lib.error.capture = function(data) {
     /* True Means It Is On Init */
     if(data == true) {
         /* Return Blank Function */

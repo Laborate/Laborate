@@ -9,7 +9,7 @@
   border: none;
 }
 body {
-  background: #0090eb;
+  background: #0b7fad;
 }
 .full {
   width: 100%;
@@ -24,13 +24,13 @@ body {
 }
 #wrapper #core #header {
   color: #ffffff;
-  padding: 15px 15px 5px 15px;
+  padding: 15px 15px 2px 15px;
 }
 #wrapper #core #header #logo {
   width: 150px;
 }
 #wrapper #core #header #date .link {
-  color: #e5e5e5;
+  color: #ededed;
   font-size: 18px;
 }
 #wrapper #core #content {
@@ -45,7 +45,7 @@ body {
   padding: 40px 30px;
 }
 #wrapper #core #content #top .header {
-  color: #0087dc;
+  color: #096d95;
   font-size: 16px;
   font-weight: bold;
 }
@@ -65,4 +65,8 @@ body {
   text-align: right;
   font-weight: bold;
   color: #5c6267;
+}
+#wrapper #core #content #bottom .link {
+  color: #5c6267;
+  text-decoration: none;
 }

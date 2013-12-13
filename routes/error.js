@@ -69,29 +69,10 @@ var error_handler = function(status, message, home, req, res) {
     }
 }
 
-var raise_error = function(error) {
-    if(typeof error == "object") {
-        if((Array.isArray(error) && error.length != 0) || !$.isEmptyObject(error)) {
-            finish();
-        }
-    } else if(error) {
-        finish();
-    }
-
-    function finish() {
-        try {
-            console.error(error);
-            raven_client.captureError(error, "middleware");
-        } catch(error) {
-            raise_error(error);
-        }
-    }
-}
-
 exports.global = function(error, req, res, next) {
     if(error) {
         error_handler(error.status, error.message, true, req, res);
-        raise_error(error);
+        req.error.capture(error);
     } else {
         next();
     }
@@ -100,7 +81,7 @@ exports.global = function(error, req, res, next) {
 exports.handler = function(req, res, next) {
     res.error = function(status, message, error, home) {
         error_handler(status, message, home, req, res);
-        raise_error(error);
+        req.error.capture(error);
     }
     next();
 };

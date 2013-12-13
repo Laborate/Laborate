@@ -37,7 +37,7 @@ function render(res) {
             res.send(html);
         } else {
             res.error(404);
-            capture_error(error);
+            req.error.capture(error);
         }
     }
 }

@@ -1,7 +1,7 @@
 /* Variables */
-@background: #0090EB;
-@date_link: darken(#ededed, 3%);
-@header: darken(#0090EB, 3%);
+@background: #0B7FAD;
+@date_link: #ededed;
+@header: darken(@background, 5%);
 @content: #000;
 @content_bg: #fff;
 @link: #333;
@@ -37,7 +37,7 @@ body {
 
         #header {
             color: @content_bg;
-            padding: 15px 15px 5px 15px;
+            padding: 15px 15px 2px 15px;
 
             #logo {
                 width: 150px;
@@ -85,6 +85,11 @@ body {
                 text-align: right;
                 font-weight: bold;
                 color: @company;
+
+                .link {
+                    color: @company;
+                    text-decoration: none;
+                }
             }
         }
     }

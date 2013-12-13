@@ -186,7 +186,7 @@ exports.register = function(req, res, next) {
                                         email: user.email,
                                         code: user.verify
                                     }]
-                                }, capture_error);
+                                }, req.error.capture);
                             } else {
                                 res.error(200, "Invalid Email Address", error);
                             }
@@ -263,7 +263,7 @@ exports.reset = function(req, res, next) {
                             email: user.email,
                             code: user.reset
                         }]
-                    }, capture_error);
+                    }, req.error.capture);
                 } else {
                     res.error(200, "Email Address Not Found");
                 }
