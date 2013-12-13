@@ -1,3 +1,15 @@
+/* Variables */
+@background: #0090EB;
+@date_link: darken(#ededed, 3%);
+@header: darken(#0090EB, 3%);
+@content: #000;
+@content_bg: #fff;
+@link: #333;
+@bold: #555;
+@bottom: #EDEEEF;
+@company: darken(@bottom, 55%);
+
+/* Template */
 * {
     font-family: sans-serif, serif;
     font-size: 14px;
@@ -8,7 +20,7 @@
 }
 
 body {
-    background: #0090EB;
+    background: @background;
 }
 
 .full {
@@ -24,7 +36,7 @@ body {
         padding: 15px 15px 30px 15px;
 
         #header {
-            color: #fff;
+            color: @content_bg;
             padding: 15px 15px 5px 15px;
 
             #logo {
@@ -32,14 +44,14 @@ body {
             }
 
             #date .link {
-                color: darken(#ededed, 3%);
+                color: @date_link;
                 font-size: 18px;
             }
         }
 
         #content {
-            color: #000;
-            background: #fff;
+            color: @content;
+            background: @content_bg;
             width: 100%;
             border-radius: 8px;
             min-height: 220px;
@@ -49,24 +61,30 @@ body {
                 padding: 40px 30px;
 
                 .header {
-                    color: darken(#0090EB, 10%);
+                    color: @header;
                     font-size: 16px;
                     font-weight: bold;
                 }
 
                 .link {
-                    color: #333;
+                    color: @link;
                     text-decoration: underline;
+                }
+
+                .bold {
+                    color: @bold;
+                    font-weight: bold;
+                    text-decoration: none;
                 }
             }
 
             #bottom {
-                background: #EDEEEF;
-                border-top: solid 1px darken(#EDEEEF, 5%);
-                padding: 10px 30px;
+                background: @bottom;
+                border-top: solid 1px darken(@bottom, 5%);
+                padding: 12px 30px;
                 text-align: right;
                 font-weight: bold;
-                color: darken(#EDEEEF, 55%);
+                color: @company;
             }
         }
     }

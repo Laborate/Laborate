@@ -1,3 +1,5 @@
+/* Variables */
+/* Template */
 * {
   font-family: sans-serif, serif;
   font-size: 14px;
@@ -7,7 +9,7 @@
   border: none;
 }
 body {
-  background: #0090EB;
+  background: #0090eb;
 }
 .full {
   width: 100%;
@@ -21,7 +23,7 @@ body {
   padding: 15px 15px 30px 15px;
 }
 #wrapper #core #header {
-  color: #fff;
+  color: #ffffff;
   padding: 15px 15px 5px 15px;
 }
 #wrapper #core #header #logo {
@@ -32,8 +34,8 @@ body {
   font-size: 18px;
 }
 #wrapper #core #content {
-  color: #000;
-  background: #fff;
+  color: #000000;
+  background: #ffffff;
   width: 100%;
   border-radius: 8px;
   min-height: 220px;
@@ -43,18 +45,23 @@ body {
   padding: 40px 30px;
 }
 #wrapper #core #content #top .header {
-  color: #0071b8;
+  color: #0087dc;
   font-size: 16px;
   font-weight: bold;
 }
 #wrapper #core #content #top .link {
-  color: #333;
+  color: #333333;
   text-decoration: underline;
 }
+#wrapper #core #content #top .bold {
+  color: #555555;
+  font-weight: bold;
+  text-decoration: none;
+}
 #wrapper #core #content #bottom {
-  background: #EDEEEF;
+  background: #edeeef;
   border-top: solid 1px #e0e1e3;
-  padding: 10px 30px;
+  padding: 12px 30px;
   text-align: right;
   font-weight: bold;
   color: #5c6267;
