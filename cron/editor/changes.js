@@ -18,16 +18,19 @@ require('../init')(function() {
 
                                     reply.changes = [];
                                     _this.redisClient.set(room, JSON.stringify(reply));
+                                    if(!--documents.length) _this.finish();
                                 }, 100);
                             });
                         } else {
                             lib.error.capture(error);
+                            if(!--documents.length) _this.finish();
                         }
                     })
                 });
             });
         } else {
             lib.error.capture(error);
+            _this.finish();
         }
     });
 });

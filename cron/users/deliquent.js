@@ -3,7 +3,7 @@ require('../init')(function() {
     this.models.users.find({
         deliquent: true
     }, function(error, users) {
-        if(!error) {
+        if(!error && users.length != 0) {
             $.each(users, function(key, user) {
                 _this.models.pricing.find({
                     student: user.pricing.student,
@@ -24,18 +24,22 @@ require('../init')(function() {
                                         priority: true,
                                         user_id: users[0].id
                                     }, lib.error.capture);
+                                    if(!--users.length) _this.finish();
                                 } else {
                                     lib.error.capture(error);
+                                    if(!--users.length) _this.finish();
                                 }
                             });
                         }, 100);
                     } else {
                         lib.error.capture(error);
+                        if(!--users.length) _this.finish();
                     }
                 });
             });
         } else {
             lib.error.capture(error);
+            _this.finish();
         }
     });
 });

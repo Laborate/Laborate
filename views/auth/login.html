@@ -20,14 +20,14 @@
             <% if(organization.register) { %>
                 Want an account? <a class="backdrop-link" href="/register/">Register</a>
             <% } else if(organization.id && organization.reset) { %>
-                Forgot your password? <a class="backdrop-link" href="<%= organization.reset %>">Reset</a>
+                Forgot your password? <a class="backdrop-link" href="<%= organization.reset || "/reset/" %>">Reset</a>
             <% } %>
          </div>
     </div>
     <div id="backdrop-footer">
         <ul>
             <% if(organization.register) { %>
-                <li><a href="/reset/">Forgot your password?</a></li>
+                <li><a href="<%=  organization.reset || "/reset/" %>">Forgot your password?</a></li>
             <% } %>
             <li><a href="/privacy/">Privacy Policy</a></li>
             <li><a href="/contact/">Contact Us</a></li>

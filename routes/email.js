@@ -16,9 +16,9 @@ exports.index = function(req, res, next) {
 
         case "document/invite":
             req.email_test("document_invite", {
-                id: "abasdf23423ghajkgsdf23",
+                id: "adfasdfasdf",
                 name: "hello_world.js",
-                access: "Open",
+                access: "Editor",
                 collaborators: config.profile.screen_name,
                 message: req.param("message")
             }, render(res));

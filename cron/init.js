@@ -9,12 +9,16 @@ lib.core.extensions();
 /* Exports */
 module.exports = function(callback) {
     var _this = this;
-    this.lib = lib;
-    this.editorJsdom = this.lib.jsdom.editor;
-    this.redisClient = this.lib.redis,
-    this.lib.models(this, function() {
-        callback();
-    });
+    _this.lib = lib;
+    _this.editorJsdom = _this.lib.jsdom.editor;
+    _this.redisClient = _this.lib.redis,
+    _this.lib.models(_this, callback);
+    _this.finish = function() {
+        setTimeout(function() {
+            _this.redisClient.end();
+            process.exit(code=0);
+        }, 500);
+    }
 }
 
 /* Error Handling */

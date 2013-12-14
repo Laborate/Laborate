@@ -207,9 +207,9 @@ exports.invite = function(req, res, next) {
                         users: $.map(req.param("addresses").split(","), function(address) {
                             return {
                                 email: $.trim(address),
-                                id: document.pub_id,
                                 name: document.name,
-                                access: (document.password) ? "Password" : "Open",
+                                id: document.pub_id,
+                                access: documents[0].permission.name,
                                 collaborators: $.map(document.roles, function(role) {
                                     if(role.user) {
                                         return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
