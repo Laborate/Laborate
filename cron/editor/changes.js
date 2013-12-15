@@ -1,14 +1,14 @@
 require('../init')(function() {
     var _this = this;
-    _this.redisClient.keys("editor*", function(error, documents) {
+    _this.lib.redis.keys("editor*", function(error, documents) {
         if(!error && documents.length != 0) {
             $.each(documents, function(key, room) {
-                _this.redisClient.get(room, function(error, reply) {
+                _this.lib.redis.get(room, function(error, reply) {
                     var reply = JSON.parse(reply);
 
                     _this.models.documents.get(reply.id, function(error, document) {
                         if(!error && document) {
-                            _this.editorJsdom(document.content, reply.changes, function(content) {
+                            _this.lib.jsdom.editor(document.content, reply.changes, function(content) {
                                 //Delay To Prevent Database Overload
                                 setTimeout(function() {
                                     document.save({
@@ -17,7 +17,7 @@ require('../init')(function() {
                                     }, lib.error.capture);
 
                                     reply.changes = [];
-                                    _this.redisClient.set(room, JSON.stringify(reply));
+                                    _this.lib.redis.set(room, JSON.stringify(reply));
                                     if(!--documents.length) _this.finish();
                                 }, 100);
                             });

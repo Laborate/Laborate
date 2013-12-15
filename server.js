@@ -14,7 +14,6 @@ GLOBAL.config         = require('./config');
 GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
-GLOBAL.raven_client   = new raven.Client(config.sentry.node);
 
 /* Update Crontab */
 require("./cron")(__dirname);
@@ -139,8 +138,7 @@ app.configure('development', function() {
 app.configure('production', function() {
     /* Last Resort Error Handling */
     process.on('uncaughtException', function (exception) {
-        console.error(exception);
-        raven_client.captureError(exception);
+        lib.error.capture(exception);
     });
 });
 

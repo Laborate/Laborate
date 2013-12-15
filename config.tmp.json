@@ -66,10 +66,12 @@
             "debug": false
         }
     },
+    "redis": 1,
     "stripe": {
         "reset": true,
-        "id": "",
-        "description": ""
+        "description": "",
+        "production": "",
+        "development": ""
     },
     "apps": {
         "sftp": false,

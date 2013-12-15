@@ -10,12 +10,10 @@ lib.core.extensions();
 module.exports = function(callback) {
     var _this = this;
     _this.lib = lib;
-    _this.editorJsdom = _this.lib.jsdom.editor;
-    _this.redisClient = _this.lib.redis,
     _this.lib.models(_this, callback);
     _this.finish = function() {
         setTimeout(function() {
-            _this.redisClient.end();
+            _this.lib.redis.end();
             process.exit(code=0);
         }, 500);
     }

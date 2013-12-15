@@ -1,6 +1,6 @@
 require('../init')(function() {
     var _this = this;
-    this.models.users.find({
+    _this.models.users.find({
         deliquent: true
     }, function(error, users) {
         if(!error && users.length != 0) {
