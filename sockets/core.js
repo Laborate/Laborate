@@ -26,7 +26,7 @@ exports.notifications = function(req) {
 }
 
 exports.track = function(req, session) {
-    lib.redis.set("tracking", function(error, data) {
+    lib.redis.get("tracking", function(error, data) {
         var user = (session) ? session.user : {};
         var organization = (session) ? session.organization : {};
         var address = req.handshake.address;

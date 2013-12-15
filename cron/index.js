@@ -18,9 +18,9 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
 
-            //Users Tracking @12 Hours
+            //Users Tracking @5 Minutes
             tab.remove(tab.findComment("users_tracking"));
-            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/tracking.js"), "users_tracking").hour().every(12);
+            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/tracking.js"), "users_tracking").minute().every(5);
 
             //Users Deliquent @1 Month
             tab.remove(tab.findComment("users_deliquent"));

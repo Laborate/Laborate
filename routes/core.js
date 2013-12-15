@@ -21,7 +21,7 @@ exports.setup = function(req, res, next) {
 }
 
 exports.tracking = function(req, res, next) {
-    req.redis.set("tracking", function(error, data) {
+    req.redis.get("tracking", function(error, data) {
         var user = req.session.user;
         var organization = req.session.organization.id;
         var tracking = (data) ? JSON.parse(data) : [];
