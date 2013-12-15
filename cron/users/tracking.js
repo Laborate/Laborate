@@ -2,8 +2,10 @@ require('../init')(function() {
     var _this = this;
     _this.lib.redis.get("tracking", function(error, tracking) {
         if(!error && tracking) {
-            console.log(tracking);
-            _this.finish();
+            _this.models.tracking.create(JSON.parse(tracking), function(error) {
+                 lib.error.capture(error);
+                 _this.finish();
+            });
         } else {
             lib.error.capture(error);
             _this.finish();
