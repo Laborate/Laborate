@@ -79,6 +79,9 @@ module.exports = function(app) {
     /* Webhooks */
     app.post("/webhook/stripe", authUtil.loginDenied, webhooks.stripe);
 
+    /* SiteMap */
+    app.get('/sitemap.xml', core.sitemap);
+
     /* Github */
     if(config.apps.github) {
         app.get('/github/token', authUtil.restrictAccess, github.token);
@@ -101,7 +104,6 @@ module.exports = function(app) {
         app.get('/google/token/remove', authUtil.restrictAccess, google.remove_token);
         app.get('/google/token/:name', authUtil.restrictAccess, google.token);
     }
-
 
     /* Test Emails */
     if(!config.general.production) {

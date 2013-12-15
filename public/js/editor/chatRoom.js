@@ -2,6 +2,8 @@
 //          Chat Room Instances
 /////////////////////////////////////////////////
 window.chat = {
+    focus: true,
+    count: 0,
     conversation: function() {
         return $('.chat .scroll-pane').data("jsp")
     },
@@ -143,6 +145,7 @@ window.chat = {
         }
     },
     _inputMessage: function(from, message, direction, gravatar) {
+        window.chat._notify();
         var last_message = $(".jspPane .item").eq(-1);
         if(last_message.attr("data-direction") == direction) {
             last_message
@@ -162,6 +165,7 @@ window.chat = {
         }
     },
     _inputStatus: function(status) {
+        window.chat._notify();
         if(window.notifications != false) {
     	   $(".jspPane").append('<div class="item status">' + status + '</div>');
         }
@@ -184,6 +188,16 @@ window.chat = {
             "message": message,
             "isStatus": false
         });
+    },
+    _notify: function() {
+        if(!window.chat.focus) {
+            window.chat.count++;
+            window.sidebarUtil.setTitle(
+                "in",
+                window.editorUtil.name,
+                window.chat.count
+            );
+        }
     }
 }
 
@@ -209,6 +223,11 @@ $(function() {
     	}
     });
 
+    $(".messenger textarea").on('focus', function() {
+        window.chat.count = 0;
+        window.sidebarUtil.setTitle("in", window.editorUtil.name);
+    });
+
     //Pull Message
     window.socketUtil.socket.on('editorChatRoom', function (data) {
         if(data.isStatus) {
@@ -224,4 +243,14 @@ $(function() {
             $("#chat_bubble_count").text(count + 1);
         }
     });
+});
+
+
+
+window.addEventListener('focus', function() {
+    window.chat.focus = true;
+});
+
+window.addEventListener('blur', function() {
+    window.chat.focus = false;
 });

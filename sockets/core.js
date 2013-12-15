@@ -1,6 +1,8 @@
-require("../lib").models(exports);
+var lib = require("../lib")
+lib.models(exports);
 
 exports.pageTrack = function(req) {
+    exports.track(req, req.session);
     req.session.last_page = req.data;
     req.session.save();
 }
@@ -23,9 +25,30 @@ exports.notifications = function(req) {
     }
 }
 
-exports.connect = function(req) {
-    var address = req.handshake.address;
-    console.log("Socket IP: " + address.address + ":" + address.port);
+exports.track = function(req, session) {
+    lib.redis.set("tracking", function(error, data) {
+        var user = (session) ? session.user : {};
+        var organization = (session) ? session.organization : {};
+        var address = req.handshake.address;
+        var location = lib.geoip(address.address);
+        var tracking = (data) ? JSON.parse(data) : [];
+
+        tracking.push({
+            type: "socket",
+            lat: location.ll[0],
+            lon: location.ll[1],
+            ip: address.address,
+            port: address.port,
+            user_id: user.id || null,
+            organization_id: organization.id || null
+        });
+
+        lib.redis.set(
+            "tracking",
+            JSON.stringify(tracking),
+            lib.error.capture
+        );
+    });
 }
 
 exports.leave = function(req) {

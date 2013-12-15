@@ -15,7 +15,7 @@ module.exports = function(app) {
     app.io.route('editorDisconnectAll', editor.disconnectAll);
 
     /* Connect */
-    app.io.on('connection', core.connect);
+    app.io.on('connection', core.track);
 
     /* Disconnect */
     app.io.route('disconnect', core.leave);

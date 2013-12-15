@@ -5,6 +5,7 @@ window.editorUtil = {
     clean: true,
     fullscreenActive: false,
     fullscreeenTransitioning: false,
+    name: "",
     notification: function(message, permanent) {
         $(".header .bottom .filters")
             .toggle(!message)

@@ -18,6 +18,7 @@ git submodule update
 npm install
 
 #Start Server
+cd ~/middleware;
 forever start start.js
 
 #Install Complete

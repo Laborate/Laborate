@@ -36,7 +36,9 @@
     "winston": "0.7.2",
     "stripe": "2.1.0-rc3",
     "jquery.payment": "0.0.1",
-    "node-watch": "0.3.4"
+    "node-watch": "0.3.4",
+    "sitemap": "0.7.1",
+    "geoip-lite": "1.1.1"
   },
   "devDependencies": {
     "express-debug": "*"

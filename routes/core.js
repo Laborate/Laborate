@@ -4,9 +4,6 @@ var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
-    //Log IP Address
-    console.log("Web IP: " + req.headers['x-forwarded-for'] + ":" + req.headers['x-forwarded-port']);
-
     //Set Server Root For Non Express Calls
     req.session.server = req.protocol + "://" + req.host;
     req.session.save();
@@ -19,6 +16,32 @@ exports.setup = function(req, res, next) {
     res.renderOutdated = function(view, data) {
         res.render(view, data, outdatedhtml.makeoutdated(req, res));
     }
+
+    next();
+}
+
+exports.tracking = function(req, res, next) {
+    req.redis.set("tracking", function(error, data) {
+        var user = req.session.user;
+        var organization = req.session.organization.id;
+        var tracking = (data) ? JSON.parse(data) : [];
+
+        tracking.push({
+            type: "web",
+            lat: req.location.ll[0],
+            lon: req.location.ll[1],
+            ip: req.headers['x-forwarded-for'],
+            port: req.headers['x-forwarded-port'],
+            user_id: (user) ? user.id : null,
+            organization_id: (organization) ? organization.id : null
+        });
+
+        req.redis.set(
+            "tracking",
+            JSON.stringify(tracking),
+            req.error.capture
+        );
+    });
 
     next();
 }
@@ -211,4 +234,11 @@ exports.organization = function(req, res, next) {
     } else {
         next();
     }
+}
+
+exports.sitemap = function(req, res, next) {
+    req.sitemap(req, function(xml) {
+        res.set('Content-Type', 'application/xml');
+        res.send(xml);
+    });
 }

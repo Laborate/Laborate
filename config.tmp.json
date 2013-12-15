@@ -187,5 +187,37 @@
         "error_log": "../logs/middleware/log.error"
     },
     "cron": "../../logs/middleware/cron.log",
-    "gravatar": "https://www.gravatar.com/avatar/?d=mm"
+    "gravatar": "https://www.gravatar.com/avatar/?d=mm",
+    "sitemap": {
+        "cacheTime": 600000,
+        "routes": {
+            "default": {
+                "freq": "monthly",
+                "priority": 0.5
+            },
+            "register": {
+                "freq": "monthly",
+                "priority": 1
+            },
+            "login": {
+                "freq": "monthly",
+                "priority": 0.9
+            },
+            "reset": {
+                "freq": "monthly",
+                "priority": 0.7
+            }
+        },
+        "ignore": [
+            "logout",
+            "reload",
+            "verify",
+            "documents",
+            "editor",
+            "account",
+            "github",
+            "bitbucket",
+            "sitemap.xml"
+        ]
+    }
 }

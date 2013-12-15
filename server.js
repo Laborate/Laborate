@@ -104,17 +104,20 @@ app.configure(function() {
         })
     }));
 
-    //Custom Setup
-    app.use(require("./routes/core").setup);
+    //Custom Libraries
+    app.use(lib.express);
 
     //Error Handler (Routes)
     app.use(require("./routes/error").handler);
 
+    //Custom Setup
+    app.use(require("./routes/core").setup);
+
     //Custom Backdrop
     app.use(require("./routes/core").backdrop);
 
-    //Custom Libraries
-    app.use(lib.express);
+    //Custom Setup
+    app.use(require("./routes/core").tracking);
 
     //Custom Authentication
     app.use(require("./routes/security").core(crsf, basic_auth));

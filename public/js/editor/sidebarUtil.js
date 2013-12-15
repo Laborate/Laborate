@@ -103,13 +103,16 @@ window.sidebarUtil = {
 	setAccess: function(access) {
         $(".filter[data-key='file-access'] strong").text(access);
 	},
-	setTitle: function(direction, title) {
+	setTitle: function(direction, title, notification) {
+	    var notify = (notification) ? ("(" + notification + ")") : "";
 	    var extension = title.split(".")[title.split(".").length - 1];
 	    window.editorUtil.setModeExtension(extension);
 
+	    window.editorUtil.name = title;
+
 		$("#documentTitle").val(title);
 		$("#document_title").text(title);
-		$("title").text(title + window.config.delimeter + window.config.name);
+		$("title").text(title + notify + window.config.delimeter + window.config.name);
 		if(direction == "out") {
     		window.socketUtil.socket.emit('editorExtras' , {
     		    "docName": $("#documentTitle").val()
