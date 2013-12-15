@@ -202,11 +202,10 @@ $(function() {
             var _this = $(this);
         	if($.trim(_this.val()) != "") {
         		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar);
+        		  _this.val("");
         	}
 
-        	setTimeout(function() {
-        	    _this.val("");
-            }, 50);
+        	return false;
     	}
     });
 

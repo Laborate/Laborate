@@ -8,6 +8,10 @@ $(function() {
         window.sidebarUtil.change(false);
     });
 
+    $(".header .top .form").on("change", function() {
+        window.sidebarUtil.submit($(this));
+    });
+
     $(".search form, .sidebar form").on("submit", function() {
         window.sidebarUtil.submit($(this));
         return false;

@@ -256,12 +256,7 @@ window.sidebarUtil = {
                         });
 
                         _this.searchList[key].push(marked);
-                        _this.searchGetState().marked.push(marked);
                     }
-
-                    var state = _this.searchGetState();
-                    state.query = null;
-                    state.marked.length = 0;
                 });
             } catch(error) {
                 return error;
@@ -269,12 +264,13 @@ window.sidebarUtil = {
         }
 	},
 	searchRemove: function(search) {
-        var state = this.searchList[parseInt(search)];
+	    var _this = this;
+        var state = _this.searchList[parseInt(search)];
         window.editor.operation(function() {
             for (var i = 0; i < state.length; ++i) {
                     state[i].clear();
             }
-            delete state;
+            delete _this.searchList[parseInt(search)];
             $(".sidebar .form[name='highlight-word'] .item[data-search='" + search + "']")
                 .remove();
         });
@@ -283,17 +279,10 @@ window.sidebarUtil = {
     	$(".sidebar .form[name='highlight-word'] .listing")
     	    .append("                                                                       \
                 <div class='item' data-search='" + key + "'>                                \
-                    <div class='name'>" + search + "</div>                                  \
+                    <div class='name'>" + $('<div/>').text(search).html() + "</div>         \
                     <div class='remove " + window.config.icons.cross_square + "'></div>     \
                 </div>                                                                      \
     	    ");
 	},
-	searchList: {},
-	searchNewState: function() {
-    	this.posFrom = this.posTo = this.query = null;
-        this.marked = [];
-	},
-	searchGetState: function() {
-    	return window.editor._searchState || (window.editor._searchState = new this.searchNewState());
-	}
+	searchList: {}
 }
