@@ -2,7 +2,7 @@
 //          Chat Room Instances
 /////////////////////////////////////////////////
 window.chat = {
-    focus: true,
+    focus: false,
     count: 0,
     conversation: function() {
         return $('.chat .scroll-pane').data("jsp")

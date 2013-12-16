@@ -181,37 +181,41 @@ window.editorUtil = {
         }, 100);
     },
     setModeExtension: function(extension) {
-        if(extension in window.editorUtil.extensions) {
-            var modeName = window.editorUtil.extensions[extension];
-            var modeObject = window.editorUtil.languages[modeName];
-        }
-
-        if(!extension || !modeObject) {
-            if(!extension) {
-                Raven.captureMessage("Unknown Code Editor Extension: " + extension);
-            } else if(!modeObject && modeName) {
-                Raven.captureMessage("Unknown Code Editor Mode: " + modeName);
+        if(extension) {
+            if(extension in window.editorUtil.extensions) {
+                var modeName = window.editorUtil.extensions[extension];
+                var modeObject = window.editorUtil.languages[modeName];
             }
 
-            var modeName = "Plain Text";
-            var modeObject = window.editorUtil.languages[modeName];
-        }
+            if(!extension || !modeObject) {
+                if(!extension) {
+                    Raven.captureMessage("Unknown Code Editor Extension: " + extension);
+                } else if(!modeObject && modeName) {
+                    Raven.captureMessage("Unknown Code Editor Mode: " + modeName);
+                }
 
-        this.setMode(modeName, modeObject);
-        return modeName;
+                var modeName = "Plain Text";
+                var modeObject = window.editorUtil.languages[modeName];
+            }
+
+            this.setMode(modeName, modeObject);
+            return modeName;
+        }
     },
     setModeLanguage: function(language) {
-        var modeName = language;
-        var modeObject = window.editorUtil.languages[language];
+        if(language) {
+            var modeName = language;
+            var modeObject = window.editorUtil.languages[language];
 
-        if(!language || !modeObject) {
-            Raven.captureMessage("Unknown Code Editor Language: " + language);
+            if(!language || !modeObject) {
+                Raven.captureMessage("Unknown Code Editor Language: " + language);
 
-            var modeName = "Plain Text";
-            var modeObject = window.editorUtil.languages[modeName];
+                var modeName = "Plain Text";
+                var modeObject = window.editorUtil.languages[modeName];
+            }
+
+            this.setMode(modeName, modeObject);
         }
-
-        this.setMode(modeName, modeObject);
     },
     join: function(password, reconnect, callback) {
         //Have to wait for the socket to initialize

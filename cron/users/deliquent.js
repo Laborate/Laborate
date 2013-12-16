@@ -24,16 +24,16 @@ require('../init')(function() {
                                         priority: true,
                                         user_id: users[0].id
                                     }, lib.error.capture);
-                                    if(!--users.length) _this.finish();
+                                    if(users.end(key)) _this.finish();
                                 } else {
                                     lib.error.capture(error);
-                                    if(!--users.length) _this.finish();
+                                    if(users.end(key)) _this.finish();
                                 }
                             });
                         }, 100);
                     } else {
                         lib.error.capture(error);
-                        if(!--users.length) _this.finish();
+                        if(users.end(key)) _this.finish();
                     }
                 });
             });

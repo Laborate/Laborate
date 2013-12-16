@@ -18,12 +18,12 @@ require('../init')(function() {
 
                                     reply.changes = [];
                                     _this.lib.redis.set(room, JSON.stringify(reply));
-                                    if(!--documents.length) _this.finish();
+                                    if(documents.end(key)) _this.finish();
                                 }, 100);
                             });
                         } else {
                             lib.error.capture(error);
-                            if(!--documents.length) _this.finish();
+                            if(documents.end(key)) _this.finish();
                         }
                     })
                 });

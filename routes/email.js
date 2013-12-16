@@ -16,11 +16,36 @@ exports.index = function(req, res, next) {
 
         case "document/invite":
             req.email_test("document_invite", {
-                id: "adfasdfasdf",
-                name: "hello_world.js",
-                access: "Editor",
-                collaborators: config.profile.screen_name,
-                message: req.param("message")
+                name: config.profile.name.capitalize(),
+                document: {
+                    from: "jashanD",
+                    id: "adfasdfasdf",
+                    name: "hello_world.js",
+                    access: "editor",
+                    laborators: [
+                        {
+                            name: config.profile.screen_name,
+                            gravatar: "/favicon/500.png"
+                        },
+                        {
+                            name: config.profile.screen_name,
+                            gravatar: "/favicon/500.png"
+                        }
+                    ]
+                }
+            }, render(res));
+            break;
+
+        case "document/invite/2":
+            req.email_test("document_invite", {
+                name: config.profile.name.capitalize(),
+                document: {
+                    from: "jashanD",
+                    id: "adfasdfasdf",
+                    name: "hello_world.js",
+                    access: "viewer",
+                    laborators: []
+                }
             }, render(res));
             break;
 
@@ -29,6 +54,7 @@ exports.index = function(req, res, next) {
                 name: config.profile.name.capitalize()
             }, render(res));
             break;
+
         default:
             res.error(404);
             break;

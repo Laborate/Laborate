@@ -18,19 +18,19 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
 
-            //Users Tracking @5 Minutes
+            //Users Tracking (Every: 5 Minutes)
             tab.remove(tab.findComment("users_tracking"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/tracking.js"), "users_tracking").minute().every(5);
 
-            //Users Deliquent @1 Month
+            //Users Deliquent (Every: 1 Month)
             tab.remove(tab.findComment("users_deliquent"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/deliquent.js"), "users_deliquent").dom().on(1);
 
-            //Editor Users @30 Seconds
+            //Editor Users (Every: 1 Minute)
             tab.remove(tab.findComment("editor_users"));
-            tab.create(exportCommand + " && sleep 30; node " + path.join(root_dir, "/cron/editor/users.js"), "editor_users");
+            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/editor/users.js"), "editor_users");
 
-            //Editor Changes @5 Minutes
+            //Editor Changes (Every: 5 Minutes)
             tab.remove(tab.findComment("editor_changes"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(5);
 

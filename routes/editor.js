@@ -201,30 +201,50 @@ exports.invite = function(req, res, next) {
             if(documents.length == 1) {
                 var document = documents[0].document;
                 if(document.password == req.access_token) {
-                    req.email("document_invite", {
-                        from: req.session.user.name + " <" + req.session.user.email + ">",
-                        subject: document.name,
-                        users: $.map(req.param("addresses").split(","), function(address) {
-                            return {
-                                email: $.trim(address),
-                                name: document.name,
-                                id: document.pub_id,
-                                access: documents[0].permission.name,
-                                collaborators: $.map(document.roles, function(role) {
-                                    if(role.user) {
-                                        return (req.session.user.id != role.user.id) ? role.user.screen_name : null;
-                                    } else {
-                                        return null;
-                                    }
-                                }).join(", "),
-                                message: req.param("message")
-                            }
-                        })
-                    }, function(errors) {
-                        if(errors.length == 0) {
-                            res.json({ success: true });
+                    req.models.users.find({
+                        screen_name: req.param("screen_name")
+                    }, function(error, users) {
+                        if(!error && users.length == 1) {
+                            var user = users[0];
+                            document.invite(user.id, 2, function(success, reason) {
+                                if(success) {
+                                    req.email("document_invite", {
+                                        from: req.session.user.name + " <" + req.session.user.email + ">",
+                                        subject: document.name,
+                                        users: [{
+                                            email: user.email,
+                                            name: user.name,
+                                            document: {
+                                                from: req.session.user.screen_name,
+                                                name: document.name,
+                                                id: document.pub_id,
+                                                access: "editor",
+                                                laborators: $.map(document.roles, function(role) {
+                                                    if(role.user) {
+                                                        if(req.session.user.id != role.user.id) {
+                                                            return {
+                                                                name: role.user.screen_name,
+                                                                gravatar: role.user.gravatar
+                                                            }
+                                                        } else {
+                                                            return null;
+                                                        }
+                                                    } else {
+                                                        return null;
+                                                    }
+                                                })
+
+                                            }
+                                        }]
+                                    }, req.error.capture);
+
+                                    res.json({ success: true });
+                                } else {
+                                    res.error(200, reason || "Failed To Send Invite");
+                                }
+                            });
                         } else {
-                            res.error(200, "Failed To Send Invite", errors);
+                            res.error(200, "User Doesn't Exist");
                         }
                     });
                 } else {

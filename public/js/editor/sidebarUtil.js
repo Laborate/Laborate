@@ -44,7 +44,8 @@ window.sidebarUtil = {
                 form.find("input").val("");
                 break;
             case "invite":
-                this.invite(form);
+                this.invite(form.find("input").val());
+                form.find("input").val("");
                 break;
             case "commit":
                 this.commit(form);
@@ -104,15 +105,15 @@ window.sidebarUtil = {
         $(".filter[data-key='file-access'] strong").text(access);
 	},
 	setTitle: function(direction, title, notification) {
+	    var name = (notification) ? title.slice(0,17) : title;
 	    var notify = (notification) ? ("(" + notification + ")") : "";
 	    var extension = title.split(".")[title.split(".").length - 1];
-	    window.editorUtil.setModeExtension(extension);
-
+	    if(!notification) window.editorUtil.setModeExtension(extension);
 	    window.editorUtil.name = title;
 
 		$("#documentTitle").val(title);
 		$("#document_title").text(title);
-		$("title").text(title + notify + window.config.delimeter + window.config.name);
+		$("title").text(name + notify + window.config.delimeter + window.config.name);
 		if(direction == "out") {
     		window.socketUtil.socket.emit('editorExtras' , {
     		    "docName": $("#documentTitle").val()
@@ -287,5 +288,30 @@ window.sidebarUtil = {
                 </div>                                                                      \
     	    ");
 	},
-	searchList: {}
+	searchList: {},
+	invite: function(screen_name) {
+	    var _this = this;
+        $.post("/editor/" + url_params()["document"] + "/invite/", {
+            screen_name: screen_name,
+            access_token: window.editorUtil.access_token,
+            _csrf: window.config.csrf
+        }, function(json) {
+            var error = $(".form[name='invite'] .error_message");
+
+            if(json.success) {
+                error.slideUp(200);
+                _this.laborators();
+            } else {
+                error.text(json.error_message.toLowerCase()).slideDown(200);
+            }
+        });
+	},
+	laborators: function() {
+        $.post("/editor/" + url_params()["document"] + "/laborators/", {
+            access_token: window.editorUtil.access_token,
+            _csrf: window.config.csrf
+        }, function(json) {
+            console.log(json);
+        });
+	}
 }

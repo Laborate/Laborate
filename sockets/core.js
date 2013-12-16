@@ -27,8 +27,8 @@ exports.notifications = function(req) {
 
 exports.track = function(req, session) {
     lib.redis.get("tracking", function(error, data) {
-        var user = (session) ? session.user : {};
-        var organization = (session) ? session.organization : {};
+        var user = (session) ? (session.user || {}) : {};
+        var organization = (session) ? (session.organization || {}) : {};
         var address = req.handshake.address;
         var location = lib.geoip(address.address);
         var tracking = (data) ? JSON.parse(data) : [];
