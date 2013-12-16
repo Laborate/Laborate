@@ -302,7 +302,13 @@ window.sidebarUtil = {
                 error.slideUp(200);
                 _this.laborators();
             } else {
-                error.text(json.error_message.toLowerCase()).slideDown(200);
+                error
+                    .text(json.error_message.toLowerCase())
+                    .slideDown(200);
+
+                setTimeout(function() {
+                    error.slideUp(200);
+                }, 15000);
             }
         });
 	},
