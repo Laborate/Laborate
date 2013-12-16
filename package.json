@@ -1,6 +1,6 @@
 {
-  "name": "code",
-  "version": "0.0.1",
+  "name": "middleware",
+  "version": "0.0.5",
   "private": true,
   "dependencies": {
     "express.io": "1.1.13",
@@ -47,10 +47,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Laborate/code.git"
+    "url": "https://github.com/Laborate/middleware.git"
   },
   "bugs": {
-    "url": "http://github.com/Laborate/code/issues"
+    "url": "http://github.com/Laborate/middleware/issues"
   },
   "engines": {
     "node": "<= 0.10.7"

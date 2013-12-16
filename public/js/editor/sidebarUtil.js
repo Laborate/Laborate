@@ -308,7 +308,7 @@ window.sidebarUtil = {
 
                 setTimeout(function() {
                     error.slideUp(200);
-                }, 15000);
+                }, 10000);
             }
         });
 	},
