@@ -115,11 +115,11 @@ app.configure(function() {
     //Custom Backdrop
     app.use(require("./routes/core").backdrop);
 
-    //Custom Setup
-    app.use(require("./routes/core").tracking);
-
     //Custom Authentication
     app.use(require("./routes/security").core(crsf, basic_auth));
+
+    //Routes Tracking
+    app.use(require("./routes/core").tracking);
 
     //Custom Routing
     app.use(require("./routes/core").locals);

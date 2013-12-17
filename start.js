@@ -12,7 +12,7 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
     max: config.forever.max_failures,
     silent: config.forever.silent,
 
-    spinSleepTime: 0,
+    spinSleepTime: 10,
 
     watch: (config.general.production) ? false : config.forever.watch,
     watchDirectory: __dirname + "/" + config.forever.watch_directory,
