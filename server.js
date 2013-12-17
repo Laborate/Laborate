@@ -106,14 +106,14 @@ app.configure(function() {
     //Custom Libraries
     app.use(lib.express);
 
-    //Error Handler (Routes)
-    app.use(require("./routes/error").handler);
-
     //Custom Setup
     app.use(require("./routes/core").setup);
 
     //Custom Backdrop
     app.use(require("./routes/core").backdrop);
+
+    //Error Handler (Routes)
+    app.use(require("./routes/error").handler);
 
     //Custom Authentication
     app.use(require("./routes/security").core(crsf, basic_auth));

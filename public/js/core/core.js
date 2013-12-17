@@ -100,7 +100,7 @@ $(function() {
 });
 
 window.socketUtil = {
-    socket: io.connect(window.config.host + ":" + window.config.port, {
+    socket: io.connect(window.config.socket, {
         "sync disconnect on unload": true
     }),
     pageTrack: function() {

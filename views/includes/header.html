@@ -57,9 +57,10 @@
         <!-- Site Config -->
         <script type="text/javascript">
             window.config = {
-                host: "<%= host %>",
                 csrf: "<%= csrf %>",
+                host: "<%= host %>",
                 port: "<%= port %>",
+                socket: "<%= host + ":" + port %>",
                 title: "<%= title %>",
                 name: "<%= site_title %>",
                 delimeter: "<%= site_delimeter %>",
