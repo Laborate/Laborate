@@ -1,6 +1,3 @@
-var lib = require("../lib")
-lib.models(exports);
-
 exports.pageTrack = function(req) {
     exports.track(req, req.session);
     req.session.last_page = req.data;

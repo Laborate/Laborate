@@ -42,7 +42,6 @@ exports.tracking = function(req, res, next) {
             req.error.capture
         );
     });
-
     next();
 }
 

@@ -69,10 +69,10 @@ exports.document = function(req) {
         req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 
-        editorUtil.redisClient.get(editorUtil.socketRoom(req), function(error, reply) {
+        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
             reply = JSON.parse(reply);
             reply.changes.push(req.data["changes"]);
-            editorUtil.redisClient.set(editorUtil.socketRoom(req), JSON.stringify(reply));
+            lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
         });
     }
 }
@@ -104,13 +104,13 @@ exports.extras = function(req) {
     }
 
     this.get = function(callback) {
-        editorUtil.redisClient.get(editorUtil.socketRoom(req), function(error, reply) {
+        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
             callback(JSON.parse(reply));
         });
     }
 
     this.save = function(data) {
-        editorUtil.redisClient.set(editorUtil.socketRoom(req), JSON.stringify(data));
+        lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
     }
 
     //Logic

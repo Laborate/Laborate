@@ -1,7 +1,3 @@
-var lib = require("../lib/");
-var editorJsdom = lib.jsdom.editor;
-lib.models(exports);
-exports.redisClient = lib.redis;
 exports.roomUsers = new Array();
 
 exports.users = function(user, room) {
@@ -19,7 +15,7 @@ exports.users = function(user, room) {
 }
 
 exports.accessCheck = function(user, room, token, callback) {
-    exports.models.documents.roles.find({
+    lib.models.documents.roles.find({
         user_id: user,
         document_pub_id: room[0]
     }, function(error, documents) {
@@ -52,14 +48,14 @@ exports.clientData = function(room, document_role, callback) {
     var document = document_role.document;
     var permission = document_role.permission;
 
-    exports.redisClient.get(room, function(error, reply) {
+    lib.redis.get(room, function(error, reply) {
         if(!error && reply) {
             reply = JSON.parse(reply);
             document.breakpoints = reply.breakpoints;
             document.changes = reply.changes;
         } else {
             document.changes = [];
-            exports.redisClient.set(room, JSON.stringify({
+            lib.redis.set(room, JSON.stringify({
                 id: document.id,
                 breakpoints: document.breakpoints,
                 changes: [],
@@ -110,26 +106,26 @@ exports.removeUser = function(req, user, room) {
 
             if(Object.keys(exports.roomUsers[room]).length == 0) {
                 delete exports.roomUsers[room];
-                exports.models.documents.roles.find({
+                lib.models.documents.roles.find({
                     user_id: req.session.user.id,
                     document_pub_id: exports.room(req)
                 }, function(error, documents) {
                     if(!error && documents.length == 1) {
                         var document = documents[0].document;
-                        exports.redisClient.get(room, function(error, reply) {
+                        lib.redis.get(room, function(error, reply) {
                             reply = JSON.parse(reply);
                             if(reply.changes) {
-                                editorJsdom(document.content, reply.changes, function(content) {
+                                lib.jsdom.editor(document.content, reply.changes, function(content) {
                                     document.save({
                                         content: content.split("\n"),
                                         breakpoints: reply.breakpoints
                                     });
-                                    exports.redisClient.del(room);
+                                    lib.redis.del(room);
                                 });
                             }
                         });
                     } else  {
-                        exports.redisClient.del(room);
+                        lib.redis.del(room);
                     }
                 });
             }
