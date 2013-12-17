@@ -1,0 +1,29 @@
+<% include ../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="backdrop-core">
+    <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
+        <div id="backdrop-container">
+             <form action="/auth/register/" autocomplete="on">
+                <input type="text" class="backdrop-input" autofocus="on" name="name" placeholder="full name"/>
+                <input type="text" class="backdrop-input" name="screen_name" placeholder="screen name (public)"/>
+                <input type="email" class="backdrop-input" name="email" placeholder="email"/>
+                <input type="password" class="backdrop-input" name="password" placeholder="password"/>
+                <input type="password" class="backdrop-input" name="password_confirm" placeholder="confirm password"/>
+                <input type="submit" class="backdrop-button" value="Register"/>
+            </form>
+        </div>
+        <div class="backdrop-bottom">
+            Have an account? <a class="backdrop-link" href="/login/">Login</a>
+        </div>
+    </div>
+    <div id="backdrop-footer">
+        <ul>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+            <li><a href="/">© <%= company %></a></li>
+        </ul>
+    </div>
+</div>
+<% include ../includes/footer.html %>

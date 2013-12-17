@@ -2,6 +2,10 @@ var core = require("./core");
 var editor = require("./editor");
 
 module.exports = function(app) {
+    /* Core */
+    app.io.route('pageTrack', core.pageTrack);
+    app.io.route('notifications', core.notifications);
+
     /* Editor */
     app.io.route('editorJoin', editor.join);
     app.io.route('editorChatRoom', editor.chatRoom);
@@ -9,6 +13,9 @@ module.exports = function(app) {
     app.io.route('editorCursors', editor.cursors);
     app.io.route('editorExtras', editor.extras);
     app.io.route('editorDisconnectAll', editor.disconnectAll);
+
+    /* Connect */
+    app.io.on('connection', core.track);
 
     /* Disconnect */
     app.io.route('disconnect', core.leave);

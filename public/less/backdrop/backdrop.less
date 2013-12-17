@@ -1,112 +1,202 @@
-/* BackDrop Core */
+@import '../core/index';
+@import '../compless/all';
+
 #backdrop {
-    position:  absolute;
+    position: absolute;
     width: 100%;
     height: 100%;
-    top: 0px;
-    left: 0px;
-    font-family: "Helvetica Neue";
-    background-color: #F0F1F1;
-    background: -webkit-linear-gradient(315deg, rgba(241, 243, 243, 1), rgba(241, 243, 243, 1) 80%);
     z-index: 100000;
+    top: 0;
+    left: 0;
+    color: #fff;
+    background: @color_backdrop;
 }
 
-#backdrop * {
-   font-family: "Helvetica Neue";
-}
-
-#backdrop #backdropLogo {
-    font-family: "Not Just Groovy";
-    font-size: 30px;
-    text-align: center;
-    color: #444;
-}
-
-/* BackDrop Specific */
-#backdrop .backdropContainer {
-    padding: 15px;
-    background: #f8f8f8;
-    width: 250px;
-    margin: 0px auto;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border: solid 1px #ccc;
-    -webkit-box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
-    -moz-box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
-    box-shadow: #ededed 0 1px 3px, #ededed 0 0 0 1px, inset #e5e5e5 0 -1px 0;
-}
-
-#backdrop #backdropDocTitle {
-    padding-right: 80px;
-}
-
-/* BackDrop General */
-#backdrop table {
+#backdrop-img {
+    position: absolute;
     width: 100%;
-    padding: 0px;
-    margin: 0px;
+    height: 100%;
+    z-index: 100001;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    .transform(blur(2px));
 }
 
-#backdrop form {
-    padding: 0px;
-    margin: 0px;
+#backdrop-gradient {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 100002;
+    .linear-gradient(0deg, rgba(0, 0, 0, .80), rgba(0, 0, 0, .15));
 }
 
-#backdrop a {
+#backdrop-core {
+    z-index: 100002;
+    display: none;
+}
+
+#backdrop-logo {
+    font-family: "Not Just Groovy";
+    font-size: 26px;
+    text-align: center;
+}
+
+#backdrop-container {
+    width: 200px;
+    padding: 20px;
+    margin: auto;
+    border: solid 1px solid 1px rgba(0,0,0,.2);
+    .border-radius(5px);
+    .linear-gradient(0deg, rgba(0, 0, 0, .3), rgba(0, 0, 0, .2));
+    .box-shadow(0 1px 10px rgba(0, 0, 0, .2));
+}
+
+#backdrop-container.larger {
+    width: 250px;
+}
+
+#backdrop-profile {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 10px auto;
+    outline: none;
+    overflow: hidden;
+    border: solid 4px rgba(0, 0, 0, .10);
+    background: rgba(0, 0, 0, .1);
+    .border-radius(50%);
+}
+
+#backdrop-profile img {
+    width: 75px;
+    height: 75px;
+}
+
+.backdrop-link {
+    color: @color_backdrop_link;
     text-decoration: none;
 }
 
-#backdrop .backdropContainer a {
-    color: #0073e0;
+.backdrop-link:hover {
+    text-decoration: underline;
 }
 
-#backdrop .backdropContainer a:hover {
-   text-decoration: underline;
+.backdrop-link:hover:active {
+    color: darken(@color_backdrop_link, 5%);
+    text-decoration: underline;
 }
 
-#backdrop .seperatorRequired {
-    border-bottom: thin solid #CCC;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-}
-
-#backdrop .backdropInitalWelcome {
-    font-size: 18px;
-    text-align: center;
-    color: #516067;
-    width: 100%;
-    word-wrap: break-word;
-}
-
-#backdrop .backdropButton {
-    margin: 0px !important;
-}
-
-#backdrop input[type=text], #backdrop input[type=password] {
-    outline: none;
-    width: 100%;
+.backdrop-text {
     font-size: 16px;
-    padding: 5px;
-    border: thin solid #999;
-    background: url("/img/tshadow.png") #FFF;
-    background-repeat: repeat-x;
-    background-position: 0px -4px;
-    background-position-x: 0px;
-    background-position-y: -4px;
-    -moz-border-radius: 3px;
-	border-radius: 3px;
-	margin-top: 0px;
-}
-
-#backdrop input {
-	margin-bottom: 10px;
-	outline: none;
-	border: none;
-}
-
-#backdrop .textError {
-    display: none;
-    margin-top: 10px;
+    line-height: 20px;
+    margin-bottom: 10px;
     text-align: center;
-    color:#CC352D;
+    .ellipsis();
+}
+
+.backdrop-input {
+    width: 100%;
+    border: none;
+    padding: 8px 10px;
+    background-color: #fff;
+    background-image: url('/img/tshadow.png');
+    background-repeat: repeat-x;
+    background-position: 0 -2px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    .border-radius(4px);
+}
+
+.backdrop-input.error {
+    background-color: @color_backdrop_input_error;
+}
+
+.backdrop-button {
+    width: 100%;
+    background: @color_backdrop_button;
+    border: none;
+    padding: 7px 0;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    .border-radius(4px);
+}
+
+.backdrop-button:hover {
+    background: darken(@color_backdrop_button, 2%);
+}
+
+.backdrop-button:hover:active {
+    background: darken(@color_backdrop_button, 5%);
+}
+
+.backdrop-button.error {
+    background-color: @color_backdrop_button_error;
+}
+
+.backdrop-button.error:hover {
+    background-color: darken(@color_backdrop_button_error, 2%);
+}
+
+.backdrop-button.error:hover:active {
+    background-color: darken(@color_backdrop_button_error, 5%);
+}
+
+.backdrop-bottom {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#backdrop-footer {
+    display: none;
+    position: absolute;
+    bottom: 30px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 100002;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        outline: 0;
+        display: inline;
+        list-style: disc;
+
+        li {
+            margin: 0 13px;
+            float: left;
+
+            &:first-child {
+                margin-left: 0;
+                list-style: none;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.organization {
+    #backdrop-img {
+        opacity: .6;
+    }
+
+    #backdrop-gradient {
+        .linear-gradient(0deg, rgba(0, 0, 0, .70), rgba(0, 0, 0, .1));
+    }
+
+
+    #backdrop-container {
+        .linear-gradient(0deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, .4));
+    }
 }

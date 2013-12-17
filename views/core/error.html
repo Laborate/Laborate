@@ -1,0 +1,22 @@
+<% include ../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
+         <div id="backdrop-container" class="larger backdrop-text">
+            <%- error_html %>
+            <% if(home != false) { %>
+                <br/>Please continue back <a class="backdrop-link" href="/">home</a>.
+            <% } %>
+         </div>
+    </div>
+    <div id="backdrop-footer">
+        <ul>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+            <li><a href="/">© Laborate.io</a></li>
+        </ul>
+    </div>
+</div>
+<% include ../includes/footer.html %>

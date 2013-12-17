@@ -1,86 +1,90 @@
 //////////////////////////////////////////////////
 //          Chat Room Instances
 /////////////////////////////////////////////////
-window.chatRoom = {
+window.chat = {
+    focus: false,
+    count: 0,
+    conversation: function() {
+        return $('.chat .scroll-pane').data("jsp")
+    },
     clear: function() {
-        $(".jspPane").html('<div id="chatBottom"></div>');
-         window.chatRoom.resize();
+        $(".jspPane").html("");
+         window.chat.resize();
     },
     help: function() {
-        help = '<strong><div class="chatRoomHelper" style="text-align:left; text-decoration:underline; margin: 5px 0px 0px 0px;">Console Commands</div></strong>';
-        help += '<div style="text-align:left; font-size:12px; color:#666; margin: 5px 0px;" class="chatRoomHelper">1 command per message</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:c = clear screen</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:h = console commands</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">:n = toggle chat notifications</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px; margin-bottom: 30px;">:s = toggle sidebar visibility</div>';
-        help += '<strong><div class="chatRoomHelper" style="text-align:left; text-decoration:underline;">Message References</div></strong>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">&number = scroll to line</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">#number = highlight line</div>';
-        help += '<div class="chatRoomHelper" style="text-align:left; text-indent: 10px;">@pattern = search for word</div>';
-    	$(".jspPane").append(help);
-    	window.chatRoom.resize();
-    	window.chatRoom._scrollToBottom();
+    	window.chat.helper([
+            ['Console Commands', 'bold underline'],
+            ['1 command per message', 'indent small'],
+            [':c = clear history', 'indent'],
+            [':h = console commands', 'indent'],
+            [':n = toggle notifications', 'indent'],
+            ['', 'seperator'],
+            ['Message References', 'bold underline'],
+            ['&number = scroll', 'indent'],
+            ['#number / range = highlight', 'indent'],
+            ['^word = search', 'indent']
+    	]);
     },
     toggle: function() {
         if(window.notifications == false) {
             window.notifications = true;
-            window.chatRoom.status("Chat Notifications Turned On");
+            window.chat.status("Chat Notifications Turned On");
         }
         else {
-            window.chatRoom.status("Chat Notifications Turned Off");
+            window.chat.status("Chat Notifications Turned Off");
             window.notifications = false;
         }
-        window.chatRoom.resize();
-        window.chatRoom._scrollToBottom();
+        window.chat.resize();
+        window.chat._scrollToBottom();
 
     },
-    sidebar: function() {
-        if($("#sidebar").is(":visible")) {
-            $("#editorCodeMirror").css("margin-left", "5px");
-        } else {
-            $("#editorCodeMirror").css("margin-left", "");
-        }
-        $("#sidebar").toggle();
-        window.editor.refresh();
-    },
-    message: function(from, message, direction) {
-        if(!window.chatRoom._check(message, "commands", from)) {
-            if(window.chatRoom._check(message, "js")) {
+    message: function(from, message, direction, gravatar) {
+        if(!window.chat._check(message, "commands", from)) {
+            if(window.chat._check(message, "js")) {
                 if(direction == "out") {
-                    window.chatRoom._pushMessage(message);
+                    window.chat._pushMessage(message);
                 }
 
-                var lineContent = window.chatRoom._check(message, "line");
-                var searchContent = window.chatRoom._check(lineContent, "search");
-                var scrollContent = window.chatRoom._check(searchContent, "scroll");
-                window.chatRoom._inputMessage(from, scrollContent, direction);
+                var lineContent = window.chat._check(message, "line");
+                var searchContent = window.chat._check(lineContent, "search");
+                var scrollContent = window.chat._check(searchContent, "scroll");
+                var linkContent = window.chat._check(scrollContent, "links");
+                window.chat._inputMessage(from, linkContent, direction, gravatar);
             }
         }
-        window.chatRoom.resize();
-        window.chatRoom._scrollToBottom();
+        window.chat.resize();
+        window.chat._scrollToBottom();
     },
     status: function(message) {
-        window.chatRoom._inputStatus(message);
-        window.chatRoom.resize();
-        window.chatRoom._scrollToBottom();
+        window.chat._inputStatus(message);
+        window.chat.resize();
+        window.chat._scrollToBottom();
+    },
+    helper: function(messages) {
+        window.chat._inputHelper(messages);
+        window.chat.resize();
+        window.chat._scrollToBottom();
     },
     resize: function() {
-        var header = $("#header").height();
-        var chatroom_messenger = $("#chatBox").height();
-        var window_height = window.innerHeight;
-        $("#chatConversation").height((window_height - (header + chatroom_messenger + 30)) + "px");
+        if(!window.editorUtil.fullscreeenTransitioning) {
+            if($(".header .top").is(":visible")) {
+                $(".chat").height($(window).height() - $(".header .top").outerHeight());
+            } else {
+                $(".chat").height($(window).height());
+            }
+        }
     },
     signIn: function(screenName) {
         window.screenName = screenName;
         $.cookie("screenName", screenName);
-        window.chatRoom.status(screenName + " has signed in");
+        window.chat.status(screenName + " has signed in");
     },
     signOut: function(screenName) {
-        window.chatRoom.status(screenName + " has signed out");
+        window.chat.status(screenName + " has signed out");
     },
     _scrollToBottom: function() {
-        window.jscrollData.reinitialise();
-        window.jscrollData.scrollToPercentY("100");
+        window.window.chat.conversation().reinitialise();
+        window.window.chat.conversation().scrollToPercentY("100");
     },
     _check: function(message, type) {
         if(type == "commands") {
@@ -88,13 +92,12 @@ window.chatRoom = {
             commands = {
                 ":c": "clear",
 		        ":h": "help",
-		        ":n": "toggle",
-		        ":s": "sidebar"
+		        ":n": "toggle"
             }
 
         	for(var command in commands) {
         		if(message == command) {
-                    window.chatRoom[commands[command]](message);
+                    window.chat[commands[command]](message);
                     return true
         		}
         	}
@@ -104,9 +107,12 @@ window.chatRoom = {
             } else {
                 return false;
             }
+        } else if(type == "links") {
+            var urlRegex = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)|((mailto:)?[_.\w-]+@([\w][\w\-]+\.)+[a-zA-Z]{2,3})/g;
+            return message.replace(urlRegex, '<a class="link" target="_blank" href="$1">$1</a>');
         } else {
             types = {
-                "search": [/.*@.*/ig, "@", "window.sidebarUtil.search"],
+                "search": [/.*\^.*/ig, "^", "window.sidebarUtil.search"],
                 "line": [/.*#\d.*/ig, "#", "window.sidebarUtil.highlight"],
                 "scroll": [/.*&.*/ig, "&", "window.sidebarUtil.jumpToLine"]
             }
@@ -138,67 +144,113 @@ window.chatRoom = {
         	}
         }
     },
-    _inputMessage: function(from, message, direction) {
-        var html = '<div class="chatRoomMessage ' + direction + '"><div class="chatRoomName">';
-        html += from +'</div><div class="chatRoomBubble">' + message +'</div></div>';
-        $(".jspPane").append(html);
-    },
-    _inputStatus: function(status) {
-        if(window.notifications != false) {
-    	   $(".jspPane").append('<div class="chatRoomStatus">' + status + '</div>');
+    _inputMessage: function(from, message, direction, gravatar) {
+        window.chat._notify();
+        var last_message = $(".jspPane .item").eq(-1);
+        if(last_message.attr("data-direction") == direction) {
+            last_message
+                .find(".bubble")
+                .append('<div class="separator"></div>' + message);
+        } else {
+            var html = ('                                       \
+                <div data-direction="' + direction + '"         \
+                    class="item message ' + direction + '">             \
+                    <div class="gravatar">                      \
+                        <img src="' + gravatar + '" />          \
+                    </div>                                      \
+                    <div class="bubble">' + message + '</div>   \
+                </div>                                          \
+            ');
+            $(".jspPane").append(html);
         }
     },
-    _reset: function() {
-        $("#messenger").blur();
-        setTimeout(function() {
-            $("#messenger").val('').focus()
-        }, 05);
+    _inputStatus: function(status) {
+        window.chat._notify();
+        if(window.notifications != false) {
+    	   $(".jspPane").append('<div class="item status">' + status + '</div>');
+        }
+    },
+    _inputHelper: function(helpers) {
+        var html = '<div class="item helper">';
+
+        $.each(helpers, function(key, helper) {
+            html += "<div class='" + (helper[1] || "") + "'>" + helper[0] + "</div>";
+
+            if(key == helpers.length-1) {
+                html += "</div>";
+            }
+        })
+
+        $(".jspPane").append(html);
     },
     _pushMessage: function(message) {
         window.socketUtil.socket.emit('editorChatRoom', {
             "message": message,
             "isStatus": false
         });
+    },
+    _notify: function() {
+        if(!window.chat.focus) {
+            window.chat.count++;
+            window.sidebarUtil.setTitle(
+                "in",
+                window.editorUtil.name,
+                window.chat.count
+            );
+        }
     }
 }
 
 //////////////////////////////////////////////////
 //          Chat Room Control Functions
 /////////////////////////////////////////////////
-$(window).ready(function() {
-    $(function() {
-    	var pane = $('.scroll-pane');
-    	pane.jScrollPane({
-    	    showArrows: false,
-    	    animateScroll: true,
-    	    autoReinitialise: true,
-    	    hideFocus: true
-        });
-    	window.jscrollData = $('.scroll-pane').data('jsp');
-	});
-
-    setTimeout(window.chatRoom.help, 10);
-    setInterval(window.chatRoom.resize, 1000);
-    $(window).resize(window.chatRoom.resize);
+$(function() {
+    setTimeout(window.chat.help, 10);
+    setInterval(window.chat.resize, 1000);
+    $(window).resize(window.chat.resize);
 
     //Submit New Message
-    $("#messenger").live('keydown', function(e) {
+    $(".messenger textarea").on('keydown', function(e) {
         //Checks if enter key is pressed
         if(e.which == 13) {
-        	if($.trim($(this).val()) != "") {
-        		  window.chatRoom.message("me", $.trim($(this).val()), "out");
+            var _this = $(this);
+        	if($.trim(_this.val()) != "") {
+        		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar);
+        		  _this.val("");
         	}
-        	window.chatRoom._reset();
+
+        	return false;
     	}
+    });
+
+    $(".messenger textarea").on('focus', function() {
+        window.chat.count = 0;
+        window.sidebarUtil.setTitle("in", window.editorUtil.name);
     });
 
     //Pull Message
     window.socketUtil.socket.on('editorChatRoom', function (data) {
-        if(data['isStatus']) {
-            window.chatRoom.status(data['message']);
+        if(data.isStatus) {
+            window.chat.status(data.message);
         }
         else {
-            window.chatRoom.message(data['from'], data['message'], "in");
+            window.chat.message(data.from, data.message, "in", data.gravatar);
+        }
+
+        if($("#header").is(":visible") == false) {
+            var count = $("#chat_bubble_count").text();
+            count = (count) ? parseInt(count) : 0;
+            $("#chat_bubble_count").text(count + 1);
         }
     });
+});
+
+
+
+window.addEventListener('focus', function() {
+    window.chat.focus = true;
+});
+
+window.addEventListener('blur', function() {
+    window.chat.focus = false;
 });

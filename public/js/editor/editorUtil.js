@@ -3,42 +3,108 @@
 /////////////////////////////////////////////////
 window.editorUtil = {
     clean: true,
-    setChanges: function(direction, data) {
-        if(data['origin'] != "setValue") {
-            if(direction == "out") {
-                if(window.editorUtil.clean) {
-                    window.socketUtil.socket.emit('editorDocument', {
-                        "changes": data
-                    });
-                } else {
-                    window.editorUtil.clean = true;
-                }
-            } else if(direction == "in") {
-                if(window.editorUtil.clean) {
-                    window.editorUtil.clean = false;
-                    window.editor.replaceRange(data['text'], data['from'], data['to']);
-                } else {
-                    window.editorUtil.clean = true;
-                }
+    fullscreenActive: false,
+    fullscreeenTransitioning: false,
+    name: "",
+    notification: function(message, permanent) {
+        $(".header .bottom .filters")
+            .toggle(!message)
+            .next(".message")
+            .text(message)
+            .toggle(!!message) ;
+
+        if(!permanent && message) {
+            setTimeout(function() {
+                window.editorUtil.notification(false);
+            }, 15000);
+        }
+    },
+    fullscreen: function(show) {
+        var _this = this;
+        _this.fullscreenActive = !show;
+        _this.fullscreeenTransitioning = true;
+        $.cookie("fullscreen", !show, {
+            path: '/editor',
+            expires: 365
+        });
+
+        if(show) {
+            $(".sidebar")
+                .removeClass("fullscreen");
+
+            setTimeout(function() {
+                $(".content .fullscreen")
+                    .removeClass(window.config.icons.contract + " active")
+                    .addClass(window.config.icons.expand);
+                $(".sidebar .profile , .header .top").slideDown(500);
+                $(".chat").animate({
+                    top: 95,
+                    height: $(window).height() - $(".header .top").outerHeight()
+                }, 500);
+            }, 100);
+        } else {
+            $(".content .fullscreen")
+                .removeClass(window.config.icons.expand)
+                .addClass(window.config.icons.contract + " active");
+            $(".sidebar .profile , .header .top").slideUp(500);
+            $(".chat").animate({
+                top: 0,
+                height: $(window).height()
+            }, 500);
+
+            setTimeout(function() {
+                $(".sidebar")
+                    .addClass("fullscreen");
+            }, 600);
+        }
+
+        setTimeout(function() {
+            _this.fullscreeenTransitioning = false;
+            _this.resize();
+            window.chat.resize();
+        }, 600);
+    },
+    setChanges: function(direction, data, override) {
+        window.editorUtil.setInfo();
+
+        if(direction == "out" && window.editorUtil.initialized) {
+            if(window.editorUtil.clean) {
+                window.socketUtil.socket.emit('editorDocument', {
+                    "changes": data
+                });
+            } else {
+                window.editorUtil.clean = true;
+            }
+        } else if(direction == "in") {
+            if(window.editorUtil.clean || override) {
+                window.editorUtil.clean = false;
+                window.editor.replaceRange(data['text'], data['from'], data['to']);
+            } else {
+                window.editorUtil.clean = true;
             }
         }
     },
     gutterClick: function(direction, data) {
-        var info = window.editor.lineInfo(parseInt(data["line"]));
-        var marker = document.createElement("div");
-        marker.className ="CodeMirror-breakpoint";
-        marker.innerHTML = "●";
-        if(direction == "out") {
-            window.editor.setGutterMarker(data["line"], "breakpoints", info.gutterMarkers ? null : marker);
-            window.socketUtil.socket.emit('editorExtras', {
-                "breakpoint": {
-                    "line": data["line"],
-                    "remove": info.gutterMarkers
+        $.each(data, function(index, value) {
+            if(!isNaN(value["line"])) {
+                var info = window.editor.lineInfo(parseInt(value["line"]));
+                var marker = document.createElement("div");
+                marker.className ="CodeMirror-breakpoint";
+                marker.innerHTML = "●";
+
+                if(direction == "out" && window.editorUtil.initialized) {
+                    window.editor.setGutterMarker(value["line"], "breakpoints", info.gutterMarkers ? null : marker);
+                    window.socketUtil.socket.emit('editorExtras', {
+                        "breakpoint": [{
+                            "line": value["line"],
+                            "remove": info.gutterMarkers
+                        }]
+                    });
+                } else if(direction == "in") {
+                    window.editor.setGutterMarker(value["line"], "breakpoints", value["remove"] ? null : marker);
                 }
-            });
-        } else if(direction == "in") {
-            window.editor.setGutterMarker(data["line"], "breakpoints", data["remove"] ? null : marker);
-        }
+            }
+        });
     },
     users: function(data) {
         $.when($(Object.keys(window.users)).not(data).each(function(index, value) {
@@ -64,7 +130,7 @@ window.editorUtil = {
         $("#contributor_info #contributor_info_name").text("");
     },
     userCursors: function(direction, data) {
-        if(direction == "out") {
+        if(direction == "out" && window.editorUtil.initialized) {
             if(data['leave']) {
                 window.socketUtil.socket.emit('editorCursors', {"leave":true});
             } else {
@@ -82,49 +148,134 @@ window.editorUtil = {
             }
         }
     },
-    refresh: function() {
-        var header = $("#header").height();
-        var window_height = window.innerHeight;
-        if($("#header").is(":visible")) {
-            window.editor.setSize("", (window_height - header - 38) + "px")
-        } else {
-            window.editor.setSize("", (window_height - header - 68) + "px")
-        }
-        editor.refresh();
-    },
-    fullScreen: function() {
-        if($("#header").is(":visible")) {
-            $("#editorCodeMirror").css({"margin":" 30px auto 0 auto", "width": "90%"});
-            $("#full_screen").addClass("icon-contract-2");
-            $("#full_screen").removeClass("icon-expand-2");
-            $("#full_screen").css({"font-size": "24px", "margin": "0 0 0 30px"});
-            $("#sidebar, #header, #chatRoom").hide();
-        } else {
-            $("#editorCodeMirror").css({"margin": "", "width": ""});
-            $("#full_screen").addClass("icon-expand-2");
-            $("#full_screen").removeClass("icon-contract-2");
-            $("#full_screen").css({"font-size": "", "margin": ""});
-            $("#sidebar, #header, #chatRoom").show();
-        }
+    setInfo: function() {
+        var file = window.editor.getValue();
 
-        window.editor.refresh();
-        window.editorUtil.refresh();
+        //File Size
+        $(".filter[data-key='file-size'] strong").text(file_size.size(file));
+
+        //File Line Count
+        $(".filter[data-key='file-lines'] strong").text(file.split("\n").length);
     },
-    join: function(password) {
+    resize: function() {
+        if(!window.editorUtil.fullscreeenTransitioning) {
+            window.editor.setSize("", $(window).height() - $(".header").height());
+            editor.refresh();
+        }
+    },
+    setMode: function(name, object) {
+        window.sidebarUtil.defaultLanguage(name);
+        CodeMirror.autoLoadMode(window.editor, $.trim(object.mode));
+
+        setTimeout(function() {
+            window.editor.setOption("mode", $.trim(object.mime));
+
+            setTimeout(function() {
+                if(editor.getMode().name == "null") {
+                    window.editor.setOption("mode", $.trim(object.mode));
+                    setTimeout(function () {
+                        window.editor.refresh();
+                    }, 100);
+                }
+            }, 100);
+        }, 100);
+    },
+    setModeExtension: function(extension) {
+        if(extension) {
+            if(extension in window.editorUtil.extensions) {
+                var modeName = window.editorUtil.extensions[extension];
+                var modeObject = window.editorUtil.languages[modeName];
+            }
+
+            if(!extension || !modeObject) {
+                if(!extension) {
+                    Raven.captureMessage("Unknown Code Editor Extension: " + extension);
+                } else if(!modeObject && modeName) {
+                    Raven.captureMessage("Unknown Code Editor Mode: " + modeName);
+                }
+
+                var modeName = "Plain Text";
+                var modeObject = window.editorUtil.languages[modeName];
+            }
+
+            this.setMode(modeName, modeObject);
+            return modeName;
+        }
+    },
+    setModeLanguage: function(language) {
+        if(language) {
+            var modeName = language;
+            var modeObject = window.editorUtil.languages[language];
+
+            if(!language || !modeObject) {
+                Raven.captureMessage("Unknown Code Editor Language: " + language);
+
+                var modeName = "Plain Text";
+                var modeObject = window.editorUtil.languages[modeName];
+            }
+
+            this.setMode(modeName, modeObject);
+        }
+    },
+    join: function(password, reconnect, callback) {
         //Have to wait for the socket to initialize
         interval = setInterval(function() {
             if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
-                window.socketUtil.socket.emit("editorJoin", [password, false], function(json) {
+                window.socketUtil.socket.emit("editorJoin", [password, reconnect], function(json) {
                     if(json.success) {
-                        window.editor.setValue(json.content);
-                        window.editor.clearHistory();
-                        $("#backdrop").hide();
                         if(password) {
                             window.editorUtil.access_token = password;
                         } else {
                             window.editorUtil.access_token = null;
                         }
+
+                        async.series([
+                            function(next) {
+                                $("#editorCodeMirror").css({"opacity": "0"});
+                                next();
+                            },
+                            function(next) {
+                                window.editor.setValue(json.content);
+                                next();
+                            },
+                            function(next) {
+                                window.editorUtil.gutterClick("in", json.breakpoints);
+                                next();
+                            },
+                            function(next) {
+                                if(json.changes.length != 0) {
+                                    window.editor.operation(function() {
+                                        $.each(json.changes, function(index, value) {
+                                            window.editorUtil.setChanges("in", value, true);
+                                            if (index == json.changes.length-1) {
+                                                next();
+                                            }
+                                        });
+                                    });
+                                } else {
+                                    next();
+                                }
+                            },
+                            function(next) {
+                                window.sidebarUtil.setAccess(json.access);
+                                window.sidebarUtil.setTitle("in", json.name);
+                                window.editorUtil.setInfo();
+                                window.editor.clearHistory();
+                                setTimeout(next, 1000);
+                            },
+                            function(next) {
+                                if(callback) {
+                                    callback();
+                                } else {
+                                    $("#backdrop").hide();
+                                    $("#editorCodeMirror").css({"opacity": ""});
+                                }
+
+                                window.editorUtil.initialized = true;
+                                next();
+                            }
+                        ]);
                     } else {
                         if(json.error_message) {
                             window.editorUtil.error(json.error_message, json.redirect_url);
@@ -138,10 +289,10 @@ window.editorUtil = {
     },
     error: function(message, url) {
         if(message == "You Are Already Editing This Document") {
-            message += "<br><input type='button' id='disconnectAll' \
-                        style='margin:5px 0 0 0;' class='button blue full' value='Disconnect All Other Sessions'/>";
+            message += "<br><button id='disconnectAll' style='margin-top: 5px' \
+                       class='backdrop-button'>Disconnect All Other Sessions</button>";
 
-            $("#disconnectAll").live("click", function() {
+            $(document).on("click", "#disconnectAll", function() {
                 $(this).val("loading...").addClass("disabled");
                  window.socketUtil.socket.emit("editorDisconnectAll", {}, function(json) {
                     if(json.success) {
@@ -149,6 +300,8 @@ window.editorUtil = {
                     }
                  });
             });
+        } else {
+            window.socketUtil.socket.removeAllListeners();
         }
 
         window.backdrop.error(message, url);

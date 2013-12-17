@@ -1,0 +1,141 @@
+/* Variables */
+@background: #0B7FAD;
+@header: darken(@background, 5%);
+@content: #000;
+@content_bg: #fff;
+@link: #333;
+@bold: #555;
+@head: darken(@bold, 5%);
+@list: #ccc;
+@bottom: #EDEEEF;
+@company: darken(@bottom, 55%);
+
+/* Template */
+* {
+    font-family: sans-serif, serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+}
+
+body {
+    background: @background;
+}
+
+.full {
+    width: 100%;
+}
+
+#wrapper {
+    width: 100%;
+    height: 100%;
+
+    #core {
+        width: 400px;
+        padding: 15px 15px 30px 15px;
+
+        &.medium {
+            width: 500px;
+        }
+
+        &.large {
+            width: 550px;
+        }
+
+        #header {
+            color: @content_bg;
+            padding: 15px 15px 2px 15px;
+
+            #logo {
+                width: 150px;
+            }
+        }
+
+        #content {
+            color: @content;
+            background: @content_bg;
+            width: 100%;
+            border-radius: 6px;
+            min-height: 220px;
+            overflow: hidden;
+
+            #top {
+                padding: 30px;
+
+                .header {
+                    color: @header;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+
+                .link {
+                    color: @link;
+                    text-decoration: underline;
+                }
+
+                .bold {
+                    color: @bold;
+                    font-weight: bold;
+                    text-decoration: none;
+                }
+
+                .message-header {
+                    margin-bottom: 3px;
+                    display: block;
+                }
+
+                .button {
+                    display: block;
+                    margin-top: 10px;
+                    padding: 8px 0;
+                    background: darken(@background, 2%);
+                    color: #fff;
+                    border-radius: 3px;
+                    font-weight: bold;
+                    text-align: center;
+                    text-decoration: none;
+                }
+
+                .list {
+                    width: 100%;
+
+                    .item {
+                        &:not(:first-child) > td {
+                            padding-top: 10px;
+                        }
+
+                        .gravatar {
+                            width: 30px;
+
+                            img {
+                               width: 30px;
+                               height: 30px;
+                               border-radius: 3px;
+                            }
+                        }
+
+                        .name {
+                            padding-left: 15px;
+                        }
+                    }
+                }
+            }
+
+            #bottom {
+                background: @bottom;
+                border-top: solid 1px darken(@bottom, 5%);
+                padding: 12px 30px;
+                text-align: right;
+                font-weight: bold;
+                color: @company;
+
+                .link {
+                    color: @company;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}

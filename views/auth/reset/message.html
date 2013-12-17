@@ -1,0 +1,25 @@
+<% include ../../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
+         <div id="backdrop-container" style="width:300px">
+             <div class="text-center">
+                An email containing a password reset link has been sent to your inbox.
+             </div>
+         </div>
+    </div>
+    <div id="backdrop-footer">
+        <ul>
+            <li><a href="/login/">Login</a></li>
+            <% if(organization.register) { %>
+                <li><a href="/register/">Register</a></li>
+            <% } %>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+            <li><a href="/">© <%= company %></a></li>
+        </ul>
+    </div>
+</div>
+<% include ../../includes/footer.html %>

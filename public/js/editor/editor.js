@@ -1,4 +1,4 @@
-$(window).ready(function() {
+$(function() {
     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
 
     window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
@@ -12,8 +12,8 @@ $(window).ready(function() {
         indentUnit: 4,
         indentWithTabs: true,
         smartIndent: true,
-        autofocus: false,
-        dragDrop: false,
+        autofocus: true,
+        dragDrop: true,
         autoCloseBrackets: true,
         autoCloseTags: true,
         highlightSelectionMatches: true,
@@ -27,7 +27,7 @@ $(window).ready(function() {
     });
 
     window.editor.on("gutterClick", function(cm, n) {
-        window.editorUtil.gutterClick("out", {"line":n});
+        window.editorUtil.gutterClick("out", [{"line":n}]);
     });
 
     window.editor.on("cursorActivity", function() {
@@ -83,20 +83,11 @@ $(window).ready(function() {
 
     //Resize Editor on Window Resize
     $(window).resize(function() {
-        window.editorUtil.refresh();
+        window.editorUtil.resize();
     });
 
     //Toogle Full Screen Mode
-    $("#full_screen").live("click", function() {
-        window.editorUtil.fullScreen();
-    });
-
-    //Contributor Events
-    $(".contributor").live("hover", function(){
-        window.editorUtil.userHover($(this));
-    });
-
-    $(".contributor").live("mouseout", function(){
-        window.editorUtil.userLeave();
+    $(".fullscreen").on("click", function() {
+        window.editorUtil.fullscreen(window.editorUtil.fullscreenActive);
     });
 });

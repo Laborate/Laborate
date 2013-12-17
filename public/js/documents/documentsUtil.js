@@ -2,419 +2,721 @@
 //          Document Instances
 /////////////////////////////////////////////////
 window.documents = {
-    popUp: function(preset, data) {
-        //Inital Clean Up
-        $("#popup .presets").hide();
-        $("#popup .selection").hide();
-        $("#popup .input, #popUp .select").val('').css({"border":""});
-        $("#popup .selected").removeClass("selected");
+    mode: new Array(),
+    locationActivated: null,
+    locationIcons: {},
+    headerBarPrevious: null,
+    timer: null,
+    uploadFiles: [],
+    popup: function(action, data, header) {
+        var container = $(".popup .container");
+        var new_css = {};
+        var show = true;
 
-        //Cycle Through Presets
-        if(preset == "location_add") {
-            $("#popup #location_add").show();
-            $("#popup #location_add .selection").eq(0).show();
-            $("#popup #popup_header #popup_header_name").text("New Location");
-            $("#popup #location_add .select").val($("#popup #location_add .select option:first").val());
-            $("#popup").css({"width": "280"});
+        container
+            .attr("style", "")
+            .find(".action")
+            .hide()
+            .find("input")
+            .not("[type='file']")
+            .val("")
+            .removeClass("error");
+
+        container
+            .find(".header .download")
+            .hide();
+
+        container
+            .find("#popup-" + action)
+            .show();
+
+        switch(action) {
+            case "add-location":
+                new_css.width = "300px";
+                new_css.height = "350px";
+
+                if(data) container
+                    .find("#popup-" + action)
+                    .find(".listing")
+                    .html(data);
+                break;
+
+            case "create":
+                new_css.width = "250px";
+                new_css.height = "142px";
+                break;
+
+            case "rename":
+                new_css.width = "250px";
+                new_css.height = "142px";
+
+                container
+                    .find("#popup-" + action)
+                    .find("form")
+                    .attr("action", "/documents/file/" + data.id + "/rename/")
+                    .find("input")
+                    .val(data.name);
+                break;
+
+            case "url":
+                new_css.width = "300px";
+                new_css.height = "100px";
+
+                container
+                    .find("#popup-" + action)
+                    .find("input")
+                    .val(window.config.host + "/editor/" + data + "/");
+                break;
+
+            case "upload":
+                new_css.width = "300px";
+                new_css.height = "305px";
+
+                container
+                    .find("#popup-" + action)
+                    .find(".listing")
+                    .html(function() {
+                        return $.map(data, function(item) {
+                            return $('                                                               \
+                                <div class="item">                                                   \
+                                    <div class="left icon ' + config.icons.file_small + '"></div>    \
+                                    <div class="name">' + item.name + '</div>                        \
+                                </div>                                                               \
+                            ').attr(function() {
+                                var attributes = {};
+                                $.each(item, function(key, value) {
+                                    if(typeof value != "function") {
+                                        attributes["data-" + key] = value;
+                                    }
+                                })
+                                return attributes;
+                            }());
+                        });
+                    }());
+                break;
+
+            case "image":
+                new_css.width = "300px";
+                new_css.height = "150px";
+                new_css.background = "url('/img/transparent.gif') repeat";
+
+                container
+                    .find(".header .download")
+                    .show();
+
+                container
+                    .find("#popup-" + action)
+                    .find("img")
+                    .attr("src", data)
+                    .css("visibility", "hidden")
+                    .load(function() {
+                        container
+                            .css({
+                                "width": "",
+                                "height": ""
+                            })
+                            .hAlign("fixed")
+                            .vAlign("fixed")
+                            .find("#popup-" + action)
+                            .find("img")
+                            .css("visibility", "");
+                    });
+
+                break;
+
+            default:
+                show = false;
+                break;
         }
 
-        if(preset == "location_remove") {
-            $("#popup #location_remove").show();
-            $("#popup #popup_header #popup_header_name").text("Confirm Location Deletion?");
-            $("#popup").css({"width": "250"});
+        if(header) {
+            container
+                .find(".header .title")
+                .text(header)
+                .parent(".header")
+                .toggle(!!(header));
         }
 
-        if(preset == "share_url") {
-            $("#popup #share_url input[type=text]").val(data);
-            $("#popup #share_url").show();
-            $("#popup #popup_header #popup_header_name").text("Share Url");
-            $("#popup").css({"width": "250"});
-        }
+        container
+            .css(new_css)
+            .hAlign("fixed")
+            .vAlign("fixed")
+            .parent(".popup")
+            .toggle(show);
+    },
+    popupSubmit: function(form) {
+        var passed = true;
+        var data = new FormData(form[0]);
+        var submit =  form.find("button[type=submit]");
 
-        if(preset == "new_file") {
-            $("#popup #new_file input[type=text]").css({"border":""});
-            $("#popup #new_file").show();
-            $("#popup #new_file .selection").show();
-            $("#popup #popup_header #popup_header_name").text("Document Name");
-            $("#popup").css({"width": "250"});
-        }
+        data.append("_csrf", window.config.csrf);
 
-        if(preset == "rename") {
-            $("#popup #rename input[type=text]").val(data).css({"border":""});
-            $("#popup #rename").show();
-            $("#popup #rename .selection").show();
-            $("#popup #popup_header #popup_header_name").text("Rename Document");
-            $("#popup").css({"width": "250"});
-        }
+        if(!submit.attr("data-original")) submit.attr("data-original", submit.text());
+        if(window.documents.timer) clearInterval(window.documents.timer);
 
-        if(preset == "photo_preview") {
-            $("#popup #photo_preview").show();
-            $("#popup #popup_header #popup_header_name").text(data[0]);
-            $("#popup #photo_preview a").attr("href", data[1]);
-            $("#popup #photo_preview img").attr("src", data[1]);
-            $("#popup").css({"width": "300"});
-            $('#image_preview').load(function() {
-                $("#popup").hAlign().vAlign();
+        form.find("input").each(function() {
+            if($(this).data("required") && $(this).val() == "") {
+                passed = false;
+                $(this).addClass("error");
+            } else {
+                $(this).removeClass("error");
+            }
+        });
+
+        form.find(".list").each(function() {
+            var list = $(this).removeClass("error");
+            if(list.find(".item").hasClass("active")) {
+                $.each(list.find(".item.active").data(), function(key, value) {
+                    if(list.data("name") != "next") {
+                        data.append(list.data("name") + "[" + key + "]",  value);
+                    }
+                });
+            } else {
+                if(list.data("required")) {
+                    list.addClass("error");
+                    passed = false;
+                }
+            }
+        });
+
+        if(passed) {
+            submit.text("loading...").addClass("disabled");
+
+            $.ajax({
+                url: form.attr("action"),
+                type: 'POST',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false
+            }, 'json').done(function(result) {
+                if(result.success) {
+                    form.find("input").val("");
+                    window.documents.popup("close");
+                    submit.text(submit.attr("data-original"));
+                    if(form.data("callback")) window.documents[form.data("callback")](result);
+                } else {
+                    submit
+                        .text(result.error_message)
+                        .removeClass("disabled")
+                        .addClass("error");
+
+                    window.documents.timer = setTimeout(function() {
+                        submit
+                            .text(submit.attr("data-original"))
+                            .removeClass("error");
+                    }, 5000);
+                }
             });
         }
-
-        //Auto Center And Show
-        $("html, body").animate({ scrollTop: 0 }, ($(window).scrollTop()/2), function() {
-            $("body").css("overflow", "hidden");
-            $("#popup_backdrop").show();
-            $("#popup").hAlign().vAlign().show();
-            $("#popup #" + preset + " input").eq(0).focus();
-        });
     },
-    popUpClose: function() {
-        //Remove Live Events From Forms
-        $("#popup *").die();
+    popupUpload: function() {
+        $(".popup #popup-upload input[type='file']")
+            .click(function() {
+                $(this).unbind('change');
+            })
+            .click()
+            .change(function(event) {
+                if($(this)[0].files.length != 0) {
+                    var files = $.map($(this)[0].files, function(item) {
+                        if((item.type == "" || item.type.match(/(?:text|json)/)) && item.size < 1024 * 2000) {
+                            return item;
+                        }
+                    });
 
-        //Hide Pop Up
-        $("#popup").hide();
-        $("#popup_backdrop").hide();
-        $("body").css("overflow", "");
+                    if(files.length != 0) window.documents.popup("upload", files, "Upload Files (2mb limit)");
+                }
+            });
     },
-    contextMenu: function(element, e) {
-        if($.trim(element.find(".file_attributes").text()) == "owner") { var action  = "Delete"; }
-        else { var action = "Forget"; }
+    popupAddLocation: function(element) {
+        var list = [],
+            update = true,
+            listing = $("#popup-add-location .list"),
+            name = $("#popup-add-location #location-name");
 
-        $("#menu #action").text(action);
+        listing.removeClass("error");
+        name.removeClass("error");
 
-        if(($(window).width() - e.pageX) <= 130) { var left = e.pageX  - $("#menu").width(); }
-        else { var left = e.pageX + 4; }
+        switch(element.data("next")) {
+            case "github":
+                list = window.documents.repoListing("github");
+                break;
 
-        $("#menu").css({"top": e.pageY + 16, "left": left}).attr("data", element.attr("data")).show();
-    },
-    contextMenuItem: function(element) {
-        window.documents.contextMenuClose();
-        var id = element.attr("id");
-        var reference = $("#menu").attr("data");
+            case "bitbucket":
+                list = window.documents.repoListing("bitbucket");
+                break;
 
-        setTimeout(function() {
-            if(id == "new") {
-                window.documents.goToTab("/editor/");
-            }
+            case "repo-option":
+                update = false;
+                var name = $("#location-name");
 
-            if(id == "tab") {
-                window.documents.goToTab("/editor/" + reference + "/");
-            }
+                if(!name.val() || (name.val() == element.siblings(".active").data("repository"))) {
+                    name.val(element.data("repository"));
+                }
 
-            if(id == "rename") {
-                window.documents.popUp("rename", $("#file_" + reference + " .title").attr("data"));
-                $("#popup #rename form").live("submit", function() {
-                    var name = $("#popup #rename input[type=text]").val();
-                    if(name) {
-                        $("#file_"+reference+" .title").attr("data", name);
-                        $("#file_"+reference+" .title").text(name);
-                        window.documents.popUpClose();
-                        $.post("/documents/file/" + reference + "/rename/", { name: name,  _csrf: window.config.csrf },
-                            function(json) {
-                                if(json.success == false) {
-                                    window.notification.open(json.error_message);
-                                } else {
-                                    $("#popup #rename form").die();
-                                }
+                element.siblings().removeClass("active");
+                element.addClass("active");
+                break;
+
+            case "link":
+                var name = element.parents(".actions").find("#location-name");
+                if(element.data("name-required") && name.val()) {
+                    window.location.href = element.attr("data-link") + encodeURI(name.val()) + "/";
+                } else {
+                    if(!element.data("name-required")) {
+                         window.location.href = element.attr("data-link");
+                    } else {
+                        name.addClass("error");
+                    }
+                }
+                break;
+
+            default:
+                $.each(window.config.apps, function(key, value) {
+                    var add_icon =  ("green " + config.icons.add_circle);
+                    var arrow_icon = ("blue " + config.icons.circle_arrow_up);
+
+
+                    if(key == "sftp" && value.show) {
+                        list.push({
+                            "name": "SFTP Server",
+                            "icon": config.icons.sftp,
+                            "class": "selectable",
+                            "data": {
+                                "data-next": "sftp"
+                            },
+                            "notification": arrow_icon
                         });
-                    } else {
-                        $("#popup #rename input[type=text]").css({"border":"solid thin #CC352D"});
+                    } else if(key == "github" && value.show) {
+                        list.push({
+                            "name": "Github Repository",
+                            "icon": config.icons.github,
+                            "class": "selectable",
+                            "data": {
+                                "data-next": (value.enabled) ? "github" : "link",
+                                "data-link": value.link,
+                            },
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
+                        });
+                    } else if(key == "bitbucket" && value.show) {
+                        list.push({
+                            "name": "Bitbucket Repository",
+                            "icon": config.icons.bitbucket,
+                            "class": "selectable",
+                            "data": {
+                                "data-next": (value.enabled) ? "bitbucket" : "link",
+                                "data-link": value.link
+                            },
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
+                        });
+                    } else if(key == "dropbox" && value.show) {
+                        list.push({
+                            "name": "Dropbox Account",
+                            "icon": config.icons.dropbox,
+                            "class": "selectable",
+                            "data": {
+                                "data-next": (value.enabled) ? "dropbox" : "link",
+                                "data-link": value.link,
+                                "data-name-required": "true"
+                            },
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
+                        });
+                    } else if(key == "google" && value.show) {
+                        list.push({
+                            "name": "Google Drive Account",
+                            "icon": config.icons.drive,
+                            "class": "selectable",
+                            "data": {
+                                "data-next": (value.enabled) ? "drive" : "link",
+                                "data-link": value.link,
+                                "data-name-required": "true"
+                            },
+                            "notification": (!value.enabled) ? add_icon : arrow_icon
+                        });
                     }
-
-                    return false;
                 });
-            }
 
-            if(id == "action") {
-                $.post("/documents/file/" + reference + "/remove/", { _csrf: window.config.csrf }, function(json) {
+                break;
+        }
+
+        if(update && list.length != 0) {
+            window.documents.popup("add-location", $.map(list, function(item) {
+                return $('                                                              \
+                    <div class="item ' + item.class + '">                               \
+                        <div class="icon ' + item.icon + '"></div>                      \
+                        <div class="name">' + item.name + '</div>                       \
+                        <div class="notification ' + item["notification"]  + '"></div>  \
+                    </div>                                                              \
+                ').attr(item.data);
+            }), "Add Location");
+        }
+    },
+    contextMenu: function(element) {
+        var menu = element.parent(".context-menu");
+        var file = $(".pane .file[data-id='" + menu.attr("data-id") + "']");
+
+        switch(element.data("action")) {
+            case "rename":
+                window.documents.popup("rename", {
+                    "id": file.attr("data-id"),
+                    "name": file.attr("data-name")
+                }, "Rename File");
+                break;
+            case "remove":
+                $.post("/documents/file/" + file.attr("data-id") + "/remove/", {
+                    _csrf: window.config.csrf
+                }, function(json) {
                     if(json.success == false) {
-                        window.notification.open(json.error_message);
+                        window.documents.headerBar(["message"], json.error_message);
                     } else {
-                        $("#file_" + reference).animate({"opacity": 0}, 500);
+                        file.css({ "opacity": 0 });
                         setTimeout(function() {
-                            $("#file_" + reference).remove();
-                        }, 600);
+                            file.remove();
+                        }, 300);
                     }
 
                 });
-            }
+                break;
+            case "url":
+                window.documents.popup("url", file.data("id"), "Share Url");
+                break;
+        }
+    },
+    contextMenuOpen: function(element, event) {
+        $(".context-menu-open")
+            .attr("href", "/editor/" + element.data("id"));
 
-            if(id == "share") {
-                window.documents.popUp("share_url", location.protocol + '//' + location.host+ "/editor/" + reference + "/");
+        $("#context-menu-remove").text(function() {
+            if(element.data("role") == "owner") {
+                return "Delete";
+            } else {
+                return "Forget";
             }
+        }());
 
-        }, 100);
+        $(".context-menu")
+            .css({
+                "top": function() {
+                    if(($(window).height() - event.pageY) <= 150) {
+                        return event.pageY  - $(".context-menu").height();
+                    } else {
+                        return event.pageY + 16;
+                    }
+                }(),
+                "left": function() {
+                    if(($(window).width() - event.pageX) <= 150) {
+                        return event.pageX  - $(".context-menu").width();
+                    } else {
+                        return event.pageX + 4;
+                    }
+                }()
+            })
+            .attr({
+                "data-id": element.data("id")
+            })
+            .show();
     },
     contextMenuClose: function() {
-       $("#menu").hide();
+        $(".context-menu").hide();
     },
-    locationChange: function(location_id, path, no_history) {
-        $("#locations ul li").removeClass("selected");
-        $("#" + location_id).addClass("selected");
-        $("#files #file_library").html("");
+    headerBar: function(action, message, permanent) {
+        $(".bottom > div:not(.clear)").hide();
+        $(".bottom .filter").hide();
+        $(".bottom .filter select").val("add filter");
+        $(".top input").val("");
+        window.documents.mode = [];
 
-        if(location_id == "online" || !location_id) {
-            $("#online").addClass("selected");
-            window.documents.onlineDirectory(no_history);
-        } else {
-            window.documents.locationDirectory(location_id, path, no_history);
+        $.each(action, function(i, item) {
+            switch(item) {
+                case "message":
+                    window.documents.popup("close");
+                    $(".bottom .message").html(message).show();
+
+                    if(window.documents.headerBarPrevious && !permanent) {
+                        setTimeout(function() {
+                            window.documents.headerBar(window.documents.headerBarPrevious);
+                        }, 10000);
+                    }
+
+                    break;
+                case "filters-online":
+                    $(".bottom .filters, .bottom .filter[data-type='online']").show();
+                    break;
+                case "filters-non-online":
+                    $(".bottom .filters, .bottom .filter[data-type='non-online']").show();
+                    break;
+                case "add":
+                    $(".bottom .add-files").show();
+                    break;
+                case "download":
+                    $(".bottom .download-files").show();
+                    break;
+                case "side-button":
+                    $(".side-button").show();
+                    break
+            }
+        });
+
+        if(action.indexOf("message") == -1) {
+            window.documents.headerBarPrevious = action;
         }
     },
-    addLocation: function() {
-        //Show Pop Up
-        window.documents.popUp("location_add");
-
-        //Look For Location Type Change
-        $("#popup #popup_location_type").live("change", function() {
-            $("#popup .selection").hide();
-
-            if($(this).val() == "sftp") {
-                $("#popup_location_sftp").show();
-            }
-            else {
-                $("#popup_location_" + $(this).val()).show();
-            }
-            $("#popup").hAlign().vAlign();
-        });
-
-        //Add Select Class To Github Repository
-        $("#popup #popup_location_github ul li").live("click", function() {
-            if($("#popup #popup_location_name").val() == $("#popup #popup_location_github .selected").text()) {
-                $("#popup #popup_location_name").val($(this).text());
+    locations: function() {
+        $.get("/documents/locations/", function(json) {
+            if(json.success == false) {
+                window.documents.headerBar(["message"], json.error_message);
             }
 
-            $("#popup #popup_location_github ul li").removeClass("selected");
-            $(this).addClass("selected");
-        });
+            var locations = ('                                                \
+                <div class="item" data-key="online" data-counter="0">         \
+                    <div class="container">                                   \
+                        <div class="name">Your Drive</div>                    \
+                        <div class="icon ' + config.icons.online + '"></div>  \
+                    </div>                                                    \
+                    <div class="active"></div>                                \
+                </div>                                                        \
+            ');
 
-        //Check For Form Submit
-        $("#popup #location_add form").live("submit", function() {
-            var type = $("#popup #popup_location_type").val();
-            var type_icon = type;
-            var passed = true;
-            var items = {"type": type};
-            var exceptions = ['popup_location_default', 'popup_location_username'];
 
-            //Check If Inputs Have Values
-            if($("#popup #popup_location_name").val() == "") {
-                $("#popup #popup_location_name").css({"border":"solid thin #CC352D"});
-                passed = false;
-            }
-            else {
-                $("#popup #popup_location_name").css({"border":""});
-                items["name"] = $("#popup #popup_location_name").val();
-            }
-
-            $("#popup_location_" + type).find("input[type=text], select").each(function() {
-                if($(this).val() == "" && $.inArray($(this).attr("id"), exceptions) == -1) {
-                    $(this).css({"border": "solid thin #CC352D"});
-                    passed = false;
-                }
-                else {
-                    $(this).css({"border": ""});
-                    items[$(this).attr("name")] = $(this).val();
-                }
+            $.each(json, function(i, item) {
+                locations += ('                                                         \
+                    <div class="item"                                                   \
+                        data-key="' + item.key + '"                                     \
+                        data-name="' + item.name + '"                                   \
+                        data-counter="0">                                               \
+                        <div class="container">                                         \
+                            <div class="name">' + item.name + '</div>                   \
+                            <div class="icon ' + config.icons[item.type] + '"></div>    \
+                        </div>                                                          \
+                        <div class="active"></div>                                      \
+                    </div>                                                              \
+                ');
             });
 
-            if($("#popup_location_" + type).find("input[type=password]").clone() != "") {
-                var pass = $("#popup_location_" + type).find("input[type=password]");
-                items[pass.attr("name")] = pass.val();
+            $(".sidebar .list .item").not("[data-key='online']").remove();
+            $(".sidebar .list .listing").html(locations);
+
+            var interval = setInterval(function() {
+                if(window.documents.locationActivated) {
+                    var location = $(".list .item[data-key='" + window.documents.locationActivated + "']")
+                        .addClass("activated");
+
+                    if(window.documents.locationActivated != "online") {
+                        $("title").text(location.attr("data-name") + window.config.delimeter + window.config.title);
+                    }
+
+                    clearInterval(interval);
+                }
+            }, 100);
+        });
+    },
+    location: function(location, path, history) {
+        $(".sidebar .info").text("");
+        $(".list .item").removeClass("activated");
+        var location_element = $(".list .item[data-key='" + location + "']").addClass("activated");
+        if(location != window.url_params()["location"] || path != window.url_params()["dir"]) {
+            $(".pane").html("");
+        }
+
+        if(window.documents.interval) clearTimeout(window.documents.timer);
+
+        if(!location || ["popup", "search", "online"].indexOf(location) != -1) {
+            $("title").text(window.config.title);
+            window.documents.locationNotification("online", false);
+            if(location == "popup") {
+                window.documents.mode = null;
+                window.history.pushState(null, null, "/documents/");
+
+                switch(path) {
+                    case "add/document/":
+                        window.documents.popup("create", false, "Create File");
+                        break;
+                    case "add/location/":
+                        window.documents.popupAddLocation($(".popup"));
+                        break;
+                }
+
+                window.documents.onlineDirectory(history);
+            } else if(location == "search") {
+                window.documents.onlineDirectory(history, true);
+                var interval = setInterval(function() {
+                    if(window.documents.locationActivated) {
+                        window.documents.mode = null;
+                        window.history.pushState(null, null, "/documents/");
+                        clearInterval(interval);
+                        $("#search input")
+                            .val(decodeURI(path.substring(0, path.length - 1)))
+                            .parents("form")
+                            .submit();
+                    }
+                }, 100);
+            } else {
+                window.documents.onlineDirectory(history);
+            }
+        } else {
+            if(location_element.length != 0) {
+                $("title").text(location_element.attr("data-name") + window.config.delimeter + window.config.title);
             }
 
-            if(type == "github") {
-                if($("#popup_location_" + type + " .selected").text() == "") {
-                    $("#popup_location_" + type).css({"border": "solid thin #CC352D"});
-                    passed = false;
-                }
-                else {
-                    $("#popup_location_" + type).css({"border": ""});
-                    items["repository"] = $("#popup_location_" + type + " .selected").text();
-                    items["branch"] = $("#popup_location_" + type + " .selected").attr("data");
-                }
+            window.documents.locationDirectory(location, path, history);
+        }
+    },
+    locationReload: function() {
+        if(window.navigator.onLine) {
+            window.socketUtil.pageTrack();
+            if(window.documents.locationActivated && window.documents.mode.length == 0) {
+                window.documents.locations();
+                window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
+            }
+        }
+    },
+    locationNotification: function(location, action, count) {
+        var element = $(".list .item[data-key='" + location + "']").find(".icon");
+
+        if(element.length > 0) {
+            if(!(location in window.documents.locationIcons)) {
+                window.documents.locationIcons[location] = element.attr("class");
             }
 
-            if(passed) {
-                $.post("/documents/location/create/", { locations_add: items, _csrf: window.config.csrf },
-                    function(json) {
-                        if(json.success == false) {
-                            window.notification.open(json.error_message);
-                        } else {
-                            window.documents.locationListing();
+            if(action) {
+                var actions = {
+                    "upload": config.icons.circle_arrow_up,
+                    "download": config.icons.circle_arrow_down,
+                    "counter": function() {
+                        if(count) {
+                            var parentContainer = element.parents(".item");
+                            count += parseInt(parentContainer.attr("data-counter"));
+                            parentContainer.attr("data-counter", count);
+                            if(count <= 9 && element.attr("class").indexOf(config.icons.circle_notice) == -1) {
+                                return config.icons.number + ((count != 1) ? "-" + count : "");
+                            } else {
+                                return config.icons.circle_notice;
+                            }
                         }
-                });
-                $("#popup #popup_location_type").die();
-                $("#popup #popup_location_github ul li").die();
-                $("#popup #location_add form").die();
-                window.documents.popUpClose();
-            }
-            return false;
-        });
-    },
-    removeLocation: function(element) {
-        var id = element.attr("id");
-        window.documents.popUp("location_remove");
+                    }()
+                };
 
-        $("#popup #location_remove input[type=button]").live("click", function() {
-            $.post("/documents/location/remove/", { locations_remove: id, _csrf: window.config.csrf }, function(json) {
-                if(json.success == false) {
-                    window.notification.open(json.error_message);
-                } else {
-                    element.remove();
-
-                    if(window.sidebar == id) {
-                        window.documents.locationChange("online");
-                    }
-
-                    if($("#locations.remove ul li").size() == 1) {
-                        $("#locations").removeClass("remove");
-                        $("#locations #online").toggle().addClass("selected");
-                    }
+                if(action in actions) {
+                    window.documents.locationNotificationChange(element,
+                        element.attr("class").replace(/icon-.*/g, actions[action]), true);
                 }
-            });
-            $("#popup #location_remove input[type=button]").die();
-            window.documents.popUpClose();
-        });
-    },
-    toggleRemoveMode: function() {
-        $("#locations").toggleClass("remove");
-        $("#locations #online").toggle();
-    },
-    locationListing: function(location) {
-        $.get("/documents/locations/",
-            function(json) {
-                var locations = "";
-                $.each(json, function(i, item) {
-                    if(item["type"] == "github") { var icon = "icon-github"; }
-                    else if(item["type"] == "sftp") { var icon = "icon-drawer"; }
-                    else { var icon = "icon-storage"; }
-                    locations += '<li id="' + item['key'] + '" data="' + item['type'] + '">';
-                    locations += '<div class="left icon ' + icon + '"></div>';
-                    locations += '<div class="location_name">' + item['name'] + '</div>';
-                    locations += '<div class="clear"></div></li>';
-                });
-                $("#locations ul li").not("li[id='online']").remove();
-                $("#locations ul").append(locations);
-
-                if(location) {
-                    $("#" + location).addClass("selected");
-                } else {
-                    $("#" + window.sidebar).addClass("selected");
-                }
+            } else {
+                window.documents.locationNotificationChange(element,
+                    window.documents.locationIcons[location], false, false);
+                element.parents(".item").attr("data-counter", 0);
             }
-        );
+        }
     },
-    cachedLocations: function(location_id) {
+    locationNotificationChange: function(element, className, active, big) {
+        if(element.attr("class").indexOf(className) == -1) {
+            element.fadeOut(200);
+            setTimeout(function() {
+                element
+                    .attr("class", className)
+                    .toggleClass("notify", active)
+                    .toggleClass("big", active)
+                    .fadeIn(200);
+            }, 300);
+        }
+    },
+    cachedLocations: function(location) {
         if(window.cachedLocations == undefined) {
            window.cachedLocations = new Array();
         }
 
-        if(window.cachedLocations["location_" + location_id] == undefined) {
-            window.cachedLocations["location_" + location_id] = new Array();
+        if(window.cachedLocations["location_" + location] == undefined) {
+            window.cachedLocations["location_" + location] = new Array();
         }
 
-        return window.cachedLocations["location_" + location_id];
+        return window.cachedLocations["location_" + location];
     },
-    addcachedLocation: function(location_id, path, json) {
-        if(window.cachedLocations["location_" + location_id] == undefined) {
-            window.cachedLocations["location_" + location_id] = {}
+    addcachedLocation: function(location, path, json) {
+        if(window.cachedLocations["location_" + location] == undefined) {
+            window.cachedLocations["location_" + location] = {}
         }
 
         if(path == "" || path == undefined) {
             path = "";
         }
 
-        window.cachedLocations["location_" + location_id][path] = json;
+        window.cachedLocations["location_" + location][path] = json;
     },
-    goToLink: function(link) {
-        window.location.href = link;
-    },
-    goToTab: function(link) {
-        var new_tab = window.open(link, '_blank')
-        if(!new_tab || !new_tab.document.hasFocus()) {
-            window.location.href = link;
+    repoListing: function(type) {
+        var json = $.ajax({
+            type: "GET",
+            url: "/" + type + "/repos/",
+            async: false,
+        }).responseJSON;
+
+        if(json.success == false) {
+            if(json.error_message == "Bad " + type.capitalize() + " Oauth Token") {
+                window.documents.headerBar(["message"],
+                    "Opps! " + type.capitalize() + " Needs To Be <a href='" + config.apps[type].link + "'>Reauthorized</a>", true);
+            } else {
+                window.documents.headerBar(["message"], json.error_message);
+            }
+        } else {
+            return $.map(json.repos, function(item) {
+                return {
+                    "name": item.user + "/<strong>" + item.repo + "</strong>",
+                    "icon": (item.private) ? config.icons.locked : config.icons.unlocked,
+                    "class": "selectable",
+                    "data": {
+                        "data-repo": item.repo,
+                        "data-repository": item.user + "/" + item.repo,
+                        "data-branch": item.branch,
+                        "data-next": "repo-option",
+                        "data-type": type
+                    }
+                }
+            });
         }
     },
-    newFile: function(path, location) {
-        window.documents.popUp("new_file");
+    onlineDirectory: function(history, hide) {
+        window.documents.headerBar(["filters-online", "add"]);
 
-        $("#popup #new_file form").live("submit", function() {
-            var name = $("#popup #new_file input[type=text]").val();
-            if(name) {
-                window.documents.popUpClose();
-                if(location == "online") {
-                    location = null;
-                    window.notification.open("creating file");
-                } else {
-                    window.notification.open("creating file in current directory...");
-                }
+        window.documents.timer = setTimeout(function() {
+            window.documents.headerBar(["message"], "downloading directory listing...", true);
+        }, 5000);
 
-                $.post("/documents/file/create/", { name: name, external_path:  path, location: location, _csrf: window.config.csrf },
-                    function(json) {
-                        if(json.success == false) {
-                            window.notification.open(json.error_message);
-                        } else {
-                            window.documents.goToTab("/editor/" + json.document + "/");
-                            window.notification.close();
-                            $("#popup #new_file form").die();
-                        }
-                });
-            } else {
-                $("#popup #new_file input[type=text]").css({"border":"solid thin #CC352D"});
-            }
-            return false;
-        });
-    },
-    onlineDirectory: function(no_history) {
-        window.notification.open("loading...");
         $.get("/documents/files/", function(json) {
             if(json.success == false) {
-                window.notification.open(json.error_message);
+                window.documents.headerBar(["message"], json.error_message);
             } else {
+                clearTimeout(window.documents.timer);
+                window.documents.headerBar(["filters-online", "add"]);
+
                 var files = "";
                 $.each(json, function(i, item) {
-                    var protection = (item.password) ? "password" : "open";
-                    var location = (item.location) ? item['location'] : "";
-                    var file = '<div id="file_' + item.id + '" class="file online" data="' + item.id + '">';
-                    file += '<div class="file_attributes icon ' + protection + '" data="' + location + '">';
-                    file += item.role.toLowerCase();
-                    file += '</div>';
-                    file += '<div class="title" data="' + item.name + '">' + item.name + '</div></div>';
-                    files += file;
+                    window.documents.fileParser(item, true);
+
+                    files += ('                                                       \
+                        <div class="item ' + item.class + " " + item.color + '"       \
+                            data-name="' + item.name + '"                             \
+                            data-role="' + item.role + '"                             \
+                            data-location="' + item.location + '"                     \
+                            data-id="' + item.id + '"                                 \
+                            data-protection="' + item.protection + '"                 \
+                            data-size="' + item.size + '"                             \
+                            data-laborators="' + item.laborators + '"                 \
+                            data-type="' + item.type + '">                            \
+                            <div class="corner ' + item.corner + '"></div>            \
+                            <div class="icon ' + item.icon + '"></div>                \
+                            <div class="name">' + item.name + '</div>                 \
+                        </div>                                                        \
+                    ');
                 });
 
-                $("#files #file_library").append(files);
-
-                window.notification.close();
-                if(!no_history) history.pushState(null, null, "/documents/");
-                window.sidebar = "online";
+                $(".pane").html($(files).toggle(!hide));
+                $(".sidebar .info").text(json.length + " files");
+                if(history) window.history.pushState(null, null, "/documents/");
+                window.socketUtil.pageTrack();
+                window.documents.locationActivated = "online";
             }
         });
     },
-    githubRepos: function() {
-        $.get("/github/repos/", function(json) {
-            if(json.success == false) {
-                if(json.error_message == "Bad Github Oauth Token") {
-                    window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
-                } else {
-                    window.notification.open(json.error_message);
-                }
-
-            } else {
-                var repos = "";
-                $.each(json, function(i, item) {
-                    repos += '<li data="' + item['branch'] + '">' + item['user'] + '/<span class="bold">' + item['repo'] + '</span></li>'
-                });
-
-                if(repos) {
-                    $("#popup_location_github").append("<ul>" + repos + "</ul>");
-                } else {
-                    $("#popup_location_github #github_empty").show();
-                }
-            }
-        });
-    },
-    locationDirectory: function(location_id, path, no_history) {
-        window.notification.open("loading...");
-        var response = window.documents.cachedLocations(location_id);
+    locationDirectory: function(location, path, history) {
+        var response = window.documents.cachedLocations(location);
         var files = "";
 
         path = $.trim(path)
@@ -427,18 +729,23 @@ window.documents = {
         if(response[path] != undefined) {
             finish(response[path]);
         } else {
-            $.get("/documents/location/" + location_id + "/" + path,
+            window.documents.headerBar(["message"], "downloading directory listing...", true);
+            $.get("/documents/location/" + location + "/" + path,
                 function(json) {
                     if(json.success == false) {
                         if(json.error_message == "Bad Github Oauth Token") {
-                            window.notification.open("Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>");
+                            window.documents.headerBar(["message"],
+                                "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>", true);
                         } else {
-                            window.notification.open(json.error_message);
+                            if(history) {
+                                window.documents.headerBar(["message"], json.error_message);
+                            } else {
+                                window.documents.location("online", null, true);
+                            }
                         }
-
                     } else {
-                        window.documents.addcachedLocation(location_id, path, json);
-                        finish(json);
+                        window.documents.addcachedLocation(location, path, json.contents);
+                        finish(json.contents);
                     }
                 }
             );
@@ -446,98 +753,404 @@ window.documents = {
 
         function finish(response) {
             $.each(response, function(i, item) {
-                switch(item["type"]) {
-                    case "dir":
-                        var type = "folder";
-                        var icon = "folder";
-                        var type_title = "folder";
-                        break;
-                    case "symlink":
-                        var type = "folder";
-                        var icon = "folder";
-                        var type_title = "symlink";
-                        break;
-                    case "back":
-                        var type = "folder";
-                        var icon = "back";
-                        var type_title = "back";
-                        break;
-                    case "file":
-                        var type = "file";
-                        var icon = "open";
-                        if(item["extension"] && item["extension"].length <= 5) {
-                            var type_title = item["extension"];
-                        } else {
-                            var type_title = "file";
-                        }
-                }
+                window.documents.fileParser(item, false);
 
-                var template = '<div class="file external" data="' + item["path"] + '">';
-                template += '<div class="file_attributes ' + icon + '" data="' + type + '">' + type_title + '</div>';
-                template += '<div class="title" data="' + item["name"] + '">' + item["name"] + '</div>';
-                template += '</div>';
-                files += template;
+                files += ('                                                 \
+                    <div class="item ' + item.class + ' ' + item.color + '" \
+                        data-name="' + item.name + '"                       \
+                        data-path="' + item.path + '"                       \
+                        data-type="' + item.type + '"                       \
+                        data-size="' + item.size + '"                       \
+                        data-location="' + location + '">                   \
+                        <div class="icon ' + item.icon + '"></div>          \
+                        <div class="name">' + item.name + '</div>           \
+                        <div class="progress">                              \
+                            <div class="bar"></div>                         \
+                        </div>                                              \
+                    </div>                                                  \
+                ');
             });
-            $("#files #file_library").html(files);
-            window.notification.close();
+
+            $(".pane").html(files);
+            $(".sidebar .info").text(response.length + " files");
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
-            if(!no_history) history.pushState(null, null, "/documents/" + location_id + "/" + path);
-            window.sidebar = location_id;
+            if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
+            window.socketUtil.pageTrack();
+            window.documents.locationActivated = location;
+            window.documents.headerBar(["filters-non-online", "download"]);
         }
     },
-    locationFile: function(location_id, element) {
-        window.notification.open("downloading...");
-        var path = element.parent().attr("data");
+    fileSelect: function(show) {
+        if(show) {
+            $(".pane .item").filter(function() {
+                if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
+                    if($(this).hasClass("disabled")) {
+                        $(this).attr("data-disabled", "disabled");
+                    } else {
+                        $(this).addClass("disabled");
+                    }
 
-        $.get("/documents/location/" + location_id + "/" + path, function(json) {
-            if(json.success == false) {
-                 window.notification.open(json.error_message);
-            } else {
-                window.documents.goToTab("/editor/" + json.document + "/");
-                window.notification.close();
-            }
-        });
-    },
-    photoPreview: function(location_id, name, path) {
-        var url = "/documents/location/" + location_id + "/" + path + "/";
-        window.documents.popUp("photo_preview", [name, url]);
-    },
-    fileSearch: function(form) {
-        var search = form.find("input[name=s]").val();
-        var protection = form.find("select[name=p]").val();
-        var relation = form.find("select[name=r]").val();
-        var parent_location = form.parent("#location_template");
+                    return false;
+                } else {
+                    return true;
+                }
+            }).each(function() {
+                var oldClass = $(this).find(".icon").data("default");
+                var newClass = $(this).find(".icon").attr("class");
 
-        parent_location.find(".file").each(function() {
-            var show = true;
-            if($(this).find(".title").attr("data").toLowerCase().indexOf(search) < 0) {
-                $(this).hide();
-            } else {
-                $(this).show();
-            }
-        });
+                $(this)
+                    .attr("data-selected", "false")
+                    .find(".icon")
+                    .attr({
+                        "data-default": ((!oldClass) ? newClass : oldClass),
+                        "class": "icon " + config.icons.dashed_add
+                    });
+            });
 
-        if(parent_location.find(".file:visible").length == 0 && parent_location.find(".file").length != 0) {
-            $(".notFound").show();
-            if($(window).width() < 1015) {
-                parent_location.find("#newFile").hide();
-                parent_location.find("#clearSearch").css("float","right");
-            }
-            else {
-                parent_location.find("#newFile").show();
-                parent_location.find("#clearSearch").css("float","left");
-            }
-
-            parent_location.find("#clearSearch").show();
-
+            window.documents.mode = ["selectFiles"];
         } else {
-            parent_location.find(".notFound").hide();
-            parent_location.find("#clearSearch").hide();
-            parent_location.find("#newFile").show();
+            $(".pane .item").filter(function() {
+                if(["file-template", "file-script"].indexOf($(this).data("type")) == -1) {
+                    if($(this).data("disabled") != "disabled") {
+                        $(this).removeClass("disabled");
+                    }
+
+                    return false;
+                } else {
+                    return true;
+                }
+            }).each(function() {
+                $(this).attr("data-selected", "")
+                $(this).find(".icon")
+                    .attr({
+                        "data-default": "",
+                        "class": $(this).find(".icon").data("default")
+                    });
+            });
+
+            window.documents.mode = [];
         }
     },
-    fileSearchClear: function(element) {
-        element.parent("form").find('input:text, select').val('');
-        element.parent("form").submit();
+    fileSelectClick: function(element) {
+        if(window.documents.mode[0] == "selectFiles") {
+            if(element.attr("data-selected") == "true") {
+                element
+                    .attr("data-selected", "false")
+                    .find(".icon")
+                        .attr("class", "icon " + config.icons.dashed_add);
+            } else {
+                element
+                    .attr("data-selected", "true")
+                    .find(".icon")
+                        .attr("class", "icon " + config.icons.dashed_check);
+            }
+        }
+    },
+    fileProgress: function(element, percent, abort, callback) {
+        if(percent >= 0 && percent <= 100 && !abort) {
+            if(!element.find(".progress").is(":visible")) {
+                window.documents.fileProgressOpen(element, function() {
+                    element.find(".bar").animate({
+                        width: percent + "%"
+                    }, 200);
+
+                    if(percent == 100) {
+                        setTimeout(function() {
+                            window.documents.fileProgressClose(element, callback)
+                        }, 300);
+                    } else {
+                        if(callback) callback();
+                    }
+                });
+            } else {
+                element.find(".bar").animate({
+                    width: percent + "%"
+                }, 200);
+
+                if(percent == 100) {
+                    setTimeout(function() {
+                        window.documents.fileProgressClose(element, callback)
+                    }, 300);
+                } else {
+                    if(callback) callback();
+                }
+            }
+        } else if(element.find(".progress").is(":visible")) {
+            window.documents.fileProgressClose(element, callback);
+        }
+    },
+    fileProgressOpen: function(element, callback) {
+        element.find(".bar").width("0%");
+        element.find(".name").fadeOut(200);
+        setTimeout(function() {
+            element
+                .find(".progress")
+                .show()
+                .animate({
+                    bottom: "8px",
+                    opacity: 1
+                }, 200);
+
+            if(callback) setTimeout(callback, 300);
+        });
+    },
+    fileProgressClose: function(element, callback) {
+        element.find(".progress").animate({
+            bottom: "0px",
+            opacity: 0
+        }, 200);
+
+        setTimeout(function() {
+            element
+                .find(".progress")
+                .hide()
+                .parent(".item")
+                .find(".name")
+                .fadeIn(200);
+
+            if(callback) setTimeout(callback, 300);
+        }, 300);
+    },
+    fileSearch: function(search, filters) {
+        $(".pane .item").each(function() {
+            var item = $(this);
+            var show = true;
+
+            $.when(Function)
+            .then(function() {
+                if(search) {
+                    if(item.attr("data-name").toLowerCase().indexOf(search.toLowerCase()) == -1) {
+                        show = false;
+                    }
+                }
+            })
+            .then(function() {
+                filters.each(function() {
+                    var value = $(this).find(":selected").attr("value");
+                    if(value && item.attr("data-" + $(this).attr("name")) != value) {
+                        show = false;
+                    }
+                });
+            }).done(function() {
+                item.toggle(show);
+            });
+        });
+
+        $(".sidebar .info").text($(".pane .item:visible").length + " files");
+    },
+    fileDownload: function(files, open) {
+        if(open) {
+            $(".pane .item")
+                .not(files)
+                .addClass("disabled");
+
+            files
+                .find(".icon")
+                .attr("class", "icon spin " + config.icons.spinner);
+        }
+
+        window.documents.locationNotification("online", "upload");
+        window.documents.fileProgress(files, 0, false, function() {
+            files.each(function(count) {
+                var file = $(this);
+                $.get("/documents/location/" + file.data("location") + "/" + file.data("path"), function(json) {
+                    if(json.success == false) {
+                        window.documents.headerBar(["message"], json.error_message);
+                    } else {
+                        window.documents.fileProgress(file, 100, false, function() {
+                            if(open && (count+1) == files.length) {
+                                window.location.href = "/editor/" + json.document + "/";
+                            }
+                        });
+
+                        if((count+1) == files.length) {
+                            window.documents.locationNotification("online", "counter", files.length);
+                        }
+                    }
+                });
+            });
+        });
+    },
+    fileCreated: function(responses) {
+        $.each(responses.documents, function(i, item) {
+            window.documents.fileParser(item, true);
+
+            file = $('                                                       \
+                <div class="item file ' + item.color + ' ' + item.class + '" \
+                    style="opacity:0;"                                       \
+                    data-name="' + item.name + '"                            \
+                    data-role="' + item.role + '"                            \
+                    data-id="' + item.id + '"                                \
+                    data-size="' + item.size + '"                            \
+                    data-laborators="0"                                      \
+                    data-type="' + item.type + '">                           \
+                    <div class="icon ' + item.icon + '"></div>               \
+                    <div class="name">' + item.name + '</div>                \
+                    <div class="progress">                                   \
+                        <div class="bar"></div>                              \
+                    </div>                                                   \
+                </div>                                                       \
+            ')
+            .appendTo(".pane")
+            .animate({ opacity: 1 }, 1000);
+        });
+    },
+    fileRename: function(data) {
+        window.documents.fileParser(data.document, true);
+
+        $(".pane .file[data-id='" + data.document.id + "']")
+            .attr({
+                "class": "item file " + data.document.color,
+                "data-name": data.document.name,
+                "data-type": data.document.type
+            })
+            .find(".icon")
+            .attr("class", "icon " + data.document.icon)
+            .siblings(".name")
+            .text(data.document.name);
+    },
+    fileParser: function(item, online) {
+        if(online) {
+            //File Users
+            if(item.users <= 2) {
+                item["laborators"] = 0;
+            } else if(item.users >= 3 && item.users <= 5) {
+                item["laborators"] = 1;
+            } else if(item.users >= 6 && item.users <= 8) {
+                item["laborators"] = 2;
+            } else if(item.users >= 9 && item.users <= 11) {
+                item["laborators"] = 3;
+            } else {
+                item["laborators"] = 4;
+            }
+
+            //File Size
+            if(item.size <= 1024) {
+                item["size"] = 0;
+            } else if(item.size > 1024 && item.size <= 1024 * 10) {
+                item["size"] = 1;
+            } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
+                item["size"] = 2;
+            } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
+                item["size"] = 3;
+            } else {
+                item["size"] = 4;
+            }
+
+            // File Type
+            switch(item.type) {
+                case "file-template":
+                    item["class"] = "file";
+                    item["color"] = "blue";
+                    item["icon"] = config.icons.file_template;
+                    break;
+                case "file-script":
+                    item["class"] = "file";
+                    item["color"] = "blue";
+                    item["icon"] =  config.icons.file_script;
+                    break;
+
+                case "file-zip":
+                    item["class"] = "file disabled";
+                    item["color"] = "red";
+                    item["icon"] = config.icons.file_zip;
+                    break;
+                case "file-image":
+                    item["class"] = "file";
+                    item["color"] = "green";
+                    item["icon"] = config.icons.file_image;
+                    break;
+                case "file-notebook":
+                    item["class"] = "file";
+                    item["color"] = "green";
+                    item["icon"] = config.icons.file_notebook;
+                    break;
+                case "file-math":
+                    item["class"] = "file";
+                    item["color"] = "purple";
+                    item["icon"] = config.icons.file_math;
+                    break;
+
+                default:
+                    item["class"] = "file";
+                    item["color"] = "blue";
+                    item["icon"] = config.icons.file;
+                    break;
+            }
+
+            // Protection
+            switch(item.protection) {
+                case "password":
+                    item["corner"] = config.icons.locked;
+                    break;
+                case "assigned":
+                    item["corner"] = config.icons.profile;
+                    break;
+                default:
+                    item["corner"] = "";
+                    break;
+            }
+        }  else {
+            //File Size
+            if(!item.size) {
+                item["size"] = "";
+            } else if(item.size <= 1024) {
+                item["size"] = 0;
+            } else if(item.size > 1024 && item.size <= 1024 * 10) {
+                item["size"] = 1;
+            } else if(item.size > 1024 * 10 && item.size <= 1024 * 100) {
+                item["size"] = 2;
+            } else if(item.size > 1024 * 100 && item.size <= 1024 * 1024) {
+                item["size"] = 3;
+            } else {
+                item["size"] = 4;
+            }
+
+            //File Types
+            switch(item.type) {
+                case "back":
+                    item["color"] = "";
+                    item["class"] = "back";
+                    item["icon"] = config.icons.file_back;
+                    break;
+                case "folder":
+                    item["color"] = "purple";
+                    item["class"] = "folder";
+                    item["icon"] = config.icons.folder;
+                    break;
+                case "folder-symlink":
+                    item["color"] = "orange";
+                    item["class"] = "folder";
+                    item["icon"] = config.icons.folder;
+                    break;
+                case "file-template":
+                    item["color"] = "blue";
+                    item["class"] = "file";
+                    item["icon"] = config.icons.file_template;
+                    break;
+                case "file-script":
+                    item["color"] = "blue";
+                    item["class"] = "file";
+                    item["icon"] = config.icons.file_script;
+                    break;
+                case "file-zip":
+                    item["color"] = "red";
+                    item["class"] = "file disabled";
+                    item["icon"] = config.icons.file_zip;
+                    break;
+                case "file-image":
+                    item["color"] = "green";
+                    item["class"] = "file";
+                    item["icon"] = config.icons.file_image;
+                    break;
+                default:
+                    item["color"] = "";
+                    item["class"] = "file disabled";
+                    item["icon"] = config.icons.file;
+                    break;
+            }
+        }
+
+        return item;
     }
 }

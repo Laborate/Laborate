@@ -1,4 +1,8 @@
 *.log
 .DS_Store
 node_modules
-npm-debug.log
+tmp
+config.json
+dump.rdb
+* copy*
+lib/email/**/style.css

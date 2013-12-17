@@ -1,74 +1,101 @@
-html, body, ul, form {
-	margin:0;
-	padding:0;
-	font-family:'Helvetica Neue', Helvetica,Arial, sans-serif;
+@import './index';
+@import '../compless/all';
+
+html {
+    height: 100%;
+}
+
+body {
+    background: @color_body;
+    font-family: 'Helvetica Neue', Helvetica,Arial, sans-serif;
+    min-width: 1077px;
+    min-height: 100%;
+    position: relative;
+    .reset-box-model();
+
+    @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px) {
+        min-width: 320px;
+    }
 }
 
 * {
     outline: none;
-}
-
-body {
-    min-width: 920px;
+    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 ul {
-	list-style:none;
+	list-style: none;
 }
 
 a {
     color: inherit;
-	text-decoration:none;
+	text-decoration: none;
 }
 
 .left {
-	float:left;
+	.float-left();
 }
 
 .right {
-	float:right;
+	.float-right();
 }
 
 .center {
-	margin-left:auto;
-	margin-right:auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .clear {
-	float:none;
-	clear:both;
+	float: none;
+	clear: both;
+	.clearfix();
 }
 
 .full {
-	float:none;
-	clear:both;
-	margin:0;
-	width:100%;
-}
-
-.pull_left {
-	width:92px !important;
-}
-
-.pull_right {
-	float:right;
-	width:92px !important;
-}
-
-.bold {
-    font-weight: bold;
-}
-
-.hidden {
-    display: none;
-}
-
-.scroll {
-    overflow: scroll;
+	float: none;
+	clear: both;
+	margin: 0;
+	width: 100%;
 }
 
 .disabled {
     opacity: .8;
+}
+
+input, select, textarea {
+    outline: none;
+    margin: 2px 0px;
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    -webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+pre {
+    width: 95%;
+}
+
+.scroll-pane {
+	width: 100%;
+	height: 30%;
+	overflow: auto;
 }
 
 @font-face {

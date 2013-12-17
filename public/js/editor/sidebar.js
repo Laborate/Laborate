@@ -1,68 +1,35 @@
-$(window).ready(function() {
+$(function() {
     /* Core Operations */
-    $("#sidebar_header .icon").live("click", function() {
-        window.sidebarUtil.change($(this).attr("id"), "");
+    $(".sidebar .list .item").on("click", function() {
+        window.sidebarUtil.change($(this).attr("data-key"), false);
     });
 
-    $("#sidebar form").live("submit", function() {
+    $(".sidebar .back").on("click", function() {
+        window.sidebarUtil.change(false);
+    });
+
+    $(".header .top .form").on("change", function() {
+        window.sidebarUtil.submit($(this));
+    });
+
+    $(".search form, .sidebar form").on("submit", function() {
+        window.sidebarUtil.submit($(this));
         return false;
     });
 
-    /* Triggers: Documents */
-    $("#document_undo").live("click", function() {
-        window.editor.undo();
+    $(".sidebar .form[name='settings'] select[name='security']").on("change", function() {
+        window.sidebarUtil.togglePassword($(this).val() == "false");
     });
 
-    $("#document_redo").live("click", function() {
-        window.editor.redo();
+    $(".sidebar .form[name='type-mode'] select").on("change", function() {
+        $(this).parents("form").submit();
     });
 
-    $("#document_format").live("click", window.sidebarUtil.format);
-
-
-    /* Triggers: Find */
-    $("#lineNumberList .listX").live("click", function() {
-        window.sidebarUtil.highlightRemove($(this).parent());
+    $(".sidebar .form[name='highlight-line'] .listing").on("click", ".remove", function() {
+        window.sidebarUtil.highlightRemove($(this).parents(".item").attr("data-lines"));
     });
 
-    $("#findList .listX").live("click", function() {
-        window.sidebarUtil.searchRemove($(this));
+    $(".sidebar .form[name='highlight-word'] .listing").on("click", ".remove", function() {
+        window.sidebarUtil.searchRemove($(this).parents(".item").attr("data-search"));
     });
-
-    $("#lineNumberJumpForm").live("submit", function() {
-        window.sidebarUtil.jumpToLine($("#lineNumberJump").val());
-        $("#lineNumberJump").val("");
-        return false;
-    });
-
-    $("#lineNumberForm").live("submit", function() {
-         window.sidebarUtil.highlight($("#lineNumber").val());
-         $("#lineNumber").val("");
-         return false;
-    });
-
-    $("#findWordsForm").live("submit", function() {
-        window.sidebarUtil.search($("#findWords").val());
-        $("#findWords").val("");
-        return false;
-    });
-
-    /* Triggers: Share */
-    $("#email_share").live("submit", window.sidebarUtil.email_invite);
-    setTimeout(window.sidebarUtil.copy_button, 1000);
-
-    /* Triggers: Download */
-    $("#downloadFile").live("click", window.sidebarUtil.downloadFile);
-    $("#githubCommit").live("click", window.sidebarUtil.commitFile);
-    $("#saveToServer").live("click", window.sidebarUtil.pushFile);
-
-    /* Triggers: Settings */
-    $("#password_change").on("click", window.sidebarUtil.togglePassword);
-    $("#settingsSave").on("click", window.sidebarUtil.settings);
-
-    $("#removeDoc, #actionConfirmCancel").live("click", function() {
-        $("#removeConfirm").slideToggle();
-    });
-
-    $("#removeConfirmClick").on("click", window.sidebarUtil.remove);
 });

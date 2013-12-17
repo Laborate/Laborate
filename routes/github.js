@@ -1,23 +1,29 @@
+var querystring = require('querystring');
+
+exports.token = function(req, res, next) {
+    res.redirect(req.github.auth_url);
+}
+
 exports.add_token = function(req, res, next) {
     if(req.param("code")) {
         req.github.get_token(req.param("code"), function (error, token) {
             req.models.users.get(req.session.user.id, function(error, user) {
-                user.github = token;
-                req.session.user = user;
+                user.save({ github: token });
+                req.session.user.github = token;
                 req.session.save();
-                res.redirect("/account/settings/");
+                res.redirect("/documents/popup/add/location/");
             });
         });
     } else {
-        res.redirect("/account/settings/");
+        res.redirect("/documents/popup/add/location/");
     }
 };
 
 exports.remove_token = function(req, res, next) {
     if(req.session.user.github) {
         req.models.users.get(req.session.user.id, function(error, user) {
-            user.github = null;
-            req.session.user = user;
+            user.save({ github: null });
+            req.session.user.github = null;
             req.session.save();
             res.redirect("/account/settings/");
         });
@@ -30,17 +36,20 @@ exports.repos = function(req, res, next) {
     if(req.session.user.github) {
         req.github.repos(req.session.user.github, function(error, results) {
             if(!error) {
-                res.json(results);
+                res.json({
+                    success: true,
+                    repos: results
+                });
             } else {
                 if(error.message == "Bad credentials") {
-                    res.error(200, "Bad Github Oauth Token");
+                    res.error(200, "Bad Github Oauth Token", error);
                 } else {
-                    res.error(200, "Failed To Load Github Contents");
+                    res.error(200, "Failed To Load Github Repos", error);
                 }
             }
         });
     } else {
-        res.json([]);
+        res.error(200, "Bad Github Oauth Token");
     }
 };
 
@@ -69,24 +78,55 @@ exports.contents = function(req, res, next) {
                             location: req.param("0"),
                         }, function(error, document) {
                             if(!error) {
-                                res.json({document: document.id});
+                                res.json({
+                                    success: true,
+                                    document: document.pub_id
+                                });
                             } else {
-                                res.error(200, "Failed To Create Document");
+                                res.error(200, "Failed To Create Document", error);
                             }
                         });
                         break;
 
                     case "directory":
-                        res.json(results.contents);
+                        res.json({
+                            success: true,
+                            contents: $.map(results.contents, function(item) {
+                                if(item){
+                                    item.type = function(type, extension) {
+                                        if(type == "file") {
+                                            if(!extension) {
+                                                return "file";
+                                            }  else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                                return "file-image";
+                                            } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                                return "file-template";
+                                            } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                                                return "file-zip";
+                                            } else {
+                                                return "file-script";
+                                            }
+                                        } else if(type == "dir") {
+                                            return "folder";
+                                        } else if(type == "symlink") {
+                                            return "folder-symlink";
+                                        } else {
+                                            return type;
+                                        }
+                                    }(item.type, item.extension);
+                                    return item;
+                                }
+                            })
+                        });
                         break;
                 }
             } else {
                 if(error.message == "Bad credentials") {
-                    res.error(200, "Bad Github Oauth Token");
+                    res.error(200, "Bad Github Oauth Token", error);
                 } if(error.message == "This repository is empty.") {
                     res.json([]);
                 } else {
-                    res.error(200, "Failed To Load Github Contents");
+                    res.error(200, "Failed To Load Github Contents", error);
                 }
             }
         });
@@ -97,9 +137,9 @@ exports.contents = function(req, res, next) {
 
 exports.commit = function(req, res, next) {
     if(req.session.user.github) {
-        req.models.documents_roles.find({
+        req.models.documents.roles.find({
             user_id: req.session.user.id,
-            document_id: req.param("document")
+            document_pub_id: req.param("document")
         }, function(error, documents) {
             if(!error && documents.length == 1 && documents[0].permission_id != 3) {
                 var document = documents[0].document;
@@ -121,10 +161,10 @@ exports.commit = function(req, res, next) {
                     res.error(200, "Failed To Commit File");
                 }
             } else {
-                res.error(200, "Failed To Commit File");
+                res.error(200, "Failed To Commit File", error);
             }
         });
     } else {
-        res.error(200, "Failed To Commit File");
+        res.error(200, "Bad Github Oauth Token");
     }
 }

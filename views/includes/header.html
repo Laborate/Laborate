@@ -1,5 +1,13 @@
-<% include signature.html %>
-<% title = (title) ? (title + site_delimeter + site_title) : site_title; %>
+<!--
+| | __ _| |__   ___  _ __ __ _| |_ ___  (_) ___
+| |/ _` | '_ \ / _ \| '__/ _` | __/ _ \ | |/ _ \
+| | (_| | |_) | (_) | | | (_| | ||  __/_| | (_) |
+|_|\__,_|_.__/ \___/|_|  \__,_|\__\___(_)_|\___/
+-->
+<%
+    title = (title) ? (title + site_delimeter + site_title) : site_title;
+    random = (!production) ? ("?rand=" + random) : "";
+%>
 <!DOCTYPE html>
 <html itemscope="itemscope" itemtype="http://schema.org/WebPage" lang="en">
     <head>
@@ -7,33 +15,41 @@
         <title><%= title %></title>
         <meta name="description" content="Collaborative software development made easy! Upload files manually, from Github repositories or SFTP Servers in seconds and start editing in realtime with your team.">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta charset="utf-8">
 
         <!-- Open Graph Meta Tags -->
         <meta property="og:type" content="website">
-        <meta property="og:url" content="http://<%= host %>/">
-        <meta property="og:image" content="http://<%= host %>/favicon/196.png">
+        <meta property="og:url" content="<%= host %>">
+        <meta property="og:image" content="<%= favicons["196"] + random %>">
         <meta property="og:title" content="<%= title %>">
         <meta property="og:description" content="Collaborative software development made easy! Upload files manually, from Github repositories or SFTP Servers in seconds and start editing in realtime with your team.">
 
         <!-- Google Webmaster Meta Tags -->
-        <meta name="google-site-verification" content="4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY" />
+        <meta name="google-site-verification" content="<%= google_verification %>" />
 
         <!-- Robot Meta Tags -->
         <meta name="revisit-after" content="5 days">
         <meta name="distribution" content="web">
-        <meta name="ROBOTS" content="INDEX, FOLLOW">
 
-        <!-- Opera Speed Dial Favicon -->
-        <link rel="icon" type="image/png" href="http://<%= host %>/favicon/160.png" />
+        <% if(private) { %>
+            <meta name="robots" content="noindex">
+        <% } else { %>
+            <meta name="robots" content="index, follow">
+        <% } %>
+
+        <!-- Favicon ICO -->
+        <link rel="shortcut icon" href="<%= favicons["ico"] + random %>" />
         <!-- Standard Favicon -->
-        <link rel="icon" type="image/png" href="http://<%= host %>/favicon/16.png" />
+        <link rel="icon" type="image/png" href="<%= favicons["196"] + random %>" />
+        <!-- Opera Speed Dial Favicon -->
+        <link rel="icon" type="image/png" href="<%= favicons["160"] + random %>" />
         <!-- For iPhone 4 Retina display: -->
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://<%= host %>/favicon/114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= favicons["114"] + random %>">
         <!-- For iPad: -->
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://<%= host %>/favicon/72.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= favicons["72"] + random %>">
         <!-- For iPhone: -->
-        <link rel="apple-touch-icon-precomposed" href="http://<%= host %>/favicon/57.png">
+        <link rel="apple-touch-icon-precomposed" href="<%= favicons["57"] + random %>">
 
         <!-- CSS -->
         <%- css %>
@@ -44,18 +60,35 @@
                 host: "<%= host %>",
                 csrf: "<%= csrf %>",
                 port: "<%= port %>",
+                title: "<%= title %>",
                 name: "<%= site_title %>",
-                delimeter: "<%= site_delimeter %>"
+                delimeter: "<%= site_delimeter %>",
+                pageTrack: <%= pageTrack %>,
+                gravatar: "<%= gravatar %>",
+                apps: <%- JSON.stringify(apps) %>,
+                icons: <%- JSON.stringify(icons) %>,
+
+                <% $.each(config, function(key, value) { %>
+                    <% if(typeof value == "boolean") { %>
+                        <%= key %>: <%- value %>,
+                    <% } else if(typeof value == "object") { %>
+                        <%= key %>: <%- JSON.stringify(value) %>,
+                    <% } else if(typeof value == "number") { %>
+                        <%= key %>: <%= value %>,
+                    <% } else  { %>
+                        <%= key %>: "<%= value %>",
+                    <% } %>
+                <% }); %>
             }
         </script>
 
         <!-- Javascript -->
         <%- js %>
 
-        <!-- Sentry Logging -->
+        <!-- Raven Exception Handling -->
         <script type="text/javascript">
             Raven.config("<%= sentry %>").install();
             window.onerror = Raven.process;
         </script>
     </head>
-    <body>
+    <body class="<%= (organization.id) ? "organization" : "" %>">

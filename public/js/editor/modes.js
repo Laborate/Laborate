@@ -1,80 +1,80 @@
-function setEditorMode(mode) {
-    languageExtentsion =  { "js":"javascript", "json":"application/json",
-                            "php":"php",
-                            "css":"css",
-                            "h":"text/x-c++src", "c":"text/x-csrc", "cc":"text/x-csrc", "cpp":"text/x-c++src",
-                            "cxx":"text/x-csharp", "java":"text/x-java", "jar":"text/x-java","scala":"text/x-c++src",
-                            "m":"text/x-c++src", "pch":"text/x-c++src",
-                            "coffee":"text/x-coffeescript",
-                            "lisp":"commonlisp",
-                            "clj":"clojure",
-                            "diff":"diff", "patch":"diff",
-                            "ecl":"ecl",
-                            "erlc":"erlang",
-                            "go":"go",
-                            "groovy":"groovy",
-                            "lhs":"haskell",
-                            "zip":"haxe",
-                            "net":"application/x-aspx", "asp":"htmlembedded", "jsp":"application/x-jsp", "aspx":"application/x-aspx",
-                            "ejs": "application/x-ejs", "jade": "text/x-jade",
-                            "html":"htmlmixed","plist":"htmlmixed",
-                            "less":"less",
-                            "lua":"lua",
-                            "markdown":"gfm", "mdown":"gfm", "mkdn":"gfm", "md":"gfm", "mkd":"gfm",
-                            "mdwn":"gfm", "mdtxt":"gfm", "mdtext":"gfm", "text":"gfm",
-                            "frm":"mysql", "myd":"mysql", "myi":"mysql",
-                            "nt":"ntriples",
-                            "ocaml":"ocaml", "ml":"ocaml", "mli":"ocaml",
-                            "p":"pascal", "pl":"pascal", "pas":"pascal", "pascal":"pascal",
-                            "pl":"perl", "pm":"perl", "pig":"pig",
-                            "sql":"sql", "psql":"sql", "mysql":"sql", "sqlite3":"sql",
-                            "properties":"properties",
-                            "r":"r",
-                            "spec":"spec",
-                            "changelog":"changes",
-                            "rst":"rst",
-                            "rb":"ruby",
-                            "rs":"rust",
-                            "ss":"scheme",
-                            "sh":"shell",
-                            "sieve":"sieve",
-                            "stinit":"smalltalk", "im":"smalltalk", "st":"smalltalk",
-                            "tpl":"smarty",
-                            "sparql":"sparql",
-                            "tex":"stex", "stex":"stex", "sex":"stex",
-                            "tiddler":"tiddlywiki", "tid":"tiddlywiki",
-                            "vb":"vb",
-                            "vbs":"vbscript",
-                            "vsl":"velocity", "vm":"velocity",
-                            "v":"verilog", "vp":"verilog",
-                            "xml":"xml", "xmi":"xml", "xdr":"xml", "xdp":"xml", "xdl":"xml", "xql":"xml", "xsd":"xml",
-                            "xsl":"xml", "xss":"xml", "xsl":"xml",
-                            "xq":"xquery", "xqm":"xquery", "xquery":"xquery", "xqy":"xquery",
-                            "yml":"yaml",
-                            "py":"python", "p":"python", "pickle":"python", "pyd":"python", "pyo":"python",  "pyw":"python",
-                            "rpy":"python" }
+$(function() {
+    window.editorUtil.languages = {};
+    $.each(CodeMirror.modeInfo, function(key, value) {
+        if(value.name != "HTML") {
+            window.editorUtil.languages[value.name] = {
+                mime: value.mime,
+                mode: value.mode
+            }
 
-    if(mode in languageExtentsion) {
-        var modeName = languageExtentsion[mode];
-    } else {
-        var modeName = "shell";
+            if(value.name == "Embedded Javascript") {
+                window.editorUtil.languages["HTML"] = {
+                    mime: value.mime,
+                    mode: value.mode
+                }
+            }
+        }
+    });
+
+    window.editorUtil.extensions =  {
+        "js":"JavaScript", "json":"JSON",
+        "php":"PHP",
+        "css":"CSS",
+        "h":"C", "c":"C", "cc":"C", "cpp":"C++",
+        "cxx":"C++", "java":"Java", "jar":"Java","scala":"Scala",
+        "pch":"C++",
+        "m": "Octave",
+        "coffee":"Coffee Script",
+        "lisp":"Common Lisp",
+        "clj":"Clojure",
+        "diff":"Diff", "patch":"Diff",
+        "ecl":"ECL",
+        "erlc":"Erlang",
+        "go":"Go",
+        "groovy":"Groovy",
+        "lhs":"Haskell",
+        "zip":"Haxe",
+        "net":"Asp.net", "asp":"Asp.net HTML",
+        "jsp":"Java Server Pages", "aspx":"JavaServer Pages",
+        "ejs": "Embedded Javascript", "jade": "Jade",
+        "html":"HTML","plist":"Plist",
+        "less":"LESS", "sass": "Sass", "scss": "SCSS",
+        "lua":"Lua",
+        "markdown":"Markdown", "mdown":"Markdown",
+        "mkdn":"GitHub Flavored Markdown", "md":"GitHub Flavored Markdown",
+        "mkd":"Markdown", "mdwn":"Markdown", "mdtxt":"Markdown",
+        "mdtext":"Markdown", "text":"Markdown",
+        "frm":"MYSQL", "myd":"MYSQL", "myi":"MYSQL",
+        "nt":"Ntriples",
+        "ocaml":"Ocaml", "ml":"Ocaml", "mli":"Ocaml",
+        "p":"Pascal", "pl":"Pascal", "pas":"Pascal", "Pascal":"Pascal",
+        "pl":"Perl", "pm":"Perl", "pig":"Pig",
+        "sql":"SQL", "psql":"PSQL", "mysql":"MYSQL",
+        "sqlite3":"Sqlite3",
+        "properties":"Properties",
+        "r":"R",
+        "spec":"Spec",
+        "changelog":"Changes",
+        "rst":"RST",
+        "rb":"Ruby",
+        "rs":"Rust",
+        "ss":"Scheme",
+        "sh":"Shell",
+        "sieve":"Sieve",
+        "stinit":"Smalltalk", "im":"Smalltalk", "st":"Smalltalk",
+        "tpl":"Smarty",
+        "sparql":"Sparql",
+        "tex":"Stex", "stex":"Stex", "sex":"Stex",
+        "tiddler":"Tiddly Wiki", "tid":"Tiddly Wiki",
+        "vb":"VB",
+        "vbs":"VBS",
+        "vsl":"Velocity", "vm":"Velocity",
+        "v":"Verilog", "vp":"Verilog",
+        "xml":"XML", "xmi":"XML", "xdr":"XML", "xdp":"XML", "xdl":"XML", "xql":"XML", "xsd":"XML",
+        "xsl":"XML", "xss":"XML", "xsl":"XML",
+        "xq":"XQuery", "xqm":"XQuery", "xquery":"XQuery", "xqy":"XQuery",
+        "yml":"Yaml",
+        "py":"Python", "p":"Python", "pickle":"Python", "pyd":"Python", "pyo":"Python",  "pyw":"Python",
+        "rpy":"Python"
     }
-
-    if(modeName == "gfm") {
-        CodeMirror.autoLoadMode(window.editor, "javascript");
-        CodeMirror.autoLoadMode(window.editor, "css");
-        CodeMirror.autoLoadMode(window.editor, "htmlmixed");
-        CodeMirror.autoLoadMode(window.editor, "clike");
-    } else if(["m", "h", "c", "cc", "cpp", "cxx", "java", "jar", "scala", "pch"].indexOf(modeName) != -1) {
-        CodeMirror.autoLoadMode(window.editor, "clike");
-    } else if(modeName == "application/json") {
-        CodeMirror.autoLoadMode(window.editor, "javascript");
-    }
-
-    if(["application/json"].indexOf(modeName) == -1) {
-        CodeMirror.autoLoadMode(window.editor, modeName);
-    }
-
-    window.editor.setOption("mode", modeName);
-    setTimeout(function () { window.editor.refresh(); }, 100)
-}
+});

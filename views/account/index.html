@@ -1,0 +1,406 @@
+<% include ../includes/header.html %>
+<div class="sidebar">
+    <div class="profile">
+        <div class="img">
+            <a href="/account/notifications/">
+                <img src="<%= gravatar %>" />
+            </a>
+        </div>
+    </div>
+    <div class="list">
+        <div class="shadow-top"></div>
+        <div class="listing">
+            <div class="item" data-key="dashboard">
+                <div class="container">
+                    <div class="name">Dashboard</div>
+                    <div class="icon <%= icons.dashboard %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="profile">
+                <div class="container">
+                    <div class="name">Public Profile</div>
+                    <div class="icon <%= icons.profile %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+                <div class="item" data-key="settings">
+                    <div class="container">
+                        <div class="name">Account Settings</div>
+                        <div class="icon <%= icons.settings %>"></div>
+                    </div>
+                    <div class="active"></div>
+                </div>
+            <% } %>
+            <div class="item" data-key="locations">
+                <div class="container">
+                    <div class="name">Manage Locations</div>
+                    <div class="icon <%= icons.locations %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="notifications">
+                <div class="container">
+                    <div class="name">Notifications</div>
+                    <div class="icon <%= icons.notifications %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="billing">
+                <div class="container">
+                    <div class="name">Plans & Billing</div>
+                    <div class="icon <%= icons.billing %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="payments">
+                <div class="container">
+                    <div class="name">Payment History</div>
+                    <div class="icon <%= icons.payment_history %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <!-- Enable After Session Tracking Is Enabled
+            <div class="item" data-key="security">
+                <div class="container">
+                    <div class="name">Security History</div>
+                    <div class="icon <%= icons.security_history %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            -->
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="header">
+        <div class="top">
+            <div class="search">
+                <form id="search" autocomplete="off">
+                    <div class="icon <%= icons.search %>"></div>
+                    <input type="text" placeholder="Search your files..." />
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="accounts">
+                <% if(user.admin) { %>
+                    <a href="/admin/">Admin</a>
+                    <span>|</span>
+                <% } %>
+                <a href="/documents/">Documents</a>
+                <span>|</span>
+                <a href="/logout/">Sign Out</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <%  if(user.deliquent) { %>
+        <div class="notification">
+            Unless a valid credit card is provided,
+            your account will be downgraded to the free plan at the end of the billing cycle.
+        </div>
+    <%  } else {
+            if(user.notifications.length != 0) {
+                $.each(user.notifications, function(key, notification) {
+                    if(notification.priority) {
+    %>
+                        <div class="notification" data-id="<%= notification.id %>">
+                            <%= notification.message %>
+                            <div class="close <%= icons.cross_square %>"></div>
+                        </div>
+    <%
+                    }
+                });
+            }
+        }
+    %>
+    <div class="pane">
+        <div class="selection dashboard" data-key="dashboard">
+            <div class="container">
+                <div class="side">
+                    <div class="data"><%= user.documents.total %></div>
+                    <div class="label">document<%= (user.documents.total != 1) ?  "s" : "" %></div>
+                </div>
+                <div class="side">
+                    <div class="data"><%= user.documents.private %></div>
+                    <div class="label">private document<%= (user.documents.private != 1) ?  "s" : "" %></div>
+                </div>
+                <div class="side">
+                    <div class="data"><%= user.notifications.length %></div>
+                    <div class="label">notifications</div>
+                </div>
+            </div>
+            <div class="container">
+                <% if(user.documents.top_viewed.length != 0) { %>
+                    <div id="plans" class="listing compact">
+                        <div class="item header center">Popular Files</div>
+
+                        <% $.each(user.documents.top_viewed, function(key, document) { %>
+                            <div class="item selectable">
+                                <a href="/editor/<%= document.pub_id %>/">
+                                    <div class="name"><%= document.name %></div>
+                                    <div class="action <%= (document.password) ? icons.locked_defined + " locked" : "users" %>">
+                                        <% if(!document.password && document.roles.length - 1 != 0) { %>
+                                            <%= document.roles.length - 1 %>
+                                            <span class="<%= icons.users %>"></span>
+                                        <% } %>
+                                    </div>
+                                    <div class="clear"></div>
+                                </a>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="listing">
+                        <div class="item empty">
+                            Don't have any files? <a href="/documents/popup/add/document/">Add One</a>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="selection" data-key="profile">
+            <form class="container" action="/account/profile/">
+                <div class="gravatar">
+                    <div class="img">
+                        <img src="<%= gravatar %>"/>
+                    </div>
+                    <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned || !user.organizations[0].gravatar) { %>
+                        <div class="link">
+                            <a href="http://gravatar.com" target="_blank">Change Avatar</a>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="profile">
+                    <div class="item">
+                        <div class="name">Full Name</div>
+                        <input class="input" type="text" name="name" value="<%= user.name %>" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Screen Name</div>
+                        <input class="input" type="text" name="screen_name" value="<%= user.screen_name %>" />
+                    </div>
+                    <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+                        <div class="item">
+                            <div class="name">Email Address (Affects Login)</div>
+                            <input class="input" type="text" name="email" value="<%= user.email %>" />
+                        </div>
+                    <% } %>
+                    <% if(user.organizations.length != 0) { %>
+                        <div class="item">
+                            <div class="name"><%= user.organizations[0].permission.name %> of</div>
+                            <input class="input" type="text" value="<%= user.organizations[0].organization.name %>" disabled="disabled" />
+                        </div>
+                    <% } %>
+                </div>
+                <input class="button" type="submit" value="Update Profile" data-success="Profile Updated" />
+            </form>
+        </div>
+        <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
+            <div class="selection" data-key="settings">
+                <form class="container" action="/account/settings/password/" autocomplete="off">
+                    <div class="item">
+                        <div class="name">Old Password</div>
+                        <input class="input" type="password" name="old_password" />
+                    </div>
+                    <div class="item">
+                        <div class="name">New Password</div>
+                        <input class="input" type="password" name="new_password" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Confirm Password</div>
+                        <input class="input" type="password" name="confirm_password" />
+                    </div>
+                    <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
+                </form>
+                <form class="container" action="/account/settings/delete/" autocomplete="off">
+                    <div class="item">
+                        <div class="comment">
+                            Deleting your account will delete all files you own. Please
+                            transfer ownership of your files if you want other people
+                            to be able to access them. This action is irreversible.
+                        </div>
+                        <div class="name">Password</div>
+                        <input class="input" type="password" name="password" />
+                    </div>
+                    <input class="button red" type="submit" value="Delete Account" />
+                </form>
+            </div>
+        <% } %>
+        <div class="selection" data-key="locations">
+            <div id="locations" class="listing container">
+                <% if(!$.isEmptyObject(user.locations)) { %>
+                    <div class="item header">
+                        <div class="icon">App</div>
+                        <div class="name">Location Name</div>
+                    </div>
+                    <% $.each(user.locations, function(key, item) {
+                        var name = item["name"];
+                        if(["github", "bitbucket"].indexOf(item.type) != -1) {
+                            name = name.split("/");
+                            name = name[0] + "/<strong>" + name[1] + "</strong>";
+                        }
+                    %>
+                        <div class="item" data-id="<%= key %>">
+                            <div class="icon <%= icons[item.type] %>"></div>
+                            <div class="name"><%- name %></div>
+                            <div class="action remove">Remove</div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="item empty">
+                        Don't have any locations? <a href="/documents/popup/add/location/">Add One</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="selection" data-key="billing">
+            <% if($.isEmptyObject(user.card) || user.deliquent) { %>
+                <form class="container" action="/account/billing/card/add" autocomplete="off">
+                    <div class="item">
+                        <div class="name">Name On Card</div>
+                        <input class="input" type="text" name="name" />
+                    </div>
+                    <div class="item half">
+                        <div class="name">Credit Card</div>
+                        <input id="card" class="input" type="text" name="card" />
+                        <img id="card-company" class="card-type">
+                    </div>
+                    <div class="item quarter">
+                        <div class="name">Expiration</div>
+                        <input id="expiration" class="input" type="text" name="expiration" placeholder="MM / YYYY" />
+                    </div>
+                    <div class="item quarter">
+                        <div class="name">CVC</div>
+                        <input id="cvc" class="input" type="text" name="cvc" />
+                    </div>
+                    <div class="clear"></div>
+                    <input class="button" type="submit" value="Add Credit Card" data-success="Credit Card Added"/>
+                </form>
+            <% } else { %>
+                <div id="credit-cards" class="listing container">
+                    <div class="item">
+                        <div class="icon">
+                            <img class="card-type" src="/img/cards/<%= user.card.type.replace(" ", "") %>.png">
+                        </div>
+                        <div class="title"><%= user.card.name %></div>
+                        <div class="card">
+                            <span class="big">····</span> <%= user.card.card %>
+                        </div>
+                        <div class="action remove">Remove</div>
+                    </div>
+                </div>
+            <% } %>
+            <div class="container">
+                <% if(user.pricing.priority > 0) { %>
+                    <div class="comment">
+                        When downgrading your plan, all documents that
+                        currently have passwords will not be affected.
+                    </div>
+                <% } %>
+                <div id="plans" class="listing">
+                    <div class="item header">
+                        <div class="small-text">Plan</div>
+                        <div class="tiny-text">Price</div>
+                        <div class="icon">Pro</div>
+                        <div class="left">Private Documents</div>
+                    </div>
+
+                    <% $.each(plans, function(key, pricing) {
+                        if(pricing.pro) {
+                            var icon_class = icons.checked + " checked";
+                        } else {
+                            var icon_class = icons.unchecked + " unchecked";
+                        }
+
+                        if(pricing.id == user.pricing.id) {
+                            var item = "active";
+                            var button = "current";
+                        } else {
+                            if(user.deliquent || (pricing.amount != 0 && $.isEmptyObject(user.card))) {
+                                var item = "";
+                                var button = (key == 0) ? "downgrade" : "Card Required";
+                                var button_class =  (key == 0) ? "clickable" : "error";
+                            } else {
+                                var item = "";
+                                var button = (pricing.priority > user.pricing.priority) ? "upgrade" : "downgrade";
+                                var button_class = "clickable";
+                            }
+                        }
+
+                        if(pricing.documents != null) {
+                            var documents = pricing.documents;
+                        } else {
+                            var documents = "Unlimited";
+                        }
+
+                        if(pricing.amount == 0) {
+                            var amount = "Free";
+                        } else {
+                            var amount = "$" + pricing.amount;
+                        }
+                    %>
+                        <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
+                            <div class="small-text"><%= pricing.name %></div>
+                            <div class="tiny-text"><%= amount %></div>
+                            <div class="icon <%= icon_class %>"></div>
+                            <div class="small-text"><%- documents %></div>
+                            <div class="action button <%= button_class %>"><%= button %></div>
+                        </div>
+
+                        <% if(user.pricing.student && key == 0) { %>
+                            <div class="banner">
+                                <div class="arrow"></div>
+                                <span class="<%= icons.student %>"></span> price included within tuition
+                            </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+        <div class="selection" data-key="notifications">
+            <div id="notifications" class="listing container">
+                <% if(user.notifications.length != 0) { %>
+                    <div class="item header">
+                        <div class="message">Notification Messages</div>
+                    </div>
+                    <% $.each(user.notifications, function(key, item) { %>
+                        <div class="item" data-id="<%= item.id %>">
+                            <div class="priority <%= (item.priority) ? "active" : "" %>"></div>
+                            <div class="message"><%= item.message %></div>
+                            <div class="action remove">Remove</div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="item empty">
+                        Congratulations you are all up to date!
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="selection" data-key="payments">
+            <div class="listing container">
+                <% if(user.payments.length != 0) { %>
+                    <div class="item header">
+                        <div class="description">Description</div>
+                        <div class="small-text">Plan</div>
+                        <div class="smaller-text">Amount</div>
+                    </div>
+                    <% $.each(user.payments, function(key, item) { %>
+                        <div class="item" data-id="<%= item.pub_id %>">
+                            <div class="description"><%= item.description %></div>
+                            <div class="small-text"><%= item.plan %></div>
+                            <div class="smaller-text">$<%= item.amount %></div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="item empty">
+                        The billing cycle starts on the first of the month. Check back soon!
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../includes/footer.html %>

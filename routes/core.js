@@ -1,16 +1,16 @@
+var fs = require("fs");
+var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
+var backdrop_themes = {};
 
-exports.config = function(req, res, next) {
+exports.setup = function(req, res, next) {
+    //Set Server Root For Non Express Calls
+    req.session.server = req.protocol + "://" + req.host;
+    req.session.save();
+    if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
+
     //Header Config
-    res.setHeader("Server", "Laborate.io");
-
-    //Response Locals
-    res.locals.host = req.host;
-    res.locals.site_title = config.general.product + config.general.delimeter.web + config.general.company;
-    res.locals.site_delimeter = config.general.delimeter.web;
-    res.locals.csrf = req.session._csrf;
-    res.locals.port = config.general.port;
-    res.locals.sentry = config.sentry.browser;
+    res.setHeader("Server", config.general.company);
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {
@@ -20,35 +20,224 @@ exports.config = function(req, res, next) {
     next();
 }
 
+exports.tracking = function(req, res, next) {
+    req.redis.get("tracking", function(error, data) {
+        var user = req.session.user;
+        var organization = req.session.organization.id;
+        var tracking = (data) ? JSON.parse(data) : [];
 
-exports.login = function(req, res) {
-    res.renderOutdated('login', {
-        title: 'Login',
-        mode: "login",
-        js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop")
-    });
-};
-
-exports.register = function(req, res) {
-    res.renderOutdated('register', {
-        title: 'Register',
-        mode: 'register',
-        js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop")
-    });
-};
-
-exports.verify = function(req, res) {
-    if(req.session.user.verified) {
-        res.renderOutdated('verify', {
-            title: 'Verify Your Account',
-            mode: "verify",
-            feedback: 'Verification Email Has Been Sent',
-            js: clientJS.renderTags("backdrop"),
-            css: clientCSS.renderTags("backdrop")
+        tracking.push({
+            type: "web",
+            lat: req.location.ll[0],
+            lon: req.location.ll[1],
+            ip: req.headers['x-forwarded-for'],
+            port: req.headers['x-forwarded-port'],
+            user_id: (user) ? user.id : null,
+            organization_id: (organization) ? organization.id : null
         });
+
+        req.redis.set(
+            "tracking",
+            JSON.stringify(tracking),
+            req.error.capture
+        );
+    });
+    next();
+}
+
+exports.locals = function(req, res, next) {
+    res.locals.csrf = (req.csrfToken) ? req.csrfToken() : "";
+    res.locals.port = config.general.port;
+    res.locals.production = config.general.production;
+    res.locals.host = req.session.server;
+    res.locals.site_title = req.session.organization.logo || config.general.company;
+    res.locals.site_delimeter = config.general.delimeter.web;
+    res.locals.description = config.general.description.join("");
+    res.locals.sentry = config.sentry.browser;
+    res.locals.google_verification = config.google.verification;
+    res.locals.company = config.general.company;
+    res.locals.logo = req.session.organization.logo || config.general.logo;
+    res.locals.backdrop = "";
+    res.locals.private = false;
+    res.locals.pageTrack = true;
+    res.locals.config = {};
+    res.locals.random = config.random;
+    res.locals.icons = config.icons;
+    res.locals.user = req.session.user;
+    res.locals.organization = req.session.organization;
+    res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
+    res.locals.apps = {
+        sftp: {
+            show: config.apps.sftp
+        },
+        github: {
+            show: config.apps.github,
+            enabled: !!(req.session.user && req.session.user.github),
+            link: "/github/token/"
+        },
+        bitbucket: {
+            show: config.apps.bitbucket,
+            enabled: !$.isEmptyObject(req.session.user && req.session.user.bitbucket),
+            link: "/bitbucket/token/"
+        },
+        dropbox: {
+            show: config.apps.dropbox,
+            enabled: false,
+            link: "/dropbox/token/"
+        },
+        google: {
+            show: config.apps.google,
+            enabled: false,
+            link: "/google/token/"
+        }
+    };
+    res.locals.favicons = (!$.isEmptyObject(req.session.organization.icons)) ? req.session.organization.icons : {
+        "ico": res.locals.host + "/favicon/icon.ico",
+        "196": res.locals.host + "/favicon/196.png",
+        "160": res.locals.host + "/favicon/160.png",
+        "114": res.locals.host + "/favicon/114.png",
+        "72": res.locals.host + "/favicon/72.png",
+        "57": res.locals.host + "/favicon/57.png"
+    };
+
+    next();
+}
+
+exports.device = function(req, res, next) {
+    var device = req.device.type.toLowerCase();
+    var user_agent = req.headers['user-agent'].toLowerCase();
+
+    if(user_agent.indexOf("msie") != -1) {
+        res.error(200, "Internet Explorer browsers aren't supported yet. \
+            Try <a class='backdrop-link' href='http://www.google.com/chrome'>Chrome</a>.", null, false);
+    } else if(["desktop", "bot"].indexOf(device) != -1 || user_agent == "ruby") {
+        next();
     } else {
-        res.redirect("/documents/");
+        device = device.charAt(0).toUpperCase() + device.slice(1);
+        res.error(200, device + "'s aren't supported yet", null, false);
     }
-};
+}
+
+exports.reload = function(documents) {
+    return function(req, res, next) {
+        async.series([
+            function(callback) {
+                req.models.users.get(req.session.user.id, function(error, user) {
+                    req.session.user = user;
+                    callback(error);
+                });
+            },
+            function(callback) {
+                if(documents) {
+                    async.parallel({
+                        total: function(callback) {
+                            req.models.documents.roles.count({
+                                user_id: req.session.user.id
+                            }, function(error, count) {
+                                callback(error, count);
+                            });
+                        },
+                        private: function(callback) {
+                            req.models.documents.count({
+                                owner_id: req.session.user.id,
+                                password: req.db.tools.ne(null)
+                            }, function(error, count) {
+                                callback(error, count);
+                            });
+                        },
+                        top_viewed: function(callback) {
+                            req.models.documents.roles.find({
+                                user_id: req.session.user.id
+                            }, ["viewed", "Z"], 10, function(error, roles) {
+                                callback(error, $.map(roles, function(role) {
+                                    return role.document;
+                                }));
+                            });
+                        }
+                    }, function(errors, documents) {
+                        if(!errors) {
+                            req.session.user.documents = documents;
+                        } else {
+                            req.session.user.documents = {
+                                total: 0,
+                                password: 0,
+                                top_viewed: []
+                            }
+                        }
+                        callback(errors);
+                    });
+                } else {
+                    callback(null);
+                }
+            },
+            function(callback) {
+                req.session.save();
+                callback(null);
+            }
+        ], next);
+    }
+}
+
+exports.backdrop = function(req, res, next) {
+    req.backdrop = function(theme) {
+        theme = (theme) ? theme : (req.session.organization) ? req.session.organization.theme : "blurry";
+        var files = backdrop_themes[theme];
+        var style_css = "";
+
+        if(!files) {
+           var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
+            if(fs.existsSync(theme_path) && fs.lstatSync(theme_path).isDirectory()) {
+                files = fs.readdirSync(theme_path);
+
+                if(files.length != 0) {
+                    backdrop_themes[theme] = files;
+                } else {
+                    return req.backdrop("blurry");
+                }
+            } else {
+                return req.backdrop("blurry");
+            }
+        }
+
+        style_css = ("background-image: url('/img/backgrounds/" +
+                    theme + "/" + files[Math.floor((Math.random() * files.length))] +
+                    "');");
+
+        if(theme == "blurry") {
+            var hue = Math.floor((Math.random() * 360)) + "deg";
+            style_css += ("filter: hue-rotate(" + hue + ");         \
+                           -webkit-filter: hue-rotate(" + hue + "); \
+                           -moz-filter: hue-rotate(" + hue + ");    \
+                           -ms-filter: hue-rotate(" + hue + ");     \
+                           -o-filter: hue-rotate(" + hue + ");      \
+                          ");
+        }
+
+        return style_css.replace(/ /g, '');
+    }
+
+    next();
+}
+
+exports.organization = function(req, res, next) {
+    if(req.session.organization) {
+        if(["register", "verify", "reset"].indexOf(req.url.split("/")[1]) != -1) {
+            if(!req.session.organization.register) {
+                res.error(404);
+            } else {
+                next();
+            }
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+}
+
+exports.sitemap = function(req, res, next) {
+    req.sitemap(req, function(xml) {
+        res.set('Content-Type', 'application/xml');
+        res.send(xml);
+    });
+}

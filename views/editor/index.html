@@ -1,0 +1,276 @@
+<% include ../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
+         <div id="backdrop-container">
+            <div class="backdrop-text"><%= document.name %></div>
+            <form action="/editor/<%= document.pub_id %>/join/">
+                <% if(document.password) { %>
+                    <input type="password" autofocus="on" name="password" class="backdrop-input" placeholder="password"/>
+                    <input type="submit" class="backdrop-button" value="connecting..." disabled="disabled"/>
+                <% } else { %>
+                    <input type="hidden" name="password"/>
+                    <div class="loader-bar">
+                        <div class="loader-bar-block"></div>
+                    </div>
+                <% } %>
+            </form>
+         </div>
+    </div>
+    <div id="backdrop-footer">
+        <ul>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+            <li><a href="/">© <%= company %></a></li>
+        </ul>
+    </div>
+</div>
+<div class="sidebar">
+    <div class="profile">
+        <div class="img">
+            <a href="/account/notifications/">
+                <img src="<%= gravatar %>" />
+            </a>
+        </div>
+    </div>
+    <div class="controller">
+        <div class="back <%= icons.circle_arrow_up %>"></div>
+        <div class="title">Settings</div>
+    </div>
+    <div class="list">
+        <div class="shadow-top"></div>
+        <div class="listing">
+            <div class="item" data-key="document">
+                <div class="container">
+                    <div class="name">File</div>
+                    <div class="icon <%= icons.file %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="search">
+                <div class="container">
+                    <div class="name">Search</div>
+                    <div class="icon <%= icons.search %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="laborators">
+                <div class="container">
+                    <div class="name">Laborators</div>
+                    <div class="icon <%= icons.users %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="upload">
+                <div class="container">
+                    <div class="name">Upload</div>
+                    <div class="icon <%= icons.circle_arrow_up %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="download">
+                <div class="container">
+                    <div class="name">Download</div>
+                    <div class="icon <%= icons.circle_arrow_down %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="settings">
+                <div class="container">
+                    <div class="name">Settings</div>
+                    <div class="icon <%= icons.settings %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+        </div>
+        <div class="shadow-bottom"></div>
+    </div>
+    <div class="pane">
+        <div class="item" data-key="document">
+            <div class="form pair">
+                <form name="undo">
+                    <button class="button">
+                        <span class="icon <%= icons.undo %>"></span>Undo
+                    </button>
+                </form>
+                <form name="redo">
+                    <button class="button">
+                        <span class="icon <%= icons.redo %>"></span>Redo
+                    </button>
+                </form>
+            </div>
+            <form class="form collection" name="type-mode">
+                <div class="select">
+                    <div class="icon <%= icons.menu_arrows %>"></div>
+                    <select name="languages"></select>
+                </div>
+                <div class="select">
+                    <div class="icon <%= icons.menu_arrows %>"></div>
+                    <select name="keymapping">
+                        <option value="default">KeyMappings</option>
+                        <option value="vim">Vim</option>
+                        <option value="emacs">Emacs</option>
+                    </select>
+                </div>
+            </form>
+            <form class="form collection" name="beautify">
+                <div class="select">
+                    <div class="icon <%= icons.menu_arrows %>"></div>
+                    <select>
+                        <option value="whole">Document</option>
+                        <option value="selection">Selection</option>
+                    </select>
+                </div>
+                <button type="submit" class="button">
+                    <span class="icon <%= icons.beautify %>"></span>Beautify
+                </button>
+            </form>
+        </div>
+        <div class="item" data-key="search">
+            <form class="form connected" name="line-jump">
+                <input class="input" type="text" placeholder="Jump To Line"/>
+                <button type="submit" class="button">Go</button>
+            </form>
+            <form class="form connected" name="highlight-line">
+                <input class="input" type="text" placeholder="Find Line(s)"/>
+                <button type="submit" class="button">Go</button>
+                <div class="listing"></div>
+            </form>
+            <form class="form connected" name="highlight-word">
+                <input class="input" type="text" placeholder="Find Word(s)"/>
+                <button type="submit" class="button">Go</button>
+                <div class="listing"></div>
+            </form>
+        </div>
+        <div class="item" data-key="laborators">
+            <form class="form connected" name="invite">
+                <input class="input" type="text" placeholder="screen name"/>
+                <button type="submit" class="button">Go</button>
+                <div class="clear"></div>
+                <div class="error_message"></div>
+                <div class="listing"></div>
+            </form>
+        </div>
+        <div class="item" data-key="upload">
+            <form class="form collection" name="commit">
+                <div>Laborate/<strong>Middleware</strong></div>
+                <textarea class="textarea" placeholder="message"></textarea>
+                <button type="submit" class="button">Commit To Github</button>
+            </form>
+            <form class="form collection" name="save">
+                <button type="submit" class="button">Save To Dropbox</button>
+            </form>
+        </div>
+        <div class="item" data-key="download">
+            <form class="form" data-key="print">
+                <button type="submit" class="button">
+                    <span class="icon <%= icons.print %>"></span>Print
+                </button>
+            </form>
+            <form class="form" name="download">
+                <button type="submit" class="button">
+                    <span class="icon <%= icons.download %>"></span>Download
+                </button>
+            </form>
+        </div>
+        <div class="item" data-key="settings">
+            <form class="form collection" name="settings">
+                <input class="input" type="text" placeholder="file name" value="<%= document.name %>"/>
+                <% if(document.owner.id == user.id) { %>
+                    <% if(user.organizations.length != 0) { %>
+                        <% if(!user.organizations[0].permission.student) { %>
+                            <div class="select">
+                                <div class="icon <%= icons.menu_arrows %>"></div>
+                                <select name="readonly">
+                                    <option value="false">Collaborate</option>
+                                    <option value="true" <%= (document.readonly) ? "selected" : "" %>>Readonly</option>
+                                </select>
+                            </div>
+                        <% } %>
+                    <% } %>
+                    <% if(user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
+                        <div class="select">
+                            <div class="icon <%= icons.menu_arrows %>"></div>
+                            <select name="security">
+                                <option value="false">Public</option>
+                                <option value="true" <%= (document.password) ? "selected" : "" %>>Private</option>
+                            </select>
+                        </div>
+                        <input class="input" name="password" type="password"
+                            placeholder="password" <%= (!document.password) ? "disabled" : "" %>
+                        />
+                    <% } %>
+                <% } %>
+                <button type="submit" class="button">Save</button>
+            </form>
+            <form class="form collection" name="delete">
+                <button type="submit" class="button red"><%= (document.owner.id == user.id) ? "Delete" : "Forget" %></button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="header">
+        <div class="top">
+            <div class="search">
+                <form name="highlight-word" class="form" autocomplete="off">
+                    <div class="icon <%= icons.search %>"></div>
+                    <input type="text" placeholder="Search your file..." />
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="accounts">
+                <% if(user.admin) { %>
+                    <a href="/admin/">Admin</a>
+                    <span>|</span>
+                <% } %>
+                <a href="/account/">Account</a>
+                <span>|</span>
+                <a href="/documents/">Documents</a>
+                <span>|</span>
+                <a href="/logout/">Sign Out</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="bottom">
+            <div class="filters">
+                <div class="filter">
+                    <span>Name:</span>
+                    <strong><%= document.name %></strong>
+                </div>
+                <div class="filter" data-key="file-access">
+                    <span>Access:</span>
+                    <strong></strong>
+                </div>
+                <div class="filter" data-key="file-size">
+                    <span>Size:</span>
+                    <strong></strong>
+                </div>
+                <div class="filter" data-key="file-lines">
+                    <span>Lines:</span>
+                    <strong></strong>
+                </div>
+            </div>
+            <div class="message"></div>
+            <div class="fullscreen <%= icons.expand %>"></div>
+        </div>
+    </div>
+    <div class="pane">
+        <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
+        <div class="shadow-top"></div>
+    </div>
+    <div class="chat">
+        <div class="controller">5 editors<span><%= site_delimeter %></span>6 viewers</div>
+        <div class="conversation">
+            <div class="shadow-top"></div>
+            <div class="scroll-pane"></div>
+            <div class="shadow-bottom"></div>
+        </div>
+        <div class="messenger">
+            <textarea placeholder="message goes here"></textarea>
+        </div>
+    </div>
+</div>
+<% include ../includes/footer.html %>

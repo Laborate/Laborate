@@ -2,24 +2,13 @@ var editorUtil = require("./editorUtil");
 
 /* Route Functions */
 exports.join = function(req) {
-    editorUtil.models.documents_roles.find({
-        user_id: req.session.user.id,
-        document_id: editorUtil.room(req)
-    }, function(error, documents) {
-        if(documents.length == 1 && !error) {
-            var document = documents[0].document;
-            if(!document.password || req.data[0] == document.password) {
-                if(req.data[1] || !editorUtil.inRoom(req.session.user.screen_name, editorUtil.socketRoom(req))) {
-                    editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req), document);
-                    req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
-                        message: req.session.user.screen_name + " joined the document",
-                        isStatus: true
-                    });
-
-                    req.io.respond({
-                        success: true,
-                        content: (document.content) ? document.content.join("\n") : "",
-                        breakpoints: document.breakpoints
+    if(req.session.user) {
+        editorUtil.accessCheck(req.session.user.id, editorUtil.room(req), req.data[0], function(access_object) {
+            if(access_object.success) {
+                if(!editorUtil.inRoom(req.data[1], req.session.user.screen_name, editorUtil.socketRoom(req))) {
+                    editorUtil.clientData(editorUtil.socketRoom(req), access_object, function(data) {
+                        editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+                        req.io.respond(data);
                     });
                 } else {
                     req.io.respond({
@@ -28,96 +17,117 @@ exports.join = function(req) {
                     });
                 }
             } else {
-                req.io.respond({
-                    success: false,
-                    error_message: "Incorrect Password",
-                    redirect_url: "/documents/"
-                });
-
-                //Force Socket Disconnect
-                req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+                editorUtil.kickOut(req, access_object);
             }
-        } else {
-            req.io.respond({
-                success: false,
-                error_message: "Document Does Not Exist",
-                redirect_url: "/documents/"
-            });
-
-            //Force Socket Disconnect
-            req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
-        }
-    });
+        });
+    } else {
+        editorUtil.kickOut(req);
+    }
 }
 
 exports.disconnectAll = function(req) {
-    var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
-    if(socket in req.io.socket.manager.sockets.sockets) {
-        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
+    if(req.session.user) {
+        var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
+        if(socket in req.io.socket.manager.sockets.sockets) {
+            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
+        }
+        req.io.respond({ success: true });
+        req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+        exports.leave(req, true);
     }
-    req.io.respond({ success: true });
-    req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
-    exports.leave(req, true);
 }
 
 exports.leave = function(req, override) {
-    var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
-    //Only Non-forced Disconnects
-    if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
-        req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
-            message: req.session.user.screen_name + " left the document",
-            isStatus: true
-        });
-        editorUtil.removeUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+    if(req.session.user) {
+        var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
+        //Only Non-forced Disconnects
+        if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
+            req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
+                message: req.session.user.screen_name + " left the document",
+                isStatus: true
+            });
+            editorUtil.removeUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+        }
+    } else {
+        editorUtil.kickOut(req);
     }
 }
 
 exports.chatRoom = function(req) {
-    req.data["from"] = req.session.user.screen_name;
-    req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', req.data);
+    if(req.session.user) {
+        req.data.from = req.session.user.screen_name;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', req.data);
+    } else {
+        editorUtil.kickOut(req);
+    }
 }
 
 exports.document = function(req) {
-    //console.log(req.data["changes"]);
-    req.data["from"] = req.session.user.screen_name;
-    req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
+    if(req.session.user) {
+        req.data.from = req.session.user.screen_name;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
+
+        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+            reply = JSON.parse(reply);
+            reply.changes.push(req.data["changes"]);
+            lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
+        });
+    }
 }
 
 exports.cursors = function(req) {
-    req.data["from"] = req.session.user.screen_name;
-    req.io.room(editorUtil.socketRoom(req)).broadcast('editorCursors', req.data);
+    if(req.session.user) {
+        req.data.from = req.session.user.screen_name;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(editorUtil.socketRoom(req)).broadcast('editorCursors', req.data);
+    } else {
+        editorUtil.kickOut(req);
+    }
 }
 
 exports.extras = function(req) {
-    req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', req.data);
-
-    if("breakpoint" in req.data) {
-        editorUtil.redisClient.get(editorUtil.socketRoom(req), function(error, reply) {
-            reply = JSON.parse(reply);
-            console.log(reply.breakpoints);
-            console.log(reply.content);
-
-            if(!reply.breakpoints) {
-                reply.breakpoints = new Array();
-            }
-
-            if(req.data.breakpoint.remove) {
-                if(reply.breakpoints.indexOf(req.data.breakpoint.line) > -1) {
-                    reply.breakpoints.splice(reply.breakpoints.indexOf(req.data.breakpoint.line), 1);
-                }
-
-                if(reply.breakpoints.length == 0) {
-                    reply.breakpoints = null;
+    //Methods
+    this.breakpoints = function(changes, breakpoints, callback) {
+        $.each(changes, function(index, value) {
+            if(value.remove) {
+                if(breakpoints.indexOf(value.line) > -1) {
+                    breakpoints.splice(breakpoints.indexOf(value.line), 1);
                 }
             } else {
-                reply.breakpoints.push(req.data.breakpoint.line);
+                breakpoints.push(value.line);
             }
-
-
-            editorUtil.redisClient.set(editorUtil.socketRoom(req), JSON.stringify({
-                content: reply.content,
-                breakpoints: reply.breakpoints
-            }));
         });
+
+        callback(breakpoints);
+    }
+
+    this.get = function(callback) {
+        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+            callback(JSON.parse(reply));
+        });
+    }
+
+    this.save = function(data) {
+        lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
+    }
+
+    //Logic
+    if(req.session.user) {
+        req.data.from = req.session.user.screen_name;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', req.data);
+
+        if("breakpoint" in req.data) {
+            this.get(function(reply) {
+                this.breakpoints(req.data.breakpoint, reply.breakpoints, function(breakpoints) {
+                    reply.breakpoints = breakpoints;
+                });
+                this.save(reply);
+            });
+        }
+    } else {
+        editorUtil.kickOut(req);
     }
 }

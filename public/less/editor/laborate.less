@@ -1,40 +1,95 @@
-#editorCodeMirror * {outline: none;}
+@import '../core/index';
+@import '../compless/all';
 
-.CodeMirror {position: relative;}
-.CodeMirror-scroll {height: 100%; overflow-y: auto; overflow-x: auto;}
-.CodeMirror-focused .cm-matchhighlight {background: #adfab4}
-.CodeMirror-activeline-background {background: rgba(213,238,250,0.2);}
-.CodeMirror pre.CodeMirror-placeholder { color: #999; }
+.CodeMirror {
+    position: relative;
+    height: 100%;
+}
 
-.cm-s-laborate {background: #fff;; color: #323231;}
-.cm-s-laborate .CodeMirror-selected {background: rgba(176,208,255,0.61);}
-.cm-s-laborate .CodeMirror-highlighted {background: #b0d0ff;}
-.cm-s-laborate .CodeMirror-linejump {background: #b4d9f2;}
-.cm-s-laborate .CodeMirror-gutters {background: none; border-right: 0px; padding-right: 10px;}
-.cm-s-laborate .CodeMirror-linenumber {cursor: pointer;}
-.cm-s-laborate .CodeMirror-cursor {border-left: 1px solid #666;}
-.cm-s-laborate .CodeMirror-breakpoint {color: #56606E;}
+.CodeMirror-scroll {
+    overflow-y: auto;
+    overflow-x: auto;
+    margin-right: 10px;
+    padding: 0;
+}
+
+.CodeMirror-focused .cm-matchhighlight {
+    background: #adfab4;
+}
+
+.CodeMirror-activeline-background {
+    background: rgba(213,238,250,0.2);
+}
+
+.CodeMirror pre.CodeMirror-placeholder {
+    color: #999;
+}
+
+.cm-s-laborate {
+    background: transparent;
+    color: #000;
+}
+
+.cm-s-laborate .CodeMirror-selected {
+    background: rgba(176,208,255,0.61);
+}
+
+.cm-s-laborate .CodeMirror-highlighted {
+    background: #b0d0ff;
+}
+
+.cm-s-laborate .CodeMirror-linejump {
+    background: #b3d9f3;
+}
+
+.cm-s-laborate .CodeMirror-gutters {
+    background: none;
+    border-right: 0px;
+    padding-right: 10px;
+}
+
+.cm-s-laborate .CodeMirror-linenumber {
+    cursor: pointer;
+    color: #666;
+}
+
+.cm-s-laborate .CodeMirror-cursor {
+    border-left: 1px solid #666;
+}
+
+.cm-s-laborate .CodeMirror-breakpoint {
+    color: #56606E;
+}
+
 .cm-s-laborate .CodeMirror-dialog {
-    position: fixed !important;
-    padding: 10px 0px 10px 10px !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding: 10px 0px 10px 15px !important;
+    margin-left: -5px !important;
     font-size: 24px !important;
     overflow: visible !important;
     z-index: 100 !important;
     height: auto !important;
-    margin-right: -15px !important;
-    left: 211px !important;
-    right: 245px !important;
     border-bottom: solid 1px #ccc !important;
+    .box-sizing(border-box);
 }
 
-.cm-s-laborate .CodeMirror-dialog-top {
-    top: 50px !important;
-    border-bottom: solid 1px #ccc !important;
+.cm-s-laborate .CodeMirror-vscrollbar {
+    overflow-y: hidden;
 }
 
+.cm-s-laborate .CodeMirror-lines {
+    margin: 20px 0 10px 0;
+}
+
+.cm-s-laborate .CodeMirror-dialog-top,
 .cm-s-laborate .CodeMirror-dialog-bottom {
+    top: inherit !important;
     bottom: 0 !important;
     border-top: solid 1px #ccc !important;
+    border-bottom: none;
 }
 
 .cm-s-laborate .CodeMirror-dialog input {
@@ -65,34 +120,126 @@
     border: solid 1px #5b5b5b;
 }
 
-.cm-s-laborate pre {color: #292929; padding: 0;}
-.cm-s-laborate span.cm-searching {background: #adfab4;}
-.cm-s-laborate span.cm-comment {color: #8E908C;}
-.cm-s-laborate span.cm-atom {color: #C82829;}
-.cm-s-laborate span.cm-number {color: #006ab5;}
-.cm-s-laborate span.cm-meta {color: #E42040;}
-.cm-s-laborate span.cm-qualifier {color: #b76000;}
-.cm-s-laborate span.cm-operator {color: #4042c2;}
+.cm-s-laborate pre {
+    color: #292929;
+    padding: 0;
+}
 
-.cm-s-laborate span.cm-attribute {color: #AB5800;}
-.cm-s-laborate span.cm-property {color: #000;}
-.cm-s-laborate span.cm-keyword {color: #A32575;}
-.cm-s-laborate span.cm-string {color: #355a88;}
+.cm-s-laborate span.cm-searching {
+    background: #adfab4;
+}
 
-.cm-s-laborate span.cm-builtin {color: #8734BE;}
-.cm-s-laborate span.cm-variable {color: #000;}
-.cm-s-laborate span.cm-variable-2 {color: #956C00;}
-.cm-s-laborate span.cm-def {color: #357d88;}
-.cm-s-laborate span.cm-error {background: url("/img/underline.png") bottom repeat-x;}
-.cm-s-laborate span.cm-bracket {color: #f8f8f2;}
-.cm-s-laborate span.cm-tag {color: #9B2A92;}
-.cm-s-laborate span.cm-link {color: #7227ff;}
-.cm-s-laborate span.cm-header {color: #00a831}
+.cm-s-laborate span.cm-comment {
+    color: #8E908C;
+}
 
-.cm-s-laborate .CodeMirror-matchingbracket { color: #a62da2 !important;}
-.cm-s-laborate .CodeMirror-nonmatchingbracket {color: #ff0000 !important;}
-.cm-s-laborate .acWord {color:black;}
-.cm-s-laborate .fileLink::after {border-bottom-color: #fbfbfe !important;}
+.cm-s-laborate span.cm-atom {
+    color: #C82829;
+}
+
+.cm-s-laborate span.cm-number {
+    color: #006ab5;
+}
+
+.cm-s-laborate span.cm-meta {
+    color: #E42040;
+}
+
+.cm-s-laborate span.cm-qualifier {
+    color: #b76000;
+}
+
+.cm-s-laborate span.cm-operator {
+    color: #4042c2;
+}
+
+.cm-s-laborate span.cm-attribute {
+    color: #AB5800;
+}
+
+.cm-s-laborate span.cm-property {
+    color: #000;
+}
+
+.cm-s-laborate span.cm-keyword {
+    color: #A32575;
+}
+
+.cm-s-laborate span.cm-string {
+    color: #355a88;
+}
+
+.cm-s-laborate span.cm-builtin {
+    color: #8734BE;
+}
+
+.cm-s-laborate span.cm-variable {
+    color: #000;
+}
+
+.cm-s-laborate span.cm-variable-2 {
+    color: #946a00;
+}
+
+.cm-s-laborate span.cm-def {
+    color: #357d88;
+}
+
+.cm-s-laborate span.cm-error {
+    background: url("/img/underline.png") bottom repeat-x;
+}
+
+.cm-s-laborate span.cm-bracket {
+    color: #f8f8f2;
+}
+
+.cm-s-laborate span.cm-tag {
+    color: #9B2A92;
+}
+
+.cm-s-laborate span.cm-link {
+    color: #7227ff;
+}
+
+.cm-s-laborate span.cm-header {
+    color: #00a831;
+}
+
+.cm-s-laborate .CodeMirror-matchingbracket {
+    color: #a62da2 !important;
+}
+
+.cm-s-laborate .CodeMirror-nonmatchingbracket {
+    color: #ff0000 !important;
+}
+
+.cm-s-laborate .acWord {
+    color: black;
+}
+
+.cm-s-laborate .fileLink::after {
+    border-bottom-color: #fbfbfe !important;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: @color_scroll_track;
+}
+
+::-webkit-scrollbar-thumb {
+    background: @color_scroll_thumb;
+
+    &:hover {
+        background: darken(@color_scroll_thumb, 10%);
+
+        &:active {
+            background: darken(@color_scroll_thumb, 15%);
+        }
+    }
+}
 
 @media print {
     .codemirror, .codemirror-scroll {

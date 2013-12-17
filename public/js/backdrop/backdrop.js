@@ -1,17 +1,28 @@
 window.backdrop = {
+    button: "",
+    timer: null,
+    email: null,
     ready: function() {
-        $("#backdropCore").hide().vAlign().hAlign().show();
-        $("#backdrop input[type=text]").attr({"spellcheck": false});
+        $("#backdrop-core").vAlign().hAlign().show();
+        $(".backdrop-input").attr({"spellcheck": false});
+        window.backdrop.button = $("#backdrop input[type=submit]").val();
+    },
+    load: function() {
+        $("#backdrop-footer").hAlign().show();
     },
     submit: function() {
         var passed = true;
         var data = { _csrf: window.config.csrf }
-        var submit = $("#backdrop input[type=submit]").val();
+        clearInterval(window.backdrop.timer);
 
-        $("#backdrop input[type='text'], #backdrop input[type='password']").each(function() {
+        $(".backdrop-input").each(function() {
             passed = (passed) ? !!$(this).val() : passed;
             data[$(this).attr("name")] = $(this).val();
-            $(this).css({"border": $(this).val() ? "" : "solid thin #CC352D"});
+            if($(this).val()) {
+                $(this).removeClass("error");
+            } else {
+                $(this).addClass("error");
+            }
         });
 
         if(passed) {
@@ -30,8 +41,16 @@ window.backdrop = {
                     }
                 }
                 else {
-                    $("#backdrop .textError").text(result.error_message).fadeIn();
-                    $("#backdrop input[type=submit]").val(submit).removeClass("disabled");
+                    $("#backdrop input[type=submit]")
+                        .val(result.error_message)
+                        .removeClass("disabled")
+                        .addClass("error");
+
+                    window.backdrop.timer = setTimeout(function() {
+                        $("#backdrop input[type=submit]")
+                            .val(window.backdrop.button)
+                            .removeClass("error");
+                    }, 5000);
                 }
             });
         }
@@ -39,38 +58,78 @@ window.backdrop = {
         return false;
     },
     error: function(message, url) {
-        $("#backdrop .textError").hide();
-        $("body > *").not("#backdrop").remove();
-        $("#backdrop").show();
-        $(".backdropContainer")
-            .width("320px")
-            .html(
-                $(".backdropInitalWelcome")
-                    .removeClass("seperatorRequired")
-                    .html(message)[0]
-            );
+        if(message) {
+            $("#backdrop .textError").hide();
+            $("body > *")
+                .not("#backdrop")
+                .remove();
+            $("#backdrop").show();
+            $(".backdrop-bottom").hide();
+            $("#backdrop-container")
+                .css("text-align", "center")
+                .width("290px")
+                .html(message);
 
-        $("#backdropCore").hAlign().vAlign();
+            $("#backdrop-core")
+                .hAlign()
+                .vAlign();
 
-        if(socketUtil) {
-            socketUtil.socket.disconnect();
-            delete socketUtil;
-            io = undefined;
-        }
-
-        if(url) {
-            if(url == true) {
-                setTimeout(function() {
-                    window.location.reload(true);
-                }, 5000);
-            } else {
-                setTimeout(function() {
-                    window.location.href = url;
-                }, 30000);
+            if(url) {
+                if(url == true) {
+                    setTimeout(function() {
+                        window.location.reload(true);
+                    }, 5000);
+                } else {
+                    setTimeout(function() {
+                        window.location.href = url;
+                    }, 30000);
+                }
             }
+        } else {
+            window.location.href = (url) ? url : "/";
         }
+    },
+    urlChange: function(url) {
+        window.location.href = url;
+    },
+    profileImg: function() {
+        if(window.backdrop.email != $("#backdrop-email").val()) {
+            var profile_img = ("https://www.gravatar.com/avatar/" +
+                                                CryptoJS.MD5($("#backdrop-email").val()).toString() +
+                                                "?s=150&d=404");
+
+            $.ajax({
+                url: profile_img,
+                complete: function(xhr) {
+                    if(xhr.status == 200) {
+                        window.backdrop.profileImgChange(profile_img);
+                    } else {
+                        if($("#backdrop-profile img").attr("src") != "https://www.gravatar.com/avatar/?d=mm") {
+                            window.backdrop.profileImgChange("https://www.gravatar.com/avatar/?d=mm");
+                        }
+                    }
+
+                    window.backdrop.email = $("#backdrop-email").val();
+                }
+            });
+        }
+    },
+    profileImgChange: function(url) {
+        $("#backdrop-profile img").fadeOut(200);
+
+        setTimeout(function() {
+            $("#backdrop-profile img")
+                .attr("src", url)
+                .load(function() {
+                    $("#backdrop-profile img").fadeIn(200);
+                });
+        }, 300);
     }
 }
 
-$(window).ready(window.backdrop.ready);
-$("#backdrop form").live("submit", window.backdrop.submit);
+$(document)
+    .ready(window.backdrop.ready)
+    .on("submit", "#backdrop form", window.backdrop.submit)
+    .on("blur change", "#backdrop-email", window.backdrop.profileImg);
+
+$(window).load(window.backdrop.load);

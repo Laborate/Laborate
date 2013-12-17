@@ -1,15 +1,41 @@
-window.url_params = function() {
-    params = /\/account\/(.*?)\//.exec(window.location.href);
-    params_dict = {};
-    if(params) {
-        params_dict["mode"] = params[1];
-    } else {
-        params_dict["mode"] = "profile";
-    }
+$(function() {
+    $(document).on("click", ".list .item", function() {
+        window.account.location($(this).data("key"), true);
+    });
 
-    return params_dict;
-}
+    $(document).on("submit", ".pane form", function() {
+        window.account.locationSubmit($(this));
+        return false;
+    });
 
-$("#navigation ul li").live("click", function() {
-    window.account.navigationChange($(this).attr("id"));
+    $(document).on("click", ".pane #locations .remove", function() {
+        window.account.locationRemove($(this).parents(".item"));
+    });
+
+    $(document).on("click", ".pane #credit-cards .remove", function() {
+        window.account.cardRemove($(this));
+    });
+
+    $(document).on("keyup", ".pane #card", window.account.cardType);
+
+    $(document).on("click", ".pane #plans .button.clickable", function() {
+        window.account.planChange($(this).parents(".item"));
+    });
+
+    $(document).on("click", ".notification .close", function() {
+        window.account.notificationClose($(this).parents(".notification"));
+    });
+
+    $(document).on("click", ".pane #notifications .priority", function() {
+        window.account.notificationPriority($(this).parents(".item"));
+    });
+
+    $(document).on("click", ".pane #notifications .remove", function() {
+        window.account.notificationRemove($(this).parents(".item"));
+    });
+
+    $(document).on("submit", "#search", function() {
+        window.account.fileSearch($(this).find("input").val());
+        return false;
+    });
 });

@@ -1,307 +1,323 @@
 window.sidebarUtil = {
-	change: function(module, focusElement) {
-		$(".sidebar_content_inner").hide();
-		$("#sidebar_header .icon").removeClass("state_active");
-		$("#sidebar_header #" + module).addClass("state_active");
-		$("#sidebar_"+ module).show();
-		$("#" + focusElement).focus();
+	change: function(module, permanent) {
+	    var element = $(".sidebar .list .item[data-key='" + module + "']");
+	    if(module != false && (permanent || !element.hasClass("activated"))) {
+	        $(".sidebar").addClass("menu");
+	        $(".sidebar .pane > .item").hide();
+	        $(".sidebar .list .item").removeClass("activated");
+	        element.addClass("activated");
+            $(".sidebar .pane > .item[data-key='" + module + "']").show();
+            $(".sidebar .controller .title").text(element.find(".name").text());
+        } else {
+            $(".sidebar").removeClass("menu");
+            $(".sidebar .controller .title").text("Menu Panel");
+            $(".sidebar .list .item").removeClass("activated");
+        }
 	},
-	keyMap: function(map) {
-		if(map != "" && map != undefined) {
-			window.editor.setOption("keyMap", map);
-			$.cookie("keyMap", map);
-		}
+	submit: function(form) {
+        switch(form.attr("name")) {
+            case "undo":
+                window.editor.undo();
+                break;
+            case "redo":
+                window.editor.redo();
+                break;
+            case "type-mode":
+                this.typeMode(
+                    form.find("select[name='languages']").val(),
+                    form.find("select[name='keymapping']").val()
+                );
+                break;
+            case "beautify":
+                this.beautify(form.find("select").val());
+                break;
+            case "line-jump":
+                this.jumpToLine(form.find("input").val());
+                form.find("input").val("");
+                break;
+            case "highlight-line":
+                this.highlight(form.find("input").val());
+                form.find("input").val("");
+                break;
+            case "highlight-word":
+                this.search(form.find("input").val());
+                form.find("input").val("");
+                break;
+            case "invite":
+                this.invite(form.find("input").val());
+                form.find("input").val("");
+                break;
+            case "commit":
+                this.commit(form);
+                break;
+            case "save":
+                this.save(form);
+                break;
+            case "print":
+                this.print(form);
+                break;
+            case "download":
+                this.download(form);
+                break;
+            case "settings":
+                this.settings(form);
+                break;
+        }
 	},
-	format: function(whole_document) {
-		for(var i=0; i<=window.editor.lineCount(); i++) {
-			window.editor.indentLine(i);
-		}
+	populateLanguages: function() {
+        var languages = "";
+        $.each(window.editorUtil.languages, function(language, mode) {
+            languages += "<option value='" + language + "'>" + language + "</option>";
+        });
 
-		window.editor.refresh();
+        $(".form[name='type-mode'] select[name='languages']").html(languages);
 	},
-	highlight: function(line) {
-		this.change('find');
-		if(line.length != 0 && window.editor.getValue().length != 0 && /[^0-9,-]/.test(line) == false) {
-			var lines = line.split(",");
-			var part1 = "<div class='header clear'>";
-			part1 += "<div class='listColor' style='background:#B4D5E8;'></div>";
-			part1 += "<div class='left'>";
-			var part2 = "</div><div class='listX right'></div>";
-			part2 += "<div class='clear'></div>";
-
-			for (var a = 0; a < lines.length; ++a) {
-				var line = $.trim(lines[a]);
-				var alreadyThere = false;
-
-				$.each($("#lineNumberList .header"), function() {
-					if($(this).find(".listContent").text() == line) {
-						alreadyThere = true;
-					}
-				});
-
-				if(line.length != 0 && !alreadyThere) {
-					lineSplit = line.split("-");
-
-					if(lineSplit.length == 1) {
-						var range = [parseInt(line)];
-						$("#lineNumberList").append(part1 + "<span class='listContent'>" + lineSplit[0] + "</span>" + part2);
-					}
-					else {
-						var range = createRange(parseInt(lineSplit[0]), parseInt(lineSplit[1]) + 1.0);
-						$("#lineNumberList").append(part1 + "<span class='listContent'>" + lineSplit[0] + "-" + lineSplit[1] + "</span>" + part2);
-					}
-
-					for (var b = 0; b < range.length; ++b) {
-						window.editor.addLineClass(range[b] - 1, "", "CodeMirror-highlighted");
-
-					}
-				}
-			}
-		}
+	defaultLanguage: function(language) {
+        $(".form[name='type-mode'] select[name='languages'] option")
+            .filter(function() {
+                return ($(this).text() == language);
+            })
+            .prop('selected', true);
 	},
-	highlightRemove: function(parent) {
-		var lineSplit = parent.find(".listContent").text().split("-");
-		parent.remove();
-
-		if(lineSplit.length == 1) { range = [parseInt(lineSplit[0])];}
-		else { range = createRange(parseInt(lineSplit[0]), parseInt(lineSplit[1]) + 1.0); }
-
-		for (var c = 0; c < range.length; ++c) {
-			window.editor.removeLineClass(range[c] - 1, "", "CodeMirror-highlighted");
-		}
+	defaultKeymap: function(keymap) {
+	    if(keymap) {
+    	    $(".form[name='type-mode'] select[name='keymapping'] option")
+                .filter(function() {
+                    return ($(this).val() == keymap);
+                })
+                .prop('selected', true);
+        }
 	},
-	search: function(pattern) {
-		this.change('find');
-		var alreadyThere = false;
-
-		$.each($("#findList .header"), function() {
-			if($(this).find(".listContent").text() == pattern) {
-				alreadyThere = true;
-			}
-		});
-
-		if(pattern.length != 0 && window.editor.getValue().length != 0 && !alreadyThere) {
-			function SearchState() {
-				this.posFrom = this.posTo = this.query = null;
-				this.marked = [];
-			}
-
-			function getSearchState() {
-				return window.editor._searchState || (window.editor._searchState = new SearchState());
-			}
-
-			window.searchList = window.searchList || {}
-			var key = Math.floor((Math.random()*10000)+1);
-			window.searchList[key] = new Array();
-			color = randomFunctionalColor();
-			$("<style type='text/css'> .h" + key + "{background:" + color + ";} </style>").appendTo("head");
-			for (var cursor = window.editor.getSearchCursor(pattern); cursor.findNext();) {
-				marked = window.editor.markText(cursor.from(), cursor.to(), {"className": "h" + key})
-				window.searchList[key].push(marked);
-				getSearchState().marked.push(marked);
-			}
-
-			var li = "<div class='header clear " + key + "'>";
-			li += "<div class='listColor' style='background:" + color + "'></div>";
-			li += "<div class='listContent left'></div>" ;
-			li += "<div class='listX right' data='" + key + "'></div>";
-			li += "<div class='clear'></div>";
-			$("#findList").append(li).find("." + key + " .listContent").text(pattern);
-			$("#findList").find("." + key).removeClass(key + "");
-			var state = getSearchState();
-			state.query = null;
-			state.marked.length = 0;
-		}
+	typeMode: function(languages, keymapping) {
+	    window.editorUtil.setModeLanguage(languages);
+        this.keyMap(keymapping);
 	},
-	searchRemove: function(element) {
-		var state = window.searchList[parseInt(element.attr("data"))];
-		for (var i = 0; i < state.length; ++i) {
-			state[i].clear();
-		}
-		delete window.searchList[parseInt(element.attr("data"))];
-		element.parent().remove();
+	keyMap: function(keymap) {
+	    if(keymap) {
+    		window.editor.setOption("keyMap", keymap);
+    		$.cookie("keyMap", keymap, {
+                path: '/editor',
+                expires: 365
+            });
+        }
 	},
-	jumpToLine: function(line) {
-		window.editor.scrollIntoView({"line": (line - 1), "ch":0});
-		window.editor.addLineClass((line - 1), "", "CodeMirror-linejump ");
-
-		setTimeout(function() {
-            window.editor.removeLineClass((line - 1), "", "CodeMirror-linejump ");
-		}, 3000);
-
+	setAccess: function(access) {
+        $(".filter[data-key='file-access'] strong").text(access);
 	},
-	setTitle: function(direction, title) {
+	setTitle: function(direction, title, notification) {
+	    var name = (notification) ? title.slice(0,17) : title;
+	    var notify = (notification) ? ("(" + notification + ")") : "";
+	    var extension = title.split(".")[title.split(".").length - 1];
+	    if(!notification) window.editorUtil.setModeExtension(extension);
+	    window.editorUtil.name = title;
+
 		$("#documentTitle").val(title);
 		$("#document_title").text(title);
-		setEditorMode(title.split(".")[title.split(".").length - 1]);
-		$("title").text(title + window.config.delimeter + window.config.name);
+		$("title").text(name + notify + window.config.delimeter + window.config.name);
 		if(direction == "out") {
     		window.socketUtil.socket.emit('editorExtras' , {
     		    "docName": $("#documentTitle").val()
             });
         }
 	},
-	settings: function() {
-	    $("#settingsSave").removeClass("red_harsh").addClass("disabled").val("Saving...");
-        window.sidebarUtil.keyMap($("#keyMap").val());
-        $.post("/editor/" + window.url_params()["document"] + "/update/", {
-            name: $("#documentTitle").val(),
-            password: $("#documentPassword").val(),
-            change_password: $("#change_password").val(),
-            access_token: window.editorUtil.access_token,
-            _csrf: window.config.csrf
-        }, function(json) {
-            if(json.success) {
-                if($("#change_password").val() == "true") {
-                    window.editorUtil.access_token = json.hash;
-                    window.socketUtil.socket.emit('editorExtras', {
-                            "passChange": true,
-                            "passOpen": ($("#documentPassword").val() == "")
+	togglePassword: function(active) {
+        $(".form[name='settings'] input[name='password']")
+            .val("")
+            .prop("disabled", active);
+	},
+	beautify: function(select) {
+	    window.editor.operation(function() {
+	        if(select == "selection") {
+                var start = window.editor.getCursor("start").line;
+                var end = window.editor.getCursor("end").line;
+	        } else {
+    	        var start = window.editor.firstLine();
+                var end = window.editor.lastLine();
+	        }
+
+            window.editor.eachLine(start, end, function(line) {
+                window.editor.indentLine(
+                    window.editor.getLineNumber(line),
+                    "smart"
+                );
+            });
+	    });
+	},
+	jumpToLine: function(line) {
+	    try {
+    	    line -= 1;
+            window.editor.scrollIntoView({
+                line: line,
+                ch: 0
+            });
+
+            window.editor.addLineClass(line, "text", "CodeMirror-linejump");
+            setTimeout(function() {
+                window.editor.removeLineClass(line, "text", "CodeMirror-linejump");
+            }, 5000);
+        } catch(error) {
+            return error;
+        }
+	},
+	highlight: function(lines) {
+	    if(lines && window.editor.getValue().length != 0) {
+    	    try {
+        	    var _this = this;
+        	    _this.change("search", true);
+        	    window.editor.operation(function() {
+                    $.each(_this.highlightRange(lines), function(key, value) {
+                        if(typeof value == "number") {
+                            _this.highlightListing(value);
+                            window.editor.addLineClass(value, "text", "CodeMirror-highlighted");
+                        } else if(typeof value == "object") {
+                            _this.highlightListing(value);
+                            for (var line = value.from; line < value.to; line++) {
+                                window.editor.addLineClass(line, "text", "CodeMirror-highlighted");
+                            }
+                        }
                     });
+                });
+            } catch(error) {
+                return error;
+            }
+        }
+	},
+	highlightRemove: function(lines) {
+	    var _this = this;
+	    _this.change("search", true);
+	    $(".sidebar .form[name='highlight-line'] .item[data-lines='" + lines + "']").remove();
+        window.editor.operation(function() {
+            $.each(_this.highlightRange(lines), function(key, value) {
+                if(typeof value == "number") {
+                    window.editor.removeLineClass(value, "text", "CodeMirror-highlighted");
+                } else if(typeof value == "object") {
+                    for (var line = value.from; line < value.to; line++) {
+                        window.editor.removeLineClass(line, "text", "CodeMirror-highlighted");
+                    }
                 }
-                window.sidebarUtil.setTitle("out", $("#documentTitle").val());
-                $("#settingsSave").removeClass("red_harsh disabled").val("Settings Saved");
-                setTimeout(function() {
-                    window.sidebarUtil.togglePassword(true);
-                }, 100);
-                setTimeout(function() {
-                    $("#settingsSave").val("Save Settings");
-                }, 5000);
+            });
+        });
+	},
+	highlightRange: function(lines) {
+        return $.map(lines.split(","), function(line) {
+            if(line) {
+                if(line.indexOf("-") != -1) {
+                    line = line.split("-");
 
-            } else {
-               $("#settingsSave").removeClass("disabled").addClass("red_harsh").val("Failed To Save");
-               setTimeout(function() {
-                    $("#settingsSave").removeClass("red_harsh").val("Save Settings");
-                    window.sidebarUtil.togglePassword(true);
-                }, 5000);
+                    if(isNaN(line[0]) || isNaN(line[1])) {
+                        throw Error("Invalid Lines");
+                    } else {
+                        return {
+                            from: parseInt(line[0]-1),
+                            to: parseInt(line[1])
+                        }
+                    }
+                } else {
+                    if(isNaN(line)) {
+                        throw Error("Invalid Lines");
+                    } else {
+                        return parseInt(line-1);
+                    }
+                }
             }
         });
 	},
-	remove: function() {
-	    var input_val = $("#removeDoc").val();
-	    $("#removeDoc").addClass("disabled").val("Removing...");
-    	$.post("/editor/" + window.url_params()["document"] + "/remove/", {
+	highlightListing: function(lines) {
+	    if(typeof lines == "number") {
+	        lines += 1;
+	        var lines_formatted = "Line: " + lines;
+	    } else {
+	        lines = (lines.from + 1) + " - " + lines.to;
+	        var lines_formatted = "Lines: " + lines;
+	    }
+
+    	$(".sidebar .form[name='highlight-line'] .listing")
+    	    .append("                                                                       \
+                <div class='item' data-lines='" + lines + "'>                               \
+                    <div class='name'>" + lines_formatted + "</div>                         \
+                    <div class='remove " + window.config.icons.cross_square + "'></div>     \
+                </div>                                                                      \
+    	    ");
+	},
+	search: function(search) {
+    	if(search && window.editor.getValue().length != 0) {
+    	    try {
+        	    var _this = this;
+        	    this.change("search", true);
+
+        	    window.editor.operation(function() {
+                    var key = Math.floor((Math.random()*10000)+1);
+                    var color = randomFunctionalColor();
+
+                    _this.searchList[key] = [];
+                    _this.searchListing(key, search);
+
+                    $("<style type='text/css'>.s" + key + "{background:" + color + ";}</style>").appendTo("head");
+
+                    for (var cursor = window.editor.getSearchCursor(search); cursor.findNext();) {
+                        var marked = window.editor.markText(cursor.from(), cursor.to(), {
+                            "className": "s" + key
+                        });
+
+                        _this.searchList[key].push(marked);
+                    }
+                });
+            } catch(error) {
+                return error;
+            }
+        }
+	},
+	searchRemove: function(search) {
+	    var _this = this;
+        var state = _this.searchList[parseInt(search)];
+        window.editor.operation(function() {
+            for (var i = 0; i < state.length; ++i) {
+                    state[i].clear();
+            }
+            delete _this.searchList[parseInt(search)];
+            $(".sidebar .form[name='highlight-word'] .item[data-search='" + search + "']")
+                .remove();
+        });
+	},
+	searchListing: function(key, search) {
+    	$(".sidebar .form[name='highlight-word'] .listing")
+    	    .append("                                                                       \
+                <div class='item' data-search='" + key + "'>                                \
+                    <div class='name'>" + $('<div/>').text(search).html() + "</div>         \
+                    <div class='remove " + window.config.icons.cross_square + "'></div>     \
+                </div>                                                                      \
+    	    ");
+	},
+	searchList: {},
+	invite: function(screen_name) {
+	    var _this = this;
+        $.post("/editor/" + url_params()["document"] + "/invite/", {
+            screen_name: screen_name,
             access_token: window.editorUtil.access_token,
             _csrf: window.config.csrf
         }, function(json) {
+            var error = $(".form[name='invite'] .error_message");
+
             if(json.success) {
-                window.socketUtil.socket.emit('editorExtras', {
-                        "docDelete": true
-                });
-                window.location.href = "/documents/";
+                error.slideUp(200);
+                _this.laborators();
             } else {
-               $("#removeDoc").removeClass("disabled").addClass("red_harsh").val("Failed To Remove");
-            }
+                error
+                    .text(json.error_message.toLowerCase())
+                    .slideDown(200);
 
-            setTimeout(function() {
-                $("#removeDoc").removeClass("red_harsh").val(input_val);
-            }, 5000);
-        });
-	},
-	copy_button: function() {
-    	$("#shareCopy").zclip({
-            path:'/flash/copy.swf',
-            copy: window.location.href,
-            afterCopy: function() {
-                $("#shareCopy").val("Copied");
                 setTimeout(function() {
-                    $("#shareCopy").val("Copy Invite Url");
-                }, 5000);
+                    error.slideUp(200);
+                }, 10000);
             }
         });
 	},
-	togglePassword: function(reset) {
-        if(!$("#documentPassword").is(":disabled") || reset == true) {
-            $("#documentPassword").attr("disabled", "disabled").val("");
-            $("#change_password").val("false");
-            $("#password_change")
-                .removeClass("icon-cancel")
-                .addClass("icon-pencil")
-                .css("cssText", "");
-        } else {
-            $("#documentPassword").removeAttr("disabled").val("");
-            $("#change_password").val("true");
-            $("#password_change")
-                .removeClass("icon-pencil")
-                .addClass("icon-cancel")
-                .css("cssText", "border: solid 1px #999 !important;");
-        }
-	},
-	email_invite: function() {
-    	if($("#emailAddresses").val() != "") {
-            $("#emailSend").addClass("disabled").val("Sending...");
-            $("#sidebar_share .header").eq(0).css("color", "");
-            $("#emailAddresses").css("border", "");
-
-            $.post("/editor/" + url_params()["document"] + "/invite/", {
-                addresses: $("#emailAddresses").val(),
-                message: $("#emailMessage").val(),
-                access_token: window.editorUtil.access_token,
-                _csrf: window.config.csrf
-            }, function(json) {
-                 if(json.success) {
-                     $("#emailAddresses, #emailMessage").val("");
-                     $("#emailSend").removeClass("disabled").val("Email Sent");
-                 }
-                 else {
-                     $("#emailSend").removeClass("disabled").val("Email Failed").addClass("red_harsh");
-                 }
-
-                 setTimeout(function() {
-                    $("#emailSend").val("Send Email").removeClass("red_harsh");
-                 }, 5000);
-             });
-        } else {
-            $("#sidebar_share .header").eq(0).css("color", "#F10F00");
-            $("#emailAddresses").css("border", "solid 1px #F10F00");
-            $("#emailSend").val("Missing Information").addClass("red_harsh");
-            setTimeout(function() {
-                $("#sidebar_share .header").eq(0).css("color", "");
-                $("#emailAddresses").css("border", "");
-                $("#emailSend").val("Send Email").removeClass("red_harsh");
-            }, 5000);
-        }
-	},
-	downloadFile: function() {
-		var url = "/editor/" + window.url_params()["document"] + "/download/";
-		url += (window.editorUtil.access_token) ? (window.editorUtil.access_token + "/") : "";
-
-        $("#downloadFile").addClass("disabled").val("Downloading...");
-		$.fileDownload(url, {
-            successCallback: function (url) {
-                $("#downloadFile").removeClass("disabled red_harsh").val("Download File");
-            },
-            failCallback: function (responseHtml, url) {
-                $("#downloadFile").removeClass("disabled").addClass("red_harsh").val("Download Failed");
-
-                setTimeout(function() {
-                    $("#downloadFile").removeClass("disabled red_harsh").val("Download File");
-                }, 5000);
-            }
-		}).done(function() {
-
-		});
-    },
-    commitFile: function() {
-        $("#githubCommit").removeClass("red_harsh").addClass("disabled").val("Commiting...");
-        $.post("/editor/" + url_params()["document"] + "/commit/", {
-            message: $("#githubMessage").val(),
+	laborators: function() {
+        $.post("/editor/" + url_params()["document"] + "/laborators/", {
+            access_token: window.editorUtil.access_token,
             _csrf: window.config.csrf
         }, function(json) {
-             if(json.success) {
-                 $("#githubMessage").val("");
-                 $("#githubCommit").removeClass("disabled").val("File Commited");
-             }
-             else {
-                 $("#githubCommit").removeClass("disabled").val("Commit Failed").addClass("red_harsh");
-             }
-
-             setTimeout(function() {
-                $("#githubCommit").val("Commit File").removeClass("red_harsh");
-             }, 5000);
-         });
-	},
-	pushFile: function() {
-		$("#saveToServer").removeClass("red_harsh").addClass("disabled").val("Saving...");
+            console.log(json);
+        });
 	}
 }

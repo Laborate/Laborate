@@ -5,128 +5,157 @@ var piler      = require("piler");
 var redis      = require('redis');
 var ejs        = require('ejs');
 var RedisStore = require('connect-redis')(express);
-var cluster    = require('cluster');
 var raven      = require('raven');
+var device     = require('express-device');
 
-/* Modules: Custom */
-var error = require("./routes/error");
+/* IMPORTANT - Global Variables */
+GLOBAL.$              = require("jquery");
+GLOBAL.config         = require('./config');
+GLOBAL.lib            = require("./lib");
+GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
+GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 
-/* IMPORTANT - No VAR Makes Variables Global */
-$         = require("jquery");
-config    = require('./config');
-clientJS  = piler.createJSManager({urlRoot: "/js/"});
-clientCSS = piler.createCSSManager({urlRoot: "/css/"});
+/* Update Crontab */
+require("./cron")(__dirname);
 
-//Configure Workers
-workers = function() {
-    var app = express().http().io();
-    var srv = app.server;
+/* Update Config Template */
+lib.core.config_template(__dirname);
 
-    /* Socket IO: Configuration */
-    app.io.configure(function() {
-        app.io.enable('browser client minification');
-        app.io.enable('browser client etag');
-        app.io.enable('browser client gzip');
-        app.io.set('log level', 1);
-        app.io.set('log colors', true);
-        app.io.set('transports', [
-            'websocket',
-            'flashsocket',
-            'htmlfile',
-            'xhr-polling',
-            'jsonp-polling'
-        ]);
+/* Prototype Extensions */
+lib.core.extensions();
 
-        app.io.set('store', new express.io.RedisStore({
-            redisPub: redis.createClient(),
-            redisSub: redis.createClient(),
-            redisClient: redis.createClient(),
-        }));
+/* Ejs Filters */
+lib.core.ejs_filters(ejs);
+
+/* Init Email */
+lib.email_init();
+
+/* Set App & Server Variables */
+var app = express().http().io();
+var srv = app.server;
+var crsf = express.csrf();
+var basic_auth = express.basicAuth;
+
+/* Socket IO: Configuration */
+app.io.configure(function() {
+    app.io.enable('browser client minification');
+    app.io.enable('browser client etag');
+    app.io.enable('browser client gzip');
+    app.io.set('log level', 1);
+    app.io.set('log colors', true);
+    app.io.set('transports', [
+        'websocket',
+        'flashsocket',
+        'htmlfile',
+        'xhr-polling',
+        'jsonp-polling'
+    ]);
+
+    app.io.set('store', new express.io.RedisStore({
+        redisPub: redis.createClient(),
+        redisSub: redis.createClient(),
+        redisClient: redis.createClient(),
+    }));
+});
+
+/* Express: Configuration */
+app.configure(function() {
+    //Assests
+    clientJS.bind(app, srv);
+    clientCSS.bind(app, srv);
+    require("./public")(__dirname);
+
+    //Express Engines
+    app.engine('html', ejs.renderFile);
+
+    //Express Global Config
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'html');
+    app.set('view options', { layout: true });
+    app.set('view cache', true);
+    app.set('x-powered-by', false);
+
+    //Express Direct Assests
+    app.use('/favicon', express.static(__dirname + '/public/favicon'));
+    app.use('/fonts', express.static(__dirname + '/public/fonts'));
+    app.use('/flash', express.static(__dirname + '/public/flash'));
+    app.use('/img', express.static(__dirname + '/public/img'));
+    app.use('/codemirror', express.static(__dirname + '/node_modules/codemirror'));
+
+    //Express Upload Limit
+    app.use(express.limit('20mb'));
+
+    //Express External Addons
+    app.use(slashes(true));
+    app.use(device.capture());
+
+    //Express Logger & Cookie
+    app.use(express.logger('dev'));
+    app.use(express.compress());
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.cookieParser());
+    app.use(express.session({
+        key: config.cookie_session.key,
+        secret: config.cookie_session.secret,
+        store: new RedisStore({
+            client: redis.createClient()
+        })
+    }));
+
+    //Custom Libraries
+    app.use(lib.express);
+
+    //Error Handler (Routes)
+    app.use(require("./routes/error").handler);
+
+    //Custom Setup
+    app.use(require("./routes/core").setup);
+
+    //Custom Backdrop
+    app.use(require("./routes/core").backdrop);
+
+    //Custom Authentication
+    app.use(require("./routes/security").core(crsf, basic_auth));
+
+    //Routes Tracking
+    app.use(require("./routes/core").tracking);
+
+    //Custom Routing
+    app.use(require("./routes/core").locals);
+    app.use(require("./routes/core").device);
+});
+
+/* Development Only */
+app.configure('development', function() {
+    require('express-debug')(app, {
+        theme: __dirname + config.development.debugger.theme,
+        panels: config.development.debugger.panels
     });
+});
 
-    /* Express: Configuration */
-    app.configure(function() {
-        //Assests
-        clientJS.bind(app, srv);
-        clientCSS.bind(app, srv);
-        require("./lib/core/dependencies")();
-
-        //Express
-        app.engine('html', ejs.renderFile);
-        app.set('views', __dirname + '/views');
-        app.set('view engine', 'html');
-        app.set('view options', { layout: true });
-        app.set('view cache', true);
-        app.set('x-powered-by', false);
-        app.use('/favicon', express.static(__dirname + '/public/favicon'));
-        app.use('/fonts', express.static(__dirname + '/public/fonts'));
-        app.use('/flash', express.static(__dirname + '/public/flash'));
-        app.use('/img', express.static(__dirname + '/public/img'));
-        app.use('/codemirror', express.static(__dirname + '/node_modules/codemirror'));
-        app.use(slashes(true));
-        app.use(express.logger('dev'));
-        app.use(express.compress());
-        app.use(express.bodyParser());
-        app.use(express.methodOverride());
-        app.use(express.cookieParser());
-        app.use(express.session({
-            key: config.cookie_session.key,
-            secret: config.cookie_session.secret,
-            store: new RedisStore({
-                client: redis.createClient()
-            })
-        }));
-        app.use(express.csrf());
-
-        //Express Custom
-        app.use(require("./lib/models").express);
-        app.use(require("./lib/email"));
-        app.use(require("./lib/github"));
-        app.use(require("./routes/core").config);
-        app.use(error.global);
-        app.use(error.handler);
-
-        //Send Error Logging To Sentry
-        app.use(raven.middleware.express(config.sentry.node));
+/* Production Only */
+app.configure('production', function() {
+    /* Last Resort Error Handling */
+    process.on('uncaughtException', function (exception) {
+        lib.error.capture(exception);
     });
+});
 
-    /* Development Only */
-    app.configure('development', function() {
-        require('express-debug')(app, {
-            theme: __dirname + config.development.debugger.theme,
-            panels: config.development.debugger.panels
-        });
+/* Express: Start Router */
+app.use(app.router);
 
-        if(config.development.basicAuth.username) {
-            app.use(express.basicAuth(
-                config.development.basicAuth.username,
-                config.development.basicAuth.password
-            ));
-        }
-    });
+/* Send Error Logging To Sentry */
+app.use(raven.middleware.express(config.sentry.node));
 
-    /* Express: Start Router */
-    app.use(app.router);
+/* Error Handler (Express) */
+app.use(require("./routes/error").global);
 
-    /* Express: Import Routes */
-    require('./routes')(app);
+/* Express: Import Routes */
+require('./routes')(app);
 
-    /* Socket IO: Import Routes */
-    require('./sockets')(app);
+/* Socket IO: Import Routes */
+require('./sockets')(app);
 
-    /* Ejs: Import Filters */
-    require('./lib/core/ejs_filters')(ejs);
-
-    /* Listen To Server */
-    app.listen(config.general.port);
-}
-
-//Scale With Workers
-//Start forking if you are the master.
-if (cluster.isMaster && config.general.environment == "production") {
-    for (var i = 0; i < require('os').cpus().length; i++) {
-        cluster.fork();
-    }
-} else {
-    workers();
-}
+/* Listen To Server */
+app.listen(config.general.port);
