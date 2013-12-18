@@ -90,7 +90,7 @@ exports.login = function(req, res, next) {
                 if(has_organization) {
                     if(user.admin && $.isEmptyObject(user.stripe)) {
                         user.set_recovery(req, res);
-                        user.verified(req, function(user) {
+                        user.verified(function(user) {
                             req.session.user = user;
                             res.json({
                                 success: true,
@@ -171,7 +171,6 @@ exports.register = function(req, res, next) {
                                 });
 
                                 req.email("verify", {
-                                    from: config.email.auth.user,
                                     subject: "Please Verify Your Email",
                                     users: [{
                                         name: user.name,
@@ -199,7 +198,7 @@ exports.verify = function(req, res, next) {
         res.error(401);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
-            user.verified(req, function(user) {
+            user.verified(function(user) {
                 req.session.user = user;
                 res.redirect(req.session.redirect_url || "/documents/");
                 delete req.session.redirect_url;
@@ -248,7 +247,6 @@ exports.reset = function(req, res, next) {
                     });
 
                     req.email("reset", {
-                        from: config.email.auth.user,
                         subject: "Reset Password Link",
                         users: [{
                             name: user.name,
