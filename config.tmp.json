@@ -184,7 +184,7 @@
             ".*/**",
             ".*"
         ],
-        "max_failures": 100,
+        "max_failures": 10,
         "output_log": "../logs/middleware/log.out",
         "error_log": "../logs/middleware/log.error"
     },

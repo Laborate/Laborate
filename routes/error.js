@@ -71,8 +71,13 @@ var error_handler = function(status, message, home, req, res) {
 
 exports.global = function(error, req, res, next) {
     if(error) {
-        error_handler(error.status, error.message, true, req, res);
-        req.error.capture(error);
+        var html = error
+                    .toString()
+                    .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+                    .replace(/\n/g, '<br>');
+
+        res.send(html);
+        lib.error.capture(error);
     } else {
         next();
     }

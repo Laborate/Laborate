@@ -15,47 +15,50 @@ exports.users = function(user, room) {
 }
 
 exports.accessCheck = function(user, room, token, callback) {
-    lib.models.documents.roles.find({
-        user_id: user,
-        document_pub_id: room[0]
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            var document = documents[0].document;
-            if((!document.password || token == document.password)) {
-                callback({
-                    success: true,
-                    document: document,
-                    permission: documents[0].permission
-                });
+    lib.models_init(null, function(db, models) {
+        models.documents.roles.find({
+            user_id: user,
+            document_pub_id: room[0]
+        }, function(error, documents) {
+            if(!error && documents.length == 1) {
+                var document = documents[0].document;
+                if((!document.password || token == document.password)) {
+                    callback({
+                        success: true,
+                        document: document,
+                        permission: documents[0].permission
+                    });
+                } else {
+                    callback({
+                        success: false,
+                        error_message: "Invalid Credentials",
+                        redirect_url: "/documents/"
+                    });
+                }
             } else {
                 callback({
                     success: false,
-                    error_message: "Invalid Credentials",
+                    error_message: "Document Does Not Exist",
                     redirect_url: "/documents/"
                 });
             }
-        } else {
-            callback({
-                success: false,
-                error_message: "Document Does Not Exist",
-                redirect_url: "/documents/"
-            });
-        }
-    });
+        });
+    }, true);
 }
 
 exports.clientData = function(room, document_role, callback) {
+    var redis = lib.redis();
     var document = document_role.document;
     var permission = document_role.permission;
 
-    lib.redis.get(room, function(error, reply) {
+    redis.get(room, function(error, reply) {
         if(!error && reply) {
             reply = JSON.parse(reply);
             document.breakpoints = reply.breakpoints;
             document.changes = reply.changes;
         } else {
             document.changes = [];
-            lib.redis.set(room, JSON.stringify({
+            redis.set(room, JSON.stringify({
                 id: document.id,
                 breakpoints: document.breakpoints,
                 changes: [],
@@ -96,6 +99,8 @@ exports.addUser = function(req, user, room) {
 }
 
 exports.removeUser = function(req, user, room) {
+    var redis = lib.redis();
+
     req.io.leave(room);
     req.io.socket.disconnect();
 
@@ -106,28 +111,30 @@ exports.removeUser = function(req, user, room) {
 
             if(Object.keys(exports.roomUsers[room]).length == 0) {
                 delete exports.roomUsers[room];
-                lib.models.documents.roles.find({
-                    user_id: req.session.user.id,
-                    document_pub_id: exports.room(req)
-                }, function(error, documents) {
-                    if(!error && documents.length == 1) {
-                        var document = documents[0].document;
-                        lib.redis.get(room, function(error, reply) {
-                            reply = JSON.parse(reply);
-                            if(reply.changes) {
-                                lib.jsdom.editor(document.content, reply.changes, function(content) {
-                                    document.save({
-                                        content: content.split("\n"),
-                                        breakpoints: reply.breakpoints
+                lib.models_init(null, function(db, models) {
+                    models.documents.roles.find({
+                        user_id: req.session.user.id,
+                        document_pub_id: exports.room(req)
+                    }, function(error, documents) {
+                        if(!error && documents.length == 1) {
+                            var document = documents[0].document;
+                            redis.get(room, function(error, reply) {
+                                reply = JSON.parse(reply);
+                                if(reply.changes) {
+                                    lib.jsdom.editor(document.content, reply.changes, function(content) {
+                                        document.save({
+                                            content: content.split("\n"),
+                                            breakpoints: reply.breakpoints
+                                        });
+                                        redis.del(room);
                                     });
-                                    lib.redis.del(room);
-                                });
-                            }
-                        });
-                    } else  {
-                        lib.redis.del(room);
-                    }
-                });
+                                }
+                            });
+                        } else  {
+                            redis.del(room);
+                        }
+                    });
+                }, true);
             }
         }
     }

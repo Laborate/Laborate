@@ -52,7 +52,9 @@ function createRange() {
 $(function() {
     //Check For Notifications
     window.socketUtil.notifications();
-    setInterval(window.socketUtil.notifications, 10000);
+
+    //Set Up Notification Checker
+    window.socketUtil.onNotification();
 
     //Prevent Rewriting Of Document
     setInterval(function() {
@@ -113,6 +115,11 @@ window.socketUtil = {
     },
     notifications: function() {
         window.socketUtil.socket.emit("notifications", function(notification) {
+            window.socketUtil.notification(notification);
+        });
+    },
+    onNotification: function() {
+        window.socketUtil.socket.on('notifications', function (notification) {
             window.socketUtil.notification(notification);
         });
     }

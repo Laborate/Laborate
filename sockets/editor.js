@@ -65,14 +65,16 @@ exports.chatRoom = function(req) {
 
 exports.document = function(req) {
     if(req.session.user) {
+        var redis = lib.redis();
+
         req.data.from = req.session.user.screen_name;
         req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 
-        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+        redis.get(editorUtil.socketRoom(req), function(error, reply) {
             reply = JSON.parse(reply);
             reply.changes.push(req.data["changes"]);
-            lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
+            redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
         });
     }
 }
@@ -88,6 +90,8 @@ exports.cursors = function(req) {
 }
 
 exports.extras = function(req) {
+    var redis = lib.redis();
+
     //Methods
     this.breakpoints = function(changes, breakpoints, callback) {
         $.each(changes, function(index, value) {
@@ -104,13 +108,13 @@ exports.extras = function(req) {
     }
 
     this.get = function(callback) {
-        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+        redis.get(editorUtil.socketRoom(req), function(error, reply) {
             callback(JSON.parse(reply));
         });
     }
 
     this.save = function(data) {
-        lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
+        redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
     }
 
     //Logic

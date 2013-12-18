@@ -1,4 +1,4 @@
-require('../init')(function() {
+require('../init')("user.tracking", function() {
     var _this = this;
     _this.lib.redis.get("tracking", function(error, tracking) {
         if(!error && tracking) {

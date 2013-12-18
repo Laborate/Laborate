@@ -1,4 +1,4 @@
-require('../init')(function() {
+require('../init')("editor.changes", function() {
     var _this = this;
     _this.lib.redis.keys("editor*", function(error, documents) {
         if(!error && documents.length != 0) {

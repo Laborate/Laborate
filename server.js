@@ -15,20 +15,14 @@ GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 
-/* Update Crontab */
-require("./cron")(__dirname);
+/* Install Crontab */
+//require("./cron")(__dirname);
 
-/* Update Config Template */
-lib.core.config_template(__dirname);
-
-/* Prototype Extensions */
-lib.core.extensions();
-
-/* Ejs Filters */
-lib.core.ejs_filters(ejs);
-
-/* Init Email */
-lib.email_init();
+/* Initialize Lib */
+lib.init({
+    root: __dirname,
+    ejs: ejs
+});
 
 /* Set App & Server Variables */
 var app = express().http().io();

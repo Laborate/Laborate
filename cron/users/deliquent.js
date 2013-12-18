@@ -1,4 +1,4 @@
-require('../init')(function() {
+require('../init')("user.deliquent", function() {
     var _this = this;
     _this.models.users.find({
         deliquent: true
