@@ -28,6 +28,7 @@ exports.tracking = function(req, res, next) {
 
         tracking.push({
             type: "web",
+            agent: req.headers['user-agent'],
             lat: req.location.ll[0],
             lon: req.location.ll[1],
             ip: req.headers['x-forwarded-for'],

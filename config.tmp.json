@@ -61,10 +61,8 @@
         "database": "",
         "user": "",
         "password": "",
-        "query": {
-            "pool": true,
-            "debug": false
-        }
+        "query": {},
+        "timezone": ""
     },
     "redis": 0,
     "stripe": {

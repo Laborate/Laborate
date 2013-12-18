@@ -35,6 +35,7 @@ exports.track = function(req, session) {
 
         tracking.push({
             type: "socket",
+            agent: req.handshake.headers['user-agent'],
             lat: location.ll[0],
             lon: location.ll[1],
             ip: address.address,
