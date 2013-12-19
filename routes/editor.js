@@ -7,26 +7,39 @@ exports.index = function(req, res, next) {
                 if(documents.length != 0) {
                     var document = documents[0];
                     var password = (document.password == null);
+                    var passed = false;
 
-                    req.models.documents.permissions.all(function(error, permissions) {
-                        if(!error) {
-                            res.renderOutdated('editor/index', {
-                                title: document.name,
-                                user: req.session.user,
-                                document: document,
-                                js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
-                                css: clientCSS.renderTags("backdrop", "codemirror", "editor"),
-                                backdrop: req.backdrop(),
-                                private: !password,
-                                config: {
-                                    autoJoin: password,
-                                    permissions: $.map(permissions, function(permission) {
-                                        return permission.name;
-                                    })
-                                }
-                            });
-                        } else {
-                            res.error(404, false, error);
+                    $.each(document.roles, function(key, role) {
+                        if(role.access && role.user.id == req.session.user.id) {
+                            passed = true;
+                        }
+
+                        if(document.roles.end(key)) {
+                            if(passed) {
+                                req.models.documents.permissions.all(function(error, permissions) {
+                                    if(!error) {
+                                        res.renderOutdated('editor/index', {
+                                            title: document.name,
+                                            user: req.session.user,
+                                            document: document,
+                                            js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
+                                            css: clientCSS.renderTags("backdrop", "codemirror", "editor"),
+                                            backdrop: req.backdrop(),
+                                            private: !password,
+                                            config: {
+                                                autoJoin: password,
+                                                permissions: $.map(permissions, function(permission) {
+                                                    return permission.name;
+                                                })
+                                            }
+                                        });
+                                    } else {
+                                        res.error(404);
+                                    }
+                                });
+                            } else {
+                                res.error(404);
+                            }
                         }
                     });
                 } else {
@@ -222,37 +235,37 @@ exports.invite = function(req, res, next) {
                             var user = users[0];
                             document.invite(user.id, 2, function(success, reason) {
                                 if(success) {
-                                    req.email("document_invite", {
-                                        from: req.session.user.name + " <" + req.session.user.email + ">",
-                                        subject: document.name + " (" + req.session.user.screen_name + ")",
-                                        users: [{
-                                            email: user.email,
-                                            name: user.name,
-                                            document: {
-                                                from: req.session.user.screen_name,
-                                                name: document.name,
-                                                id: document.pub_id,
-                                                access: "editor",
-                                                laborators: $.map(document.roles, function(role) {
-                                                    if(role.user) {
-                                                        if(req.session.user.id != role.user.id) {
-                                                            return {
-                                                                name: role.user.screen_name,
-                                                                gravatar: role.user.gravatar
-                                                            }
-                                                        } else {
-                                                            return null;
-                                                        }
-                                                    } else {
-                                                        return null;
-                                                    }
-                                                })
-
+                                    var laborators = [];
+                                    $.each(document.roles, function(key, role) {
+                                        role.getUser(function(error, new_user) {
+                                            if([user.id, document.owner_id].indexOf(new_user.id) == -1) {
+                                                laborators.push({
+                                                    name: new_user.screen_name,
+                                                    gravatar: new_user.gravatar
+                                                });
                                             }
-                                        }]
-                                    }, req.error.capture);
 
-                                    res.json({ success: true });
+                                            if(document.roles.end(key)) {
+                                                req.email("document_invite", {
+                                                    from: req.session.user.name + " <" + req.session.user.email + ">",
+                                                    subject: document.name + " (" + req.session.user.screen_name + ")",
+                                                    users: [{
+                                                        email: user.email,
+                                                        name: user.name,
+                                                        document: {
+                                                            from: req.session.user.screen_name,
+                                                            name: document.name,
+                                                            id: document.pub_id,
+                                                            access: "editor",
+                                                            laborators: laborators
+                                                        }
+                                                    }]
+                                                }, req.error.capture);
+
+                                                res.json({ success: true });
+                                            }
+                                        });
+                                    });
                                 } else {
                                     res.error(200, reason || "Failed To Send Invite");
                                 }

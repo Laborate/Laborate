@@ -41,16 +41,20 @@ window.backdrop = {
                     }
                 }
                 else {
-                    $("#backdrop input[type=submit]")
-                        .val(result.error_message)
-                        .removeClass("disabled")
-                        .addClass("error");
-
-                    window.backdrop.timer = setTimeout(function() {
+                    if($("#backdrop form").attr("data-error")) {
+                        eval($("#backdrop form").attr("data-error"))(result.error_message);
+                    } else {
                         $("#backdrop input[type=submit]")
-                            .val(window.backdrop.button)
-                            .removeClass("error");
-                    }, 5000);
+                            .val(result.error_message)
+                            .removeClass("disabled")
+                            .addClass("error");
+
+                        window.backdrop.timer = setTimeout(function() {
+                            $("#backdrop input[type=submit]")
+                                .val(window.backdrop.button)
+                                .removeClass("error");
+                        }, 5000);
+                    }
                 }
             });
         }
