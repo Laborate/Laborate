@@ -259,6 +259,46 @@ exports.invite = function(req, res, next) {
     });
 }
 
+exports.laborators = function(req, res, next) {
+    req.models.documents.roles.find({
+        access: true,
+        user_id: req.session.user.id,
+        document_pub_id: req.param("document")
+    }, function(error, roles) {
+        if(!error) {
+            res.json({
+                success: true,
+                laborators: $.map(roles, function(role) {
+                    return {
+                        id: role.user.pud_id,
+                        screen_name: role.user.screen_name,
+                        gravatar: role.user.gravatar,
+                        permission: {
+                            id: role.permission.id,
+                            name: role.permission.name,
+                            owner: role.permission.owner,
+                            access: role.permission.access,
+                            readonly: role.permission.readonly
+                        }
+                    }
+                }).sort(function (a, b) {
+                    if(a.permission.id == b.permission.id) {
+                        a = a.screen_name;
+                        b = b.screen_name;
+                    } else {
+                        a = a.permission.id;
+                        b = b.permission.id;
+                    }
+
+                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                })
+            });
+        } else {
+            res.error(200, "Failed To Get Laborators", error);
+        }
+    });
+}
+
 
 exports.access_token = function(req, res, next) {
     req.access_token = req.param("access_token") || null;

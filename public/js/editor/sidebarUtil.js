@@ -317,7 +317,21 @@ window.sidebarUtil = {
             access_token: window.editorUtil.access_token,
             _csrf: window.config.csrf
         }, function(json) {
-            console.log(json);
+            if(json.success) {
+                $.each(json.laborators, function(key, laborator) {
+                    var icon = "laborator-" + laborator.permission.name;
+                    $(".sidebar .form[name='invite'] .listing")
+                        .append("                                                       \
+                            <div class='item'                                           \
+                                 data-id='" + laborator.id + "'                         \
+                                 data-permission='" + laborator.permission.id + "' >    \
+                                 <div class='online'></div>                             \
+                                 <div class='name'>" + laborator.screen_name + "</div>  \
+                                 <div classs='icon " + config.icons[icon] + "'></div    \
+                            </div>                                                      \
+                        ")
+                });
+            }
         });
 	}
 }
