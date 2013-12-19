@@ -12,6 +12,7 @@ module.exports = function(app) {
     app.io.route('editorDocument', editor.document);
     app.io.route('editorCursors', editor.cursors);
     app.io.route('editorExtras', editor.extras);
+    app.io.route('editorLaborators', editor.laborators);
     app.io.route('editorDisconnectAll', editor.disconnectAll);
 
     /* Connect */

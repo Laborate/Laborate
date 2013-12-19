@@ -79,10 +79,10 @@ exports.clientData = function(room, document_role, callback) {
     });
 }
 
-exports.addUser = function(req, user, room) {
+exports.addUser = function(req, user_id, user_name, room) {
     req.io.join(room);
     req.io.room(room).broadcast('editorChatRoom', {
-        message: user + " joined the document",
+        message: user_name + " joined the document",
         isStatus: true
     });
 
@@ -90,10 +90,10 @@ exports.addUser = function(req, user, room) {
         exports.roomUsers[room] = new Array();
     }
 
-    exports.roomUsers[room][user] = {
+    exports.roomUsers[room][user_id] = {
         "socket": req.io.socket.id,
         "update": setInterval(function() {
-            req.io.emit('editorUsers', exports.users(user, room));
+            req.io.emit('editorUsers', exports.users(user_id, room));
         }, 2000)
     }
 }

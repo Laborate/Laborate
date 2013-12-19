@@ -55,6 +55,10 @@ $(function() {
 
     //Pull Extras Info
     window.socketUtil.socket.on('editorExtras', function (data) {
+        if("laborators" in data) {
+            window.sidebarUtil.laborators();
+        }
+
         if("docName" in data) {
             window.sidebarUtil.setTitle("in", data["docName"]);
         }

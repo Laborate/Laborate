@@ -1,23 +1,33 @@
 exports.index = function(req, res, next) {
     if(req.param("document")) {
-        req.models.documents.roles.find({
-            document_pub_id: req.param("document"),
-            access: true
+        req.models.documents.find({
+            pub_id: req.param("document")
         }, function(error, documents) {
             if(!error) {
                 if(documents.length != 0) {
-                    var document = documents[0].document;
+                    var document = documents[0];
                     var password = (document.password == null);
 
-                    res.renderOutdated('editor/index', {
-                        title: document.name,
-                        user: req.session.user,
-                        document: document,
-                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
-                        css: clientCSS.renderTags("backdrop", "codemirror", "editor"),
-                        backdrop: req.backdrop(),
-                        private: !password,
-                        config: { autoJoin: password }
+                    req.models.documents.permissions.all(function(error, permissions) {
+                        if(!error) {
+                            res.renderOutdated('editor/index', {
+                                title: document.name,
+                                user: req.session.user,
+                                document: document,
+                                js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
+                                css: clientCSS.renderTags("backdrop", "codemirror", "editor"),
+                                backdrop: req.backdrop(),
+                                private: !password,
+                                config: {
+                                    autoJoin: password,
+                                    permissions: $.map(permissions, function(permission) {
+                                        return permission.name;
+                                    })
+                                }
+                            });
+                        } else {
+                            res.error(404, false, error);
+                        }
                     });
                 } else {
                    res.error(404);
@@ -61,17 +71,21 @@ exports.join = function(req, res, next) {
         if(!error && documents.length != 0) {
             document = documents[0];
             if(!document.password || document.hash(req.param("password")) == document.password) {
-                document.join(req.session.user.id, 2, function(access) {
-                    if(access) {
-                        res.json({
-                            success: true,
-                            next: {
-                                function: "window.editorUtil.join",
-                                arguments: document.password
-                            }
-                        });
+                document.join(req.session.user.id, 2, function(exists, blocked) {
+                    if(exists) {
+                        if(!blocked) {
+                            res.json({
+                                success: true,
+                                next: {
+                                    function: "window.editorUtil.join",
+                                    arguments: document.password
+                                }
+                            });
+                        } else {
+                            res.error(200, "You Do Not Have Access To This Document");
+                        }
                     } else {
-                        res.error("Document Doesn't Exist");
+                        res.error(200, "Document Doesn't Exist");
                     }
                 });
             } else {
@@ -262,37 +276,37 @@ exports.invite = function(req, res, next) {
 exports.laborators = function(req, res, next) {
     req.models.documents.roles.find({
         access: true,
-        user_id: req.session.user.id,
         document_pub_id: req.param("document")
     }, function(error, roles) {
         if(!error) {
-            res.json({
-                success: true,
-                laborators: $.map(roles, function(role) {
+            var data = {
+                success: true
+            }
+
+            data.laborators = $.map(roles, function(role) {
+                if(req.session.user.id != role.user.id) {
                     return {
-                        id: role.user.pud_id,
+                        id: role.user.pub_id,
                         screen_name: role.user.screen_name,
                         gravatar: role.user.gravatar,
-                        permission: {
-                            id: role.permission.id,
-                            name: role.permission.name,
-                            owner: role.permission.owner,
-                            access: role.permission.access,
-                            readonly: role.permission.readonly
-                        }
+                        permission: role.permission.id
                     }
-                }).sort(function (a, b) {
-                    if(a.permission.id == b.permission.id) {
-                        a = a.screen_name;
-                        b = b.screen_name;
-                    } else {
-                        a = a.permission.id;
-                        b = b.permission.id;
-                    }
+                } else {
+                    data.permission = role.permission.id;
+                }
+            }).sort(function (a, b) {
+                if(a.permission.id == b.permission.id) {
+                    a = a.screen_name;
+                    b = b.screen_name;
+                } else {
+                    a = a.permission.id;
+                    b = b.permission.id;
+                }
 
-                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-                })
+                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
             });
+
+            res.json(data);
         } else {
             res.error(200, "Failed To Get Laborators", error);
         }

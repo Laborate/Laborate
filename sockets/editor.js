@@ -5,10 +5,19 @@ exports.join = function(req) {
     if(req.session.user) {
         editorUtil.accessCheck(req.session.user.id, editorUtil.room(req), req.data[0], function(access_object) {
             if(access_object.success) {
-                if(!editorUtil.inRoom(req.data[1], req.session.user.screen_name, editorUtil.socketRoom(req))) {
+                if(!editorUtil.inRoom(req.data[1], req.session.user.pub_id, editorUtil.socketRoom(req))) {
                     editorUtil.clientData(editorUtil.socketRoom(req), access_object, function(data) {
-                        editorUtil.addUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+                        editorUtil.addUser(
+                            req,
+                            req.session.user.pub_id,
+                            req.session.user.screen_name,
+                            editorUtil.socketRoom(req)
+                        );
                         req.io.respond(data);
+
+                        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
+                            laborators: true
+                        });
                     });
                 } else {
                     req.io.respond({
@@ -27,7 +36,7 @@ exports.join = function(req) {
 
 exports.disconnectAll = function(req) {
     if(req.session.user) {
-        var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
+        var socket = editorUtil.userSocket(req.session.user.pub_id, editorUtil.socketRoom(req));
         if(socket in req.io.socket.manager.sockets.sockets) {
             req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
         }
@@ -35,22 +44,30 @@ exports.disconnectAll = function(req) {
         req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
         exports.leave(req, true);
     }
+
+    req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
+        laborators: true
+    });
 }
 
 exports.leave = function(req, override) {
     if(req.session.user) {
-        var socket = editorUtil.userSocket(req.session.user.screen_name, editorUtil.socketRoom(req));
+        var socket = editorUtil.userSocket(req.session.user.pub_id, editorUtil.socketRoom(req));
         //Only Non-forced Disconnects
         if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
             req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
                 message: req.session.user.screen_name + " left the document",
                 isStatus: true
             });
-            editorUtil.removeUser(req, req.session.user.screen_name, editorUtil.socketRoom(req));
+            editorUtil.removeUser(req, req.session.user.pub_id, editorUtil.socketRoom(req));
         }
     } else {
         editorUtil.kickOut(req);
     }
+
+    req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
+        laborators: true
+    });
 }
 
 exports.chatRoom = function(req) {
@@ -134,4 +151,13 @@ exports.extras = function(req) {
     } else {
         editorUtil.kickOut(req);
     }
+}
+
+exports.laborators = function(req) {
+    var room = editorUtil.socketRoom(req);
+    var users = editorUtil.users(req.session.user.pub_id, room);
+    req.io.respond({
+        success: true,
+        laborators: users
+    });
 }

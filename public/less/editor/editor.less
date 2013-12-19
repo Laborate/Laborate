@@ -164,6 +164,11 @@ html, body {
                             color: lighten(@color_sidebar_header, 50%);
                             .float-left();
                             .ellipsis();
+                        }
+                    }
+
+                    &.search {
+                        .name {
                             .calc-width(~"100% - 16px");
                         }
 
@@ -175,6 +180,49 @@ html, body {
 
                             &:hover {
                                 color: @color_red;
+                            }
+                        }
+                    }
+
+                    &.laborators {
+                        .settings {
+                            cursor: pointer;
+                            font-size: 14px;
+                            color: lighten(@color_sidebar_header, 40%);
+                            margin-right: 8px;
+                            .float-right();
+
+                            &:hover {
+                                color: lighten(@color_sidebar_header, 50%);
+
+                                &:active {
+                                    color: lighten(@color_sidebar_header, 60%);
+                                }
+                            }
+                        }
+
+                        .name {
+                            .calc-width(~"100% - 50px");
+                        }
+
+                        .gravatar {
+                            width: 15px;
+                            height: 15px;
+                            overflow: hidden;
+                            margin-right: 8px;
+                            opacity: .4;
+                            .border-radius(2px);
+                            .float-left();
+
+                            img {
+                                width: 15px;
+                                height: 15px;
+                            }
+                        }
+
+                        .item.active {
+                            .gravatar {
+                                opacity: 1;
                             }
                         }
                     }

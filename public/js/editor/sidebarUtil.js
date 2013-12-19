@@ -306,32 +306,94 @@ window.sidebarUtil = {
                     .text(json.error_message.toLowerCase())
                     .slideDown(200);
 
-                setTimeout(function() {
+                _this.inviteTimeout = setTimeout(function() {
                     error.slideUp(200);
                 }, 10000);
             }
         });
 	},
+	inviteTimeout: null,
 	laborators: function() {
-        $.post("/editor/" + url_params()["document"] + "/laborators/", {
-            access_token: window.editorUtil.access_token,
-            _csrf: window.config.csrf
-        }, function(json) {
-            if(json.success) {
-                $.each(json.laborators, function(key, laborator) {
-                    var icon = "laborator-" + laborator.permission.name;
-                    $(".sidebar .form[name='invite'] .listing")
-                        .append("                                                       \
-                            <div class='item'                                           \
-                                 data-id='" + laborator.id + "'                         \
-                                 data-permission='" + laborator.permission.id + "' >    \
-                                 <div class='online'></div>                             \
-                                 <div class='name'>" + laborator.screen_name + "</div>  \
-                                 <div classs='icon " + config.icons[icon] + "'></div    \
-                            </div>                                                      \
-                        ")
+	    async.parallel({
+	        users: function(callback) {
+                $.post("/editor/" + url_params()["document"] + "/laborators/", {
+                    access_token: window.editorUtil.access_token,
+                    _csrf: window.config.csrf
+                }, function(json) {
+                    callback(json.error_message, json);
                 });
-            }
-        });
+	        },
+	        online: function(callback) {
+	            window.socketUtil.socket.emit("editorLaborators", function(json) {
+                    callback(null, json.laborators);
+                });
+	        }
+	    }, function(error, data) {
+            var permissions = $.map(window.config.permissions, function(permission, key) {
+                return {
+                    id: key,
+                    name: permission.toLowerCase(),
+                    count: (key == (data.users.permission-1)) ? 1 : 0
+                }
+            });
+
+    	    $(".sidebar .form[name='invite'] .listing").html("");
+
+            $.each(data.users.laborators, function(key, laborator) {
+                if(data.online.indexOf(laborator.id) != -1) {
+                    permissions[laborator.permission-1].count++;
+                    var active = "active";
+                } else {
+                    var active = "";
+                }
+
+                if(data.users.permission == 1) {
+                    var settings = "settings " + config.icons.settings;
+                } else {
+                    var settings = "";
+                }
+
+                $(".sidebar .form[name='invite'] .listing")
+                    .append("                                                           \
+                        <div class='item " + active + "'                                \
+                             data-id='" + laborator.id + "'                             \
+                             data-permission='" + laborator.permission + "'>            \
+                             <div class='gravatar'>                                     \
+                                <img src='" + laborator.gravatar + "'>                  \
+                             </div>                                                     \
+                             <div class='name'>" + laborator.screen_name + "</div>      \
+                             <div class='" + settings + "'></div>                       \
+                        </div>                                                          \
+                    ");
+
+                if(data.users.laborators.end(key)) {
+                    var header = [];
+                    var delimiter = "<span>" + window.config.delimeter + "</span>";
+                    permissions[1].count += permissions[0].count;
+
+                    if(permissions[1].count != 0) {
+                        var editors = permissions[1].count + " " + permissions[1].name;
+                        if(permissions[1].count != 1) editors += "s";
+                        header.push(editors);
+                    }
+
+                    if(permissions[2].count != 0) {
+                        var viewers = permissions[2].count + " " + permissions[2].name;
+                        if(permissions[2].count != 1) viewers += "s";
+                        header.push(viewers);
+                    }
+
+                    if(!header.empty) {
+                        if(permissions[1].count == 1 && permissions[2].count == 0) {
+                            $(".chat .controller").text("Chat Room");
+                        } else {
+                            $(".chat .controller").html(header.join(delimiter));
+                        }
+                    } else {
+                        $(".chat .controller").text("Chat Room");
+                    }
+                }
+            });
+	    });
 	}
 }

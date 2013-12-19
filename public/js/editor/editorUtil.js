@@ -130,21 +130,23 @@ window.editorUtil = {
         $("#contributor_info #contributor_info_name").text("");
     },
     userCursors: function(direction, data) {
-        if(direction == "out" && window.editorUtil.initialized) {
-            if(data['leave']) {
-                window.socketUtil.socket.emit('editorCursors', {"leave":true});
-            } else {
-                window.socketUtil.socket.emit('editorCursors', {"line":data['line']});
-            }
-        } else if(direction == "in") {
-            if(data['leave']) {
-                window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
-                window.users[data['from']] = -1;
-            }
-            else {
-                window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
-                window.editor.addLineClass(data['line'], "", ("u"+data['from']));
-                window.users[data['from']] = data['line'];
+        if(window.editorUtil.initialized) {
+            if(direction == "out") {
+                if(data['leave']) {
+                    window.socketUtil.socket.emit('editorCursors', {"leave":true});
+                } else {
+                    window.socketUtil.socket.emit('editorCursors', {"line":data['line']});
+                }
+            } else if(direction == "in") {
+                if(data['leave']) {
+                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+                    window.users[data['from']] = -1;
+                }
+                else {
+                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+                    window.editor.addLineClass(data['line'], "", ("u"+data['from']));
+                    window.users[data['from']] = data['line'];
+                }
             }
         }
     },
@@ -258,6 +260,7 @@ window.editorUtil = {
                                 }
                             },
                             function(next) {
+                                window.sidebarUtil.laborators();
                                 window.sidebarUtil.setAccess(json.access);
                                 window.sidebarUtil.setTitle("in", json.name);
                                 window.editorUtil.setInfo();

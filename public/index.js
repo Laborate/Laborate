@@ -24,6 +24,8 @@ module.exports = function(root) {
     clientJS.addFile(js_path + 'core/cookie.js');
     clientJS.addFile(js_path + 'core/core.js');
 
+    clientJS.addExec(lib.core.extensions);
+
     /* EDT Debugger */
     clientJS.addFile(root + '/lib/debugger/edt.js');
 
