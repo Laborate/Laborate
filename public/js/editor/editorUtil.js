@@ -116,7 +116,7 @@ window.editorUtil = {
                     .u" + value + "{                                        \
                         background:" + randomUserColor() + " !important;    \
                     }                                                       \
-                </style>
+                </style>                                                    \
             ").appendTo("head");
             window.users[value] = -1;
         }));

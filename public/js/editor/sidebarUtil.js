@@ -25,7 +25,8 @@ window.sidebarUtil = {
             case "type-mode":
                 this.typeMode(
                     form.find("select[name='languages']").val(),
-                    form.find("select[name='keymapping']").val()
+                    form.find("select[name='keymapping']").val(),
+                    form.find("select[name='cursorSearch']").val()
                 );
                 break;
             case "beautify":
@@ -88,9 +89,19 @@ window.sidebarUtil = {
                 .prop('selected', true);
         }
 	},
-	typeMode: function(languages, keymapping) {
+	defaultCursorSearch: function(cursorSearch) {
+    	if(cursorSearch) {
+    	    $(".form[name='type-mode'] select[name='cursorSearch'] option")
+                .filter(function() {
+                    return ($(this).val() == cursorSearch);
+                })
+                .prop('selected', true);
+        }
+	},
+	typeMode: function(languages, keymapping, cursorSearch) {
 	    window.editorUtil.setModeLanguage(languages);
         this.keyMap(keymapping);
+        this.cursorSearch(cursorSearch === "true");
 	},
 	keyMap: function(keymap) {
 	    if(keymap) {
@@ -100,6 +111,13 @@ window.sidebarUtil = {
                 expires: 365
             });
         }
+	},
+	cursorSearch: function(cursorSearch) {
+        window.editor.setOption("highlightSelectionMatches", cursorSearch);
+        $.cookie("cursorSearch", cursorSearch, {
+            path: '/editor',
+            expires: 365
+        });
 	},
 	setAccess: function(access) {
         $(".filter[data-key='file-access'] strong").text(access);
