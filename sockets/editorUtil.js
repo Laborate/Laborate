@@ -91,10 +91,7 @@ exports.addUser = function(req, user_id, user_name, room) {
     }
 
     exports.roomUsers[room][user_id] = {
-        "socket": req.io.socket.id,
-        "update": setInterval(function() {
-            req.io.emit('editorUsers', exports.users(user_id, room));
-        }, 2000)
+        "socket": req.io.socket.id
     }
 }
 

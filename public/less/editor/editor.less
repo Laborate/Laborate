@@ -210,7 +210,7 @@ html, body {
                             height: 15px;
                             overflow: hidden;
                             margin-right: 8px;
-                            opacity: .4;
+                            opacity: .3;
                             .border-radius(2px);
                             .float-left();
 
@@ -220,9 +220,26 @@ html, body {
                             }
                         }
 
-                        .item.active {
-                            .gravatar {
-                                opacity: 1;
+                        .item {
+                            &.active {
+                                .gravatar {
+                                    opacity: 1;
+                                }
+                            }
+
+                            &.blocked {
+                                .settings {
+                                    color: @color_red;
+
+                                    &:hover {
+                                        color: lighten(@color_red, 10%);
+
+                                        &:active {
+                                            color: lighten(@color_red, 20%);
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }

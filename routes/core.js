@@ -181,7 +181,7 @@ exports.reload = function(documents) {
 
 exports.backdrop = function(req, res, next) {
     req.backdrop = function(theme) {
-        theme = (theme) ? theme : (req.session.organization) ? req.session.organization.theme : "blurry";
+        theme = theme || (req.session.organization.theme || config.general.backdrop);
         var files = backdrop_themes[theme];
         var style_css = "";
 
@@ -193,10 +193,10 @@ exports.backdrop = function(req, res, next) {
                 if(files.length != 0) {
                     backdrop_themes[theme] = files;
                 } else {
-                    return req.backdrop("blurry");
+                    return req.backdrop(config.general.backdrop);
                 }
             } else {
-                return req.backdrop("blurry");
+                return req.backdrop(config.general.backdrop);
             }
         }
 
@@ -204,7 +204,7 @@ exports.backdrop = function(req, res, next) {
                     theme + "/" + files[Math.floor((Math.random() * files.length))] +
                     "');");
 
-        if(theme == "blurry") {
+        if(["blurry", "grid"].indexOf(theme) != -1) {
             var hue = Math.floor((Math.random() * 360)) + "deg";
             style_css += ("filter: hue-rotate(" + hue + ");         \
                            -webkit-filter: hue-rotate(" + hue + "); \

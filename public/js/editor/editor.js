@@ -43,11 +43,6 @@ $(function() {
         window.editorUtil.setChanges("in", data["changes"]);
     });
 
-    //Pull User Info
-    window.socketUtil.socket.on('editorUsers', function (data) {
-        window.editorUtil.users(data);
-    });
-
     //Pull Cursor Info
     window.socketUtil.socket.on('editorCursors', function (data) {
         window.editorUtil.userCursors("in", data);

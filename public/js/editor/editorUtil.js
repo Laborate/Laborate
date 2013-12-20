@@ -109,25 +109,17 @@ window.editorUtil = {
     users: function(data) {
         $.when($(Object.keys(window.users)).not(data).each(function(index, value) {
             window.editor.removeLineClass(window.users[value], "", ("u" + value));
-            $("#document_contributors").find("[data=" + value + "]").remove();
             delete window.users[value];
         })).done($(data).not(Object.keys(window.users)).each(function(index, value) {
-            $("<style type='text/css'> .u" + value + "{background:" + randomUserColor() + " !important;} </style>").appendTo("head");
-            var contributor = '<div class="contributor u' + value + '" ';
-            contributor += 'data="'+ value +'" userName="' + value + '"></div>';
-            $("#document_contributors").append(contributor);
+            $("                                                             \
+                <style type='text/css'>                                     \
+                    .u" + value + "{                                        \
+                        background:" + randomUserColor() + " !important;    \
+                    }                                                       \
+                </style>
+            ").appendTo("head");
             window.users[value] = -1;
         }));
-    },
-    userHover: function(element) {
-        $("#contributor_info #contributor_info_name").text(element.attr("username"));
-        var contributor_box_offset = element.offset().left - (element.width()/2);
-        var contributor_info = $("#contributor_info").width()/2;
-        $("#contributor_info").show().css("left", (contributor_box_offset - contributor_info) + "px");
-    },
-    userLeave: function() {
-        $("#contributor_info").hide().css("left", "0px");
-        $("#contributor_info #contributor_info_name").text("");
     },
     userCursors: function(direction, data) {
         if(window.editorUtil.initialized) {
@@ -138,12 +130,11 @@ window.editorUtil = {
                     window.socketUtil.socket.emit('editorCursors', {"line":data['line']});
                 }
             } else if(direction == "in") {
+                window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+
                 if(data['leave']) {
-                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
                     window.users[data['from']] = -1;
-                }
-                else {
-                    window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+                } else {
                     window.editor.addLineClass(data['line'], "", ("u"+data['from']));
                     window.users[data['from']] = data['line'];
                 }

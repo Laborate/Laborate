@@ -325,6 +325,7 @@ window.sidebarUtil = {
 	        },
 	        online: function(callback) {
 	            window.socketUtil.socket.emit("editorLaborators", function(json) {
+                    window.editorUtil.users(json.laborators);
                     callback(null, json.laborators);
                 });
 	        }
@@ -342,9 +343,11 @@ window.sidebarUtil = {
             $.each(data.users.laborators, function(key, laborator) {
                 if(data.online.indexOf(laborator.id) != -1) {
                     permissions[laborator.permission-1].count++;
-                    var active = "active";
+                    var item = "active";
+                } else if(laborator.permission == 4) {
+                    var item = "blocked";
                 } else {
-                    var active = "";
+                    var item = "";
                 }
 
                 if(data.users.permission == 1) {
@@ -355,7 +358,7 @@ window.sidebarUtil = {
 
                 $(".sidebar .form[name='invite'] .listing")
                     .append("                                                           \
-                        <div class='item " + active + "'                                \
+                        <div class='item " + item + "'                                  \
                              data-id='" + laborator.id + "'                             \
                              data-permission='" + laborator.permission + "'>            \
                              <div class='gravatar'>                                     \

@@ -288,7 +288,6 @@ exports.invite = function(req, res, next) {
 
 exports.laborators = function(req, res, next) {
     req.models.documents.roles.find({
-        access: true,
         document_pub_id: req.param("document")
     }, function(error, roles) {
         if(!error) {

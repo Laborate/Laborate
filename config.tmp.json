@@ -24,7 +24,8 @@
             "Collaborative software development made easy! Upload ",
             "files manually, from Github repositories or SFTP Servers in seconds ",
             "and start editing in realtime with your team."
-        ]
+        ],
+        "backdrop": ""
     },
     "development": {
         "basicAuth": {
