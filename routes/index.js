@@ -17,6 +17,7 @@ module.exports = function(app) {
 
     /* Login */
     app.get('/login', authUtil.loginCheck, auth.login);
+    app.get('/login/:user', authUtil.loginCheck, auth.login_user);
     app.post('/auth/login', authUtil.login);
 
     /* Logout */

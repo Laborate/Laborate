@@ -1,0 +1,37 @@
+<% include ../../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
+         <div id="backdrop-container">
+            <div class="text-center">
+                <div id="backdrop-profile">
+                    <img src="<%= user.gravatar %>"/>
+                </div>
+            </div>
+             <form action="/auth/login/" autocomplete="on">
+                <div class="backdrop-text"><%= user.name %></div>
+                <input name="email" class="backdrop-input" type="hidden" value="<%= user.email %>"/>
+                <input name="password" type="password" class="backdrop-input" placeholder="password" autofocus="on"/>
+                <input type="submit" class="backdrop-button" value="Login"/>
+             </form>
+         </div>
+         <% if(organization.id && organization.reset) { %>
+            <div class="backdrop-bottom">
+                Forgot your password? <a class="backdrop-link" href="<%= organization.reset || "/reset/" %>">Reset</a>
+            </div>
+        <% } %>
+    </div>
+    <div id="backdrop-footer">
+        <ul>
+            <% if(organization.register) { %>
+                <li><a href="<%=  organization.reset || "/reset/" %>">Forgot your password?</a></li>
+            <% } %>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+            <li><a href="/">© <%= company %></a></li>
+        </ul>
+    </div>
+</div>
+<% include ../../includes/footer.html %>

@@ -1,10 +1,29 @@
 exports.login = function(req, res) {
-    res.renderOutdated('auth/login', {
+    res.renderOutdated('auth/login/index', {
         title: 'Login',
         js: clientJS.renderTags("backdrop", "crypto"),
         css: clientCSS.renderTags("backdrop"),
         backdrop: req.backdrop(),
         pageTrack: false
+    });
+};
+
+exports.login_user = function(req, res) {
+    req.models.users.find({
+        pub_id: req.param("user")
+    }, function(error, users) {
+        if(!error && !users.empty) {
+            res.renderOutdated('auth/login/user', {
+                title: 'Login',
+                user: users[0],
+                js: clientJS.renderTags("backdrop"),
+                css: clientCSS.renderTags("backdrop"),
+                backdrop: req.backdrop(),
+                pageTrack: false
+            });
+        } else {
+            res.error(404, error)
+        }
     });
 };
 
