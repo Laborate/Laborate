@@ -9,20 +9,21 @@ lib.core.extensions();
 /* Exports */
 module.exports = function(name, callback) {
     /* Setup */
-    this.redis = lib.redis();
-    this.finish = function() {
+    var _this = this;
+    _this.redis = lib.redis();
+    _this.finish = function() {
         setTimeout(function() {
-            lib.redis.end();
+            _this.redis.end();
             process.exit(code=0);
         }, 500);
     }
-    lib.models_init(this, callback);
+    lib.models_init(_this, callback);
 
     /* Exit After 1 Minute (Safegaurd) */
     setTimeout(function() {
         var message = "cronjob: " + name + " took longer than a minute";
         lib.error.report(message);
-        lib.redis.end();
+        _this.redis.end();
         process.exit(1);
     }, 60000);
 }
