@@ -32,4 +32,24 @@ $(function() {
     $(".sidebar .form[name='highlight-word'] .listing").on("click", ".remove", function() {
         window.sidebarUtil.searchRemove($(this).parents(".item").attr("data-search"));
     });
+
+    $(".sidebar .form[name='invite'] .listing").on("click", ".settings", function(event) {
+        event.stopPropagation();
+        window.sidebarUtil.laboratorOpen(
+            $(this).offset(),
+            $(this).parents(".item").attr("data-id")
+        );
+    });
+
+    $(".context-menu").on("click", ".item", function() {
+        window.debug = $(this);
+        window.sidebarUtil.laboratorChange(
+            $(this).parents(".context-menu").attr("data-id"),
+            $(this).attr("data-id")
+        );
+    });
+
+    $('html').click(function() {
+        $(".context-menu").hide();
+    });
 });

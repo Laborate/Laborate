@@ -13,16 +13,23 @@ exports.login_user = function(req, res) {
         pub_id: req.param("user")
     }, function(error, users) {
         if(!error && !users.empty) {
-            res.renderOutdated('auth/login/user', {
-                title: 'Login',
-                user: users[0],
-                js: clientJS.renderTags("backdrop"),
-                css: clientCSS.renderTags("backdrop"),
-                backdrop: req.backdrop(),
-                pageTrack: false
+            var user = users[0];
+            user.has_organization(req.session.organization.id, function(has_organization) {
+                if(has_organization) {
+                    res.renderOutdated('auth/login/user', {
+                        title: 'Login',
+                        user: users[0],
+                        js: clientJS.renderTags("backdrop"),
+                        css: clientCSS.renderTags("backdrop"),
+                        backdrop: req.backdrop(),
+                        pageTrack: false
+                    });
+                } else {
+                    res.error(404);
+                }
             });
         } else {
-            res.error(404, error)
+            res.error(404, error);
         }
     });
 };
@@ -80,10 +87,10 @@ exports.reset_password = function(req, res) {
                     pageTrack: false
                 });
             } else {
-                res.redirect("/");
+                res.error(404);
             }
         });
     } else {
-        res.redirect("/");
+        res.error(404);
     }
 };

@@ -416,5 +416,32 @@ window.sidebarUtil = {
                 }
             });
 	    });
+	},
+	laboratorOpen: function(location, user) {
+        $(".context-menu")
+            .css({
+                "top": location.top - ($(".context-menu").height()/2) + 8,
+                "left": location.left + 26
+            })
+            .attr({
+                "data-id": user
+            })
+            .show();
+	},
+	laboratorChange: function(user, permission) {
+	    var _this = this;
+        $.post("/editor/" + url_params()["document"] + "/laborator/" + user + "/", {
+            permission: permission,
+            access_token: window.editorUtil.access_token,
+            _csrf: window.config.csrf
+        }, function(json) {
+            if(json.success) {
+                _this.laborators();
+                window.socketUtil.socket.emit('editorPermission', user, permission);
+                window.socketUtil.socket.emit('editorExtras' , {
+        		    laborators: true
+                });
+            }
+        });
 	}
 }

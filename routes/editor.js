@@ -22,8 +22,9 @@ exports.index = function(req, res, next) {
                                             title: document.name,
                                             user: req.session.user,
                                             document: document,
+                                            permissions: permissions,
                                             js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
-                                            css: clientCSS.renderTags("backdrop", "codemirror", "editor"),
+                                            css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
                                             backdrop: req.backdrop(),
                                             private: !password,
                                             config: {
@@ -84,7 +85,7 @@ exports.join = function(req, res, next) {
         if(!error && documents.length != 0) {
             document = documents[0];
             if(!document.password || document.hash(req.param("password")) == document.password) {
-                document.join(req.session.user.id, 2, function(exists, blocked) {
+                document.join(req.session.user, 2, function(exists, blocked) {
                     if(exists) {
                         if(!blocked) {
                             res.json({
@@ -233,7 +234,7 @@ exports.invite = function(req, res, next) {
                     }, function(error, users) {
                         if(!error && users.length == 1) {
                             var user = users[0];
-                            document.invite(user.id, 2, function(success, reason) {
+                            document.invite(user, 2, function(success, reason) {
                                 if(success) {
                                     var laborators = [];
                                     $.each(document.roles, function(key, role) {
@@ -321,6 +322,36 @@ exports.laborators = function(req, res, next) {
             res.json(data);
         } else {
             res.error(200, "Failed To Get Laborators", error);
+        }
+    });
+}
+
+exports.laborator = function(req, res, next) {
+    req.models.documents.roles.find({
+        user_pub_id: req.param("user"),
+        document_pub_id: req.param("document")
+    }, function(error, roles) {
+        if(!error && !roles.empty) {
+            if(roles[0].document.owner_id == req.session.user.id) {
+                req.models.documents.permissions.get(
+                    req.param("permission"), function(error, permission) {
+                        if(!error && permission) {
+                            roles[0].setPermission(permission, function(error, role) {
+                                if(!error) {
+                                    res.json({ success: true });
+                                } else {
+                                    res.error(200, "Failed To Update Permission", error);
+                                }
+                            });
+                        } else {
+                            res.error(200, "Failed To Update Permission", error);
+                        }
+                    });
+            } else {
+                res.error(200, "Failed To Update Permission");
+            }
+        } else {
+            res.error(200, "Failed To Update Permission", error);
         }
     });
 }

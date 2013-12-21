@@ -77,6 +77,7 @@ module.exports = function(app) {
     app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.access_token, github.commit);
     app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.invite);
     app.post('/editor/:document/laborators', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.laborators);
+    app.post('/editor/:document/laborator/:user', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.laborator);
 
     /* Webhooks */
     app.post("/webhook/stripe", authUtil.loginDenied, webhooks.stripe);
