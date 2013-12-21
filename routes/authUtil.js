@@ -143,6 +143,8 @@ exports.register = function(req, res, next) {
                 if(!error) {
                     if(exists) {
                         res.error(200, "Screen Name Already Exists");
+                    } else if(req.param('screen_name').length <= 2) {
+                        res.error(200, "Screen Name Is To Short");
                     } else if(req.param('screen_name').length > 30) {
                         res.error(200, "Screen Name Is To Long");
                     } else if(req.param('password').length <= 6) {
