@@ -90,7 +90,6 @@ $(function() {
         window.editorUtil.fullscreen($.cookie("fullscreen") == "false");
     }
 
-    if(config.autoJoin)  {
-        $('#backdrop form').submit();
-    }
+    //Start Joining Proccess
+    $('#backdrop form').submit();
 });

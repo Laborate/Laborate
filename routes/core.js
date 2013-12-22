@@ -141,7 +141,7 @@ exports.reload = function(documents) {
                         private: function(callback) {
                             req.models.documents.count({
                                 owner_id: req.session.user.id,
-                                password: req.db.tools.ne(null)
+                                private: true
                             }, function(error, count) {
                                 callback(error, count);
                             });

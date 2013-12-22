@@ -27,7 +27,7 @@ exports.files = function(req, res, next) {
                     return {
                         id: value.document.pub_id,
                         name: value.document.name,
-                        protection: (value.document.password != null) ? "password" : "",
+                        private: value.document.private,
                         location: value.document.location,
                         size: value.document.size(),
                         type: function(name) {

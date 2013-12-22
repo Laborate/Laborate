@@ -6,7 +6,6 @@ exports.index = function(req, res, next) {
             if(!error) {
                 if(documents.length != 0) {
                     var document = documents[0];
-                    var password = (document.password == null);
                     var passed = false;
 
                     $.each(document.roles, function(key, role) {
@@ -15,7 +14,7 @@ exports.index = function(req, res, next) {
                         }
 
                         if(document.roles.end(key)) {
-                            if(passed) {
+                            if(passed || !document.private) {
                                 req.models.documents.permissions.all(function(error, permissions) {
                                     if(!error) {
                                         res.renderOutdated('editor/index', {
@@ -26,9 +25,8 @@ exports.index = function(req, res, next) {
                                             js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
                                             css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
                                             backdrop: req.backdrop(),
-                                            private: !password,
+                                            private: document.private,
                                             config: {
-                                                autoJoin: password,
                                                 permissions: $.map(permissions, function(permission) {
                                                     return permission.name;
                                                 })

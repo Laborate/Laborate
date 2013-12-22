@@ -7,15 +7,9 @@
          <div id="backdrop-container">
             <div class="backdrop-text"><%= document.name %></div>
             <form action="/editor/<%= document.pub_id %>/join/">
-                <% if(document.password) { %>
-                    <input type="password" autofocus="on" name="password" class="backdrop-input" placeholder="password"/>
-                    <input type="submit" class="backdrop-button" value="connecting..." disabled="disabled"/>
-                <% } else { %>
-                    <input type="hidden" name="password"/>
-                    <div class="loader-bar">
-                        <div class="loader-bar-block"></div>
-                    </div>
-                <% } %>
+                <div class="loader-bar">
+                    <div class="loader-bar-block"></div>
+                </div>
             </form>
          </div>
     </div>
@@ -197,17 +191,14 @@
                             </div>
                         <% } %>
                     <% } %>
-                    <% if(user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
+                    <% if(document.private || user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
                         <div class="select">
                             <div class="icon <%= icons.menu_arrows %>"></div>
                             <select name="security">
                                 <option value="false">Public</option>
-                                <option value="true" <%= (document.password) ? "selected" : "" %>>Private</option>
+                                <option value="true" <%= (document.private) ? "selected" : "" %>>Private</option>
                             </select>
                         </div>
-                        <input class="input" name="password" type="password"
-                            placeholder="password" <%= (!document.password) ? "disabled" : "" %>
-                        />
                     <% } %>
                 <% } %>
                 <button type="submit" class="button">Save</button>

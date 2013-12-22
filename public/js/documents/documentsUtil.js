@@ -1079,16 +1079,10 @@ window.documents = {
             }
 
             // Protection
-            switch(item.protection) {
-                case "password":
-                    item["corner"] = config.icons.locked;
-                    break;
-                case "assigned":
-                    item["corner"] = config.icons.profile;
-                    break;
-                default:
-                    item["corner"] = "";
-                    break;
+            if(item.private) {
+                item["corner"] = config.icons.locked;
+            } else {
+                item["corner"] = "";
             }
         }  else {
             //File Size
