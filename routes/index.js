@@ -66,18 +66,18 @@ module.exports = function(app) {
     app.post('/documents/location/create', authUtil.restrictAccess, authUtil.xhr, documents.create_location);
 
     /* Editor */
-    app.get('/editor', authUtil.restrictAccess, editor.access_token, editor.index);
-    app.get('/editor/:document', authUtil.restrictAccess, core.reload(true), editor.access_token, editor.index);
-    app.get('/editor/:document/download/:access_token', authUtil.restrictAccess, editor.access_token, editor.download);
-    app.get('/editor/:document/download', authUtil.restrictAccess, editor.access_token, editor.download);
-    app.post('/editor/exists', authUtil.restrictAccess, editor.access_token, editor.exists);
-    app.post('/editor/:document/join', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.join);
-    app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.update);
-    app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.remove);
-    app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.access_token, github.commit);
-    app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.invite);
-    app.post('/editor/:document/laborators', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.laborators);
-    app.post('/editor/:document/laborator/:user', authUtil.restrictAccess, authUtil.xhr, editor.access_token, editor.laborator);
+    app.get('/editor', authUtil.restrictAccess, editor.index);
+    app.get('/editor/:document', authUtil.restrictAccess, core.reload(true), editor.index);
+    app.get('/editor/:document/download/:access_token', authUtil.restrictAccess, editor.download);
+    app.get('/editor/:document/download', authUtil.restrictAccess, editor.download);
+    app.post('/editor/exists', authUtil.restrictAccess,  editor.exists);
+    app.post('/editor/:document/join', authUtil.restrictAccess, authUtil.xhr, editor.join);
+    app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, editor.update);
+    app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.remove);
+    app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.commit);
+    app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.invite);
+    app.post('/editor/:document/laborators', authUtil.restrictAccess, authUtil.xhr, editor.laborators);
+    app.post('/editor/:document/laborator/:user', authUtil.restrictAccess, authUtil.xhr, editor.laborator);
 
     /* Webhooks */
     app.post("/webhook/stripe", authUtil.loginDenied, webhooks.stripe);

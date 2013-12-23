@@ -57,13 +57,15 @@
                 </div>
                 <div class="active"></div>
             </div>
-            <div class="item" data-key="upload">
-                <div class="container">
-                    <div class="name">Upload</div>
-                    <div class="icon <%= icons.circle_arrow_up %>"></div>
+            <% if(document.location && user.locations[document.location]) { %>
+                <div class="item" data-key="upload">
+                    <div class="container">
+                        <div class="name">Upload</div>
+                        <div class="icon <%= icons.circle_arrow_up %>"></div>
+                    </div>
+                    <div class="active"></div>
                 </div>
-                <div class="active"></div>
-            </div>
+            <% } %>
             <div class="item" data-key="download">
                 <div class="container">
                     <div class="name">Download</div>
@@ -154,16 +156,30 @@
                 <div class="listing laborators"></div>
             </form>
         </div>
-        <div class="item" data-key="upload">
-            <form class="form collection" name="commit">
-                <div>Laborate/<strong>Middleware</strong></div>
-                <textarea class="textarea" placeholder="message"></textarea>
-                <button type="submit" class="button">Commit To Github</button>
-            </form>
-            <form class="form collection" name="save">
-                <button type="submit" class="button">Save To Dropbox</button>
-            </form>
-        </div>
+        <% if(document.location && user.locations[document.location]) { %>
+            <div class="item" data-key="upload">
+                <% /* TODO: Add Bitbucket When They Release an API for Committing */ %>
+                <% if(["github"].indexOf(user.locations[document.location].type) != -1) { %>
+                    <form class="form collection" name="commit">
+                        <div>
+                            <%= user.locations[document.location].repo.capitalize %>
+                            /
+                            <strong><%= user.locations[document.location].branch %></strong>
+                        </div>
+                        <textarea class="textarea" placeholder="message"></textarea>
+                        <button type="submit" class="button">
+                            Commit To <%= user.locations[document.location].type.capitalize %>
+                        </button>
+                    </form>
+                <% } else { %>
+                    <form class="form collection" name="save">
+                        <button type="submit" class="button">
+                            Save To <%= user.locations[document.location].type.capitalize %>
+                        </button>
+                    </form>
+                <% } %>
+            </div>
+        <% } %>
         <div class="item" data-key="download">
             <form class="form" data-key="print">
                 <button type="submit" class="button">

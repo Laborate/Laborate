@@ -1,3 +1,6 @@
+var github = require("./github");
+var bitbucket = require("./github");
+
 exports.index = function(req, res, next) {
     if(req.param("document")) {
         req.models.documents.find({
@@ -89,8 +92,7 @@ exports.join = function(req, res, next) {
                             res.json({
                                 success: true,
                                 next: {
-                                    function: "window.editorUtil.join",
-                                    arguments: document.password
+                                    function: "window.editorUtil.join"
                                 }
                             });
                         } else {
@@ -118,32 +120,28 @@ exports.update = function(req, res, next) {
         if(documents.length == 1) {
             if(!error) {
                 var document = documents[0].document;
-                if(document.password == req.access_token) {
-                    document.name = req.param("name");
+                document.name = req.param("name");
 
-                    if(req.param("change_password") == "true") {
-                        if(document.owner.id == req.session.user.id) {
-                            if(req.param("password")) {
-                                document.password = document.hash(req.param("password"));
-                            } else {
-                                document.password = null;
-                            }
-
-                            document.save();
-
-                            res.json({
-                                success: true,
-                                hash: document.password
-                            });
+                if(req.param("change_password") == "true") {
+                    if(document.owner.id == req.session.user.id) {
+                        if(req.param("password")) {
+                            document.password = document.hash(req.param("password"));
                         } else {
-                            res.error(200, "Failed To Update File");
+                            document.password = null;
                         }
-                    } else {
-                        res.json({ success: true });
+
                         document.save();
+
+                        res.json({
+                            success: true,
+                            hash: document.password
+                        });
+                    } else {
+                        res.error(200, "Failed To Update File");
                     }
                 } else {
-                    res.error(200, "Failed To Update File");
+                    res.json({ success: true });
+                    document.save();
                 }
             } else {
                 res.error(200, "Failed To Update File", error);
@@ -163,13 +161,9 @@ exports.download = function(req, res, next) {
         if(!error) {
             if(documents.length == 1) {
                 var document = documents[0].document;
-                if(document.password == req.access_token) {
-                    res.cookie("fileDownload", true, {path: "/"});
-                    res.attachment(document.name);
-                    res.end((document.content) ? document.content.join("\n") : "", "UTF-8");
-                } else {
-                    res.error(404);
-                }
+                res.cookie("fileDownload", true, {path: "/"});
+                res.attachment(document.name);
+                res.end((document.content) ? document.content.join("\n") : "", "UTF-8");
             } else {
                 res.error(404);
             }
@@ -187,29 +181,26 @@ exports.remove = function(req, res, next) {
     }, function(error, documents) {
         if(!error && documents.length == 1) {
             var document = documents[0].document;
-            if(document.password == req.access_token) {
-                if(document.owner_id == req.session.user.id) {
-                    document.remove(function(error) {
-                        if(!error) {
-                            res.json({ success: true, master: true });
-                        } else {
-                            res.error(200, "Failed To Remove File", error);
-                        }
-                    });
-                } else {
-                    req.models.documents.roles.find({
-                        user_id: req.session.user.id,
-                        document_id: req.param("document")
-                    }).remove(function(error) {
-                        if(!error) {
-                            res.json({ success: true, master: false });
-                        } else {
-                            res.error(200, "Failed To Remove File", error);
-                        }
-                    });
-                }
+
+            if(document.owner_id == req.session.user.id) {
+                document.remove(function(error) {
+                    if(!error) {
+                        res.json({ success: true, master: true });
+                    } else {
+                        res.error(200, "Failed To Remove File", error);
+                    }
+                });
             } else {
-                res.error(404);
+                req.models.documents.roles.find({
+                    user_id: req.session.user.id,
+                    document_id: req.param("document")
+                }).remove(function(error) {
+                    if(!error) {
+                        res.json({ success: true, master: false });
+                    } else {
+                        res.error(200, "Failed To Remove File", error);
+                    }
+                });
             }
         } else {
             res.error(400, false, error);
@@ -226,56 +217,53 @@ exports.invite = function(req, res, next) {
         if(!error) {
             if(documents.length == 1) {
                 var document = documents[0].document;
-                if(document.password == req.access_token) {
-                    req.models.users.find({
-                        screen_name: req.param("screen_name")
-                    }, function(error, users) {
-                        if(!error && users.length == 1) {
-                            var user = users[0];
-                            document.invite(user, 2, function(success, reason) {
-                                if(success) {
-                                    var laborators = [];
-                                    $.each(document.roles, function(key, role) {
-                                        role.getUser(function(error, new_user) {
-                                            if([user.id, document.owner_id].indexOf(new_user.id) == -1) {
-                                                laborators.push({
-                                                    name: new_user.screen_name,
-                                                    gravatar: new_user.gravatar
-                                                });
-                                            }
 
-                                            if(document.roles.end(key)) {
-                                                req.email("document_invite", {
-                                                    from: req.session.user.name + " <" + req.session.user.email + ">",
-                                                    subject: document.name + " (" + req.session.user.screen_name + ")",
-                                                    users: [{
-                                                        email: user.email,
-                                                        name: user.name,
-                                                        document: {
-                                                            from: req.session.user.screen_name,
-                                                            name: document.name,
-                                                            id: document.pub_id,
-                                                            access: "editor",
-                                                            laborators: laborators
-                                                        }
-                                                    }]
-                                                }, req.error.capture);
+                req.models.users.find({
+                    screen_name: req.param("screen_name")
+                }, function(error, users) {
+                    if(!error && users.length == 1) {
+                        var user = users[0];
+                        document.invite(user, 2, function(success, reason) {
+                            if(success) {
+                                var laborators = [];
+                                $.each(document.roles, function(key, role) {
+                                    role.getUser(function(error, new_user) {
+                                        if([user.id, document.owner_id].indexOf(new_user.id) == -1) {
+                                            laborators.push({
+                                                name: new_user.screen_name,
+                                                gravatar: new_user.gravatar
+                                            });
+                                        }
 
-                                                res.json({ success: true });
-                                            }
-                                        });
+                                        if(document.roles.end(key)) {
+                                            req.email("document_invite", {
+                                                from: req.session.user.name + " <" + req.session.user.email + ">",
+                                                subject: document.name + " (" + req.session.user.screen_name + ")",
+                                                users: [{
+                                                    email: user.email,
+                                                    name: user.name,
+                                                    document: {
+                                                        from: req.session.user.screen_name,
+                                                        name: document.name,
+                                                        id: document.pub_id,
+                                                        access: "editor",
+                                                        laborators: laborators
+                                                    }
+                                                }]
+                                            }, req.error.capture);
+
+                                            res.json({ success: true });
+                                        }
                                     });
-                                } else {
-                                    res.error(200, reason || "Failed To Send Invite");
-                                }
-                            });
-                        } else {
-                            res.error(200, "User Doesn't Exist");
-                        }
-                    });
-                } else {
-                    res.error(200, "Failed To Send Invite");
-                }
+                                });
+                            } else {
+                                res.error(200, reason || "Failed To Send Invite");
+                            }
+                        });
+                    } else {
+                        res.error(200, "User Doesn't Exist");
+                    }
+                });
             } else {
                 res.error(404);
             }
@@ -354,8 +342,43 @@ exports.laborator = function(req, res, next) {
     });
 }
 
+/*
+    TODO: Add Bitbucket When They
+    Release an API for Committing
+*/
+exports.commit = function(req, res, next) {
+    req.models.documents.roles.find({
+        user_id: req.session.user.id,
+        document_pub_id: req.param("document"),
+        access: true
+    }, function(error, roles) {
+        if(!error && !roles.empty) {
+            if(!roles[0].permission.readonly) {
+                var document = roles[0].document;
+                var location = req.session.user.locations[document.location];
 
-exports.access_token = function(req, res, next) {
-    req.access_token = req.param("access_token") || null;
-    next();
+                if(location) {
+                    switch(location.type) {
+                        case (!config.apps.github || "github"):
+                            github.commit(req, res, location, document);
+                            break;
+                        /*
+                        case (!config.apps.bitbucket || "bitbucket"):
+                            bitbucket.contents(req, res, next);
+                            break;
+                        */
+                        default:
+                            res.error(200, "Failed To Commit");
+                            break;
+                    }
+                } else {
+                    res.error(200, "Failed To Commit");
+                }
+            } else {
+                res.error(200, "Failed To Commit", error);
+            }
+        } else {
+            res.error(200, "Failed To Commit", error);
+        }
+    });
 }

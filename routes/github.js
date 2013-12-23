@@ -135,36 +135,18 @@ exports.contents = function(req, res, next) {
     }
 };
 
-exports.commit = function(req, res, next) {
-    if(req.session.user.github) {
-        req.models.documents.roles.find({
-            user_id: req.session.user.id,
-            document_pub_id: req.param("document")
-        }, function(error, documents) {
-            if(!error && documents.length == 1 && documents[0].permission_id != 3) {
-                var document = documents[0].document;
-                if(document.password == req.access_token) {
-                    req.github.commit(req.session.user.github,
-                        req.session.user.locations[document.location].repository,
-                        req.session.user.locations[document.location].branch,
-                        (document.path) ? document.path + "/" + document.name : document.name,
-                        (document.content) ? document.content.join("\n") : "",
-                        req.param("message"),
-                    function(errors) {
-                        if(!errors) {
-                            res.json({ success: true });
-                        } else {
-                            res.error(200, "Failed To Commit File");
-                        }
-                    });
-                } else {
-                    res.error(200, "Failed To Commit File");
-                }
-            } else {
-                res.error(200, "Failed To Commit File", error);
-            }
-        });
-    } else {
-        res.error(200, "Bad Github Oauth Token");
-    }
+exports.commit = function(req, res, location, document) {
+    req.github.commit(req.session.user.github,
+        location.repository,
+        location.branch,
+        (document.path) ? document.path + "/" + document.name : document.name,
+        document.content.join("\n"),
+        req.param("message"),
+    function(errors) {
+        if(!errors) {
+            res.json({ success: true });
+        } else {
+            res.error(200, "Failed To Commit");
+        }
+    });
 }

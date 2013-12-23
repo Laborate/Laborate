@@ -223,7 +223,7 @@ exports.file_remove = function(req, res, next) {
 
 /* Locations */
 exports.location = function(req, res, next) {
-    if(req.session.user.locations && (req.param("0") in req.session.user.locations)) {
+    if(req.param("0") in req.session.user.locations) {
         switch(req.session.user.locations[req.param("0")].type) {
             case (!config.apps.github || "github"):
                 github.contents(req, res, next);

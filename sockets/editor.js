@@ -3,9 +3,9 @@ var editorUtil = require("./editorUtil");
 /* Route Functions */
 exports.join = function(req) {
     if(req.session.user) {
-        editorUtil.accessCheck(req.session.user.id, editorUtil.room(req), req.data[0], function(access_object) {
+        editorUtil.accessCheck(req.session.user.id, editorUtil.room(req), function(access_object) {
             if(access_object.success) {
-                if(!editorUtil.inRoom(req.data[1], req.session.user.pub_id, editorUtil.socketRoom(req))) {
+                if(!editorUtil.inRoom(req.data, req.session.user.pub_id, editorUtil.socketRoom(req))) {
                     editorUtil.clientData(editorUtil.socketRoom(req), access_object, function(data) {
                         editorUtil.addUser(
                             req,
@@ -59,7 +59,12 @@ exports.leave = function(req, override) {
                 message: req.session.user.screen_name + " left the document",
                 isStatus: true
             });
-            editorUtil.removeUser(req, req.session.user.pub_id, editorUtil.socketRoom(req));
+
+            editorUtil.save(req, function(success) {
+                if(success) {
+                    editorUtil.removeUser(req);
+                }
+            });
         }
     } else {
         editorUtil.kickOut(req);
@@ -159,5 +164,13 @@ exports.laborators = function(req) {
     req.io.respond({
         success: true,
         laborators: users
+    });
+}
+
+exports.save = function(req) {
+    editorUtil.save(req, function(sucess) {
+        req.io.respond({
+            success: sucess
+        });
     });
 }

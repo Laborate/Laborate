@@ -14,27 +14,19 @@ exports.users = function(user, room) {
     }
 }
 
-exports.accessCheck = function(user, room, token, callback) {
+exports.accessCheck = function(user, room, callback) {
     lib.models_init(null, function(db, models) {
         models.documents.roles.find({
             user_id: user,
-            document_pub_id: room[0]
+            document_pub_id: room[0],
+            access: true
         }, function(error, documents) {
             if(!error && documents.length == 1) {
-                var document = documents[0].document;
-                if((!document.password || token == document.password)) {
-                    callback({
-                        success: true,
-                        document: document,
-                        permission: documents[0].permission
-                    });
-                } else {
-                    callback({
-                        success: false,
-                        error_message: "Invalid Credentials",
-                        redirect_url: "/documents/"
-                    });
-                }
+                callback({
+                    success: true,
+                    document: documents[0].document,
+                    permission: documents[0].permission
+                });
             } else {
                 callback({
                     success: false,
@@ -95,8 +87,38 @@ exports.addUser = function(req, user_id, user_name, room) {
     }
 }
 
-exports.removeUser = function(req, user, room) {
+exports.save = function(req, callback) {
     var redis = lib.redis();
+    lib.models_init(null, function(db, models) {
+        models.documents.roles.find({
+            user_id: req.session.user.id,
+            document_pub_id: exports.room(req)
+        }, function(error, documents) {
+            if(!error && !documents.empty) {
+                var document = documents[0].document;
+                redis.get(exports.socketRoom(req), function(error, reply) {
+                    reply = JSON.parse(reply);
+                    if(reply.changes) {
+                        lib.jsdom.editor(document.content, reply.changes, function(content) {
+                            document.save({
+                                content: content.split("\n"),
+                                breakpoints: reply.breakpoints
+                            });
+                        });
+                        callback(true);
+                    }
+                });
+            } else  {
+                callback(false);
+            }
+        });
+    }, true);
+}
+
+exports.removeUser = function(req) {
+    var redis = lib.redis();
+    var user = req.session.user.pub_id;
+    var room = exports.socketRoom(req);
 
     req.io.leave(room);
     req.io.socket.disconnect();
@@ -106,32 +128,9 @@ exports.removeUser = function(req, user, room) {
             clearInterval(exports.roomUsers[room][user]["update"]);
             delete exports.roomUsers[room][user];
 
-            if(Object.keys(exports.roomUsers[room]).length == 0) {
+            if(Object.keys(exports.roomUsers[room]).empty) {
                 delete exports.roomUsers[room];
-                lib.models_init(null, function(db, models) {
-                    models.documents.roles.find({
-                        user_id: req.session.user.id,
-                        document_pub_id: exports.room(req)
-                    }, function(error, documents) {
-                        if(!error && documents.length == 1) {
-                            var document = documents[0].document;
-                            redis.get(room, function(error, reply) {
-                                reply = JSON.parse(reply);
-                                if(reply.changes) {
-                                    lib.jsdom.editor(document.content, reply.changes, function(content) {
-                                        document.save({
-                                            content: content.split("\n"),
-                                            breakpoints: reply.breakpoints
-                                        });
-                                        redis.del(room);
-                                    });
-                                }
-                            });
-                        } else  {
-                            redis.del(room);
-                        }
-                    });
-                }, true);
+                redis.del(room);
             }
         }
     }

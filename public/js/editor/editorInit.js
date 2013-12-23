@@ -31,7 +31,7 @@ $.extend(window.socketUtil, {
             window.config.name
         ].join(window.config.delimeter));
         if(!$("#backdrop").is(":visible")) {
-            window.editorUtil.join(window.editorUtil.access_token, true, window.socketUtil.connect);
+            window.editorUtil.join(true, window.socketUtil.connect);
         }
     },
     unload: function() {

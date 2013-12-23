@@ -49,7 +49,8 @@ window.sidebarUtil = {
                 form.find("input").val("");
                 break;
             case "commit":
-                this.commit(form);
+                this.commit(form.find("textarea").val());
+                form.find("textarea").val("");
                 break;
             case "save":
                 this.save(form);
@@ -311,7 +312,6 @@ window.sidebarUtil = {
 	    var _this = this;
         $.post("/editor/" + url_params()["document"] + "/invite/", {
             screen_name: screen_name,
-            access_token: window.editorUtil.access_token,
             _csrf: window.config.csrf
         }, function(json) {
             var error = $(".form[name='invite'] .error_message");
@@ -335,7 +335,6 @@ window.sidebarUtil = {
 	    async.parallel({
 	        users: function(callback) {
                 $.post("/editor/" + url_params()["document"] + "/laborators/", {
-                    access_token: window.editorUtil.access_token,
                     _csrf: window.config.csrf
                 }, function(json) {
                     callback(json.error_message, json);
@@ -434,16 +433,27 @@ window.sidebarUtil = {
 	    var _this = this;
         $.post("/editor/" + url_params()["document"] + "/laborator/" + user + "/", {
             permission: permission,
-            access_token: window.editorUtil.access_token,
             _csrf: window.config.csrf
         }, function(json) {
             if(json.success) {
                 _this.laborators();
                 window.socketUtil.socket.emit('editorPermission', user, permission);
-                window.socketUtil.socket.emit('editorExtras' , {
+                window.socketUtil.socket.emit('editorExtras', {
         		    laborators: true
                 });
             }
         });
+	},
+	commit: function(message) {
+	    window.socketUtil.socket.emit('editorSave', function(json) {
+	        if(json.success) {
+                $.post("/editor/" + url_params()["document"] + "/commit/", {
+                    message: message,
+                    _csrf: window.config.csrf
+                }, function(json) {
+                    console.log(json);
+                });
+            }
+	    });
 	}
 }

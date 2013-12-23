@@ -210,19 +210,13 @@ window.editorUtil = {
             this.setMode(modeName, modeObject);
         }
     },
-    join: function(password, reconnect, callback) {
+    join: function(reconnect, callback) {
         //Have to wait for the socket to initialize
         interval = setInterval(function() {
             if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
-                window.socketUtil.socket.emit("editorJoin", [password, reconnect], function(json) {
+                window.socketUtil.socket.emit("editorJoin", reconnect, function(json) {
                     if(json.success) {
-                        if(password) {
-                            window.editorUtil.access_token = password;
-                        } else {
-                            window.editorUtil.access_token = null;
-                        }
-
                         async.series([
                             function(next) {
                                 $("#editorCodeMirror").css({"opacity": "0"});
