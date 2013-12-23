@@ -26,7 +26,7 @@ exports.join = function(req) {
                     });
                 }
             } else {
-                editorUtil.kickOut(req, access_object);
+                editorUtil.kickOut(req);
             }
         });
     } else {
@@ -34,16 +34,16 @@ exports.join = function(req) {
     }
 }
 
-exports.disconnectAll = function(req) {
-    if(req.session.user) {
-        var socket = editorUtil.userSocket(req.session.user.pub_id, editorUtil.socketRoom(req));
-        if(socket in req.io.socket.manager.sockets.sockets) {
-            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
-        }
-        req.io.respond({ success: true });
-        req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
-        exports.leave(req, true);
+exports.disconnectAll = function(req, user) {
+    user = user || req.session.user.pub_id;
+
+    var socket = editorUtil.userSocket(user, editorUtil.socketRoom(req));
+    if(socket in req.io.socket.manager.sockets.sockets) {
+        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
     }
+    req.io.respond({ success: true });
+    req.io.socket.manager.onClientDisconnect(socket, "forced");
+    exports.leave(req, true);
 
     req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
         laborators: true
@@ -173,4 +173,26 @@ exports.save = function(req) {
             success: sucess
         });
     });
+}
+
+exports.permission = function(req) {
+    lib.models_init(null, function(db, models) {
+        models.documents.roles.find({
+            user_pub_id: req.data,
+            document_pub_id: editorUtil.room(req)
+        }, function(error, roles) {
+            if(!error && !roles.empty) {
+                if(!roles[0].access) {
+                    exports.disconnectAll(req.data);
+                } else {
+                    var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
+                    if(socket in req.io.socket.manager.sockets.sockets) {
+                        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                            "readonly": roles[0].readonly
+                        });
+                    }
+                }
+            }
+        });
+    }, true);
 }

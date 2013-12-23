@@ -58,6 +58,10 @@ $(function() {
             window.sidebarUtil.setTitle("in", data["docName"]);
         }
 
+        if("readonly" in data) {
+            window.editor.options.readOnly = data.readonly;
+        }
+
         if("breakpoint" in data) {
             window.editorUtil.gutterClick("in", data["breakpoint"]);
         }

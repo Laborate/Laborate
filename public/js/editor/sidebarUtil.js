@@ -437,7 +437,7 @@ window.sidebarUtil = {
         }, function(json) {
             if(json.success) {
                 _this.laborators();
-                window.socketUtil.socket.emit('editorPermission', user, permission);
+                window.socketUtil.socket.emit('editorPermission', user);
                 window.socketUtil.socket.emit('editorExtras', {
         		    laborators: true
                 });
