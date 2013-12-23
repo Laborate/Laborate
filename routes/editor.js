@@ -161,7 +161,7 @@ exports.download = function(req, res, next) {
         if(!error) {
             if(documents.length == 1) {
                 var document = documents[0].document;
-                res.cookie("fileDownload", true, {path: "/"});
+                res.cookie("fileDownload", true, { path: "/" });
                 res.attachment(document.name);
                 res.end((document.content) ? document.content.join("\n") : "", "UTF-8");
             } else {
