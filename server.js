@@ -16,7 +16,7 @@ GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 
 /* Install Crontab */
-//require("./cron")(__dirname);
+require("./cron")(__dirname);
 
 /* Initialize Lib */
 lib.init({

@@ -18,6 +18,7 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
 
+            /* BUG: tasks never end which creates memory leaks
             //Users Tracking (Every: 5 Minutes)
             tab.remove(tab.findComment("users_tracking"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/tracking.js"), "users_tracking").minute().every(5);
@@ -33,6 +34,7 @@ module.exports = function(root_dir) {
             //Editor Changes (Every: 5 Minutes)
             tab.remove(tab.findComment("editor_changes"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(5);
+            */
 
             //Save Crontab
             tab.save();
