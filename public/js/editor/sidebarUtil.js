@@ -359,13 +359,15 @@ window.sidebarUtil = {
     	    $(".sidebar .form[name='invite'] .listing").html("");
 
             $.each(data.users.laborators, function(key, laborator) {
+                var item = "";
+
+                if(laborator.permission == 4) {
+                    item += "blocked";
+                }
+
                 if(data.online.indexOf(laborator.id) != -1) {
                     permissions[laborator.permission-1].count++;
-                    var item = "active";
-                } else if(laborator.permission == 4) {
-                    var item = "blocked";
-                } else {
-                    var item = "";
+                    item += " active";
                 }
 
                 if(data.users.permission == 1) {
