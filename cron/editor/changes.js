@@ -15,7 +15,7 @@ require('../init')("editor.changes", function() {
                                             //Delay To Prevent Database Overload
                                             setTimeout(function() {
                                                 document.save({
-                                                    content: content.split("\n"),
+                                                    content: (content != "") ? content.split("\n") : [],
                                                     breakpoints: reply.breakpoints
                                                 }, lib.error.capture);
 

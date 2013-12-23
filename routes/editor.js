@@ -358,18 +358,22 @@ exports.commit = function(req, res, next) {
                 var location = req.session.user.locations[document.location];
 
                 if(location) {
-                    switch(location.type) {
-                        case (!config.apps.github || "github"):
-                            github.commit(req, res, location, document);
-                            break;
-                        /*
-                        case (!config.apps.bitbucket || "bitbucket"):
-                            bitbucket.contents(req, res, next);
-                            break;
-                        */
-                        default:
-                            res.error(200, "Failed To Commit");
-                            break;
+                    if(!document.content.empty) {
+                        switch(location.type) {
+                            case (!config.apps.github || "github"):
+                                github.commit(req, res, location, document);
+                                break;
+                            /*
+                            case (!config.apps.bitbucket || "bitbucket"):
+                                bitbucket.contents(req, res, next);
+                                break;
+                            */
+                            default:
+                                res.error(200, "Failed To Commit");
+                                break;
+                        }
+                    } else {
+                        res.error(200, "Failed To Commit");
                     }
                 } else {
                     res.error(200, "Failed To Commit");

@@ -101,7 +101,7 @@ exports.save = function(req, callback) {
                     if(reply.changes) {
                         lib.jsdom.editor(document.content, reply.changes, function(content) {
                             document.save({
-                                content: content.split("\n"),
+                                content: (content != "") ? content.split("\n") : [],
                                 breakpoints: reply.breakpoints
                             });
                         });
