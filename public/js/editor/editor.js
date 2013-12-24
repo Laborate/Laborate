@@ -70,7 +70,7 @@ $(function() {
             window.location.href = "/documents/";
         }
 
-        if("privateChange" in data) {
+        if("readonly" in data) {
             window.location.reload(true);
         }
     });

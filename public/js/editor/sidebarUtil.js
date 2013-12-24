@@ -550,7 +550,7 @@ window.sidebarUtil = {
 
                         if(json.changeReadonly) {
                             window.socketUtil.socket.emit('editorExtras', {
-                    		    privateChange: true
+                    		    readonly: true
                             });
                         }
                     } else {
