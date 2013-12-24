@@ -310,15 +310,19 @@ window.sidebarUtil = {
 	searchList: {},
 	invite: function(screen_name) {
 	    var _this = this;
+	    var button = $(".form[name='invite'] .button");
+        var error = $(".form[name='invite'] .error_message");
+
+        _this.buttonLoading(button);
+
         $.post("/editor/" + url_params()["document"] + "/invite/", {
             screen_name: screen_name,
             _csrf: window.config.csrf
         }, function(json) {
-            var error = $(".form[name='invite'] .error_message");
-
             if(json.success) {
                 error.slideUp(200);
                 _this.laborators();
+                _this.buttonSuccess(button);
             } else {
                 error
                     .text(json.error_message.toLowerCase())
@@ -538,7 +542,7 @@ window.sidebarUtil = {
                     "data-original": button.html()
                 })
                 .removeClass("error success")
-                .html("loading...");
+                .html(button.attr("data-loading") || "loading...");
         }
 	},
 	buttonSuccess: function(button) {
@@ -548,7 +552,7 @@ window.sidebarUtil = {
                 .attr("disabled", null)
                 .removeClass("error")
                 .addClass("success")
-                .html(button.attr("data-success"));
+                .html(button.attr("data-success") || button.attr("data-original"));
 
             setTimeout(function() {
                  _this.buttonReset(button);

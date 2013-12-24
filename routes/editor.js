@@ -326,8 +326,7 @@ exports.laborator = function(req, res, next) {
         document_pub_id: req.param("document")
     }, function(error, roles) {
         if(!error && !roles.empty) {
-            console.error(roles[0].permission);
-            if(roles[0].permission.owner) {
+            if(roles[0].document.owner_id == req.session.user.id) {
                 req.models.documents.permissions.get(
                     req.param("permission"), function(error, permission) {
                         if(!error && permission) {
