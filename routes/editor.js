@@ -10,35 +10,45 @@ exports.index = function(req, res, next) {
                 if(documents.length != 0) {
                     var document = documents[0];
                     var passed = false;
+                    var permission = null;
 
                     $.each(document.roles, function(key, role) {
-                        if(role.access && role.user.id == req.session.user.id) {
+                        if(role.user.id == req.session.user.id) {
                             passed = true;
+                            permission = {
+                                id: role.permission.id,
+                                owner: role.permission.owner,
+                            }
                         }
 
                         if(document.roles.end(key)) {
-                            if(passed || !document.private) {
-                                req.models.documents.permissions.all(function(error, permissions) {
-                                    if(!error) {
-                                        res.renderOutdated('editor/index', {
-                                            title: document.name,
-                                            user: req.session.user,
-                                            document: document,
-                                            permissions: permissions,
-                                            js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
-                                            css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
-                                            backdrop: req.backdrop(),
-                                            private: document.private,
-                                            config: {
-                                                permissions: $.map(permissions, function(permission) {
-                                                    return permission.name;
-                                                })
-                                            }
-                                        });
-                                    } else {
-                                        res.error(404);
-                                    }
-                                });
+                            if(role.access) {
+                                if(passed || !document.private) {
+                                    req.models.documents.permissions.all(function(error, permissions) {
+                                        if(!error) {
+                                            res.renderOutdated('editor/index', {
+                                                title: document.name,
+                                                user: req.session.user,
+                                                document: document,
+                                                permissions: permissions,
+                                                js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
+                                                css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
+                                                backdrop: req.backdrop(),
+                                                private: document.private,
+                                                config: {
+                                                    permission: permission,
+                                                    permissions: $.map(permissions, function(permission) {
+                                                        return permission.name;
+                                                    })
+                                                }
+                                            });
+                                        } else {
+                                            res.error(404);
+                                        }
+                                    });
+                                } else {
+                                    res.error(404);
+                                }
                             } else {
                                 res.error(404);
                             }
@@ -130,7 +140,7 @@ exports.update = function(req, res, next) {
                         if(!user.organizations[0].permission.student) {
                             var readonly = (req.param("readonly") === "true");
 
-                            changeReadonly = (readonly == document.readonly);
+                            changeReadonly = (readonly != document.readonly);
                             document.readonly = readonly;
                         }
                     }
@@ -291,42 +301,33 @@ exports.laborators = function(req, res, next) {
         document_pub_id: req.param("document")
     }, function(error, roles) {
         if(!error) {
-            var data = {
-                success: true
-            }
-
-            data.laborators = $.map(roles, function(role) {
-                if(req.session.user.id != role.user.id) {
-                    return {
-                        id: role.user.pub_id,
-                        screen_name: role.user.screen_name,
-                        gravatar: role.user.gravatar,
-                        permission: {
-                            id: role.permission.id,
-                            access: role.permission.access,
-                            owner: role.permission.owner
+            res.json({
+                success: true,
+                laborators: $.map(roles, function(role) {
+                    if(req.session.user.id != role.user.id) {
+                        return {
+                            id: role.user.pub_id,
+                            screen_name: role.user.screen_name,
+                            gravatar: role.user.gravatar,
+                            permission: {
+                                id: role.permission.id,
+                                access: role.permission.access,
+                                owner: role.permission.owner
+                            }
                         }
                     }
-                } else {
-                    data.permission = {
-                        id: role.permission.id,
-                        access: role.permission.access,
-                        owner: role.permission.owner
+                }).sort(function (a, b) {
+                    if(a.permission.id == b.permission.id) {
+                        a = a.screen_name;
+                        b = b.screen_name;
+                    } else {
+                        a = a.permission.id;
+                        b = b.permission.id;
                     }
-                }
-            }).sort(function (a, b) {
-                if(a.permission.id == b.permission.id) {
-                    a = a.screen_name;
-                    b = b.screen_name;
-                } else {
-                    a = a.permission.id;
-                    b = b.permission.id;
-                }
 
-                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                })
             });
-
-            res.json(data);
         } else {
             res.error(200, "Failed To Get Laborators", error);
         }

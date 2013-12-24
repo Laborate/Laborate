@@ -55,15 +55,11 @@ $(function() {
         }
 
         if("docName" in data) {
-            window.sidebarUtil.setTitle("in", data["docName"]);
-        }
-
-        if("readonly" in data) {
-            window.editor.options.readOnly = data.readonly;
+            window.sidebarUtil.setTitle("in", data.docName);
         }
 
         if("breakpoint" in data) {
-            window.editorUtil.gutterClick("in", data["breakpoint"]);
+            window.editorUtil.gutterClick("in", data.breakpoint);
         }
 
         if("docDelete" in data) {

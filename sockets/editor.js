@@ -183,13 +183,13 @@ exports.permission = function(req) {
         }, function(error, roles) {
             if(!error && !roles.empty) {
                 if(!roles[0].access) {
-                    exports.disconnectAll(req.data);
-                } else {
                     var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
                     if(socket in req.io.socket.manager.sockets.sockets) {
                         req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                            "readonly": roles[0].readonly
+                            docDelete: true
                         });
+
+                        exports.disconnectAll(req, req.data);
                     }
                 }
             }

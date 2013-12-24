@@ -137,12 +137,12 @@ window.sidebarUtil = {
 	    if(!notification) window.editorUtil.setModeExtension(extension);
 	    window.editorUtil.name = title;
 
-		$("#documentTitle").val(title);
-		$("#document_title").text(title);
+        $(".sidebar .form[name=settings] .input[name=name]").val(title);
+		$(".header .filter[data-key='file-name'] strong").text(title);
 		$("title").text(name + notify + window.config.delimeter + window.config.name);
 		if(direction == "out") {
     		window.socketUtil.socket.emit('editorExtras' , {
-    		    "docName": $("#documentTitle").val()
+    		    docName: title
             });
         }
 	},
@@ -344,11 +344,11 @@ window.sidebarUtil = {
 	inviteTimeout: null,
 	laborators: function() {
 	    async.parallel({
-	        users: function(callback) {
+	        laborators: function(callback) {
                 $.post("/editor/" + url_params()["document"] + "/laborators/", {
                     _csrf: window.config.csrf
                 }, function(json) {
-                    callback(json.error_message, json);
+                    callback(json.error_message, json.laborators);
                 });
 	        },
 	        online: function(callback) {
@@ -368,22 +368,26 @@ window.sidebarUtil = {
 
     	    $(".sidebar .form[name='invite'] .listing").html("");
 
-            $.each(data.users.laborators, function(key, laborator) {
+            $.each(data.laborators, function(key, laborator) {
                 var item = "";
-
-                if(!laborator.permission.access) {
-                    item += "blocked";
-                }
 
                 if(data.online.indexOf(laborator.id) != -1) {
                     permissions[laborator.permission.id-1].count++;
                     item += " active";
                 }
 
-                if(data.users.permission.owner) {
+                if(config.permission.owner) {
                     var settings = "settings " + config.icons.settings;
+
+                    if(!laborator.permission.access) {
+                        item += " blocked";
+                    }
                 } else {
-                    var settings = "";
+                    if(!laborator.permission.access) {
+                        return true;
+                    } else {
+                        var settings = "";
+                    }
                 }
 
                 $(".sidebar .form[name='invite'] .listing")
@@ -399,7 +403,7 @@ window.sidebarUtil = {
                         </div>                                                          \
                     ");
 
-                if(data.users.laborators.end(key)) {
+                if(data.laborators.end(key)) {
                     var header = [];
                     var delimiter = "<span>" + window.config.delimeter + "</span>";
                     permissions[1].count += permissions[0].count;
@@ -415,8 +419,6 @@ window.sidebarUtil = {
                         if(permissions[2].count != 1) viewers += "s";
                         header.push(viewers);
                     }
-
-                    console.log(permissions);
 
                     if(!header.empty) {
                         if(permissions[1].count == 0 && permissions[2].count == 0) {
@@ -546,6 +548,7 @@ window.sidebarUtil = {
                     _csrf: window.config.csrf
                 }, function(json) {
                     if(json.success) {
+                        _this.setTitle("out", name);
                         _this.buttonSuccess(button);
 
                         if(json.changeReadonly) {
