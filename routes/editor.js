@@ -119,30 +119,30 @@ exports.update = function(req, res, next) {
     }, function(error, documents) {
         if(documents.length == 1) {
             if(!error) {
+                var user = req.session.user;
                 var document = documents[0].document;
+
                 document.name = req.param("name");
 
-                if(req.param("change_password") == "true") {
-                    if(document.owner.id == req.session.user.id) {
-                        if(req.param("password")) {
-                            document.password = document.hash(req.param("password"));
-                        } else {
-                            document.password = null;
+                if(documents[0].permission.owner) {
+                    if(!user.organizations.empty) {
+                        if(!user.organizations[0].permission.student) {
+                            document.readonly = (req.param("readonly") === "true");
                         }
-
-                        document.save();
-
-                        res.json({
-                            success: true,
-                            hash: document.password
-                        });
-                    } else {
-                        res.error(200, "Failed To Update File");
                     }
-                } else {
-                    res.json({ success: true });
-                    document.save();
+
+                    if(user.pricing.documents == null || user.documents.private < user.pricing.documents) {
+                        document.private = (req.param("private") === "true");
+                    }
                 }
+
+                document.save(function(error, document) {
+                    if(!error) {
+                        res.json({ success: true });
+                    } else {
+                        res.error(200, "Failed To Update File", error);
+                    }
+                });
             } else {
                 res.error(200, "Failed To Update File", error);
             }
@@ -182,10 +182,13 @@ exports.remove = function(req, res, next) {
         if(!error && documents.length == 1) {
             var document = documents[0].document;
 
-            if(document.owner_id == req.session.user.id) {
+            if(documents[0].permission.owner) {
                 document.remove(function(error) {
                     if(!error) {
-                        res.json({ success: true, master: true });
+                        res.json({
+                            success: true,
+                            owner: true
+                        });
                     } else {
                         res.error(200, "Failed To Remove File", error);
                     }
@@ -196,7 +199,10 @@ exports.remove = function(req, res, next) {
                     document_id: req.param("document")
                 }).remove(function(error) {
                     if(!error) {
-                        res.json({ success: true, master: false });
+                        res.json({
+                            success: true,
+                            master: false
+                        });
                     } else {
                         res.error(200, "Failed To Remove File", error);
                     }

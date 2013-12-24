@@ -194,9 +194,18 @@
         </div>
         <div class="item" data-key="settings">
             <form class="form collection" name="settings">
-                <input class="input" type="text" placeholder="file name" value="<%= document.name %>"/>
+                <input class="input" name="name" type="text" placeholder="file name" value="<%= document.name %>"/>
                 <% if(document.owner.id == user.id) { %>
-                    <% if(user.organizations.length != 0) { %>
+                    <% if(document.private || user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
+                        <div class="select">
+                            <div class="icon <%= icons.menu_arrows %>"></div>
+                            <select name="private">
+                                <option value="false">Public</option>
+                                <option value="true" <%= (document.private) ? "selected" : "" %>>Private</option>
+                            </select>
+                        </div>
+                    <% } %>
+                    <% if(!user.organizations.empty) { %>
                         <% if(!user.organizations[0].permission.student) { %>
                             <div class="select">
                                 <div class="icon <%= icons.menu_arrows %>"></div>
@@ -207,20 +216,13 @@
                             </div>
                         <% } %>
                     <% } %>
-                    <% if(document.private || user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
-                        <div class="select">
-                            <div class="icon <%= icons.menu_arrows %>"></div>
-                            <select name="security">
-                                <option value="false">Public</option>
-                                <option value="true" <%= (document.private) ? "selected" : "" %>>Private</option>
-                            </select>
-                        </div>
-                    <% } %>
                 <% } %>
-                <button type="submit" class="button">Save</button>
+                <button type="submit" class="button" data-success="Saved">Save</button>
             </form>
-            <form class="form collection" name="delete">
-                <button type="submit" class="button red"><%= (document.owner.id == user.id) ? "Delete" : "Forget" %></button>
+            <form class="form collection" name="remove">
+                <button type="submit" class="button red" data-success="Deleted">
+                    <%= (document.owner.id == user.id) ? "Delete" : "Forget" %>
+                </button>
             </form>
         </div>
     </div>

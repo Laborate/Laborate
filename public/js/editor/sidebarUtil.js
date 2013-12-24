@@ -24,9 +24,9 @@ window.sidebarUtil = {
                 break;
             case "type-mode":
                 this.typeMode(
-                    form.find("select[name='languages']").val(),
-                    form.find("select[name='keymapping']").val(),
-                    form.find("select[name='cursorSearch']").val()
+                    form.find("select[name=languages]").val(),
+                    form.find("select[name=keymapping]").val(),
+                    (form.find("select[name=cursorSearch]").val() === "true")
                 );
                 break;
             case "beautify":
@@ -62,7 +62,14 @@ window.sidebarUtil = {
                 this.download();
                 break;
             case "settings":
-                this.settings(form);
+                this.settings(
+                    form.find("input[name=name]").val(),
+                    (form.find("select[name=private]").val() === "true"),
+                    (form.find("select[name=readonly]").val() === "true")
+                );
+                break;
+            case "remove":
+                this.remove(form);
                 break;
         }
 	},
@@ -102,7 +109,7 @@ window.sidebarUtil = {
 	typeMode: function(languages, keymapping, cursorSearch) {
 	    window.editorUtil.setModeLanguage(languages);
         this.keyMap(keymapping);
-        this.cursorSearch(cursorSearch === "true");
+        this.cursorSearch(cursorSearch);
 	},
 	keyMap: function(keymap) {
 	    if(keymap) {
@@ -409,6 +416,8 @@ window.sidebarUtil = {
                         header.push(viewers);
                     }
 
+                    console.log(permissions);
+
                     if(!header.empty) {
                         if(permissions[1].count == 0 && permissions[2].count == 0) {
                             $(".chat .controller").text("Chat Room");
@@ -463,7 +472,7 @@ window.sidebarUtil = {
                     if(json.success) {
                         _this.buttonSuccess(button);
                     } else {
-                        _this.buttonError(button);
+                        _this.buttonError(button, json.error_message);
                     }
                 });
             } else {
@@ -485,7 +494,7 @@ window.sidebarUtil = {
                     if(json.success) {
                         _this.buttonSuccess(button);
                     } else {
-                        _this.buttonError(button);
+                        _this.buttonError(button, json.error_message);
                     }
                 });
             } else {
@@ -521,6 +530,61 @@ window.sidebarUtil = {
                 _this.buttonError(button);
             }
 	    });
+	},
+	settings: function(name, private, readonly) {
+	    var _this = this;
+	    var button = $(".sidebar .form[name=settings] .button");
+
+	    _this.buttonLoading(button);
+
+	    window.socketUtil.socket.emit('editorSave', function(json) {
+	       if(json.success) {
+                $.post("/editor/" + url_params()["document"] + "/update/", {
+                    name: name,
+                    private: private,
+                    readonly: readonly,
+                    _csrf: window.config.csrf
+                }, function(json) {
+                    if(json.success) {
+                        _this.buttonSuccess(button);
+                    } else {
+                        _this.buttonError(button, json.error_message);
+                    }
+                });
+            } else {
+                _this.buttonError(button);
+            }
+	    });
+	},
+	remove: function() {
+        var _this = this;
+	    var button = $(".sidebar .form[name=remove] .button");
+
+	    _this.buttonLoading(button);
+
+        $.post("/editor/" + url_params()["document"] + "/remove/", {
+            _csrf: window.config.csrf
+        }, function(json) {
+            if(json.success) {
+                _this.buttonSuccess(button);
+
+                if(json.owner) {
+                    window.socketUtil.socket.emit('editorExtras', {
+                        docDelete: true
+                    });
+                } else {
+                    window.socketUtil.socket.emit('editorExtras', {
+            		    laborators: true
+                    });
+                }
+
+                setTimeout(function() {
+                    window.location.href = "/documents/";
+                }, 100);
+            } else {
+                _this.buttonError(button, json.error_message);
+            }
+        });
 	},
 	buttonReset: function(button) {
     	if(button.attr("data-original")) {
