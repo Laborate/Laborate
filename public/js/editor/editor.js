@@ -66,16 +66,12 @@ $(function() {
             window.editorUtil.gutterClick("in", data["breakpoint"]);
         }
 
-        if(data["docDelete"] == true) {
+        if("docDelete" in data) {
             window.location.href = "/documents/";
         }
 
-        if(data["passChange"] == true) {
-            if(data["passOpen"] == true) {
-                window.editorUtil.access_token = null;
-            } else {
-                window.location.reload(true);
-            }
+        if("privateChange" in data) {
+            window.location.reload(true);
         }
     });
 

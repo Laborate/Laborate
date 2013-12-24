@@ -121,13 +121,17 @@ exports.update = function(req, res, next) {
             if(!error) {
                 var user = req.session.user;
                 var document = documents[0].document;
+                var changeReadonly = false;
 
                 document.name = req.param("name");
 
                 if(documents[0].permission.owner) {
                     if(!user.organizations.empty) {
                         if(!user.organizations[0].permission.student) {
-                            document.readonly = (req.param("readonly") === "true");
+                            var readonly = (req.param("readonly") === "true");
+
+                            changeReadonly = (readonly == document.readonly);
+                            document.readonly = readonly;
                         }
                     }
 
@@ -138,7 +142,10 @@ exports.update = function(req, res, next) {
 
                 document.save(function(error, document) {
                     if(!error) {
-                        res.json({ success: true });
+                        res.json({
+                            success: true,
+                            changeReadonly: changeReadonly
+                        });
                     } else {
                         res.error(200, "Failed To Update File", error);
                     }

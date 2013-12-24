@@ -547,6 +547,12 @@ window.sidebarUtil = {
                 }, function(json) {
                     if(json.success) {
                         _this.buttonSuccess(button);
+
+                        if(json.changeReadonly) {
+                            window.socketUtil.socket.emit('editorExtras', {
+                    		    privateChange: true
+                            });
+                        }
                     } else {
                         _this.buttonError(button, json.error_message);
                     }
