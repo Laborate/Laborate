@@ -53,13 +53,13 @@ window.sidebarUtil = {
                 form.find("textarea").val("");
                 break;
             case "save":
-                this.save(form);
+                this.save();
                 break;
             case "print":
-                this.print(form);
+                this.print();
                 break;
             case "download":
-                this.download(form);
+                this.download();
                 break;
             case "settings":
                 this.settings(form);
@@ -351,7 +351,7 @@ window.sidebarUtil = {
                 return {
                     id: key,
                     name: permission.toLowerCase(),
-                    count: (key == (data.users.permission-1)) ? 1 : 0
+                    count: 0
                 }
             });
 
@@ -360,16 +360,16 @@ window.sidebarUtil = {
             $.each(data.users.laborators, function(key, laborator) {
                 var item = "";
 
-                if(laborator.permission == 4) {
+                if(!laborator.permission.access) {
                     item += "blocked";
                 }
 
                 if(data.online.indexOf(laborator.id) != -1) {
-                    permissions[laborator.permission-1].count++;
+                    permissions[laborator.permission.id-1].count++;
                     item += " active";
                 }
 
-                if(data.users.permission == 1) {
+                if(data.users.permission.owner) {
                     var settings = "settings " + config.icons.settings;
                 } else {
                     var settings = "";
@@ -379,7 +379,7 @@ window.sidebarUtil = {
                     .append("                                                           \
                         <div class='item " + item + "'                                  \
                              data-id='" + laborator.id + "'                             \
-                             data-permission='" + laborator.permission + "'>            \
+                             data-permission='" + laborator.permission.id + "'>            \
                              <div class='gravatar'>                                     \
                                 <img src='" + laborator.gravatar + "'>                  \
                              </div>                                                     \
@@ -406,7 +406,7 @@ window.sidebarUtil = {
                     }
 
                     if(!header.empty) {
-                        if(permissions[1].count == 1 && permissions[2].count == 0) {
+                        if(permissions[1].count == 0 && permissions[2].count == 0) {
                             $(".chat .controller").text("Chat Room");
                         } else {
                             $(".chat .controller").html(header.join(delimiter));
@@ -445,15 +445,128 @@ window.sidebarUtil = {
         });
 	},
 	commit: function(message) {
+	    var _this = this;
+	    var button = $(".sidebar .form[name=commit] .button");
+
+	    _this.buttonLoading(button);
+
 	    window.socketUtil.socket.emit('editorSave', function(json) {
-	        if(json.success) {
+	       if(json.success) {
                 $.post("/editor/" + url_params()["document"] + "/commit/", {
                     message: message,
                     _csrf: window.config.csrf
                 }, function(json) {
-                    console.log(json);
+                    if(json.success) {
+                        _this.buttonSuccess(button);
+                    } else {
+                        _this.buttonError(button);
+                    }
                 });
+            } else {
+                _this.buttonError(button);
             }
 	    });
+	},
+	save: function() {
+        var _this = this;
+	    var button = $(".sidebar .form[name=save] .button");
+
+	    _this.buttonLoading(button);
+
+	    window.socketUtil.socket.emit('editorSave', function(json) {
+	       if(json.success) {
+                $.post("/editor/" + url_params()["document"] + "/save/", {
+                    _csrf: window.config.csrf
+                }, function(json) {
+                    if(json.success) {
+                        _this.buttonSuccess(button);
+                    } else {
+                        _this.buttonError(button);
+                    }
+                });
+            } else {
+                _this.buttonError(button);
+            }
+	    });
+	},
+	print: function() {
+        $("html").addClass("print");
+        window.editorUtil.resize();
+        window.print();
+        setTimeout(function() {
+            $("html").removeClass("print");
+            window.editorUtil.resize();
+        }, 100);
+	},
+	download: function() {
+        var _this = this;
+	    var button = $(".sidebar .form[name=download] .button");
+
+	    _this.buttonLoading(button);
+
+	    window.socketUtil.socket.emit('editorSave', function(json) {
+	       if(json.success) {
+                $.fileDownload("/editor/" + url_params()["document"] + "/download/")
+                    .done(function() {
+                        _this.buttonSuccess(button);
+                    })
+                    .fail(function() {
+                        _this.buttonError(button);
+                    });
+            } else {
+                _this.buttonError(button);
+            }
+	    });
+	},
+	buttonReset: function(button) {
+    	if(button.attr("data-original")) {
+        	button
+                .removeClass("error success")
+        	    .html(button.attr("data-original"))
+        	    .attr({
+                    "disabled": null,
+                    "data-original": null
+                });
+    	}
+	},
+	buttonLoading: function(button) {
+	    this.buttonReset(button);
+	    if(!button.is(":disabled")) {
+            button
+                .attr({
+                    "disabled": "disabled",
+                    "data-original": button.html()
+                })
+                .removeClass("error success")
+                .html("loading...");
+        }
+	},
+	buttonSuccess: function(button) {
+        var _this = this;
+    	if(!button.hasClass("success")) {
+        	button
+                .attr("disabled", null)
+                .removeClass("error")
+                .addClass("success")
+                .html(button.attr("data-success"));
+
+            setTimeout(function() {
+                 _this.buttonReset(button);
+            }, 4000);
+    	}
+	},
+	buttonError: function(button, message) {
+	    var _this = this;
+    	if(!button.hasClass("error")) {
+        	button
+                .attr("disabled", null)
+                .addClass("error")
+                .removeClass("success")
+                .html(message || "Failed");
+
+            setTimeout(function() {
+                 _this.buttonReset(button);
+            }, 4000);
+    	}
 	}
 }

@@ -167,13 +167,13 @@
                             <strong><%= user.locations[document.location].branch %></strong>
                         </div>
                         <textarea class="textarea" placeholder="message"></textarea>
-                        <button type="submit" class="button">
+                        <button type="submit" class="button" data-success="Committed">
                             Commit To <%= user.locations[document.location].type.capitalize %>
                         </button>
                     </form>
                 <% } else { %>
                     <form class="form collection" name="save">
-                        <button type="submit" class="button">
+                        <button type="submit" class="button" data-success="Saved">
                             Save To <%= user.locations[document.location].type.capitalize %>
                         </button>
                     </form>
@@ -181,13 +181,13 @@
             </div>
         <% } %>
         <div class="item" data-key="download">
-            <form class="form" data-key="print">
+            <form class="form" name="print">
                 <button type="submit" class="button">
                     <span class="icon <%= icons.print %>"></span>Print
                 </button>
             </form>
             <form class="form" name="download">
-                <button type="submit" class="button">
+                <button type="submit" class="button" data-success="Downloaded">
                     <span class="icon <%= icons.download %>"></span>Download
                 </button>
             </form>

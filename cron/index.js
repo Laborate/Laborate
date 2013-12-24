@@ -15,8 +15,15 @@ module.exports = function(root_dir) {
             var foreverCommand = path.join(npmBinRoot, 'forever');
             var startLocation = path.join(root_dir, "/start.js");
             var startCommand = util.format('%s && %s start %s', exportCommand, foreverCommand, startLocation);
+
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
+
+
+            //Restart @12 hours
+            var restartCommand = util.format('%s && %s restartall', exportCommand, foreverCommand);
+            tab.remove(tab.findComment("laborate_middleware_restart"));
+            tab.create(restartCommand, "laborate_middleware_restart").hour().on(2);
 
             /* BUG: tasks never end which creates memory leaks
             //Users Tracking (Every: 5 Minutes)

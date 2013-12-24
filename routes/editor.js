@@ -288,10 +288,18 @@ exports.laborators = function(req, res, next) {
                         id: role.user.pub_id,
                         screen_name: role.user.screen_name,
                         gravatar: role.user.gravatar,
-                        permission: role.permission.id
+                        permission: {
+                            id: role.permission.id,
+                            access: role.permission.access,
+                            owner: role.permission.owner
+                        }
                     }
                 } else {
-                    data.permission = role.permission.id;
+                    data.permission = {
+                        id: role.permission.id,
+                        access: role.permission.access,
+                        owner: role.permission.owner
+                    }
                 }
             }).sort(function (a, b) {
                 if(a.permission.id == b.permission.id) {
@@ -318,7 +326,8 @@ exports.laborator = function(req, res, next) {
         document_pub_id: req.param("document")
     }, function(error, roles) {
         if(!error && !roles.empty) {
-            if(roles[0].document.owner_id == req.session.user.id) {
+            console.error(roles[0].permission);
+            if(roles[0].permission.owner) {
                 req.models.documents.permissions.get(
                     req.param("permission"), function(error, permission) {
                         if(!error && permission) {
