@@ -548,7 +548,7 @@ window.sidebarUtil = {
                     _csrf: window.config.csrf
                 }, function(json) {
                     if(json.success) {
-                        _this.setTitle("out", name);
+                        _this.setTitle("out", name, window.chat.count);
                         _this.buttonSuccess(button);
 
                         if(json.changeReadonly) {

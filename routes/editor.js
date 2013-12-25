@@ -98,27 +98,23 @@ exports.join = function(req, res, next) {
     }, function(error, documents) {
         if(!error && documents.length != 0) {
             document = documents[0];
-            if(!document.password || document.hash(req.param("password")) == document.password) {
-                document.join(req.session.user, 2, function(exists, blocked) {
-                    if(exists) {
-                        if(!blocked) {
-                            res.json({
-                                success: true,
-                                next: {
-                                    function: "window.editorUtil.join"
-                                }
-                            });
-                        } else {
-                            res.error(200, "You Do Not Have Access To This Document");
-                        }
+            document.join(req.session.user, 2, function(exists, blocked) {
+                if(exists) {
+                    if(!blocked) {
+                        res.json({
+                            success: true,
+                            next: {
+                                function: "window.editorUtil.join"
+                            }
+                        });
                     } else {
-                        res.error(200, "Document Doesn't Exist");
+                        res.error(200, "You Do Not Have Access To This Document");
                     }
-                });
-            } else {
-                res.error(200, "Incorrect Password");
-            }
-        } else {
+                } else {
+                    res.error(200, "Document Doesn't Exist");
+                }
+            });
+    } else {
             res.error(404, "Document Doesn't Exist", error);
         }
     });

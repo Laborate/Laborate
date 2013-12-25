@@ -55,7 +55,7 @@ $(function() {
         }
 
         if("docName" in data) {
-            window.sidebarUtil.setTitle("in", data.docName);
+            window.sidebarUtil.setTitle("in", data.docName, window.chat.count);
         }
 
         if("breakpoint" in data) {

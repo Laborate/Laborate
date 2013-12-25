@@ -246,6 +246,10 @@ window.editorUtil = {
                                 }
                             },
                             function(next) {
+                                if(json.permission.readonly && json.permission.id == 2) {
+                                    json.permission.name = config.permissions[2];
+                                }
+
                                 window.sidebarUtil.laborators();
                                 window.sidebarUtil.setAccess(json.permission.name);
                                 window.sidebarUtil.setTitle("in", json.name);

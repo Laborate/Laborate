@@ -77,6 +77,7 @@ exports.clientData = function(room, document_role, callback) {
             }) : []),
             changes: document.changes,
             permission: {
+                id: permission.id,
                 name: permission.name,
                 readonly: readonly
             }

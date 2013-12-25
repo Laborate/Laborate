@@ -133,6 +133,7 @@ app.configure('production', function() {
     /* Last Resort Error Handling */
     process.on('uncaughtException', function (exception) {
         lib.error.capture(exception);
+        return false;
     });
 });
 
