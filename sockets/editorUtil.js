@@ -60,8 +60,12 @@ exports.clientData = function(room, document_role, callback) {
 
         if(permission.owner) {
             var readonly = false;
+        } else if(document.readonly) {
+            var readonly = true;
+        } else if(permission.readonly) {
+            var readonly = true;
         } else {
-            var readonly = (document.readonly || permission.readonly);
+            var readonly = false;
         }
 
         callback({
