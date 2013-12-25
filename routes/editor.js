@@ -36,7 +36,10 @@ exports.index = function(req, res, next) {
                                                 backdrop: req.backdrop(),
                                                 private: document.private,
                                                 config: {
-                                                    permission: permission,
+                                                    permission: permission || {
+                                                        id: 2,
+                                                        owner: false
+                                                    },
                                                     permissions: $.map(permissions, function(permission) {
                                                         return permission.name;
                                                     })
@@ -211,14 +214,11 @@ exports.remove = function(req, res, next) {
                     }
                 });
             } else {
-                req.models.documents.roles.find({
-                    user_id: req.session.user.id,
-                    document_id: req.param("document")
-                }).remove(function(error) {
+                documents[0].remove(function(error) {
                     if(!error) {
                         res.json({
                             success: true,
-                            master: false
+                            owner: false
                         });
                     } else {
                         res.error(200, "Failed To Remove File", error);

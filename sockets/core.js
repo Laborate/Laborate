@@ -25,31 +25,33 @@ exports.notifications = function(req) {
 }
 
 exports.track = function(req, session) {
-    var redis = lib.redis();
-    redis.get("tracking", function(error, data) {
-        var user = (session) ? (session.user || {}) : {};
-        var organization = (session) ? (session.organization || {}) : {};
-        var address = req.handshake.address;
-        var location = lib.geoip(address.address);
-        var tracking = (data) ? JSON.parse(data) : [];
+    if(req.handshake) {
+        var redis = lib.redis();
+        redis.get("tracking", function(error, data) {
+            var user = (session) ? (session.user || {}) : {};
+            var organization = (session) ? (session.organization || {}) : {};
+            var address = req.handshake.address;
+            var location = lib.geoip(address.address);
+            var tracking = (data) ? JSON.parse(data) : [];
 
-        tracking.push({
-            type: "socket",
-            agent: req.handshake.headers['user-agent'],
-            lat: location.ll[0],
-            lon: location.ll[1],
-            ip: address.address,
-            port: address.port,
-            user_id: user.id || null,
-            organization_id: organization.id || null
+            tracking.push({
+                type: "socket",
+                agent: req.handshake.headers['user-agent'],
+                lat: location.ll[0],
+                lon: location.ll[1],
+                ip: address.address,
+                port: address.port,
+                user_id: user.id || null,
+                organization_id: organization.id || null
+            });
+
+            redis.set(
+                "tracking",
+                JSON.stringify(tracking),
+                lib.error.capture
+            );
         });
-
-        redis.set(
-            "tracking",
-            JSON.stringify(tracking),
-            lib.error.capture
-        );
-    });
+    }
 }
 
 exports.leave = function(req) {

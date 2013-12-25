@@ -225,7 +225,7 @@
                 <button type="submit" class="button" data-success="Saved">Save</button>
             </form>
             <form class="form collection" name="remove">
-                <button type="submit" class="button red" data-success="Deleted">
+                <button type="submit" class="button red" data-success="<%= (document.owner.id == user.id) ? "Deleted" : "Forgotten" %>">
                     <%= (document.owner.id == user.id) ? "Delete" : "Forget" %>
                 </button>
             </form>
