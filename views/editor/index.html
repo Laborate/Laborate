@@ -58,13 +58,16 @@
                 <div class="active"></div>
             </div>
             <% if(document.location && user.locations[document.location]) { %>
-                <div class="item" data-key="upload">
-                    <div class="container">
-                        <div class="name">Upload</div>
-                        <div class="icon <%= icons.circle_arrow_up %>"></div>
+                <% //Until Bitbucket comming and others are built %>
+                <% if(user.locations[document.location].type == "github") { %>
+                    <div class="item" data-key="upload">
+                        <div class="container">
+                            <div class="name">Upload</div>
+                            <div class="icon <%= icons.circle_arrow_up %>"></div>
+                        </div>
+                        <div class="active"></div>
                     </div>
-                    <div class="active"></div>
-                </div>
+                <% } %>
             <% } %>
             <div class="item" data-key="download">
                 <div class="container">
@@ -172,11 +175,13 @@
                         </button>
                     </form>
                 <% } else { %>
+                    <!-- Google Drive, Dropbox and Evernote coming soon
                     <form class="form collection" name="save">
                         <button type="submit" class="button" data-success="Saved">
                             Save To <%= user.locations[document.location].type.capitalize %>
                         </button>
                     </form>
+                    -->
                 <% } %>
             </div>
         <% } %>
