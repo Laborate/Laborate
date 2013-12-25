@@ -764,11 +764,11 @@ html, body {
 
 .print {
     & {
-        overflow: visible;
+        overflow: visible !important;
 
         body {
-            overflow: visible;
-            background: #fff;
+            overflow: visible !important;
+            background: #fff !important;
 
             & > .content {
                 margin: 0;
@@ -776,11 +776,11 @@ html, body {
 
                 .header .bottom,
                 .pane {
-                    width: 100%;
+                    width: 100% !important;
                 }
 
                 .pane {
-                    padding-bottom: 50px;
+                    padding-bottom: 50px !important;
                 }
             }
 
@@ -789,7 +789,7 @@ html, body {
             .header .top,
             .fullscreen,
             .context-menu {
-                display: none;
+                display: none !important;
             }
         }
     }
