@@ -46,7 +46,7 @@ var error_handler = function(status, message, home, req, res) {
                 if(redirect_url) {
                     res.redirect(redirect_url);
                 } else {
-                    res.renderOutdated('core/error', {
+                    res.renderOutdated('error/index', {
                         host: req.host,
                         title: error_message,
                         mode: error_message,

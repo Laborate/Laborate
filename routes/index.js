@@ -1,5 +1,6 @@
 /* Modules: Custom */
 var core = require('./core');
+var landing = require('./landing');
 var auth = require('./auth');
 var authUtil = require('./authUtil');
 var account = require('./account');
@@ -14,7 +15,7 @@ var feedback = require('./feedback');
 
 module.exports = function(app) {
     /* Root */
-    app.get('/', authUtil.loginCheck, auth.login);
+    app.get('/', authUtil.loginCheck, landing.index);
 
     /* Login */
     app.get('/login', authUtil.loginCheck, auth.login);
