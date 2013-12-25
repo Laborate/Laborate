@@ -182,17 +182,19 @@ exports.permission = function(req) {
             document_pub_id: editorUtil.room(req)
         }, function(error, roles) {
             if(!error && !roles.empty) {
-                var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
+                if(roles[0].document.owner_id == req.session.user.id) {
+                    var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
 
-                if(socket in req.io.socket.manager.sockets.sockets) {
-                    if(roles[0].access) {
-                        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                            readonly: true
-                        });
-                    } else {
-                        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                            docDelete: true
-                        });
+                    if(socket in req.io.socket.manager.sockets.sockets) {
+                        if(roles[0].access) {
+                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                                readonly: true
+                            });
+                        } else {
+                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                                docDelete: true
+                            });
+                        }
                     }
                 }
             }
