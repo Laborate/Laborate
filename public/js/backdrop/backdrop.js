@@ -3,8 +3,13 @@ window.backdrop = {
     timer: null,
     email: null,
     ready: function() {
-        $("#backdrop-core").vAlign().hAlign().show();
-        $(".backdrop-input").attr({"spellcheck": false});
+        if($("#backdrop").hasClass("feedback")) {
+            $("#backdrop-core").hAlign().show();
+        } else {
+            $("#backdrop-core").vAlign().hAlign().show();
+            $(".backdrop-input").attr({"spellcheck": false});
+        }
+
         window.backdrop.button = $("#backdrop input[type=submit]").val();
     },
     load: function() {
@@ -15,7 +20,7 @@ window.backdrop = {
         var data = { _csrf: window.config.csrf }
         clearInterval(window.backdrop.timer);
 
-        $(".backdrop-input").each(function() {
+        $(".backdrop-input, .backdrop-textarea, .backdrop-radio:checked").each(function() {
             passed = (passed) ? !!$(this).val() : passed;
             data[$(this).attr("name")] = $(this).val();
             if($(this).val()) {

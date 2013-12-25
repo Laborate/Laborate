@@ -1,0 +1,41 @@
+<% include ../includes/header.html %>
+<div id="backdrop" class="feedback">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
+         <div id="backdrop-container" class="larger">
+             <form action="/feedback/" autocomplete="off">
+                <table cellpadding="10px" width="100%">
+                    <% $.each(questions, function(key, question) { %>
+                        <tr>
+                            <td valign="top"><%= question.question %></td>
+                            <td valign="top">
+                                <% if(question.type == "textarea") { %>
+                                    <textarea name="feedback[<%= key %>]" class="backdrop-textarea"></textarea>
+                                <% } else if(question.type == "radio") { %>
+                                    <input class="backdrop-radio"  type="radio" id="<%= key %>0" name="feedback[<%= key %>]" value="Yes" checked="checked">
+                                    <label for="<%= key %>0">Yes</label>
+                                    <span class="backdrop-spacer"></span>
+                                    <input class="backdrop-radio" type="radio" id="<%= key %>1" name="feedback[<%= key %>]" value="No">
+                                    <label for="<%= key %>1">No</label>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </table>
+                <br>
+                <input type="submit" class="backdrop-button" value="Submit Feedback"/>
+            </form>
+         </div>
+    </div>
+    <div id="backdrop-footer">
+        <ul>
+            <li><a href="/logout/">Logout</a></li>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+            <li><a href="/">© <%= company %></a></li>
+        </ul>
+    </div>
+</div>
+<% include ../includes/footer.html %>

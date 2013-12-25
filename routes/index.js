@@ -10,6 +10,7 @@ var bitbucket = require('./bitbucket');
 var google = require('./google');
 var webhooks = require('./webhooks');
 var email = require('./email');
+var feedback = require('./feedback');
 
 module.exports = function(app) {
     /* Root */
@@ -39,6 +40,11 @@ module.exports = function(app) {
     app.get('/reset/:code', authUtil.loginCheck, core.organization, auth.reset_password);
     app.post('/auth/reset', authUtil.loginCheck, core.organization, authUtil.reset);
     app.post('/auth/reset/:code', authUtil.loginCheck, core.organization, authUtil.reset_password);
+
+    /* Feedback */
+    app.get('/feedback', authUtil.restrictAccess, core.reload(false), feedback.index);
+    app.get('/feedback/success', authUtil.restrictAccess, core.reload(false), feedback.success);
+    app.post('/feedback', authUtil.restrictAccess, core.reload(false), feedback.submit);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload(true), account.index);

@@ -95,7 +95,8 @@
     .ellipsis();
 }
 
-.backdrop-input {
+.backdrop-input,
+.backdrop-textarea {
     width: 100%;
     border: none;
     padding: 8px 10px;
@@ -108,8 +109,15 @@
     .border-radius(4px);
 }
 
-.backdrop-input.error {
+.backdrop-input.error,
+.backdrop-textarea.error  {
     background-color: @color_backdrop_input_error;
+}
+
+.backdrop-textarea {
+    font-size: 12px;
+    min-height: 60px;
+    resize: vertical;
 }
 
 .backdrop-button {
@@ -198,5 +206,39 @@
 
     #backdrop-container {
         .linear-gradient(0deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, .4));
+    }
+}
+
+
+.feedback {
+    #backdrop-footer {
+        display: none !important;
+    }
+
+    #backdrop-gradient,
+    #backdrop-img {
+        position: fixed !important;
+    }
+
+    #backdrop-core {
+        top: 40px;
+    }
+
+    #backdrop-container {
+        width: 500px;
+        margin-bottom: 40px;
+
+        .backdrop-text {
+            text-align: left;
+        }
+
+        .backdrop-input,
+        .backdrop-textarea {
+            width: 250px;
+        }
+
+        .backdrop-spacer {
+            margin-left: 10px;
+        }
     }
 }
