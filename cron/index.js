@@ -11,7 +11,7 @@ module.exports = function(root_dir) {
             var nodePath = process.execPath.split('/').slice(0, -1).join('/');
             var exportCommand = 'export PATH=' + nodePath + ':$PATH';
 
-            //Start @Reboot
+            //Start (On Reboot)
             var foreverCommand = path.join(npmBinRoot, 'forever');
             var startLocation = path.join(root_dir, "/start.js");
             var startCommand = util.format('%s && %s start %s', exportCommand, foreverCommand, startLocation);
@@ -19,13 +19,15 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
 
-
-            //Restart @12 hours
+            //Restart (Every: 3 Hours)
             var restartCommand = util.format('%s && %s restartall', exportCommand, foreverCommand);
             tab.remove(tab.findComment("laborate_middleware_restart"));
-            tab.create(restartCommand, "laborate_middleware_restart").hour().on(2);
+            tab.create(restartCommand, "laborate_middleware_restart").hour().every(3);
 
-            /* BUG: tasks never end which creates memory leaks
+            //Users Feedback (On: 1st hour)
+            tab.remove(tab.findComment("users_feedback"));
+            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback.js"), "users_feedback").hour().on(1);
+
             //Users Tracking (Every: 5 Minutes)
             tab.remove(tab.findComment("users_tracking"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/tracking.js"), "users_tracking").minute().every(5);
@@ -41,7 +43,6 @@ module.exports = function(root_dir) {
             //Editor Changes (Every: 5 Minutes)
             tab.remove(tab.findComment("editor_changes"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(5);
-            */
 
             //Save Crontab
             tab.save();
