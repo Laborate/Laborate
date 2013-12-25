@@ -30,9 +30,9 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("users_feedback"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback.js"), "users_feedback").hour().on(1);
 
-            //Users Tracking (Every: 5 Minutes)
+            //Users Tracking (Every: 10 minutes)
             tab.remove(tab.findComment("users_tracking"));
-            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/tracking.js"), "users_tracking").minute().every(5);
+            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/tracking.js"), "users_tracking").minute().every(10);
 
             //Users Deliquent (Every: 1 Month)
             tab.remove(tab.findComment("users_deliquent"));
