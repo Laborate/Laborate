@@ -6,6 +6,7 @@ window.editorUtil = {
     fullscreenActive: false,
     fullscreeenTransitioning: false,
     name: "",
+    interval: null,
     notification: function(message, permanent) {
         $(".header .bottom .filters")
             .toggle(!message)
@@ -246,10 +247,14 @@ window.editorUtil = {
                             },
                             function(next) {
                                 window.sidebarUtil.laborators();
-                                window.sidebarUtil.setAccess(json.access);
+                                window.sidebarUtil.setAccess(json.permission.name);
                                 window.sidebarUtil.setTitle("in", json.name);
                                 window.editorUtil.setInfo();
                                 window.editor.clearHistory();
+                                clearInterval(window.editorUtil.interval);
+                                window.editorUtil.interval = setInterval(function() {
+                                    window.editor.options.readOnly = json.permission.readonly;
+                                }, 50);
                                 setTimeout(next, 1000);
                             },
                             function(next) {

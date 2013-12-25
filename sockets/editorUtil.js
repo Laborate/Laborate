@@ -58,6 +58,12 @@ exports.clientData = function(room, document_role, callback) {
             }));
         }
 
+        if(permission.owner) {
+            var readonly = false;
+        } else {
+            var readonly = (document.readonly || permission.readonly);
+        }
+
         callback({
             success: true,
             name: document.name,
@@ -66,7 +72,10 @@ exports.clientData = function(room, document_role, callback) {
                 return {"line": value};
             }) : []),
             changes: document.changes,
-            access: permission.name
+            permission: {
+                name: permission.name,
+                readonly: readonly
+            }
         });
     });
 }
