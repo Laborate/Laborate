@@ -31,5 +31,14 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
     killTree: false
 });
 
+child.on('exit', function () {
+	console.log("server.js fully down after " + config.forever.max_failures + " starts.");
+	console.log("SERVER DOWN.");
+});
+
+child.on('exit:code', function(code) {
+	console.log("server.js exited with code " + code);
+});
+
 //Start Forver
 child.start();

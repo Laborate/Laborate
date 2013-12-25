@@ -29,6 +29,9 @@ module.exports = function(root) {
     /* EDT Debugger */
     clientJS.addFile(root + '/lib/debugger/edt.js');
 
+    /* Feedback */
+    clientCSS.addFile("feedback", css_path + 'feedback/index.less');
+
     /* Backdrop */
     clientCSS.addFile("backdrop", css_path + 'backdrop/backdrop.less');
     clientCSS.addFile("backdrop", css_path + 'backdrop/loader.less');

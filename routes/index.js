@@ -45,6 +45,7 @@ module.exports = function(app) {
     /* Feedback */
     app.get('/feedback', authUtil.restrictAccess, core.reload(false), feedback.index);
     app.get('/feedback/success', authUtil.restrictAccess, core.reload(false), feedback.success);
+    app.get('/feedback/results', authUtil.restrictAccess, feedback.results);
     app.post('/feedback', authUtil.restrictAccess, core.reload(false), feedback.submit);
 
     /* Account */
