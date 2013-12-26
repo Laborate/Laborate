@@ -25,7 +25,12 @@ module.exports = function(root_dir) {
 
             //Users Feedback Notifications (On: 1st hour)
             tab.remove(tab.findComment("users_feedback_notifications"));
-            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback_notifications.js"), "users_feedback_notifications").hour().on(1);
+            if(config.feedback.enabled) {
+                tab.create(
+                    exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback_notifications.js"),
+                    "users_feedback_notifications"
+                ).hour().on(1);
+            }
 
             //Users Tracking (Every: 10 minutes)
             tab.remove(tab.findComment("users_tracking"));

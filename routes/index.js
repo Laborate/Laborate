@@ -44,10 +44,12 @@ module.exports = function(app) {
     app.post('/auth/reset/:code', authUtil.loginCheck, core.organization, authUtil.reset_password);
 
     /* Feedback */
-    app.get('/feedback', authUtil.restrictAccess, core.reload(false), feedback.index);
-    app.get('/feedback/success', authUtil.restrictAccess, core.reload(false), feedback.success);
+    if(config.feedback.enabled) {
+        app.get('/feedback', authUtil.restrictAccess, core.reload(false), feedback.index);
+        app.get('/feedback/success', authUtil.restrictAccess, core.reload(false), feedback.success);
+        app.post('/feedback', authUtil.restrictAccess, core.reload(false), feedback.submit);
+    }
     app.get('/feedback/results', authUtil.restrictAccess, feedback.results);
-    app.post('/feedback', authUtil.restrictAccess, core.reload(false), feedback.submit);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload(true), account.index);

@@ -1,45 +1,8 @@
-var questions = {
-    products: {
-        question: "What apps would you like to see in the future? (notetaker, math, etc)?",
-        type: "textarea"
-    },
-    changes: {
-        question: "What changes would you like to see (theme, functionality, etc)?",
-        type: "textarea"
-    },
-    missing: {
-        question: "What do you feel is missing?",
-        type: "textarea"
-    },
-    using: {
-        question: "Could you see yourself using this site as a tool \
-                    for your education? Why & Why Not?",
-        type: "textarea"
-    },
-    bugs: {
-        question: "Have you found any bugs?",
-        type: "textarea"
-    },
-    effective: {
-        question: "Is Laborate an effective tool for collaboration?",
-        type: "radio"
-    },
-    pay: {
-        question: "Would you pay $5 a month for this service, knowing \
-                    that it will make you a more productive and engaged student?",
-        type: "radio"
-    },
-    recommend: {
-        question: "Would you recommend this service to your fellow peers?",
-        type: "radio"
-    }
-}
-
 exports.index = function(req, res) {
     if(!req.session.user.feedback) {
         res.renderOutdated('feedback/index', {
             title: 'Feedback',
-            questions: questions,
+            questions: config.feedback.questions,
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
             backdrop: req.backdrop(),
@@ -101,7 +64,7 @@ exports.results = function(req, res) {
             if(!error) {
                 res.renderOutdated('feedback/results', {
                     title: 'Feedback Results',
-                    questions: questions,
+                    questions: config.feedback.questions,
                     results: feedback,
                     js: clientJS.renderTags(),
                     css: clientCSS.renderTags("feedback"),
