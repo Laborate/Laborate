@@ -287,26 +287,34 @@ exports.plan_change = function(req, res) {
 
 exports.notification_hide = function(req, res) {
     req.models.notifications.get(req.param("notification"), function(error, notification) {
-        notification.save({
-            priority: false
-        }, function(error) {
-            if(!error) {
-                res.json({ success: true });
-            } else {
-                res.error(200, "Failed To Hide Notification", error);
-            }
-        });
+        if(!error && notification) {
+            notification.save({
+                priority: false
+            }, function(error) {
+                if(!error) {
+                    res.json({ success: true });
+                } else {
+                    res.error(200, "Failed To Hide Notification", error);
+                }
+            });
+        } else {
+            res.error(200, "Failed To Hide Notification", error);
+        }
     });
 }
 
 exports.notification_remove = function(req, res) {
     req.models.notifications.get(req.param("notification"), function(error, notification) {
-        notification.remove(function(error) {
-            if(!error) {
-                res.json({ success: true });
-            } else {
-                res.error(200, "Failed To Remove Notification", error);
-            }
-        });
+        if(!error && notification) {
+            notification.remove(function(error) {
+                if(!error) {
+                    res.json({ success: true });
+                } else {
+                    res.error(200, "Failed To Remove Notification", error);
+                }
+            });
+        } else {
+            res.error(200, "Failed To Hide Notification", error);
+        }
     });
 }
