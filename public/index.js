@@ -29,6 +29,10 @@ module.exports = function(root) {
     /* EDT Debugger */
     clientJS.addFile(root + '/lib/debugger/edt.js');
 
+    /* Landing */
+    clientCSS.addFile("landing", css_path + 'landing/index.less');
+    clientJS.addFile("landing", js_path + 'landing/index.js');
+
     /* Feedback */
     clientCSS.addFile("feedback", css_path + 'feedback/index.less');
 

@@ -106,7 +106,7 @@
                     if(notification.priority) {
     %>
                         <div class="notification" data-id="<%= notification.id %>">
-                            <%= notification.message %>
+                            <%- notification.message %>
                             <div class="close <%= icons.cross_square %>"></div>
                         </div>
     <%
@@ -373,7 +373,7 @@
                     <% $.each(user.notifications, function(key, item) { %>
                         <div class="item" data-id="<%= item.id %>">
                             <div class="priority <%= (item.priority) ? "active" : "" %>"></div>
-                            <div class="message"><%= item.message %></div>
+                            <div class="message"><%- item.message %></div>
                             <div class="action remove">Remove</div>
                         </div>
                     <% }); %>

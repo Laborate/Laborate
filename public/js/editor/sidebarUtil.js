@@ -331,6 +331,7 @@ window.sidebarUtil = {
                 _this.laborators();
                 _this.buttonSuccess(button);
             } else {
+                _this.buttonReset(button);
                 error
                     .text(json.error_message.toLowerCase())
                     .slideDown(200);

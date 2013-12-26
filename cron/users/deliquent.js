@@ -22,7 +22,7 @@ require('../init')("user.deliquent", function() {
                                         message: "Your account has been downgraded to the free plan \
                                         becuase we attempted to charge your card 3 times and all failed.",
                                         priority: true,
-                                        user_id: users[0].id
+                                        user_id: user.id
                                     }, lib.error.capture);
                                     if(users.end(key)) _this.finish();
                                 } else {

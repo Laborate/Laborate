@@ -59,6 +59,7 @@ exports.locals = function(req, res, next) {
     res.locals.google_verification = config.google.verification;
     res.locals.company = config.general.company;
     res.locals.logo = req.session.organization.logo || config.general.logo;
+    res.locals.social = config.social;
     res.locals.backdrop = "";
     res.locals.private = false;
     res.locals.pageTrack = true;

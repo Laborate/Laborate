@@ -26,7 +26,7 @@ var questions = {
     },
     pay: {
         question: "Would you pay $5 a month for this service, knowing \
-                    that it will save you money in the long run?",
+                    that it will make you a more productive and engaged student?",
         type: "radio"
     },
     recommend: {

@@ -220,5 +220,23 @@
             "bitbucket",
             "sitemap.xml"
         ]
+    },
+    "social": {
+        "facebook": {
+            "link": "https://www.facebook.com/Laborate.io",
+            "enabled": true
+        },
+        "twitter": {
+            "link": "https://twitter.com/Laborate_io",
+            "enabled": true
+        },
+        "google_plus": {
+            "link": "",
+            "enabled": false
+        },
+        "tumblr": {
+            "link": "",
+            "enabled": false
+        }
     }
 }

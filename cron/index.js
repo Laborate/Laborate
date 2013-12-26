@@ -19,16 +19,13 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("laborate_middleware"));
             tab.create(startCommand, "laborate_middleware").everyReboot();
 
-            //Restart (Every: 3 Hours)
-            var restartCommand = util.format('%s && %s restartall', exportCommand, foreverCommand);
-            tab.remove(tab.findComment("laborate_middleware_restart"));
-            tab.create(restartCommand, "laborate_middleware_restart").hour().every(3);
-
-            /* CPU LEAK in the files below
-
             //Users Feedback (On: 1st hour)
             tab.remove(tab.findComment("users_feedback"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback.js"), "users_feedback").hour().on(1);
+
+            //Users Feedback (On: 1st hour)
+            tab.remove(tab.findComment("users_feedback_notifications"));
+            tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback_notifications.js"), "users_feedback_notifications").hour().on(1);
 
             //Users Tracking (Every: 10 minutes)
             tab.remove(tab.findComment("users_tracking"));
@@ -41,8 +38,6 @@ module.exports = function(root_dir) {
             //Editor Changes (Every: 5 Minutes)
             tab.remove(tab.findComment("editor_changes"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(5);
-
-            */
 
             //Save Crontab
             tab.save();

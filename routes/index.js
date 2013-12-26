@@ -16,6 +16,7 @@ var feedback = require('./feedback');
 module.exports = function(app) {
     /* Root */
     app.get('/', authUtil.loginCheck, landing.index);
+    app.post('/', authUtil.loginCheck, core.organization, auth.register);
 
     /* Login */
     app.get('/login', authUtil.loginCheck, auth.login);

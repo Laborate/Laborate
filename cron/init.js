@@ -6,6 +6,9 @@ GLOBAL.lib = require('../lib');
 /* Prototype Extensions */
 lib.core.extensions();
 
+/* Activate Emails */
+lib.email_init();
+
 /* Exports */
 module.exports = function(name, callback) {
     /* Setup */
@@ -17,6 +20,13 @@ module.exports = function(name, callback) {
             process.exit(code=0);
         }, 500);
     }
+
+    if(config.general.production) {
+        _this.email = lib.email("http://" + config.general.host);
+    } else {
+        _this.email = lib.email("http://" + config.profile.name + ".dev." + config.general.host);
+    }
+
     lib.models_init(_this, callback);
 
     /* Exit After 1 Minute (Safegaurd) */

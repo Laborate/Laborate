@@ -11,7 +11,7 @@
         text-align: center;
         font-size: 14px;
         width: 500px;
-        padding: 10px 15px;
+        padding: 10px 30px 10px 15px;
         margin: 20px 0 10px 25px;
         font-weight: bold;
         color: darken(@color_red, 25%);
@@ -19,6 +19,20 @@
         border: solid 1px lighten(@color_red, 20%);
         .box-sizing(border-box);
         .border-radius(2px);
+
+        a {
+            color: darken(@color_red, 30%);
+            text-decoration: underline;
+
+            &:hover {
+                color: darken(@color_red, 25%);
+
+                &:active {
+                    color: darken(@color_red, 20%);
+                }
+            }
+
+        }
 
         .close {
             position: absolute;
@@ -267,6 +281,19 @@
 
             .listing {
                 width: 100%;
+
+                a {
+                    color: darken(@color_blue, 10%);
+                    text-decoration: underline;
+
+                    &:hover {
+                        color: darken(@color_blue, 15%);
+
+                        &:active {
+                            color: darken(@color_blue, 20%);
+                        }
+                    }
+                }
 
                 .banner {
                     position: relative;

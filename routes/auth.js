@@ -37,6 +37,7 @@ exports.login_user = function(req, res) {
 exports.register = function(req, res) {
     res.renderOutdated('auth/register', {
         title: 'Register',
+        email: req.param("email") || "",
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
         backdrop: req.backdrop(),

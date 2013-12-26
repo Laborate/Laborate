@@ -127,7 +127,12 @@ exports.logout = function(req, res) {
     res.clearCookie(config.cookies.rememberme, {
         domain: "." + req.host
     });
-    res.redirect('/');
+
+    if(req.session.redirect_url) {
+        res.redirect('/login/');
+    } else {
+        res.redirect('/');
+    }
 };
 
 exports.register = function(req, res, next) {

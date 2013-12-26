@@ -4,14 +4,14 @@ exports.index = function(req, res, next) {
             req.email_test("verify", {
                 name: config.profile.name.capitalize,
                 code: "abcasdfjkl0324halsdf"
-            }, render(res));
+            }, render(req, res));
             break;
 
         case "reset":
             req.email_test("reset", {
                 name: config.profile.name.capitalize,
                 code: "abcasdfjkl0324halsdf"
-            }, render(res));
+            }, render(req, res));
             break;
 
         case "document/invite":
@@ -33,7 +33,7 @@ exports.index = function(req, res, next) {
                         }
                     ]
                 }
-            }, render(res));
+            }, render(req, res));
             break;
 
         case "document/invite/2":
@@ -46,13 +46,19 @@ exports.index = function(req, res, next) {
                     access: "viewer",
                     laborators: []
                 }
-            }, render(res));
+            }, render(req, res));
             break;
 
         case "payment/failed":
             req.email_test("payment_failed", {
                 name: config.profile.name.capitalize
-            }, render(res));
+            }, render(req, res));
+            break;
+
+        case "feedback":
+            req.email_test("feedback", {
+                name: config.profile.name.capitalize
+            }, render(req, res));
             break;
 
         default:
@@ -61,7 +67,7 @@ exports.index = function(req, res, next) {
     }
 }
 
-function render(res) {
+function render(req, res) {
     return function(error, html) {
         if(!error) {
             res.send(html);
