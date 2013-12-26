@@ -4,6 +4,14 @@ exports.index = function(req, res) {
         js: clientJS.renderTags("landing"),
         css: clientCSS.renderTags("backdrop", "landing"),
         backdrop: req.backdrop(),
-        pageTrack: false
+        pageTrack: false,
+        config: {
+            animate: !req.session.landing
+        }
     });
+
+    if(!req.session.landing) {
+        req.session.landing = true;
+        req.session.save();
+    }
 };
