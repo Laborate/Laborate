@@ -34,7 +34,8 @@ exports.tracking = function(req, res, next) {
             ip: req.headers['x-forwarded-for'],
             port: req.headers['x-forwarded-port'],
             user_id: (user) ? user.id : null,
-            organization_id: (organization) ? organization.id : null
+            organization_id: (organization) ? organization.id : null,
+            url: req.protocol + "://" + req.get('host') + req.url
         });
 
         req.redis.set(

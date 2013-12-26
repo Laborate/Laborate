@@ -1,4 +1,8 @@
 var questions = {
+    products: {
+        question: "What apps would you like to see in the future? (notetaker, math, etc)?",
+        type: "textarea"
+    },
     changes: {
         question: "What changes would you like to see (theme, functionality, etc)?",
         type: "textarea"
@@ -18,10 +22,6 @@ var questions = {
     },
     effective: {
         question: "Is Laborate an effective tool for collaboration?",
-        type: "radio"
-    },
-    difficulties: {
-        question: "Are you experiencing any technical difficulties?",
         type: "radio"
     },
     pay: {

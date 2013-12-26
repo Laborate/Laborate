@@ -25,7 +25,7 @@ exports.notifications = function(req) {
 }
 
 exports.track = function(req, session) {
-    if(req.handshake) {
+    if(req.handshake && req.headers) {
         var redis = lib.redis();
         redis.get("tracking", function(error, data) {
             var user = (session) ? (session.user || {}) : {};
@@ -42,7 +42,8 @@ exports.track = function(req, session) {
                 ip: address.address,
                 port: address.port,
                 user_id: user.id || null,
-                organization_id: organization.id || null
+                organization_id: organization.id || null,
+                url: req.headers.referer
             });
 
             redis.set(

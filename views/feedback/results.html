@@ -1,27 +1,29 @@
 <% include ../includes/header.html %>
-<% $.each(results, function(key, feedback) { %>
-    <div class="container">
-        <strong>User ID:</strong>
-        <div class="value"><%= feedback.user.id %></div>
-    </div>
-    <div class="container">
-        <strong>User Name:</strong>
-        <div class="value"><%= feedback.user.name %></div>
-    </div>
-    <div class="container">
-        <strong>Submitted:</strong>
-        <div class="value"><%= feedback.created.toDateString() %></div>
-    </div>
-
-    <% $.each(feedback.feedback, function(key, answer) { %>
+<% if(!results.empty) { %>
+    <% $.each(results, function(key, feedback) { %>
         <div class="container">
-            <strong><%= questions[key].question %>:</strong>
-            <div class="value"><%= answer %></div>
+            <strong>User</strong>
+            <div class="value"><%= feedback.user.name %> - <%= feedback.user.pub_id %></div>
         </div>
-    <% }); %>
+        <div class="container">
+            <strong>Submitted</strong>
+            <div class="value"><%= feedback.created.toDateString() %></div>
+        </div>
 
-    <% if(!results.end(key)) { %>
-        <div class="page-break"></div>
-    <% } %>
-<% }); %>
+        <% $.each(feedback.feedback, function(key, answer) { %>
+            <div class="container">
+                <strong><%= questions[key].question %></strong>
+                <div class="value"><%= answer %></div>
+            </div>
+        <% }); %>
+
+        <% if(!results.end(key)) { %>
+            <div class="page-break"></div>
+        <% } %>
+    <% }); %>
+<% } else { %>
+    <center>
+        <strong>No User Feedback</strong>
+    </center>
+<% } %>
 <% include ../includes/footer.html %>
