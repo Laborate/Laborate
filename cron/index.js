@@ -23,7 +23,7 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("users_feedback"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback.js"), "users_feedback").hour().on(1);
 
-            //Users Feedback (On: 1st hour)
+            //Users Feedback Notifications (On: 1st hour)
             tab.remove(tab.findComment("users_feedback_notifications"));
             tab.create(exportCommand + " && node " + path.join(root_dir, "/cron/users/feedback_notifications.js"), "users_feedback_notifications").hour().on(1);
 
