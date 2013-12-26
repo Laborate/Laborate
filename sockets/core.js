@@ -1,3 +1,6 @@
+var connections = { redis: lib.redis() };
+lib.models_init(connections);
+
 exports.pageTrack = function(req) {
     exports.track(req, req.session);
     req.session.last_page = req.data;
@@ -5,29 +8,26 @@ exports.pageTrack = function(req) {
 }
 
 exports.notifications = function(req) {
-    lib.models_init(null, function(db, models) {
-        if(req.session.user) {
-            var url = req.headers.referer.replace(req.session.server + "/", "");
-            if(!(/^account\/.*/.test(url))) {
-                models.notifications.exists({
-                    user_id: req.session.user.id,
-                    priority: true
-                }, function(error, exists) {
-                    req.io.respond(!error && exists);
-                });
-            } else {
-                req.io.respond(false);
-            }
+    if(req.session.user) {
+        var url = req.headers.referer.replace(req.session.server + "/", "");
+        if(!(/^account\/.*/.test(url))) {
+            connections.models.notifications.exists({
+                user_id: req.session.user.id,
+                priority: true
+            }, function(error, exists) {
+                req.io.respond(!error && exists);
+            });
         } else {
             req.io.respond(false);
         }
-    }, true);
+    } else {
+        req.io.respond(false);
+    }
 }
 
 exports.track = function(req, session) {
     if(req.handshake && req.headers) {
-        var redis = lib.redis();
-        redis.get("tracking", function(error, data) {
+         connections.redis.get("tracking", function(error, data) {
             var user = (session) ? (session.user || {}) : {};
             var organization = (session) ? (session.organization || {}) : {};
             var address = req.handshake.address;
@@ -46,7 +46,7 @@ exports.track = function(req, session) {
                 url: req.headers.referer
             });
 
-            redis.set(
+             connections.redis.set(
                 "tracking",
                 JSON.stringify(tracking),
                 lib.error.capture

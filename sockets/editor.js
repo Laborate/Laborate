@@ -1,4 +1,6 @@
+var connections = { redis: lib.redis() };
 var editorUtil = require("./editorUtil");
+lib.models_init(connections);
 
 /* Route Functions */
 exports.join = function(req) {
@@ -87,16 +89,14 @@ exports.chatRoom = function(req) {
 
 exports.document = function(req) {
     if(req.session.user) {
-        var redis = lib.redis();
-
         req.data.from = req.session.user.pub_id;
         req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 
-        redis.get(editorUtil.socketRoom(req), function(error, reply) {
+         connections.redis.get(editorUtil.socketRoom(req), function(error, reply) {
             reply = JSON.parse(reply);
             reply.changes.push(req.data["changes"]);
-            redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
+             connections.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
         });
     }
 }
@@ -112,8 +112,6 @@ exports.cursors = function(req) {
 }
 
 exports.extras = function(req) {
-    var redis = lib.redis();
-
     //Methods
     this.breakpoints = function(changes, breakpoints, callback) {
         $.each(changes, function(index, value) {
@@ -130,13 +128,13 @@ exports.extras = function(req) {
     }
 
     this.get = function(callback) {
-        redis.get(editorUtil.socketRoom(req), function(error, reply) {
+         connections.redis.get(editorUtil.socketRoom(req), function(error, reply) {
             callback(JSON.parse(reply));
         });
     }
 
     this.save = function(data) {
-        redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
+         connections.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
     }
 
     //Logic
@@ -176,28 +174,26 @@ exports.save = function(req) {
 }
 
 exports.permission = function(req) {
-    lib.models_init(null, function(db, models) {
-        models.documents.roles.find({
-            user_pub_id: req.data,
-            document_pub_id: editorUtil.room(req)
-        }, function(error, roles) {
-            if(!error && !roles.empty) {
-                if(roles[0].document.owner_id == req.session.user.id) {
-                    var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
+    connections.models.documents.roles.find({
+        user_pub_id: req.data,
+        document_pub_id: editorUtil.room(req)
+    }, function(error, roles) {
+        if(!error && !roles.empty) {
+            if(roles[0].document.owner_id == req.session.user.id) {
+                var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
 
-                    if(socket in req.io.socket.manager.sockets.sockets) {
-                        if(roles[0].access) {
-                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                                readonly: true
-                            });
-                        } else {
-                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                                docDelete: true
-                            });
-                        }
+                if(socket in req.io.socket.manager.sockets.sockets) {
+                    if(roles[0].access) {
+                        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                            readonly: true
+                        });
+                    } else {
+                        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                            docDelete: true
+                        });
                     }
                 }
             }
-        });
-    }, true);
+        }
+    });
 }

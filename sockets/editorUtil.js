@@ -1,3 +1,5 @@
+var connections = { redis: lib.redis() };
+lib.models_init(connections);
 exports.roomUsers = new Array();
 
 exports.users = function(user, room) {
@@ -15,42 +17,39 @@ exports.users = function(user, room) {
 }
 
 exports.accessCheck = function(user, room, callback) {
-    lib.models_init(null, function(db, models) {
-        models.documents.roles.find({
-            user_id: user,
-            document_pub_id: room[0],
-            access: true
-        }, function(error, documents) {
-            if(!error && documents.length == 1) {
-                callback({
-                    success: true,
-                    document: documents[0].document,
-                    permission: documents[0].permission
-                });
-            } else {
-                callback({
-                    success: false,
-                    error_message: "Document Does Not Exist",
-                    redirect_url: "/documents/"
-                });
-            }
-        });
-    }, true);
+    connections.models.documents.roles.find({
+        user_id: user,
+        document_pub_id: room[0],
+        access: true
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            callback({
+                success: true,
+                document: documents[0].document,
+                permission: documents[0].permission
+            });
+        } else {
+            callback({
+                success: false,
+                error_message: "Document Does Not Exist",
+                redirect_url: "/documents/"
+            });
+        }
+    });
 }
 
 exports.clientData = function(room, document_role, callback) {
-    var redis = lib.redis();
     var document = document_role.document;
     var permission = document_role.permission;
 
-    redis.get(room, function(error, reply) {
+    connections.redis.get(room, function(error, reply) {
         if(!error && reply) {
             reply = JSON.parse(reply);
             document.breakpoints = reply.breakpoints;
             document.changes = reply.changes;
         } else {
             document.changes = [];
-            redis.set(room, JSON.stringify({
+            connections.redis.set(room, JSON.stringify({
                 id: document.id,
                 breakpoints: document.breakpoints,
                 changes: [],
@@ -102,35 +101,31 @@ exports.addUser = function(req, user_id, user_name, room) {
 }
 
 exports.save = function(req, callback) {
-    var redis = lib.redis();
-    lib.models_init(null, function(db, models) {
-        models.documents.roles.find({
-            user_id: req.session.user.id,
-            document_pub_id: exports.room(req)
-        }, function(error, documents) {
-            if(!error && !documents.empty) {
-                var document = documents[0].document;
-                redis.get(exports.socketRoom(req), function(error, reply) {
-                    reply = JSON.parse(reply);
-                    if(reply.changes) {
-                        lib.jsdom.editor(document.content, reply.changes, function(content) {
-                            document.save({
-                                content: (content != "") ? content.split("\n") : [],
-                                breakpoints: reply.breakpoints
-                            });
+    connections.models.documents.roles.find({
+        user_id: req.session.user.id,
+        document_pub_id: exports.room(req)
+    }, function(error, documents) {
+        if(!error && !documents.empty) {
+            var document = documents[0].document;
+            connections.redis.get(exports.socketRoom(req), function(error, reply) {
+                reply = JSON.parse(reply);
+                if(reply.changes) {
+                    lib.jsdom.editor(document.content, reply.changes, function(content) {
+                        document.save({
+                            content: (content != "") ? content.split("\n") : [],
+                            breakpoints: reply.breakpoints
                         });
-                        callback(true);
-                    }
-                });
-            } else  {
-                callback(false);
-            }
-        });
-    }, true);
+                    });
+                    callback(true);
+                }
+            });
+        } else  {
+            callback(false);
+        }
+    });
 }
 
 exports.removeUser = function(req) {
-    var redis = lib.redis();
     var user = req.session.user.pub_id;
     var room = exports.socketRoom(req);
 
@@ -144,7 +139,7 @@ exports.removeUser = function(req) {
 
             if(Object.keys(exports.roomUsers[room]).empty) {
                 delete exports.roomUsers[room];
-                redis.del(room);
+                connections.redis.del(room);
             }
         }
     }

@@ -2,7 +2,6 @@ var github = require("./github");
 var bitbucket = require("./github");
 
 exports.index = function(req, res, next) {
-    console.log(123);
     if(req.param("document")) {
         req.models.documents.find({
             pub_id: req.param("document")
