@@ -3,7 +3,7 @@ $(function() {
 
     window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
-        lineWrapping: true,
+        lineWrapping: false,
         matchBrackets: true,
         matchTags: true,
         extraKeys: {"Ctrl-J": "toMatchingTag"},

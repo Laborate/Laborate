@@ -43,7 +43,7 @@
 }
 
 .cm-s-laborate .CodeMirror-gutters {
-    background: none;
+    background: @color_body;
     border-right: 0px;
     padding-right: 10px;
 }
@@ -239,6 +239,11 @@
             background: darken(@color_scroll_thumb, 15%);
         }
     }
+}
+
+::-webkit-resizer,
+::-webkit-scrollbar-corner {
+    background: none;
 }
 
 .print {
