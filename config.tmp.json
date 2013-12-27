@@ -29,7 +29,7 @@
             "majors and fields. Our goal is to provide a unified set of tools that are ",
             "all interconnected and can build off of each other."
         ],
-        "backdrop": ""
+        "backdrop": "blurry"
     },
     "development": {
         "basicAuth": {
