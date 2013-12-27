@@ -2,7 +2,7 @@
 <div id="backdrop">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
-    <div id="logo" class="spin">
+    <div id="logo" class="<%= (config.animate) ? "spin" : "" %>">
         <img src="/img/landing/logo_inner.png"/>
     </div>
     <div id="landing">
@@ -12,7 +12,7 @@
             cloud-based solutions connect students in ways once impossible.
         </div>
         <form action="/register/" method="post">
-            <div class="account">Join the launch!</div>
+            <div class="launch">Join the launch!</div>
             <div class="input-pair">
                 <input type="hidden" name="_csrf" value="<%= csrf %>"/>
                 <input class="input" name="email" type="email" placeholder="enter your email"/>
@@ -27,7 +27,7 @@
         <% $.each(social, function(key, social) { %>
             <% if(social.enabled) { %>
                 <a href="<%= social.link %>" target="_blank">
-                    <img src="/img/landing/<%= key %>.png"/>
+                    <img src="/img/social/<%= key %>.png"/>
                 </a>
             <% } %>
         <% }); %>

@@ -1,0 +1,42 @@
+<% include ../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="logo">
+        <img src="/img/landing/logo_inner.png"/>
+    </div>
+    <div id="landing">
+        <div class="header">Collaborate Anywhere</div>
+        <div class="sub-header">
+            <strong>Laborate</strong>
+            cloud-based solutions connect
+            <br>
+            students in ways once impossible.
+        </div>
+        <div class="launch">Join the launch!</div>
+        <div id="backdrop-container" class="compatible">
+            Desktop<br>compatible with
+            <div class="browsers">
+                <a href="https://www.google.com/chrome/" target="_blank">
+                    <img src="/img/browsers/chrome.png"/>
+                </a>
+                <a href="http://www.mozilla.org/en-US/firefox/new/" target="_blank">
+                    <img src="/img/browsers/firefox.png"/>
+                </a>
+                <a href="http://support.apple.com/downloads/#safari" target="_blank">
+                    <img src="/img/browsers/safari.png"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="social">
+        <% $.each(social, function(key, social) { %>
+            <% if(social.enabled) { %>
+                <a href="<%= social.link %>" target="_blank">
+                    <img src="/img/social/<%= key %>.png"/>
+                </a>
+            <% } %>
+        <% }); %>
+    </div>
+</div>
+<% include ../includes/footer.html %>

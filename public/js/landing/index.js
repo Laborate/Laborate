@@ -1,5 +1,5 @@
 $(function() {
-    $("#landing, #social").hAlign();
+    $("#landing").hAlign();
     $("#logo").vAlign().hAlign();
 
     if(config.animate) {
@@ -7,9 +7,8 @@ $(function() {
             $("#logo").fadeIn(500);
         }, 500);
     } else {
-        $("#logo")
-            .css("top", "100px")
-            .removeClass("spin");
+        var mobile = $("body").hasClass("mobile");
+        $("#logo").css("top", ((mobile) ? "50px" : "100px"));
         $("#logo, #landing, #social").fadeIn(500);
     }
 });

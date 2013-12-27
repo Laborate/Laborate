@@ -125,14 +125,21 @@ exports.device = function(req, res, next) {
     var device = req.device.type.toLowerCase();
     var user_agent = req.headers['user-agent'].toLowerCase();
 
-    if(user_agent.indexOf("msie") != -1) {
-        res.error(200, "Internet Explorer browsers aren't supported yet. \
-            Try <a class='backdrop-link' href='http://www.google.com/chrome'>Chrome</a>.", null, false);
-    } else if(["desktop", "bot"].indexOf(device) != -1 || user_agent == "ruby") {
+    if(user_agent.indexOf("msie") == -1 && (["desktop", "bot"].indexOf(device) != -1 || user_agent == "ruby")) {
+        res.locals.mobile = false;
         next();
     } else {
-        device = device.charAt(0).toUpperCase() + device.slice(1);
-        res.error(200, device + "'s aren't supported yet", null, false);
+        res.renderOutdated('landing/mobile', {
+            title: null,
+            mobile: true,
+            js: clientJS.renderTags("landing"),
+            css: clientCSS.renderTags("backdrop", "landing"),
+            backdrop: req.backdrop(),
+            pageTrack: false,
+            config: {
+                animate: false
+            }
+        });
     }
 }
 
