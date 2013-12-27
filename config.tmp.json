@@ -72,7 +72,6 @@
     "redis": 0,
     "stripe": {
         "reset": true,
-        "description": "",
         "production": "",
         "development": ""
     },
