@@ -5,6 +5,8 @@ branch=$(git symbolic-ref -q HEAD)
 branch=${branch_name##refs/heads/}
 branch=${branch_name:-HEAD}
 
+echo "$branch";
+
 
 # Get Release Info
 while [[ -z "$from" || -z "$to" ]]; do
@@ -31,5 +33,7 @@ if [ ! -z "$tag" ]; then
 fi
 
 git push origin $to;
-sleep 2;
+
+echo "$branch";
+
 git checkout $branch;
