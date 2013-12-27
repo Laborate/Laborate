@@ -24,10 +24,11 @@ done
 git checkout $to;
 git pull --rebase;
 git merge $from;
+git push origin $to;
 
 if [ ! -z "$tag" ]; then
     git tag $tag;
+    git push origin $to --tags;
 fi
 
-git push origin $to;
 git checkout $branch;
