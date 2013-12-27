@@ -3,21 +3,26 @@ exports.core = function(crsf, basicAuth) {
         if(req.session.allowed) {
             exports.finish(req, res, next, crsf, basicAuth);
         } else {
-            if(req.host.split(".").slice(-2).join(".") == config.general.host) {
-                req.session.organization = { register: true, icons: {} };
-                exports.finish(req, res, next, crsf, basicAuth);
+            if(req.host) {
+                if(req.host.split(".").slice(-2).join(".") == config.general.host) {
+                    req.session.organization = { register: true, icons: {} };
+                    exports.finish(req, res, next, crsf, basicAuth);
+                } else {
+                    req.models.organizations.find({
+                        dns: req.host
+                    }, function(error, organizations) {
+                        if(!error && organizations.length == 1) {
+                            req.session.organization = organizations[0];
+                            exports.finish(req, res, next, crsf, basicAuth);
+                        } else {
+                            res.send(403);
+                            req.error.capture(error);
+                        }
+                    });
+                }
             } else {
-                req.models.organizations.find({
-                    dns: req.host
-                }, function(error, organizations) {
-                    if(!error && organizations.length == 1) {
-                        req.session.organization = organizations[0];
-                        exports.finish(req, res, next, crsf, basicAuth);
-                    } else {
-                        res.send(403);
-                        req.error.capture(error);
-                    }
-                });
+                res.send(403);
+                req.error.capture(req);
             }
         }
     }
