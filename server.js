@@ -26,7 +26,7 @@ lib.init({
 });
 
 /* Code to run if we're in the master process */
-if (cluster.isMaster) {
+if (config.general.production && cluster.isMaster) {
 
     /* Count the machine's CPUs */
     var cpuCount = require('os').cpus().length;
