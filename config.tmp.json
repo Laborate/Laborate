@@ -196,6 +196,10 @@
                 "freq": "monthly",
                 "priority": 0.5
             },
+            "": {
+                "freq": "monthly",
+                "priority": 1
+            },
             "register": {
                 "freq": "monthly",
                 "priority": 1
@@ -218,6 +222,7 @@
             "account",
             "github",
             "bitbucket",
+            "feedback",
             "sitemap.xml"
         ]
     },
