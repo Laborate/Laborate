@@ -282,19 +282,6 @@
             .listing {
                 width: 100%;
 
-                a {
-                    color: darken(@color_blue, 10%);
-                    text-decoration: underline;
-
-                    &:hover {
-                        color: darken(@color_blue, 15%);
-
-                        &:active {
-                            color: darken(@color_blue, 20%);
-                        }
-                    }
-                }
-
                 .banner {
                     position: relative;
                     font-size: 14px;
@@ -345,7 +332,23 @@
                         }
                     }
 
+                    &:not(.empty):not(.header) {
+                        a {
+                            color: darken(@color_blue, 10%);
+                            text-decoration: underline;
+
+                            &:hover {
+                                color: darken(@color_blue, 15%);
+
+                                &:active {
+                                    color: darken(@color_blue, 20%);
+                                }
+                            }
+                        }
+                    }
+
                     & {
+
                         /* General */
                         .icon {
                             width: 35px;

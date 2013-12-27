@@ -8,7 +8,7 @@
     },
     "general": {
         "production": false,
-        "port": 3000,
+        "port": 80,
         "host": "laborate.io",
         "subdomains": [
             "",

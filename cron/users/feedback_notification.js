@@ -4,13 +4,14 @@ require('../init')("user.feedback", function() {
 
     _this.models.users.find({
         feedback: false,
+        feedback_asked: false
     }, function(error, users) {
         if(!error && !users.empty) {
             $.each(users, function(key, user) {
                 var timeDiff = Math.abs(today.getTime() - user.created.getTime());
                 var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-                if(diffDays >= 2 && user.feedbacks.empty) {
+                if(diffDays >= 3 && user.feedbacks.empty) {
                     _this.models.notifications.create({
                         message: "We noticed you have been using our service, \
                         for a couple days, do you have any <a href='/feedback/'>feedback</a>?",
@@ -28,9 +29,15 @@ require('../init')("user.feedback", function() {
                         }, function(error) {
                             lib.error.capture(error);
 
-                            if(users.end(key)) {
-                                _this.finish();
-                            }
+                            user.save({
+                                feedback_asked: true
+                            }, function(error) {
+                                lib.error.capture(error);
+
+                                if(users.end(key)) {
+                                    _this.finish();
+                                }
+                            });
                         });
                     });
                 } else if(users.end(key)) {
