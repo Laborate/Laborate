@@ -14,6 +14,7 @@
         <form action="/register/" method="post">
             <div class="account">Join the launch!</div>
             <div class="input-pair">
+                <input type="hidden" name="_csrf" value="<% csrf %>"/>
                 <input class="input" name="email" type="email" placeholder="enter your email"/>
                 <input class="submit" type="submit" value="Sign Up"/>
             </div>
