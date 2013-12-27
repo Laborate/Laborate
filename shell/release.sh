@@ -4,21 +4,23 @@ branch=$(git symbolic-ref -q HEAD)
 branch=${branch_name##refs/heads/}
 branch=${branch_name:-HEAD}
 
-while [[ -z "$merge" || -z "$tag" ]]; do
+while [[ -z "$from" || -z "$to" || -z "$tag" ]]; do
     clear;
-    read -p "Branch: " merge;
+    read -p "From Branch: " from;
+    read -p "To Branch: " to;
     read -p "Tag: " tag;
     read -p "Is this information correct [Y/n]: " correct;
 
     if [ "$correct" == "n" ]; then
-        merge=;
+        from=;
+        to=;
         tag=;
     fi
 done
 
-git checkout master;
-git pull --rebase;
-git merge $merge;
+git checkout $to;
+git pull --rebase origin/$to;
+git merge $from;
 git tag $tag;
 git push origin master;
 git checkout $branch;
