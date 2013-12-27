@@ -1,9 +1,12 @@
 cd ~/middleware;
 
+# Get Current Branch
 branch=$(git symbolic-ref -q HEAD)
 branch=${branch_name##refs/heads/}
 branch=${branch_name:-HEAD}
 
+
+# Get Release Info
 while [[ -z "$from" || -z "$to" ]]; do
     clear;
     read -p "From Branch: " from;
@@ -18,6 +21,7 @@ while [[ -z "$from" || -z "$to" ]]; do
     fi
 done
 
+# Create Release
 git checkout $to;
 git pull --rebase origin/$to;
 git merge $from;
