@@ -2,11 +2,8 @@ cd ~/middleware;
 
 # Get Current Branch
 branch=$(git symbolic-ref -q HEAD)
-branch=${branch_name##refs/heads/}
-branch=${branch_name:-HEAD}
-
-echo "$branch";
-
+branch=${branch##refs/heads/}
+branch=${branch:-HEAD}
 
 # Get Release Info
 while [[ -z "$from" || -z "$to" ]]; do
@@ -33,7 +30,4 @@ if [ ! -z "$tag" ]; then
 fi
 
 git push origin $to;
-
-echo "$branch";
-
 git checkout $branch;
