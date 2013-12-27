@@ -40,7 +40,7 @@ if (cluster.isMaster) {
     cluster.on('exit', function (worker) {
 
         /* Replace the dead worker, we're not sentimental */
-        console.log('Worker ' + worker.id + ' died :(');
+        console.error('Worker ' + worker.id + ' died :(');
         cluster.fork();
 
     });
