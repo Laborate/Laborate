@@ -23,7 +23,7 @@ done
 
 # Create Release
 git checkout $to;
-git pull --rebase origin/$to;
+git pull --rebase;
 git merge $from;
 
 if [ ! -z "$tag" ]; then
