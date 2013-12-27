@@ -21,6 +21,10 @@ done
 git checkout $to;
 git pull --rebase origin/$to;
 git merge $from;
-git tag $tag;
-git push origin master;
+
+if [ ! -z "$tag" ]; then
+    git tag $tag;
+fi
+
+git push origin $to;
 git checkout $branch;
