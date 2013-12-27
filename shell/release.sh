@@ -1,8 +1,8 @@
 cd ~/middleware;
 
-branch="$(git symbolic-ref HEAD 2>/dev/null)" ||
-branch="(unnamed branch)"
+branch=$(git symbolic-ref -q HEAD)
 branch=${branch_name##refs/heads/}
+branch=${branch_name:-HEAD}
 
 while [[ -z "$merge" || -z "$tag" ]]; do
     clear;
