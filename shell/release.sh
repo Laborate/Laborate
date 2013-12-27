@@ -31,4 +31,5 @@ if [ ! -z "$tag" ]; then
 fi
 
 git push origin $to;
+sleep 2;
 git checkout $branch;
