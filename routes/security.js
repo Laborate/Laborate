@@ -3,7 +3,7 @@ exports.core = function(crsf, basicAuth) {
         if(req.session.allowed) {
             exports.finish(req, res, next, crsf, basicAuth);
         } else {
-            if(req.host.split(".").slice(-2).join(".") == config.general.host) {
+            if(req.host == config.general.host) {
                 req.session.organization = { register: true, icons: {} };
                 exports.finish(req, res, next, crsf, basicAuth);
             } else {
