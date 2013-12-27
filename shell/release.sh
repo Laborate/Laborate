@@ -1,6 +1,6 @@
 cd ~/middleware;
 
-BRANCH= $(git branch | sed -n -e 's/^\* \(.*\)/\1/p');
+BRANCH = "$(git symbolic-ref --short HEAD)";
 git checkout master;
 git pull --rebase;
 git merge $1;
