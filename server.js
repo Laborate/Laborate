@@ -121,11 +121,11 @@ if (cluster.isMaster) {
             })
         }));
 
-        //Custom Libraries
-        app.use(lib.express);
-
         //Custom Setup
         app.use(require("./routes/core").setup);
+
+        //Custom Libraries
+        app.use(lib.express);
 
         //Custom Backdrop
         app.use(require("./routes/core").backdrop);

@@ -17,6 +17,18 @@ exports.setup = function(req, res, next) {
         res.render(view, data, outdatedhtml.makeoutdated(req, res));
     }
 
+    if('x-forwarded-for' in req.headers) {
+        req.address = {
+            ip: req.headers['x-forwarded-for'],
+            port: req.headers['x-forwarded-port']
+        }
+    } else {
+        req.address = {
+            ip: req.ip,
+            port: config.general.port
+        }
+    }
+
     next();
 }
 
@@ -31,8 +43,11 @@ exports.tracking = function(req, res, next) {
             agent: req.headers['user-agent'],
             lat: req.location.ll[0],
             lon: req.location.ll[1],
-            ip: req.headers['x-forwarded-for'],
-            port: req.headers['x-forwarded-port'],
+            city: req.location.city,
+            state: req.location.region,
+            country: req.location.country,
+            ip: req.address.ip,
+            port: req.address.port,
             user_id: (user) ? user.id : null,
             organization_id: (organization) ? organization.id : null,
             url: req.protocol + "://" + req.get('host') + req.url
