@@ -4,7 +4,7 @@ branch=$(git symbolic-ref -q HEAD)
 branch=${branch_name##refs/heads/}
 branch=${branch_name:-HEAD}
 
-while [[ -z "$from" || -z "$to" || -z "$tag" ]]; do
+while [[ -z "$from" || -z "$to" ]]; do
     clear;
     read -p "From Branch: " from;
     read -p "To Branch: " to;
