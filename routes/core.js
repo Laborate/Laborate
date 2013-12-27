@@ -17,16 +17,9 @@ exports.setup = function(req, res, next) {
         res.render(view, data, outdatedhtml.makeoutdated(req, res));
     }
 
-    if('x-forwarded-for' in req.headers) {
-        req.address = {
-            ip: req.headers['x-forwarded-for'],
-            port: req.headers['x-forwarded-port']
-        }
-    } else {
-        req.address = {
-            ip: req.ip,
-            port: config.general.port
-        }
+    req.address = {
+        ip: req.headers['x-forwarded-for'] || req.ip,
+        port: req.headers['x-forwarded-port'] || config.general.port
     }
 
     next();
