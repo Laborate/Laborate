@@ -127,7 +127,7 @@ exports.device = function(req, res, next) {
     var device = req.device.type.toLowerCase();
     var user_agent = req.headers['user-agent'].toLowerCase();
 
-    if(user_agent.indexOf("msie") == -1 && (["desktop", "bot"].indexOf(device) != -1 || user_agent == "ruby")) {
+    if(["desktop", "bot"].indexOf(device) != -1 || user_agent == "ruby") {
         res.locals.mobile = false;
         next();
     } else {
