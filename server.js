@@ -1,8 +1,3 @@
-require('nodetime').profile({
-    accountKey: 'd4d9e81534b285f634d161ed18d52a37dd292a2f',
-    appName: 'Node.js Application'
-});
-
 /* Modules: NPM */
 var express    = require('express.io');
 var slashes    = require("connect-slashes");
@@ -19,6 +14,18 @@ GLOBAL.config         = require('./config');
 GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
+
+/* NodeTime Monitoring */
+require('nodetime').profile({
+    accountKey: config.nodetime,
+    appName: function() {
+        if(config.general.production) {
+            return "Middleware Production";
+        } else {
+            return "Middleware Development: " + config.profile.full_name
+        }
+    }()
+});
 
 process.nextTick(function() {
     /* Install Crontab */
