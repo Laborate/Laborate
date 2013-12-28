@@ -16,35 +16,37 @@ GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 
-/* Install Crontab */
-require("./cron")(__dirname);
+process.nextTick(function() {
+    /* Install Crontab */
+    require("./cron")(__dirname);
 
-/* Initialize Lib */
-lib.init({
-    root: __dirname,
-    ejs: ejs
+    /* Initialize Lib */
+    lib.init({
+        root: __dirname,
+        ejs: ejs
+    });
 });
 
 /* Code to run if we're in the master process */
 if (config.general.production && cluster.isMaster) {
+    process.nextTick(function() {
+        /* Count the machine's CPUs */
+        var cpuCount = require('os').cpus().length;
 
-    /* Count the machine's CPUs */
-    var cpuCount = require('os').cpus().length;
+        /* Create a worker for each CPU */
+        for (var i = 0; i < cpuCount; i += 1) {
+            cluster.fork();
+        }
 
-    /* Create a worker for each CPU */
-    for (var i = 0; i < cpuCount; i += 1) {
-        cluster.fork();
-    }
+        /* Listen for dying workers */
+        cluster.on('exit', function (worker) {
 
-    /* Listen for dying workers */
-    cluster.on('exit', function (worker) {
+            /* Replace the dead worker, we're not sentimental */
+            console.error('Worker ' + worker.id + ' died :(');
+            cluster.fork();
 
-        /* Replace the dead worker, we're not sentimental */
-        console.error('Worker ' + worker.id + ' died :(');
-        cluster.fork();
-
+        });
     });
-
 /* Code to run if we're in a worker process */
 } else {
 

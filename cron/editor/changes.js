@@ -10,7 +10,7 @@ require('../init')("editor.changes", function() {
                         if(!error) {
                             if(exists) {
                                 _this.models.documents.get(reply.id, function(error, document) {
-                                    if(!error && document) {
+                                    if(!error &&!$.isEmptyObject(document)) {
                                         _this.lib.jsdom.editor(document.content, reply.changes, function(content) {
                                             //Delay To Prevent Database Overload
                                             setTimeout(function() {

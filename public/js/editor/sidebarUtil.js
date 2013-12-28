@@ -597,15 +597,13 @@ window.sidebarUtil = {
         });
 	},
 	buttonReset: function(button) {
-    	if(button.attr("data-original")) {
-        	button
-                .removeClass("error success")
-        	    .html(button.attr("data-original"))
-        	    .attr({
-                    "disabled": null,
-                    "data-original": null
-                });
-    	}
+    	button
+            .removeClass("error success")
+    	    .html(button.attr("data-original"))
+    	    .attr({
+                "disabled": null,
+                "data-original": null
+            });
 	},
 	buttonLoading: function(button) {
 	    this.buttonReset(button);
