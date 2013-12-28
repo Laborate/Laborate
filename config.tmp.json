@@ -10,7 +10,6 @@
         "production": false,
         "port": 80,
         "host": "laborate.io",
-        "socket": "direct.laborate.io",
         "security": "laborate.io",
         "subdomains": [
             "",
