@@ -95,6 +95,9 @@ module.exports = function(app) {
     /* SiteMap */
     app.get('/sitemap.xml', core.sitemap);
 
+    /* Robots.txt */
+    app.get('/robots.txt', core.robots);
+
     /* Github */
     if(config.apps.github) {
         app.get('/github/token', authUtil.restrictAccess, github.token);

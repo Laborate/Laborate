@@ -256,7 +256,8 @@ exports.invite = function(req, res, next) {
 
                                         if(document.roles.end(key)) {
                                             req.email("document_invite", {
-                                                from: req.session.user.name + " <" + req.session.user.email + ">",
+                                                from: req.session.user.name,
+                                                replyTo: req.session.user.name + " <" + req.session.user.email + ">",
                                                 subject: document.name + " (" + req.session.user.screen_name + ")",
                                                 users: [{
                                                     email: user.email,

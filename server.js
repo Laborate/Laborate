@@ -1,8 +1,12 @@
+require('nodetime').profile({
+    accountKey: 'd4d9e81534b285f634d161ed18d52a37dd292a2f',
+    appName: 'Node.js Application'
+});
+
 /* Modules: NPM */
 var express    = require('express.io');
 var slashes    = require("connect-slashes");
 var piler      = require("piler");
-var redis      = require('redis');
 var ejs        = require('ejs');
 var RedisStore = require('connect-redis')(express);
 var raven      = require('raven');
@@ -54,7 +58,6 @@ if (config.general.production && cluster.isMaster) {
     var app = express().http().io();
     var srv = app.server;
     var crsf = express.csrf();
-    var basic_auth = express.basicAuth;
 
     /* Socket IO: Configuration */
     app.io.configure(function() {
@@ -72,9 +75,9 @@ if (config.general.production && cluster.isMaster) {
         ]);
 
         app.io.set('store', new express.io.RedisStore({
-            redisPub: redis.createClient(),
-            redisSub: redis.createClient(),
-            redisClient: redis.createClient(),
+            redisPub: lib.redis(),
+            redisSub: lib.redis(),
+            redisClient: lib.redis(),
         }));
     });
 
@@ -119,7 +122,7 @@ if (config.general.production && cluster.isMaster) {
             key: config.cookie_session.key,
             secret: config.cookie_session.secret,
             store: new RedisStore({
-                client: redis.createClient()
+                client: lib.redis()
             })
         }));
 
@@ -136,7 +139,7 @@ if (config.general.production && cluster.isMaster) {
         app.use(require("./routes/error").handler);
 
         //Custom Authentication
-        app.use(require("./routes/security").core(crsf, basic_auth));
+        app.use(require("./routes/security").core(crsf, express.basicAuth));
 
         //Routes Tracking
         app.use(require("./routes/core").tracking);

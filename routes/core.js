@@ -262,3 +262,8 @@ exports.sitemap = function(req, res, next) {
         res.send(xml);
     });
 }
+
+exports.robots = function(req, res, next) {
+    res.set('Content-Type', 'text/plain');
+    res.render("robots");
+}
