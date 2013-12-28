@@ -273,7 +273,7 @@ window.sidebarUtil = {
 
         	    window.editor.operation(function() {
                     var key = Math.floor((Math.random()*10000)+1);
-                    var color = randomFunctionalColor();
+                    var color = randomColor();
 
                     _this.searchList[key] = [];
                     _this.searchListing(key, search);

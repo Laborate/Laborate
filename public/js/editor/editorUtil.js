@@ -115,7 +115,7 @@ window.editorUtil = {
             $("                                                             \
                 <style type='text/css'>                                     \
                     .u" + value + "{                                        \
-                        background:" + randomUserColor() + " !important;    \
+                        background:" + randomColor() + " !important;    \
                     }                                                       \
                 </style>                                                    \
             ").appendTo("head");
