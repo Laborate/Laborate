@@ -109,13 +109,17 @@ exports.save = function(req, callback) {
             var document = documents[0].document;
             connections.redis.get(exports.socketRoom(req), function(error, reply) {
                 reply = JSON.parse(reply);
-                if(reply.changes) {
-                    lib.jsdom.editor(document.content, reply.changes, function(content) {
-                        document.save({
-                            content: (content != "") ? content.split("\n") : [],
-                            breakpoints: reply.breakpoints
+                if(reply) {
+                    if(reply.changes) {
+                        lib.jsdom.editor(document.content, reply.changes, function(content) {
+                            document.save({
+                                content: (content != "") ? content.split("\n") : [],
+                                breakpoints: reply.breakpoints
+                            });
                         });
-                    });
+                        callback(true);
+                    }
+                } else {
                     callback(true);
                 }
             });
