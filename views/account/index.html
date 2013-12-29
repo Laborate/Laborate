@@ -47,29 +47,31 @@
                 </div>
                 <div class="active"></div>
             </div>
-            <div class="item" data-key="billing">
-                <div class="container">
-                    <div class="name">Plans & Billing</div>
-                    <div class="icon <%= icons.billing %>"></div>
+            <% if(!production) { %>
+                <div class="item" data-key="billing">
+                    <div class="container">
+                        <div class="name">Plans & Billing</div>
+                        <div class="icon <%= icons.billing %>"></div>
+                    </div>
+                    <div class="active"></div>
                 </div>
-                <div class="active"></div>
-            </div>
-            <div class="item" data-key="payments">
-                <div class="container">
-                    <div class="name">Payment History</div>
-                    <div class="icon <%= icons.payment_history %>"></div>
+                <div class="item" data-key="payments">
+                    <div class="container">
+                        <div class="name">Payment History</div>
+                        <div class="icon <%= icons.payment_history %>"></div>
+                    </div>
+                    <div class="active"></div>
                 </div>
-                <div class="active"></div>
-            </div>
-            <!-- Enable After Session Tracking Is Enabled
-            <div class="item" data-key="security">
-                <div class="container">
-                    <div class="name">Security History</div>
-                    <div class="icon <%= icons.security_history %>"></div>
+                <!-- Enable After Session Tracking Is Enabled
+                <div class="item" data-key="security">
+                    <div class="container">
+                        <div class="name">Security History</div>
+                        <div class="icon <%= icons.security_history %>"></div>
+                    </div>
+                    <div class="active"></div>
                 </div>
-                <div class="active"></div>
-            </div>
-            -->
+                -->
+            <% } %>
         </div>
     </div>
 </div>

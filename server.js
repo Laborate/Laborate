@@ -130,7 +130,10 @@ if (config.general.production && cluster.isMaster) {
             secret: config.cookie_session.secret,
             store: new RedisStore({
                 client: lib.redis()
-            })
+            }),
+            cookie: {
+                domain: ".laborate.io"
+            }
         }));
 
         //Custom Setup

@@ -78,7 +78,7 @@ exports.locals = function(req, res, next) {
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization;
     res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
-    res.locals.socket = req.host + ":" + config.general.port;
+    res.locals.socket = config.general.socket;
 
     res.locals.apps = {
         sftp: {

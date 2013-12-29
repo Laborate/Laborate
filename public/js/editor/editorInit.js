@@ -67,8 +67,9 @@ $(function() {
     });
 
     window.socketUtil.socket.on('error', function (reason) {
-        if(reason) {
+        if(reason != undefined && reason != null && reason != "") {
             window.editorUtil.error(reason, true);
+            Raven.captureException(reason);
         }
     });
 
@@ -91,5 +92,10 @@ $(function() {
     }
 
     //Start Joining Proccess
-    $('#backdrop form').submit();
+    var checker = setInterval(function() {
+        if(window.socketUtil.socket.socket.connected) {
+            clearInterval(checker);
+            $('#backdrop form').submit();
+        }
+    }, 10);
 });
