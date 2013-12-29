@@ -11,6 +11,7 @@
         "port": 80,
         "host": "laborate.io",
         "security": "laborate.io",
+        "socket": "socket.<host>",
         "subdomains": [
             "",
             "www"
