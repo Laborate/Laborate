@@ -1,6 +1,6 @@
 {
   "name": "middleware",
-  "version": "0.0.5",
+  "version": "2.6.0",
   "private": true,
   "dependencies": {
     "express.io": "1.1.13",
@@ -40,7 +40,8 @@
     "jquery.payment": "0.0.1",
     "node-watch": "0.3.4",
     "sitemap": "0.7.1",
-    "geoip-lite": "1.1.1"
+    "geoip-lite": "1.1.1",
+    "nodetime": "*"
   },
   "devDependencies": {
     "express-debug": "*"
