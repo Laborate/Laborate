@@ -13,8 +13,8 @@ module.exports = function(root) {
     clientCSS.addFile(css_path + 'core/header.less');
     clientCSS.addFile(css_path + 'core/jscroll.less');
 
-    clientJS.addUrl('http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js');
-    clientJS.addUrl('http://d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js');
+    clientJS.addUrl('https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js');
+    clientJS.addUrl('https://d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js');
     clientJS.addUrl('/socket.io/socket.io.js');
 
     clientJS.addFile(js_path + 'core/jscrollpane.js');
