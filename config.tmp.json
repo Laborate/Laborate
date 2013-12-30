@@ -70,7 +70,6 @@
         "query": {},
         "timezone": ""
     },
-    "redis": 0,
     "stripe": {
         "reset": true,
         "production": "",

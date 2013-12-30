@@ -93,7 +93,7 @@ $(function() {
     var checker = setInterval(function() {
         if(window.socketUtil.socket.socket.connected) {
             clearInterval(checker);
-            $('#backdrop form').submit();
+            window.editorUtil.join();
         }
     }, 10);
 });

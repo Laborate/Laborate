@@ -85,7 +85,6 @@ module.exports = function(app) {
     app.get('/editor/:document', authUtil.restrictAccess, core.reload(true), editor.index);
     app.get('/editor/:document/download', authUtil.restrictAccess, editor.download);
     app.post('/editor/exists', authUtil.restrictAccess,  editor.exists);
-    app.post('/editor/:document/join', authUtil.restrictAccess, authUtil.xhr, editor.join);
     app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, editor.update);
     app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.remove);
     app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.commit);

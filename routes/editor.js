@@ -6,73 +6,52 @@ exports.index = function(req, res, next) {
         req.models.documents.find({
             pub_id: req.param("document")
         }, function(error, documents) {
-            if(!error) {
-                if(documents.length != 0) {
-                    var document = documents[0];
-                    var passed = false;
-                    var permission = null;
-
-                    $.each(document.roles, function(key, role) {
-                        if(role.user.id == req.session.user.id) {
-                            passed = true;
-                            permission = {
-                                id: role.permission.id,
-                                owner: role.permission.owner,
-                            }
-                        }
-
-                        if(document.roles.end(key)) {
-                            if(role.access) {
-                                if(passed || !document.private) {
-                                    req.models.documents.permissions.all(function(error, permissions) {
-                                        if(!error) {
-                                            res.renderOutdated('editor/index', {
-                                                title: document.name,
-                                                user: req.session.user,
-                                                document: document,
-                                                permissions: permissions,
-                                                js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
-                                                css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
-                                                backdrop: req.backdrop(),
-                                                private: document.private,
-                                                config: {
-                                                    permission: permission || {
-                                                        id: 2,
-                                                        owner: false
-                                                    },
-                                                    permissions: $.map(permissions, function(permission) {
-                                                        return permission.name;
-                                                    })
-                                                }
-                                            });
-                                        } else {
-                                            res.error(404);
-                                        }
-                                    });
-                                } else {
-                                    res.error(404);
-                                }
+            if(!error && !documents.empty) {
+                document = documents[0];
+                document.join(req.session.user, 2, function(access, permission) {
+                    if(access) {
+                        req.models.documents.permissions.all(function(error, permissions) {
+                            if(!error) {
+                                res.renderOutdated('editor/index', {
+                                    title: document.name,
+                                    user: req.session.user,
+                                    document: document,
+                                    permissions: permissions,
+                                    js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
+                                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
+                                    backdrop: req.backdrop(),
+                                    private: document.private,
+                                    config: {
+                                        permission: permission || {
+                                            id: 2,
+                                            owner: false
+                                        },
+                                        permissions: $.map(permissions, function(permission) {
+                                            return permission.name;
+                                        })
+                                    }
+                                });
                             } else {
                                 res.error(404);
                             }
-                        }
-                    });
-                } else {
-                   res.error(404);
-                }
+                        });
+                    } else {
+                        res.error(404);
+                    }
+                });
             } else {
-                res.error(404, false, error);
+                res.error(404, null, error);
             }
         });
     } else {
-       res.renderOutdated('editor/join', {
+        res.renderOutdated('editor/join', {
             title: "Join A Document",
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
             backdrop: req.backdrop()
         });
     }
-};
+}
 
 exports.exists = function(req, res, next) {
     req.models.documents.exists({
@@ -88,34 +67,6 @@ exports.exists = function(req, res, next) {
             });
         } else {
             res.error(200, "Document Doesn't Exist", error);
-        }
-    });
-}
-
-exports.join = function(req, res, next) {
-    req.models.documents.find({
-        pub_id: req.param("document")
-    }, function(error, documents) {
-        if(!error && documents.length != 0) {
-            document = documents[0];
-            document.join(req.session.user, 2, function(exists, blocked) {
-                if(exists) {
-                    if(!blocked) {
-                        res.json({
-                            success: true,
-                            next: {
-                                function: "window.editorUtil.join"
-                            }
-                        });
-                    } else {
-                        res.error(200, "You Do Not Have Access To This Document");
-                    }
-                } else {
-                    res.error(200, "Document Doesn't Exist");
-                }
-            });
-    } else {
-            res.error(404, "Document Doesn't Exist", error);
         }
     });
 }
