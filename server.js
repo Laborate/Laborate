@@ -7,6 +7,7 @@ var RedisStore = require('connect-redis')(express);
 var raven      = require('raven');
 var device     = require('express-device');
 var cluster    = require('cluster');
+var fs         = require('fs');
 
 /* IMPORTANT - Global Variables */
 GLOBAL.$              = require("jquery");
@@ -62,7 +63,15 @@ if (config.general.production && cluster.isMaster) {
 } else {
 
     /* Set App & Server Variables */
-    var app = express().http().io();
+    if(config.general.ssl) {
+        var app = express().https({
+            key: fs.readFileSync('./laborate.key'),
+            cert: fs.readFileSync('./laborate.crt')
+        }).io();
+    } else {
+        var app = express().http().io();
+    }
+
     var srv = app.server;
     var crsf = express.csrf();
 
