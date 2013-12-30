@@ -6,7 +6,6 @@ var backdrop_themes = {};
 exports.setup = function(req, res, next) {
     //Set Server Root For Non Express Calls
     req.session.server = req.protocol + "://" + req.host;
-    req.session.save();
     if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
     //Header Config
@@ -22,6 +21,11 @@ exports.setup = function(req, res, next) {
         port: req.headers['x-forwarded-port'] || config.general.port
     }
 
+    req.session.save();
+    next();
+}
+
+exports.checker = function(req, res, next) {
     next();
 }
 

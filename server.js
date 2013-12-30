@@ -126,14 +126,11 @@ if (config.general.production && cluster.isMaster) {
         app.use(express.methodOverride());
         app.use(express.cookieParser());
         app.use(express.session({
-            key: config.cookie_session.key,
-            secret: config.cookie_session.secret,
+            key: config.cookies.session.key,
+            secret: config.cookies.session.secret,
             store: new RedisStore({
                 client: lib.redis()
-            }),
-            cookie: {
-                domain: ".laborate.io"
-            }
+            })
         }));
 
         //Custom Setup
@@ -157,6 +154,9 @@ if (config.general.production && cluster.isMaster) {
         //Custom Routing
         app.use(require("./routes/core").locals);
         app.use(require("./routes/core").device);
+
+        //Socket Check
+        app.use(require("./routes/core").checker);
     });
 
     /* Development Only */

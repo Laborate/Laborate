@@ -27,12 +27,20 @@ exports.notifications = function(req) {
 
 exports.track = function(req, session) {
     if(req.handshake && req.headers) {
-         connections.redis.get("tracking", function(error, data) {
+        connections.redis.get("tracking", function(error, data) {
             var user = (session) ? (session.user || {}) : {};
             var organization = (session) ? (session.organization || {}) : {};
-            var address = req.handshake.address;
-            var location = lib.geoip(address.address);
             var tracking = (data) ? JSON.parse(data) : [];
+            var address = {
+                ip: req.headers['x-forwarded-for'] || req.handshake.address.address,
+                port: req.headers['x-forwarded-port'] || req.handshake.address.port
+            };
+            var location = lib.geoip(address.ip) || {
+                city: null,
+                region: null,
+                country: null,
+                ll: [null, null]
+            };
 
             tracking.push({
                 type: "socket",
@@ -42,7 +50,7 @@ exports.track = function(req, session) {
                 city: location.city,
                 state: location.region,
                 country: location.country,
-                ip: address.address,
+                ip: address.ip,
                 port: address.port,
                 user_id: user.id || null,
                 organization_id: organization.id || null,

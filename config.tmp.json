@@ -14,7 +14,8 @@
         "socket": "socket.<host>",
         "subdomains": [
             "",
-            "www"
+            "www",
+            "socket"
         ],
         "company": "Laborate",
         "logo": "laborate",
@@ -52,11 +53,11 @@
         "browser": "https://beba575a90b44554a7476cd03e1d0c77@app.getsentry.com/11924"
     },
     "cookies": {
-        "rememberme": "usrr"
-    },
-    "cookie_session": {
-        "key": "usrs",
-        "secret": ""
+        "rememberme": "usrr",
+        "session": {
+            "key": "usrs",
+            "secret": "ajsfkekljl2k3j4lk2j3lkaksdflkhajsd2l3gl"
+        }
     },
     "orm": {
         "reset": true,

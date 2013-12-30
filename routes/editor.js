@@ -238,7 +238,7 @@ exports.invite = function(req, res, next) {
                 var document = documents[0].document;
 
                 req.models.users.find({
-                    screen_name: req.param("screen_name")
+                    screen_name: req.param("screen_name").toLowerCase()
                 }, function(error, users) {
                     if(!error && users.length == 1) {
                         var user = users[0];

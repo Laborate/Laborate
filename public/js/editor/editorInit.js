@@ -67,10 +67,8 @@ $(function() {
     });
 
     window.socketUtil.socket.on('error', function (reason) {
-        if(reason != undefined && reason != null && reason != "") {
-            window.editorUtil.error(reason, true);
-            Raven.captureException(reason);
-        }
+        Raven.captureException(reason);
+        window.backdrop.error("Failed To Connect. Retrying now...", true);
     });
 
     var interval = setInterval(function() {

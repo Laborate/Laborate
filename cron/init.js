@@ -18,7 +18,7 @@ module.exports = function(name, callback) {
         setTimeout(function() {
             _this.redis.end();
             process.exit(code=0);
-        }, 500);
+        }, 5000);
     }
 
     if(config.general.production) {
@@ -29,13 +29,13 @@ module.exports = function(name, callback) {
 
     lib.models_init(_this, callback);
 
-    /* Exit After 1 Minute (Safegaurd) */
+    /* Exit After 3 Minutes (Safegaurd) */
     setTimeout(function() {
-        var message = "cronjob: " + name + " took longer than a minute";
-        lib.error.report(message);
-        _this.redis.end();
-        process.exit(1);
-    }, 60000);
+        lib.error.report("cronjob: " + name + " took longer than a 3 minutes", function() {
+            _this.redis.end();
+            process.exit(1);
+        });
+    }, 180000);
 }
 
 /* Error Handling */

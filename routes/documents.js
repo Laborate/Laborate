@@ -20,36 +20,40 @@ exports.files = function(req, res, next) {
     req.models.documents.roles.find({
         user_id: req.session.user.id,
         access: true
-    }, function(error, documents) {
+    }, function(error, roles) {
         if(!error) {
-            res.json($.map(documents, function(value) {
-                if(value) {
-                    return {
-                        id: value.document.pub_id,
-                        name: value.document.name,
-                        private: value.document.private,
-                        location: value.document.location,
-                        size: value.document.size(),
-                        type: function(name) {
-                            var extension = name.split(".")[name.split(".").length-1];
+            if(!roles.empty) {
+                res.json($.map(roles, function(role) {
+                    if(role && role.document) {
+                        return {
+                            id: role.document.pub_id,
+                            name: role.document.name,
+                            private: role.document.private,
+                            location: role.document.location,
+                            size: role.document.size(),
+                            type: function(name) {
+                                var extension = name.split(".")[name.split(".").length-1];
 
-                            if(!extension) {
-                                return "file";
-                            } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-                                return "file-image";
-                            } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
-                                return "file-template";
-                            } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
-                                return "file-zip";
-                            } else {
-                                return "file-script";
-                            }
-                        }(value.document.name),
-                        users: (value.document.roles.length - 1),
-                        role: value.permission.name.toLowerCase()
+                                if(!extension) {
+                                    return "file";
+                                } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
+                                    return "file-image";
+                                } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
+                                    return "file-template";
+                                } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
+                                    return "file-zip";
+                                } else {
+                                    return "file-script";
+                                }
+                            }(role.document.name),
+                            users: (role.document.roles.length - 1),
+                            role: role.permission.name.toLowerCase()
+                        }
                     }
-                }
-            }));
+                }));
+            } else {
+                res.json([]);
+            }
         } else {
             res.error(200, "Failed To Load Files", error);
         }
