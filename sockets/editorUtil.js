@@ -67,19 +67,21 @@ exports.clientData = function(room, document_role, callback) {
             var readonly = false;
         }
 
-        callback({
-            success: true,
-            name: document.name,
-            content: (document.content) ? document.content.join("\n") : "",
-            breakpoints: ((document.breakpoints) ? $.map(document.breakpoints, function(value) {
-                return {"line": value};
-            }) : []),
-            changes: document.changes,
-            permission: {
-                id: permission.id,
-                name: permission.name,
-                readonly: readonly
-            }
+
+        lib.jsdom.editor(document.content, document.changes, function(content) {
+            callback({
+                success: true,
+                name: document.name,
+                content: content,
+                breakpoints: ((document.breakpoints) ? $.map(document.breakpoints, function(value) {
+                    return {"line": value};
+                }) : []),
+                permission: {
+                    id: permission.id,
+                    name: permission.name,
+                    readonly: readonly
+                }
+            });
         });
     });
 }

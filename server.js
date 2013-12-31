@@ -83,11 +83,11 @@ if (config.general.production && cluster.isMaster) {
         app.io.set('log level', 1);
         app.io.set('log colors', true);
         app.io.set('transports', [
-            //'websocket',
-            //'flashsocket',
-            //'htmlfile',
+            'websocket',
+            'flashsocket',
+            'htmlfile',
             'xhr-polling',
-            //'jsonp-polling'
+            'jsonp-polling'
         ]);
 
         app.io.set('store', new express.io.RedisStore({
@@ -201,5 +201,9 @@ if (config.general.production && cluster.isMaster) {
     require('./sockets')(app);
 
     /* Listen To Server */
-    app.listen(config.general.port);
+    if(config.general.ssl) {
+        app.listen(config.general.ports.https);
+    } else {
+        app.listen(config.general.ports.http);
+    }
 }

@@ -232,20 +232,6 @@ window.editorUtil = {
                                 next();
                             },
                             function(next) {
-                                if(json.changes.length != 0) {
-                                    window.editor.operation(function() {
-                                        $.each(json.changes, function(index, value) {
-                                            window.editorUtil.setChanges("in", value, true);
-                                            if (index == json.changes.length-1) {
-                                                next();
-                                            }
-                                        });
-                                    });
-                                } else {
-                                    next();
-                                }
-                            },
-                            function(next) {
                                 if(json.permission.readonly && json.permission.id == 2) {
                                     json.permission.name = config.permissions[2];
                                 }

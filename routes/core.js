@@ -18,7 +18,13 @@ exports.setup = function(req, res, next) {
 
     req.address = {
         ip: req.headers['x-forwarded-for'] || req.ip,
-        port: req.headers['x-forwarded-port'] || config.general.port
+        port: req.headers['x-forwarded-port'] || function(ssl) {
+            if(ssl) {
+                return config.general.port.https;
+            } else {
+                return config.general.port.http;
+            }
+        }(config.general.ssl)
     }
 
     req.session.save();
