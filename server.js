@@ -83,11 +83,11 @@ if (config.general.production && cluster.isMaster) {
         app.io.set('log level', 1);
         app.io.set('log colors', true);
         app.io.set('transports', [
-            'websocket',
-            'flashsocket',
-            'htmlfile',
+            //'websocket',
+            //'flashsocket',
+            //'htmlfile',
             'xhr-polling',
-            'jsonp-polling'
+            //'jsonp-polling'
         ]);
 
         app.io.set('store', new express.io.RedisStore({
