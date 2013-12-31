@@ -21,10 +21,16 @@ module.exports = function(name, callback) {
         }, 5000);
     }
 
-    if(config.general.production) {
-        _this.email = lib.email("http://" + config.general.host);
+    if(config.general.ssl) {
+        var protocol = "https://";
     } else {
-        _this.email = lib.email("http://" + config.profile.name + ".dev." + config.general.host);
+        var protocol = "http://";
+    }
+
+    if(config.general.production) {
+        _this.email = lib.email(protocol + config.general.host);
+    } else {
+        _this.email = lib.email(protocol + config.profile.name + ".dev." + config.general.host);
     }
 
     lib.models_init(_this, callback);
