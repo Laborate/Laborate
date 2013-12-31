@@ -14,6 +14,8 @@ $(function() {
 });
 
 $(window).load(function() {
+    $("#backdrop-img").fadeIn(300);
+
     if(config.animate) {
         setTimeout(function() {
             $("#logo").animate({
