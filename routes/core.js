@@ -24,9 +24,9 @@ exports.setup = function(req, res, next) {
         ip: req.headers['x-forwarded-for'] || req.ip,
         port: req.headers['x-forwarded-port'] || function(ssl) {
             if(ssl) {
-                return config.general.port.https;
+                return config.general.ports.https;
             } else {
-                return config.general.port.http;
+                return config.general.ports.http;
             }
         }(config.general.ssl)
     }

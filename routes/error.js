@@ -55,7 +55,8 @@ var error_handler = function(status, message, home, req, res) {
                         error_html: error_html,
                         home: home,
                         backdrop: req.backdrop(),
-                        pageTrack: false
+                        pageTrack: false,
+                        mobile: false
                     });
                 }
             },

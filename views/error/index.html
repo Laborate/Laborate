@@ -11,10 +11,12 @@
             <% } %>
          </div>
     </div>
-    <div id="backdrop-footer">
-        <ul>
-            <% include ../includes/backdrop_footer.html %>
-        </ul>
-    </div>
+    <% if(home != false) { %>
+        <div id="backdrop-footer">
+            <ul>
+                <% include ../includes/backdrop_footer.html %>
+            </ul>
+        </div>
+    <% } %>
 </div>
 <% include ../includes/footer.html %>

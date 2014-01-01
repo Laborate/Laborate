@@ -162,10 +162,12 @@ if (config.general.production && cluster.isMaster) {
 
         //Custom Routing
         app.use(require("./routes/core").locals);
-        app.use(require("./routes/core").device);
 
         //Socket Check
         app.use(require("./routes/core").checker);
+
+        //Device Check
+        app.use(require("./routes/core").device);
     });
 
     /* Development Only */
