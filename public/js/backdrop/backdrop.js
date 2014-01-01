@@ -13,7 +13,7 @@ window.backdrop = {
         window.backdrop.button = $("#backdrop input[type=submit]").val();
     },
     load: function() {
-        $("#backdrop-img").fadeIn(300);
+        $("#backdrop-img").fadeIn(350);
         $("#backdrop-footer").hAlign().show();
     },
     submit: function() {

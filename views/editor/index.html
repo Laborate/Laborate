@@ -199,7 +199,7 @@
         <div class="item" data-key="settings">
             <form class="form collection" name="settings">
                 <input class="input" name="name" type="text" placeholder="file name" value="<%= document.name %>"/>
-                <% if(document.owner.id == user.id) { %>
+                <% if(document.owner_id == user.id) { %>
                     <% if(document.private || user.pricing.documents == null || user.documents.private < user.pricing.documents) { %>
                         <div class="select">
                             <div class="icon <%= icons.menu_arrows %>"></div>
@@ -224,8 +224,8 @@
                 <button type="submit" class="button" data-success="Saved">Save</button>
             </form>
             <form class="form collection" name="remove">
-                <button type="submit" class="button red" data-success="<%= (document.owner.id == user.id) ? "Deleted" : "Forgotten" %>">
-                    <%= (document.owner.id == user.id) ? "Delete" : "Forget" %>
+                <button type="submit" class="button red" data-success="<%= (document.owner_id == user.id) ? "Deleted" : "Forgotten" %>">
+                    <%= (document.owner_id == user.id) ? "Delete" : "Forget" %>
                 </button>
             </form>
         </div>

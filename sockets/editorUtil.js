@@ -112,7 +112,7 @@ exports.save = function(req, callback) {
             connections.redis.get(exports.socketRoom(req), function(error, reply) {
                 reply = JSON.parse(reply);
                 if(reply) {
-                    if(reply.changes) {
+                    if(reply.changes && document) {
                         lib.jsdom.editor(document.content, reply.changes, function(content) {
                             document.save({
                                 content: (content != "") ? content.split("\n") : [],

@@ -58,15 +58,15 @@ $(function() {
     window.onbeforeunload = window.socketUtil.unload;
     window.onunload = window.socketUtil.unload;
 
-    window.socketUtil.socket.on('connect_failed', function () {
+    window.socketUtil.socket.on('connect_failed', function() {
         window.backdrop.error("Failed To Connect. Retrying now...", true);
     });
 
-    window.socketUtil.socket.on('reconnect_failed', function () {
+    window.socketUtil.socket.on('reconnect_failed', function() {
         window.backdrop.error("Failed To Reconnect. Retrying now...", true);
     });
 
-    window.socketUtil.socket.on('error', function (reason) {
+    window.socketUtil.socket.on('error', function(reason) {
         Raven.captureException(reason);
         window.backdrop.error("Failed To Connect. Retrying now...", true);
     });
@@ -90,10 +90,5 @@ $(function() {
     }
 
     //Start Joining Proccess
-    var checker = setInterval(function() {
-        if(window.socketUtil.socket.socket.connected) {
-            clearInterval(checker);
-            window.editorUtil.join();
-        }
-    }, 10);
+    window.editorUtil.join();
 });

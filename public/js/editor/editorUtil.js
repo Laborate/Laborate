@@ -212,11 +212,15 @@ window.editorUtil = {
         }
     },
     join: function(reconnect, callback) {
+        console.log("started");
+
         //Have to wait for the socket to initialize
         interval = setInterval(function() {
             if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
+                console.log("sent");
                 window.socketUtil.socket.emit("editorJoin", reconnect, function(json) {
+                    console.log("recieved");
                     if(json.success) {
                         async.series([
                             function(next) {
