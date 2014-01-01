@@ -12,7 +12,7 @@ var error_handler = function(status, message, home, req, res) {
             break;
         case 403:
             error_message = "Access Forbidden";
-            error_html = 'You are not authorized to view this page.';
+            error_html = 'Access Forbidden';
             delete req.session._csrf;
             req.session.save();
             break;

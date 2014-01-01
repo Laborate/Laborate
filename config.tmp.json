@@ -18,7 +18,6 @@
         "socket": "socket.<host>",
         "subdomains": [
             "",
-            "www",
             "socket"
         ],
         "company": "Laborate",
@@ -60,7 +59,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "8lJsGxq6TaALnbkJPQtEMM4VzPvbHCyP766STs82U2cbOBsqVl"
+            "secret": "XA9hDAzCvWGnWLgpyORiwqiR5X8yNw2yWkIPTwBwZgT58Gpn7n"
         }
     },
     "orm": {
@@ -191,7 +190,7 @@
             ".*/**",
             ".*"
         ],
-        "max_failures": 10,
+        "max_failures": 1000,
         "output_log": "../logs/middleware/log.out",
         "error_log": "../logs/middleware/log.error"
     },

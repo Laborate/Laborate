@@ -9,7 +9,11 @@ exports.setup = function(req, res, next) {
     if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
 
     //Header Config
-    res.setHeader("Server", config.general.company);
+    res.header("Server", config.general.company);
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Origin', req.headers.host);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {
@@ -32,7 +36,11 @@ exports.setup = function(req, res, next) {
 }
 
 exports.checker = function(req, res, next) {
-    next();
+    if(req.host != config.general.socket) {
+        next();
+    } else {
+        res.error(403, null, null, false);
+    }
 }
 
 exports.tracking = function(req, res, next) {
