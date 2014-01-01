@@ -1,6 +1,22 @@
 var connections = { redis: lib.redis() };
 lib.models_init(connections);
 
+exports.connect = function(req) {
+    if(!req.session.user) {
+        if(config.cookies.rememberme in req.cookies) {
+            connections.models.users.find({
+                recovery: req.cookies[config.cookies.rememberme]
+            }, function(error, user) {
+                if(!error && user.length == 1) {
+                    var user = user[0];
+                    req.session.user = user;
+                    req.session.save();
+                }
+            });
+        }
+    }
+}
+
 exports.pageTrack = function(req) {
     req.session.last_page = req.data;
     req.session.save();

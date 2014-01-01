@@ -80,6 +80,7 @@ if (config.general.production && cluster.isMaster) {
         app.io.enable('browser client minification');
         app.io.enable('browser client etag');
         app.io.enable('browser client gzip');
+        app.io.set("origins", "*:*");
         app.io.set('log level', 1);
         app.io.set('log colors', true);
         app.io.set('transports', [
@@ -133,7 +134,7 @@ if (config.general.production && cluster.isMaster) {
         app.use(express.compress());
         app.use(express.bodyParser());
         app.use(express.methodOverride());
-        app.use(express.cookieParser());
+        app.use(express.cookieParser(config.cookies.session.secret));
         app.use(express.session({
             key: config.cookies.session.key,
             secret: config.cookies.session.secret,

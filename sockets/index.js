@@ -17,6 +17,9 @@ module.exports = function(app) {
     app.io.route('editorSave', editor.save);
     app.io.route('editorDisconnectAll', editor.disconnectAll);
 
+    /* Connect */
+    app.io.route('connect', core.connect);
+
     /* Disconnect */
     app.io.route('disconnect', core.leave);
     app.io.route('reconnect_failed', core.leave);

@@ -23,16 +23,17 @@ exports.restrictAccess = function(req, res, next) {
         }
     } else {
         if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
-                function(error, user) {
-                    if(!error && user.length == 1) {
-                        user[0].set_recovery(req, res);
-                        req.session.user = user[0];
-                        req.session.save();
-                        res.redirect(req.originalUrl);
-                    } else {
-                        res.error(401, false, error);
-                    }
+            req.models.users.find({
+                recovery: req.cookies[config.cookies.rememberme]
+            }, function(error, user) {
+                if(!error && user.length == 1) {
+                    user[0].set_recovery(req, res);
+                    req.session.user = user[0];
+                    req.session.save();
+                    res.redirect(req.originalUrl);
+                } else {
+                    res.error(401, false, error);
+                }
             });
         } else {
             res.error(401);
@@ -45,15 +46,16 @@ exports.loginCheck = function(req, res, next) {
         res.redirect('/documents');
     } else {
         if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({recovery: req.cookies[config.cookies.rememberme]},
-                function(error, user) {
-                    if(!error && user.length == 1) {
-                        user[0].set_recovery(req, res);
-                        req.session.user = user[0];
-                        res.redirect('/documents');
-                    } else {
-                        if(next) next();
-                    }
+            req.models.users.find({
+                recovery: req.cookies[config.cookies.rememberme]
+            }, function(error, user) {
+                if(!error && user.length == 1) {
+                    user[0].set_recovery(req, res);
+                    req.session.user = user[0];
+                    res.redirect('/documents');
+                } else {
+                    if(next) next();
+                }
             });
         } else {
             if(next) next();
@@ -125,7 +127,9 @@ exports.logout = function(req, res) {
     delete req.session.reset;
     req.session.save();
 
-    res.clearCookie(config.cookies.rememberme);
+    res.clearCookie(config.cookies.rememberme, {
+        domain: "." + req.host
+    });
 
     if(req.session.redirect_url) {
         res.redirect('/login/');
