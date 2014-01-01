@@ -191,7 +191,7 @@ exports.kickOut = function(req, response) {
     req.io.respond(((!response) ? {
         success: false,
         error_message: "Log In Required",
-        redirect_url: true
+        redirect_url: "/logout/"
     } : response));
 
     //Force Socket Disconnect
