@@ -9,7 +9,7 @@ exports.stripe = function(req, res) {
     switch(req.body.type) {
         /* Charge Succeeded */
         case "charge.succeeded":
-            if(req.body.data.object.amount != 0) {
+            if(req.body.data.object.amount != 0 && req.body.data.object.description) {
                 req.models.users.find({
                     stripe: req.body.data.object.customer
                 }, function(error, users) {
@@ -30,7 +30,7 @@ exports.stripe = function(req, res) {
 
         /* Charge Refunded */
         case "charge.refunded":
-            if(req.body.data.object.amount != 0) {
+            if(req.body.data.object.amount != 0 && req.body.data.object.description) {
                 req.models.users.find({
                     stripe: req.body.data.object.customer
                 }, function(error, users) {

@@ -71,6 +71,18 @@ exports.loginDenied = function(req, res, next) {
     }
 }
 
+exports.admin = function(req, res, next) {
+    if(req.session.user) {
+        if(req.session.user.admin) {
+            next();
+        } else {
+            res.error(404);
+        }
+    } else {
+        res.error(404);
+    }
+}
+
 exports.xhr = function(req, res, next) {
     if(req.xhr) {
         next();

@@ -2,8 +2,8 @@ var connections = { redis: lib.redis() };
 lib.models_init(connections);
 
 exports.connect = function(req) {
-    if(!req.session.user) {
-        if(config.cookies.rememberme in req.cookies) {
+    if(config.cookies.rememberme in req.cookies) {
+        if(!req.session.user) {
             connections.models.users.find({
                 recovery: req.cookies[config.cookies.rememberme]
             }, function(error, user) {

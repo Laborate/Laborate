@@ -157,64 +157,13 @@ exports.device = function(req, res, next) {
     }
 }
 
-exports.reload = function(documents) {
-    return function(req, res, next) {
-        async.series([
-            function(callback) {
-                req.models.users.get(req.session.user.id, function(error, user) {
-                    req.session.user = user;
-                    callback(error);
-                });
-            },
-            function(callback) {
-                if(documents) {
-                    async.parallel({
-                        total: function(callback) {
-                            req.models.documents.roles.count({
-                                user_id: req.session.user.id
-                            }, function(error, count) {
-                                callback(error, count);
-                            });
-                        },
-                        private: function(callback) {
-                            req.models.documents.count({
-                                owner_id: req.session.user.id,
-                                private: true
-                            }, function(error, count) {
-                                callback(error, count);
-                            });
-                        },
-                        top_viewed: function(callback) {
-                            req.models.documents.roles.find({
-                                user_id: req.session.user.id
-                            }, ["viewed", "Z"], 10, function(error, roles) {
-                                callback(error, $.map(roles, function(role) {
-                                    return role.document;
-                                }));
-                            });
-                        }
-                    }, function(errors, documents) {
-                        if(!errors) {
-                            req.session.user.documents = documents;
-                        } else {
-                            req.session.user.documents = {
-                                total: 0,
-                                password: 0,
-                                top_viewed: []
-                            }
-                        }
-                        callback(errors);
-                    });
-                } else {
-                    callback(null);
-                }
-            },
-            function(callback) {
-                req.session.save();
-                callback(null);
-            }
-        ], next);
-    }
+exports.reload = function(req, res, next) {
+    req.models.users.get(req.session.user.id, function(error, user) {
+        req.session.user = user;
+        req.session.save();
+        lib.error.capture(error);
+        next();
+    });
 }
 
 exports.backdrop = function(req, res, next) {
