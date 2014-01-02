@@ -33,10 +33,6 @@ $.extend(window.socketUtil, {
         if(!$("#backdrop").is(":visible")) {
             window.editorUtil.join(true, window.socketUtil.connect);
         }
-    },
-    unload: function() {
-        window.unload = true;
-        window.socketUtil.socket.disconnect();
     }
 });
 
@@ -55,8 +51,6 @@ $(function() {
     window.socketUtil.socket.on("reconnecting", window.socketUtil.disconnect);
     window.socketUtil.socket.on("disconnect", window.socketUtil.disconnect);
     window.onoffline = window.socketUtil.disconnect;
-    window.onbeforeunload = window.socketUtil.unload;
-    window.onunload = window.socketUtil.unload;
 
     window.socketUtil.socket.on('connect_failed', function() {
         window.backdrop.error("Failed To Connect. Retrying now...", true);

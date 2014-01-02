@@ -1,19 +1,19 @@
 exports.core = function(crsf, basicAuth) {
     return function(req, res, next) {
         if(req.session.allowed) {
-            exports.finish(req, res, next, crsf, basicAuth);
+            exports.socket(req, res, next, crsf, basicAuth);
         } else {
             if(req.host) {
                 if(req.host.split(".").slice(-2).join(".") == config.general.security) {
                     req.session.organization = { register: true, icons: {} };
-                    exports.finish(req, res, next, crsf, basicAuth);
+                    exports.socket(req, res, next, crsf, basicAuth);
                 } else {
                     req.models.organizations.find({
                         dns: req.host
                     }, function(error, organizations) {
                         if(!error && organizations.length == 1) {
                             req.session.organization = organizations[0];
-                            exports.finish(req, res, next, crsf, basicAuth);
+                            exports.socket(req, res, next, crsf, basicAuth);
                         } else {
                             res.send(403);
                             req.error.capture(error);
@@ -25,6 +25,16 @@ exports.core = function(crsf, basicAuth) {
                 req.error.capture(req);
             }
         }
+    }
+}
+
+exports.socket = function(req, res, next, crsf, basicAuth) {
+    if(req.host != config.general.socket) {
+        exports.finish(req, res, next, crsf, basicAuth);
+    } else if(req.path == "/socket/") {
+        exports.finish(req, res, next, crsf, basicAuth);
+    } else {
+        res.send(403);
     }
 }
 

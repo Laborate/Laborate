@@ -384,7 +384,7 @@ window.documents = {
     },
     contextMenuOpen: function(element, event) {
         $(".context-menu-open")
-            .attr("href", "/editor/" + element.data("id"));
+            .attr("href", "/editor/" + element.data("id") + "/");
 
         $("#context-menu-remove").text(function() {
             if(element.data("role") == "owner") {

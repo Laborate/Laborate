@@ -11,7 +11,7 @@ $(document).on("mouseover mouseout", ".pane .item", function() {
 
 $(document).on("click", ".content .pane .item:not(.disabled)", function() {
     if(window.documents.locationActivated == "online") {
-        window.location.href = "/editor/" + $(this).data("id");
+        window.location.href = "/editor/" + $(this).data("id") + "/";
     } else {
         if(["back", "folder", "folder-symlink"].indexOf($(this).data("type")) != -1) {
             window.documents.location(window.documents.locationActivated,

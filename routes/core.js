@@ -35,14 +35,6 @@ exports.setup = function(req, res, next) {
     next();
 }
 
-exports.checker = function(req, res, next) {
-    if(req.host != config.general.socket) {
-        next();
-    } else {
-        res.error(403, null, null, false);
-    }
-}
-
 exports.tracking = function(req, res, next) {
     req.redis.get("tracking", function(error, data) {
         var user = req.session.user;
@@ -96,7 +88,7 @@ exports.locals = function(req, res, next) {
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization;
     res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
-    res.locals.socket = config.general.socket;
+    res.locals.socket = req.protocol + "://" + config.general.socket;
 
     res.locals.apps = {
         sftp: {

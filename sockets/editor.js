@@ -37,19 +37,21 @@ exports.join = function(req) {
 }
 
 exports.disconnectAll = function(req, user) {
-    user = user || req.session.user.pub_id;
+    if(req.session.user) {
+        user = user || req.session.user.pub_id;
 
-    var socket = editorUtil.userSocket(user, editorUtil.socketRoom(req));
-    if(socket in req.io.socket.manager.sockets.sockets) {
-        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
+        var socket = editorUtil.userSocket(user, editorUtil.socketRoom(req));
+        if(socket in req.io.socket.manager.sockets.sockets) {
+            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
+        }
+        req.io.respond({ success: true });
+        req.io.socket.manager.onClientDisconnect(socket, "forced");
+        exports.leave(req, true);
+
+        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
+            laborators: true
+        });
     }
-    req.io.respond({ success: true });
-    req.io.socket.manager.onClientDisconnect(socket, "forced");
-    exports.leave(req, true);
-
-    req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
-        laborators: true
-    });
 }
 
 exports.leave = function(req, override) {
@@ -68,13 +70,11 @@ exports.leave = function(req, override) {
                 }
             });
         }
-    } else {
-        editorUtil.kickOut(req);
-    }
 
-    req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
-        laborators: true
-    });
+        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
+            laborators: true
+        });
+    }
 }
 
 exports.chatRoom = function(req) {
@@ -157,43 +157,55 @@ exports.extras = function(req) {
 }
 
 exports.laborators = function(req) {
-    var room = editorUtil.socketRoom(req);
-    var users = editorUtil.users(req.session.user.pub_id, room);
-    req.io.respond({
-        success: true,
-        laborators: users
-    });
+    if(req.session.user) {
+        var room = editorUtil.socketRoom(req);
+        var users = editorUtil.users(req.session.user.pub_id, room);
+        req.io.respond({
+            success: true,
+            laborators: users
+        });
+    } else {
+        editorUtil.kickOut(req);
+    }
 }
 
 exports.save = function(req) {
-    editorUtil.save(req, function(sucess) {
-        req.io.respond({
-            success: sucess
+    if(req.session.user) {
+        editorUtil.save(req, function(sucess) {
+            req.io.respond({
+                success: sucess
+            });
         });
-    });
+    } else {
+        editorUtil.kickOut(req);
+    }
 }
 
 exports.permission = function(req) {
-    connections.models.documents.roles.find({
-        user_pub_id: req.data,
-        document_pub_id: editorUtil.room(req)
-    }, function(error, roles) {
-        if(!error && !roles.empty) {
-            if(roles[0].document.owner_id == req.session.user.id) {
-                var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
+    if(req.session.user) {
+        connections.models.documents.roles.find({
+            user_pub_id: req.data,
+            document_pub_id: editorUtil.room(req)
+        }, function(error, roles) {
+            if(!error && !roles.empty) {
+                if(roles[0].document.owner_id == req.session.user.id) {
+                    var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
 
-                if(socket in req.io.socket.manager.sockets.sockets) {
-                    if(roles[0].access) {
-                        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                            readonly: true
-                        });
-                    } else {
-                        req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                            docDelete: true
-                        });
+                    if(socket in req.io.socket.manager.sockets.sockets) {
+                        if(roles[0].access) {
+                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                                readonly: true
+                            });
+                        } else {
+                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                                docDelete: true
+                            });
+                        }
                     }
                 }
             }
-        }
-    });
+        });
+    } else {
+        editorUtil.kickOut(req);
+    }
 }

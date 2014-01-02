@@ -8,53 +8,9 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-function createRange() {
-  var start, end, step;
-  var array = [];
-
-  switch(arguments.length){
-    case 0:
-      throw new Error('range() expected at least 1 argument, got 0 - must be specified as [start,] stop[, step]');
-      return array;
-    case 1:
-      start = 0;
-      end = Math.floor(arguments[0]) - 1;
-      step = 1;
-      break;
-    case 2:
-    case 3:
-    default:
-      start = Math.floor(arguments[0]);
-      end = Math.floor(arguments[1]) - 1;
-      var s = arguments[2];
-      if (typeof s === 'undefined'){
-        s = 1;
-      }
-      step = Math.floor(s) || (function(){ throw new Error('range() step argument must not be zero'); })();
-      break;
-   }
-
-  if (step > 0){
-    for (var i = start; i <= end; i += step){
-      array.push(i);
-    }
-  } else if (step < 0) {
-    step = -step;
-    if (start > end){
-      for (var i = start; i > end + 1; i -= step){
-        array.push(i);
-      }
-    }
-  }
-  return array;
-}
-
 $(function() {
-    //Check For Notifications
-    window.socketUtil.notifications();
-
-    //Set Up Notification Checker
-    window.socketUtil.onNotification();
+    //Initalize Socket
+    window.socketUtil.init();
 
     //Prevent Rewriting Of Document
     setInterval(function() {
@@ -102,9 +58,25 @@ $(function() {
 });
 
 window.socketUtil = {
-    socket: io.connect(window.config.socket, {
-        "sync disconnect on unload": true
-    }),
+    socket: null,
+    init: function() {
+        _this = window.socketUtil;
+
+        _this.socket = io.connect(window.config.socket, {
+            "sync disconnect on unload": true
+        });
+
+        _this.socket.on("connect", _this.pageTrack);
+        _this.socket.on("reconnect", _this.pageTrack);
+        _this.socket.on("notification", _this.notification);
+
+        _this.notifications();
+        _this.onNotification();
+    },
+    unload: function() {
+      window.unload = true;
+      window.socketUtil.socket.socket.disconnect();
+    },
     pageTrack: function() {
         if(config.pageTrack) {
             window.socketUtil.socket.emit("pageTrack", window.location.href);
@@ -114,18 +86,19 @@ window.socketUtil = {
         $(".sidebar .profile .img").toggleClass("blink", notification);
     },
     notifications: function() {
-        window.socketUtil.socket.emit("notifications", function(notification) {
-            window.socketUtil.notification(notification);
+        _this = window.socketUtil;
+        _this.socket.emit("notifications", function(notification) {
+            _this.notification(notification);
         });
     },
     onNotification: function() {
-        window.socketUtil.socket.on('notifications', function (notification) {
-            window.socketUtil.notification(notification);
+        _this = window.socketUtil;
+        _this.socket.on('notifications', function (notification) {
+            _this.notification(notification);
         });
     }
 }
 
 window.onpopstate = window.socketUtil.pageTrack;
-window.socketUtil.socket.on("connect", window.socketUtil.pageTrack);
-window.socketUtil.socket.on("reconnect", window.socketUtil.pageTrack);
-window.socketUtil.socket.on("notification", window.socketUtil.notification);
+window.onunload = window.socketUtil.unload;
+window.onbeforeunload = window.socketUtil.unload;

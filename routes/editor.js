@@ -246,13 +246,16 @@ exports.invite = function(req, res, next) {
 
 exports.laborators = function(req, res, next) {
     req.models.documents.roles.find({
+        user_id: req.db.tools.ne(req.session.user.id),
         document_pub_id: req.param("document")
     }, function(error, roles) {
         if(!error) {
             res.json({
                 success: true,
                 laborators: $.map(roles, function(role) {
-                    if(req.session.user.id != role.user.id) {
+                    console.log(role.user_id);
+
+                    if(role.user) {
                         return {
                             id: role.user.pub_id,
                             screen_name: role.user.screen_name,
