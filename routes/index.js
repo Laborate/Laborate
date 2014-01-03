@@ -97,9 +97,6 @@ module.exports = function(app) {
     /* Admin */
     app.get('/admin', authUtil.restrictAccess, authUtil.admin, admin.index);
 
-    /* Socket */
-    app.get('/socket', authUtil.socket);
-
     /* Webhooks */
     app.post("/webhook/stripe", authUtil.loginDenied, webhooks.stripe);
 

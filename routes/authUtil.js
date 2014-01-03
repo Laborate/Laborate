@@ -91,25 +91,6 @@ exports.xhr = function(req, res, next) {
     }
 }
 
-exports.socket = function(req, res, next) {
-    if(!req.session.user) {
-        if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({
-                recovery: req.cookies[config.cookies.rememberme]
-            }, function(error, user) {
-                if(!error && user.length == 1) {
-                    var user = user[0];
-                    req.session.user = user;
-                    req.session.save();
-                }
-            });
-        }
-    }
-
-    res.attachment("socket.png");
-    res.end("", "UTF-8");
-}
-
 /* Operations */
 exports.login = function(req, res, next) {
     req.models.users.find({

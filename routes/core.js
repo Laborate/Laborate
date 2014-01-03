@@ -71,6 +71,7 @@ exports.locals = function(req, res, next) {
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
     res.locals.host = req.session.server;
+    res.locals.socket = req.session.server;
     res.locals.site_title = req.session.organization.logo || config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.description = config.general.description.join("");
@@ -88,7 +89,6 @@ exports.locals = function(req, res, next) {
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization;
     res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
-    res.locals.socket = req.protocol + "://" + config.general.socket;
 
     res.locals.apps = {
         sftp: {

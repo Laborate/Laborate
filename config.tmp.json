@@ -15,7 +15,6 @@
         },
         "host": "laborate.io",
         "security": "laborate.io",
-        "socket": "socket.<host>",
         "subdomains": [
             "",
             "socket"
@@ -59,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "ygdentAMlGe2QzyxSdemxlLfXS4J87JG5WyEXXOTLBbiBLoDPk"
+            "secret": "6mNdQKXJy1xD5s3iKV11i9hZP5WCmDXddtrQHbc5LUVm7MDnzx"
         }
     },
     "orm": {
@@ -287,6 +286,5 @@
                 "type": "radio"
             }
         }
-    },
-    "random": ""
+    }
 }
