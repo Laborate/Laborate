@@ -155,6 +155,9 @@ if (config.general.production && cluster.isMaster) {
         //Error Handler (Routes)
         app.use(require("./routes/error").handler);
 
+        //Redirects
+        app.use(require("./routes/core").redirects);
+
         //Custom Authentication
         app.use(require("./routes/security").core(crsf, express.basicAuth));
 

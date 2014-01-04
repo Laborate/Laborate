@@ -149,6 +149,14 @@ exports.device = function(req, res, next) {
     }
 }
 
+exports.redirects = function(req, res, next) {
+    if(req.subdomains.indexOf('www') === -1) {
+        next();
+    } else {
+        res.redirect(req.protocol + "://" + req.host.split(".").slice(1).join(".") + req.path);
+    }
+}
+
 exports.reload = function(req, res, next) {
     req.models.users.get(req.session.user.id, function(error, user) {
         req.session.user = user;
