@@ -58,18 +58,16 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "6mNdQKXJy1xD5s3iKV11i9hZP5WCmDXddtrQHbc5LUVm7MDnzx"
+            "secret": "RiQhIJwsAvL1cEOResDwKiosLfTnMgQku8oi5wOnKw4nIAiDfX"
         }
     },
     "orm": {
         "reset": true,
         "protocol": "mysql",
-        "port": 3306,
-        "host": "localhost",
+        "host": "127.0.0.1",
         "database": "",
         "user": "",
         "password": "",
-        "query": {},
         "timezone": ""
     },
     "stripe": {
