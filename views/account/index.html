@@ -130,7 +130,7 @@
                 </div>
                 <div class="side">
                     <div class="data"><%= user.notifications.length %></div>
-                    <div class="label">notifications</div>
+                    <div class="label">notifications<%= (user.notifications.length != 1) ?  "s" : "" %></div>
                 </div>
             </div>
             <div class="container">

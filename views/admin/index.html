@@ -1,0 +1,141 @@
+<% include ../includes/header.html %>
+<div class="sidebar">
+    <div class="profile">
+        <div class="img">
+            <a href="/account/notifications/">
+                <img src="<%= gravatar %>" />
+            </a>
+        </div>
+    </div>
+    <div class="list">
+        <div class="shadow-top"></div>
+        <div class="listing">
+            <div class="item" data-key="dashboard">
+                <div class="container">
+                    <div class="name">Dashboard</div>
+                    <div class="icon <%= icons.dashboard %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+            <div class="item" data-key="feedback">
+                <div class="container">
+                    <div class="name">Feedback</div>
+                    <div class="icon <%= icons.feedback %>"></div>
+                </div>
+                <div class="active"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <div class="header">
+        <div class="top">
+            <div class="search">
+                <form id="search" autocomplete="off">
+                    <div class="icon <%= icons.search %>"></div>
+                    <input type="text" placeholder="Search your files..." />
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="accounts">
+                <a href="/account/">Account</a>
+                <span>|</span>
+                <a href="/documents/">Documents</a>
+                <span>|</span>
+                <a href="/logout/">Sign Out</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <% if(user.notifications.length != 0) {
+        $.each(user.notifications, function(key, notification) {
+            if(notification.priority) {
+    %>
+                <div class="notification" data-id="<%= notification.id %>">
+                    <%- notification.message %>
+                    <div class="close <%= icons.cross_square %>"></div>
+                </div>
+    <%
+            }
+        });
+    } %>
+    <div class="pane">
+        <div class="selection dashboard" data-key="dashboard">
+            <div class="container">
+                <div class="side">
+                    <div class="data"><%= users.total %></div>
+                    <div class="label">user<%= (users.total != 1) ?  "s" : "" %></div>
+                </div>
+                <div class="side">
+                    <div class="data"><%= users.paid %></div>
+                    <div class="label">paid user<%= (users.paid != 1) ?  "s" : "" %></div>
+                </div>
+                <div class="side">
+                    <div class="data"><%= feedbacks.length %></div>
+                    <div class="label">feedback<%= ([0,1].indexOf(feedbacks.length) == -1) ?  "s" : "" %></div>
+                </div>
+            </div>
+            <div class="container">
+                <% if(top_documents.length != 0) { %>
+                    <div id="plans" class="listing compact">
+                        <div class="item header center">Popular Files</div>
+
+                        <% $.each(top_documents, function(key, document) { %>
+                            <div class="item selectable">
+                                <a href="/editor/<%= document.pub_id %>/">
+                                    <div class="name"><%= document.name %></div>
+                                    <div class="action">
+                                        <% if(!document.password && document.roles.length - 1 != 0) { %>
+                                            <span class="users">
+                                                <%= document.roles.length - 1 %>
+                                                <span class="<%= icons.users %>"></span>
+                                            </span>
+                                        <% } %>
+                                        <% if(document.private) { %>
+                                            <span class="locked <%= icons.locked_defined %>"></span>
+                                        <% } %>
+                                    </div>
+                                    <div class="clear"></div>
+                                </a>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="listing">
+                        <div class="item empty">
+                            No documents have been created
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="selection full" data-key="feedback">
+            <% if(feedbacks.length != 0) { %>
+                <% $.each(feedbacks, function(key, feedback) { %>
+                    <div class="block">
+                        <strong>User</strong>
+                        <div class="value"><%= feedback.user.name %> - <%= feedback.user.pub_id %></div>
+                    </div>
+                    <div class="block">
+                        <strong>Submitted</strong>
+                        <div class="value"><%= feedback.created.toDateString() %></div>
+                    </div>
+
+                    <% $.each(feedback.feedback, function(key, answer) { %>
+                        <div class="block">
+                            <strong><%= questions[key].question %></strong>
+                            <div class="value"><%= answer %></div>
+                        </div>
+                    <% }); %>
+
+                    <% if(!feedbacks.end(key)) { %>
+                        <div class="page-break"></div>
+                    <% } %>
+                <% }); %>
+            <% } else { %>
+                <center><strong>No Feedback Given</strong></center>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% include ../includes/footer.html %>

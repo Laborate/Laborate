@@ -11,8 +11,8 @@ exports.index = function(req, res, next) {
             title: 'Account',
             plans: plans,
             user: req.session.user,
-            js: clientJS.renderTags("account", "header"),
-            css: clientCSS.renderTags("account", "header"),
+            js: clientJS.renderTags("account"),
+            css: clientCSS.renderTags("account"),
         });
     });
 };

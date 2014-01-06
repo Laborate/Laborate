@@ -51,7 +51,6 @@ module.exports = function(app) {
         app.get('/feedback/success', authUtil.restrictAccess, core.reload, feedback.success);
         app.post('/feedback', authUtil.restrictAccess, core.reload, feedback.submit);
     }
-    app.get('/feedback/results', authUtil.restrictAccess, authUtil.admin, feedback.results);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload, documents.stats, account.index);
@@ -96,6 +95,7 @@ module.exports = function(app) {
 
     /* Admin */
     app.get('/admin', authUtil.restrictAccess, authUtil.admin, admin.index);
+    app.get('/admin/:panel', authUtil.restrictAccess, authUtil.admin, admin.index);
 
     /* Webhooks */
     app.post("/webhook/stripe", authUtil.loginDenied, webhooks.stripe);

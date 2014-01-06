@@ -11,7 +11,7 @@ exports.setup = function(req, res, next) {
     //Header Config
     res.header("Server", config.general.company);
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Origin', req.headers.host);
+    res.header('Access-Control-Allow-Origin', req.host);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
 

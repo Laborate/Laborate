@@ -33,9 +33,6 @@ module.exports = function(root) {
     clientCSS.addFile("landing", css_path + 'landing/index.less');
     clientJS.addFile("landing", js_path + 'landing/index.js');
 
-    /* Feedback */
-    clientCSS.addFile("feedback", css_path + 'feedback/index.less');
-
     /* Backdrop */
     clientCSS.addFile("backdrop", css_path + 'backdrop/backdrop.less');
     clientCSS.addFile("backdrop", css_path + 'backdrop/loader.less');
@@ -109,4 +106,10 @@ module.exports = function(root) {
     clientJS.addFile("account", js_path + 'account/account.js');
     clientJS.addFile("account", js_path + 'account/accountUtil.js');
     clientJS.addFile("account", js_path + 'account/accountInit.js');
+
+    /* Admin */
+    clientCSS.addFile("admin", css_path + 'admin/admin.less');
+    clientJS.addFile("admin", js_path + 'admin/admin.js');
+    clientJS.addFile("admin", js_path + 'admin/adminUtil.js');
+    clientJS.addFile("admin", js_path + 'admin/adminInit.js');
 };

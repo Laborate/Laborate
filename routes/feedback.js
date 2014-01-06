@@ -57,20 +57,3 @@ exports.submit = function(req, res) {
         res.error(200, "1 Submission Per Day");
     }
 };
-
-exports.results = function(req, res) {
-    req.models.users.feedback.all(function(error, feedback) {
-        if(!error) {
-            res.renderOutdated('feedback/results', {
-                title: 'Feedback Results',
-                questions: config.feedback.questions,
-                results: feedback,
-                js: clientJS.renderTags(),
-                css: clientCSS.renderTags("feedback"),
-                pageTrack: true
-            });
-        } else {
-            res.error(200, "Failed To Get Results", error);
-        }
-    });
-};

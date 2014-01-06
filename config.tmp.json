@@ -17,7 +17,7 @@
         "security": "laborate.io",
         "subdomains": [
             "",
-            "socket"
+            "www"
         ],
         "company": "Laborate",
         "logo": "laborate",
@@ -58,18 +58,16 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "Epew70MTquVegNTTsa8b9emKyLH44E1Xk5vc5b5lmIgtflRkVh"
+            "secret": "e9iwZW5txm0hGiwT3APLq9CnTd82SrIvxfCFUeogV8EPm7ZwXK"
         }
     },
     "orm": {
         "reset": true,
         "protocol": "mysql",
-        "port": 3306,
-        "host": "localhost",
+        "host": "127.0.0.1",
         "database": "",
         "user": "",
         "password": "",
-        "query": {},
         "timezone": ""
     },
     "stripe": {
@@ -141,7 +139,8 @@
         "beautify": "icon-document-fill",
         "expand": "icon-expand",
         "contract": "icon-contract",
-        "priority": "icon-warning"
+        "priority": "icon-warning",
+        "feedback": "icon-bars-2"
     },
     "github": {
         "id": "",
@@ -161,13 +160,15 @@
     },
     "nodetime": "d4d9e81534b285f634d161ed18d52a37dd292a2f",
     "email": {
-        "mode": "smtp",
-        "authentication": "tls",
-        "host": "smtp.gmail.com",
-        "port": 587,
+        "from": "noreply@laborate.io",
+        "mode": "SMTP",
+        "service": "Mailgun",
         "auth": {
-            "user": "invite@laborate.io",
-            "pass": "laborateinvite"
+            "user": "postmaster@laborate.io",
+            "pass": "79k8mh9c8wm7"
+        },
+        "tls": {
+            "ciphers": "SSLv3"
         }
     },
     "forever": {

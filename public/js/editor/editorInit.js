@@ -62,7 +62,7 @@ $(function() {
 
     window.socketUtil.socket.on('error', function(reason) {
         Raven.captureException(reason);
-        window.backdrop.error("Failed To Connect. Retrying now...", false);
+        window.backdrop.error("Failed To Connect", '/');
     });
 
     var interval = setInterval(function() {
