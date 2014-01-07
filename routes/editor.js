@@ -10,10 +10,22 @@ exports.index = function(req, res, next) {
                 document = documents[0];
 
                 if(req.robot) {
-                    res.renderOutdated('editor/index', {
-                        title: document.name,
-                        document: document
-                    });
+                    if(!document.private) {
+                        res.renderOutdated('editor/index', {
+                            title: document.name,
+                            document: document,
+                            description: function() {
+                                var desc = document.name;
+                                desc += " is a ";
+                                desc += (document.private) ? "private" : "public";
+                                desc += " document owned by ";
+                                desc += document.owner.name + ".";
+                                return desc;
+                            }()
+                        });
+                    } else {
+                        res.error(404);
+                    }
                 } else {
                     document.join(req.session.user, 2, function(access, permission) {
                         if(access) {

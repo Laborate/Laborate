@@ -16,7 +16,7 @@ GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 
-/* NodeTime Monitoring */
+/* NodeTime Monitoring
 require('nodetime').profile({
     accountKey: config.nodetime,
     appName: function() {
@@ -27,6 +27,7 @@ require('nodetime').profile({
         }
     }()
 });
+*/
 
 process.nextTick(function() {
     /* Install Crontab */

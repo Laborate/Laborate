@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "aOZPVwnUHP7KlOZIHV5DpFsWOcLLVaJ3gyGML0ZlicHoXkh8rs"
+            "secret": "heWk5iKKUThOCJtMTLR2DeC9awsudEb9htD814Q9sbg9Cpdw2r"
         }
     },
     "orm": {
@@ -223,6 +223,7 @@
             }
         },
         "ignore": [
+            "admin",
             "logout",
             "reload",
             "verify",

@@ -20,14 +20,17 @@ exports.index = function(req, res, next) {
                 callback(error, feedback);
             });
         },
+        documents: function(callback) {
+            req.models.documents.all().count(function(error, count) {
+                callback(error, count);
+            });
+        },
         top_documents: function(callback) {
-            req.models.documents.roles.all(
+            req.models.documents.all(
                 ["viewed", "Z"],
                 10,
-            function(error, roles) {
-                callback(error, $.map(roles, function(role) {
-                    return role.document;
-                }));
+            function(error, documents) {
+                callback(error, documents);
             });
         }
     }, function(errors, data) {
@@ -37,6 +40,7 @@ exports.index = function(req, res, next) {
                 total: data.users,
                 paid: data.paid
             },
+            documents: data.documents,
             questions: config.feedback.questions,
             feedbacks: data.feedback,
             top_documents: data.top_documents,
