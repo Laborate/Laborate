@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "w7tC80ffyiRms2JEdhctUKzUTTB4TVJv5RgcWbGaXkufZuT5Ek"
+            "secret": "aOZPVwnUHP7KlOZIHV5DpFsWOcLLVaJ3gyGML0ZlicHoXkh8rs"
         }
     },
     "orm": {
@@ -163,6 +163,8 @@
         "from": "noreply@laborate.io",
         "mode": "SMTP",
         "service": "Mailgun",
+        "list": "mailing@laborate.io",
+        "key": "key-09r5im25mzu1k4bgt59ueaqe66ys3qr0",
         "auth": {
             "user": "postmaster@laborate.io",
             "pass": "79k8mh9c8wm7"

@@ -158,6 +158,9 @@ if (config.general.production && cluster.isMaster) {
         //Redirects
         app.use(require("./routes/core").redirects);
 
+        //Device Check
+        app.use(require("./routes/core").device);
+
         //Custom Authentication
         app.use(require("./routes/security").core(crsf, express.basicAuth));
 
@@ -166,9 +169,6 @@ if (config.general.production && cluster.isMaster) {
 
         //Custom Routing
         app.use(require("./routes/core").locals);
-
-        //Device Check
-        app.use(require("./routes/core").device);
     });
 
     /* Development Only */

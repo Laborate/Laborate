@@ -22,21 +22,25 @@ exports.restrictAccess = function(req, res, next) {
             });
         }
     } else {
-        if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({
-                recovery: req.cookies[config.cookies.rememberme]
-            }, function(error, user) {
-                if(!error && user.length == 1) {
-                    user[0].set_recovery(req, res);
-                    req.session.user = user[0];
-                    req.session.save();
-                    res.redirect(req.originalUrl);
-                } else {
-                    res.error(401, false, error);
-                }
-            });
+        if(req.robot) {
+            next();
         } else {
-            res.error(401);
+            if(config.cookies.rememberme in req.cookies) {
+                req.models.users.find({
+                    recovery: req.cookies[config.cookies.rememberme]
+                }, function(error, user) {
+                    if(!error && user.length == 1) {
+                        user[0].set_recovery(req, res);
+                        req.session.user = user[0];
+                        req.session.save();
+                        res.redirect(req.originalUrl);
+                    } else {
+                        res.error(401, false, error);
+                    }
+                });
+            } else {
+                res.error(401);
+            }
         }
     }
 };

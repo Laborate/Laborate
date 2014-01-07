@@ -298,43 +298,47 @@ exports.create_location = function(req, res, next) {
 };
 
 exports.stats = function(req, res, next) {
-    async.parallel({
-        total: function(callback) {
-            req.models.documents.roles.count({
-                user_id: req.session.user.id
-            }, function(error, count) {
-                callback(error, count);
-            });
-        },
-        private: function(callback) {
-            req.models.documents.count({
-                owner_id: req.session.user.id,
-                private: true
-            }, function(error, count) {
-                callback(error, count);
-            });
-        },
-        top_viewed: function(callback) {
-            req.models.documents.roles.find({
-                user_id: req.session.user.id
-            }, ["viewed", "Z"], 10, function(error, roles) {
-                callback(error, $.map(roles, function(role) {
-                    return role.document;
-                }));
-            });
-        }
-    }, function(errors, documents) {
-        if(!errors) {
-            req.session.user.documents = documents;
-        } else {
-            req.session.user.documents = {
-                total: 0,
-                password: 0,
-                top_viewed: []
+    if(!req.robot) {
+        async.parallel({
+            total: function(callback) {
+                req.models.documents.roles.count({
+                    user_id: req.session.user.id
+                }, function(error, count) {
+                    callback(error, count);
+                });
+            },
+            private: function(callback) {
+                req.models.documents.count({
+                    owner_id: req.session.user.id,
+                    private: true
+                }, function(error, count) {
+                    callback(error, count);
+                });
+            },
+            top_viewed: function(callback) {
+                req.models.documents.roles.find({
+                    user_id: req.session.user.id
+                }, ["viewed", "Z"], 10, function(error, roles) {
+                    callback(error, $.map(roles, function(role) {
+                        return role.document;
+                    }));
+                });
             }
-        }
-        req.session.save();
-        lib.error.capture(errors);
+        }, function(errors, documents) {
+            if(!errors) {
+                req.session.user.documents = documents;
+            } else {
+                req.session.user.documents = {
+                    total: 0,
+                    password: 0,
+                    top_viewed: []
+                }
+            }
+            req.session.save();
+            lib.error.capture(errors);
+            next();
+        });
+    } else {
         next();
-    });
+    }
 }

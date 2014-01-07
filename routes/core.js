@@ -17,7 +17,22 @@ exports.setup = function(req, res, next) {
 
     //Replace Views Elements For Compatibility With IE
     res.renderOutdated = function(view, data) {
-        res.render(view, data, outdatedhtml.makeoutdated(req, res));
+        if(req.mobile) {
+            res.render('landing/mobile', {
+                title: null,
+                js: clientJS.renderTags("landing"),
+                css: clientCSS.renderTags("backdrop", "landing"),
+                backdrop: req.backdrop(),
+                pageTrack: false,
+                config: {
+                    animate: false
+                }
+            }, outdatedhtml.makeoutdated(req, res));
+        } else if(req.robot) {
+            res.render("robot", data, outdatedhtml.makeoutdated(req, res));
+        } else {
+            res.render(view, data, outdatedhtml.makeoutdated(req, res));
+        }
     }
 
     req.address = {
@@ -89,6 +104,8 @@ exports.locals = function(req, res, next) {
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization;
     res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
+    res.locals.mobile = req.mobile;
+    res.locals.robot = req.robot;
 
     res.locals.apps = {
         sftp: {
@@ -129,24 +146,11 @@ exports.locals = function(req, res, next) {
 
 exports.device = function(req, res, next) {
     var device = req.device.type.toLowerCase();
-    var user_agent = req.headers['user-agent'].toLowerCase();
 
-    if(["desktop", "bot"].indexOf(device) != -1 || user_agent == "ruby") {
-        res.locals.mobile = false;
-        next();
-    } else {
-        res.renderOutdated('landing/mobile', {
-            title: null,
-            mobile: true,
-            js: clientJS.renderTags("landing"),
-            css: clientCSS.renderTags("backdrop", "landing"),
-            backdrop: req.backdrop(),
-            pageTrack: false,
-            config: {
-                animate: false
-            }
-        });
-    }
+    req.mobile = ["phone", "tablet"].indexOf(device) != -1;
+    req.robot = device == "bot";
+
+    next();
 }
 
 exports.redirects = function(req, res, next) {
@@ -232,5 +236,5 @@ exports.sitemap = function(req, res, next) {
 
 exports.robots = function(req, res, next) {
     res.set('Content-Type', 'text/plain');
-    res.render("robots");
+    res.renderOutdated("robots");
 }

@@ -8,37 +8,45 @@ exports.index = function(req, res, next) {
         }, function(error, documents) {
             if(!error && !documents.empty) {
                 document = documents[0];
-                document.join(req.session.user, 2, function(access, permission) {
-                    if(access) {
-                        req.models.documents.permissions.all(function(error, permissions) {
-                            if(!error) {
-                                res.renderOutdated('editor/index', {
-                                    title: document.name,
-                                    user: req.session.user,
-                                    document: document,
-                                    permissions: permissions,
-                                    js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
-                                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
-                                    backdrop: req.backdrop(),
-                                    private: document.private,
-                                    config: {
-                                        permission: permission || {
-                                            id: 2,
-                                            owner: false
-                                        },
-                                        permissions: $.map(permissions, function(permission) {
-                                            return permission.name;
-                                        })
-                                    }
-                                });
-                            } else {
-                                res.error(404);
-                            }
-                        });
-                    } else {
-                        res.error(404);
-                    }
-                });
+
+                if(req.robot) {
+                    res.renderOutdated('editor/index', {
+                        title: document.name,
+                        document: document
+                    });
+                } else {
+                    document.join(req.session.user, 2, function(access, permission) {
+                        if(access) {
+                            req.models.documents.permissions.all(function(error, permissions) {
+                                if(!error) {
+                                    res.renderOutdated('editor/index', {
+                                        title: document.name,
+                                        user: req.session.user,
+                                        document: document,
+                                        permissions: permissions,
+                                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
+                                        css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
+                                        backdrop: req.backdrop(),
+                                        private: document.private,
+                                        config: {
+                                            permission: permission || {
+                                                id: 2,
+                                                owner: false
+                                            },
+                                            permissions: $.map(permissions, function(permission) {
+                                                return permission.name;
+                                            })
+                                        }
+                                    });
+                                } else {
+                                    res.error(404);
+                                }
+                            });
+                        } else {
+                            res.error(404);
+                        }
+                    });
+                }
             } else {
                 res.error(404, null, error);
             }
