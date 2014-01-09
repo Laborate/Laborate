@@ -58,11 +58,12 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "MJAELK3tt3tQldl3IeneMDAUOpQAFDnwTVsIR3p337gArPbaCH"
+            "secret": "qbcOK8pELhoioBnesBA96CKWgK58uSywu2en4FJAWMZd6heTfW"
         }
     },
     "orm": {
         "reset": true,
+        "debug": "",
         "protocol": "mysql",
         "host": "127.0.0.1",
         "database": "",

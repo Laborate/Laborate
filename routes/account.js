@@ -1,16 +1,39 @@
+var async = require('async');
+
 exports.index = function(req, res, next) {
-    if(req.session.user.deliquent) {
+    var user = req.session.user;
+
+    if(user.deliquent) {
         exports.remove_card(req, res, false);
     }
 
-    req.models.pricing.find({
-        student: req.session.user.pricing.student,
-        organization: false
-    }, [ "priority", "A" ], function(error, plans) {
+    async.parallel({
+        plans: function(callback) {
+            req.models.pricing.find({
+                student: user.pricing.student,
+                organization: false
+            }, [ "priority", "A" ], callback);
+        },
+        notifications: function(callback) {
+            req.models.notifications.find({
+                user_id: user.id
+            }, callback);
+        },
+        payments: function(callback) {
+            req.models.payments.find({
+                user_id: user.id
+            }, callback);
+        }
+    }, function(errors, data) {
+        req.error.capture(errors);
+
+        user.payments = data.payments;
+        user.notifications = data.notifications;
+
         res.renderOutdated('account/index', {
             title: 'Account',
-            plans: plans,
-            user: req.session.user,
+            plans: data.plans,
+            user: user,
             js: clientJS.renderTags("account"),
             css: clientCSS.renderTags("account"),
         });

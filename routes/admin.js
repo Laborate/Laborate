@@ -26,12 +26,7 @@ exports.index = function(req, res, next) {
             });
         },
         top_documents: function(callback) {
-            req.models.documents.all(
-                ["viewed", "Z"],
-                10,
-            function(error, documents) {
-                callback(error, documents);
-            });
+            req.models.documents.all(["viewed", "Z"], 10, callback);
         }
     }, function(errors, data) {
         res.renderOutdated('admin/index', {
