@@ -295,13 +295,7 @@
 </div>
 <% if(document.owner_id == user.id) { %>
     <div class="context-menu">
-        <div class="list">
-            <% $.each(permissions.slice(1), function(key, permission) { %>
-                <div class="item" data-id="<%= permission.id %>">
-                    <%= permission.name %>
-                </div>
-            <% }) %>
-        </div>
+        <div class="list"></div>
         <div class="arrow"></div>
     </div>
 <% } %>

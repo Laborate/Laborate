@@ -1,6 +1,4 @@
-var connections = { redis: lib.redis() };
 var editorUtil = require("./editorUtil");
-lib.models_init(connections);
 
 /* Route Functions */
 exports.join = function(req) {
@@ -93,10 +91,11 @@ exports.document = function(req) {
         req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 
-         connections.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+        var redis = lib.redis();
+        redis.get(editorUtil.socketRoom(req), function(error, reply) {
             reply = JSON.parse(reply);
             reply.changes.push(req.data["changes"]);
-             connections.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
+            redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
         });
     }
 }
@@ -112,6 +111,8 @@ exports.cursors = function(req) {
 }
 
 exports.extras = function(req) {
+    var redis = lib.redis();
+
     //Methods
     this.breakpoints = function(changes, breakpoints, callback) {
         $.each(changes, function(index, value) {
@@ -128,13 +129,13 @@ exports.extras = function(req) {
     }
 
     this.get = function(callback) {
-         connections.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+        redis.get(editorUtil.socketRoom(req), function(error, reply) {
             callback(JSON.parse(reply));
         });
     }
 
     this.save = function(data) {
-         connections.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
+        redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
     }
 
     //Logic
@@ -183,27 +184,29 @@ exports.save = function(req) {
 
 exports.permission = function(req) {
     if(req.session.user) {
-        connections.models.documents.roles.find({
-            user_pub_id: req.data,
-            document_pub_id: editorUtil.room(req)
-        }, function(error, roles) {
-            if(!error && !roles.empty) {
-                if(roles[0].document.owner_id == req.session.user.id) {
-                    var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
+        lib.models_init(null, function(db, models) {
+            models.documents.roles.find({
+                user_pub_id: req.data,
+                document_pub_id: editorUtil.room(req)
+            }, function(error, roles) {
+                if(!error && !roles.empty) {
+                    if(roles[0].document.owner_id == req.session.user.id) {
+                        var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
 
-                    if(socket in req.io.socket.manager.sockets.sockets) {
-                        if(roles[0].access) {
-                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                                readonly: true
-                            });
-                        } else {
-                            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                                docDelete: true
-                            });
+                        if(socket in req.io.socket.manager.sockets.sockets) {
+                            if(roles[0].access) {
+                                req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                                    readonly: true
+                                });
+                            } else {
+                                req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
+                                    docDelete: true
+                                });
+                            }
                         }
                     }
                 }
-            }
+            });
         });
     } else {
         editorUtil.kickOut(req);

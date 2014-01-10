@@ -2,75 +2,78 @@ var github = require("./github");
 var bitbucket = require("./github");
 
 exports.index = function(req, res, next) {
-    if(req.param("document")) {
-        req.models.documents.find({
-            pub_id: req.param("document")
-        }, function(error, documents) {
-            if(!error && !documents.empty) {
-                document = documents[0];
+    res.renderOutdated('editor/join', {
+        title: "Join A Document",
+        js: clientJS.renderTags("backdrop"),
+        css: clientCSS.renderTags("backdrop"),
+        backdrop: req.backdrop()
+    });
+}
 
-                if(req.robot) {
-                    if(!document.private) {
+exports.editor = function(req, res, next) {
+    req.models.documents.find({
+        pub_id: req.param("document")
+    }, function(error, documents) {
+        if(!error && !documents.empty) {
+            document = documents[0];
+
+            if(req.robot) {
+                if(!document.private) {
+                    res.renderOutdated('editor/index', {
+                        title: document.name,
+                        document: document,
+                        description: function() {
+                            var desc = document.name;
+                            desc += " is a ";
+                            desc += (document.private) ? "private" : "public";
+                            desc += " document owned by ";
+                            desc += document.owner.name + ".";
+                            return desc;
+                        }()
+                    });
+                } else {
+                    res.error(404);
+                }
+            } else {
+                document.join(req.session.user, 2, function(access, permission) {
+                    if(!error && access) {
                         res.renderOutdated('editor/index', {
                             title: document.name,
+                            user: req.session.user,
                             document: document,
-                            description: function() {
-                                var desc = document.name;
-                                desc += " is a ";
-                                desc += (document.private) ? "private" : "public";
-                                desc += " document owned by ";
-                                desc += document.owner.name + ".";
-                                return desc;
-                            }()
+                            js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
+                            css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
+                            backdrop: req.backdrop(),
+                            private: document.private,
+                            config: {
+                                permission: permission || {
+                                    id: 2,
+                                    owner: false
+                                }
+                            }
                         });
                     } else {
                         res.error(404);
                     }
-                } else {
-                    document.join(req.session.user, 2, function(access, permission) {
-                        if(access) {
-                            req.models.documents.permissions.all(function(error, permissions) {
-                                if(!error) {
-                                    res.renderOutdated('editor/index', {
-                                        title: document.name,
-                                        user: req.session.user,
-                                        document: document,
-                                        permissions: permissions,
-                                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
-                                        css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
-                                        backdrop: req.backdrop(),
-                                        private: document.private,
-                                        config: {
-                                            permission: permission || {
-                                                id: 2,
-                                                owner: false
-                                            },
-                                            permissions: $.map(permissions, function(permission) {
-                                                return permission.name;
-                                            })
-                                        }
-                                    });
-                                } else {
-                                    res.error(404);
-                                }
-                            });
-                        } else {
-                            res.error(404);
-                        }
-                    });
-                }
-            } else {
-                res.error(404, null, error);
+                });
             }
-        });
-    } else {
-        res.renderOutdated('editor/join', {
-            title: "Join A Document",
-            js: clientJS.renderTags("backdrop"),
-            css: clientCSS.renderTags("backdrop"),
-            backdrop: req.backdrop()
-        });
-    }
+        } else {
+            res.error(404, null, error);
+        }
+    });
+}
+
+exports.permissions = function(req, res, next) {
+    req.models.documents.permissions.all().only("name", "id").run(function(error, permissions) {
+        if(!error && !permissions.empty) {
+            res.json({
+                success: true,
+                permissions: permissions
+            });
+        } else {
+            res.error(200, "Failed To Get Permissions", error);
+        }
+    });
 }
 
 exports.exists = function(req, res, next) {

@@ -83,8 +83,9 @@ module.exports = function(app) {
 
     /* Editor */
     app.get('/editor', authUtil.restrictAccess, editor.index);
-    app.get('/editor/:document', authUtil.restrictAccess, documents.stats, editor.index);
+    app.get('/editor/:document', authUtil.restrictAccess, documents.stats, editor.editor);
     app.get('/editor/:document/download', authUtil.restrictAccess, editor.download);
+    app.get('/editor/:document/permissions', authUtil.restrictAccess, authUtil.xhr, editor.permissions);
     app.post('/editor/exists', authUtil.restrictAccess,  editor.exists);
     app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, editor.update);
     app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.remove);

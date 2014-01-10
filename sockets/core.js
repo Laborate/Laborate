@@ -1,6 +1,4 @@
 var editor = require("./editor");
-var connections = { redis: lib.redis() };
-lib.models_init(connections);
 
 exports.pageTrack = function(req) {
     exports.track(req, req.session);
@@ -10,7 +8,8 @@ exports.pageTrack = function(req) {
 
 exports.track = function(req, session) {
     if(req.handshake && req.headers) {
-        connections.redis.get("tracking", function(error, data) {
+        var redis = lib.redis();
+        redis.get("tracking", function(error, data) {
             var user = (session) ? (session.user || {}) : {};
             var organization = (session) ? (session.organization || {}) : {};
             var tracking = (data) ? JSON.parse(data) : [];
@@ -40,7 +39,7 @@ exports.track = function(req, session) {
                 url: req.headers.referer
             });
 
-             connections.redis.set(
+            redis.set(
                 "tracking",
                 JSON.stringify(tracking),
                 lib.error.capture
@@ -53,11 +52,13 @@ exports.notifications = function(req) {
     if(req.session.user) {
         var url = req.headers.referer.replace(req.session.server + "/", "");
         if(!(/^account\/.*/.test(url))) {
-            connections.models.notifications.exists({
-                user_id: req.session.user.id,
-                priority: true
-            }, function(error, exists) {
-                req.io.respond(!error && exists);
+            lib.models_init(null, function(db, models) {
+                models.notifications.exists({
+                    user_id: req.session.user.id,
+                    priority: true
+                }, function(error, exists) {
+                    req.io.respond(!error && exists);
+                });
             });
         } else {
             req.io.respond(false);
