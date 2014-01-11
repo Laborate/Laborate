@@ -3,30 +3,27 @@ var async = require('async');
 exports.index = function(req, res, next) {
     async.parallel({
         users: function(callback) {
-            req.models.users.count(function(error, count) {
-                callback(error, count);
-            });
+            req.models.users.count(callback);
         },
         paid: function(callback) {
             req.models.users.count({
                 pricing_id: req.db.tools.ne(1),
                 deliquent: false
-            }, function(error, count) {
-                callback(error, count);
-            });
+            }, callback);
         },
         feedback: function(callback) {
-            req.models.users.feedback.all(function(error, feedback) {
-                callback(error, feedback);
-            });
+            req.models.users.feedback.all({}, {
+                autoFetch: true
+            }, callback);
         },
         documents: function(callback) {
-            req.models.documents.all().count(function(error, count) {
-                callback(error, count);
-            });
+            req.models.documents.count(callback);
         },
         top_documents: function(callback) {
-            req.models.documents.all(["viewed", "Z"], 10, callback);
+            req.models.documents.all({}, {
+                autoFetch: true,
+                autoFetchLimit: 1
+            }, ["viewed", "Z"], 10, callback);
         }
     }, function(errors, data) {
         res.renderOutdated('admin/index', {

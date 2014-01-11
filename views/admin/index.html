@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="container">
-                <% if(top_documents.length != 0) { %>
+                <% if(!top_documents.empty) { %>
                     <div id="plans" class="listing compact">
                         <div class="item header center">Popular Files</div>
 
@@ -98,7 +98,7 @@
             </div>
         </div>
         <div class="selection full" data-key="feedback">
-            <% if(feedbacks.length != 0) { %>
+            <% if(!feedbacks.empty) { %>
                 <% $.each(feedbacks, function(key, feedback) { %>
                     <div class="block">
                         <strong>User</strong>
