@@ -1,3 +1,4 @@
+var redis = lib.redis();
 exports.roomUsers = new Array();
 
 exports.users = function(user, room) {
@@ -39,7 +40,6 @@ exports.accessCheck = function(user, room, callback) {
 }
 
 exports.clientData = function(room, document_role, callback) {
-    var redis = lib.redis();
     var document = document_role.document;
     var permission = document_role.permission;
 
@@ -104,7 +104,6 @@ exports.addUser = function(req, user_id, user_name, room) {
 }
 
 exports.save = function(req, callback) {
-    var redis = lib.redis();
     lib.models_init(null, function(db, models) {
         models.documents.roles.find({
             user_id: req.session.user.id,
@@ -136,7 +135,6 @@ exports.save = function(req, callback) {
 }
 
 exports.removeUser = function(req) {
-    var redis = lib.redis();
     var user = req.session.user.pub_id;
     var room = exports.socketRoom(req);
 

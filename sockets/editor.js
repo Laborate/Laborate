@@ -1,3 +1,4 @@
+var redis = lib.redis();
 var editorUtil = require("./editorUtil");
 
 /* Route Functions */
@@ -91,7 +92,6 @@ exports.document = function(req) {
         req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 
-        var redis = lib.redis();
         redis.get(editorUtil.socketRoom(req), function(error, reply) {
             reply = JSON.parse(reply);
             reply.changes.push(req.data["changes"]);
@@ -111,8 +111,6 @@ exports.cursors = function(req) {
 }
 
 exports.extras = function(req) {
-    var redis = lib.redis();
-
     //Methods
     this.breakpoints = function(changes, breakpoints, callback) {
         $.each(changes, function(index, value) {

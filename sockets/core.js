@@ -1,3 +1,4 @@
+var redis = lib.redis();
 var editor = require("./editor");
 
 exports.pageTrack = function(req) {
@@ -8,7 +9,6 @@ exports.pageTrack = function(req) {
 
 exports.track = function(req, session) {
     if(req.handshake && req.headers) {
-        var redis = lib.redis();
         redis.get("tracking", function(error, data) {
             var user = (session) ? (session.user || {}) : {};
             var organization = (session) ? (session.organization || {}) : {};
