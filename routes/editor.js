@@ -271,13 +271,11 @@ exports.laborators = function(req, res, next) {
     req.models.documents.roles.find({
         user_id: req.db.tools.ne(req.session.user.id),
         document_pub_id: req.param("document")
-    }, function(error, roles) {
+    }, {autoFetch:true}, function(error, roles) {
         if(!error) {
             res.json({
                 success: true,
                 laborators: $.map(roles, function(role) {
-                    console.log(role.user_id);
-
                     if(role.user) {
                         return {
                             id: role.user.pub_id,
