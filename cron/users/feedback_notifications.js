@@ -7,7 +7,7 @@ require('../init')("user.feedback", function() {
     _this.models.users.find({
         feedback: false,
         feedback_asked: false
-    }, function(error, users) {
+    }, {autoFetch: true}, function(error, users) {
         if(!error && !users.empty) {
             $.each(users, function(key, user) {
                 var timeDiff = Math.abs(today.getTime() - user.created.getTime());
