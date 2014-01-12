@@ -22,16 +22,7 @@ exports.index = function(req, res, next) {
                     id: "adfasdfasdf",
                     name: "hello_world.js",
                     access: "editor",
-                    laborators: [
-                        {
-                            name: config.profile.screen_name,
-                            gravatar: "/favicon/500.png"
-                        },
-                        {
-                            name: config.profile.screen_name,
-                            gravatar: "/favicon/500.png"
-                        }
-                    ]
+                    laborators: []
                 }
             }, render(req, res));
             break;
@@ -44,7 +35,48 @@ exports.index = function(req, res, next) {
                     id: "adfasdfasdf",
                     name: "hello_world.js",
                     access: "viewer",
-                    laborators: []
+                    laborators: $.map(Array(2), function() {
+                        return {
+                            name: config.profile.screen_name,
+                            gravatar: "/favicon/500.png"
+                        }
+                    })
+                }
+            }, render(req, res));
+            break;
+
+        case "document/invite/3":
+            req.email_test("document_invite", {
+                name: config.profile.name.capitalize,
+                document: {
+                    from: "jashanD",
+                    id: "adfasdfasdf",
+                    name: "hello_world.js",
+                    access: "viewer",
+                    laborators: $.map(Array(5), function() {
+                        return {
+                            name: config.profile.screen_name,
+                            gravatar: "/favicon/500.png"
+                        }
+                    })
+                }
+            }, render(req, res));
+            break;
+
+        case "document/invite/4":
+            req.email_test("document_invite", {
+                name: config.profile.name.capitalize,
+                document: {
+                    from: "jashanD",
+                    id: "adfasdfasdf",
+                    name: "hello_world.js",
+                    access: "viewer",
+                    laborators: $.map(Array(15), function() {
+                        return {
+                            name: config.profile.screen_name,
+                            gravatar: "/favicon/500.png"
+                        }
+                    })
                 }
             }, render(req, res));
             break;
