@@ -37,7 +37,7 @@ $(function() {
         "net":"Asp.net", "asp":"Asp.net HTML",
         "jsp":"Java Server Pages", "aspx":"JavaServer Pages",
         "ejs": "Embedded Javascript", "jade": "Jade",
-        "html":"HTML","plist":"Plist",
+        "html":"HTML","plist":"XML",
         "less":"LESS", "sass": "Sass", "scss": "SCSS",
         "lua":"Lua",
         "markdown":"Markdown", "mdown":"Markdown",

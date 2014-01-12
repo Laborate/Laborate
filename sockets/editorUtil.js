@@ -1,4 +1,4 @@
-var redis = lib.redis();
+exports.redis = lib.redis();
 exports.roomUsers = new Array();
 
 exports.users = function(user, room) {
@@ -43,14 +43,14 @@ exports.clientData = function(room, document_role, callback) {
     var document = document_role.document;
     var permission = document_role.permission;
 
-    redis.get(room, function(error, reply) {
+    exports.redis.get(room, function(error, reply) {
         if(!error && reply) {
             reply = JSON.parse(reply);
             document.breakpoints = reply.breakpoints;
             document.changes = reply.changes;
         } else {
             document.changes = [];
-            redis.set(room, JSON.stringify({
+            exports.redis.set(room, JSON.stringify({
                 id: document.id,
                 breakpoints: document.breakpoints,
                 changes: [],
@@ -111,7 +111,7 @@ exports.save = function(req, callback) {
         }, function(error, documents) {
             if(!error && !documents.empty) {
                 var document = documents[0].document;
-                redis.get(exports.socketRoom(req), function(error, reply) {
+                exports.redis.get(exports.socketRoom(req), function(error, reply) {
                     reply = JSON.parse(reply);
                     if(reply) {
                         if(reply.changes && document) {
@@ -148,7 +148,7 @@ exports.removeUser = function(req) {
 
             if(Object.keys(exports.roomUsers[room]).empty) {
                 delete exports.roomUsers[room];
-                redis.del(room);
+                exports.redis.del(room);
             }
         }
     }
