@@ -1,4 +1,3 @@
-exports.redis = lib.redis();
 exports.roomUsers = new Array();
 
 exports.users = function(user, room) {
@@ -43,14 +42,14 @@ exports.clientData = function(room, document_role, callback) {
     var document = document_role.document;
     var permission = document_role.permission;
 
-    exports.redis.get(room, function(error, reply) {
+    lib.redis.get(room, function(error, reply) {
         if(!error && reply) {
             reply = JSON.parse(reply);
             document.breakpoints = reply.breakpoints;
             document.changes = reply.changes;
         } else {
             document.changes = [];
-            exports.redis.set(room, JSON.stringify({
+            lib.redis.set(room, JSON.stringify({
                 id: document.id,
                 breakpoints: document.breakpoints,
                 changes: [],
@@ -111,7 +110,7 @@ exports.save = function(req, callback) {
         }, function(error, documents) {
             if(!error && !documents.empty) {
                 var document = documents[0].document;
-                exports.redis.get(exports.socketRoom(req), function(error, reply) {
+                lib.redis.get(exports.socketRoom(req), function(error, reply) {
                     reply = JSON.parse(reply);
                     if(reply) {
                         if(reply.changes && document) {
@@ -148,7 +147,7 @@ exports.removeUser = function(req) {
 
             if(Object.keys(exports.roomUsers[room]).empty) {
                 delete exports.roomUsers[room];
-                exports.redis.del(room);
+                lib.redis.del(room);
             }
         }
     }

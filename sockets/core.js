@@ -1,4 +1,3 @@
-exports.redis = lib.redis();
 var editor = require("./editor");
 
 exports.pageTrack = function(req) {
@@ -9,7 +8,7 @@ exports.pageTrack = function(req) {
 
 exports.track = function(req, session) {
     if(req.handshake && req.headers) {
-        exports.redis.get("tracking", function(error, data) {
+        lib.redis.get("tracking", function(error, data) {
             var user = (session) ? (session.user || {}) : {};
             var organization = (session) ? (session.organization || {}) : {};
             var tracking = (data) ? JSON.parse(data) : [];
@@ -39,7 +38,7 @@ exports.track = function(req, session) {
                 url: req.headers.referer
             });
 
-            exports.redis.set(
+            lib.redis.set(
                 "tracking",
                 JSON.stringify(tracking),
                 lib.error.capture

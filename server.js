@@ -56,9 +56,9 @@ app.io.configure(function() {
     ]);
 
     app.io.set('store', new express.io.RedisStore({
-        redisPub: lib.redis(),
-        redisSub: lib.redis(),
-        redisClient: lib.redis(),
+        redisPub: lib.redis,
+        redisSub: lib.redis,
+        redisClient: lib.redis,
     }));
 });
 
@@ -103,7 +103,7 @@ app.configure(function() {
         key: config.cookies.session.key,
         secret: config.cookies.session.secret,
         store: new RedisStore({
-            client: lib.redis()
+            client: lib.redis
         })
     }));
 

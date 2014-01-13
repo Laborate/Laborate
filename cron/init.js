@@ -13,7 +13,7 @@ lib.email_init();
 module.exports = function(name, callback) {
     /* Setup */
     var _this = this;
-    _this.redis = lib.redis();
+    _this.redis = lib.redis;
     _this.finish = function() {
         setTimeout(function() {
             _this.redis.end();

@@ -1,4 +1,3 @@
-exports.redis = lib.redis();
 var editorUtil = require("./editorUtil");
 
 /* Route Functions */
@@ -92,10 +91,10 @@ exports.document = function(req) {
         req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
 
-        exports.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
             reply = JSON.parse(reply);
             reply.changes.push(req.data["changes"]);
-            exports.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
+            lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
         });
     }
 }
@@ -127,13 +126,13 @@ exports.extras = function(req) {
     }
 
     this.get = function(callback) {
-        exports.redis.get(editorUtil.socketRoom(req), function(error, reply) {
+        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
             callback(JSON.parse(reply));
         });
     }
 
     this.save = function(data) {
-        exports.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
+        lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
     }
 
     //Logic
