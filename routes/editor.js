@@ -19,17 +19,23 @@ exports.editor = function(req, res, next) {
 
             if(req.robot) {
                 if(!document.private) {
-                    res.renderOutdated('editor/index', {
-                        title: document.name,
-                        document: document,
-                        description: function() {
-                            var desc = document.name;
-                            desc += " is a ";
-                            desc += (document.private) ? "private" : "public";
-                            desc += " document owned by ";
-                            desc += document.owner.name + ".";
-                            return desc;
-                        }()
+                    document.getOwner(function(error, owner) {
+                        if(!error && owner) {
+                            res.renderOutdated('editor/index', {
+                                title: document.name,
+                                document: document,
+                                description: function() {
+                                    var desc = document.name;
+                                    desc += " is a ";
+                                    desc += (document.private) ? "private" : "public";
+                                    desc += " document owned by ";
+                                    desc += owner.name + ".";
+                                    return desc;
+                                }()
+                            });
+                        } else {
+                            res.error(404, null, error);
+                        }
                     });
                 } else {
                     res.error(404);
