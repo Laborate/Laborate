@@ -1,0 +1,82 @@
+@import '../core/index';
+@import '../compless/all';
+
+.header {
+    font-size: 14px;
+    color: #fff;
+    background: rgba(0, 0, 0, .3);
+    margin: -20px -20px 20px -20px;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.list .item {
+    position: relative;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: dashed 1px rgba(255, 255, 255, .2);
+    .clearfix();
+
+    &:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+    }
+
+    .rank {
+        font-size: 40px;
+        color: rgba(255, 255, 255, .6);
+        margin: 5px 20px 0 0;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, .6);
+        .float-left();
+    }
+
+    .information {
+        .float-left();
+
+        .name {
+            .float-left();
+
+            span {
+                color: rgba(255, 255, 255, .5);
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .size {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .7);
+            margin: 4px 0 0 10px;
+            .float-left();
+        }
+
+        .users {
+            margin-top: 5px;
+            .clearfix();
+
+            .user {
+                width: 30px;
+                height: 30px;
+                overflow: hidden;
+                margin-right: 10px;
+                .float-left();
+                .border-radius(2px);
+
+                img {
+                   width: 30px;
+                   height: 30px;
+                }
+            }
+
+            .more {
+                color: rgba(255, 255, 255, .7);
+                margin: 10px 0 0 5px;
+                .float-left();
+            }
+        }
+    }
+}

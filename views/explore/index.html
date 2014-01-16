@@ -1,0 +1,41 @@
+<% include ../includes/header.html %>
+<div id="backdrop" class="feedback">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="backdrop-core">
+         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
+         <div id="backdrop-container" class="larger">
+             <div class="header">Explore The Most Popular Documents</div>
+             <div class="list">
+                 <% $.each(documents, function(key, document) { %>
+                    <div class="item">
+                        <div class="rank">
+                            <%= (key+1 < 10) ? "0" : "" %><%= key + 1 %>
+                        </div>
+                        <div class="information">
+                            <div class="name">
+                                <a target="_blank" href="/users/<%= document.owner %>/"><%= document.owner %></a>
+                                <span>/</span>
+                                <a target="_blank" href="/editor/<%= document.document.pub_id %>/"><%= document.document.name %></a>
+                            </div>
+                            <div class="size"><%= document.document.size %></div>
+                            <div class="clear"></div>
+                            <div class="users">
+                                <% $.each(document.users.splice(0, 8), function(key, user) { %>
+                                    <a target="_blank" href="/users/<%= user.screen_name %>/" class="user">
+                                        <img src="<%= user.gravatar %>"/>
+                                    </a>
+                                <% }); %>
+
+                                <% if(!document.users.empty) { %>
+                                    <span class="more"><%= document.users.length %> more...</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                 <% }); %>
+             </div>
+         </div>
+    </div>
+</div>
+<% include ../includes/footer.html %>

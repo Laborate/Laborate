@@ -42,31 +42,28 @@
             &.blink {
                 .animation(fade 2s ease 1.5s normal infinite);
 
-                @blink_from: lighten(@color_sidebar_profile, 5%);
-                @blink_to: saturate(darken(@color_sidebar_locations_active, 15%), 25%);
-
                 @-webkit-keyframes fade {
-                    0% { border-color: @blink_from; }
-                    50% { border-color: @blink_to; }
-                    100% { border-color: @blink_from; }
+                    0% { border-color: @color_sidebar_blink_from; }
+                    50% { border-color: @color_sidebar_blink_to; }
+                    100% { border-color: @color_sidebar_blink_from; }
                 }
 
                 @-moz-keyframes fade {
-                    0% { border-color: @blink_from; }
-                    50% { border-color: @blink_to; }
-                    100% { border-color: @blink_from; }
+                    0% { border-color: @color_sidebar_blink_from; }
+                    50% { border-color: @color_sidebar_blink_to; }
+                    100% { border-color: @color_sidebar_blink_from; }
                 }
 
                 @-o-keyframes fade {
-                    0% { border-color: @blink_from; }
-                    50% { border-color: @blink_to; }
-                    100% { border-color: @blink_from; }
+                    0% { border-color: @color_sidebar_blink_from; }
+                    50% { border-color: @color_sidebar_blink_to; }
+                    100% { border-color: @color_sidebar_blink_from; }
                 }
 
                 @keyframes fade {
-                    0% { border-color: @blink_from; }
-                    50% { border-color: @blink_to; }
-                    100% { border-color: @blink_from; }
+                    0% { border-color: @color_sidebar_blink_from; }
+                    50% { border-color: @color_sidebar_blink_to; }
+                    100% { border-color: @color_sidebar_blink_from; }
                 }
             }
         }

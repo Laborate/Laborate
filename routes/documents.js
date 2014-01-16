@@ -32,21 +32,7 @@ exports.files = function(req, res, next) {
                             private: role.document.private,
                             location: role.document.location,
                             size: role.document.size(),
-                            type: function(name) {
-                                var extension = name.split(".")[name.split(".").length-1];
-
-                                if(!extension) {
-                                    return "file";
-                                } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-                                    return "file-image";
-                                } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
-                                    return "file-template";
-                                } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
-                                    return "file-zip";
-                                } else {
-                                    return "file-script";
-                                }
-                            }(role.document.name),
+                            type: role.document.type(),
                             users: (role.document.roles.length - 1),
                             role: role.permission.name.toLowerCase()
                         }
@@ -172,21 +158,7 @@ exports.file_rename = function(req, res, next) {
                 document: {
                     id: document.pub_id,
                     name: document.name,
-                    type: function(name) {
-                        var extension = name.split(".")[name.split(".").length-1];
-
-                        if(!extension) {
-                            return "file";
-                        } else if(["png", "gif", "jpg", "jpeg", "ico", "wbm"].indexOf(extension) > -1) {
-                            return "file-image";
-                        } else if(["html", "jade", "ejs", "erb", "md"].indexOf(extension) > -1) {
-                            return "file-template";
-                        } else if(["zip", "tar", "bz", "bz2", "gzip", "gz"].indexOf(extension) > -1) {
-                            return "file-zip";
-                        } else {
-                            return "file-script";
-                        }
-                    }(document.name)
+                    type: document.type()
                 }
              });
         } else {

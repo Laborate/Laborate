@@ -1,4 +1,4 @@
-/* Modules: Custom */
+/* Routes */
 var core = require('./core');
 var landing = require('./landing');
 var auth = require('./auth');
@@ -13,6 +13,7 @@ var webhooks = require('./webhooks');
 var email = require('./email');
 var feedback = require('./feedback');
 var admin = require('./admin');
+var explore = require('./explore');
 
 
 module.exports = function(app) {
@@ -51,6 +52,9 @@ module.exports = function(app) {
         app.get('/feedback/success', authUtil.restrictAccess, core.reload, feedback.success);
         app.post('/feedback', authUtil.restrictAccess, core.reload, feedback.submit);
     }
+
+    /* Explore */
+    app.get('/explore', authUtil.restrictAccess, explore.index);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload, documents.stats, account.index);

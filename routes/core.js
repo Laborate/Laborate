@@ -135,7 +135,7 @@ exports.locals = function(req, res, next) {
         }
     };
     res.locals.favicons = (!$.isEmptyObject(req.session.organization.icons)) ? req.session.organization.icons : {
-        "ico": res.locals.host + "/favicon/icon.ico",
+        "ico": res.locals.host + "/favicon/favicon.ico",
         "196": res.locals.host + "/favicon/196.png",
         "160": res.locals.host + "/favicon/160.png",
         "114": res.locals.host + "/favicon/114.png",

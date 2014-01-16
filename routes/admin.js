@@ -38,6 +38,7 @@ exports.index = function(req, res, next) {
             top_documents: data.top_documents,
             js: clientJS.renderTags("admin"),
             css: clientCSS.renderTags("admin"),
+            pageTrack: true
         });
     });
 }
