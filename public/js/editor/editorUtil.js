@@ -241,7 +241,9 @@ window.editorUtil = {
                                 window.sidebarUtil.setTitle("in", json.name);
                                 window.editorUtil.setInfo();
                                 window.editor.clearHistory();
+
                                 clearInterval(window.editorUtil.interval);
+
                                 window.editorUtil.interval = setInterval(function() {
                                     window.editor.options.readOnly = json.permission.readonly;
                                 }, 50);

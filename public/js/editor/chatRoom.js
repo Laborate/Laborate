@@ -147,14 +147,14 @@ window.chat = {
     _inputMessage: function(from, message, direction, gravatar) {
         window.chat._notify();
         var last_message = $(".jspPane .item").eq(-1);
-        if(last_message.attr("data-direction") == direction) {
+        if(last_message.attr("data-from") == from) {
             last_message
                 .find(".bubble")
                 .append('<div class="separator"></div>' + message);
         } else {
             var html = ('                                       \
-                <div data-direction="' + direction + '"         \
-                    class="item message ' + direction + '">             \
+                <div data-from="' + from + '"                   \
+                    class="item message ' + direction + '">     \
                     <div class="gravatar">                      \
                         <img src="' + gravatar + '" />          \
                     </div>                                      \

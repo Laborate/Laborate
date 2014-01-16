@@ -4,5 +4,6 @@ node_modules
 tmp
 config.json
 dump.rdb
-* copy*
+*copy*
+*nogit*
 lib/email/**/style.css

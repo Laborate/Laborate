@@ -227,7 +227,7 @@ exports.invite = function(req, res, next) {
                                 var laborators = [];
                                 $.each(document.roles, function(key, role) {
                                     role.getUser(function(error, new_user) {
-                                        if([user.id, document.owner_id].indexOf(new_user.id) == -1) {
+                                        if(req.session.user.id != new_user.id) {
                                             laborators.push({
                                                 name: new_user.screen_name,
                                                 gravatar: new_user.gravatar
