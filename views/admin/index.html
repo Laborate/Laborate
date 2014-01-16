@@ -62,6 +62,10 @@
                     <div class="data"><%= documents %></div>
                     <div class="label">document<%= ([0,1].indexOf(documents) == -1) ?  "s" : "" %></div>
                 </div>
+                <div class="side">
+                    <div class="data"><%= feedbacks.length %></div>
+                    <div class="label">feedback<%= (feedbacks.length != 1) ?  "s" : "" %></div>
+                </div>
             </div>
             <div class="container">
                 <% if(!top_documents.empty) { %>
