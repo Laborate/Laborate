@@ -203,6 +203,14 @@
                 </div>
                 <input class="button" type="submit" value="Update Profile" data-success="Profile Updated" />
             </form>
+            <div id="locations" class="container">
+                <form class="container">
+                    <div class="item">
+                        <div class="name">Bookmark Your Personal Login Link!</div>
+                        <input class="input" type="text" value="<%= host %>/login/<%= user.pub_id %>/" readonly="readonly"/>
+                    </div>
+                </form>
+            </div>
         </div>
         <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
             <div class="selection" data-key="settings">

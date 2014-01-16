@@ -54,7 +54,7 @@ module.exports = function(app) {
     }
 
     /* Explore */
-    app.get('/explore', authUtil.restrictAccess, explore.index);
+    app.get('/explore', explore.index);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload, documents.stats, account.index);
