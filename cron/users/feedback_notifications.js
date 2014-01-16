@@ -6,7 +6,8 @@ require('../init')("user.feedback", function() {
 
     _this.models.users.find({
         feedback: false,
-        feedback_asked: false
+        feedback_asked: false,
+        admin: false
     }, {autoFetch: true}, function(error, users) {
         if(!error && !users.empty) {
             $.each(users, function(key, user) {
