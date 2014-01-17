@@ -618,10 +618,10 @@ html, body {
                             .float-left();
                         }
 
-                        .bubble {
+                        .information {
                             .float-right();
 
-                            &:before {
+                            .bubble:before {
                                 left: -3px;
                             }
                         }
@@ -632,12 +632,16 @@ html, body {
                             .float-right();
                         }
 
-                        .bubble {
+                        .information {
                             .float-left();
 
-                            &:before {
+                            .bubble:before {
                                 right: -3px;
                             }
+                        }
+
+                        .name {
+                            display: none;
                         }
                     }
 
@@ -665,41 +669,49 @@ html, body {
                         }
                     }
 
-                    .bubble {
-                        position: relative;
-                        padding: 5px 7px;
-                        background: @color_chat_bubble;
-                        word-break: break-word;
-                        word-wrap: break-word;
-                        .border-radius(2px);
-                        .calc-width(~"100% - 55px");
+                    .information {
+                        .calc-width(~"100% - 40px");
 
-                        &:before {
-                            content: "";
-                            position: absolute;
-                            top: 5px;
-                            border: solid 4px transparent;
+                        .name {
+                            color: lighten(@color_chat_bubble, 55%);
+                            margin-bottom: 3px;
+                        }
+
+                        .bubble {
+                            position: relative;
+                            padding: 5px 7px;
                             background: @color_chat_bubble;
-                            display: block;
-                            border-color: @color_chat_bubble;
-                            width: 0;
-                            .border-radius(0 2px);
-                            .transform(rotate(45deg));
-                        }
+                            word-break: break-word;
+                            word-wrap: break-word;
+                            .border-radius(2px);
 
-                        .separator {
-                            height: 10px;
-                        }
+                            &:before {
+                                content: "";
+                                position: absolute;
+                                top: 5px;
+                                border: solid 4px transparent;
+                                background: @color_chat_bubble;
+                                display: block;
+                                border-color: @color_chat_bubble;
+                                width: 0;
+                                .border-radius(0 2px);
+                                .transform(rotate(45deg));
+                            }
 
-                        .link {
-                            cursor: pointer;
-                            color: lighten(@color_blue, 15%);
+                            .separator {
+                                height: 10px;
+                            }
 
-                            &:hover {
-                                text-decoration: underline;
+                            .link {
+                                cursor: pointer;
+                                color: lighten(@color_blue, 15%);
 
-                                &:active {
-                                    color: lighten(@color_blue, 10%);
+                                &:hover {
+                                    text-decoration: underline;
+
+                                    &:active {
+                                        color: lighten(@color_blue, 10%);
+                                    }
                                 }
                             }
                         }

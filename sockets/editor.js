@@ -77,6 +77,7 @@ exports.leave = function(req, override) {
 
 exports.chatRoom = function(req) {
     if(req.session.user) {
+        req.data.name = req.session.user.screen_name;
         req.data.from = req.session.user.pub_id;
         req.data.gravatar = req.session.user.gravatar;
         req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', req.data);
