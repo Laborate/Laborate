@@ -21,7 +21,11 @@
                  </div>
                  <div class="item">
                      <div class="key">Email Address</div>
-                     <div class="value"><%= user.email %></div>
+                     <div class="value">
+                        <a href="mailto:<%= user.email %>">
+                            <%= user.email %>
+                        </a>
+                    </div>
                  </div>
                  <% if(user.organizations.length != 0) { %>
                     <div class="item">

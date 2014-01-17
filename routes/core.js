@@ -51,7 +51,7 @@ exports.setup = function(req, res, next) {
 }
 
 exports.tracking = function(req, res, next) {
-    if(!req.robot) {
+    if(!req.robot && req.headers['user-agent']) {
         req.redis.get("tracking", function(error, data) {
             var user = req.session.user;
             var organization = req.session.organization.id;

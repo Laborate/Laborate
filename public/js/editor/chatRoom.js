@@ -38,7 +38,7 @@ window.chat = {
         window.chat._scrollToBottom();
 
     },
-    message: function(from, message, direction, gravatar) {
+    message: function(from, message, direction, gravatar, name) {
         if(!window.chat._check(message, "commands", from)) {
             if(window.chat._check(message, "js")) {
                 if(direction == "out") {
@@ -49,7 +49,7 @@ window.chat = {
                 var searchContent = window.chat._check(lineContent, "search");
                 var scrollContent = window.chat._check(searchContent, "scroll");
                 var linkContent = window.chat._check(scrollContent, "links");
-                window.chat._inputMessage(from, linkContent, direction, gravatar);
+                window.chat._inputMessage(from, linkContent, direction, gravatar, name);
             }
         }
         window.chat.resize();
@@ -144,7 +144,7 @@ window.chat = {
         	}
         }
     },
-    _inputMessage: function(from, message, direction, gravatar) {
+    _inputMessage: function(from, message, direction, gravatar, name) {
         window.chat._notify();
         var last_message = $(".jspPane .item").eq(-1);
         if(last_message.attr("data-from") == from) {
@@ -152,14 +152,17 @@ window.chat = {
                 .find(".bubble")
                 .append('<div class="separator"></div>' + message);
         } else {
-            var html = ('                                       \
-                <div data-from="' + from + '"                   \
-                    class="item message ' + direction + '">     \
-                    <div class="gravatar">                      \
-                        <img src="' + gravatar + '" />          \
-                    </div>                                      \
-                    <div class="bubble">' + message + '</div>   \
-                </div>                                          \
+            var html = ('                                           \
+                <div data-from="' + from + '"                       \
+                    class="item message ' + direction + '">         \
+                    <div class="gravatar">                          \
+                        <img src="' + gravatar + '" />              \
+                    </div>                                          \
+                    <div class="information">                       \
+                        <div class="name">' + name + '</div>        \
+                        <div class="bubble">' + message + '</div>   \
+                    </div>                                          \
+                </div>                                              \
             ');
             $(".jspPane").append(html);
         }
@@ -234,7 +237,7 @@ $(function() {
             window.chat.status(data.message);
         }
         else {
-            window.chat.message(data.from, data.message, "in", data.gravatar);
+            window.chat.message(data.from, data.message, "in", data.gravatar, data.name);
         }
 
         if($("#header").is(":visible") == false) {
