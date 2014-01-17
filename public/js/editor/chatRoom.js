@@ -145,7 +145,7 @@ window.chat = {
         }
     },
     _inputMessage: function(from, message, direction, gravatar, name) {
-        window.chat._notify();
+        if(direction == "in") window.chat._notify();
         var last_message = $(".jspPane .item").eq(-1);
         if(last_message.attr("data-from") == from) {
             last_message
@@ -168,7 +168,7 @@ window.chat = {
         }
     },
     _inputStatus: function(status) {
-        window.chat._notify();
+        if(direction == "in") window.chat._notify();
         if(window.notifications != false) {
     	   $(".jspPane").append('<div class="item status">' + status + '</div>');
         }
@@ -218,7 +218,7 @@ $(function() {
         if(e.which == 13) {
             var _this = $(this);
         	if($.trim(_this.val()) != "") {
-        		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar);
+        		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar, "");
         		  _this.val("");
         	}
 
@@ -238,12 +238,6 @@ $(function() {
         }
         else {
             window.chat.message(data.from, data.message, "in", data.gravatar, data.name);
-        }
-
-        if($("#header").is(":visible") == false) {
-            var count = $("#chat_bubble_count").text();
-            count = (count) ? parseInt(count) : 0;
-            $("#chat_bubble_count").text(count + 1);
         }
     });
 });
