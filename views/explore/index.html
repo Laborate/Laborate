@@ -14,21 +14,21 @@
                         </div>
                         <div class="information">
                             <div class="name">
-                                <a target="_blank" href="/users/<%= document.owner %>/"><%= document.owner %></a>
+                                <a target="_blank" href="/users/<%= document.owner.screen_name %>/"><%= document.owner.screen_name %></a>
                                 <span>/</span>
-                                <a target="_blank" href="/editor/<%= document.document.pub_id %>/"><%= document.document.name %></a>
+                                <a target="_blank" href="/editor/<%= document.pub_id %>/"><%= document.name %></a>
                             </div>
-                            <div class="size"><%= document.document.size %></div>
+                            <div class="size"><%= document.size(true) %></div>
                             <div class="clear"></div>
                             <div class="users">
-                                <% $.each(document.users.splice(0, 8), function(key, user) { %>
-                                    <a target="_blank" href="/users/<%= user.screen_name %>/" class="user">
-                                        <img src="<%= user.gravatar %>"/>
+                                <% $.each(document.roles.splice(0, 8), function(key, role) { %>
+                                    <a target="_blank" href="/users/<%= role.user.screen_name %>/" class="user">
+                                        <img src="<%= role.user.gravatar %>"/>
                                     </a>
                                 <% }); %>
 
-                                <% if(!document.users.empty) { %>
-                                    <span class="more"><%= document.users.length %> more...</span>
+                                <% if(!document.roles.empty) { %>
+                                    <span class="more"><%= document.roles.length %> more...</span>
                                 <% } %>
                             </div>
                         </div>
