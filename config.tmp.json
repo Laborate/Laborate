@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "O7946Mf0Lf7hOUEepvozIQNk5Qyk5SQyndQ4f6Iv80baWcJMka"
+            "secret": "OaJNou8uXEEF4QtRVPdb7BiegW4miOEyMRDPeEqmMw5RefhbAW"
         }
     },
     "orm": {
@@ -221,10 +221,6 @@
             "reset": {
                 "freq": "monthly",
                 "priority": 0.7
-            },
-            "explore": {
-                "freq": "monthly",
-                "priority": 1
             },
             "documents": {
                 "freq": "hourly",
