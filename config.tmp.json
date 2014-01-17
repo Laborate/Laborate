@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "BABt4b3ItRvUH59Zua1K01bTzW995MQkC2zt9vwFJK5mcMysu5"
+            "secret": "bX5pCiOO3MqC9FUntMmVESatUtw6duDV8TMGNo4OBsmeSTTvFX"
         }
     },
     "orm": {
@@ -244,6 +244,16 @@
             "feedback",
             "sitemap.xml"
         ]
+    },
+    "robots": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "5": "",
+        "6": "",
+        "7": ""
     },
     "social": {
         "facebook": {

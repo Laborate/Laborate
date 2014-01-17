@@ -63,10 +63,22 @@
     padding: 10px 0;
     text-align: center;
     font-weight: bold;
+
+    span {
+        font-weight: normal;
+    }
 }
 
 #backdrop-container.larger {
     width: 250px;
+}
+
+#backdrop-container.largerTwo {
+    width: 400px;
+}
+
+#backdrop-container.largest {
+    width: 500px;
 }
 
 #backdrop-profile {
@@ -221,6 +233,16 @@
     }
 }
 
+.noCenter {
+    #backdrop-core {
+        top: 40px;
+    }
+
+    #backdrop-container {
+        margin-bottom: 40px;
+    }
+}
+
 
 .feedback {
     #backdrop-footer {
@@ -232,14 +254,7 @@
         position: fixed !important;
     }
 
-    #backdrop-core {
-        top: 40px;
-    }
-
     #backdrop-container {
-        width: 500px;
-        margin-bottom: 40px;
-
         .backdrop-text {
             text-align: left;
         }

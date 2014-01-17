@@ -37,6 +37,9 @@ module.exports = function(root) {
     clientCSS.addFile("explore", css_path + 'explore/index.less');
     clientJS.addFile("explore", js_path + 'explore/index.js');
 
+    /* Users */
+    clientCSS.addFile("users", css_path + 'users/index.less');
+
     /* Backdrop */
     clientCSS.addFile("backdrop", css_path + 'backdrop/backdrop.less');
     clientCSS.addFile("backdrop", css_path + 'backdrop/loader.less');

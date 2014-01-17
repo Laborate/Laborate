@@ -1,3 +1,5 @@
+var async = require('async');
+
 /* Checks */
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {
@@ -23,7 +25,14 @@ exports.restrictAccess = function(req, res, next) {
         }
     } else {
         if(req.robot) {
-            next();
+            $.each(config.robots, function(key, url) {
+                if(req.url.indexOf(url) != -1) {
+                    res.error(404);
+                    return false;
+                }
+
+                if(config.robots.end(key)) next();
+            });
         } else {
             if(config.cookies.rememberme in req.cookies) {
                 req.models.users.find({

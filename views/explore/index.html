@@ -1,10 +1,10 @@
 <% include ../includes/header.html %>
-<div id="backdrop" class="feedback">
+<div id="backdrop" class="noCenter">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
     <div id="backdrop-core">
          <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
-         <div id="backdrop-container" class="larger">
+         <div id="backdrop-container" class="largest">
              <div id="backdrop-header">Explore The Most Popular Documents</div>
              <div class="list">
                  <% $.each(documents, function(key, document) { %>

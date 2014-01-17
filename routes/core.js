@@ -238,5 +238,7 @@ exports.sitemap = function(req, res, next) {
 
 exports.robots = function(req, res, next) {
     res.set('Content-Type', 'text/plain');
-    res.renderOutdated("robots");
+    res.renderOutdated("robots", {
+        disallow: config.robots
+    });
 }

@@ -14,6 +14,7 @@ var email = require('./email');
 var feedback = require('./feedback');
 var admin = require('./admin');
 var explore = require('./explore');
+var users = require('./users');
 
 
 module.exports = function(app) {
@@ -55,6 +56,9 @@ module.exports = function(app) {
 
     /* Explore */
     app.get('/explore', explore.index);
+
+    /* Users */
+    app.get('/users/:user', users.index);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload, documents.stats, account.index);

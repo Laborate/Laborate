@@ -3,7 +3,7 @@ window.backdrop = {
     timer: null,
     email: null,
     ready: function() {
-        if($("#backdrop").hasClass("feedback")) {
+        if($("#backdrop").hasClass("noCenter")) {
             $("#backdrop-core").hAlign().show();
         } else {
             $("#backdrop-core").vAlign().hAlign().show();
