@@ -18,7 +18,7 @@ exports.index = function(req, res, next) {
             req.email_test("document_invite", {
                 name: config.profile.name.capitalize,
                 document: {
-                    from: "jashanD",
+                    from: config.profile.screen_name,
                     id: "adfasdfasdf",
                     name: "hello_world.js",
                     access: "editor",
@@ -31,7 +31,7 @@ exports.index = function(req, res, next) {
             req.email_test("document_invite", {
                 name: config.profile.name.capitalize,
                 document: {
-                    from: "jashanD",
+                    from: config.profile.screen_name,
                     id: "adfasdfasdf",
                     name: "hello_world.js",
                     access: "viewer",
@@ -49,7 +49,7 @@ exports.index = function(req, res, next) {
             req.email_test("document_invite", {
                 name: config.profile.name.capitalize,
                 document: {
-                    from: "jashanD",
+                    from: config.profile.screen_name,
                     id: "adfasdfasdf",
                     name: "hello_world.js",
                     access: "viewer",
@@ -67,7 +67,7 @@ exports.index = function(req, res, next) {
             req.email_test("document_invite", {
                 name: config.profile.name.capitalize,
                 document: {
-                    from: "jashanD",
+                    from: config.profile.screen_name,
                     id: "adfasdfasdf",
                     name: "hello_world.js",
                     access: "viewer",

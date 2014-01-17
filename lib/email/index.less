@@ -3,7 +3,7 @@
 @header: darken(@background, 5%);
 @content: #000;
 @content_bg: #fff;
-@link: #333;
+@link: darken(#09f, 15%);
 @bold: #555;
 @head: darken(@bold, 5%);
 @list: #ccc;
@@ -73,6 +73,10 @@ body {
                 .link {
                     color: @link;
                     text-decoration: underline;
+
+                    &.nounderline {
+                        text-decoration: none;
+                    }
                 }
 
                 .bold {
