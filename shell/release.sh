@@ -21,6 +21,7 @@ while [[ -z "$from" || -z "$to" ]]; do
 done
 
 # Create Release
+git checkout .;
 git checkout $to;
 git pull --rebase;
 git merge $from;
