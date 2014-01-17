@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "bX5pCiOO3MqC9FUntMmVESatUtw6duDV8TMGNo4OBsmeSTTvFX"
+            "secret": "O7946Mf0Lf7hOUEepvozIQNk5Qyk5SQyndQ4f6Iv80baWcJMka"
         }
     },
     "orm": {
@@ -245,16 +245,16 @@
             "sitemap.xml"
         ]
     },
-    "robots": {
-        "0": "",
-        "1": "",
-        "2": "",
-        "3": "",
-        "4": "",
-        "5": "",
-        "6": "",
-        "7": ""
-    },
+    "robots": [
+        "/admin/",
+        "/account/",
+        "/feedback/",
+        "/dropbox/",
+        "/github/",
+        "/bitbucket/",
+        "/google/",
+        "/sftp/"
+    ],
     "social": {
         "facebook": {
             "link": "https://www.facebook.com/Laborate.io",
