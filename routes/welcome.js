@@ -1,34 +1,51 @@
 var pages = ["index", "creative", "social", "explore"];
 
 exports.index = function(req, res) {
-    var page = req.param("page") || "index";
-
-    if(pages.indexOf(page) != -1) {
-        if(page == "creative") {
-            var js = clientJS.renderTags("backdrop", "welcome", "codemirror");
-            var css = clientCSS.renderTags("backdrop", "welcome", "codemirror");
-        } else {
-            var js = clientJS.renderTags("backdrop", "welcome");
-            var css = clientCSS.renderTags("backdrop", "welcome");
-        }
-
-        res.renderOutdated('welcome/' + page, {
-            title: 'Welcome',
-            user: req.session.user,
-            js: js,
-            css: css,
-            backdrop: req.backdrop(),
-            pageTrack: true
-        });
-    } else {
-        res.error(404);
-    }
+    res.renderOutdated('welcome/index', {
+        title: 'Welcome',
+        js: clientJS.renderTags("backdrop", "welcome"),
+        css: clientCSS.renderTags("backdrop", "welcome"),
+        backdrop: req.backdrop(),
+        pageTrack: true
+    });
 };
 
-exports.skip = function(req, res) {
 
-}
+exports.creative = function(req, res) {
+    res.renderOutdated('welcome/creative', {
+        title: 'Welcome',
+        user: req.session.user,
+        js: clientJS.renderTags("backdrop", "welcome", "codemirror"),
+        css: clientCSS.renderTags("backdrop", "welcome", "codemirror"),
+        backdrop: req.backdrop(),
+        pageTrack: true
+    });
+};
 
-exports.finish = function(req, res) {
+exports.social = function(req, res) {
+    req.models.users.all(10, function(error, users) {
+        if(!error) {
+            res.renderOutdated('welcome/social', {
+                title: 'Welcome',
+                users: users,
+                js: clientJS.renderTags("backdrop", "welcome"),
+                css: clientCSS.renderTags("backdrop", "welcome"),
+                backdrop: req.backdrop(),
+                pageTrack: true
+            });
+        } else {
+            res.error(404, null, error);
+        }
+    });
+};
 
-}
+exports.laborator = function(req, res) {
+    res.renderOutdated('welcome/laborator', {
+        title: 'Welcome',
+        user: req.session.user,
+        js: clientJS.renderTags("backdrop", "welcome"),
+        css: clientCSS.renderTags("backdrop", "welcome"),
+        backdrop: req.backdrop(),
+        pageTrack: true
+    });
+};

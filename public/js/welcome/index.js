@@ -15,21 +15,22 @@ $(function() {
     $("#content").hAlign();
     $(".previous, .next").vAlign().show();
     $(".previous .arrow, .next .arrow").vAlign();
-    $("#footer").height($(window).height() - $("#footer").offset().top);
+
+    $(window).resize();
 });
 
 $(window).resize(function() {
+    if($("#footer").length != 0) {
+        $("#footer").height($(window).height() - $("#footer").offset().top);
+    }
+
     if((window.url_params()["page"] + "Resize") in  window) {
         window[window.url_params()["page"] + "Resize"]();
     }
-
-    $("#footer").height($(window).height() - $("#footer").offset().top);
 });
 
 /* Creative Slide */
 function creativeInit() {
-    CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
-
     window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         lineNumbers: true,
         lineWrapping: false,
@@ -50,6 +51,7 @@ function creativeInit() {
         gutters: ["CodeMirror-linenumbers"],
     });
 
+    CodeMirror.modeURL = "/codemirror/mode/%N/%N.js";
     CodeMirror.autoLoadMode(window.editor, "clike");
     window.editor.setOption("mode", "text/x-java");
     window.editor.refresh();
@@ -57,12 +59,20 @@ function creativeInit() {
 }
 
 function creativeResize() {
-    var height = $(window).height() - $("#footer").offset().top;
+    var height = $("#footer").outerHeight(true) - $("#footer #backdrop-header").outerHeight(true);
 
-    $("#footer .code").css({
-        height: height - $("#footer #backdrop-header").height()
-    });
-
-    window.editor.setSize("", height - $("#footer #backdrop-header").height() - 10);
+    $("#footer .code").height(height);
+    window.editor.setSize("", height);
     window.editor.refresh();
+}
+
+/* Social Slide */
+function socialInit() {
+    socialResize();
+}
+
+function socialResize() {
+    $("#footer .list").height(
+        $("#footer").outerHeight(true) - $("#footer #backdrop-header").outerHeight(true) - 30
+    );
 }

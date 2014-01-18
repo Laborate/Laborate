@@ -9,11 +9,30 @@
         <a href="/welcome/creative/" class="previous">
             <div class="arrow"></div>
         </a>
-        <a href="/welcome/explore/" class="next">
+        <a href="/welcome/laborator/" class="next">
             <div class="arrow"></div>
         </a>
         <div class="header">Be Social!</div>
-        <div class="sub-header">share with the world</div>
+        <div class="sub-header">laborate with the world</div>
+        <div id="footer">
+            <div id="backdrop-header">Fellow Laborators</div>
+            <div class="list">
+                <% $.each(users, function(key, user) { %>
+                    <div class="item">
+                        <div class="gravatar">
+                            <img src="<%= user.gravatar %>" />
+                        </div>
+                        <div class="information">
+                            <a target="_blank" href="/users/<%= user.screen_name %>/">
+                                <div class="name"><%= user.name %></div>
+                            </a>
+                            <div class="screen"><%= user.screen_name %></div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
     </div>
 </div>
 <% include ../includes/footer.html %>
