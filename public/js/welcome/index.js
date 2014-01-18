@@ -47,8 +47,7 @@ function creativeInit() {
         autoCloseTags: true,
         highlightSelectionMatches: false,
         styleSelectedText: false,
-        styleActiveLine: false,
-        gutters: ["CodeMirror-linenumbers"],
+        styleActiveLine: false
     });
 
     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js";
@@ -68,6 +67,26 @@ function creativeResize() {
 
 /* Social Slide */
 function socialInit() {
+    $("#footer canvas").each(function() {
+        var data = JSON.parse($(this).attr("data-documents"));
+
+        if(data.length != 0) {
+            var canvas = $(this).get()[0];
+            var graph = canvas.getContext("2d");
+            var width = 5;
+            var rightShift = 30;
+
+            graph.fillStyle="rgba(255, 255, 255, .2)";
+
+            $.each(data, function(key, height) {
+                graph.fillRect(rightShift, canvas.height-height, width, height);
+                rightShift += width + 1;
+            });
+        } else {
+            $(this).hide();
+        }
+    });
+
     socialResize();
 }
 

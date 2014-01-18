@@ -15,7 +15,7 @@
         <div class="header">Be Social!</div>
         <div class="sub-header">laborate with the world</div>
         <div id="footer">
-            <div id="backdrop-header">Fellow Laborators</div>
+            <div id="backdrop-header">Some of Your Fellow Laborators</div>
             <div class="list">
                 <% $.each(users, function(key, user) { %>
                     <div class="item">
@@ -28,6 +28,8 @@
                             </a>
                             <div class="screen"><%= user.screen_name %></div>
                         </div>
+                        <canvas
+                            data-documents="<%= JSON.stringify(user.documents) %>"></canvas>
                         <div class="clear"></div>
                     </div>
                 <% }) %>
