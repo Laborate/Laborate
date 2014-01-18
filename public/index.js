@@ -33,6 +33,10 @@ module.exports = function(root) {
     clientCSS.addFile("landing", css_path + 'landing/index.less');
     clientJS.addFile("landing", js_path + 'landing/index.js');
 
+    /* Welcome */
+    clientCSS.addFile("welcome", css_path + 'welcome/index.less');
+    clientJS.addFile("welcome", js_path + 'welcome/index.js');
+
     /* Explore */
     clientCSS.addFile("explore", css_path + 'explore/index.less');
     clientJS.addFile("explore", js_path + 'explore/index.js');
@@ -65,7 +69,6 @@ module.exports = function(root) {
     clientJS.addFile("codemirror", codemirror_path + 'addon/mode/loadmode.js');
     clientJS.addFile("codemirror", codemirror_path + 'addon/display/placeholder.js');
     clientJS.addFile("codemirror", codemirror_path + 'mode/meta.js');
-    clientJS.addFile("codemirror", js_path + 'editor/modes.js');
 
     /* Editor */
     clientCSS.addFile("editor", css_path + 'editor/editor.less');
@@ -90,6 +93,7 @@ module.exports = function(root) {
         file_size: require(root + "/lib/core/file_size")
     });
 
+    clientJS.addFile("editor", js_path + 'editor/modes.js');
     clientJS.addFile("editor", js_path + 'editor/editor.js');
     clientJS.addFile("editor", js_path + 'editor/editorUtil.js');
     clientJS.addFile("editor", js_path + 'editor/editorInit.js');

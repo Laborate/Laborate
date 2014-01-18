@@ -1,0 +1,144 @@
+@import '../core/index';
+@import '../compless/all';
+
+#content {
+    position: absolute;
+    z-index: 100002;
+    margin: 115px 0 30px 0;
+    .clearfix();
+
+    .header {
+        font-size: 64px;
+        font-weight: lighter;
+        font-family: "Gill Sans";
+        text-align: center;
+    }
+
+    .sub-header {
+        font-size: 22px;
+        font-weight: lighter;
+        margin-bottom: 45px;
+        font-family: "Gill Sans";
+        text-align: center;
+
+        strong {
+            font-weight: 500;
+        }
+    }
+
+    .previous, .next {
+        display: none;
+        position: fixed !important;
+        width: 60px;
+        height: 130px;
+        background: rgba(255, 255, 255, 0.3);
+        .transition(all);
+
+        &:hover {
+            width: 70px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        &.previous {
+            left: 0;
+            .border-radius(0 4px 4px 0);
+
+            .arrow {
+                border-right: 40px solid rgba(0, 0, 0, 0.3);
+                right: 0;
+            }
+        }
+
+        &.next {
+            right: 0;
+            .border-radius(4px 0 0 4px);
+
+            .arrow {
+                border-left: 40px solid rgba(0, 0, 0, 0.3);
+                left: 0;
+            }
+        }
+
+        .arrow {
+            position: absolute;
+            width: 0;
+        	height: 0;
+        	margin-top: 25px;
+        	border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent;
+        	.border-radius(0 0 0 2px);
+        }
+    }
+
+    .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.3);
+
+        .bar {
+            background: rgba(255, 255, 255, 0.5);
+            height: 12px;
+        }
+    }
+
+    #backdrop-header {
+        margin: 0;
+        padding: 8px 0;
+        display: block;
+    }
+
+    #footer {
+        width: 700px;
+        overflow: hidden;
+        .border-radius(5px 5px 0 0);
+        .box-sizing(border-box);
+    }
+
+    /* Index Page */
+    &.index {
+        .progress .bar {
+            width: 25%;
+        }
+
+        #continue {
+            display: inline-block;
+            margin-top: 80px;
+            font-size: 24px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: solid 5px rgba(255, 255, 255, 0.3);
+            .border-radius(4px);
+
+            &:hover {
+                border: solid 5px rgba(255, 255, 255, 0.4);
+
+                &:active {
+                    border: solid 5px rgba(255, 255, 255, 0.5);
+                }
+            }
+        }
+    }
+
+    /* Creative Page */
+    &.creative {
+        .progress .bar {
+            width: 50%;
+        }
+
+        #footer .code {
+            width: 100%;
+            position: relative;
+            background: @color_body;
+        }
+    }
+
+    /* Social Page */
+    &.social {
+        .progress .bar {
+            width: 75%;
+        }
+    }
+}

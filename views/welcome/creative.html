@@ -1,0 +1,25 @@
+<% include ../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-gradient"></div>
+    <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <div id="content" class="creative">
+        <div class="progress">
+            <div class="bar"></div>
+        </div>
+        <a href="/welcome/" class="previous">
+            <div class="arrow"></div>
+        </a>
+        <a href="/welcome/social/" class="next">
+            <div class="arrow"></div>
+        </a>
+        <div class="header">Be Creative!</div>
+        <div class="sub-header">build the next...</div>
+        <div id="footer">
+            <div id="backdrop-header">welcome.java</div>
+            <div class="code">
+                <textarea id="code" name="code" placeholder="Code goes here..."><% include ./creative_sample.html %></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<% include ../includes/footer.html %>

@@ -15,6 +15,7 @@ var feedback = require('./feedback');
 var admin = require('./admin');
 var explore = require('./explore');
 var users = require('./users');
+var welcome = require('./welcome');
 
 
 module.exports = function(app) {
@@ -59,6 +60,12 @@ module.exports = function(app) {
 
     /* Users */
     app.get('/users/:user', users.index);
+
+    /* Welcome */
+    app.get('/welcome', authUtil.restrictAccess, welcome.index);
+    app.get('/welcome/finish', authUtil.restrictAccess, welcome.finish);
+    app.get('/welcome/skip/:page', authUtil.restrictAccess, welcome.skip);
+    app.get('/welcome/:page',authUtil.restrictAccess, welcome.index);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload, documents.stats, account.index);
