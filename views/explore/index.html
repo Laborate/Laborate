@@ -5,7 +5,7 @@
     <div id="backdrop-core">
          <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
          <div id="backdrop-container" class="largest">
-             <div id="backdrop-header">Explore The Most Popular Documents</div>
+             <div id="backdrop-header">Explore Trending Documents</div>
              <div class="list">
                  <% $.each(documents, function(key, document) { %>
                     <div class="item">
@@ -14,15 +14,15 @@
                         </div>
                         <div class="information">
                             <div class="name">
-                                <a target="_blank" href="/users/<%= document.owner.screen_name %>/"><%= document.owner.screen_name %></a>
+                                <a href="/users/<%= document.owner.screen_name %>/"><%= document.owner.screen_name %></a>
                                 <span>/</span>
-                                <a target="_blank" href="/editor/<%= document.pub_id %>/"><%= document.name %></a>
+                                <a href="/editor/<%= document.pub_id %>/"><%= document.name %></a>
                             </div>
                             <div class="size"><%= document.size(true) %></div>
                             <div class="clear"></div>
                             <div class="users">
                                 <% $.each(document.roles.splice(0, 8), function(key, role) { %>
-                                    <a target="_blank" href="/users/<%= role.user.screen_name %>/" class="user">
+                                    <a href="/users/<%= role.user.screen_name %>/" class="user">
                                         <img src="<%= role.user.gravatar %>"/>
                                     </a>
                                 <% }); %>
