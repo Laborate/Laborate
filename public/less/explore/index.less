@@ -1,8 +1,27 @@
 @import '../core/index';
 @import '../compless/all';
 
+.tooltip {
+    position: absolute;
+    color: #fff;
+    background: #000;
+    margin: 0;
+    padding: 5px 8px;
+    font-size: 13px;
+    display: none;
+    .border-radius(2px);
+
+    .arrow {
+        width: 0;
+    	height: 0;
+    	border-left: 5px solid transparent;
+    	border-right: 5px solid transparent;
+    	border-bottom: 5px solid black;
+    	margin: -10px auto 5px auto;
+    }
+}
+
 .list .item {
-    position: relative;
     margin-top: 15px;
     padding-top: 15px;
     border-top: dashed 1px rgba(255, 255, 255, .2);

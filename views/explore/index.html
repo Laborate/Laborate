@@ -22,7 +22,7 @@
                             <div class="clear"></div>
                             <div class="users">
                                 <% $.each(document.roles.splice(0, 8), function(key, role) { %>
-                                    <a href="/users/<%= role.user.screen_name %>/" class="user">
+                                    <a href="/users/<%= role.user.screen_name %>/" class="user" data-name="<%= role.user.screen_name %>">
                                         <img src="<%= role.user.gravatar %>"/>
                                     </a>
                                 <% }); %>
@@ -34,6 +34,10 @@
                         </div>
                     </div>
                  <% }); %>
+             </div>
+             <div class="tooltip">
+                 <div class="arrow"></div>
+                 <div class="text"></div>
              </div>
          </div>
     </div>
