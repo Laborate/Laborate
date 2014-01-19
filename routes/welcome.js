@@ -34,7 +34,7 @@ exports.social = function(req, res) {
             async.each(users, function(user, callback) {
                 req.models.documents.roles.find({
                     user_id: user.id
-                }, ["viewed"], 60, ["created", "Z"], function(error, roles) {
+                }, ["viewed"], 60, ["created", "A"], function(error, roles) {
                     user.documents = $.map(roles, function(role) {
                         return role.viewed;
                     });
