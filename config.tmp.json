@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "zdgZvG7up1v2z3GQmEXcQol9KwWgTwvzN54xfuL32IgyiK2c3r"
+            "secret": "xzKRfiuJmx2ELXP9UdR5T1PO6nhVPkHnqfpov58DJ62lArWHhX"
         }
     },
     "orm": {
@@ -249,6 +249,7 @@
     "robots": [
         "/admin/",
         "/account/",
+        "/documents/",
         "/feedback/",
         "/dropbox/",
         "/github/",
