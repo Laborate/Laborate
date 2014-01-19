@@ -4,6 +4,7 @@ var pages = ["index", "creative", "social", "explore"];
 exports.index = function(req, res) {
     res.renderOutdated('welcome/index', {
         title: 'Welcome',
+        user: req.session.user,
         js: clientJS.renderTags("backdrop", "welcome"),
         css: clientCSS.renderTags("backdrop", "welcome"),
         backdrop: req.backdrop(),
