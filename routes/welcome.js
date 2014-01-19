@@ -26,7 +26,9 @@ exports.creative = function(req, res) {
 exports.social = function(req, res) {
     var laborators = [];
 
-    req.models.users.all(10, function(error, users) {
+    req.models.users.all({
+        id: req.db.tools.ne(req.session.user.id)
+    }, 10, function(error, users) {
         if(!error) {
             async.each(users, function(user, callback) {
                 req.models.documents.roles.find({
@@ -49,17 +51,28 @@ exports.social = function(req, res) {
                     pageTrack: true
                 });
             });
+        } else {
+            res.error(404, null, error);
         }
     });
 };
 
 exports.laborator = function(req, res) {
-    res.renderOutdated('welcome/laborator', {
-        title: 'Welcome',
-        user: req.session.user,
-        js: clientJS.renderTags("backdrop", "welcome"),
-        css: clientCSS.renderTags("backdrop", "welcome"),
-        backdrop: req.backdrop(),
-        pageTrack: true
+    req.models.documents.all({}, {
+        autoFetch:true,
+        autoFetchLimit: 3
+    }, 10, ["viewed", "Z"], function (error, documents) {
+        if(!error) {
+            res.renderOutdated('welcome/laborator', {
+                title: 'Welcome',
+                documents: documents,
+                js: clientJS.renderTags("welcome", "explore", "backdrop"),
+                css: clientCSS.renderTags("welcome", "backdrop"),
+                backdrop: req.backdrop(),
+                pageTrack: true
+            });
+        } else {
+            res.error(404, null, error);
+        }
     });
 };

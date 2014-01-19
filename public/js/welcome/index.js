@@ -95,3 +95,14 @@ function socialResize() {
         $("#footer").outerHeight(true) - $("#footer #backdrop-header").outerHeight(true) - 30
     );
 }
+
+/* Laborator Slide */
+function laboratorInit() {
+    laboratorResize();
+}
+
+function laboratorResize() {
+    $("#footer .list").height(
+        $("#footer").outerHeight(true) - $("#footer #backdrop-header").outerHeight(true) - 30
+    );
+}

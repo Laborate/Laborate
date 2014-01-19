@@ -2,9 +2,8 @@ var async = require('async');
 
 exports.index = function(req, res, next) {
     async.parallel({
-        users: function(callback) {
-            req.models.users.count(callback);
-        },
+        users: req.models.users.count,
+        documents: req.models.documents.count,
         paid: function(callback) {
             req.models.users.count({
                 pricing_id: req.db.tools.ne(1),
@@ -14,10 +13,7 @@ exports.index = function(req, res, next) {
         feedback: function(callback) {
             req.models.users.feedback.all({}, {
                 autoFetch: true
-            }, callback);
-        },
-        documents: function(callback) {
-            req.models.documents.count(callback);
+            }, ["created", "Z"], callback);
         },
         top_documents: function(callback) {
             req.models.documents.all({}, {

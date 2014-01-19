@@ -16,6 +16,39 @@
         <div class="sub-header">explore the community</div>
         <div id="footer">
             <div id="backdrop-header">Trending Documents</div>
+            <div class="list">
+                <% $.each(documents, function(key, document) { %>
+                    <div class="item">
+                        <div class="rank">
+                            <%= (key+1 < 10) ? "0" : "" %><%= key + 1 %>
+                        </div>
+                        <div class="information">
+                            <div class="name">
+                                <a href="/users/<%= document.owner.screen_name %>/"><%= document.owner.screen_name %></a>
+                                <span>/</span>
+                                <a href="/editor/<%= document.pub_id %>/"><%= document.name %></a>
+                            </div>
+                            <div class="size"><%= document.size(true) %></div>
+                            <div class="clear"></div>
+                            <div class="users">
+                                <% $.each(document.roles.splice(0, 8), function(key, role) { %>
+                                    <a href="/users/<%= role.user.screen_name %>/" class="user" data-name="<%= role.user.screen_name %>">
+                                        <img src="<%= role.user.gravatar %>"/>
+                                    </a>
+                                <% }); %>
+
+                                <% if(!document.roles.empty) { %>
+                                    <span class="more"><%= document.roles.length %> more...</span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                 <% }); %>
+            </div>
+            <div class="tooltip">
+                 <div class="arrow"></div>
+                 <div class="text"></div>
+             </div>
         </div>
     </div>
 </div>

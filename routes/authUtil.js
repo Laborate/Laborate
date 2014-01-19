@@ -56,7 +56,7 @@ exports.restrictAccess = function(req, res, next) {
 
 exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
-        res.redirect('/documents');
+        res.redirect('/documents/');
     } else {
         if(config.cookies.rememberme in req.cookies) {
             req.models.users.find({
@@ -65,7 +65,7 @@ exports.loginCheck = function(req, res, next) {
                 if(!error && user.length == 1) {
                     user[0].set_recovery(req, res);
                     req.session.user = user[0];
-                    res.redirect('/documents');
+                    res.redirect('/documents/');
                 } else {
                     if(next) next();
                 }
@@ -233,7 +233,7 @@ exports.verify = function(req, res, next) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified(function(user) {
                 req.session.user = user;
-                res.redirect(req.session.redirect_url || "/documents/");
+                res.redirect(req.session.redirect_url || "/welcome/");
                 delete req.session.redirect_url;
                 req.session.save();
             });
@@ -247,7 +247,7 @@ exports.reload = function(req, res, next) {
             if(!error && user) {
                 user.set_recovery(req, res);
                 req.session.user = user;
-                res.redirect(req.session.last_page || '/documents');
+                res.redirect(req.session.last_page || '/documents/');
                 delete req.session.reset;
                 delete req.session.last_page;
                 req.session.save();
