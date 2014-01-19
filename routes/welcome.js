@@ -29,12 +29,12 @@ exports.social = function(req, res) {
 
     req.models.users.all({
         id: req.db.tools.ne(req.session.user.id)
-    }, ["created", "Z"], 10, function(error, users) {
+    }, ["created", "A"], 10, function(error, users) {
         if(!error) {
-            async.each(users, function(user, callback) {
+            async.eachSeries(users, function(user, callback) {
                 req.models.documents.roles.find({
                     user_id: user.id
-                }, ["viewed"], 60, ["created", "A"], function(error, roles) {
+                }, ["viewed"], 60, ["created", "Z"], function(error, roles) {
                     user.documents = $.map(roles, function(role) {
                         return role.viewed;
                     });
