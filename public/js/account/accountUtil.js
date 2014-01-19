@@ -218,7 +218,7 @@ window.account = {
 
                     if(listing.find(".item:not(.header)").length == 0) {
                         listing.html("<div class='item empty'> \
-                            Congratulations you are all up to date! \
+                            Congratulations, you are all up to date! \
                         </div>");
                     }
                 }, 350);

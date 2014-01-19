@@ -20,7 +20,7 @@ require('../init')("user.feedback", function() {
                     }, lib.error.capture);
 
                     _this.models.notifications.create({
-                        message: "We noticed you have been using our service, \
+                        message: "We noticed you have been using our service \
                         for a couple days, do you have any <a href='/feedback/'>feedback</a>?",
                         priority: true,
                         user_id: user.id

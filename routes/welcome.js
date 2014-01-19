@@ -29,7 +29,7 @@ exports.social = function(req, res) {
 
     req.models.users.all({
         id: req.db.tools.ne(req.session.user.id)
-    }, 10, function(error, users) {
+    }, ["created", "Z"], 10, function(error, users) {
         if(!error) {
             async.each(users, function(user, callback) {
                 req.models.documents.roles.find({
