@@ -25,32 +25,32 @@ exports.creative = function(req, res) {
 };
 
 exports.social = function(req, res) {
-    var laborators = [];
-
     req.models.users.all({
         id: req.db.tools.ne(req.session.user.id)
     }, ["created", "A"], 10, function(error, users) {
         if(!error) {
-            async.eachSeries(users, function(user, callback) {
+            async.mapSeries(users, function(user, callback) {
                 req.models.documents.roles.find({
                     user_id: user.id
                 }, ["viewed"], 60, ["created", "Z"], function(error, roles) {
                     user.documents = $.map(roles, function(role) {
                         return role.viewed;
                     });
-
-                    laborators.push(user);
-                    callback(null);
+                    callback(null, user);
                 });
-            }, function() {
-                res.renderOutdated('welcome/social', {
-                    title: 'Welcome',
-                    users: laborators,
-                    js: clientJS.renderTags("backdrop", "welcome"),
-                    css: clientCSS.renderTags("backdrop", "welcome"),
-                    backdrop: req.backdrop(),
-                    pageTrack: true
-                });
+            }, function(error, laborators) {
+                if(!error) {
+                    res.renderOutdated('welcome/social', {
+                        title: 'Welcome',
+                        users: laborators,
+                        js: clientJS.renderTags("backdrop", "welcome"),
+                        css: clientCSS.renderTags("backdrop", "welcome"),
+                        backdrop: req.backdrop(),
+                        pageTrack: true
+                    });
+                } else {
+                    res.error(404, null, error);
+                }
             });
         } else {
             res.error(404, null, error);
