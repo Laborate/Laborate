@@ -59,6 +59,8 @@ exports.profile = function(req, res) {
                         res.error(200, "Screen Name Is To Short");
                     } else if(req.param('screen_name').length > 30) {
                         res.error(200, "Screen Name Is To Long");
+                    } else if(req.param('screen_name').indexOf(" ") != -1) {
+                        res.error(200, "Screen Name Has Spaces");
                     } else {
                         req.stripe.customers.update(req.session.user.stripe, {
                             email: req.param("email")

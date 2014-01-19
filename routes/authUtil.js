@@ -178,6 +178,8 @@ exports.register = function(req, res, next) {
                         res.error(200, "Screen Name Is To Short");
                     } else if(req.param('screen_name').length > 30) {
                         res.error(200, "Screen Name Is To Long");
+                    } else if(req.param('screen_name').indexOf(" ") != -1) {
+                        res.error(200, "Screen Name Has Spaces");
                     } else if(req.param('password').length <= 6) {
                         res.error(200, "Password Is To Short");
                     } else if(req.param('password') != req.param('password_confirm')) {
