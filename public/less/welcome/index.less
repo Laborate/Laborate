@@ -25,7 +25,6 @@
     position: absolute;
     z-index: 100002;
     margin: 115px 0 30px 0;
-    .clearfix();
 
     .header {
         font-size: 64px;
@@ -121,12 +120,59 @@
         overflow: hidden;
         .border-radius(5px 5px 0 0);
         .box-sizing(border-box);
+        .box-shadow(0 1px 10px rgba(0, 0, 0, .2));
+
+        .list {
+            background: rgba(255, 255, 255, .1);
+        }
     }
 
     /* Index Page */
     &.index {
         .progress .bar {
             width: 25%;
+        }
+
+        #bookmark {
+            position: relative;
+            padding: 0;
+            margin: 90px auto 0 auto;
+            width: 510px;
+            height: 40px;
+
+            & > * {
+                color: #fff;
+                position: absolute;
+                top: 0;
+                border: none;
+                outline: none;
+                margin: 0;
+                font-size: 15px;
+                height: 40px;
+                .box-sizing(border-box);
+            }
+
+            input {
+                right: 0;
+                width: 470px;
+                padding: 10px 15px;
+                background: rgba(255, 255, 255, 0.2);
+                margin-right: -5px;
+                .border-radius(0 3px 3px 0);
+
+                &::-moz-focus-inner {
+                    border: 0;
+                    padding: 0;
+                }
+            }
+
+            .icon {
+                left: 0;
+                width: 45px;
+                background: rgba(0, 0, 0, 0.3);
+                padding: 13px 15px;
+                .border-radius(3px 0 0 3px);
+            }
         }
 
         #continue {
@@ -170,7 +216,6 @@
         .list {
             padding: 15px 10px;
             height: 100%;
-            background: rgba(255, 255, 255, .1);
             overflow: auto;
             .box-sizing(border-box);
 
@@ -234,7 +279,6 @@
         .list {
             padding: 15px 10px;
             height: 100%;
-            background: rgba(255, 255, 255, .1);
             overflow: auto;
             .box-sizing(border-box);
 

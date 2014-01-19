@@ -7,7 +7,11 @@
             <div class="bar"></div>
         </div>
         <div class="header">Welcome to Laborate!</div>
-        <div class="sub-header"><span><%= user.screen_name %></span>, you are almost a laborator</div>
+        <div class="sub-header"><span><%= user.screen_name %></span>, bookmark your login url</div>
+        <div id="bookmark">
+            <div class="icon <%= icons.power %>"></div>
+            <input type="text" value="<%= host %>/login/<%= user.pub_id %>/" readonly="readonly" />
+        </div>
         <div class="text-center">
             <a id="continue" href="/welcome/creative/">continue</a>
         </div>
