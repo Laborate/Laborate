@@ -19,14 +19,20 @@
                      <div class="key">Screen Name</div>
                      <div class="value"><%= user.screen_name %></div>
                  </div>
-                 <div class="item">
-                     <div class="key">Email Address</div>
-                     <div class="value">
-                        <a href="mailto:<%= user.email %>">
-                            <%= user.email %>
-                        </a>
-                    </div>
-                 </div>
+                 <% if(user.location) { %>
+                     <div class="item">
+                         <div class="key">Location</div>
+                         <div class="value"><%= user.location %></div>
+                     </div>
+                 <% } %>
+                 <% if(user.url) { %>
+                     <div class="item">
+                         <div class="key">Url</div>
+                         <div class="value">
+                            <a target="_blank" href="<%= user.url %>"><%= user.url %></a>
+                         </div>
+                     </div>
+                 <% } %>
                  <% if(user.organizations.length != 0) { %>
                     <div class="item">
                         <div class="key"><%= user.organizations[0].permission.name %> at</div>

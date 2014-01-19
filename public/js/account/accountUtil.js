@@ -26,7 +26,7 @@ window.account = {
         submit.val("loading...");
 
         form.find("input").each(function() {
-            if(!$(this).val()) {
+            if(!$(this).val() && $(this).data("required")) {
                 passed = false;
                 $(this).addClass("error");
             } else {

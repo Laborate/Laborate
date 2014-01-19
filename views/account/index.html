@@ -182,18 +182,20 @@
                 <div class="profile">
                     <div class="item">
                         <div class="name">Full Name</div>
-                        <input class="input" type="text" name="name" value="<%= user.name %>" />
+                        <input class="input" type="text" name="name" value="<%= user.name %>" data-required="true" />
                     </div>
                     <div class="item">
                         <div class="name">Screen Name</div>
-                        <input class="input" type="text" name="screen_name" value="<%= user.screen_name %>" />
+                        <input class="input" type="text" name="screen_name" value="<%= user.screen_name %>" data-required="true" />
                     </div>
-                    <% if(user.organizations.length == 0 || !user.organizations[0].permission.owned) { %>
-                        <div class="item">
-                            <div class="name">Email Address (Affects Login)</div>
-                            <input class="input" type="text" name="email" value="<%= user.email %>" />
-                        </div>
-                    <% } %>
+                    <div class="item">
+                        <div class="name">Location</div>
+                        <input class="input" type="text" name="location" value="<%= user.location %>" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Url</div>
+                        <input class="input" type="text" name="url" value="<%= user.url %>" />
+                    </div>
                     <% if(user.organizations.length != 0) { %>
                         <div class="item">
                             <div class="name"><%= user.organizations[0].permission.name %> at</div>

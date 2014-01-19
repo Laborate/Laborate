@@ -68,11 +68,9 @@ exports.profile = function(req, res) {
                                     if(!error && user) {
                                         var profile = {
                                             name: req.param("name"),
-                                            screen_name: req.param("screen_name")
-                                        }
-
-                                        if(user.organizations.length == 0 || !user.organizations[0].permission.owned) {
-                                            profile.email = req.param("email");
+                                            screen_name: req.param("screen_name"),
+                                            url: req.param("url"),
+                                            location: req.param("location"),
                                         }
 
                                         user.save(profile, function(error, user) {
