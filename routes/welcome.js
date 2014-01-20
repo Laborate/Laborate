@@ -43,8 +43,14 @@ exports.social = function(req, res) {
                     res.renderOutdated('welcome/social', {
                         title: 'Welcome',
                         users: laborators.sort(function(a, b) {
-                            c = (a.documents.empty) ? 0 : Math.max.apply(null, a.documents);
-                            d = (b.documents.empty) ? 0 : Math.max.apply(null, b.documents);
+                            if(a.documents.length === b.documents.length) {
+                                var c = (a.documents.empty) ? 0 : Math.max.apply(null, a.documents);
+                                var d = (b.documents.empty) ? 0 : Math.max.apply(null, b.documents);
+                            } else {
+                                var c = a.documents.length;
+                                var d = b.documents.length;
+                            }
+
                             return (c > d) ? -1 : ((c < d) ? 1 : 0);
                         }),
                         js: clientJS.renderTags("backdrop", "welcome"),
