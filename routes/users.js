@@ -4,7 +4,7 @@ exports.index = function(req, res, next) {
     }, function(error, users){
         if(!error && !users.empty) {
             res.renderOutdated('users/index', {
-                title: users[0].name,
+                title: users[0].screen_name + " (" + users[0].name + ")",
                 user: users[0],
                 js: clientJS.renderTags("users", "backdrop"),
                 css: clientCSS.renderTags("users", "backdrop"),
