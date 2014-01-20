@@ -27,7 +27,7 @@ exports.creative = function(req, res) {
 exports.social = function(req, res) {
     req.models.users.all({
         id: req.db.tools.ne(req.session.user.id)
-    }, ["created", "A"], 10, function(error, users) {
+    }).limit(10).orderRaw("rand()").run(function(error, users) {
         if(!error) {
             async.mapSeries(users, function(user, callback) {
                 req.models.documents.roles.find({
@@ -42,7 +42,11 @@ exports.social = function(req, res) {
                 if(!error) {
                     res.renderOutdated('welcome/social', {
                         title: 'Welcome',
-                        users: laborators,
+                        users: laborators.sort(function(a, b) {
+                            c = (a.documents.empty) ? 0 : Math.max.apply(null, a.documents);
+                            d = (b.documents.empty) ? 0 : Math.max.apply(null, b.documents);
+                            return (c > d) ? -1 : ((c < d) ? 1 : 0);
+                        }),
                         js: clientJS.renderTags("backdrop", "welcome"),
                         css: clientCSS.renderTags("backdrop", "welcome"),
                         backdrop: req.backdrop(),
