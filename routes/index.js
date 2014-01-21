@@ -20,7 +20,7 @@ var welcome = require('./welcome');
 
 module.exports = function(app) {
     /* Root */
-    app.get('/', authUtil.loginCheck, landing.index);
+    app.get('/', authUtil.removeRedirect, authUtil.loginCheck, landing.index);
     app.post('/register', authUtil.loginCheck, core.organization, auth.register);
 
     /* Login */
@@ -56,10 +56,10 @@ module.exports = function(app) {
     }
 
     /* Explore */
-    app.get('/explore', explore.index);
+    app.get('/explore', authUtil.removeRedirect, explore.index);
 
     /* Users */
-    app.get('/users/:user', users.index);
+    app.get('/users/:user', authUtil.removeRedirect, users.index);
 
     /* Welcome */
     app.get('/welcome', authUtil.restrictAccess, welcome.index);

@@ -76,6 +76,12 @@ exports.loginCheck = function(req, res, next) {
     }
 };
 
+exports.removeRedirect = function(req, res, next) {
+    delete req.session.redirect_url;
+    req.session.save();
+    next();
+}
+
 exports.loginDenied = function(req, res, next) {
     if(req.session.user) {
         res.error(404);
