@@ -219,15 +219,15 @@
                 <form class="container" action="/account/settings/password/" autocomplete="off">
                     <div class="item">
                         <div class="name">Old Password</div>
-                        <input class="input" type="password" name="old_password" />
+                        <input class="input" type="password" name="old_password" data-required="true" />
                     </div>
                     <div class="item">
                         <div class="name">New Password</div>
-                        <input class="input" type="password" name="new_password" />
+                        <input class="input" type="password" name="new_password" data-required="true" />
                     </div>
                     <div class="item">
                         <div class="name">Confirm Password</div>
-                        <input class="input" type="password" name="confirm_password" />
+                        <input class="input" type="password" name="confirm_password" data-required="true" />
                     </div>
                     <input class="button" type="submit" value="Change Password" data-success="Password Updated"/>
                 </form>
@@ -239,7 +239,7 @@
                             to be able to access them. This action is irreversible.
                         </div>
                         <div class="name">Password</div>
-                        <input class="input" type="password" name="password" />
+                        <input class="input" type="password" name="password" data-required="true" />
                     </div>
                     <input class="button red" type="submit" value="Delete Account" />
                 </form>
@@ -277,20 +277,20 @@
                 <form class="container" action="/account/billing/card/add" autocomplete="off">
                     <div class="item">
                         <div class="name">Name On Card</div>
-                        <input class="input" type="text" name="name" />
+                        <input class="input" type="text" name="name" data-required="true" />
                     </div>
                     <div class="item half">
                         <div class="name">Credit Card</div>
-                        <input id="card" class="input" type="text" name="card" />
+                        <input id="card" class="input" type="text" name="card" data-required="true" />
                         <img id="card-company" class="card-type">
                     </div>
                     <div class="item quarter">
                         <div class="name">Expiration</div>
-                        <input id="expiration" class="input" type="text" name="expiration" placeholder="MM / YYYY" />
+                        <input id="expiration" class="input" type="text" name="expiration" placeholder="MM / YYYY" data-required="true" />
                     </div>
                     <div class="item quarter">
                         <div class="name">CVC</div>
-                        <input id="cvc" class="input" type="text" name="cvc" />
+                        <input id="cvc" class="input" type="text" name="cvc" data-required="true" />
                     </div>
                     <div class="clear"></div>
                     <input class="button" type="submit" value="Add Credit Card" data-success="Credit Card Added"/>
