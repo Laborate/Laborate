@@ -4,7 +4,8 @@ exports.login = function(req, res) {
         js: clientJS.renderTags("backdrop", "crypto"),
         css: clientCSS.renderTags("backdrop"),
         backdrop: req.backdrop(),
-        pageTrack: false
+        pageTrack: false,
+        attempted: !!req.session.redirect_url
     });
 };
 
@@ -22,7 +23,8 @@ exports.login_user = function(req, res) {
                         js: clientJS.renderTags("backdrop"),
                         css: clientCSS.renderTags("backdrop"),
                         backdrop: req.backdrop(),
-                        pageTrack: false
+                        pageTrack: false,
+                        attempted: !!req.session.redirect_url
                     });
                 } else {
                     res.error(404);

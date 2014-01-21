@@ -5,11 +5,14 @@
     <div id="backdrop-core">
         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
         <div id="backdrop-container">
-        <div class="text-center">
-            <div id="backdrop-profile">
-                <img src="<%= user.gravatar %>"/>
+            <% if(attempted) { %>
+                <div id="backdrop-header" class="error">You Must Be Logged In</div>
+            <% } %>
+            <div class="text-center">
+                <div id="backdrop-profile">
+                    <img src="<%= user.gravatar %>"/>
+                </div>
             </div>
-        </div>
             <form action="/auth/login/" autocomplete="on">
                 <div class="backdrop-text"><%= user.name %></div>
                 <input name="email" class="backdrop-input" type="hidden" value="<%= user.email %>"/>

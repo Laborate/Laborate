@@ -5,6 +5,9 @@
     <div id="backdrop-core">
          <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
          <div id="backdrop-container">
+            <% if(attempted) { %>
+                <div id="backdrop-header" class="error">You Must Be Logged In</div>
+            <% } %>
             <div class="text-center">
                 <div id="backdrop-profile">
                     <img src="<%= gravatar %>"/>
