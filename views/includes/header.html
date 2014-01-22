@@ -5,7 +5,12 @@
 |_|\__,_|_.__/ \___/|_|  \__,_|\__\___(_)_|\___/
 -->
 <%
-    title = (title) ? (title + site_delimeter + site_title) : site_title;
+    if(title_first) {
+        title = (title) ? (title + site_delimeter + site_title) : site_title;
+    } else {
+        title = (title) ? (site_title + site_delimeter + title) : site_title;
+    }
+
     random = (!production) ? ("?rand=" + random) : "";
 %>
 <!DOCTYPE html>

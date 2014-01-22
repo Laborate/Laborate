@@ -108,6 +108,7 @@ exports.locals = function(req, res, next) {
     res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
     res.locals.mobile = req.mobile;
     res.locals.robot = req.robot;
+    res.locals.title_first = true;
 
     res.locals.apps = {
         sftp: {
