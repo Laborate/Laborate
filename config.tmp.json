@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "gttM9QUTgzTC0UNINwCeruWTToZobRCH3AsGqMwUIi6B2UuvHR"
+            "secret": "Px8AD8lr26WH70r7ffOfvT8alSsNGFeHC0SZcgPGVhMAfX12un"
         }
     },
     "orm": {
@@ -223,7 +223,7 @@
                 "freq": "monthly",
                 "priority": 0.7
             },
-            "explore": {
+            "trending": {
                 "freq": "monthly",
                 "priority": 1
             },
@@ -238,6 +238,7 @@
             "reload",
             "verify",
             "documents",
+            "explore",
             "editor",
             "account",
             "github",

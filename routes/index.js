@@ -13,7 +13,7 @@ var webhooks = require('./webhooks');
 var email = require('./email');
 var feedback = require('./feedback');
 var admin = require('./admin');
-var explore = require('./explore');
+var trending = require('./trending');
 var users = require('./users');
 var welcome = require('./welcome');
 
@@ -55,8 +55,9 @@ module.exports = function(app) {
         app.post('/feedback', authUtil.restrictAccess, core.reload, feedback.submit);
     }
 
-    /* Explore */
-    app.get('/explore', authUtil.removeRedirect, explore.index);
+    /* Trending */
+    app.get('/trending', authUtil.removeRedirect, trending.index);
+    app.get('/explore', authUtil.removeRedirect, trending.redirect);
 
     /* Users */
     app.get('/users/:user', authUtil.removeRedirect, users.index);
