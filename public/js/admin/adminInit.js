@@ -10,4 +10,7 @@ window.url_params = function() {
 
 $(function() {
     window.admin.location(window.url_params()["mode"], true);
+    window.onpopstate = function() {
+        window.admin.location(window.url_params()["mode"]);
+    };
 });

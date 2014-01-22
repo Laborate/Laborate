@@ -13,4 +13,7 @@ $(function() {
     $('#expiration').payment('formatCardExpiry');
     $('#cvc').payment('formatCardCVC');
     window.account.location(window.url_params()["mode"], true);
+    window.onpopstate = function() {
+        window.account.location(window.url_params()["mode"]);
+    };
 });
