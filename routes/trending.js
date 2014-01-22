@@ -9,8 +9,8 @@ exports.index = function(req, res, next) {
             res.renderOutdated('trending/index', {
                 title: 'Trending',
                 documents: documents,
-                js: clientJS.renderTags("explore", "backdrop"),
-                css: clientCSS.renderTags("explore", "backdrop"),
+                js: clientJS.renderTags("trending", "backdrop"),
+                css: clientCSS.renderTags("trending", "backdrop"),
                 backdrop: req.backdrop(),
                 pageTrack: true
             });

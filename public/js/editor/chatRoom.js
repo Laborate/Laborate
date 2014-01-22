@@ -168,7 +168,8 @@ window.chat = {
         }
     },
     _inputStatus: function(status) {
-        if(direction == "in") window.chat._notify();
+        window.chat._notify();
+
         if(window.notifications != false) {
     	   $(".jspPane").append('<div class="item status">' + status + '</div>');
         }
