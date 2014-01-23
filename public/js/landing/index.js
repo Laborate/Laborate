@@ -5,28 +5,32 @@ $(function() {
 
 
     $("#slider").on("click", "div", function() {
+        var slide = $(".slide").eq($(this).index());
+
         $('html, body').animate({
-            scrollTop: $(".slide").eq($(this).index()).offset().top
+            scrollTop: slide.offset().top + slide.outerHeight(true)
         }, 500);
     });
 
-    $('.slide').waypoint(function(direction) {
-        var selected = $(this);
+    $('.slide').each(function() {
+        $(this).waypoint(function(direction) {
+            var selected = $(this);
 
-        if (direction === "up") {
-            selected = selected.prev();
-        }
+            if (direction === "up") {
+                selected = selected.prev();
+            }
 
-        if (!selected.length) {
-            selected = $(this);
-        }
+            if (!selected.length) {
+                selected = $(this);
+            }
 
-        $("#slider > div")
-            .removeClass("active")
-            .eq(selected.index())
-            .addClass("active");
-    }, {
-        offset: 100
+            $("#slider > div")
+                .removeClass("active")
+                .eq(selected.index())
+                .addClass("active");
+        }, {
+            offset: $(this).height()/.5
+        });
     });
 
     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js";
