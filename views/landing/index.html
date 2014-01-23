@@ -2,35 +2,109 @@
 <div id="backdrop">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
-    <div id="logo" class="<%= (config.animate) ? "spin" : "" %>">
-        <img src="/img/landing/logo_inner.png"/>
-    </div>
-    <div id="landing">
-        <div class="header">Collaborate Anywhere</div>
-        <div class="sub-header">
-            <strong>Laborate's</strong>
-            cloud-based solutions connect students in ways once impossible.
-        </div>
-        <form action="/register/" method="post">
-            <div class="launch">Join the alpha launch!</div>
-            <div class="input-pair">
-                <input type="hidden" name="_csrf" value="<%= csrf %>"/>
-                <input class="input" name="email" type="email" placeholder="enter your email"/>
-                <input class="submit" type="submit" value="Sign Up"/>
+    <div id="slider"></div>
+    <div id="content">
+        <!-- Slide: Main -->
+        <div id="main" class="slide">
+            <img id="logo" src="/img/logo.png"/>
+            <div class="header">Collaborate Anywhere</div>
+            <div class="sub-header">
+                <strong>Laborate's</strong>
+                cloud-based solutions connect students in ways once impossible.
             </div>
-            <div class="login">
-                or <a href="/login/">Sign In</a>
-            </div>
-        </form>
-    </div>
-    <div id="social">
-        <% $.each(social, function(key, social) { %>
-            <% if(social.enabled) { %>
-                <a href="<%= social.link %>" target="_blank">
-                    <img src="/img/social/<%= key %>.png"/>
-                </a>
+            <% if(user) { %>
+                <div class="link">
+                    start laborating on your <a href="/documents/">documents</a>
+                </div>
+            <% } else { %>
+                <form action="/register/" method="post">
+                    <div class="launch">Join the alpha launch!</div>
+                    <div class="input-pair">
+                        <input type="hidden" name="_csrf" value="<%= csrf %>"/>
+                        <input class="input" name="email" type="email" placeholder="enter your email"/>
+                        <input class="submit" type="submit" value="Sign Up"/>
+                    </div>
+                    <div class="link">
+                        or <a href="/login/">Sign In</a>
+                    </div>
+                </form>
             <% } %>
-        <% }); %>
+            <div class="footer">
+                <div id="backdrop-header">hello.java</div>
+                <div class="code">
+                    <% if(user) { %>
+                        <textarea class="editor" placeholder="Code goes here..."><% include ../includes/samples/user.html %></textarea>
+                    <% } else { %>
+                        <textarea class="editor" placeholder="Code goes here..."><% include ../includes/samples/index.html %></textarea>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Community -->
+        <div id="community" class="slide colored">
+            <div class="center">
+                <div class="left sub-header">
+                    Building a community<br>of amazing laborators
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Classroom -->
+        <div id="classroom" class="slide">
+            <div class="center">
+                <div class="left sub-header">
+                    Made for<br>the classroom
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Catalyst -->
+        <div id="catalyst" class="slide colored">
+            <div class="center">
+                <div class="left sub-header">
+                    Coding is<br>the catalyst
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide: Students -->
+        <div id="students" class="slide">
+            <div class="center">
+                <div class="left sub-header">
+                    Made by students<br>for students
+                </div>
+            </div>
+        </div>
+
+        <% if(!user) { %>
+            <!-- Slide: Register -->
+            <div id="register" class="slide colored">
+                <div class="center">
+                    <div class="quote">So what are you waiting for?</div>
+                    <form action="/register/" method="post">
+                        <div class="input-pair">
+                            <input type="hidden" name="_csrf" value="<%= csrf %>"/>
+                            <input class="input" name="email" type="email" placeholder="enter your email"/>
+                            <input class="submit" type="submit" value="Sign Up"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Slide: Footer -->
+        <div id="footer" class="slide colored">
+            <div class="center">
+                <% $.each(social, function(key, social) { %>
+                    <% if(social.enabled) { %>
+                        <a href="<%= social.link %>" target="_blank">
+                            <img src="/img/social/<%= key %>.png"/>
+                        </a>
+                    <% } %>
+                <% }); %>
+            </div>
+        </div>
     </div>
 </div>
 <% include ../includes/footer.html %>

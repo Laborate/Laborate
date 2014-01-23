@@ -1,36 +1,63 @@
 $(function() {
-    $("#landing").hAlign();
-    $("#logo").vAlign().hAlign();
+    $("#slider")
+        .html(Array($(".slide").length).join("<div><div></div></div>"))
+        .vAlign();
 
-    if(config.animate) {
-        setTimeout(function() {
-            $("#logo").fadeIn(500);
+
+    $("#slider").on("click", "div", function() {
+        $('html, body').animate({
+            scrollTop: $(".slide").eq($(this).index()).offset().top
         }, 500);
-    } else {
-        var mobile = $("body").hasClass("mobile");
-        $("#logo").css("top", ((mobile) ? "50px" : "100px"));
-        $("#logo, #landing, #social").fadeIn(500);
-    }
+    });
+
+    $('.slide').waypoint(function(direction) {
+        var selected = $(this);
+
+        if (direction === "up") {
+            selected = selected.prev();
+        }
+
+        if (!selected.length) {
+            selected = $(this);
+        }
+
+        $("#slider > div")
+            .removeClass("active")
+            .eq(selected.index())
+            .addClass("active");
+    }, {
+        offset: 100
+    });
+
+    CodeMirror.modeURL = "/codemirror/mode/%N/%N.js";
+
+    $(".editor").each(function() {
+        var editor = CodeMirror.fromTextArea(this, {
+            lineNumbers: true,
+            lineWrapping: false,
+            matchBrackets: true,
+            matchTags: true,
+            tabMode: "indent",
+            theme: "laborate",
+            indentUnit: 4,
+            indentWithTabs: true,
+            smartIndent: true,
+            autofocus: true,
+            dragDrop: true,
+            autoCloseBrackets: true,
+            autoCloseTags: true,
+            highlightSelectionMatches: false,
+            styleSelectedText: false,
+            styleActiveLine: false
+        });
+
+        $(this).parent().height($(this).parent().parent().height() - $("#backdrop-header").outerHeight(true));
+        editor.setOption("mode", "text/x-java");
+        editor.refresh();
+        CodeMirror.autoLoadMode(editor, "clike");
+    });
 });
 
 $(window).load(function() {
     $("#backdrop-img").fadeIn(350);
-
-    if(config.animate) {
-        setTimeout(function() {
-            $("#logo").animate({
-                top: "100px",
-                opacity: 0
-            }, 800);
-
-            setTimeout(function() {
-                $("#landing, #social").fadeIn(500);
-                $("#logo")
-                    .removeClass("spin")
-                    .animate({
-                        opacity: 1
-                    }, 500);
-            }, 1300);
-        }, 1000);
-    }
-})
+});

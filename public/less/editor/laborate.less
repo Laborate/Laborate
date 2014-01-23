@@ -226,6 +226,23 @@
     border-bottom-color: #fbfbfe !important;
 }
 
+.print {
+    .cm-s-laborate {
+        height: 100% !important;
+        overflow: visible;
+    }
+
+    .cm-s-laborate .CodeMirror-gutters {
+        background: none;
+    }
+
+    .codemirror, .codemirror-scroll {
+        margin-bottom: 0px !important;
+        height: intrinsic !important;
+    }
+}
+
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -250,20 +267,4 @@
 ::-webkit-resizer,
 ::-webkit-scrollbar-corner {
     background: none;
-}
-
-.print {
-    .cm-s-laborate {
-        height: 100% !important;
-        overflow: visible;
-    }
-
-    .cm-s-laborate .CodeMirror-gutters {
-        background: none;
-    }
-
-    .codemirror, .codemirror-scroll {
-        margin-bottom: 0px !important;
-        height: intrinsic !important;
-    }
 }

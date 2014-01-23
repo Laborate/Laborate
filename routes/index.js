@@ -20,7 +20,7 @@ var welcome = require('./welcome');
 
 module.exports = function(app) {
     /* Root */
-    app.get('/', authUtil.removeRedirect, authUtil.loginCheck, landing.index);
+    app.get('/', authUtil.removeRedirect, landing.index);
     app.post('/register', authUtil.loginCheck, core.organization, auth.register);
 
     /* Login */
