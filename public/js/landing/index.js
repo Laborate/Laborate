@@ -9,11 +9,8 @@ $(function() {
 
 
     $("#slider").on("click", "div", function() {
-        if(!$(this).hasClass("active")) {
-            var slide = $(".slide").eq($(this).index());
-
-            $('html, body').scrollTop(slide.offset().top - slide.outerHeight(true)/2);
-        }
+        var slide = $(".slide").eq($(this).index());
+        $('html, body').scrollTop(slide.offset().top - slide.outerHeight(true)/2);
     });
 
     $('.slide').each(function() {
@@ -61,8 +58,7 @@ $(function() {
         autoCloseTags: true,
         highlightSelectionMatches: false,
         styleSelectedText: false,
-        styleActiveLine: false,
-        mode: "text/x-java"
+        styleActiveLine: false
     }
 
     $(".editor").each(function() {
@@ -71,8 +67,12 @@ $(function() {
             window.movie.stop();
 
             var editor = window.movie._editor;
+            editor.setOption("mode", "python");
+            CodeMirror.autoLoadMode(editor, "python");
         } else {
             var editor = CodeMirror.fromTextArea(this);
+            editor.setOption("mode", "text/x-java");
+            CodeMirror.autoLoadMode(editor, "clike");
         }
 
         $(this).parent().height(
@@ -84,7 +84,6 @@ $(function() {
         });
 
         editor.refresh();
-        CodeMirror.autoLoadMode(editor, "clike");
     });
 });
 
