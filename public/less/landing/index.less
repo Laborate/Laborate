@@ -51,8 +51,9 @@
         position: relative;
         width: 100%;
         padding: 40px 80px;
-        min-height: 300px;
+        min-height: 400px;
         .box-sizing(border-box);
+        .clearfix();
 
         &:first-child {
             border: none;
@@ -75,7 +76,7 @@
     }
 
     .sub-header {
-        font-size: 35px;
+        font-size: 45px;
         font-weight: lighter;
         margin-bottom: 45px;
         text-shadow: 0 2px 0 rgba(0, 0, 0, .6);
@@ -202,6 +203,83 @@
 
     /* Slide: Community */
     #community {
+        z-index: 1000;
+    }
+
+    /* Slide: Classroom */
+    #classroom {
+        padding-bottom: 0;
+
+        .footer {
+            width: 550px;
+            height: 400px;
+            overflow: hidden;
+            .border-radius(5px 5px 0 0);
+            .box-sizing(border-box);
+            .box-shadow(0 1px 10px rgba(0, 0, 0, .2));
+
+            #backdrop-header {
+                margin: 0;
+                padding: 8px 0;
+                display: block;
+                font-family: 'Helvetica Neue';
+                position: relative;
+
+                div {
+                    position: absolute;
+                    right: 10px;
+                    width: 8px;
+                    height: 8px;
+                    opacity: 0;
+                    background: @color_blue;
+                    .border-radius(50%);
+                    .animation(fade 2s ease 3.5s normal infinite);
+
+                    @-webkit-keyframes fade {
+                        0% { opacity: 0; }
+                        40% { opacity: 1; }
+                        70% { opacity: 1; }
+                        90% { opacity: 0; }
+                        100% { opacity: 0; }
+                    }
+
+                    @-moz-keyframes fade {
+                        0% { opacity: 0; }
+                        40% { opacity: 1; }
+                        70% { opacity: 1; }
+                        90% { opacity: 0; }
+                        100% { opacity: 0; }
+                    }
+
+                    @-o-keyframes fade {
+                        0% { opacity: 0; }
+                        40% { opacity: 1; }
+                        70% { opacity: 1; }
+                        90% { opacity: 0; }
+                        100% { opacity: 0; }
+                    }
+
+                    @keyframes fade {
+                        0% { opacity: 0; }
+                        40% { opacity: 1; }
+                        70% { opacity: 1; }
+                        90% { opacity: 0; }
+                        100% { opacity: 0; }
+                    }
+                }
+            }
+
+            .code {
+                width: 100%;
+                position: relative;
+                background: @color_body;
+                text-align: left;
+            }
+        }
+    }
+
+    /* Slide: Catalyst */
+    #catalyst {
         z-index: 1000;
     }
 

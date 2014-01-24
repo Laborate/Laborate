@@ -54,6 +54,29 @@ exports.restrictAccess = function(req, res, next) {
     }
 };
 
+exports.loginGenerate = function(req, res, next) {
+    if(!req.session.user) {
+        if(config.cookies.rememberme in req.cookies) {
+            req.models.users.find({
+                recovery: req.cookies[config.cookies.rememberme]
+            }, function(error, user) {
+                if(!error && user.length == 1) {
+                    user[0].set_recovery(req, res);
+                    req.session.user = user[0];
+                    next();
+                } else {
+                    next();
+                }
+            });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+
+}
+
 exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
         res.redirect('/documents/');

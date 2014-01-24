@@ -71,6 +71,10 @@ module.exports = function(root) {
     clientJS.addFile("codemirror", codemirror_path + 'addon/display/placeholder.js');
     clientJS.addFile("codemirror", codemirror_path + 'mode/meta.js');
 
+    /* CodeMirror Movie */
+    clientCSS.addFile("codemirror-movie", css_path + 'editor/movie.less');
+    clientJS.addFile("codemirror-movie", js_path + 'editor/movie.js');
+
     /* Editor */
     clientCSS.addFile("editor", css_path + 'editor/editor.less');
 
