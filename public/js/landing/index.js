@@ -17,6 +17,14 @@ $(function() {
     $('.slide').each(function() {
         var slide = $(this);
         slide.waypoint(function(direction) {
+            if(window.movie) {
+                if($(this).attr("id") == "classroom") {
+                    window.movie.play();
+                } else {
+                    window.movie.stop();
+                }
+            }
+
             $("#slider > div")
                 .removeClass("active")
                 .eq(slide.index())
@@ -30,34 +38,46 @@ $(function() {
     });
 
     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js";
+    CodeMirror.settings = {
+        lineNumbers: true,
+        lineWrapping: false,
+        matchBrackets: true,
+        matchTags: true,
+        tabMode: "indent",
+        theme: "laborate",
+        indentUnit: 4,
+        indentWithTabs: true,
+        smartIndent: true,
+        autofocus: true,
+        dragDrop: true,
+        autoCloseBrackets: true,
+        autoCloseTags: true,
+        highlightSelectionMatches: false,
+        styleSelectedText: false,
+        styleActiveLine: false,
+        mode: "text/x-java"
+    }
 
     $(".editor").each(function() {
         if($(this).hasClass("movie")) {
-            var movie = CodeMirror.movie(this);
+            window.movie = CodeMirror.movie(this);
+            window.movie.stop();
+
+            var editor = window.movie._editor;
         } else {
-            var editor = CodeMirror.fromTextArea(this, {
-                lineNumbers: true,
-                lineWrapping: false,
-                matchBrackets: true,
-                matchTags: true,
-                tabMode: "indent",
-                theme: "laborate",
-                indentUnit: 4,
-                indentWithTabs: true,
-                smartIndent: true,
-                autofocus: true,
-                dragDrop: true,
-                autoCloseBrackets: true,
-                autoCloseTags: true,
-                highlightSelectionMatches: false,
-                styleSelectedText: false,
-                styleActiveLine: false
-            });
-            $(this).parent().height($(this).parent().parent().height() - $("#backdrop-header").outerHeight(true));
-            editor.setOption("mode", "text/x-java");
-            editor.refresh();
-            CodeMirror.autoLoadMode(editor, "clike");
+            var editor = CodeMirror.fromTextArea(this);
         }
+
+        $(this).parent().height(
+            $(this).parent().parent().height() - $("#backdrop-header").outerHeight(true)
+        );
+
+        $.each(CodeMirror.settings, function(key, value) {
+            editor.setOption(key, value);
+        });
+
+        editor.refresh();
+        CodeMirror.autoLoadMode(editor, "clike");
     });
 });
 
