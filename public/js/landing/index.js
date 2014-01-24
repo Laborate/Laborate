@@ -2,16 +2,18 @@ $(function() {
     $("#classroom #backdrop-header div").vAlign();
 
     $("#slider")
-        .html(Array($(".slide").length).join("<div><div></div></div>"))
-        .vAlign();
+        .html(Array(6).join("<div><div></div></div>"))
+        .vAlign()
+        .find("div").eq(0)
+        .addClass("active");
 
 
     $("#slider").on("click", "div", function() {
-        var slide = $(".slide").eq($(this).index());
+        if(!$(this).hasClass("active")) {
+            var slide = $(".slide").eq($(this).index());
 
-        $('html, body').animate({
-            scrollTop: slide.offset().top - slide.outerHeight(true)/2
-        }, 500);
+            $('html, body').scrollTop(slide.offset().top - slide.outerHeight(true)/2);
+        }
     });
 
     $('.slide').each(function() {
@@ -19,9 +21,14 @@ $(function() {
         slide.waypoint(function(direction) {
             if(window.movie) {
                 if($(this).attr("id") == "classroom") {
-                    window.movie.play();
+                    setTimeout(function() {
+                        if(slide.hasClass('active')) {
+                            window.movie.play();
+                        }
+                    }, 100);
                 } else {
                     window.movie.stop();
+                    window.movie._editor.setValue("");
                 }
             }
 

@@ -210,9 +210,45 @@
     #classroom {
         padding-bottom: 0;
 
+        &.active #backdrop-header div {
+            .animation(fade 2s ease 3.5s normal infinite);
+
+            @-webkit-keyframes fade {
+                0% { opacity: 0; }
+                40% { opacity: 1; }
+                70% { opacity: 1; }
+                90% { opacity: 0; }
+                100% { opacity: 0; }
+            }
+
+            @-moz-keyframes fade {
+                0% { opacity: 0; }
+                40% { opacity: 1; }
+                70% { opacity: 1; }
+                90% { opacity: 0; }
+                100% { opacity: 0; }
+            }
+
+            @-o-keyframes fade {
+                0% { opacity: 0; }
+                40% { opacity: 1; }
+                70% { opacity: 1; }
+                90% { opacity: 0; }
+                100% { opacity: 0; }
+            }
+
+            @keyframes fade {
+                0% { opacity: 0; }
+                40% { opacity: 1; }
+                70% { opacity: 1; }
+                90% { opacity: 0; }
+                100% { opacity: 0; }
+            }
+        }
+
         .footer {
             width: 550px;
-            height: 400px;
+            height: 450px;
             overflow: hidden;
             .border-radius(5px 5px 0 0);
             .box-sizing(border-box);
@@ -231,41 +267,8 @@
                     width: 8px;
                     height: 8px;
                     opacity: 0;
-                    background: @color_blue;
+                    background: @color_green;
                     .border-radius(50%);
-                    .animation(fade 2s ease 3.5s normal infinite);
-
-                    @-webkit-keyframes fade {
-                        0% { opacity: 0; }
-                        40% { opacity: 1; }
-                        70% { opacity: 1; }
-                        90% { opacity: 0; }
-                        100% { opacity: 0; }
-                    }
-
-                    @-moz-keyframes fade {
-                        0% { opacity: 0; }
-                        40% { opacity: 1; }
-                        70% { opacity: 1; }
-                        90% { opacity: 0; }
-                        100% { opacity: 0; }
-                    }
-
-                    @-o-keyframes fade {
-                        0% { opacity: 0; }
-                        40% { opacity: 1; }
-                        70% { opacity: 1; }
-                        90% { opacity: 0; }
-                        100% { opacity: 0; }
-                    }
-
-                    @keyframes fade {
-                        0% { opacity: 0; }
-                        40% { opacity: 1; }
-                        70% { opacity: 1; }
-                        90% { opacity: 0; }
-                        100% { opacity: 0; }
-                    }
                 }
             }
 
@@ -283,9 +286,27 @@
         z-index: 1000;
     }
 
+    /* Slide: Register */
+    #register {
+        padding: 45px 0;
+        min-height: inherit;
+        text-align: center;
+
+        .quote {
+            color: #cfd2d2;
+            font-weight: 100;
+            font-size: 19px;
+            font-style: italic;
+        }
+
+        .input-pair {
+            margin-bottom: 0;
+        }
+    }
+
     /* Slide: Footer */
     #footer {
-        padding: 20px 0;
+        padding: 50px 0;
         background: rgba(0, 0, 0, 0.3);
         min-height: inherit;
         text-align: center;
@@ -308,8 +329,8 @@
 
 
             img {
-                width: 40px;
-                height: 40px;
+                width: 30px;
+                height: 30px;
             }
         }
 

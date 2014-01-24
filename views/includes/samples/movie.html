@@ -1,31 +1,44 @@
 |
 @@@
-type: //Today we are going to
+type: //Yes, you raising your the hand.
 run: {command: "newlineAndIndent"}
-type: //make a simple while demo
-run: {command: "newlineAndIndent", times: 2, delay: 500}
-wait: 500
-type: public class WhileDemo {
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-type: public static void main (String[] args) {
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-type: int count = 1;
-run: {command: "newlineAndIndent", times: 2, delay: 500}
-type: while (count < 11) {
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-type: System.out.println("Count is: " + count);
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-type: count++;
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-run: {command: "indentLess", times: 1, delay: 500}
-type: }
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-run: {command: "indentLess", times: 1, delay: 500}
-type: }
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-run: {command: "indentLess", times: 1, delay: 500}
-type: }
+type: //What is your question?
+run: {command: "newlineAndIndent", times: 2}
+type: //Hi, I am <%= (user) ? user.name : "Laborator" %>
+run: {command: "newlineAndIndent"}
+type: //and my question is: How do I make a while loop?
+run: {command: "newlineAndIndent", times: 2}
+type: //Alright class, today I will show a while loop
 run: {command: "newlineAndIndent", times: 3, delay: 500}
-type: //Check online for this lectures homework
-run: {command: "newlineAndIndent", times: 1, delay: 500}
-type: //Have a good weekend!
+wait: 500
+type: public class WhileLoop {
+run: {command: "newlineAndIndent"}
+wait: 1000
+type: public static void main (String[] args) {
+run: {command: "newlineAndIndent"}
+wait: 1500
+type: int count = 1;
+run: {command: "newlineAndIndent", times: 2}
+type: while (count < 11) {
+run: {command: "newlineAndIndent"}
+type: System.out.println("Count is: " + count);
+run: {command: "newlineAndIndent"}
+type: count++;
+run: {command: "newlineAndIndent"}
+run: {command: "indentLess"}
+type: }
+run: {command: "newlineAndIndent"}
+run: {command: "indentLess"}
+type: }
+run: {command: "newlineAndIndent"}
+run: {command: "indentLess"}
+type: }
+run: {command: "newlineAndIndent", times: 3}
+wait: 1500
+type: //Any other questions?
+wait: 1500
+type: {text: " No"}
+run: {command: "newlineAndIndent"}
+type: //Check online for this lecture's homework
+run: {command: "newlineAndIndent"}
+type: //and have a good weekend!
