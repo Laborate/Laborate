@@ -198,18 +198,6 @@ exports.backdrop = function(req, res, next) {
                     theme + "/" + files[Math.floor((Math.random() * files.length))] +
                     "');");
 
-        /*
-        if(["blurry", "grid"].indexOf(theme) != -1) {
-            var hue = Math.floor((Math.random() * 360)) + "deg";
-            style_css += ("filter: hue-rotate(" + hue + ");         \
-                           -webkit-filter: hue-rotate(" + hue + "); \
-                           -moz-filter: hue-rotate(" + hue + ");    \
-                           -ms-filter: hue-rotate(" + hue + ");     \
-                           -o-filter: hue-rotate(" + hue + ");      \
-                          ");
-        }
-        */
-
         return style_css.replace(/ /g, '');
     }
 

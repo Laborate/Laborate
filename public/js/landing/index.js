@@ -25,7 +25,6 @@ $(function() {
                     }, 100);
                 } else {
                     window.movie.stop();
-                    window.movie._editor.setValue("");
                 }
             }
 
