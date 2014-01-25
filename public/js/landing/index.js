@@ -17,7 +17,7 @@ $(function() {
         var slide = $(this);
         slide.waypoint(function(direction) {
             if(window.movie) {
-                if($(this).attr("id") == "classroom") {
+                if(slide.attr("id") == "classroom") {
                     setTimeout(function() {
                         if(slide.hasClass('active')) {
                             window.movie.play();
@@ -37,7 +37,7 @@ $(function() {
             $('.slide').removeClass("active");
             slide.addClass("active");
         }, {
-            offset: (slide.index() == 0) ? -50 : slide.height()
+            offset: (slide.index() == 0) ? -50 : slide.height()/2
         });
     });
 

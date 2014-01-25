@@ -198,6 +198,7 @@ exports.backdrop = function(req, res, next) {
                     theme + "/" + files[Math.floor((Math.random() * files.length))] +
                     "');");
 
+        /*
         if(["blurry", "grid"].indexOf(theme) != -1) {
             var hue = Math.floor((Math.random() * 360)) + "deg";
             style_css += ("filter: hue-rotate(" + hue + ");         \
@@ -207,6 +208,7 @@ exports.backdrop = function(req, res, next) {
                            -o-filter: hue-rotate(" + hue + ");      \
                           ");
         }
+        */
 
         return style_css.replace(/ /g, '');
     }
