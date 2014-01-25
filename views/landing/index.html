@@ -49,7 +49,7 @@
                 </div>
                 <div class="right laborators">
                     <% $.each(laborators, function(key, laborator) { %>
-                        <a class="laborator" target="_blank" href="/users/<%= laborator.screen_name %>" style="z-index: <%= key %>">
+                        <a class="laborator" target="_blank" href="/users/<%= laborator.screen_name %>/" style="z-index: <%= key %>">
                             <div class="gravatar">
                                 <img src="<%= laborator.gravatar %>" />
                             </div>
@@ -118,24 +118,14 @@
                     Made by students<br>for students
                 </div>
                 <div class="right founders">
-                    <a class="founder" target="_blank" href="/users/spencer_b/">
-                        <div class="gravatar">
-                            <img src="/img/founders/spencer.jpg" />
-                        </div>
-                        <div class="name">Spencer Butterfield</div>
-                    </a>
-                    <a class="founder" target="_blank" href="/users/bvallelunga/">
-                        <div class="gravatar">
-                            <img src="/img/founders/brian.jpg" />
-                        </div>
-                        <div class="name">Brian Vallelunga</div>
-                    </a>
-                    <a class="founder" target="_blank" href="/users/jdhillon/">
-                        <div class="gravatar">
-                            <img src="/img/founders/jashan.jpg" />
-                        </div>
-                        <div class="name">Jashan Dhillon</div>
-                    </a>
+                    <% $.each(admins, function(key, admin) { %>
+                        <a class="founder" target="_blank" href="/users/<%= admin.screen_name %>/">
+                            <div class="gravatar">
+                                <img src="<%= admin.gravatar %>" />
+                            </div>
+                            <div class="name"><%= admin.name %></div>
+                        </a>
+                    <% }); %>
                 </div>
             </div>
         </div>

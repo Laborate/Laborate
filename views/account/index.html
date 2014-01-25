@@ -190,11 +190,11 @@
                     </div>
                     <div class="item">
                         <div class="name">Location</div>
-                        <input class="input" type="text" name="location" value="<%= user.location %>" />
+                        <input class="input" type="text" name="location" value="<%= user.location || "" %>" />
                     </div>
                     <div class="item">
                         <div class="name">Url</div>
-                        <input class="input" type="text" name="url" value="<%= user.url %>" />
+                        <input class="input" type="text" name="url" value="<%= user.url || "" %>" />
                     </div>
                     <% if(user.organizations.length != 0) { %>
                         <div class="item">
