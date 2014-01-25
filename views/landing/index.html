@@ -47,6 +47,15 @@
                 <div class="left sub-header">
                     Building a community<br>of amazing laborators
                 </div>
+                <div class="right laborators">
+                    <% $.each(laborators, function(key, laborator) { %>
+                        <a class="laborator" target="_blank" href="/users/<%= laborator.screen_name %>" style="z-index: <%= key %>">
+                            <div class="gravatar">
+                                <img src="<%= laborator.gravatar %>" />
+                            </div>
+                        </a>
+                    <% }); %>
+                </div>
             </div>
         </div>
 

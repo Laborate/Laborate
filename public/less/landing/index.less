@@ -215,7 +215,39 @@
 
     /* Slide: Community */
     #community {
+        .laborators {
+            position: relative;
+            width: 550px;
+            .clearfix();
+            .box-sizing(border-box);
 
+            .laborator {
+                position: relative;
+                margin: 0 0 10px 10px;
+                .float-left();
+
+                .gravatar {
+                    width: 80px;
+                    height: 80px;
+                    overflow: hidden;
+                    border: solid 4px rgba(0, 0, 0, 0.3);
+                    .border-radius(50%);
+
+                    &:hover {
+                        border-color: rgba(0, 0, 0, 0.5);
+
+                        &:active {
+                            border-color: rgba(0, 0, 0, 0.7);
+                        }
+                    }
+
+                    img {
+                        width: 80px;
+                        height: 80px;
+                    }
+                }
+            }
+        }
     }
 
     /* Slide: Classroom */
