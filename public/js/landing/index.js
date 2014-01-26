@@ -10,7 +10,7 @@ $(function() {
 
     $("#slider").on("click", "div", function() {
         var slide = $(".slide").eq($(this).index());
-        $('html, body').scrollTop(slide.offset().top - slide.outerHeight(true)/2);
+        $('html, body').scrollTop(slide.offset().top - slide.outerHeight(true)/3);
     });
 
     $('.slide').each(function() {
@@ -36,7 +36,7 @@ $(function() {
             $('.slide').removeClass("active");
             slide.addClass("active");
         }, {
-            offset: (slide.index() == 0) ? -50 : slide.height()/2
+            offset: (slide.index() == 0) ? -50 : slide.height()/1.5
         });
     });
 
