@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "WvzJukQdMzC4x90OwTZehKTATwpTMTg1B0NSNuWgKupDDCFEkM"
+            "secret": "CeGIbhZTc8SctNrRCvFWPnPyJeW2TEHkhDsq7Acy98v3QFrVKK"
         }
     },
     "orm": {
@@ -312,6 +312,5 @@
                 "type": "radio"
             }
         }
-    },
-    "random": ""
+    }
 }

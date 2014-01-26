@@ -20,8 +20,8 @@ exports.setup = function(req, res, next) {
         if(req.mobile) {
             res.render('landing/mobile', {
                 title: null,
-                js: clientJS.renderTags("landing"),
-                css: clientCSS.renderTags("backdrop", "landing"),
+                js: clientJS.renderTags("mobile"),
+                css: clientCSS.renderTags("backdrop", "mobile"),
                 backdrop: req.backdrop(),
                 pageTrack: false,
                 config: {

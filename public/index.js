@@ -34,6 +34,10 @@ module.exports = function(root) {
     clientCSS.addFile("landing", css_path + 'landing/index.less');
     clientJS.addFile("landing", js_path + 'landing/index.js');
 
+    /* Landing Mobile */
+    clientCSS.addFile("mobile", css_path + 'landing/mobile.less');
+    clientJS.addFile("mobile", js_path + 'landing/mobile.js');
+
     /* Welcome */
     clientCSS.addFile("welcome", css_path + 'welcome/index.less');
     clientJS.addFile("welcome", js_path + 'welcome/index.js');
