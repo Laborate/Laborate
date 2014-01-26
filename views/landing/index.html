@@ -18,7 +18,7 @@
                 </div>
             <% } else { %>
                 <form action="/register/" method="post">
-                    <div class="launch">Join the alpha launch!</div>
+                    <div class="quote">Join the alpha launch!</div>
                     <div class="input-pair">
                         <input type="hidden" name="_csrf" value="<%= csrf %>"/>
                         <input class="input" name="email" type="email" placeholder="enter your email"/>
@@ -44,8 +44,15 @@
         <!-- Slide: Community -->
         <div id="community" class="slide colored">
             <div class="center">
-                <div class="left sub-header">
-                    Building a community<br>of amazing laborators
+                <div class="left">
+                    <div class="sub-header">
+                        Be part of a community<br>of amazing laborators
+                    </div>
+                    <div class="quote">
+                        Laborate's community of like minded individuals
+                        <br> are shaping tomorrow by improving their
+                        <br> own education today.
+                    </div>
                 </div>
                 <div class="right laborators">
                     <% $.each(laborators, function(key, laborator) { %>
@@ -71,8 +78,17 @@
                         <textarea class="editor movie" placeholder="Code goes here..."><% include ../includes/samples/movie.html %></textarea>
                     </div>
                 </div>
-                <div class="right text-right sub-header">
-                    Made for<br>the classroom
+                <div class="right">
+                    <div class="text-right sub-header">
+                        Made for<br>the classroom
+                    </div>
+                    <div class="text-right quote">
+                        Laborate's tools are made to work
+                        <br> in lecture, class and small teams.
+                        <br> You can watch the instructor's the lecture
+                        <br> in realtime, do practice problems in section
+                        <br> and collaborate with your trusted peers.
+                    </div>
                 </div>
             </div>
         </div>
@@ -80,8 +96,16 @@
         <!-- Slide: Catalyst -->
         <div id="catalyst" class="slide colored">
             <div class="center">
-                <div class="left sub-header">
-                    Coding is<br>the catalyst
+                <div class="left">
+                    <div class="sub-header">
+                        Coding is<br>the catalyst
+                    </div>
+                    <div class="quote">
+                        Our first realtime collaboration tool is
+                        <br> is for programmers. As the tool evolves,
+                        <br> it will lay the groundwork for future
+                        <br> tools and services.
+                    </div>
                 </div>
                 <div class="right files">
                     <div class="file">
@@ -114,8 +138,15 @@
         <!-- Slide: Students -->
         <div id="students" class="slide">
             <div class="center">
-                <div class="left sub-header">
-                    Made by students<br>for students
+                <div class="left">
+                    <div class="sub-header">
+                        Made by students<br>for students
+                    </div>
+                    <div class="quote">
+                        We are have experienced your pain
+                        <br> and that is what drives us to build
+                        <br> tools for you!
+                    </div>
                 </div>
                 <div class="right founders">
                     <% $.each(admins, function(key, admin) { %>
