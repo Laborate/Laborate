@@ -107,6 +107,8 @@ function laboratorInit() {
 }
 
 function laboratorResize() {
+    var hover = false;
+
     $("#footer .list").height(
         $("#footer").outerHeight(true) - $("#footer #backdrop-header").outerHeight(true) - 30
     );
