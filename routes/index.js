@@ -67,6 +67,7 @@ module.exports = function(app) {
     app.get('/welcome/creative',authUtil.restrictAccess, welcome.creative);
     app.get('/welcome/social',authUtil.restrictAccess, welcome.social);
     app.get('/welcome/laborator',authUtil.restrictAccess, welcome.laborator);
+    app.get('/welcome/gravatar',authUtil.restrictAccess, welcome.gravatar);
 
     /* Account */
     app.get("/account", authUtil.restrictAccess, core.reload, documents.stats, account.index);

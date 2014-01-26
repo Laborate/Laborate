@@ -2,13 +2,22 @@ var async = require("async");
 var pages = ["index", "creative", "social", "explore"];
 
 exports.index = function(req, res) {
-    res.renderOutdated('welcome/index', {
-        title: 'Welcome',
-        user: req.session.user,
-        js: clientJS.renderTags("backdrop", "welcome"),
-        css: clientCSS.renderTags("backdrop", "welcome"),
-        backdrop: req.backdrop(),
-        pageTrack: true
+    req.models.users.get(req.session.user.id, function(error, user) {
+        if(!error) {
+            user.has_gravatar(function(enabled) {
+                res.renderOutdated('welcome/index', {
+                    title: 'Welcome',
+                    user: req.session.user,
+                    gravatar_enabled: enabled,
+                    js: clientJS.renderTags("backdrop", "welcome"),
+                    css: clientCSS.renderTags("backdrop", "welcome"),
+                    backdrop: req.backdrop(),
+                    pageTrack: true
+                });
+            });
+        } else {
+            res.error(404, null, error);
+        }
     });
 };
 
@@ -19,6 +28,17 @@ exports.creative = function(req, res) {
         user: req.session.user,
         js: clientJS.renderTags("backdrop", "welcome", "codemirror"),
         css: clientCSS.renderTags("backdrop", "welcome", "codemirror"),
+        backdrop: req.backdrop(),
+        pageTrack: true
+    });
+};
+
+exports.gravatar = function(req, res) {
+    res.renderOutdated('welcome/gravatar', {
+        title: 'Welcome',
+        user: req.session.user,
+        js: clientJS.renderTags("backdrop", "welcome"),
+        css: clientCSS.renderTags("backdrop", "welcome"),
         backdrop: req.backdrop(),
         pageTrack: true
     });
@@ -76,6 +96,7 @@ exports.laborator = function(req, res) {
         if(!error) {
             res.renderOutdated('welcome/laborator', {
                 title: 'Welcome',
+                user: req.session.user,
                 documents: documents,
                 js: clientJS.renderTags("welcome", "explore", "backdrop"),
                 css: clientCSS.renderTags("welcome", "backdrop"),

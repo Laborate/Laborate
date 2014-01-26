@@ -6,15 +6,32 @@
         <div class="progress">
             <div class="bar"></div>
         </div>
+        <a href="/welcome/creative/" class="next">
+            <div class="arrow"></div>
+        </a>
         <div class="header">Welcome to Laborate!</div>
-        <div class="sub-header"><span><%= user.screen_name %></span>, bookmark your login url</div>
-        <div id="bookmark">
-            <div class="icon <%= icons.power %>"></div>
-            <input type="text" value="<%= host %>/login/<%= user.pub_id %>/" readonly="readonly" />
-        </div>
-        <div class="text-center">
-            <a id="continue" href="/welcome/creative/">continue</a>
-        </div>
+        <% if(gravatar_enabled) { %>
+            <div class="sub-header"><span><%= user.screen_name %></span> bookmark your login url</div>
+            <div id="bookmark">
+                <div class="icon <%= icons.power %>"></div>
+                <input type="text" value="<%= host %>/login/<%= user.pub_id %>/" readonly="readonly" />
+            </div>
+        <% } else { %>
+            <div class="sub-header"><span><%= user.screen_name %></span> create a gravatar, create an identity</div>
+            <div id="container">
+                <div id="gravatar" class="left">
+                    <img src="<%= user.gravatar %>&s=600&d=mm"/>
+                </div>
+                <div id="reasons" class="right">
+                    <div>Create an identity</div>
+                    <div>Put a face to name</div>
+                    <div>Change or remove at anytime</div>
+                    <a target="_blank" href="https://en.gravatar.com/site/signup/">
+                        create your gravatar
+                    </a>
+                </div>
+            </div>
+        <% } %>
     </div>
 </div>
 <% include ../includes/footer.html %>
