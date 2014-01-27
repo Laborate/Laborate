@@ -40,6 +40,7 @@ module.exports = function(app) {
 
     /* Verify Email */
     app.get('/verify', authUtil.restrictAccess, core.organization, auth.verify);
+    app.get('/verify/resend', authUtil.restrictAccess, core.organization, authUtil.verifyResend);
     app.get('/verify/:code', authUtil.restrictAccess, core.organization, authUtil.verify);
 
     /* Reset Email */

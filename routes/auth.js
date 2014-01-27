@@ -51,7 +51,6 @@ exports.verify = function(req, res) {
     if(req.session.user.verify) {
         res.renderOutdated('auth/verify', {
             title: 'Verify Your Account',
-            feedback: 'Verification Email Has Been Sent',
             js: clientJS.renderTags("backdrop"),
             css: clientCSS.renderTags("backdrop"),
             backdrop: req.backdrop(),

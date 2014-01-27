@@ -272,6 +272,33 @@ exports.verify = function(req, res, next) {
     }
 };
 
+exports.verifyResend = function(req, res, next) {
+    if(!req.session.user.verify) {
+        res.redirect("/documents/");
+    } else {
+        req.models.users.get(req.session.user.id, function(error, user) {
+            if(!error) {
+                user.set_verify();
+                req.email("verify", {
+                    subject: "Please Verify Your Email",
+                    users: [{
+                        name: user.name,
+                        email: user.email,
+                        code: user.verify
+                    }]
+                }, req.error.capture);
+
+                req.session.user = user;
+                req.session.save();
+
+                res.redirect("/verify/");
+            } else {
+                res.error(404, null, error);
+            }
+        });
+    }
+};
+
 exports.reload = function(req, res, next) {
   if(req.session.user) {
         req.models.users.get(req.session.user.id, function(error, user) {
