@@ -10,6 +10,10 @@ var error_handler = function(status, message, home, req, res) {
             req.session.redirect_url = req.originalUrl;
             req.session.save();
             break;
+        case 402:
+            error_message = "Login Required";
+            redirect_url = "/logout/";
+            break;
         case 403:
             error_message = "Access Forbidden";
             error_html = 'Access Forbidden';

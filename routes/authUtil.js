@@ -259,7 +259,7 @@ exports.verify = function(req, res, next) {
     if(!req.session.user.verify) {
         res.redirect("/documents/");
     } else if($.trim(req.param('code')) != req.session.user.verify) {
-        res.error(401);
+        res.error(402);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified(function(user) {
