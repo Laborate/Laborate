@@ -1,212 +1,56 @@
+var _this = exports;
 var editorUtil = require("./editorUtil");
 
-/* Route Functions */
 exports.join = function(req) {
     if(req.session.user) {
-        editorUtil.accessCheck(req.session.user.id, editorUtil.room(req), function(access_object) {
-            if(access_object.success) {
-                if(!editorUtil.inRoom(req.data, req.session.user.pub_id, editorUtil.socketRoom(req))) {
-                    editorUtil.clientData(editorUtil.socketRoom(req), access_object, function(data) {
-                        editorUtil.addUser(
-                            req,
-                            req.session.user.pub_id,
-                            req.session.user.screen_name,
-                            editorUtil.socketRoom(req)
-                        );
-                        req.io.respond(data);
-
-                        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
-                            laborators: true
-                        });
-                    });
-                } else {
-                    req.io.respond({
-                        success: false,
-                        error_message: "You Are Already Editing This Document"
-                    });
-                }
+        editorUtil.accessCheck(req, function(error, response) {
+            if(!error && response) {
+                editorUtil.broadcast(req, "laborators");
+                editorUtil.broadcast(req, "chatroom joined");
+                req.io.respond(response);
             } else {
-                editorUtil.kickOut(req);
+                editorUtil.error(req, error || "problems");
             }
         });
     } else {
-        editorUtil.kickOut(req);
+        editorUtil.error(req, "kickout");
     }
 }
 
 exports.disconnectAll = function(req, user) {
     if(req.session.user) {
+        var manager = req.io.socket.manager;
+        var sockets = manager.sockets.sockets;
         user = user || req.session.user.pub_id;
 
-        var socket = editorUtil.userSocket(user, editorUtil.socketRoom(req));
-        if(socket in req.io.socket.manager.sockets.sockets) {
-            req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', { "docDelete": true });
-        }
-        req.io.respond({ success: true });
-        req.io.socket.manager.onClientDisconnect(socket, "forced");
-        exports.leave(req, true);
+        editorUtil.userSocket(req, user, function(socket) {
+            if(socket in sockets) {
+                editorUtil.broadcast(req, "document deleted", sockets[socket]);
+            }
 
-        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
-            laborators: true
+            req.io.respond({ success: true });
+            manager.onClientDisconnect(socket, "forced");
+            _this.leave(req, true);
+
+            editorUtil.broadcast(req, "laborators");
         });
     }
 }
 
 exports.leave = function(req, override) {
     if(req.session.user) {
-        var socket = editorUtil.userSocket(req.session.user.pub_id, editorUtil.socketRoom(req));
-        //Only Non-forced Disconnects
-        if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
-            req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', {
-                message: req.session.user.screen_name + " left the document",
-                isStatus: true
-            });
+        var manager = req.io.socket.manager;
+        var sockets = manager.sockets.sockets;
 
-            editorUtil.save(req, function(success) {
-                if(success) {
-                    editorUtil.removeUser(req);
-                }
-            });
-        }
-
-        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', {
-            laborators: true
-        });
-    }
-}
-
-exports.chatRoom = function(req) {
-    if(req.session.user) {
-        req.data.name = req.session.user.screen_name;
-        req.data.from = req.session.user.pub_id;
-        req.data.gravatar = req.session.user.gravatar;
-        req.io.room(editorUtil.socketRoom(req)).broadcast('editorChatRoom', req.data);
-    } else {
-        editorUtil.kickOut(req);
-    }
-}
-
-exports.document = function(req) {
-    if(req.session.user) {
-        req.data.from = req.session.user.pub_id;
-        req.data.gravatar = req.session.user.gravatar;
-        req.io.room(editorUtil.socketRoom(req)).broadcast('editorDocument', req.data);
-
-        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
-            reply = JSON.parse(reply);
-            reply.changes.push(req.data["changes"]);
-            lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(reply));
-        });
-    }
-}
-
-exports.cursors = function(req) {
-    if(req.session.user) {
-        req.data.from = req.session.user.pub_id;
-        req.data.gravatar = req.session.user.gravatar;
-        req.io.room(editorUtil.socketRoom(req)).broadcast('editorCursors', req.data);
-    } else {
-        editorUtil.kickOut(req);
-    }
-}
-
-exports.extras = function(req) {
-    //Methods
-    this.breakpoints = function(changes, breakpoints, callback) {
-        $.each(changes, function(index, value) {
-            if(value.remove) {
-                if(breakpoints.indexOf(value.line) > -1) {
-                    breakpoints.splice(breakpoints.indexOf(value.line), 1);
-                }
-            } else {
-                breakpoints.push(value.line);
+        editorUtil.userSocket(req, user, function(socket) {
+            //Only Non-forced Disconnects
+            if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
+                editorUtil.broadcast(req, "chatroom left");
+                editorUtil.saveDocument(req);
             }
+
+            editorUtil.removeUser(req);
+            editorUtil.broadcast(req, "laborators");
         });
-
-        callback(breakpoints);
-    }
-
-    this.get = function(callback) {
-        lib.redis.get(editorUtil.socketRoom(req), function(error, reply) {
-            callback(JSON.parse(reply));
-        });
-    }
-
-    this.save = function(data) {
-        lib.redis.set(editorUtil.socketRoom(req), JSON.stringify(data));
-    }
-
-    //Logic
-    if(req.session.user) {
-        req.data.from = req.session.user.pub_id;
-        req.data.gravatar = req.session.user.gravatar;
-        req.io.room(editorUtil.socketRoom(req)).broadcast('editorExtras', req.data);
-
-        if("breakpoint" in req.data) {
-            this.get(function(reply) {
-                this.breakpoints(req.data.breakpoint, reply.breakpoints, function(breakpoints) {
-                    reply.breakpoints = breakpoints;
-                });
-                this.save(reply);
-            });
-        }
-    } else {
-        editorUtil.kickOut(req);
-    }
-}
-
-exports.laborators = function(req) {
-    if(req.session.user) {
-        var room = editorUtil.socketRoom(req);
-        var users = editorUtil.users(req.session.user.pub_id, room);
-        req.io.respond({
-            success: true,
-            laborators: users
-        });
-    } else {
-        editorUtil.kickOut(req);
-    }
-}
-
-exports.save = function(req) {
-    if(req.session.user) {
-        editorUtil.save(req, function(sucess) {
-            req.io.respond({
-                success: sucess
-            });
-        });
-    } else {
-        editorUtil.kickOut(req);
-    }
-}
-
-exports.permission = function(req) {
-    if(req.session.user) {
-        lib.models_init(null, function(db, models) {
-            models.documents.roles.find({
-                user_pub_id: req.data,
-                document_pub_id: editorUtil.room(req)
-            }, function(error, roles) {
-                if(!error && !roles.empty) {
-                    if(roles[0].document.owner_id == req.session.user.id) {
-                        var socket = editorUtil.userSocket(req.data, editorUtil.socketRoom(req));
-
-                        if(socket in req.io.socket.manager.sockets.sockets) {
-                            if(roles[0].access) {
-                                req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                                    readonly: true
-                                });
-                            } else {
-                                req.io.socket.manager.sockets.sockets[socket].emit('editorExtras', {
-                                    docDelete: true
-                                });
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    } else {
-        editorUtil.kickOut(req);
     }
 }

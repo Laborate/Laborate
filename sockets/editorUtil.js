@@ -1,201 +1,166 @@
-exports.roomUsers = new Array();
+var _this = exports;
 
-exports.users = function(user, room) {
-    if(room in exports.roomUsers) {
-        if(user in exports.roomUsers[room]) {
-            var copyUsers = Object.keys(exports.roomUsers[room]);
-            copyUsers.splice(copyUsers.indexOf(user), 1);
-            return copyUsers;
-        } else {
-            return [];
-        }
-    } else {
-        return [];
-    }
-}
-
-exports.accessCheck = function(user, room, callback) {
-    lib.models_init(null, function(db, models) {
-        models.documents.roles.find({
-            user_id: user,
-            document_pub_id: room[0],
-            access: true
-        }, function(error, documents) {
-            if(!error && documents.length == 1) {
-                callback({
-                    success: true,
-                    document: documents[0].document,
-                    permission: documents[0].permission
-                });
-            } else {
-                callback({
-                    success: false,
-                    error_message: "Document Does Not Exist",
-                    redirect_url: "/documents/"
-                });
-            }
-        });
-    });
-}
-
-exports.clientData = function(room, document_role, callback) {
-    var document = document_role.document;
-    var permission = document_role.permission;
-
-    lib.redis.get(room, function(error, reply) {
-        if(!error && reply) {
-            reply = JSON.parse(reply);
-            document.breakpoints = reply.breakpoints;
-            document.changes = reply.changes;
-        } else {
-            document.changes = [];
-            lib.redis.set(room, JSON.stringify({
-                id: document.id,
-                breakpoints: document.breakpoints,
-                changes: [],
-                users: []
-            }));
-        }
-
-        if(permission.owner) {
-            var readonly = false;
-        } else if(document.readonly) {
-            var readonly = true;
-        } else if(permission.readonly) {
-            var readonly = true;
-        } else {
-            var readonly = false;
-        }
-
-
-        lib.jsdom.editor(document.content, document.changes, function(content) {
-            callback({
-                success: true,
-                name: document.name,
-                content: content,
-                breakpoints: ((document.breakpoints) ? $.map(document.breakpoints, function(value) {
-                    return {"line": value};
-                }) : []),
-                permission: {
-                    id: permission.id,
-                    name: permission.name,
-                    readonly: readonly
-                }
-            });
-        });
-    });
-}
-
-exports.addUser = function(req, user_id, user_name, room) {
-    req.io.join(room);
-    req.io.room(room).broadcast('editorChatRoom', {
-        message: user_name + " joined the document",
-        isStatus: true
-    });
-
-    if(!(room in exports.roomUsers)) {
-        exports.roomUsers[room] = new Array();
-    }
-
-    exports.roomUsers[room][user_id] = {
-        "socket": req.io.socket.id
-    }
-}
-
-exports.save = function(req, callback) {
+/* Authentication */
+exports.accessCheck = function(req, callback) {
     lib.models_init(null, function(db, models) {
         models.documents.roles.find({
             user_id: req.session.user.id,
-            document_pub_id: exports.room(req)
+            document_pub_id: _this.room(req),
+            access: true
         }, function(error, documents) {
             if(!error && !documents.empty) {
-                var document = documents[0].document;
-                lib.redis.get(exports.socketRoom(req), function(error, reply) {
-                    reply = JSON.parse(reply);
-                    if(reply) {
-                        if(reply.changes && document) {
-                            lib.jsdom.editor(document.content, reply.changes, function(content) {
-                                document.save({
-                                    content: (content != "") ? content.split("\n") : [],
-                                    breakpoints: reply.breakpoints
-                                });
-                            });
-                            callback(true);
-                        }
-                    } else {
-                        callback(true);
-                    }
-                });
-            } else  {
-                callback(false);
+                _this.clientData(req, {
+                    document: documents[0].document,
+                    permission: documents[0].permission
+                }, callback);
+            } else {
+                callback("exists");
             }
         });
     });
 }
 
-exports.removeUser = function(req) {
-    var user = req.session.user.pub_id;
-    var room = exports.socketRoom(req);
+/* Client Data: Redis & Models */
+exports.clientData = function(req, data, callback) {
+    var room = _this.room(req, true);
+    var readonly;
 
-    req.io.leave(room);
-    req.io.socket.disconnect();
-
-    if(room in exports.roomUsers) {
-        if(user in exports.roomUsers[room]) {
-            clearInterval(exports.roomUsers[room][user]["update"]);
-            delete exports.roomUsers[room][user];
-
-            if(Object.keys(exports.roomUsers[room]).empty) {
-                delete exports.roomUsers[room];
-                lib.redis.del(room);
-            }
-        }
-    }
-}
-
-exports.userSocket = function(user, room) {
-    if(room in exports.roomUsers) {
-        if(user in exports.roomUsers[room]) {
-            return exports.roomUsers[room][user]["socket"];
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
-}
-
-exports.room = function(req) {
-    return req.headers.referer.split("/").slice(-2, -1);
-}
-
-exports.socketRoom = function(req) {
-    return "editor" + exports.room(req);
-}
-
-exports.inRoom = function(reconnect, user, room) {
-    if(!reconnect) {
-        if(room in exports.roomUsers) {
-            if(user in exports.roomUsers[room]) {
-                return true;
+    _this.getRedis(room, function(error, document) {
+        if(!error) {
+            if(document) {
+                if(req.session.user.pub_id in document.users) {
+                    return callback("already editing");
+                } else {
+                    document.users[req.session.user.pub_id] = {
+                        id: req.session.user.id,
+                        pub_id: req.session.user.pub_id,
+                        name: req.session.user.name
+                    }
+                }
             } else {
-                return false;
+                document = {
+                    id: data.document.id,
+                    breakpoints: data.document.breakpoints,
+                    changes: [],
+                    users: {}
+                }
+
+                document.users[req.session.user.pub_id] = {
+                    id: req.session.user.id,
+                    pub_id: req.session.user.pub_id,
+                    name: req.session.user.name,
+                    socket: req.io.socket.id
+                }
             }
+
+            lib.jsdom.editor(data.document.content, document.changes, function(content) {
+                callback(false, {
+                    success: true,
+                    name: data.document.name,
+                    content: content,
+                    breakpoints: $.map(breakpoints, function(value) {
+                        return { "line": value };
+                    }),
+                    permission: {
+                        id: data.permission.id,
+                        name: data.permission.name,
+                        readonly: function(permission) {
+                            if(permission.owner) {
+                                return false;
+                            } else if(document.readonly) {
+                                return true;
+                            } else if(permission.readonly) {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }(data.permission)
+                    }
+                });
+
+                _this.saveRedis(room, document);
+            });
         } else {
-            return false;
+            return callback("problems");
         }
-    } else {
-        return false;
+    });
+}
+
+/* Broadcast */
+exports.broadcast = function(req, type, socket, callback) {
+    var room = _this.room(req, true);
+    var channel, message, data;
+
+    switch(type) {
+        case "laborators":
+            channel = 'editorExtras';
+            message = {
+                laborators: true
+            }
+            break;
+
+        case "document deleted":
+            channel = 'editorExtras';
+            message = {
+                "docDelete": true
+            }
+            break;
+
+        case "chatroom joined":
+            channel = "editorChatRoom";
+            message = {
+                message: req.session.user.screen_name + " joined the document",
+                isStatus: true
+            }
+            break;
+
+        case "chatroom left":
+            channel = "editorChatRoom";
+            message = {
+                message: req.session.user.screen_name + " left the document",
+                isStatus: true
+            }
+            break;
+    }
+
+    if(room && message) {
+        data = $.extend(true, {
+            success: true
+        }, message);
+
+        if(socket) {
+            socket.emit(channel, data);
+        } else {
+            req.io.room(room).broadcast(channel, data);
+        }
     }
 }
 
-exports.kickOut = function(req, response) {
-    req.io.respond(((!response) ? {
-        success: false,
-        error_message: "Log In Required",
-        redirect_url: "/logout/"
-    } : response));
+/* Get User Socket */
+exports.userSocket = function(req, user, callback) {
+    _this.getRedis(_this.room(req, true), function(error, document) {
+        callback(document.users[user]);
+    });
+}
 
-    //Force Socket Disconnect
-    req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+/* Remove User */
+exports.removeUser = function(req, user) {
+    var room = _this.room(req, true);
+
+    _this.getRedis(room, function(error, document) {
+        delete document.users[user];
+        _this.saveRedis(room, document);
+    });
+}
+
+/* Get From Redis */
+exports.getRedis = function(room, callback) {
+    lib.redis.get(room, function(error, response) {
+        callback(error, JSON.parse(response));
+    });
+}
+
+/* Save To Redis */
+exports.saveRedis = function(room, data) {
+    lib.redis.set(room, JSON.stringify(data));
 }

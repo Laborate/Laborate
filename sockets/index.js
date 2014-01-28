@@ -7,6 +7,7 @@ module.exports = function(app) {
     app.io.route('notifications', core.notifications);
 
     /* Editor */
+    /*
     app.io.route('editorJoin', editor.join);
     app.io.route('editorChatRoom', editor.chatRoom);
     app.io.route('editorDocument', editor.document);
