@@ -273,22 +273,7 @@ window.editorUtil = {
         }, 100);
     },
     error: function(message, url) {
-        if(message == "You Are Already Editing This Document") {
-            message += "<br><button id='disconnectAll' style='margin-top: 5px' \
-                       class='backdrop-button'>Disconnect All Other Sessions</button>";
-
-            $(document).on("click", "#disconnectAll", function() {
-                $(this).val("loading...").addClass("disabled");
-                 window.socketUtil.socket.emit("editorDisconnectAll", {}, function(json) {
-                    if(json.success) {
-                        window.location.reload(true);
-                    }
-                 });
-            });
-        } else {
-            window.socketUtil.socket.removeAllListeners();
-        }
-
+        window.socketUtil.socket.removeAllListeners();
         window.backdrop.error(message, url);
     }
 }

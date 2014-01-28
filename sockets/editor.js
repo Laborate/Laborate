@@ -17,26 +17,6 @@ exports.join = function(req) {
     }
 }
 
-exports.disconnectAll = function(req, user) {
-    if(req.session.user) {
-        var manager = req.io.socket.manager;
-        var sockets = manager.sockets.sockets;
-        user = user || req.session.user.pub_id;
-
-        editorUtil.userSocket(req, user, function(socket) {
-            if(socket in sockets) {
-                editorUtil.broadcast(req, "document deleted", sockets[socket]);
-            }
-
-            req.io.respond({ success: true });
-            manager.onClientDisconnect(socket, "forced");
-            _this.leave(req, true);
-
-            editorUtil.broadcast(req, "laborators");
-        });
-    }
-}
-
 exports.leave = function(req, override) {
     if(req.session.user) {
         var manager = req.io.socket.manager;

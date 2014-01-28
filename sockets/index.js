@@ -15,7 +15,6 @@ module.exports = function(app) {
     app.io.route('editorLaborators', editor.laborators);
     //app.io.route('editorPermission', editor.permission);
     //app.io.route('editorSave', editor.save);
-    //app.io.route('editorDisconnectAll', editor.disconnectAll);
 
     /* Disconnect */
     app.io.route('connected', core.track);
