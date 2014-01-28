@@ -79,7 +79,7 @@ exports.clientData = function(req, role, callback) {
                 });
 
                 document.changes = [];
-                _this.saveRedis(room, document);
+                _this.setRedis(room, document);
             });
         } else {
             return callback("problems");
@@ -107,7 +107,7 @@ exports.saveDocument = function(req) {
                         });
 
                         reply.changes = [];
-                        _this.saveRedis(room, reply);
+                        _this.setRedis(room, reply);
                     });
                 }
             });
@@ -189,7 +189,7 @@ exports.removeUser = function(req) {
 
     _this.getRedis(room, function(error, document) {
         delete document.users[req.session.user.pub_id];
-        _this.saveRedis(room, document);
+        _this.setRedis(room, document);
     });
 }
 
@@ -201,6 +201,6 @@ exports.getRedis = function(room, callback) {
 }
 
 /* Save To Redis */
-exports.saveRedis = function(room, data) {
+exports.setRedis = function(room, data) {
     lib.redis.set(room, JSON.stringify(data));
 }

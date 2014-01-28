@@ -54,3 +54,28 @@ exports.leave = function(req, override) {
         });
     }
 }
+
+exports.chatRoom = function(req) {
+    if(req.session.user) {
+        req.data.name = req.session.user.screen_name;
+        req.data.from = req.session.user.pub_id;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(editorUtil.room(req, true)).broadcast('editorChatRoom', req.data);
+    } else {
+        editorUtil.error(req, "kickout");
+    }
+}
+
+exports.document = function(req) {
+    if(req.session.user) {
+        var room = editorUtil.room(req, true);
+        req.data.from = req.session.user.pub_id;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(editorUtil.room(req, true)).broadcast('editorDocument', req.data);
+
+        editorUtil.getRedis(room, function(error, document) {
+            document.changes.push(req.data.changes);
+            editorUtil.setRedis(room, document);
+        });
+    }
+}
