@@ -58,7 +58,7 @@ exports.clientData = function(req, role, callback) {
                     success: true,
                     name: role.document.name,
                     content: content,
-                    breakpoints: $.map(breakpoints, function(value) {
+                    breakpoints: $.map(document.breakpoints, function(value) {
                         return { "line": value };
                     }),
                     permission: {
@@ -165,6 +165,17 @@ exports.broadcast = function(req, type, socket, callback) {
     }
 }
 
+/* Error Handler */
+exports.error = function(req, type) {
+    console.log(type);
+}
+
+/* Get Room */
+exports.room = function(req, socket) {
+    var room = req.headers.referer.split("/").slice(-2, -1);
+    return (socket) ? ("editor" + room) : room;
+}
+
 /* Get User Socket */
 exports.userSocket = function(req, user, callback) {
     _this.getRedis(_this.room(req, true), function(error, document) {
@@ -173,11 +184,11 @@ exports.userSocket = function(req, user, callback) {
 }
 
 /* Remove User */
-exports.removeUser = function(req, user) {
+exports.removeUser = function(req) {
     var room = _this.room(req, true);
 
     _this.getRedis(room, function(error, document) {
-        delete document.users[user];
+        delete document.users[req.session.user.pub_id];
         _this.saveRedis(room, document);
     });
 }

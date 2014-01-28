@@ -42,7 +42,7 @@ exports.leave = function(req, override) {
         var manager = req.io.socket.manager;
         var sockets = manager.sockets.sockets;
 
-        editorUtil.userSocket(req, user, function(socket) {
+        editorUtil.userSocket(req, req.session.user.pub_id, function(socket) {
             //Only Non-forced Disconnects
             if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
                 editorUtil.broadcast(req, "chatroom left");
