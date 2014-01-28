@@ -28,14 +28,10 @@ exports.clientData = function(req, role, callback) {
     _this.getRedis(room, function(error, document) {
         if(!error) {
             if(document) {
-                if(req.session.user.pub_id in document.users) {
-                    return callback("already editing");
-                } else {
-                    document.users[req.session.user.pub_id] = {
-                        id: req.session.user.id,
-                        pub_id: req.session.user.pub_id,
-                        name: req.session.user.name
-                    }
+                document.users[req.session.user.pub_id] = {
+                    id: req.session.user.id,
+                    pub_id: req.session.user.pub_id,
+                    name: req.session.user.name
                 }
             } else {
                 document = {
@@ -80,6 +76,7 @@ exports.clientData = function(req, role, callback) {
 
                 document.changes = [];
                 _this.setRedis(room, document);
+                req.io.join(room);
             });
         } else {
             return callback("problems");
@@ -183,10 +180,17 @@ exports.userSocket = function(req, user, callback) {
     });
 }
 
+/* Get Users */
+exports.users = function(req, callback) {
+    var room = _this.room(req, true);
+    _this.getRedis(room, function(error, document) {
+        callback(document.users);
+    });
+}
+
 /* Remove User */
 exports.removeUser = function(req) {
     var room = _this.room(req, true);
-
     _this.getRedis(room, function(error, document) {
         delete document.users[req.session.user.pub_id];
         _this.setRedis(room, document);

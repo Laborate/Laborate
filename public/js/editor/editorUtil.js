@@ -211,12 +211,12 @@ window.editorUtil = {
             this.setMode(modeName, modeObject);
         }
     },
-    join: function(reconnect, callback) {
+    join: function(callback) {
         //Have to wait for the socket to initialize
         interval = setInterval(function() {
             if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
-                window.socketUtil.socket.emit("editorJoin", reconnect, function(json) {
+                window.socketUtil.socket.emit("editorJoin", function(json) {
                     if(json.success) {
                         async.series([
                             function(next) {

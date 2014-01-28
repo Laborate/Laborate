@@ -77,5 +77,33 @@ exports.document = function(req) {
             document.changes.push(req.data.changes);
             editorUtil.setRedis(room, document);
         });
+    } else {
+        editorUtil.error(req, "kickout");
+    }
+}
+
+exports.cursors = function(req) {
+    if(req.session.user) {
+        req.data.from = req.session.user.pub_id;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(editorUtil.room(req, true)).broadcast('editorCursors', req.data);
+    } else {
+        editorUtil.error(req, "kickout");
+    }
+}
+
+exports.laborators = function(req) {
+    if(req.session.user) {
+        editorUtil.users(req, function(users) {
+            console.log(Object.keys(users));
+            delete users[req.session.user.pub_id];
+
+            req.io.respond({
+                success: true,
+                laborators: Object.keys(users)
+            });
+        });
+    } else {
+        editorUtil.error(req, "kickout");
     }
 }
