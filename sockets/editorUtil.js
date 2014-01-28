@@ -7,11 +7,11 @@ exports.accessCheck = function(req, callback) {
             user_id: req.session.user.id,
             document_pub_id: _this.room(req),
             access: true
-        }, function(error, documents) {
-            if(!error && !documents.empty) {
+        }, function(error, roles) {
+            if(!error && !roles.empty) {
                 _this.clientData(req, {
-                    document: documents[0].document,
-                    permission: documents[0].permission
+                    document: roles[0].document,
+                    permission: roles[0].permission
                 }, callback);
             } else {
                 callback("exists");
@@ -21,7 +21,7 @@ exports.accessCheck = function(req, callback) {
 }
 
 /* Client Data: Redis & Models */
-exports.clientData = function(req, data, callback) {
+exports.clientData = function(req, role, callback) {
     var room = _this.room(req, true);
     var readonly;
 
@@ -39,8 +39,8 @@ exports.clientData = function(req, data, callback) {
                 }
             } else {
                 document = {
-                    id: data.document.id,
-                    breakpoints: data.document.breakpoints,
+                    id: role.document.id,
+                    breakpoints: role.document.breakpoints,
                     changes: [],
                     users: {}
                 }
@@ -53,17 +53,17 @@ exports.clientData = function(req, data, callback) {
                 }
             }
 
-            lib.jsdom.editor(data.document.content, document.changes, function(content) {
+            lib.jsdom.editor(role.document.content, document.changes, function(content) {
                 callback(false, {
                     success: true,
-                    name: data.document.name,
+                    name: role.document.name,
                     content: content,
                     breakpoints: $.map(breakpoints, function(value) {
                         return { "line": value };
                     }),
                     permission: {
-                        id: data.permission.id,
-                        name: data.permission.name,
+                        id: role.permission.id,
+                        name: role.permission.name,
                         readonly: function(permission) {
                             if(permission.owner) {
                                 return false;
@@ -74,15 +74,44 @@ exports.clientData = function(req, data, callback) {
                             } else {
                                 return false;
                             }
-                        }(data.permission)
+                        }(role.permission)
                     }
                 });
 
+                document.changes = [];
                 _this.saveRedis(room, document);
             });
         } else {
             return callback("problems");
         }
+    });
+}
+
+/* Save Document */
+exports.saveDocument = function(req) {
+    var room = _this.room(req, true);
+
+    _this.getRedis(room, function(error, reply) {
+        lib.models_init(null, function(db, models) {
+            models.documents.roles.find({
+                user_id: req.session.user.id,
+                document_id: reply.id,
+                access: true
+            }, function(error, roles) {
+                if(!error && !roles.empty) {
+                    var document = roles[0].document;
+                    lib.jsdom.editor(document.content, reply.changes, function(content) {
+                        document.save({
+                            content: (content != "") ? content.split("\n") : [],
+                            breakpoints: reply.breakpoints
+                        });
+
+                        reply.changes = [];
+                        _this.saveRedis(room, reply);
+                    });
+                }
+            });
+        });
     });
 }
 
