@@ -32,7 +32,8 @@
             "majors and fields. Our goal is to provide a unified set of tools that are ",
             "all interconnected and can build off of each other."
         ],
-        "backdrop": "blurry"
+        "backdrop": "blurry",
+        "hiring": false
     },
     "development": {
         "basicAuth": {
@@ -58,7 +59,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "ARtGwP4hQb6w0phFw33RGUQu5qxksOiyS7nOfQBlyDM3mHdEDH"
+            "secret": "XltWTbmGeeueOAJ1KiP2mnTVqsrNvoTPOCPr1Teey313nshSqU"
         }
     },
     "orm": {

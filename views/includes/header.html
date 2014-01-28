@@ -97,6 +97,15 @@
         <script type="text/javascript">
             Raven.config("<%= sentry %>").install();
             window.onerror = Raven.process;
+
+            <% if(production && hiring) { %>
+                $(function() {
+                    console.log($("#printout").text());
+                });
+            <% } %>
         </script>
     </head>
     <body class="<%= (organization.id) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %>">
+        <% if(production && hiring) { %>
+            <div id="printout" class="hidden"><% include ./printout.html %></div>
+        <% } %>

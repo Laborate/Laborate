@@ -109,6 +109,7 @@ exports.locals = function(req, res, next) {
     res.locals.mobile = req.mobile;
     res.locals.robot = req.robot;
     res.locals.title_first = true;
+    res.locals.hiring = config.general.hiring;
 
     res.locals.apps = {
         sftp: {
