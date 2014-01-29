@@ -71,6 +71,17 @@ $(function() {
         }
     });
 
+    //Pull Errors
+    window.socketUtil.socket.on('editorError', function (data) {
+        if(data) {
+            if(data.error_message) {
+                window.editorUtil.error(data.error_message, data.redirect_url);
+            } else if(data.redirect_url) {
+                window.location.href = data.redirect_url;
+            }
+        }
+    });
+
     //Focus Editor On Click
     $("#editorContainer").on("click", function() {
         window.editor.focus();

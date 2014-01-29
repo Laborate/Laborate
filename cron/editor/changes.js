@@ -13,19 +13,24 @@ require('../init')("editor.changes", function() {
                             _this.lib.jsdom.editor(document.content, reply.changes, function(content) {
                                 document.save({
                                     content: (content != "") ? content.split("\n") : [],
-                                    breakpoints: reply.breakpoints
-                                }, lib.error.capture);
+                                        breakpoints: reply.breakpoints
+                                }, function(error) {
+                                    if(Object.keys(reply.users).empty) {
+                                        _this.redis.del(room);
+                                    } else {
+                                        reply.changes = [];
+                                        _this.redis.set(room, JSON.stringify(reply));
+                                    }
 
-                                reply.changes = [];
-                                _this.redis.set(room, JSON.stringify(reply), next);
+                                    next(error);
+                                });
                             });
                         } else {
                             next(error);
                             _this.redis.del(room);
                         }
                     });
-
-                    });
+                });
             }, function(errors) {
                 lib.error.capture(errors);
                 _this.finish();

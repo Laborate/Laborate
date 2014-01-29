@@ -160,7 +160,10 @@ exports.broadcast = function(req, type, socket, callback) {
 
 /* Error Handler */
 exports.error = function(req, type) {
-    var message, disconnect = false;
+    var data,
+        message,
+        disconnect = false,
+        manager = req.io.socket.manager;
 
     switch(type) {
         case "exists":
@@ -180,19 +183,22 @@ exports.error = function(req, type) {
         case "kickout":
             disconnect = true;
             message = {
-                error_message: "Log In Required",
+                error_message: "Login Is Required",
                 redirect_url: "/logout/"
             }
             break;
     }
 
     if(message) {
-        req.io.respond($.extend(true, {
+        data = $.extend(true, {
             success: false
-        }, message));
+        }, message);
+
+        req.io.respond(data);
+        manager.sockets.sockets[req.io.socket.id].emit("editorError", data);
 
         if(disconnect) {
-            req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+            manager.onClientDisconnect(req.io.socket.id, "forced");
         }
     }
 }
