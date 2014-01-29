@@ -26,11 +26,8 @@
             "email": " - "
         },
         "description": [
-            "Making enhanced student development through collaboration in various ",
-            "fields of study effortless and affordable. We are introducing a suite of ",
-            "products that will enable students to collaborate in realtime in targeted ",
-            "majors and fields. Our goal is to provide a unified set of tools that are ",
-            "all interconnected and can build off of each other."
+            "When you’re in class, studying for an exam, or working in a group; ",
+            "we are your solution to facilitating realtime collaboration."
         ],
         "backdrop": "blurry",
         "hiring": false
@@ -59,7 +56,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "0kwkR4QiJRMKZnvABHKZFB1Mub86ZWAWcg25UxCGxGd7ViDIlt"
+            "secret": "PL2WuWBBT08tP7iMMzgRT25zArL3tZ5gV2KDFZqCeoZmzi7URv"
         }
     },
     "orm": {

@@ -113,7 +113,7 @@ window.editorUtil = {
             delete window.users[value];
         })).done($(data).not(Object.keys(window.users)).each(function(index, value) {
             $("                                                             \
-                <style type='text/css'>                                     \
+                <style type='text/css' data-user=" + value + ">             \
                     .u" + value + "{                                        \
                         background:" + randomColor() + " !important;    \
                     }                                                       \

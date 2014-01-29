@@ -160,7 +160,41 @@ exports.broadcast = function(req, type, socket, callback) {
 
 /* Error Handler */
 exports.error = function(req, type) {
-    console.log(type);
+    var message, disconnect = false;
+
+    switch(type) {
+        case "exists":
+            message = {
+                error_message: "Document Does Not Exist",
+                redirect_url: "/documents/"
+            }
+            break;
+
+        case "problems":
+            message = {
+                error_message: "Sorry, We Are Experience Difficulties",
+                redirect_url: "/documents/"
+            }
+            break;
+
+        case "kickout":
+            disconnect = true;
+            message = {
+                error_message: "Log In Required",
+                redirect_url: "/logout/"
+            }
+            break;
+    }
+
+    if(message) {
+        req.io.respond($.extend(true, {
+            success: false
+        }, message));
+
+        if(disconnect) {
+            req.io.socket.manager.onClientDisconnect(req.io.socket.id, "forced");
+        }
+    }
 }
 
 /* Get Room */
@@ -195,7 +229,6 @@ exports.users = function(req, callback) {
             if(users.end(index)) {
                 _this.setRedis(room, document);
                 callback(document.users);
-                console.log(document.users);
             }
         });
     });
