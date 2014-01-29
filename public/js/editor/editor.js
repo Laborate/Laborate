@@ -58,8 +58,8 @@ $(function() {
             window.sidebarUtil.setTitle("in", data.docName, window.chat.count);
         }
 
-        if("breakpoint" in data) {
-            window.editorUtil.gutterClick("in", data.breakpoint);
+        if("breakpoints" in data) {
+            window.editorUtil.gutterClick("in", data.breakpoints);
         }
 
         if("docDelete" in data) {

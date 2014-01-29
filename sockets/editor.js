@@ -19,18 +19,17 @@ exports.join = function(req) {
 
 exports.leave = function(req, override) {
     if(req.session.user) {
-        var manager = req.io.socket.manager;
-        var sockets = manager.sockets.sockets;
+        editorUtil.userSockets(req, req.session.user.pub_id, function(user_sockets) {
+            $.each(user_sockets, function(index, socket) {
+                //Only Non-forced Disconnects
+                if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
+                    editorUtil.broadcast(req, "chatroom left");
+                    editorUtil.saveDocument(req);
+                }
 
-        editorUtil.userSocket(req, req.session.user.pub_id, function(socket) {
-            //Only Non-forced Disconnects
-            if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
-                editorUtil.broadcast(req, "chatroom left");
-                editorUtil.saveDocument(req);
-            }
-
-            editorUtil.removeUser(req);
-            editorUtil.broadcast(req, "laborators");
+                editorUtil.removeUser(req);
+                editorUtil.broadcast(req, "laborators");
+            });
         });
     }
 }
@@ -82,6 +81,82 @@ exports.laborators = function(req) {
                         return user.pub_id;
                     }
                 })
+            });
+        });
+    } else {
+        editorUtil.error(req, "kickout");
+    }
+}
+
+exports.extras = function(req) {
+    if(req.session.user) {
+        var room = editorUtil.room(req, true);
+        req.data.from = req.session.user.pub_id;
+        req.data.gravatar = req.session.user.gravatar;
+        req.io.room(room).broadcast('editorExtras', req.data);
+
+        if("breakpoints" in req.data) {
+            editorUtil.getRedis(room, function(error, document) {
+                $.each(req.data.breakpoints, function(index, value) {
+                    if(value.remove) {
+                        if(document.breakpoints.indexOf(value.line) > -1) {
+                            document.breakpoints.splice(document.breakpoints.indexOf(value.line), 1);
+                        }
+                    } else {
+                        document.breakpoints.push(value.line);
+                    }
+
+                    if(req.data.breakpoints.end(index)) {
+                        this.saveRedis(room, document);
+                    }
+                });
+            });
+        }
+    } else {
+        editorUtil.error(req, "kickout");
+    }
+}
+
+exports.permission = function(req) {
+    if(req.session.user) {
+        var sockets = req.io.socket.manager.sockets.sockets;
+
+        lib.models_init(null, function(db, models) {
+            models.documents.roles.find({
+                user_pub_id: req.data,
+                document_pub_id: editorUtil.room(req)
+            }, function(error, roles) {
+                if(!error && !roles.empty) {
+                    if(roles[0].document.owner_id == req.session.user.id) {
+                        editorUtil.userSockets(req, req.data, function(user_sockets) {
+                            $.each(user_sockets, function(index, socket) {
+                                if(socket in sockets) {
+                                    if(roles[0].access) {
+                                        sockets[socket].emit('editorExtras', {
+                                            readonly: true
+                                        });
+                                    } else {
+                                        sockets[socket].emit('editorExtras', {
+                                            docDelete: true
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                    }
+                }
+            });
+        });
+    } else {
+        editorUtil.error(req, "kickout");
+    }
+}
+
+exports.save = function(req) {
+    if(req.session.user) {
+        editorUtil.saveDocument(req, function(success) {
+            req.io.respond({
+                success: true
             });
         });
     } else {

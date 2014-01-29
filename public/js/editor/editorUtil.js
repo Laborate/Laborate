@@ -96,7 +96,7 @@ window.editorUtil = {
                 if(direction == "out" && window.editorUtil.initialized) {
                     window.editor.setGutterMarker(value["line"], "breakpoints", info.gutterMarkers ? null : marker);
                     window.socketUtil.socket.emit('editorExtras', {
-                        "breakpoint": [{
+                        "breakpoints": [{
                             "line": value["line"],
                             "remove": info.gutterMarkers
                         }]

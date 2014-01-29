@@ -20,6 +20,7 @@ exports.accessCheck = function(req, callback) {
     });
 }
 
+
 /* Client Data: Redis & Models */
 exports.clientData = function(req, role, callback) {
     var room = _this.room(req, true);
@@ -79,7 +80,7 @@ exports.clientData = function(req, role, callback) {
 }
 
 /* Save Document */
-exports.saveDocument = function(req) {
+exports.saveDocument = function(req, callback) {
     var room = _this.room(req, true);
 
     _this.getRedis(room, function(error, reply) {
@@ -99,6 +100,7 @@ exports.saveDocument = function(req) {
 
                         reply.changes = [];
                         _this.setRedis(room, reply);
+                        if(callback) callback();
                     });
                 }
             });
@@ -167,10 +169,14 @@ exports.room = function(req, socket) {
     return (socket) ? ("editor" + room) : room;
 }
 
-/* Get User Socket */
-exports.userSocket = function(req, user, callback) {
+/* Get User Sockets */
+exports.userSockets = function(req, pub_id, callback) {
     _this.getRedis(_this.room(req, true), function(error, document) {
-        callback(document.users[user]);
+        callback($.map(document.users, function(user) {
+            if(pub_id == user.pub_id) {
+                return user.socket;
+            }
+        }));
     });
 }
 
@@ -186,8 +192,18 @@ exports.users = function(req, callback) {
 exports.removeUser = function(req) {
     var room = _this.room(req, true);
     _this.getRedis(room, function(error, document) {
-        delete document.users[req.io.socket.id];
-        _this.setRedis(room, document);
+        var users = Object.keys(document.users);
+        var sockets = req.io.socket.manager.sockets.sockets;
+
+        $.each(users, function(index, user) {
+            if(user === req.io.socket.id || !(user in sockets)) {
+                delete document.users[user];
+            }
+
+            if(users.end(index)) {
+                _this.setRedis(room, document);
+            }
+        });
     });
 }
 
@@ -201,4 +217,9 @@ exports.getRedis = function(room, callback) {
 /* Save To Redis */
 exports.setRedis = function(room, data) {
     lib.redis.set(room, JSON.stringify(data));
+}
+
+/* Remove From Redis */
+exports.removeRedis = function(room) {
+    lib.redis.del(room);
 }

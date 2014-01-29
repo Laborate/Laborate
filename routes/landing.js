@@ -11,7 +11,7 @@ exports.index = function(req, res) {
         admins: function(callback) {
             req.models.users.find({
                 admin: true
-            }).limit(3).run(callback);
+            }).limit(3).orderRaw("rand()").run(callback);
         }
     }, function(errors, data) {
         if(!errors) {
