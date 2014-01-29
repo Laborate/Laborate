@@ -184,7 +184,20 @@ exports.userSockets = function(req, pub_id, callback) {
 exports.users = function(req, callback) {
     var room = _this.room(req, true);
     _this.getRedis(room, function(error, document) {
-        callback(document.users);
+        var users = Object.keys(document.users);
+        var sockets = req.io.socket.manager.sockets.sockets;
+
+        $.each(users, function(index, user) {
+            if(!(user in sockets)) {
+                delete document.users[user];
+            }
+
+            if(users.end(index)) {
+                _this.setRedis(room, document);
+                callback(document.users);
+                console.log(document.users);
+            }
+        });
     });
 }
 
@@ -192,18 +205,8 @@ exports.users = function(req, callback) {
 exports.removeUser = function(req) {
     var room = _this.room(req, true);
     _this.getRedis(room, function(error, document) {
-        var users = Object.keys(document.users);
-        var sockets = req.io.socket.manager.sockets.sockets;
-
-        $.each(users, function(index, user) {
-            if(user === req.io.socket.id || !(user in sockets)) {
-                delete document.users[user];
-            }
-
-            if(users.end(index)) {
-                _this.setRedis(room, document);
-            }
-        });
+        delete document.users[req.io.socket.id];
+        _this.setRedis(room, document);
     });
 }
 
