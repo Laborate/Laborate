@@ -75,12 +75,13 @@ exports.cursors = function(req) {
 exports.laborators = function(req) {
     if(req.session.user) {
         editorUtil.users(req, function(users) {
-            console.log(Object.keys(users));
-            delete users[req.session.user.pub_id];
-
             req.io.respond({
                 success: true,
-                laborators: Object.keys(users)
+                laborators: $.map(users, function(user) {
+                    if(user.socket != req.io.socket.id) {
+                        return user.pub_id;
+                    }
+                })
             });
         });
     } else {

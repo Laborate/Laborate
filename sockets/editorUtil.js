@@ -27,26 +27,20 @@ exports.clientData = function(req, role, callback) {
 
     _this.getRedis(room, function(error, document) {
         if(!error) {
-            if(document) {
-                document.users[req.session.user.pub_id] = {
-                    id: req.session.user.id,
-                    pub_id: req.session.user.pub_id,
-                    name: req.session.user.name
-                }
-            } else {
+            if(!document) {
                 document = {
                     id: role.document.id,
                     breakpoints: role.document.breakpoints,
                     changes: [],
                     users: {}
                 }
+            }
 
-                document.users[req.session.user.pub_id] = {
-                    id: req.session.user.id,
-                    pub_id: req.session.user.pub_id,
-                    name: req.session.user.name,
-                    socket: req.io.socket.id
-                }
+            document.users[req.io.socket.id] = {
+                id: req.session.user.id,
+                pub_id: req.session.user.pub_id,
+                name: req.session.user.name,
+                socket: req.io.socket.id
             }
 
             lib.jsdom.editor(role.document.content, document.changes, function(content) {
@@ -128,7 +122,7 @@ exports.broadcast = function(req, type, socket, callback) {
         case "document deleted":
             channel = 'editorExtras';
             message = {
-                "docDelete": true
+                docDelete: true
             }
             break;
 
@@ -192,7 +186,7 @@ exports.users = function(req, callback) {
 exports.removeUser = function(req) {
     var room = _this.room(req, true);
     _this.getRedis(room, function(error, document) {
-        delete document.users[req.session.user.pub_id];
+        delete document.users[req.io.socket.id];
         _this.setRedis(room, document);
     });
 }
