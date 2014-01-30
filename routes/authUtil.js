@@ -135,9 +135,20 @@ exports.xhr = function(req, res, next) {
 
 /* Operations */
 exports.login = function(req, res, next) {
+    var name = $.trim(req.param('name'));
+    var password = req.models.users.hash($.trim(req.param('password')));
+
     req.models.users.find({
-        email: $.trim(req.param('email')),
-        password: req.models.users.hash($.trim(req.param('password')))
+        or: [
+            {
+                email: name,
+                password: password
+            },
+            {
+                screen_name: name,
+                password: password
+            }
+        ]
     }, function(error, users) {
         if(!error && users.length == 1) {
             var user = users[0];

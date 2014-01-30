@@ -15,7 +15,7 @@
             </div>
             <form action="/auth/login/" autocomplete="on">
                 <div class="backdrop-text"><%= user.name %></div>
-                <input name="email" class="backdrop-input" type="hidden" value="<%= user.email %>"/>
+                <input name="name" class="backdrop-input" type="hidden" value="<%= user.screen_name %>"/>
                 <input name="password" type="password" class="backdrop-input" placeholder="password" autofocus="on"/>
                 <input type="submit" class="backdrop-button" value="Login"/>
             </form>
