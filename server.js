@@ -80,7 +80,7 @@ app.configure(function() {
     app.set('x-powered-by', false);
 
     //Express Direct Assests
-    app.use('/favicon', express.static(__dirname + '/public/favicon'));
+    app.use('/favicon', express.static(__dirname + '/public/favicons'));
     app.use('/fonts', express.static(__dirname + '/public/fonts'));
     app.use('/flash', express.static(__dirname + '/public/flash'));
     app.use('/img', express.static(__dirname + '/public/img'));

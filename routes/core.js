@@ -140,12 +140,12 @@ exports.locals = function(req, res, next) {
         }
     };
     res.locals.favicons = (!$.isEmptyObject(req.session.organization.icons)) ? req.session.organization.icons : {
-        "ico": res.locals.host + "/favicon/favicon.ico",
         "196": res.locals.host + "/favicon/196.png",
         "160": res.locals.host + "/favicon/160.png",
         "114": res.locals.host + "/favicon/114.png",
         "72": res.locals.host + "/favicon/72.png",
-        "57": res.locals.host + "/favicon/57.png"
+        "57": res.locals.host + "/favicon/57.png",
+        "32": res.locals.host + "/favicon/32.png"
     };
 
     next();
