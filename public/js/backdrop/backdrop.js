@@ -103,25 +103,27 @@ window.backdrop = {
         window.location.href = url;
     },
     profileImg: function() {
-        if(window.backdrop.email != $("#backdrop-email").val()) {
-            var profile_img = ("https://www.gravatar.com/avatar/" +
-                                                CryptoJS.MD5($("#backdrop-email").val()).toString() +
-                                                "?s=150&d=404");
+        if(CryptoJS) {
+            if(window.backdrop.email != $("#backdrop-email").val()) {
+                var profile_img = ("https://www.gravatar.com/avatar/" +
+                                                    CryptoJS.MD5($("#backdrop-email").val()).toString() +
+                                                    "?s=150&d=404");
 
-            $.ajax({
-                url: profile_img,
-                complete: function(xhr) {
-                    if(xhr.status == 200) {
-                        window.backdrop.profileImgChange(profile_img);
-                    } else {
-                        if($("#backdrop-profile img").attr("src") != "https://www.gravatar.com/avatar/?d=mm") {
-                            window.backdrop.profileImgChange("https://www.gravatar.com/avatar/?d=mm");
+                $.ajax({
+                    url: profile_img,
+                    complete: function(xhr) {
+                        if(xhr.status == 200) {
+                            window.backdrop.profileImgChange(profile_img);
+                        } else {
+                            if($("#backdrop-profile img").attr("src") != "https://www.gravatar.com/avatar/?d=mm") {
+                                window.backdrop.profileImgChange("https://www.gravatar.com/avatar/?d=mm");
+                            }
                         }
-                    }
 
-                    window.backdrop.email = $("#backdrop-email").val();
-                }
-            });
+                        window.backdrop.email = $("#backdrop-email").val();
+                    }
+                });
+            }
         }
     },
     profileImgChange: function(url) {
