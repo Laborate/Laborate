@@ -6,7 +6,10 @@ var backdrop_themes = {};
 exports.setup = function(req, res, next) {
     //Set Server Root For Non Express Calls
     req.session.server = req.protocol + "://" + req.host;
-    if(!config.random) config.random = Math.floor((Math.random()*1000000)+1);
+
+    if(!config.general.production || !config.random) {
+        config.random = Math.floor((Math.random()*1000000)+1);
+    }
 
     //Header Config
     res.header("Server", config.general.company);
@@ -101,7 +104,6 @@ exports.locals = function(req, res, next) {
     res.locals.private = false;
     res.locals.pageTrack = true;
     res.locals.config = {};
-    res.locals.random = config.random;
     res.locals.icons = config.icons;
     res.locals.user = req.session.user;
     res.locals.organization = req.session.organization;
@@ -110,6 +112,7 @@ exports.locals = function(req, res, next) {
     res.locals.robot = req.robot;
     res.locals.title_first = true;
     res.locals.hiring = config.general.hiring;
+    res.locals.random = "?rand=" + config.random;
 
     res.locals.apps = {
         sftp: {
