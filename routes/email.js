@@ -10,7 +10,7 @@ exports.index = function(req, res, next) {
         case "reset":
             req.email_test("reset", {
                 name: config.profile.name.capitalize,
-                code: "abcasdfjkl0324halsdf"
+                code: "#"
             }, render(req, res));
             break;
 
@@ -19,7 +19,7 @@ exports.index = function(req, res, next) {
                 name: config.profile.name.capitalize,
                 document: {
                     from: config.profile.screen_name,
-                    id: "adfasdfasdf",
+                    id: "#",
                     name: "hello_world.js",
                     access: "editor",
                     laborators: []
@@ -32,7 +32,7 @@ exports.index = function(req, res, next) {
                 name: config.profile.name.capitalize,
                 document: {
                     from: config.profile.screen_name,
-                    id: "adfasdfasdf",
+                    id: "#",
                     name: "hello_world.js",
                     access: "viewer",
                     laborators: $.map(Array(2), function() {
@@ -50,7 +50,7 @@ exports.index = function(req, res, next) {
                 name: config.profile.name.capitalize,
                 document: {
                     from: config.profile.screen_name,
-                    id: "adfasdfasdf",
+                    id: "#",
                     name: "hello_world.js",
                     access: "viewer",
                     laborators: $.map(Array(5), function() {
@@ -68,7 +68,7 @@ exports.index = function(req, res, next) {
                 name: config.profile.name.capitalize,
                 document: {
                     from: config.profile.screen_name,
-                    id: "adfasdfasdf",
+                    id: "#",
                     name: "hello_world.js",
                     access: "viewer",
                     laborators: $.map(Array(15), function() {

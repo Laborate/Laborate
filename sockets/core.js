@@ -69,8 +69,8 @@ exports.notifications = function(req) {
 
 exports.leave = function(req) {
     switch(true) {
-        case /.*\/editor\/\d*/g.test(req.headers.referer):
-           editor.leave(req);
-           break;
+        case /.*?\/editor\/[a-zA-Z0-9]+\//g.test(req.headers.referer):
+            editor.leave(req);
+            break;
     }
 }
