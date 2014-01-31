@@ -29,9 +29,6 @@ window.sidebarUtil = {
                     (form.find("select[name=cursorSearch]").val() === "true")
                 );
                 break;
-            case "beautify":
-                this.beautify(form.find("select").val());
-                break;
             case "line-jump":
                 this.jumpToLine(form.find("input").val());
                 form.find("input").val("");
@@ -150,24 +147,6 @@ window.sidebarUtil = {
         $(".form[name='settings'] input[name='password']")
             .val("")
             .prop("disabled", active);
-	},
-	beautify: function(select) {
-	    window.editor.operation(function() {
-	        if(select == "selection") {
-                var start = window.editor.getCursor("start").line;
-                var end = window.editor.getCursor("end").line;
-	        } else {
-    	        var start = window.editor.firstLine();
-                var end = window.editor.lastLine();
-	        }
-
-            window.editor.eachLine(start, end, function(line) {
-                window.editor.indentLine(
-                    window.editor.getLineNumber(line),
-                    "smart"
-                );
-            });
-	    });
 	},
 	jumpToLine: function(line) {
 	    try {
