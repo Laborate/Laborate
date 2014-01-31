@@ -10,21 +10,25 @@ require('../init')("editor.changes", function() {
 
                     _this.models.documents.get(reply.id, function(error, document) {
                         if(!error && document) {
-                            _this.lib.jsdom.editor(document.content, reply.changes, function(content) {
-                                document.save({
-                                    content: (content != "") ? content.split("\n") : [],
-                                        breakpoints: reply.breakpoints
-                                }, function(error) {
-                                    if(Object.keys(reply.users).empty) {
-                                        _this.redis.del(room);
-                                    } else {
-                                        reply.changes = [];
-                                        _this.redis.set(room, JSON.stringify(reply));
-                                    }
+                            if(reply.pub_id == document.pub_id) {
+                                _this.lib.jsdom.editor(document.content, reply.changes, function(content) {
+                                    document.save({
+                                        content: (content != "") ? content.split("\n") : [],
+                                            breakpoints: reply.breakpoints
+                                    }, function(error) {
+                                        if(Object.keys(reply.users).empty) {
+                                            _this.redis.del(room);
+                                        } else {
+                                            reply.changes = [];
+                                            _this.redis.set(room, JSON.stringify(reply));
+                                        }
 
-                                    next(error);
+                                        next(error);
+                                    });
                                 });
-                            });
+                            } else {
+                                next(error);
+                            }
                         } else {
                             next(error);
                             _this.redis.del(room);
