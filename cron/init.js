@@ -18,7 +18,7 @@ module.exports = function(name, callback) {
         setTimeout(function() {
             _this.redis.end();
             process.exit(code=0);
-        }, 5000);
+        }, 500);
     }
 
     if(config.general.ssl) {
