@@ -88,6 +88,7 @@ module.exports = function(root) {
     clientJS.addFile("editor", codemirror_path + 'addon/search/searchcursor.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/matchbrackets.js');
     clientJS.addFile("editor", codemirror_path + 'addon/selection/active-line.js');
+    clientJS.addFile("editor", codemirror_path + 'addon/edit/trailingspace.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/closebrackets.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/closetag.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/matchtags.js');
@@ -97,8 +98,8 @@ module.exports = function(root) {
     clientJS.addFile("editor", codemirror_path + 'keymap/vim.js');
     clientJS.addFile("editor", codemirror_path + 'keymap/emacs.js');
 
-    clientJS.addOb({
-        file_size: require(root + "/lib/core/file_size")
+    clientJS.addOb("editor", {
+        file_size: lib.core.file_size
     });
 
     clientJS.addFile("editor", js_path + 'editor/modes.js');

@@ -19,6 +19,7 @@ $(function() {
         highlightSelectionMatches: true,
         styleSelectedText: true,
         styleActiveLine: false,
+        showTrailingSpace: true,
         gutters: ["CodeMirror-linenumbers", "breakpoints"]
     });
 

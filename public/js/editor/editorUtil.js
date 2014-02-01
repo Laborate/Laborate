@@ -79,7 +79,7 @@ window.editorUtil = {
         } else if(direction == "in") {
             if(window.editorUtil.clean || override) {
                 window.editorUtil.clean = false;
-                window.editor.replaceRange(data['text'], data['from'], data['to']);
+                window.editor.replaceRange(data.text, data.from, data.to);
             } else {
                 window.editorUtil.clean = true;
             }
