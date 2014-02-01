@@ -992,7 +992,7 @@ window.documents = {
                 </div>                                                       \
             ')
             .appendTo(".pane")
-            .animate({ opacity: 1 }, 1000);
+            .animate({ opacity: 1 }, 200);
         });
     },
     fileRename: function(data) {
