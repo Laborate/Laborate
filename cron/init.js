@@ -35,13 +35,13 @@ module.exports = function(name, callback) {
 
     lib.models_init(_this, callback);
 
-    /* Exit After 3 Minutes (Safegaurd) */
+    /* Exit After 2 Minutes (Safegaurd) */
     setTimeout(function() {
-        lib.error.report("cronjob: " + name + " took longer than a 3 minutes", function() {
+        lib.error.report("cronjob: " + name + " took longer than a 2 minutes", function() {
             _this.redis.end();
-            process.exit(1);
+            process.exit(code=0);
         });
-    }, 180000);
+    }, 120000);
 }
 
 /* Error Handling */
