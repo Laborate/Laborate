@@ -15,7 +15,7 @@ exports.editor = function(req, res, next) {
         pub_id: req.param("document")
     }, function(error, documents) {
         if(!error && !documents.empty) {
-            document = documents[0];
+            var document = documents[0];
 
             if(req.robot) {
                 if(!document.private) {
@@ -52,6 +52,7 @@ exports.editor = function(req, res, next) {
                             backdrop: req.backdrop(),
                             private: document.private,
                             config: {
+                                embed: false,
                                 permission: permission || {
                                     id: 2,
                                     owner: false
@@ -67,6 +68,51 @@ exports.editor = function(req, res, next) {
             res.error(404, null, error);
         }
     });
+}
+
+exports.embed = function(req, res, next) {
+    if(!req.robot) {
+        req.models.documents.find({
+            pub_id: req.param("document")
+        }, function(error, documents) {
+            if(!error && !documents.empty) {
+                var document = documents[0];
+
+                if(!document.private) {
+                    res.renderOutdated('editor/embed/index', {
+                        title: document.name,
+                        document: document,
+                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
+                        css: clientCSS.renderTags("backdrop", "codemirror", "editor", "editor-embed"),
+                        config: {
+                            embed: true,
+                            permission: {
+                                id: 2,
+                                owner: false
+                            }
+                        }
+                    });
+                } else {
+                   res.error(404);
+                }
+            } else {
+                res.error(404, null, error);
+            }
+        });
+    } else {
+        res.error(404);
+    }
+}
+
+exports.embed_test = function(req, res, next) {
+    if(!req.robot) {
+        res.renderOutdated('editor/embed/tester', {
+            title: "Embed Tester",
+            document: req.param("document"),
+        });
+    } else {
+        res.error(404);
+    }
 }
 
 exports.permissions = function(req, res, next) {

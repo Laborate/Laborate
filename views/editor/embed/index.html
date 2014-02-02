@@ -1,0 +1,42 @@
+<% include ../../includes/header.html %>
+<div id="backdrop">
+    <div id="backdrop-core">
+         <div id="backdrop-container">
+            <div class="backdrop-text"><%= document.name %></div>
+            <form action="/editor/<%= document.pub_id %>/join/">
+                <div class="loader-bar">
+                    <div class="loader-bar-block"></div>
+                </div>
+            </form>
+         </div>
+    </div>
+</div>
+<div class="content">
+    <div class="header">
+        <div class="bottom">
+            <div class="filters">
+                <div class="filter" data-key="file-name">
+                    <span>Name:</span>
+                    <strong><%= document.name %></strong>
+                </div>
+                <div class="filter" data-key="file-size">
+                    <span>Size:</span>
+                    <strong></strong>
+                </div>
+                <div class="filter" data-key="file-lines">
+                    <span>Lines:</span>
+                    <strong></strong>
+                </div>
+            </div>
+            <a class="link" target="_blank" href="/editor/<%= document.pub_id %>/">
+                Edit in <span>Laborate</span>
+            </a>
+            <div class="message"></div>
+        </div>
+    </div>
+    <div class="pane">
+        <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
+        <div class="shadow-top"></div>
+    </div>
+</div>
+<% include ../../includes/footer.html %>

@@ -107,7 +107,7 @@ exports.extras = function(req) {
                     }
 
                     if(req.data.breakpoints.end(index)) {
-                        this.saveRedis(room, document);
+                        editorUtil.setRedis(room, document);
                     }
                 });
             });

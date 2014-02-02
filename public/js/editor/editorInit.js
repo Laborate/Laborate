@@ -78,29 +78,34 @@ $(function() {
     //Refresh Editor
     window.editorUtil.resize();
 
-    //Setup Fullscreen
-    if($.cookie("fullscreen") != null) {
-        window.editorUtil.fullscreen($.cookie("fullscreen") == "false");
-    }
+    if(!config.embed) {
+        //Setup Fullscreen
+        if($.cookie("fullscreen") != null) {
+            window.editorUtil.fullscreen($.cookie("fullscreen") == "false");
+        }
 
-    $.get("/editor/" + url_params()["document"] + "/permissions/", function(response) {
-        //Ser Permissions
-        window.config.permissions = $.map(response.permissions, function(permission) {
-            return permission.name;
+        $.get("/editor/" + url_params()["document"] + "/permissions/", function(response) {
+            //Ser Permissions
+            window.config.permissions = $.map(response.permissions, function(permission) {
+                return permission.name;
+            });
+
+            //Set Permission Popup
+            $(".context-menu .list").append(
+                $.map(response.permissions.slice(1), function(permission) {
+                    return ('                                               \
+                        <div class="item" data-id="' + permission.id + '">  \
+                            ' + permission.name + '                         \
+                        </div>                                              \
+                    ');
+                })
+            );
+
+            //Init Joining
+            window.editorUtil.join();
         });
-
-        //Set Permission Popup
-        $(".context-menu .list").append(
-            $.map(response.permissions.slice(1), function(permission) {
-                return ('                                               \
-                    <div class="item" data-id="' + permission.id + '">  \
-                        ' + permission.name + '                         \
-                    </div>                                              \
-                ');
-            })
-        );
-
+    } else {
         //Init Joining
         window.editorUtil.join();
-    });
+    }
 });

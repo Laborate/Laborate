@@ -205,7 +205,7 @@ exports.error = function(req, type) {
 
 /* Get Room */
 exports.room = function(req, socket) {
-    var room = req.headers.referer.split("/").slice(-2, -1);
+    var room = req.headers.referer.split("/").slice(-2, -1)[0];
     return (socket) ? ("editor" + room) : room;
 }
 

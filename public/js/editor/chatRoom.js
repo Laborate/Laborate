@@ -83,8 +83,8 @@ window.chat = {
         window.chat.status(screenName + " has signed out");
     },
     _scrollToBottom: function() {
-        window.window.chat.conversation().reinitialise();
-        window.window.chat.conversation().scrollToPercentY("100");
+        window.chat.conversation().reinitialise();
+        window.chat.conversation().scrollToPercentY("100");
     },
     _check: function(message, type) {
         if(type == "commands") {
@@ -209,38 +209,40 @@ window.chat = {
 //          Chat Room Control Functions
 /////////////////////////////////////////////////
 $(function() {
-    setTimeout(window.chat.help, 10);
-    setInterval(window.chat.resize, 1000);
-    $(window).resize(window.chat.resize);
+    if(!config.embed) {
+        setTimeout(window.chat.help, 10);
+        setInterval(window.chat.resize, 1000);
+        $(window).resize(window.chat.resize);
 
-    //Submit New Message
-    $(".messenger textarea").on('keydown', function(e) {
-        //Checks if enter key is pressed
-        if(e.which == 13) {
-            var _this = $(this);
-        	if($.trim(_this.val()) != "") {
-        		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar, "");
-        		  _this.val("");
+        //Submit New Message
+        $(".messenger textarea").on('keydown', function(e) {
+            //Checks if enter key is pressed
+            if(e.which == 13) {
+                var _this = $(this);
+            	if($.trim(_this.val()) != "") {
+            		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar, "");
+            		  _this.val("");
+            	}
+
+            	return false;
         	}
+        });
 
-        	return false;
-    	}
-    });
+        $(".messenger textarea").on('focus', function() {
+            window.chat.count = 0;
+            window.sidebarUtil.setTitle("in", window.editorUtil.name);
+        });
 
-    $(".messenger textarea").on('focus', function() {
-        window.chat.count = 0;
-        window.sidebarUtil.setTitle("in", window.editorUtil.name);
-    });
-
-    //Pull Message
-    window.socketUtil.socket.on('editorChatRoom', function (data) {
-        if(data.isStatus) {
-            window.chat.status(data.message);
-        }
-        else {
-            window.chat.message(data.from, data.message, "in", data.gravatar, data.name);
-        }
-    });
+        //Pull Message
+        window.socketUtil.socket.on('editorChatRoom', function (data) {
+            if(data.isStatus) {
+                window.chat.status(data.message);
+            }
+            else {
+                window.chat.message(data.from, data.message, "in", data.gravatar, data.name);
+            }
+        });
+    }
 });
 
 

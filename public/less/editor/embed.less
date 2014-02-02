@@ -1,0 +1,106 @@
+@import '../core/index';
+@import '../compless/all';
+
+html, body {
+    min-width: inherit;
+    background: @color_header_top;
+}
+
+#backdrop {
+    background: @color_header_top;
+
+    #backdrop-container {
+        background: none;
+        .box-shadow(none);
+        .border-radius(none);
+
+        .backdrop-text {
+            margin-bottom: 3px;
+        }
+
+        .loader-bar {
+            border: none;
+        }
+    }
+}
+
+.content {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+    .header,
+    .header .bottom,
+    .pane {
+        width: 100%;
+    }
+
+    .pane {
+        background: #f9f9f9;
+    }
+
+    .header {
+        .bottom {
+            position: relative;
+            background: @color_header_top;
+            color: #fff;
+
+            .link {
+                position: absolute;
+                right: 0;
+                top: 0;
+                font-size: 12px;
+                padding: 15px;
+                background: darken(@color_header_top, 5%);
+                color: #fff;
+                font-weight: lighter;
+
+                span {
+                    font-family: "Not Just Groovy";
+                    font-weight: bold;
+                }
+
+                &:hover {
+                    background: darken(@color_header_top, 8%);
+
+                    &:active {
+                        background: darken(@color_header_top, 11%);
+                    }
+                }
+            }
+
+
+            .message {
+                color: darken(#fff, 5%);
+            }
+
+            .filters {
+                color: darken(#fff, 5%);
+
+                .filter {
+                    strong {
+                        color: darken(#fff, 10%);
+                    }
+
+                    @media only screen and (max-width: 550px) {
+                        & {
+                            display: none;
+
+                            &:first-child,
+                            &:nth-child(2) {
+                                display: block;
+                                max-width: inherit;
+                            }
+                        }
+                    }
+
+                    @media only screen and (max-width: 450px) {
+                        &:nth-child(2) {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

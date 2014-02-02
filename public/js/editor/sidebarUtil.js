@@ -323,95 +323,101 @@ window.sidebarUtil = {
 	},
 	inviteTimeout: null,
 	laborators: function() {
-	    async.parallel({
-	        laborators: function(callback) {
-                $.post("/editor/" + url_params()["document"] + "/laborators/", {
-                    _csrf: window.config.csrf
-                }, function(json) {
-                    callback(json.error_message, json.laborators);
+	    if(!config.embed) {
+    	    async.parallel({
+    	        laborators: function(callback) {
+                    $.post("/editor/" + url_params()["document"] + "/laborators/", {
+                        _csrf: window.config.csrf
+                    }, function(json) {
+                        callback(json.error_message, json.laborators);
+                    });
+    	        },
+    	        online: function(callback) {
+    	            window.socketUtil.socket.emit("editorLaborators", function(json) {
+                        window.editorUtil.users(json.laborators);
+                        callback(null, json.laborators);
+                    });
+    	        }
+    	    }, function(error, data) {
+                var permissions = $.map(window.config.permissions, function(permission, key) {
+                    return {
+                        id: key,
+                        name: permission.toLowerCase(),
+                        count: 0
+                    }
                 });
-	        },
-	        online: function(callback) {
-	            window.socketUtil.socket.emit("editorLaborators", function(json) {
-                    window.editorUtil.users(json.laborators);
-                    callback(null, json.laborators);
-                });
-	        }
-	    }, function(error, data) {
-            var permissions = $.map(window.config.permissions, function(permission, key) {
-                return {
-                    id: key,
-                    name: permission.toLowerCase(),
-                    count: 0
-                }
-            });
 
-    	    $(".sidebar .form[name='invite'] .listing").html("");
+        	    $(".sidebar .form[name='invite'] .listing").html("");
 
-            $.each(data.laborators, function(key, laborator) {
-                var item = "";
+                $.each(data.laborators, function(key, laborator) {
+                    var item = "";
 
-                if(data.online.indexOf(laborator.id) != -1) {
-                    permissions[laborator.permission.id-1].count++;
-                    item += " active";
-                }
-
-                if(config.permission.owner) {
-                    var settings = "settings " + config.icons.settings;
-
-                    if(!laborator.permission.access) {
-                        item += " blocked";
-                    }
-                } else {
-                    if(!laborator.permission.access) {
-                        return true;
-                    } else {
-                        var settings = "";
-                    }
-                }
-
-                $(".sidebar .form[name='invite'] .listing")
-                    .append("                                                           \
-                        <div class='item " + item + "'                                  \
-                             data-id='" + laborator.id + "'                             \
-                             data-permission='" + laborator.permission.id + "'>            \
-                             <div class='gravatar'>                                     \
-                                <img src='" + laborator.gravatar + "'>                  \
-                             </div>                                                     \
-                             <div class='name'>" + laborator.screen_name + "</div>      \
-                             <div class='" + settings + "'></div>                       \
-                        </div>                                                          \
-                    ");
-
-                if(data.laborators.end(key)) {
-                    var header = [];
-                    var delimiter = "<span>" + window.config.delimeter + "</span>";
-                    permissions[1].count += permissions[0].count;
-
-                    if(permissions[1].count != 0) {
-                        var editors = permissions[1].count + " " + permissions[1].name;
-                        if(permissions[1].count != 1) editors += "s";
-                        header.push(editors);
+                    if(data.online.indexOf(laborator.id) != -1) {
+                        permissions[laborator.permission.id-1].count++;
+                        item += " active";
                     }
 
-                    if(permissions[2].count != 0) {
-                        var viewers = permissions[2].count + " " + permissions[2].name;
-                        if(permissions[2].count != 1) viewers += "s";
-                        header.push(viewers);
-                    }
+                    if(config.permission.owner) {
+                        var settings = "settings " + config.icons.settings;
 
-                    if(!header.empty) {
-                        if(permissions[1].count == 0 && permissions[2].count == 0) {
-                            $(".chat .controller").text("Chat Room");
-                        } else {
-                            $(".chat .controller").html(header.join(delimiter));
+                        if(!laborator.permission.access) {
+                            item += " blocked";
                         }
                     } else {
-                        $(".chat .controller").text("Chat Room");
+                        if(!laborator.permission.access) {
+                            return true;
+                        } else {
+                            var settings = "";
+                        }
                     }
-                }
+
+                    $(".sidebar .form[name='invite'] .listing")
+                        .append("                                                           \
+                            <div class='item " + item + "'                                  \
+                                 data-id='" + laborator.id + "'                             \
+                                 data-permission='" + laborator.permission.id + "'>            \
+                                 <div class='gravatar'>                                     \
+                                    <img src='" + laborator.gravatar + "'>                  \
+                                 </div>                                                     \
+                                 <div class='name'>" + laborator.screen_name + "</div>      \
+                                 <div class='" + settings + "'></div>                       \
+                            </div>                                                          \
+                        ");
+
+                    if(data.laborators.end(key)) {
+                        var header = [];
+                        var delimiter = "<span>" + window.config.delimeter + "</span>";
+                        permissions[1].count += permissions[0].count;
+
+                        if(permissions[1].count != 0) {
+                            var editors = permissions[1].count + " " + permissions[1].name;
+                            if(permissions[1].count != 1) editors += "s";
+                            header.push(editors);
+                        }
+
+                        if(permissions[2].count != 0) {
+                            var viewers = permissions[2].count + " " + permissions[2].name;
+                            if(permissions[2].count != 1) viewers += "s";
+                            header.push(viewers);
+                        }
+
+                        if(!header.empty) {
+                            if(permissions[1].count == 0 && permissions[2].count == 0) {
+                                $(".chat .controller").text("Chat Room");
+                            } else {
+                                $(".chat .controller").html(header.join(delimiter));
+                            }
+                        } else {
+                            $(".chat .controller").text("Chat Room");
+                        }
+                    }
+                });
+    	    });
+        } else {
+            window.socketUtil.socket.emit("editorLaborators", function(json) {
+                window.editorUtil.users(json.laborators);
             });
-	    });
+        }
 	},
 	laboratorOpen: function(location, user) {
         $(".context-menu")
