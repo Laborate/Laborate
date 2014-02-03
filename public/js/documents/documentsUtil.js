@@ -429,6 +429,8 @@ window.documents = {
             }
         }());
 
+        $("#context-menu-widget").toggle(!element.data("private"));
+
         $(".context-menu")
             .css({
                 "top": function() {
@@ -731,7 +733,7 @@ window.documents = {
                             data-role="' + item.role + '"                             \
                             data-location="' + item.location + '"                     \
                             data-id="' + item.id + '"                                 \
-                            data-protection="' + item.protection + '"                 \
+                            data-private="' + item.private + '"                       \
                             data-size="' + item.size + '"                             \
                             data-laborators="' + item.laborators + '"                 \
                             data-type="' + item.type + '">                            \
