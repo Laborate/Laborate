@@ -84,6 +84,7 @@ exports.embed = function(req, res, next) {
                         document: document,
                         js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
                         css: clientCSS.renderTags("backdrop", "codemirror", "editor", "editor-embed"),
+                        embed: true,
                         config: {
                             embed: true,
                             permission: {
@@ -93,14 +94,14 @@ exports.embed = function(req, res, next) {
                         }
                     });
                 } else {
-                   res.error(404);
+                   res.error(404, null, null, { embed: true });
                 }
             } else {
-                res.error(404, null, error);
+                res.error(404, null, error, { embed: true });
             }
         });
     } else {
-        res.error(404);
+        res.error(404, null, null, { embed: true });
     }
 }
 
@@ -157,6 +158,7 @@ exports.update = function(req, res, next) {
                 var user = req.session.user;
                 var document = documents[0].document;
                 var changeReadonly = false;
+                var changePrivate = false;
 
                 document.name = req.param("name");
 
@@ -164,14 +166,15 @@ exports.update = function(req, res, next) {
                     if(!user.organizations.empty) {
                         if(!user.organizations[0].permission.student) {
                             var readonly = (req.param("readonly") === "true");
-
                             changeReadonly = (readonly != document.readonly);
                             document.readonly = readonly;
                         }
                     }
 
                     if(user.pricing.documents == null || user.documents.private < user.pricing.documents) {
-                        document.private = (req.param("private") === "true");
+                        var private = (req.param("private") === "true");
+                        changePrivate = (private != document.private);
+                        document.private = private;
                     }
                 }
 
@@ -179,7 +182,8 @@ exports.update = function(req, res, next) {
                     if(!error) {
                         res.json({
                             success: true,
-                            changeReadonly: changeReadonly
+                            changeReadonly: changeReadonly,
+                            changePrivate: changePrivate
                         });
                     } else {
                         res.error(200, "Failed To Update File", error);

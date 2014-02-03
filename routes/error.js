@@ -1,7 +1,9 @@
-var error_handler = function(status, message, home, req, res) {
+var error_handler = function(status, message, locals, req, res) {
     var error_message;
     var error_html;
     var redirect_url;
+
+    locals = locals || {};
 
     switch(status) {
         case 401:
@@ -22,8 +24,7 @@ var error_handler = function(status, message, home, req, res) {
             break;
         case 500:
             error_message = "Internal Server Error";
-            error_html = 'Sorry we are having technical difficulties. \
-                         The problem has been reported and will be fixed soon.';
+            error_html = 'Sorry we are having<br>technical difficulties.';
             break;
         default:
             error_message = (message) ? message : "Page Not Found";
@@ -50,18 +51,19 @@ var error_handler = function(status, message, home, req, res) {
                 if(redirect_url) {
                     res.redirect(redirect_url);
                 } else {
-                    res.renderOutdated('error/index', {
+                    res.renderOutdated('error/index', $.extend(true, {
                         host: req.host,
                         title: error_message,
                         mode: error_message,
                         js: clientJS.renderTags("backdrop"),
                         css: clientCSS.renderTags("backdrop"),
                         error_html: error_html,
-                        home: home,
                         backdrop: req.backdrop(),
                         pageTrack: false,
-                        mobile: false
-                    });
+                        mobile: false,
+                        home: locals.home || true,
+                        embed: locals.embed || false
+                    }, locals));
                 }
             },
             'application/json': function() {
@@ -89,8 +91,8 @@ exports.global = function(error, req, res, next) {
 };
 
 exports.handler = function(req, res, next) {
-    res.error = function(status, message, error, home) {
-        error_handler(status, message, home, req, res);
+    res.error = function(status, message, error, locals) {
+        error_handler(status, message, locals, req, res);
         req.error.capture(error);
     }
     next();

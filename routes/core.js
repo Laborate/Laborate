@@ -113,6 +113,7 @@ exports.locals = function(req, res, next) {
     res.locals.title_first = true;
     res.locals.hiring = config.general.hiring;
     res.locals.random = "?rand=" + config.random;
+    res.locals.embed = false;
 
     res.locals.apps = {
         sftp: {

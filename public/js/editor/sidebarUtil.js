@@ -542,6 +542,12 @@ window.sidebarUtil = {
                     		    readonly: true
                             });
                         }
+
+                        if(json.changePrivate) {
+                            window.socketUtil.socket.emit('editorExtras', {
+                    		    private: true
+                            });
+                        }
                     } else {
                         _this.buttonError(button, json.error_message);
                     }

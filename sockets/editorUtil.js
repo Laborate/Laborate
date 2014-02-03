@@ -1,4 +1,5 @@
 var _this = exports;
+var async = require('async');
 
 /* Authentication */
 exports.accessCheck = function(req, callback) {
@@ -10,11 +11,54 @@ exports.accessCheck = function(req, callback) {
         }, function(error, roles) {
             if(!error && !roles.empty) {
                 _this.clientData(req, {
+                    isEmbed: false,
                     document: roles[0].document,
                     permission: roles[0].permission
                 }, callback);
             } else {
                 callback("exists");
+            }
+        });
+    });
+}
+
+exports.accessCheckEmbed = function(req, callback) {
+    lib.models_init(null, function(db, models) {
+        async.series({
+            document: function(next) {
+                models.documents.find({
+                    pub_id: _this.room(req),
+                    private: false
+                }, function(error, documents) {
+                    if(!error && !documents.empty) {
+                        next(null, documents[0]);
+                    } else {
+                        next("exists");
+                    }
+                });
+            },
+            permission: function(next) {
+                models.documents.permissions.find({
+                    owner: false,
+                    readonly: true,
+                    access: true
+                }, function(error, permissions) {
+                    if(!error && !permissions.empty) {
+                        next(null, permissions[0]);
+                    } else {
+                        next("exists");
+                    }
+                });
+            }
+        }, function(errors, data) {
+            if(!errors && data) {
+                _this.clientData(req, {
+                    isEmbed: true,
+                    document: data.document,
+                    permission: data.permission
+                }, callback);
+            } else {
+                callback(errors[0]);
             }
         });
     });
@@ -37,11 +81,13 @@ exports.clientData = function(req, role, callback) {
                 }
             }
 
-            document.users[req.io.socket.id] = {
-                id: req.session.user.id,
-                pub_id: req.session.user.pub_id,
-                name: req.session.user.name,
-                socket: req.io.socket.id
+            if(!role.isEmbed) {
+                document.users[req.io.socket.id] = {
+                    id: req.session.user.id,
+                    pub_id: req.session.user.pub_id,
+                    name: req.session.user.name,
+                    socket: req.io.socket.id
+                }
             }
 
             lib.jsdom.editor(role.document.content, document.changes, function(content) {
@@ -72,6 +118,10 @@ exports.clientData = function(req, role, callback) {
                 document.changes = [];
                 _this.setRedis(room, document);
                 req.io.join(room);
+
+                if(role.isEmbed) {
+                    req.io.join(_this.room(req, true));
+                }
             });
         } else {
             return callback("problems");
@@ -204,19 +254,45 @@ exports.error = function(req, type) {
 }
 
 /* Get Room */
-exports.room = function(req, socket) {
-    var room = req.headers.referer.split("/").slice(-2, -1)[0];
-    return (socket) ? ("editor" + room) : room;
+exports.room = function(req, socket, embed) {
+    var room = /.*\/editor\/(.*?)\/.*/.exec(req.headers.referer);
+
+    if(room) {
+        room = room[1];
+
+        if(socket) {
+            if(embed) {
+                return "editorEmbed" + room;
+            } else {
+                return "editor" + room;
+            }
+        } else {
+            return room;
+        }
+
+    } else {
+        return null;
+    }
+}
+
+/* Get Room */
+exports.isEmbed = function(req) {
+    return !!(/.*\/editor\/.*?\/embed\/.*/.exec(req.headers.referer));
+
 }
 
 /* Get User Sockets */
 exports.userSockets = function(req, pub_id, callback) {
     _this.getRedis(_this.room(req, true), function(error, document) {
-        callback($.map(document.users, function(user) {
-            if(pub_id == user.pub_id) {
-                return user.socket;
-            }
-        }));
+        if(document) {
+            callback($.map(document.users, function(user) {
+                if(pub_id == user.pub_id) {
+                    return user.socket;
+                }
+            }));
+        } else {
+            callback([]);
+        }
     });
 }
 

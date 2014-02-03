@@ -14,7 +14,11 @@ body {
     .reset-box-model();
 
     &.mobile {
-        min-width: 320px;
+        min-width: 320px !important;
+    }
+
+    &.embed {
+        min-width: inherit !important;
     }
 
     @media only screen

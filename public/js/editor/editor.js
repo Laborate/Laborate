@@ -2,7 +2,7 @@ $(function() {
     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
 
     window.editor = CodeMirror.fromTextArea(document.getElementById("code"), {
-        lineNumbers: true,
+        lineNumbers: !config.embed,
         lineWrapping: false,
         matchBrackets: true,
         matchTags: true,
@@ -51,7 +51,7 @@ $(function() {
 
     //Pull Extras Info
     window.socketUtil.socket.on('editorExtras', function (data) {
-        if("laborators" in data) {
+        if("laborators" in data && !config.embed) {
             window.sidebarUtil.laborators();
         }
 
@@ -59,15 +59,23 @@ $(function() {
             window.sidebarUtil.setTitle("in", data.docName, window.chat.count);
         }
 
-        if("breakpoints" in data) {
+        if("breakpoints" in data && !config.embed) {
             window.editorUtil.gutterClick("in", data.breakpoints);
         }
 
         if("docDelete" in data) {
-            window.location.href = "/documents/";
+            if(config.embed) {
+                window.location.reload(true);
+            } else {
+                window.location.href = "/documents/";
+            }
         }
 
         if("readonly" in data) {
+            window.location.reload(true);
+        }
+
+        if("private" in data && config.embed) {
             window.location.reload(true);
         }
     });

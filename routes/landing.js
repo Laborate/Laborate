@@ -27,7 +27,7 @@ exports.index = function(req, res) {
                 title_first: false
             });
         } else {
-            res.error(500, "Laborate is currently experiencing technical difficulties.", errors);
+            res.error(500, null, errors, { home: false });
         }
     });
 };

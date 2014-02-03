@@ -101,13 +101,13 @@ module.exports = function(app) {
 
     /* Editor */
     app.get('/editor', authUtil.restrictAccess, editor.index);
-    app.get('/editor/embed/:document/', editor.embed);
+    app.get('/editor/:document', authUtil.restrictAccess, documents.stats, editor.editor);
+    app.get('/editor/:document/embed', editor.embed);
 
     if(!config.production) {
-        app.get('/editor/embed/tester/:document/', editor.embed_test);
+        app.get('/editor/:document/embed/tester', editor.embed_test);
     }
 
-    app.get('/editor/:document', authUtil.restrictAccess, documents.stats, editor.editor);
     app.get('/editor/:document/download', authUtil.restrictAccess, editor.download);
     app.get('/editor/:document/permissions', authUtil.restrictAccess, authUtil.xhr, editor.permissions);
     app.post('/editor/exists', authUtil.restrictAccess,  editor.exists);

@@ -8,7 +8,7 @@ window.editorUtil = {
     name: "",
     interval: null,
     notification: function(message, permanent) {
-        $(".header .bottom .filters, .header .bottom .link")
+        $(".header .bottom .filters, .header .bottom .linkable")
             .toggle(!message);
 
         $(".header .bottom .message")
@@ -217,7 +217,7 @@ window.editorUtil = {
         interval = setInterval(function() {
             if(window.socketUtil.socket.socket.connected) {
                 clearInterval(interval);
-                window.socketUtil.socket.emit("editorJoin", config.embed, function(json) {
+                window.socketUtil.socket.emit("editorJoin", function(json) {
                     if(json.success) {
                         async.series([
                             function(next) {

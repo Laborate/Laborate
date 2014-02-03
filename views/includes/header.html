@@ -100,7 +100,7 @@
             <% } %>
         </script>
     </head>
-    <body class="<%= (organization.id) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %>">
+    <body class="<%= (organization.id) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %> <%= (embed) ? "embed" : "" %>">
         <% if(production && hiring) { %>
             <div id="printout" class="hidden"><% include ./printout.html %></div>
         <% } %>

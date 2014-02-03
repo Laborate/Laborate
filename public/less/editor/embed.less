@@ -1,11 +1,6 @@
 @import '../core/index';
 @import '../compless/all';
 
-html, body {
-    min-width: inherit;
-    background: @color_header_top;
-}
-
 #backdrop {
     background: @color_header_top;
 
@@ -37,34 +32,73 @@ html, body {
 
     .pane {
         background: #f9f9f9;
+        border: solid 1px #ccc;
+        height: 100%;
+        margin-top: -2px;
+        position: relative;
+        z-index: 1;
+
+        .cm-s-laborate .CodeMirror-gutters {
+            background: #f9f9f9;
+        }
+
+        .shadow-top {
+            top: -3px;
+        }
     }
 
     .header {
+        position: relative;
+        z-index: 2;
+        height: 40px;
+
         .bottom {
             position: relative;
             background: @color_header_top;
             color: #fff;
+            padding: 7px 25px 7px 55px;
 
-            .link {
+            .linkable {
                 position: absolute;
-                right: 0;
                 top: 0;
-                font-size: 12px;
-                padding: 15px;
-                background: darken(@color_header_top, 5%);
-                color: #fff;
-                font-weight: lighter;
+                display: inline-block;
+                .clearfix();
 
-                span {
+                &.edit {
+                    right: 0;
                     font-family: "Not Just Groovy";
                     font-weight: bold;
+                    padding: 14px;
+                    background: darken(@color_header_top, 5%);
+                    color: #fff;
+                    font-weight: lighter;
+                    font-size: 12px;
+
+                    &:hover {
+                        background: darken(@color_header_top, 8%);
+
+                        &:active {
+                            background: darken(@color_header_top, 11%);
+                        }
+                    }
                 }
 
-                &:hover {
-                    background: darken(@color_header_top, 8%);
+                &.logo {
+                    left: 0;
+                    padding: 10px;
+                    background: lighten(@color_header_top, 8%);
 
-                    &:active {
-                        background: darken(@color_header_top, 11%);
+                    &:hover {
+                        background: lighten(@color_header_top, 11%);
+
+                        &:active {
+                            background: lighten(@color_header_top, 13%);
+                        }
+                    }
+
+                    img {
+                        width: 20px;
+                        height: 20px;
                     }
                 }
             }
@@ -75,6 +109,7 @@ html, body {
             }
 
             .filters {
+                font-size: 13px;
                 color: darken(#fff, 5%);
 
                 .filter {
@@ -82,7 +117,7 @@ html, body {
                         color: darken(#fff, 10%);
                     }
 
-                    @media only screen and (max-width: 550px) {
+                    @media only screen and (max-width: 480px) {
                         & {
                             display: none;
 
@@ -94,7 +129,12 @@ html, body {
                         }
                     }
 
-                    @media only screen and (max-width: 450px) {
+                    @media only screen and (max-width: 380px) {
+                        & strong {
+                            color: #fff;
+                        }
+
+                        & span,
                         &:nth-child(2) {
                             display: none;
                         }
