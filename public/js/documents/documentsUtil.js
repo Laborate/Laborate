@@ -377,9 +377,11 @@ window.documents = {
         );
     },
     popupWidgetResult: function(id, width, height) {
-         window.documents.popup("widget", $('                                                               \
-            <iframe src="' + window.config.host + '/editor/' + id + '/embed/"                               \
-                    style="width:' + width + ';height:' + height + ';outline:none;border:none;"></iframe>   \
+         window.documents.popup("widget", $('                                  \
+            <iframe src="' + window.config.host + '/editor/' + id + '/embed/"  \
+                    width="' + width + '"                                      \
+                    height="' + height + '"                                    \
+                    frameborder="0"></iframe>                                  \
         ').prop('outerHTML'), "Widget Embed (view only)");
     },
     contextMenu: function(element) {
@@ -429,6 +431,7 @@ window.documents = {
             }
         }());
 
+        $("#context-menu-url").toggle(!element.data("private"));
         $("#context-menu-widget").toggle(!element.data("private"));
 
         $(".context-menu")
