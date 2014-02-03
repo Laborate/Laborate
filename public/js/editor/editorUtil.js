@@ -71,6 +71,7 @@ window.editorUtil = {
 
         if(direction == "out" && window.editorUtil.initialized) {
             if(window.editorUtil.clean) {
+                console.log(data);
                 window.socketUtil.socket.emit('editorDocument', {
                     "changes": data
                 });
@@ -80,7 +81,29 @@ window.editorUtil = {
         } else if(direction == "in") {
             if(window.editorUtil.clean || override) {
                 window.editorUtil.clean = false;
-                window.editor.replaceRange(data.text, data.from, data.to);
+
+                window.editor.operation(function() {
+                    var current = data.next;
+
+                    window.editor.replaceRange(
+                        data.text,
+                        data.from,
+                        data.to
+                    );
+
+                    async.whilst(function() {
+                        return !!current;
+                    }, function (callback) {
+                        window.editor.replaceRange(
+                            current.text,
+                            current.from,
+                            current.to
+                        );
+
+                        current = current.next;
+                        callback();
+                    }, Function);
+                });
             } else {
                 window.editorUtil.clean = true;
             }
