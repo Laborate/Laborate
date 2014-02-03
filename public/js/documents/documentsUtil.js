@@ -18,7 +18,7 @@ window.documents = {
             .find(".action")
             .hide()
             .find("input")
-            .not("[type='file']")
+            .not("[type='file'], .keep")
             .val("")
             .removeClass("error");
 
@@ -66,6 +66,16 @@ window.documents = {
                     .find("#popup-" + action)
                     .find("input")
                     .val(window.config.host + "/editor/" + data + "/");
+                break;
+
+            case "widget":
+                new_css.width = "500px";
+                new_css.height = "265px";
+
+                container
+                    .find("#popup-" + action)
+                    .find("textarea")
+                    .val(data);
                 break;
 
             case "upload":
@@ -351,6 +361,27 @@ window.documents = {
             }), "Add Location");
         }
     },
+    popupWidget: function(file) {
+        $(".popup").attr("data-file", file.attr("data-id"));
+        window.documents.popupWidgetChange($("#popup-widget .sizes .item").eq(1));
+    },
+    popupWidgetChange: function(size) {
+        window.debug = size;
+        $("#popup-widget .sizes .item").removeClass("active");
+        size.addClass("active");
+
+        window.documents.popupWidgetResult(
+            $(".popup").attr("data-file"),
+            size.find("input[name=width]").val(),
+            size.find("input[name=height]").val()
+        );
+    },
+    popupWidgetResult: function(id, width, height) {
+         window.documents.popup("widget", $('                                                               \
+            <iframe src="' + window.config.host + '/editor/' + id + '/embed/"                               \
+                    style="width:' + width + ';height:' + height + ';outline:none;border:none;"></iframe>   \
+        ').prop('outerHTML'), "Widget Embed");
+    },
     contextMenu: function(element) {
         var menu = element.parent(".context-menu");
         var file = $(".pane .file[data-id='" + menu.attr("data-id") + "']");
@@ -379,6 +410,10 @@ window.documents = {
                 break;
             case "url":
                 window.documents.popup("url", file.data("id"), "Share Url");
+                break;
+
+            case "widget":
+                window.documents.popupWidget(file);
                 break;
         }
     },

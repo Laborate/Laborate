@@ -73,7 +73,8 @@
                 max-height: 400px;
             }
 
-            input[type='text'] {
+            input[type='text'],
+            textarea {
                 width: 100%;
                 border: none;
                 padding: 8px 10px;
@@ -88,6 +89,12 @@
                 &.error {
                     background-color: @color_popup_input_error;
                 }
+            }
+
+            textarea {
+                resize: none;
+                min-height: 80px;
+                word-break: break-all;
             }
 
             input[type='file'] {

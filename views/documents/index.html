@@ -172,6 +172,33 @@
             <div class="action" id="popup-url">
                 <input type="text"/>
             </div>
+            <div class="action" id="popup-widget">
+                <div class="sizes">
+                    <div class="item">
+                        <div class="name">Small</div>
+                        <div class="dimension">400px x 400px</div>
+                        <input name="width" type="hidden" value="400px" class="keep" />
+                        <input name="height" type="hidden" value="400px" class="keep" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Medium</div>
+                        <div class="dimension">500px x 400px</div>
+                        <input name="width" type="hidden" value="500px" class="keep" />
+                        <input name="height" type="hidden" value="400px" class="keep" />
+                    </div>
+                    <div class="item">
+                        <div class="name">Fullscreen</div>
+                        <div class="dimension">100% x 100%</div>
+                        <input name="width" type="hidden" value="100%" class="keep" />
+                        <input name="height" type="hidden" value="100%" class="keep" />
+                    </div>
+                    <div class="item custom">
+                        <input name="width" type="text" placeholder="width" value="600px" class="keep" />
+                        <input name="height" type="text" placeholder="height" value="400px" class="keep" />
+                    </div>
+                </div>
+                <textarea></textarea>
+            </div>
             <div class="action" id="popup-upload">
                 <form action="/documents/file/upload/" data-callback="fileCreated" enctype="multipart/form-data">
                     <input name="files" type="file" multiple="multiple"/>
@@ -195,5 +222,6 @@
     <div id="contect-menu-rename" class="item" data-action="rename">Rename</div>
     <div id="context-menu-remove" class="item" data-action="remove"></div>
     <div id="context-menu-url" class="item" data-action="url">Share Url</div>
+    <div id="context-menu-widget" class="item" data-action="widget">Widget Embed</div>
 </div>
 <% include ../includes/footer.html %>

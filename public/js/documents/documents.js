@@ -43,7 +43,15 @@ $(document).on("click", ".popup .download", function() {
         .parents(".popup")
         .find("#popup-image img")
         .attr("src"));
-})
+});
+
+$(document).on("click", "#popup-widget .item", function() {
+    window.documents.popupWidgetChange($(this));
+});
+
+$(document).on("keyup", "#popup-widget .custom input", function() {
+    window.documents.popupWidgetChange($(this).parents(".item"));
+});
 
 $(document).on("click", ".select-files", function() {
     window.documents.fileSelectClick($(".pane .file:not(.disabled)"));
