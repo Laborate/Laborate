@@ -89,7 +89,7 @@ exports.cursors = function(req) {
 }
 
 exports.laborators = function(req) {
-    if(req.session.user || !editorUtil.isEmbed(req)) {
+    if(req.session.user || editorUtil.isEmbed(req)) {
         editorUtil.users(req, function(users) {
             req.io.respond({
                 success: true,
