@@ -380,7 +380,7 @@ window.documents = {
          window.documents.popup("widget", $('                                                               \
             <iframe src="' + window.config.host + '/editor/' + id + '/embed/"                               \
                     style="width:' + width + ';height:' + height + ';outline:none;border:none;"></iframe>   \
-        ').prop('outerHTML'), "Widget Embed");
+        ').prop('outerHTML'), "Widget Embed (view only)");
     },
     contextMenu: function(element) {
         var menu = element.parent(".context-menu");
