@@ -51,7 +51,7 @@ $(function() {
 
     //Pull Extras Info
     window.socketUtil.socket.on('editorExtras', function (data) {
-        if("laborators" in data && !config.embed) {
+        if("laborators" in data) {
             window.sidebarUtil.laborators();
         }
 
