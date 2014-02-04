@@ -71,7 +71,6 @@ window.editorUtil = {
 
         if(direction == "out" && window.editorUtil.initialized) {
             if(window.editorUtil.clean) {
-                console.log(data);
                 window.socketUtil.socket.emit('editorDocument', {
                     "changes": data
                 });
