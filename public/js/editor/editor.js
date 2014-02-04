@@ -20,7 +20,7 @@ $(function() {
         styleSelectedText: true,
         styleActiveLine: false,
         showTrailingSpace: true,
-        gutters: ["CodeMirror-linenumbers", "breakpoints"]
+        gutters: (config.embed) ? false : ["CodeMirror-linenumbers", "breakpoints"]
     });
 
     window.editor.on("change", function(instance, changeObj) {
