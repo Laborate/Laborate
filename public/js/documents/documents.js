@@ -106,7 +106,7 @@ $(document).on("contextmenu", ".pane .item", function(event) {
     }
 });
 
-$(document).on("contextmenu",function() {
+$(document).on("contextmenu", function() {
     return false;
 });
 
