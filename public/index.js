@@ -88,6 +88,7 @@ module.exports = function(root) {
     clientJS.addFile("editor", codemirror_path + 'addon/search/searchcursor.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/matchbrackets.js');
     clientJS.addFile("editor", codemirror_path + 'addon/selection/active-line.js');
+    clientJS.addFile("editor", codemirror_path + 'addon/edit/trailingspace.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/closebrackets.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/closetag.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/matchtags.js');

@@ -26,8 +26,12 @@ window.sidebarUtil = {
                 this.typeMode(
                     form.find("select[name=languages]").val(),
                     form.find("select[name=keymapping]").val(),
-                    (form.find("select[name=cursorSearch]").val() === "true")
+                    (form.find("select[name=cursorSearch]").val() === "true"),
+                    (form.find("select[name=whiteSpace]").val() === "true")
                 );
+                break;
+            case "beautify":
+                this.beautify(form.find("select").val());
                 break;
             case "line-jump":
                 this.jumpToLine(form.find("input").val());
@@ -103,10 +107,27 @@ window.sidebarUtil = {
                 .prop('selected', true);
         }
 	},
-	typeMode: function(languages, keymapping, cursorSearch) {
+	defaultWhiteSpace: function(whiteSpace) {
+    	if(whiteSpace) {
+    	    $(".form[name='type-mode'] select[name='whiteSpace'] option")
+                .filter(function() {
+                    return ($(this).val() == whiteSpace);
+                })
+                .prop('selected', true);
+        }
+	},
+	typeMode: function(languages, keymapping, cursorSearch, whiteSpace) {
 	    window.editorUtil.setModeLanguage(languages);
         this.keyMap(keymapping);
         this.cursorSearch(cursorSearch);
+        this.whiteSpace(whiteSpace);
+	},
+	whiteSpace: function(whiteSpace) {
+    	window.editor.setOption("showTrailingSpace", whiteSpace);
+        $.cookie("whiteSpace", whiteSpace, {
+            path: '/editor',
+            expires: 365
+        });
 	},
 	keyMap: function(keymap) {
 	    if(keymap) {
@@ -147,6 +168,24 @@ window.sidebarUtil = {
         $(".form[name='settings'] input[name='password']")
             .val("")
             .prop("disabled", active);
+	},
+	beautify: function(select) {
+	    window.editor.operation(function() {
+	        if(select == "selection") {
+                var start = window.editor.getCursor("start").line;
+                var end = window.editor.getCursor("end").line;
+	        } else {
+    	        var start = window.editor.firstLine();
+                var end = window.editor.lastLine();
+	        }
+
+            window.editor.eachLine(start, end, function(line) {
+                window.editor.indentLine(
+                    window.editor.getLineNumber(line),
+                    "smart"
+                );
+            });
+	    });
 	},
 	jumpToLine: function(line) {
 	    try {

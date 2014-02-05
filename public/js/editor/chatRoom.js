@@ -194,7 +194,7 @@ window.chat = {
         });
     },
     _notify: function() {
-        if(!window.chat.focus) {
+        if(!window.chat.focus && window.notifications != false) {
             window.chat.count++;
             window.sidebarUtil.setTitle(
                 "in",
