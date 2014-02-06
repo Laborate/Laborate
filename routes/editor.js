@@ -1,5 +1,6 @@
 var github = require("./github");
-var bitbucket = require("./github");
+var bitbucket = require("./bitbucket");
+var sftp = require("./sftp");
 
 exports.index = function(req, res, next) {
     res.renderOutdated('editor/join', {
@@ -433,6 +434,42 @@ exports.commit = function(req, res, next) {
             }
         } else {
             res.error(200, "Failed To Commit", error);
+        }
+    });
+}
+
+exports.save = function(req, res, next) {
+    req.models.documents.roles.find({
+        user_id: req.session.user.id,
+        document_pub_id: req.param("document"),
+        access: true
+    }, function(error, roles) {
+        if(!error && !roles.empty) {
+            if(!roles[0].permission.readonly) {
+                var document = roles[0].document;
+                var location = req.session.user.locations[document.location];
+
+                if(location) {
+                    if(!document.content.empty) {
+                        switch(location.type) {
+                            case (!config.apps.sftp || "sftp"):
+                                sftp.save(req, res, location, document);
+                                break;
+                            default:
+                                res.error(200, "Failed To Save");
+                                break;
+                        }
+                    } else {
+                        res.error(200, "Failed To Save");
+                    }
+                } else {
+                    res.error(200, "Failed To Save");
+                }
+            } else {
+                res.error(200, "Failed To Save", error);
+            }
+        } else {
+            res.error(200, "Failed To Save", error);
         }
     });
 }

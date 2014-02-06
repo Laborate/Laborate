@@ -58,7 +58,7 @@
             </div>
             <% if(document.location && user.locations[document.location]) { %>
                 <% //Until Bitbucket comming and others are built %>
-                <% if(user.locations[document.location].type == "github") { %>
+                <% if(user.locations[document.location].type != "bitbucket") { %>
                     <div class="item" data-key="upload">
                         <div class="container">
                             <div class="name">Upload</div>
@@ -180,14 +180,15 @@
                             Commit To <%= user.locations[document.location].type.capitalize %>
                         </button>
                     </form>
-                <% } else { %>
-                    <!-- Google Drive, Dropbox and Evernote coming soon
+                <% } %>
+
+                <% if(["sftp"].indexOf(user.locations[document.location].type) != -1) { %>
+                    <!-- Google Drive, Dropbox and Evernote coming soon -->
                     <form class="form collection" name="save">
                         <button type="submit" class="button" data-success="Saved">
                             Save To <%= user.locations[document.location].type.capitalize %>
                         </button>
                     </form>
-                    -->
                 <% } %>
             </div>
         <% } %>

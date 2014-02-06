@@ -146,7 +146,7 @@ exports.commit = function(req, res, location, document) {
         if(!errors) {
             res.json({ success: true });
         } else {
-            res.error(200, "Failed To Commit");
+            res.error(200, "Failed To Commit", errors);
         }
     });
 }

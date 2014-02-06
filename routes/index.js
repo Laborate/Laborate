@@ -114,6 +114,7 @@ module.exports = function(app) {
     app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, editor.update);
     app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.remove);
     app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.commit);
+    app.post('/editor/:document/save', authUtil.restrictAccess, authUtil.xhr, editor.save);
     app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.invite);
     app.post('/editor/:document/laborators', authUtil.restrictAccess, authUtil.xhr, editor.laborators);
     app.post('/editor/:document/laborator/:user', authUtil.restrictAccess, authUtil.xhr, editor.laborator);

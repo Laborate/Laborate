@@ -68,3 +68,17 @@ exports.contents = function(req, res, next) {
         }
     });
 }
+
+exports.save = function(req, res, location, document) {
+    req.sftp.save(
+        location,
+        (document.path) ? document.path + "/" + document.name : document.name,
+        document.content.join("\n"),
+    function(error) {
+        if(!error) {
+            res.json({ success: true });
+        } else {
+            res.error(200, "Failed To Save", error);
+        }
+    });
+}
