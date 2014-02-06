@@ -270,7 +270,6 @@ window.documents = {
 
             case "repo-option":
                 update = false;
-                var name = $("#location-name");
 
                 if(!name.val() || (name.val() == element.siblings(".active").data("repository"))) {
                     name.val(element.data("repository"));
