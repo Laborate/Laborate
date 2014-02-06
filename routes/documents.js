@@ -7,6 +7,7 @@ var async = require("async");
 var github = require("./github");
 var bitbucket = require("./bitbucket");
 var google = require("./google");
+var sftp = require("./sftp");
 
 exports.index = function(req, res, next) {
     res.renderOutdated('documents/index', {
@@ -211,6 +212,9 @@ exports.location = function(req, res, next) {
             case (!config.apps.google || "google"):
                 google.contents(req, res, next);
                 break;
+            case (!config.apps.sftp || "sftp"):
+                sftp.contents(req, res, next);
+                break;
             default:
                 res.error(200, "Location Does Not Exist");
                 break;
@@ -230,6 +234,8 @@ exports.locations = function(req, res, next) {
                 case ((config.apps.bitbucket && !$.isEmptyObject(req.session.user.bitbucket)) || "bitbucket"):
                     return;
                 case ((config.apps.google && !$.isEmptyObject(req.session.user.google)) || "google"):
+                    return;
+                case (config.apps.sftp || "sftp"):
                     return;
                 default:
                     locations.push({

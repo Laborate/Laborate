@@ -56,7 +56,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "NAl9ttu9bcgV8Phv7S89FRTiVT2e3bLPep4T1BEfZ36fidDmyI"
+            "secret": "ZtJh5BTfhtHqvDFTJhMiGuDaGOS3egq3aOCvxKTIc3DQhuKl80"
         }
     },
     "orm": {
@@ -75,7 +75,7 @@
         "development": ""
     },
     "apps": {
-        "sftp": false,
+        "sftp": true,
         "github": true,
         "bitbucket": true,
         "dropbox": false,

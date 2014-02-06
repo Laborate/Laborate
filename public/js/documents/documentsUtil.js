@@ -40,6 +40,15 @@ window.documents = {
                     .find(".listing")
                     .html(data);
                 break;
+            case "add-location-sftp":
+                new_css.width = "300px";
+                new_css.height = "320px";
+
+                if(data) container
+                    .find("#popup-" + action)
+                    .find("input[name='location[name]']")
+                    .val(data);
+                break;
 
             case "create":
                 new_css.width = "250px";
@@ -242,12 +251,15 @@ window.documents = {
         var list = [],
             update = true,
             listing = $("#popup-add-location .list"),
-            name = $("#popup-add-location #location-name");
+            name = $("#popup-add-location input[name='location[name]']");
 
         listing.removeClass("error");
         name.removeClass("error");
 
         switch(element.data("next")) {
+            case "sftp":
+                window.documents.popup("add-location-sftp", name.val(), "Add Location");
+                break;
             case "github":
                 list = window.documents.repoListing("github");
                 break;
