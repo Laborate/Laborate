@@ -42,7 +42,7 @@ exports.editor = function(req, res, next) {
                     res.error(404);
                 }
             } else {
-                document.join(req.session.user, 2, function(access, permission) {
+                document.join(req.session.user, 3, function(access, permission) {
                     if(!error && access) {
                         res.renderOutdated('editor/index', {
                             title: document.name,
