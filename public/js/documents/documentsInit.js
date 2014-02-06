@@ -1,12 +1,12 @@
 //Url Parameters
-window.url_params = function() {
+window.url_params = function(real) {
     params = /\/documents\/([\w\d]*?)\/(.*)/.exec(window.location.href);
 
     return ((params) ? {
         location: params[1],
         dir: params[2]
     } : {
-        location: "online",
+        location: (real) ? "" : "online",
         dir: ""
     });
 }

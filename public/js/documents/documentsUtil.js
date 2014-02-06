@@ -12,6 +12,7 @@ window.documents = {
         var container = $(".popup .container");
         var new_css = {};
         var show = true;
+        var params = window.url_params(true);
 
         container
             .attr("style", "")
@@ -53,6 +54,14 @@ window.documents = {
             case "create":
                 new_css.width = "250px";
                 new_css.height = "142px";
+
+                container
+                    .find("#popup-" + action)
+                    .find("input[name=location]")
+                    .val(params.location)
+                    .parents("#popup-" + action)
+                    .find("input[name=path]")
+                    .val(params.dir);
                 break;
 
             case "rename":
@@ -93,6 +102,12 @@ window.documents = {
 
                 container
                     .find("#popup-" + action)
+                    .find("input[name=location]")
+                    .val(params.location)
+                    .parents("#popup-" + action)
+                    .find("input[name=path]")
+                    .val(params.dir)
+                    .parents("#popup-" + action)
                     .find(".listing")
                     .html(function() {
                         return $.map(data, function(item) {
@@ -828,7 +843,7 @@ window.documents = {
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
             window.socketUtil.pageTrack();
             window.documents.locationActivated = location;
-            window.documents.headerBar(["filters-non-online", "download"]);
+            window.documents.headerBar(["filters-non-online", "add", "download"]);
         }
     },
     fileSelect: function(show) {
@@ -1023,28 +1038,30 @@ window.documents = {
         });
     },
     fileCreated: function(responses) {
-        $.each(responses.documents, function(i, item) {
-            window.documents.fileParser(item, true);
+        if(!window.url_params(true)["location"]) {
+            $.each(responses.documents, function(i, item) {
+                window.documents.fileParser(item, true);
 
-            file = $('                                                       \
-                <div class="item file ' + item.color + ' ' + item.class + '" \
-                    style="opacity:0;"                                       \
-                    data-name="' + item.name + '"                            \
-                    data-role="' + item.role + '"                            \
-                    data-id="' + item.id + '"                                \
-                    data-size="' + item.size + '"                            \
-                    data-laborators="0"                                      \
-                    data-type="' + item.type + '">                           \
-                    <div class="icon ' + item.icon + '"></div>               \
-                    <div class="name">' + item.name + '</div>                \
-                    <div class="progress">                                   \
-                        <div class="bar"></div>                              \
-                    </div>                                                   \
-                </div>                                                       \
-            ')
-            .appendTo(".pane")
-            .animate({ opacity: 1 }, 200);
-        });
+                file = $('                                                       \
+                    <div class="item file ' + item.color + ' ' + item.class + '" \
+                        style="opacity:0;"                                       \
+                        data-name="' + item.name + '"                            \
+                        data-role="' + item.role + '"                            \
+                        data-id="' + item.id + '"                                \
+                        data-size="' + item.size + '"                            \
+                        data-laborators="0"                                      \
+                        data-type="' + item.type + '">                           \
+                        <div class="icon ' + item.icon + '"></div>               \
+                        <div class="name">' + item.name + '</div>                \
+                        <div class="progress">                                   \
+                            <div class="bar"></div>                              \
+                        </div>                                                   \
+                    </div>                                                       \
+                ')
+                .appendTo(".pane")
+                .animate({ opacity: 1 }, 200);
+            });
+        }
     },
     fileRename: function(data) {
         window.documents.fileParser(data.document, true);

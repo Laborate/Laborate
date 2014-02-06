@@ -65,7 +65,7 @@ $(document).on("click", ".download-files", function() {
 });
 
 $(document).on("click", ".confirm-files, .cancel-files", function() {
-    window.documents.headerBar(["filters-non-online", "download"]);
+    window.documents.headerBar(["filters-non-online", "add", "download"]);
     var files = $(".pane .file[data-selected=true]");
     if($(this).hasClass("confirm-files") && files.length != 0) {
         window.documents.fileDownload(files, false);

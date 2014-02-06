@@ -52,6 +52,8 @@ exports.file_create = function(req, res, next) {
     req.models.documents.create({
         name: req.param("name"),
         owner_id: req.session.user.id,
+        location: req.param("location") || null,
+        path: req.param("path")
     }, function(error, document) {
         if(!error && document) {
             res.json({
@@ -73,7 +75,8 @@ exports.file_create = function(req, res, next) {
                             return "file-script";
                         }
                     }(document.name),
-                    role: "owner"
+                    role: "owner",
+                    location: document.location
                 }]
             });
         } else {
@@ -111,7 +114,9 @@ exports.file_upload = function(req, res, next) {
             req.models.documents.create({
                 name: file.name,
                 owner_id: req.session.user.id,
-                content: fs.readFileSync(file.path, 'utf8').split("\n")
+                content: fs.readFileSync(file.path, 'utf8').split("\n"),
+                location: req.param("location") || null,
+                path: req.param("path")
             }, function(error, document) {
                 if(!error && document) {
                     fs.unlink(file.path);
@@ -133,7 +138,8 @@ exports.file_upload = function(req, res, next) {
                                 return "file-script";
                             }
                         }(document.name),
-                        role: "owner"
+                        role: "owner",
+                        location: document.location
                     });
                 } else {
                     res.error(200, "Failed To Upload Files", error);

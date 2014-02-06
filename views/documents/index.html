@@ -170,6 +170,8 @@
             </div>
             <div class="action" id="popup-create">
                 <form action="/documents/file/create/" data-callback="fileCreated">
+                    <input name="path" type="hidden"/>
+                    <input name="location" type="hidden"/>
                     <input name="name" type="text" placeholder="file name" data-required="true"/>
                     <button type="submit">Create File</button>
                 </form>
@@ -212,6 +214,8 @@
             </div>
             <div class="action" id="popup-upload">
                 <form action="/documents/file/upload/" data-callback="fileCreated" enctype="multipart/form-data">
+                    <input name="path" type="hidden"/>
+                    <input name="location" type="hidden"/>
                     <input name="files" type="file" multiple="multiple"/>
                     <div class="list">
                         <div class="shadow-top"></div>
