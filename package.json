@@ -41,8 +41,9 @@
     "node-watch": "0.3.4",
     "sitemap": "0.7.1",
     "geoip-lite": "1.1.1",
-    "nodetime": "*",
-    "mailgun-js": "0.2.2"
+    "mailgun-js": "0.2.2",
+    "tmp": "0.0.23",
+    "ssh2": "0.2.17"
   },
   "devDependencies": {
     "express-debug": "*"
