@@ -47,6 +47,8 @@ app.io.configure(function() {
     app.io.set("origins", "*:*");
     app.io.set('log level', 1);
     app.io.set('log colors', true);
+    app.io.set('heartbeat timeout', 10);
+    app.io.set('heartbeat interval', 4);
     app.io.set('transports', [
         'websocket',
         'flashsocket',
