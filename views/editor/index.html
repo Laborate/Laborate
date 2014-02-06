@@ -186,7 +186,11 @@
                     <!-- Google Drive, Dropbox and Evernote coming soon -->
                     <form class="form collection" name="save">
                         <button type="submit" class="button" data-success="Saved">
-                            Save To <%= user.locations[document.location].type.capitalize %>
+                            <% if(user.locations[document.location].type == "sftp") { %>
+                                Save To SFTP
+                            <% } else { %>
+                                Save To <%= user.locations[document.location].type.capitalize %>
+                            <% } %>
                         </button>
                     </form>
                 <% } %>
