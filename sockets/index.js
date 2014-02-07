@@ -20,6 +20,7 @@ module.exports = function(app) {
     /* Terminal */
     app.io.route('terminalJoin', terminal.join);
     app.io.route('terminalData', terminal.data);
+    app.io.route('terminalResize', terminal.resize);
 
     /* Disconnect */
     app.io.route('connected', core.track);

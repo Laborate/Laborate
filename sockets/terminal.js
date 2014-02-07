@@ -1,15 +1,20 @@
 var pty = require('pty.js');
-var terminal = terminal = require('term.js');
+var terminal = require('term.js');
+var terminalUtil = require('./terminalUtil');
+
 var term;
 
 exports.join = function(req) {
-    term = pty.fork(process.env.SHELL || 'sh', [], {
-        name: require('fs').existsSync('/usr/share/terminfo/x/xterm-256color')
-        ? 'xterm-256color'
-        : 'xterm',
-        cols: 80,
-        rows: 24,
-        cwd: process.env.HOME
+    //Join Room
+    req.io.join(terminalUtil.location(req, true));
+
+    //Start Terminal
+    var location = terminalUtil.location(req);
+
+    term = pty.fork("ssh", [location.username + "@" + location.host], {
+        name: 'xterm',
+        cols: req.data[0],
+        rows: req.data[1]
     });
 
     term.on('data', function(data) {
@@ -21,4 +26,12 @@ exports.join = function(req) {
 
 exports.data = function(req) {
     term.write(req.data);
+}
+
+exports.resize = function(req) {
+    term.resize(req.data[0], req.data[1]);
+}
+
+exports.leave = function(req) {
+    term.destroy();
 }

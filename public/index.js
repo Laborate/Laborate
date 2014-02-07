@@ -116,6 +116,8 @@ module.exports = function(root) {
     clientCSS.addFile("editor-embed", css_path + 'editor/embed.less');
 
     /* Terminal */
+    clientCSS.addFile("terminal", css_path + 'terminal/index.less');
+
     clientJS.addFile("terminal", node_modules + 'term.js/src/term.js');
     clientJS.addFile("terminal", js_path + 'terminal/index.js');
 
