@@ -16,6 +16,7 @@ var admin = require('./admin');
 var trending = require('./trending');
 var users = require('./users');
 var welcome = require('./welcome');
+var terminal = require('./terminal');
 
 
 module.exports = function(app) {
@@ -118,6 +119,9 @@ module.exports = function(app) {
     app.post('/editor/:document/invite', authUtil.restrictAccess, authUtil.xhr, editor.invite);
     app.post('/editor/:document/laborators', authUtil.restrictAccess, authUtil.xhr, editor.laborators);
     app.post('/editor/:document/laborator/:user', authUtil.restrictAccess, authUtil.xhr, editor.laborator);
+
+    /* Terminal */
+    app.get('/terminal/:location', authUtil.restrictAccess, terminal.index);
 
     /* Admin */
     app.get('/admin', authUtil.restrictAccess, authUtil.admin, admin.index);

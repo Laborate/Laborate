@@ -1,5 +1,6 @@
 var core = require("./core");
 var editor = require("./editor");
+var terminal = require("./terminal");
 
 module.exports = function(app) {
     /* Core */
@@ -15,6 +16,10 @@ module.exports = function(app) {
     app.io.route('editorExtras', editor.extras);
     app.io.route('editorPermission', editor.permission);
     app.io.route('editorSave', editor.save);
+
+    /* Terminal */
+    app.io.route('terminalJoin', terminal.join);
+    app.io.route('terminalData', terminal.data);
 
     /* Disconnect */
     app.io.route('connected', core.track);
