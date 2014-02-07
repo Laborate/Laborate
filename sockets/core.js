@@ -1,4 +1,5 @@
 var editor = require("./editor");
+var terminal = require("./terminal");
 
 exports.pageTrack = function(req) {
     exports.track(req, req.session);
@@ -71,6 +72,9 @@ exports.leave = function(req) {
     switch(true) {
         case /.*?\/editor\/[a-zA-Z0-9]+\//g.test(req.headers.referer):
             editor.leave(req);
+            break;
+        case /.*?\/terminal\/[a-zA-Z0-9]+\//g.test(req.headers.referer):
+            terminal.leave(req);
             break;
     }
 }

@@ -5,33 +5,42 @@ var terminalUtil = require('./terminalUtil');
 var term;
 
 exports.join = function(req) {
-    //Join Room
-    req.io.join(terminalUtil.location(req, true));
+    if(!term) {
+        //Join Room
+        req.io.join(terminalUtil.location(req, true));
 
-    //Start Terminal
-    var location = terminalUtil.location(req);
+        //Start Terminal
+        var location = terminalUtil.location(req);
 
-    term = pty.fork("ssh", [location.username + "@" + location.host], {
-        name: 'xterm',
-        cols: req.data[0],
-        rows: req.data[1]
-    });
+        term = pty.fork("ssh", [location.username + "@" + location.host], {
+            name: 'xterm-color',
+            cols: req.data[0],
+            rows: req.data[1]
+        });
 
-    term.on('data', function(data) {
-        req.io.emit('terminalData', data);
-    });
+        term.on('data', function(data) {
+            req.io.emit('terminalData', data);
+        });
 
-    req.io.respond();
+        req.io.respond();
+    }
 }
 
 exports.data = function(req) {
-    term.write(req.data);
+    if(term) {
+        term.write(req.data);
+    }
 }
 
 exports.resize = function(req) {
-    term.resize(req.data[0], req.data[1]);
+    if(term) {
+        term.resize(req.data[0], req.data[1]);
+    }
 }
 
 exports.leave = function(req) {
-    term.destroy();
+    if(term) {
+        term.destroy();
+        term = null;
+    }
 }
