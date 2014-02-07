@@ -34,7 +34,11 @@ exports.data = function(req) {
 
 exports.resize = function(req) {
     if(term) {
-        term.resize(req.data[0], req.data[1]);
+        //If the user manually disconnects and
+        //then does a resize, an error is raised
+        try {
+            term.resize(req.data[0], req.data[1]);
+        } catch(error) {}
     }
 }
 
