@@ -53,8 +53,8 @@ $(document).on("keyup", "#popup-widget .custom input", function() {
     window.documents.popupWidgetChange($(this).parents(".item"));
 });
 
-$(document).on("click", ".terminal", function() {
-    window.location.href = "/terminal/" + window.documents.locationActivated + "/";
+$(document).on("click", ".terminal-button", function() {
+    window.documents.terminal();
 });
 
 $(document).on("click", ".select-files", function() {

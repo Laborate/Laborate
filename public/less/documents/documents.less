@@ -11,7 +11,7 @@
                 display: none;
             }
 
-            .terminal {
+            .terminal-button {
                 color: #fff;
                 font-size: 13px;
                 padding: 5px 8px;
@@ -142,6 +142,12 @@
     }
 
     .pane {
+        .transition(padding-bottom);
+
+        &.extend {
+            padding-bottom: 300px;
+        }
+
         .item {
             position: relative;
             text-align: center;
@@ -270,6 +276,21 @@
                     .border-radius(2px);
                 }
             }
+        }
+    }
+
+    .terminal {
+        position: fixed;
+        bottom: -320px;
+        height: 300px;
+        opacity: 0;
+        background: #000;
+        .calc-width(~"100% - 180px");
+        .transition();
+
+        &.active {
+            opacity: 1;
+            bottom: 0;
         }
     }
 }

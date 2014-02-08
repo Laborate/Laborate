@@ -1,8 +1,8 @@
 $.extend(window.socketUtil, {
     connect: function(reconnect) {
         if(!window.term) {
-            var term_width = (Math.ceil(($(window).width() - 80)/7));
-            var term_height = (Math.ceil(($(window).height() - 80)/13));
+            var term_width = (Math.ceil(($(window).width() - 40)/7));
+            var term_height = (Math.ceil(($(window).height() - 40)/13));
 
             window.socketUtil.socket.emit("terminalJoin", [term_width, term_height], function() {
                 window.term = new Terminal({
@@ -71,8 +71,8 @@ $(function() {
 
 $(window).on("resize", function() {
     if(window.term) {
-        var term_width = (Math.ceil(($(window).width() - 80)/7));
-        var term_height = (Math.ceil(($(window).height() - 80)/13));
+        var term_width = (Math.ceil(($(window).width() - 40)/7));
+        var term_height = (Math.ceil(($(window).height() - 40)/13));
 
         term.resize(term_width, term_height);
         window.socketUtil.socket.emit('terminalResize', [term_width, term_height]);

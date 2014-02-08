@@ -7,6 +7,7 @@ window.documents = {
     locationIcons: {},
     headerBarPrevious: null,
     headerBarPreviousDouble: null,
+    terminalActive: null,
     timer: null,
     uploadFiles: [],
     popup: function(action, data, header) {
@@ -519,7 +520,7 @@ window.documents = {
                     $(".bottom .download-files").show();
                     break;
                 case "terminal":
-                    $(".bottom .terminal").show();
+                    $(".bottom .terminal-button").show();
                     break;
                 case "side-button":
                     $(".side-button").show();
@@ -567,7 +568,7 @@ window.documents = {
 
             $(".sidebar .list .item").not("[data-key='online']").remove();
             $(".sidebar .list .listing").html(locations);
-            if(callback) {
+            if(typeof callback == "function") {
                 callback();
             }
 
@@ -1229,5 +1230,25 @@ window.documents = {
         }
 
         return item;
+    },
+    terminal: function() {
+        if(window.documents.terminalActive == window.documents.locationActivated) {
+            $(".pane").removeClass("extend");
+            $(".terminal").removeClass("active");
+            $(".terminal iframe")
+                .hide()
+                .attr("src", "");
+            window.documents.terminalActive = null;
+        } else {
+            $(".pane").addClass("extend");
+            $(".terminal").addClass("active");
+            $('.terminal iframe')
+                .hide()
+                .attr("src", "/terminal/" + window.documents.locationActivated + "/")
+                .load(function() {
+                    $(this).show();
+                });
+            window.documents.terminalActive = window.documents.locationActivated;
+        }
     }
 }
