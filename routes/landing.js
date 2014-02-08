@@ -3,10 +3,38 @@ var async = require('async');
 exports.index = function(req, res) {
     async.parallel({
         laborators: function(callback) {
-            req.models.users.find({
-                id: req.db.tools.ne((req.session.user) ? req.session.user.id : null),
-                admin: false
-            }).limit(15).run(callback);
+            var users = [];
+            var screen_names = [];
+            var counter = 0;
+
+            req.models.users.count(function(error, count) {
+                async.until(
+                    function() {
+                        return (counter > 14) || (counter > count);
+                    },
+                    function(next) {
+                        req.models.users.find({
+                            id: req.db.tools.ne((req.session.user) ? req.session.user.id : null),
+                            admin: false
+                        })
+                        .only(["screen_name", "email"])
+                        .skip(Math.floor(Math.random() * count))
+                        .limit(1)
+                        .run(function(error, user) {
+                            if(!user.empty && screen_names.indexOf(user[0].screen_name) == -1) {
+                                counter++;
+                                users.push(user[0]);
+                                screen_names.push(user[0].screen_name);
+                            }
+
+                            next(error);
+                        });
+                    },
+                    function(errors) {
+                        callback(errors, users);
+                    }
+                )
+            });
         },
         admins: function(callback) {
             req.models.users.find({
