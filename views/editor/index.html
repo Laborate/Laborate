@@ -286,13 +286,22 @@
                 </div>
             </div>
             <div class="message"></div>
-            <div class="fullscreen <%= icons.expand %>"></div>
+            <div class="toggles fullscreen-toggle <%= icons.expand %>"></div>
+            <% if(user.locations[document.location].type == "sftp") { %>
+                <div class="toggles terminal-toggle <%= icons.terminal %>"></div>
+            <% } %>
         </div>
     </div>
     <div class="pane">
         <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
         <div class="shadow-top"></div>
     </div>
+    <% if(user.locations[document.location].type == "sftp") { %>
+        <div class="terminal">
+            <a target="_blank" class="<%= icons.expand %>"></a>
+            <iframe width="100%" height="100%" frameborder="0" data-location="<%= document.location %>"></iframe>
+        </div>
+    <% } %>
     <div class="chat">
         <div class="controller">Chat Room</div>
         <div class="conversation">

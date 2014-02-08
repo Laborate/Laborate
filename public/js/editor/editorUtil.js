@@ -21,6 +21,29 @@ window.editorUtil = {
             }, 15000);
         }
     },
+    terminal: function(show) {
+        var _this = this;
+        if($(".terminal").hasClass("active") || show == false) {
+            $(".terminal iframe").fadeOut(150);
+
+            setTimeout(function() {
+                $(".terminal iframe").attr("src", "");
+                $(".terminal, .terminal-toggle").removeClass("active");
+                setTimeout(_this.resize, 300);
+            }, 200);
+        } else {
+            var terminal =  "/terminal/" + $('.terminal iframe').data("location") + "/";
+            $(".terminal, .terminal-toggle").addClass("active");
+            $('.terminal iframe')
+                .hide()
+                .attr("src", terminal)
+                .load(function() {
+                    $(this).show();
+                });
+            $(".terminal a").attr("href", terminal);
+            setTimeout(_this.resize, 300);
+        }
+    },
     fullscreen: function(show) {
         var _this = this;
         _this.fullscreenActive = !show;
@@ -35,7 +58,7 @@ window.editorUtil = {
                 .removeClass("fullscreen");
 
             setTimeout(function() {
-                $(".content .fullscreen")
+                $(".content .fullscreen-toggle")
                     .removeClass(window.config.icons.contract + " active")
                     .addClass(window.config.icons.expand);
                 $(".sidebar .profile , .header .top").slideDown(500);
@@ -45,7 +68,7 @@ window.editorUtil = {
                 }, 500);
             }, 100);
         } else {
-            $(".content .fullscreen")
+            $(".content .fullscreen-toggle")
                 .removeClass(window.config.icons.expand)
                 .addClass(window.config.icons.contract + " active");
             $(".sidebar .profile , .header .top").slideUp(500);
@@ -176,7 +199,9 @@ window.editorUtil = {
     },
     resize: function() {
         if(!window.editorUtil.fullscreeenTransitioning) {
-            window.editor.setSize("", $(window).height() - $(".header").height());
+            window.editor.setSize("",
+                $(window).height() - $(".header").height() - $(".terminal").height() - parseInt($(".terminal").css("bottom"))
+            );
             editor.refresh();
         }
     },

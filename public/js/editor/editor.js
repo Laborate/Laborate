@@ -101,7 +101,12 @@ $(function() {
     });
 
     //Toogle Full Screen Mode
-    $(".fullscreen").on("click", function() {
+    $(".fullscreen-toggle").on("click", function() {
         window.editorUtil.fullscreen(window.editorUtil.fullscreenActive);
+    });
+
+    //Toogle Terminal
+    $(".terminal-toggle").on("click", function() {
+        window.editorUtil.terminal();
     });
 });

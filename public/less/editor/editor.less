@@ -406,10 +406,9 @@ html, body {
         .bottom {
             .calc-width(~"100% - 220px");
 
-            .fullscreen {
+            .toggles {
                 position: absolute;
                 top: 10px;
-                right: 15px;
                 padding: 5px;
                 color: darken(@color_header_bottom, 40%);
                 background: darken(@color_header_bottom, 10%);
@@ -435,6 +434,14 @@ html, body {
                             background: darken(@color_header_bottom, 50%);
                         }
                     }
+                }
+
+                &.fullscreen-toggle {
+                    right: 15px;
+                }
+
+                &.terminal-toggle {
+                    right: 50px;
                 }
             }
 
@@ -484,6 +491,34 @@ html, body {
             width: 100%;
             height: 10px;
             background: url('/img/tshadow.png') repeat-x;
+        }
+    }
+
+    .terminal {
+        position: fixed;
+        z-index: 1000;
+        bottom: -280px;
+        height: 280px;
+        opacity: 0;
+        background: #000;
+        .calc-width(~"100% - 400px");
+        .transition();
+
+        &.active {
+            opacity: 1;
+            bottom: 0;
+        }
+
+        a {
+            display: inline-block;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: darken(#fff, 15%);
+
+            &:hover {
+                color: #fff;
+            }
         }
     }
 
