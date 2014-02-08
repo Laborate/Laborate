@@ -6,12 +6,12 @@ exports.index = function(req, res) {
             req.models.users.find({
                 id: req.db.tools.ne((req.session.user) ? req.session.user.id : null),
                 admin: false
-            }).limit(15).orderRaw("rand()").run(callback);
+            }).limit(15).run(callback);
         },
         admins: function(callback) {
             req.models.users.find({
                 admin: true
-            }).limit(3).orderRaw("rand()").run(callback);
+            }).limit(3).run(callback);
         }
     }, function(errors, data) {
         if(!errors) {
@@ -20,8 +20,8 @@ exports.index = function(req, res) {
                 user: req.session.user,
                 laborators: data.laborators,
                 admins: data.admins,
-                js: clientJS.renderTags("landing", "codemirror", "codemirror-movie"),
-                css: clientCSS.renderTags("backdrop", "landing", "codemirror", "codemirror-movie"),
+                js: clientJS.renderTags("landing", "codemirror"),
+                css: clientCSS.renderTags("backdrop", "landing", "codemirror"),
                 backdrop: req.backdrop(),
                 pageTrack: false,
                 title_first: false

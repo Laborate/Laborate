@@ -16,18 +16,6 @@ $(function() {
     $('.slide').each(function() {
         var slide = $(this);
         slide.waypoint(function(direction) {
-            if(window.movie) {
-                if(slide.attr("id") == "classroom") {
-                    setTimeout(function() {
-                        if(slide.hasClass('active')) {
-                            window.movie.play();
-                        }
-                    }, 100);
-                } else {
-                    window.movie.stop();
-                }
-            }
-
             $("#slider > div")
                 .removeClass("active")
                 .eq(slide.index())
@@ -61,18 +49,9 @@ $(function() {
     }
 
     $(".editor").each(function() {
-        if($(this).hasClass("movie")) {
-            window.movie = CodeMirror.movie(this);
-            window.movie.stop();
-
-            var editor = window.movie._editor;
-            editor.setOption("mode", "python");
-            CodeMirror.autoLoadMode(editor, "python");
-        } else {
-            var editor = CodeMirror.fromTextArea(this);
-            editor.setOption("mode", "text/x-java");
-            CodeMirror.autoLoadMode(editor, "clike");
-        }
+        var editor = CodeMirror.fromTextArea(this);
+        editor.setOption("mode", "python");
+        CodeMirror.autoLoadMode(editor, "python");
 
         $(this).parent().height(
             $(this).parent().parent().height() - $("#backdrop-header").outerHeight(true)
