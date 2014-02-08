@@ -1,4 +1,5 @@
 @import '../core/index';
+@import '../core/header';
 @import '../compless/all';
 
 .content {
@@ -9,6 +10,30 @@
         .bottom {
             & > div:not(.clear) {
                 display: none;
+            }
+
+            .terminal {
+                color: #fff;
+                font-size: 13px;
+                padding: 5px 8px;
+                cursor: pointer;
+                margin-right: 15px;
+                background: darken(@color_green, 5%);
+                border: solid 1px darken(@color_green, 10%);
+                .border-radius(2px);
+                .float-right();
+
+                &:hover {
+                    background: darken(@color_green, 7%);
+                }
+
+                &:active {
+                    background: darken(@color_green, 9%);
+                }
+
+                &.active {
+                    opacity: .6;
+                }
             }
 
             .download-files {

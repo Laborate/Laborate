@@ -56,7 +56,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "AiE0KqD41RVdgkfdxAkl50zuA9MfVhTZoGP2ELnmHg0VuZtXxg"
+            "secret": "1MJnyyRgiFWicSavxKeXynOF4AJkM58LBCwT6CLpHJKPRKCCvS"
         }
     },
     "orm": {
@@ -140,7 +140,8 @@
         "contract": "icon-contract",
         "priority": "icon-warning",
         "feedback": "icon-bars-2",
-        "power": "icon-off"
+        "power": "icon-off",
+        "terminal": "icon-publish"
     },
     "github": {
         "id": "",

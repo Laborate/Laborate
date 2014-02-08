@@ -20,6 +20,7 @@ $(function() {
     setInterval(window.documents.locationReload, 120000);
 
     //Pull Data For The First Time
-    window.documents.locations();
-    window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
+    window.documents.locations(function() {
+        window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
+    });
 });

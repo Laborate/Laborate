@@ -6,6 +6,7 @@ window.documents = {
     locationActivated: null,
     locationIcons: {},
     headerBarPrevious: null,
+    headerBarPreviousDouble: null,
     timer: null,
     uploadFiles: [],
     popup: function(action, data, header) {
@@ -517,6 +518,9 @@ window.documents = {
                 case "download":
                     $(".bottom .download-files").show();
                     break;
+                case "terminal":
+                    $(".bottom .terminal").show();
+                    break;
                 case "side-button":
                     $(".side-button").show();
                     break
@@ -524,10 +528,11 @@ window.documents = {
         });
 
         if(action.indexOf("message") == -1) {
+            window.documents.headerBarPreviousDouble = window.documents.headerBarPrevious;
             window.documents.headerBarPrevious = action;
         }
     },
-    locations: function() {
+    locations: function(callback) {
         $.get("/documents/locations/", function(json) {
             if(json.success == false) {
                 window.documents.headerBar(["message"], json.error_message);
@@ -549,6 +554,7 @@ window.documents = {
                     <div class="item"                                                   \
                         data-key="' + item.key + '"                                     \
                         data-name="' + item.name + '"                                   \
+                        data-type="' + item.type + '"                                   \
                         data-counter="0">                                               \
                         <div class="container">                                         \
                             <div class="name">' + item.name + '</div>                   \
@@ -561,6 +567,7 @@ window.documents = {
 
             $(".sidebar .list .item").not("[data-key='online']").remove();
             $(".sidebar .list .listing").html(locations);
+            if(callback) callback();
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {
@@ -624,7 +631,7 @@ window.documents = {
                 $("title").text(location_element.attr("data-name") + window.config.delimeter + window.config.title);
             }
 
-            window.documents.locationDirectory(location, path, history);
+            window.documents.locationDirectory(location, path, history, location_element.attr("data-type"));
         }
     },
     locationReload: function() {
@@ -781,7 +788,7 @@ window.documents = {
             }
         });
     },
-    locationDirectory: function(location, path, history) {
+    locationDirectory: function(location, path, history, type) {
         var response = window.documents.cachedLocations(location);
         var files = "";
 
@@ -843,7 +850,13 @@ window.documents = {
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
             window.socketUtil.pageTrack();
             window.documents.locationActivated = location;
-            window.documents.headerBar(["filters-non-online", "add", "download"]);
+            var header = ["filters-non-online", "add", "download"];
+
+            if(type == "sftp") {
+                header.push("terminal");
+            }
+
+            window.documents.headerBar(header);
         }
     },
     fileSelect: function(show) {

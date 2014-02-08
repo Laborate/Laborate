@@ -53,6 +53,10 @@ $(document).on("keyup", "#popup-widget .custom input", function() {
     window.documents.popupWidgetChange($(this).parents(".item"));
 });
 
+$(document).on("click", ".terminal", function() {
+    window.location.href = "/terminal/" + window.documents.locationActivated + "/";
+});
+
 $(document).on("click", ".select-files", function() {
     window.documents.fileSelectClick($(".pane .file:not(.disabled)"));
 });
@@ -65,12 +69,14 @@ $(document).on("click", ".download-files", function() {
 });
 
 $(document).on("click", ".confirm-files, .cancel-files", function() {
-    window.documents.headerBar(["filters-non-online", "add", "download"]);
     var files = $(".pane .file[data-selected=true]");
+
     if($(this).hasClass("confirm-files") && files.length != 0) {
         window.documents.fileDownload(files, false);
     }
+
     window.documents.fileSelect(false);
+    window.documents.headerBar(window.documents.headerBarPreviousDouble);
 });
 
 $(document).on("keyup", "#search input", function() {
