@@ -567,7 +567,9 @@ window.documents = {
 
             $(".sidebar .list .item").not("[data-key='online']").remove();
             $(".sidebar .list .listing").html(locations);
-            if(callback) callback();
+            if(callback) {
+                callback();
+            }
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {
