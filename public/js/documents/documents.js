@@ -1,5 +1,6 @@
 $(document).on("click", ".sidebar .list .item", function() {
-    window.documents.location($(this).data("key"), "", true);
+    window.documents.location($(this).data("key"), "", true, true);
+    window.documents.terminal(true);
 });
 
 $(document).on("mouseover mouseout", ".pane .item", function() {
@@ -55,6 +56,11 @@ $(document).on("keyup", "#popup-widget .custom input", function() {
 
 $(document).on("click", ".terminal-button", function() {
     window.documents.terminal();
+});
+
+$(document).on("click", ".terminal a", function() {
+    setTimeout(window.documents.terminal, 200);
+    return true;
 });
 
 $(document).on("click", ".select-files", function() {

@@ -586,7 +586,7 @@ window.documents = {
             }, 100);
         });
     },
-    location: function(location, path, history) {
+    location: function(location, path, history, override) {
         $(".sidebar .info").text("");
         $(".list .item").removeClass("activated");
         var location_element = $(".list .item[data-key='" + location + "']").addClass("activated");
@@ -634,7 +634,7 @@ window.documents = {
                 $("title").text(location_element.attr("data-name") + window.config.delimeter + window.config.title);
             }
 
-            window.documents.locationDirectory(location, path, history, location_element.attr("data-type"));
+            window.documents.locationDirectory(location, path, history, location_element.attr("data-type"), override);
         }
     },
     locationReload: function() {
@@ -642,7 +642,7 @@ window.documents = {
             window.socketUtil.pageTrack();
             if(window.documents.locationActivated && window.documents.mode.length == 0) {
                 window.documents.locations();
-                window.documents.location(window.url_params()["location"], window.url_params()["dir"], false);
+                window.documents.location(window.url_params()["location"], window.url_params()["dir"], false, true);
             }
         }
     },
@@ -791,7 +791,7 @@ window.documents = {
             }
         });
     },
-    locationDirectory: function(location, path, history, type) {
+    locationDirectory: function(location, path, history, type, override) {
         var response = window.documents.cachedLocations(location);
         var files = "";
 
@@ -802,7 +802,7 @@ window.documents = {
             path = "";
         }
 
-        if(response[path] != undefined) {
+        if(response[path] != undefined && !override) {
             finish(response[path]);
         } else {
             window.documents.headerBar(["message"], "downloading directory listing...", true);
@@ -1231,23 +1231,28 @@ window.documents = {
 
         return item;
     },
-    terminal: function() {
-        if(window.documents.terminalActive == window.documents.locationActivated) {
-            $(".pane").removeClass("extend");
-            $(".terminal").removeClass("active");
-            $(".terminal iframe")
-                .hide()
-                .attr("src", "");
+    terminal: function(close) {
+        if(window.documents.terminalActive == window.documents.locationActivated || close) {
+            $(".terminal iframe").fadeOut(150);
+
+            setTimeout(function() {
+                $(".terminal iframe").attr("src", "");
+                $(".pane").removeClass("extend");
+                $(".terminal").removeClass("active");
+                $(".terminal a").attr("href", "");
+            }, 200);
             window.documents.terminalActive = null;
         } else {
+            var terminal =  "/terminal/" + window.documents.locationActivated + "/";
             $(".pane").addClass("extend");
             $(".terminal").addClass("active");
             $('.terminal iframe')
                 .hide()
-                .attr("src", "/terminal/" + window.documents.locationActivated + "/")
+                .attr("src", terminal)
                 .load(function() {
                     $(this).show();
                 });
+            $(".terminal a").attr("href", terminal);
             window.documents.terminalActive = window.documents.locationActivated;
         }
     }
