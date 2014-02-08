@@ -1,18 +1,14 @@
+var _this = exports;
 var pty = require('pty.js');
 var terminal = require('term.js');
 var terminalUtil = require('./terminalUtil');
-
-var term;
+var terminals = {};
 
 exports.join = function(req) {
-    if(!term) {
-        //Join Room
-        req.io.join(terminalUtil.location(req, true));
-
+    if(!terminals[req.io.socket.id]) {
         //Start Terminal
         var location = terminalUtil.location(req);
-
-        term = pty.fork("ssh", [location.username + "@" + location.host], {
+        var term = pty.spawn("ssh", [location.username + "@" + location.host], {
             name: 'xterm-color',
             cols: req.data[0],
             rows: req.data[1]
@@ -22,17 +18,27 @@ exports.join = function(req) {
             req.io.emit('terminalData', data);
         });
 
+        term.on('close', function() {
+            req.io.emit('terminalLeave');
+            _this.leave(req);
+        });
+
         req.io.respond();
+        terminals[req.io.socket.id] = term;
     }
 }
 
 exports.data = function(req) {
+    var term = terminals[req.io.socket.id];
+
     if(term) {
         term.write(req.data);
     }
 }
 
 exports.resize = function(req) {
+    var term = terminals[req.io.socket.id];
+
     if(term) {
         //If the user manually disconnects and
         //then does a resize, an error is raised
@@ -43,8 +49,10 @@ exports.resize = function(req) {
 }
 
 exports.leave = function(req) {
+    var term = terminals[req.io.socket.id];
+
     if(term) {
         term.destroy();
-        term = null;
+        delete terminals[req.io.socket.id];
     }
 }

@@ -22,11 +22,20 @@ $.extend(window.socketUtil, {
             });
         }
     },
-    disconnect: function() {
+    disconnect: function(leave, reconnect) {
         if(window.term) {
             window.term.destroy();
             window.term = null;
-            status("Reconnecting...");
+
+            if(leave) {
+                if(reconnect) {
+                    status("Session Closed. <span>Reconnect</span>");
+                } else {
+                    status("Session Closed");
+                }
+            } else {
+                status("Reconnecting...");
+            }
         }
     },
     reconnect: function() {
@@ -61,12 +70,20 @@ $(function() {
         window.term.write(data);
     });
 
+    window.socketUtil.socket.on('terminalLeave', function() {
+        window.socketUtil.disconnect(true, true);
+    });
+
     var interval = setInterval(function() {
         if(window.socketUtil.socket.socket.connected) {
             clearInterval(interval);
             window.socketUtil.connect();
         }
-    })
+    });
+
+    $(".status").on("click", "span", function() {
+        window.socketUtil.connect();
+    });
 });
 
 $(window).on("resize", function() {
@@ -83,7 +100,7 @@ $(window).on("resize", function() {
 function status(message, url) {
     if(message) {
         $(".status")
-            .text(message)
+            .html(message)
             .hAlign().vAlign()
             .show();
     } else {
