@@ -112,6 +112,9 @@ app.configure(function() {
     //Custom Setup
     app.use(require("./routes/core").setup);
 
+    //Redirects
+    app.use(require("./routes/core").redirects);
+
     //Custom Libraries
     app.use(lib.express);
 
@@ -120,9 +123,6 @@ app.configure(function() {
 
     //Error Handler (Routes)
     app.use(require("./routes/error").handler);
-
-    //Redirects
-    app.use(require("./routes/core").redirects);
 
     //Device Check
     app.use(require("./routes/core").device);
