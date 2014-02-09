@@ -17,6 +17,15 @@ $(function() {
         return false;
     });
 
+    $(".sidebar .form[name='invite'] input").on("keyup", function() {
+        window.sidebarUtil.screenNames($(this).val());
+    });
+
+    $(".sidebar .form[name='invite'] .screen_names").on("click", ".item", function() {
+        window.sidebarUtil.screenNamesInput($(this).attr("data-name"));
+        window.sidebarUtil.screenNames(false);
+    });
+
     $(".sidebar .form[name='settings'] select[name='security']").on("change", function() {
         window.sidebarUtil.togglePassword($(this).val() == "false");
     });

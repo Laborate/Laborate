@@ -62,7 +62,8 @@ module.exports = function(app) {
     app.get('/explore', authUtil.removeRedirect, trending.redirect);
 
     /* Users */
-    app.get('/users/:user', authUtil.removeRedirect, users.index);
+    app.post('/users/', authUtil.restrictAccess, authUtil.xhr, users.index);
+    app.get('/users/:user', authUtil.removeRedirect, users.user);
 
     /* Welcome */
     app.get('/welcome', authUtil.restrictAccess, welcome.index);

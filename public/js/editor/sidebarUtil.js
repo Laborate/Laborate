@@ -410,7 +410,7 @@ window.sidebarUtil = {
                         }
                     }
 
-                    $(".sidebar .form[name='invite'] .listing")
+                    $(".sidebar .form[name='invite'] .laborators")
                         .append("                                                           \
                             <div class='item " + item + "'                                  \
                                  data-id='" + laborator.id + "'                             \
@@ -674,5 +674,47 @@ window.sidebarUtil = {
                  _this.buttonReset(button);
             }, 4000);
     	}
+	},
+	screenNames: function(screen_name) {
+	    var _this = $(".sidebar .form[name='invite'] .screen_names");
+
+	    if(screen_name) {
+            $.post("/users/", {
+                _csrf: window.config.csrf,
+                user: screen_name
+            }, function(json) {
+                if(json.success && !json.users.empty) {
+                    _this.slideDown(200);
+
+                    setTimeout(function() {
+                        _this.html(
+                            $.map(json.users, function(user) {
+                                var name = user.screen_name.replace(new RegExp(screen_name , "i"), '<span>$&</span>');
+
+                                return ("                                      \
+                                    <div class='item'                          \
+                                        data-name='" + user.screen_name + "'>  \
+                                         <div class='gravatar'>                \
+                                            <img src='" + user.gravatar + "'>  \
+                                         </div>                                \
+                                         <div class='name'>" + name + "</div>  \
+                                    </div>                                     \
+                                ");
+                            }).join("")
+                        );
+                    }, 300);
+                } else {
+                    _this.html("").slideUp(200);
+                }
+            });
+        } else {
+            _this.html("").slideUp(200);
+        }
+	},
+	screenNamesInput: function(name) {
+        $(".sidebar .form[name='invite'] input")
+            .val(name)
+            .parents(".form")
+            .submit();
 	}
 }
