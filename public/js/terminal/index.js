@@ -47,6 +47,9 @@ $.extend(window.socketUtil, {
 });
 
 $(function() {
+    //Terminal Colors
+    window.Terminal.defaults.colors[256] = '#242e30';
+
     //Socket Events
     window.socketUtil.socket.on("connect", window.socketUtil.connect);
     window.socketUtil.socket.on("reconnect", window.socketUtil.reconnect);
