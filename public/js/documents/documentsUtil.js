@@ -451,7 +451,7 @@ window.documents = {
                             file
                                 .attr("data-private", json.private)
                                 .find(".corner")
-                                .toggleClass(config.icons.locked, json.private);
+                                .toggleClass(config.icons.public, !json.private);
                         }
                     });
                 }
@@ -1105,6 +1105,11 @@ window.documents = {
                 .appendTo(".pane")
                 .animate({ opacity: 1 }, 200);
             });
+        } else {
+            window.documents.headerBar(
+                ["message"],
+                "Your New File" + ((responses.documents.length != 1) ? "s Are" : " Is") + " Located In Your Drive"
+            );
         }
     },
     fileRename: function(data) {
@@ -1192,9 +1197,9 @@ window.documents = {
 
             // Protection
             if(item.private) {
-                item["corner"] = config.icons.locked;
-            } else {
                 item["corner"] = "";
+            } else {
+                item["corner"] = config.icons.public;
             }
         }  else {
             //File Size

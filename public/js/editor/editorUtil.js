@@ -200,7 +200,7 @@ window.editorUtil = {
     resize: function() {
         if(!window.editorUtil.fullscreeenTransitioning) {
             window.editor.setSize("",
-                $(window).height() - $(".header").height() - $(".terminal").height() - parseInt($(".terminal").css("bottom"))
+                $(window).height() - $(".header").height() - $(".terminal").height() - (parseInt($(".terminal").css("bottom"))|| 0)
             );
             editor.refresh();
         }

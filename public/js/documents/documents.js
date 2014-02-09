@@ -1,6 +1,9 @@
 $(document).on("click", ".sidebar .list .item", function() {
     window.documents.location($(this).data("key"), "", true, true);
-    window.documents.terminal(true);
+
+    if(window.documents.terminalActive != window.documents.locationActivated) {
+        window.documents.terminal(true);
+    }
 });
 
 $(document).on("mouseover mouseout", ".pane .item", function() {
