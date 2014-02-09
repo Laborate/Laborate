@@ -438,6 +438,26 @@ window.documents = {
 
                 });
                 break;
+
+            case "private":
+                if(file.attr("data-role") === "owner") {
+                    $.post("/documents/file/" + file.attr("data-id") + "/private/", {
+                        _csrf: window.config.csrf,
+                        private: file.attr("data-private") !== "true"
+                    }, function(json) {
+                        if(json.success == false) {
+                            window.documents.headerBar(["message"], json.error_message);
+                        } else {
+                            file
+                                .attr("data-private", json.private)
+                                .find(".corner")
+                                .toggleClass(config.icons.locked, json.private);
+                        }
+                    });
+                }
+
+                break;
+
             case "url":
                 window.documents.popup("url", file.data("id"), "Share Url");
                 break;
@@ -452,15 +472,24 @@ window.documents = {
             .attr("href", "/editor/" + element.data("id") + "/");
 
         $("#context-menu-remove").text(function() {
-            if(element.data("role") == "owner") {
+            if(element.attr("data-role") == "owner") {
                 return "Delete";
             } else {
                 return "Forget";
             }
         }());
 
-        $("#context-menu-url").toggle(!element.data("private"));
-        $("#context-menu-widget").toggle(!element.data("private"));
+        $("#context-menu-private").text(function() {
+            if(element.attr("data-private") === "true") {
+                return "Make Public";
+            } else {
+                return "Make Private";
+            }
+        }());
+
+        $("#context-menu-private").toggle(element.attr("data-role") === "owner");
+        $("#context-menu-url").toggle(element.attr("data-private") === "false");
+        $("#context-menu-widget").toggle(element.attr("data-private") === "false");
 
         $(".context-menu")
             .css({
@@ -480,7 +509,7 @@ window.documents = {
                 }()
             })
             .attr({
-                "data-id": element.data("id")
+                "data-id": element.attr("data-id")
             })
             .show();
     },
@@ -1058,21 +1087,20 @@ window.documents = {
             $.each(responses.documents, function(i, item) {
                 window.documents.fileParser(item, true);
 
-                file = $('                                                       \
-                    <div class="item file ' + item.color + ' ' + item.class + '" \
-                        style="opacity:0;"                                       \
-                        data-name="' + item.name + '"                            \
-                        data-role="' + item.role + '"                            \
-                        data-id="' + item.id + '"                                \
-                        data-size="' + item.size + '"                            \
-                        data-laborators="0"                                      \
-                        data-type="' + item.type + '">                           \
-                        <div class="icon ' + item.icon + '"></div>               \
-                        <div class="name">' + item.name + '</div>                \
-                        <div class="progress">                                   \
-                            <div class="bar"></div>                              \
-                        </div>                                                   \
-                    </div>                                                       \
+                files = $('                                                       \
+                    <div class="item ' + item.class + " " + item.color + '"       \
+                        data-name="' + item.name + '"                             \
+                        data-role="' + item.role + '"                             \
+                        data-location="' + item.location + '"                     \
+                        data-id="' + item.id + '"                                 \
+                        data-private="' + item.private + '"                       \
+                        data-size="' + item.size + '"                             \
+                        data-laborators="' + item.laborators + '"                 \
+                        data-type="' + item.type + '">                            \
+                        <div class="corner ' + item.corner + '"></div>            \
+                        <div class="icon ' + item.icon + '"></div>                \
+                        <div class="name">' + item.name + '</div>                 \
+                    </div>                                                        \
                 ')
                 .appendTo(".pane")
                 .animate({ opacity: 1 }, 200);

@@ -97,6 +97,7 @@ module.exports = function(app) {
     app.post('/documents/file/create', authUtil.restrictAccess, authUtil.xhr, documents.file_create);
     app.post('/documents/file/upload', authUtil.restrictAccess, authUtil.xhr, documents.file_upload);
     app.post('/documents/file/:document/rename', authUtil.restrictAccess, authUtil.xhr, documents.file_rename);
+    app.post('/documents/file/:document/private', authUtil.restrictAccess, authUtil.xhr, documents.file_private);
     app.post('/documents/file/:document/remove', authUtil.restrictAccess, authUtil.xhr, documents.file_remove);
     app.post('/documents/location/create', authUtil.restrictAccess, authUtil.xhr, documents.create_location);
 
@@ -112,7 +113,7 @@ module.exports = function(app) {
     app.get('/editor/:document/download', authUtil.restrictAccess, editor.download);
     app.get('/editor/:document/permissions', authUtil.restrictAccess, authUtil.xhr, editor.permissions);
     app.post('/editor/exists', authUtil.restrictAccess,  editor.exists);
-    app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, editor.update);
+    app.post('/editor/:document/update', authUtil.restrictAccess, authUtil.xhr, documents.stats, editor.update);
     app.post('/editor/:document/remove', authUtil.restrictAccess, authUtil.xhr, editor.remove);
     app.post('/editor/:document/commit', authUtil.restrictAccess, authUtil.xhr, editor.commit);
     app.post('/editor/:document/save', authUtil.restrictAccess, authUtil.xhr, editor.save);

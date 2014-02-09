@@ -76,7 +76,8 @@ exports.file_create = function(req, res, next) {
                         }
                     }(document.name),
                     role: "owner",
-                    location: document.location
+                    location: document.location,
+                    private: document.private
                 }]
             });
         } else {
@@ -139,7 +140,8 @@ exports.file_upload = function(req, res, next) {
                             }
                         }(document.name),
                         role: "owner",
-                        location: document.location
+                        location: document.location,
+                        private: document.private
                     });
                 } else {
                     res.error(200, "Failed To Upload Files", error);
@@ -173,6 +175,36 @@ exports.file_rename = function(req, res, next) {
         }
     });
 };
+
+exports.file_private = function(req, res, next) {
+    req.models.documents.roles.find({
+        user_id: req.session.user.id,
+        document_pub_id: req.param("document"),
+        access: true
+    }, function(error, documents) {
+        if(!error && documents.length == 1) {
+            var user = req.session.user;
+            var document = documents[0].document;
+
+            if(document.owner_id == user.id) {
+                if(user.pricing.documents == null || user.documents.private < user.pricing.documents) {
+                    document.private = (req.param("private") === "true");
+                }
+
+                document.save();
+
+                res.json({
+                    success: true,
+                    private: document.private
+                 });
+            } else {
+                res.error(200, "Failed To Change Privacy");
+            }
+        } else {
+            res.error(200, "Failed To Change Privacy", error);
+        }
+    });
+}
 
 exports.file_remove = function(req, res, next) {
      req.models.documents.roles.find({
