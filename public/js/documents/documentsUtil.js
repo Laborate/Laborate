@@ -45,7 +45,7 @@ window.documents = {
                 break;
             case "add-location-sftp":
                 new_css.width = "300px";
-                new_css.height = "320px";
+                new_css.height = "370px";
 
                 if(data) container
                     .find("#popup-" + action)
