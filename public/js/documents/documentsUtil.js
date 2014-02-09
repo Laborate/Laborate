@@ -532,7 +532,7 @@ window.documents = {
                     if(window.documents.headerBarPrevious && !permanent) {
                         setTimeout(function() {
                             window.documents.headerBar(window.documents.headerBarPrevious);
-                        }, 10000);
+                        }, 3000);
                     }
 
                     break;

@@ -356,7 +356,7 @@ window.sidebarUtil = {
 
                 _this.inviteTimeout = setTimeout(function() {
                     error.slideUp(200);
-                }, 10000);
+                }, 3000);
             }
         });
 	},
