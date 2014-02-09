@@ -123,7 +123,7 @@ module.exports = function(app) {
     app.post('/editor/:document/laborator/:user', authUtil.restrictAccess, authUtil.xhr, editor.laborator);
 
     /* Terminal */
-    app.get('/terminal/:location', authUtil.restrictAccess, terminal.index);
+    app.get('/terminal/:location', authUtil.restrictAccess, core.reload, terminal.index);
 
     /* Admin */
     app.get('/admin', authUtil.restrictAccess, authUtil.admin, admin.index);
