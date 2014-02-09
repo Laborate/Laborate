@@ -1,7 +1,9 @@
 var async = require('async');
 
 exports.index = function(req, res, next) {
-    req.models.documents.all({}, {
+    req.models.documents.all({
+        private: false
+    }, {
         autoFetch:true,
         autoFetchLimit: 3
     }, 10, ["viewed", "Z"], function (error, documents) {
