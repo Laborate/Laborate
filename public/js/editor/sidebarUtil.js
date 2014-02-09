@@ -334,31 +334,33 @@ window.sidebarUtil = {
 	},
 	searchList: {},
 	invite: function(screen_name) {
-	    var _this = this;
-	    var button = $(".form[name='invite'] .button");
-        var error = $(".form[name='invite'] .error_message");
+	    if(screen_name) {
+            var _this = this;
+            var button = $(".form[name='invite'] .button");
+            var error = $(".form[name='invite'] .error_message");
 
-        _this.buttonLoading(button);
+            _this.buttonLoading(button);
 
-        $.post("/editor/" + url_params()["document"] + "/invite/", {
-            screen_name: screen_name,
-            _csrf: window.config.csrf
-        }, function(json) {
-            if(json.success) {
-                error.slideUp(200);
-                _this.laborators();
-                _this.buttonSuccess(button);
-            } else {
-                _this.buttonReset(button);
-                error
-                    .text(json.error_message.toLowerCase())
-                    .slideDown(200);
-
-                _this.inviteTimeout = setTimeout(function() {
+            $.post("/editor/" + url_params()["document"] + "/invite/", {
+                screen_name: screen_name,
+                _csrf: window.config.csrf
+            }, function(json) {
+                if(json.success) {
                     error.slideUp(200);
-                }, 3000);
-            }
-        });
+                    _this.laborators();
+                    _this.buttonSuccess(button);
+                } else {
+                    _this.buttonReset(button);
+                    error
+                        .text(json.error_message.toLowerCase())
+                        .slideDown(200);
+
+                    _this.inviteTimeout = setTimeout(function() {
+                        error.slideUp(200);
+                    }, 3000);
+                }
+            });
+        }
 	},
 	inviteTimeout: null,
 	laborators: function() {
