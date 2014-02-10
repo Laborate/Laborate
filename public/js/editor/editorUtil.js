@@ -160,8 +160,8 @@ window.editorUtil = {
         })).done($(data).not(Object.keys(window.users)).each(function(index, value) {
             $("                                                             \
                 <style type='text/css' data-user=" + value + ">             \
-                    .u" + value + "{                                        \
-                        background:" + randomColor() + " !important;    \
+                    .u" + value + " {                                       \
+                        background:" + randomColor() + " !important;        \
                     }                                                       \
                 </style>                                                    \
             ").appendTo("head");

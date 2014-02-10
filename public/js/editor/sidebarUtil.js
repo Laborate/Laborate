@@ -416,12 +416,13 @@ window.sidebarUtil = {
                         .append("                                                           \
                             <div class='item " + item + "'                                  \
                                  data-id='" + laborator.id + "'                             \
-                                 data-permission='" + laborator.permission.id + "'>            \
+                                 data-permission='" + laborator.permission.id + "'>         \
                                  <div class='gravatar'>                                     \
                                     <img src='" + laborator.gravatar + "'>                  \
                                  </div>                                                     \
                                  <div class='name'>" + laborator.screen_name + "</div>      \
                                  <div class='" + settings + "'></div>                       \
+                                 <div class='bubble u" + laborator.id + "'></div>           \
                             </div>                                                          \
                         ");
 

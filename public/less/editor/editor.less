@@ -239,7 +239,7 @@ html, body {
                             cursor: pointer;
                             font-size: 14px;
                             color: lighten(@color_sidebar_header, 40%);
-                            margin-right: 8px;
+                            margin: 1px 8px 0 0;
                             .float-right();
 
                             &:hover {
@@ -251,8 +251,18 @@ html, body {
                             }
                         }
 
+                        .bubble {
+                            width: 8px;
+                            height: 8px;
+                            margin: 4px 8px 0 0;
+                            .border-radius(50%);
+                            .float-right();
+
+                            display: none;
+                        }
+
                         .name {
-                            .calc-width(~"100% - 50px");
+                            .calc-width(~"100% - 80px");
                         }
 
                         .gravatar {
@@ -272,6 +282,10 @@ html, body {
 
                         .item {
                             &.active {
+                                .bubble {
+                                    display: inline-block;
+                                }
+
                                 .gravatar {
                                     opacity: 1;
                                 }
