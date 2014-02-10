@@ -115,7 +115,9 @@ exports.social = function(req, res) {
 };
 
 exports.laborator = function(req, res) {
-    req.models.documents.all({}, {
+    req.models.documents.all({
+        private: false
+    }, {
         autoFetch:true,
         autoFetchLimit: 3
     }, 10, ["viewed", "Z"], function (error, documents) {
