@@ -59,7 +59,7 @@ exports.social = function(req, res) {
                     id: req.db.tools.ne((req.session.user) ? req.session.user.id : null),
                     admin: false
                 })
-                .only(["name", "screen_name", "email"])
+                .only(["id", "name", "screen_name", "email"])
                 .skip(Math.floor(Math.random() * count))
                 .limit(1)
                 .run(function(error, user) {
@@ -81,7 +81,7 @@ exports.social = function(req, res) {
                             user.documents = $.map(roles, function(role) {
                                 return role.viewed;
                             });
-                            callback(null, user);
+                            callback(error, user);
                         });
                     }, function(error, laborators) {
                         if(!error) {
