@@ -451,7 +451,7 @@ window.documents = {
                             file
                                 .attr("data-private", json.private)
                                 .find(".corner")
-                                .toggleClass(config.icons.public, !json.private);
+                                .toggleClass(config.icons.lock, json.private);
                         }
                     });
                 }
@@ -1197,9 +1197,9 @@ window.documents = {
 
             // Protection
             if(item.private) {
-                item["corner"] = "";
+                item["corner"] = config.icons.lock;
             } else {
-                item["corner"] = config.icons.public;
+                item["corner"] = "";
             }
         }  else {
             //File Size
