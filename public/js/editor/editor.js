@@ -112,4 +112,9 @@ $(function() {
     $(".terminal-toggle").on("click", function() {
         window.editorUtil.terminal();
     });
+
+    $(".terminal").on("click", "a", function() {
+        setTimeout(window.editorUtil.terminal, 200);
+        return true;
+    });
 });
