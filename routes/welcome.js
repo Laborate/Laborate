@@ -56,8 +56,7 @@ exports.social = function(req, res) {
             },
             function(next) {
                 req.models.users.find({
-                    id: req.db.tools.ne((req.session.user) ? req.session.user.id : null),
-                    admin: false
+                    id: req.db.tools.ne((req.session.user) ? req.session.user.id : null)
                 })
                 .only(["id", "name", "screen_name", "email"])
                 .skip(Math.floor(Math.random() * count))
