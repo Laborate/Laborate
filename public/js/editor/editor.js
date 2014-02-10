@@ -19,7 +19,10 @@ $(function() {
         highlightSelectionMatches: true,
         styleSelectedText: true,
         styleActiveLine: false,
-        gutters: (config.embed) ? false : ["CodeMirror-linenumbers", "breakpoints"]
+        gutters: (config.embed) ? false : [
+            "CodeMirror-linenumbers",
+            "breakpoints"
+        ]
     });
 
     window.editor.on("change", function(instance, changeObj) {

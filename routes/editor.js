@@ -43,7 +43,7 @@ exports.editor = function(req, res, next) {
                 }
             } else {
                 document.join(req.session.user, 2, function(access, permission) {
-                    if(!error && access) {
+                    if(access) {
                         res.renderOutdated('editor/index', {
                             title: document.name,
                             user: req.session.user,
