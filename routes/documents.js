@@ -187,16 +187,18 @@ exports.file_private = function(req, res, next) {
             var document = documents[0].document;
 
             if(document.owner_id == user.id) {
-                if(user.pricing.documents == null || user.documents.private < user.pricing.documents) {
-                    document.private = (req.param("private") === "true");
+                document.private = (req.param("private") === "true");
+
+                if(!document.private || (user.pricing.documents == null || user.documents.private < user.pricing.documents)) {
+                    document.save();
+
+                    res.json({
+                        success: true,
+                        private: document.private
+                     });
+                } else {
+                    res.error(200, "Private Document Limit Reached. <a href='/account/billing/'>Upgrade Plan</a>");
                 }
-
-                document.save();
-
-                res.json({
-                    success: true,
-                    private: document.private
-                 });
             } else {
                 res.error(200, "Failed To Change Privacy");
             }
