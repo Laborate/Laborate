@@ -34,7 +34,20 @@ $(function() {
     });
 
     window.editor.on("cursorActivity", function() {
-        window.editorUtil.userCursors("out", {"line":window.editor.getCursor().line, "remove":false});
+        if(window.editor.getSelection()) {
+            window.editorUtil.userCursors("out", {
+                "selection": {
+                    "from": window.editor.getCursor("start"),
+                    "to": window.editor.getCursor("end")
+                },
+                "remove": false
+            });
+        } else {
+            window.editorUtil.userCursors("out", {
+                "cord": window.editor.getCursor("start"),
+                "remove": false
+            });
+        }
     });
 
     window.editor.on("blur", function() {

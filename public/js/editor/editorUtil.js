@@ -155,7 +155,7 @@ window.editorUtil = {
     },
     users: function(data) {
         $.when($(Object.keys(window.users)).not(data).each(function(index, value) {
-            window.editor.removeLineClass(window.users[value], "", ("u" + value));
+            window.users[value].cursor.remove();
             delete window.users[value];
         })).done($(data).not(Object.keys(window.users)).each(function(index, value) {
             $("                                                             \
@@ -165,25 +165,31 @@ window.editorUtil = {
                     }                                                       \
                 </style>                                                    \
             ").appendTo("head");
-            window.users[value] = -1;
+            window.users[value] = {
+                cursor: $("<div class='cursor u" + value + "'>"),
+                selection: null
+            }
         }));
     },
     userCursors: function(direction, data) {
         if(window.editorUtil.initialized) {
             if(direction == "out") {
-                if(data['leave']) {
-                    window.socketUtil.socket.emit('editorCursors', {"leave":true});
-                } else {
-                    window.socketUtil.socket.emit('editorCursors', {"line":data['line']});
-                }
+                window.socketUtil.socket.emit('editorCursors', data);
             } else if(direction == "in") {
-                window.editor.removeLineClass(window.users[data['from']], "", ("u"+data['from']));
+                var user = window.users[data.from];
 
-                if(data['leave']) {
-                    window.users[data['from']] = -1;
-                } else {
-                    window.editor.addLineClass(data['line'], "", ("u"+data['from']));
-                    window.users[data['from']] = data['line'];
+                if(user.selection) {
+                    user.selection.clear();
+                }
+
+                if(data.leave) {
+                    user.hide();
+                } else if(data.cord) {
+                    window.editor.addWidget(data.cord, user.cursor.get(0), false);
+                } else if(data.selection) {
+                    user.selection = window.editor.markText(data.selection.from, data.selection.to, {
+                        "className": "u" + data.from
+                    });
                 }
             }
         }
