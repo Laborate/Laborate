@@ -155,7 +155,13 @@ window.editorUtil = {
     },
     users: function(data) {
         $.when($(Object.keys(window.users)).not(data).each(function(index, value) {
-            window.users[value].cursor.remove();
+            var user = window.users[value];
+
+            if(user.selection) {
+                user.selection.clear();
+            }
+
+            user.cursor.remove();
             delete window.users[value];
         })).done($(data).not(Object.keys(window.users)).each(function(index, value) {
             $("                                                             \
