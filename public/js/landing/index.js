@@ -7,7 +7,7 @@ $(function() {
         .find("div").eq(0)
         .addClass("active");
 
-    $("form").on("submit", function() {
+    $(".refer-form").on("submit", function() {
         var _this = $(this),
             input = _this.find("input[type=text]"),
             button = _this.find("input[type=submit]");

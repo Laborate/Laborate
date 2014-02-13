@@ -11,7 +11,7 @@
                 cloud-based solutions that connect students in ways once impossible
             </div>
             <% if(user) { %>
-                <form action="/refer/" method="post">
+                <form class="refer-form" action="/refer/" method="post">
                     <div class="quote">Refer your friends, create a community!</div>
                     <div class="input-pair">
                         <input type="hidden" name="_csrf" value="<%= csrf %>"/>
@@ -182,7 +182,7 @@
             <div id="refer" class="slide colored">
                 <div class="center">
                     <div class="quote">So what are you waiting for? Refer your friends!</div>
-                    <form action="/refer/" method="post">
+                    <form class="refer-form" action="/refer/" method="post">
                         <div class="input-pair">
                             <input type="hidden" name="_csrf" value="<%= csrf %>"/>
                             <input class="input" name="email" type="text" placeholder="enter your friends emails"/>
