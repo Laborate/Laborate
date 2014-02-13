@@ -140,6 +140,7 @@
         }
 
         .submit {
+            width: 86px;
             right: 0;
             cursor: pointer;
             color: #fff;
@@ -152,6 +153,18 @@
 
                 &:active {
                     background: darken(@color_blue, 10%);
+                }
+            }
+
+            &.success {
+                background: @color_green;
+
+                &:hover {
+                    background: @color_green;
+
+                    &:active {
+                        background: @color_green;
+                    }
                 }
             }
         }
@@ -418,7 +431,7 @@
     }
 
     /* Slide: Register */
-    #register {
+    #register, #refer {
         padding: 50px 0;
         min-height: inherit;
         text-align: center;

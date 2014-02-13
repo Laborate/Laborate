@@ -1,5 +1,12 @@
 exports.index = function(req, res, next) {
     switch(req.param(0)) {
+        case "refer":
+            req.email_test("refer", {
+                name: config.profile.name.capitalize,
+                screen_name: config.profile.screen_name
+            }, render(req, res));
+            break;
+
         case "verify":
             req.email_test("verify", {
                 name: config.profile.name.capitalize,

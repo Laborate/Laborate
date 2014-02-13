@@ -402,3 +402,34 @@ exports.reset_password = function(req, res, next) {
         }
     });
 }
+
+exports.refer = function(req, res, next) {
+    $.each(req.param("email").split(","), function(index, email) {
+        email = $.trim(email);
+
+        if(/.*?@.*/.test(email)) {
+            req.models.users.exists({
+                email: email
+            }, function(error, exists) {
+                if(!error && !exists) {
+                    req.email("refer", {
+                        from: req.session.user.name.capitalize,
+                        replyTo: req.session.user.name + " <" + req.session.user.email + ">",
+                        subject: "From a " + req.session.user.name.capitalize + " at Laborate",
+                        users: [{
+                            email: email,
+                            name: req.session.user.name.capitalize,
+                            screen_name: req.session.user.screen_name
+                        }]
+                    }, req.error.capture);
+                } else {
+                    req.error.capture(error);
+                }
+            });
+        }
+    });
+
+    res.json({
+        success: true
+    });
+}

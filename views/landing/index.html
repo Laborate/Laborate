@@ -11,9 +11,17 @@
                 cloud-based solutions that connect students in ways once impossible
             </div>
             <% if(user) { %>
-                <div class="link">
-                    start laborating on your <a href="/documents/">documents</a>
-                </div>
+                <form action="/refer/" method="post">
+                    <div class="quote">Refer your friends, create a community!</div>
+                    <div class="input-pair">
+                        <input type="hidden" name="_csrf" value="<%= csrf %>"/>
+                        <input class="input" name="email" type="text" placeholder="enter your friends emails"/>
+                        <input class="submit" type="submit" value="Refer"/>
+                    </div>
+                    <div class="link">
+                        or start laborating on your <a href="/documents/">documents</a>
+                    </div>
+                </form>
             <% } else { %>
                 <form action="/register/" method="post">
                     <div class="quote">Join the alpha launch, it's free!</div>
@@ -165,6 +173,20 @@
                             <input type="hidden" name="_csrf" value="<%= csrf %>"/>
                             <input class="input" name="email" type="email" placeholder="enter your email"/>
                             <input class="submit" type="submit" value="Sign Up"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        <% } else { %>
+            <!-- Slide: Refer -->
+            <div id="refer" class="slide colored">
+                <div class="center">
+                    <div class="quote">So what are you waiting for? Refer your friends!</div>
+                    <form action="/refer/" method="post">
+                        <div class="input-pair">
+                            <input type="hidden" name="_csrf" value="<%= csrf %>"/>
+                            <input class="input" name="email" type="text" placeholder="enter your friends emails"/>
+                            <input class="submit" type="submit" value="Refer"/>
                         </div>
                     </form>
                 </div>

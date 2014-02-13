@@ -50,6 +50,9 @@ module.exports = function(app) {
     app.post('/auth/reset', authUtil.loginCheck, core.organization, authUtil.reset);
     app.post('/auth/reset/:code', authUtil.loginCheck, core.organization, authUtil.reset_password);
 
+    /* Refer */
+    app.post('/refer', authUtil.restrictAccess, authUtil.refer);
+
     /* Feedback */
     if(config.feedback.enabled) {
         app.get('/feedback', authUtil.restrictAccess, core.reload, feedback.index);

@@ -7,6 +7,27 @@ $(function() {
         .find("div").eq(0)
         .addClass("active");
 
+    $("form").on("submit", function() {
+        var _this = $(this),
+            input = _this.find("input[type=text]"),
+            button = _this.find("input[type=submit]");
+
+        if(input.val()) {
+            $.post(_this.attr("action"), {
+                _crsf: window.config.csrf,
+                email: input.val()
+            });
+
+            input.val("");
+            button.addClass("success").val("Thanks!");
+
+            setTimeout(function() {
+                button.removeClass("success").val("Refer");
+            }, 3000);
+        }
+
+        return false;
+    });
 
     $("#slider").on("click", "div", function() {
         var slide = $(".slide").eq($(this).index());
