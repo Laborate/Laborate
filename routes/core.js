@@ -170,7 +170,7 @@ exports.redirects = function(req, res, next) {
 }
 
 exports.reload = function(req, res, next) {
-    if((req.session.user) {
+    if(req.session.user) {
         req.models.users.get(req.session.user.id, function(error, user) {
             req.session.user = user;
             req.session.save();
