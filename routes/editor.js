@@ -41,7 +41,7 @@ exports.editor = function(req, res, next) {
                 } else {
                     res.error(404);
                 }
-            } else {
+            } else if(req.session.user) {
                 document.join(req.session.user, 2, function(access, permission) {
                     if(access) {
                         res.renderOutdated('editor/index', {
@@ -64,6 +64,8 @@ exports.editor = function(req, res, next) {
                         res.error(404);
                     }
                 });
+            } else {
+                res.redirect(req.url + "embed/");
             }
         } else {
             res.error(404, null, error);

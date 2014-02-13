@@ -316,7 +316,7 @@ exports.create_location = function(req, res, next) {
 };
 
 exports.stats = function(req, res, next) {
-    if(!req.robot) {
+    if(!req.robot && req.session.user) {
         async.parallel({
             total: function(callback) {
                 req.models.documents.roles.count({
