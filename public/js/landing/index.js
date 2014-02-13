@@ -14,7 +14,7 @@ $(function() {
 
         if(input.val()) {
             $.post(_this.attr("action"), {
-                _crsf: window.config.csrf,
+                _csrf: window.config.csrf,
                 email: input.val()
             });
 
