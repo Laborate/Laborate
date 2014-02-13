@@ -107,7 +107,7 @@ module.exports = function(app) {
 
     /* Editor */
     app.get('/editor', authUtil.restrictAccess, editor.index);
-    app.get('/editor/:document', documents.stats, editor.editor);
+    app.get('/editor/:document', documents.stats, core.reload, editor.editor);
     app.get('/editor/:document/embed', editor.embed);
 
     if(!config.general.production) {
