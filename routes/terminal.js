@@ -1,6 +1,6 @@
 exports.index = function(req, res, next) {
     res.renderOutdated('terminal/index', {
-        title: "Terminal",
+        title: "Terminals",
         locations: req.session.user.locations,
         js: clientJS.renderTags("terminal-lookup"),
         css: clientCSS.renderTags("terminal-lookup")

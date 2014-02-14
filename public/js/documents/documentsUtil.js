@@ -1276,7 +1276,7 @@ window.documents = {
             }, 200);
             window.documents.terminalActive = null;
         } else {
-            var terminal =  "/terminal/" + window.documents.locationActivated + "/";
+            var terminal =  "/terminals/" + window.documents.locationActivated + "/";
             $(".pane").addClass("extend");
             $(".terminal").addClass("active");
             $('.terminal iframe')

@@ -1,3 +1,0 @@
-$(function() {
-    $(".container").hAlign().vAlign();
-})

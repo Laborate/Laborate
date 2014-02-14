@@ -32,7 +32,7 @@ window.editorUtil = {
                 setTimeout(_this.resize, 300);
             }, 200);
         } else {
-            var terminal =  "/terminal/" + $('.terminal iframe').data("location") + "/";
+            var terminal =  "/terminals/" + $('.terminal iframe').data("location") + "/";
             $(".terminal, .terminal-toggle").addClass("active");
             $('.terminal iframe')
                 .hide()

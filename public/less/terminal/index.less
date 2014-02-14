@@ -8,18 +8,59 @@ body {
 
     width: 100%;
     height: 100%;
+    color: #fff;
 
-    .status {
-        color: #fff;
-        font-size: 24px;
-        font-family: "Not Just Groovy";
+    .container {
+        width: 250px;
 
-        span {
-            color: @color_blue;
-            cursor: pointer;
+        .logo {
+            font-size: 28px;
+            font-family: "Not Just Groovy";
+            width: 100%;
+            text-align: center;
+            margin-bottom: 5px;
+        }
 
-            &:hover {
-                text-decoration: underline;
+        .listing {
+            overflow: auto;
+            height: 250px;
+            background: lighten(@color_terminal, 10%);
+            .box-shadow(0 3px 3px darken(@color_terminal, 5%));
+            .border-radius(3px);
+
+            a {
+                display: block;
+                padding: 15px;
+                border-top: solid 1px lighten(@color_terminal, 15%);
+                .clearfix();
+
+                &:first-child {
+                    border: none;
+                }
+
+                &:nth-child(even) {
+                    background: lighten(@color_terminal, 12%);
+                }
+
+                &:hover {
+                    background: lighten(@color_terminal, 15%);
+
+                    &:active {
+                        background: lighten(@color_terminal, 20%);
+                    }
+                }
+
+                .icon {
+                    margin-top: 2px;
+                    width: 15px;
+                    margin-right: 15px;
+                    .float-left();
+                }
+
+                .name {
+                    .calc-width(~"100% - 30px");
+                    .float-left();
+                }
             }
         }
     }

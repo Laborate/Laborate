@@ -6,7 +6,10 @@
     <div class="listing">
         <% $.each(locations, function(index, location) { %>
             <% if(location.type == "sftp") { %>
-                <a href="/terminal/<%= index %>/"><%= location.name %></a>
+                <a href="/terminals/<%= index %>/">
+                    <div class="icon <%= icons.sftp %>"></div>
+                    <div class="name"><%= location.name %></div>
+                </a>
             <% } %>
         <% }); %>
     </div>

@@ -107,7 +107,7 @@ module.exports = function(app) {
 
     /* Editor */
     app.get('/editor', authUtil.restrictAccess, editor.index);
-    app.get('/editor/:document', documents.stats, core.reload, editor.editor);
+    app.get('/editor/:document', core.reload, documents.stats, editor.editor);
     app.get('/editor/:document/embed', editor.embed);
 
     if(!config.general.production) {
@@ -126,8 +126,8 @@ module.exports = function(app) {
     app.post('/editor/:document/laborator/:user', authUtil.restrictAccess, authUtil.xhr, editor.laborator);
 
     /* Terminal */
-    app.get('/terminal', authUtil.restrictAccess, core.reload, terminal.index);
-    app.get('/terminal/:location', authUtil.restrictAccess, core.reload, terminal.terminal);
+    app.get('/terminals', authUtil.restrictAccess, core.reload, terminal.index);
+    app.get('/terminals/:location', authUtil.restrictAccess, core.reload, terminal.terminal);
 
     /* Admin */
     app.get('/admin', authUtil.restrictAccess, authUtil.admin, admin.index);

@@ -1,5 +1,5 @@
 exports.location = function(req, socket) {
-    var location = /.*\/terminal\/(.*?)\/.*/.exec(req.headers.referer);
+    var location = /.*\/terminals\/(.*?)\/.*/.exec(req.headers.referer);
 
     if(location) {
         if(socket) {
