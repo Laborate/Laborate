@@ -29,7 +29,7 @@ window.editorUtil = {
             setTimeout(function() {
                 $(".terminal iframe").attr("src", "");
                 $(".terminal, .terminal-toggle").removeClass("active");
-                setTimeout(_this.resize, 300);
+                setTimeout(_this.resize, 500);
             }, 200);
         } else {
             var terminal =  "/terminals/" + $('.terminal iframe').data("location") + "/";
@@ -41,7 +41,7 @@ window.editorUtil = {
                     $(this).show();
                 });
             $(".terminal a").attr("href", terminal);
-            setTimeout(_this.resize, 300);
+            setTimeout(_this.resize, 500);
         }
     },
     fullscreen: function(show) {
