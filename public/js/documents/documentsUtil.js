@@ -227,7 +227,6 @@ window.documents = {
                 processData: false
             }, 'json').done(function(result) {
                 if(result.success) {
-                    form.find("input").val("");
                     window.documents.popup("close");
                     submit.text(submit.attr("data-original"));
                     if(form.data("callback")) window.documents[form.data("callback")](result);
