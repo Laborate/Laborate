@@ -121,6 +121,10 @@ module.exports = function(root) {
     clientJS.addFile("terminal", node_modules + 'term.js/src/term.js');
     clientJS.addFile("terminal", js_path + 'terminal/index.js');
 
+    /* Terminal Lookup Page */
+    clientCSS.addFile("terminal-lookup", css_path + 'terminal/lookup.less');
+    clientJS.addFile("terminal-lookup", js_path + 'terminal/lookup.js');
+
     /* Documents */
     clientCSS.addFile("documents", css_path + 'documents/documents.less');
 
