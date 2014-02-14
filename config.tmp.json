@@ -56,7 +56,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "BUGhMXC9q8ByaIaUlXbrv6nIkPre2qZ8O27H2KXRumLM0RKzgB"
+            "secret": "VDCNZTPOXhmmTlhdseDdGi1xglAXaFw6DG6wezz1HePROlOiEx"
         }
     },
     "orm": {
@@ -315,6 +315,29 @@
         }
     },
     "admin": {
-        "users": {}
+        "users": {
+            "table": {
+                "fields": [
+                    "id",
+                    "name",
+                    "screen_name",
+                    "email",
+                    "admin",
+                    "deliquent",
+                    "verify",
+                    "created"
+                ],
+                "headers": [
+                    "id",
+                    "name",
+                    "screen_name",
+                    "email",
+                    "admin",
+                    "deliquent",
+                    "verify",
+                    "created"
+                ]
+            }
+        }
     }
 }
