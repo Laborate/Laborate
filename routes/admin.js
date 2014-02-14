@@ -24,7 +24,10 @@ exports.index = function(req, res, next) {
         users: function(callback) {
             req.models.users.all({}, {
                 autoFetch: false
-            }).only(config.admin.users.table.fields).run(callback);
+            })
+                .only(config.admin.users.table.fields)
+                .order("created", "Z")
+                .run(callback);
         }
     }, function(errors, data) {
         res.renderOutdated('admin/index', {
