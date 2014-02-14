@@ -124,15 +124,15 @@
 
                 thead {
                     background: @color_header_bottom;
-                    color: darken(@color_header_bottom, 50%);
 
                     th {
+                        font-size: 14px;
+                        font-weight: bold;
                         padding: 10px 15px;
-                        border-left: solid 1px darken(@color_header_bottom, 5%);
-
-                        &:first-child {
-                            border: none;
-                        }
+                        color: darken(@color_header_bottom, 50%);
+                        border-bottom: solid 1px darken(@color_body, 10%);
+                        outline: none;
+                        .box-shadow(0 1px 1px #C7C7C7);
                     }
                 }
 
