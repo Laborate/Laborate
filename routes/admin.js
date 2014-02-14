@@ -2,9 +2,9 @@ var async = require('async');
 
 exports.index = function(req, res, next) {
     async.parallel({
-        users: req.models.users.count,
-        documents: req.models.documents.count,
-        paid: function(callback) {
+        users_count: req.models.users.count,
+        documents_count: req.models.documents.count,
+        paid_count: function(callback) {
             req.models.users.count({
                 pricing_id: req.db.tools.ne(1),
                 deliquent: false
@@ -20,17 +20,28 @@ exports.index = function(req, res, next) {
                 autoFetch: true,
                 autoFetchLimit: 1
             }, ["viewed", "Z"], 10, callback);
+        },
+        users: function(callback) {
+            req.models.users.all({}, {
+                autoFetch: false
+            }).only(config.admin.users.table.fields).run(callback);
         }
     }, function(errors, data) {
         res.renderOutdated('admin/index', {
             title: 'Admin',
             users: {
-                total: data.users,
-                paid: data.paid
+                total: data.users_count,
+                paid: data.paid_count
             },
-            documents: data.documents,
+            documents: data.documents_count,
             questions: config.feedback.questions,
             feedbacks: data.feedback,
+            tables: {
+                users: {
+                    headers: config.admin.users.table.headers,
+                    body: data.users
+                }
+            },
             top_documents: data.top_documents,
             js: clientJS.renderTags("admin"),
             css: clientCSS.renderTags("admin"),

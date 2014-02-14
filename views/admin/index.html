@@ -24,13 +24,6 @@
                 </div>
                 <div class="active"></div>
             </div>
-            <div class="item" data-key="tracking">
-                <div class="container">
-                    <div class="name">Tracking</div>
-                    <div class="icon <%= icons.tracking %>"></div>
-                </div>
-                <div class="active"></div>
-            </div>
             <div class="item" data-key="feedback">
                 <div class="container">
                     <div class="name">Feedback</div>
@@ -141,6 +134,24 @@
             <% } else { %>
                 <center><strong>No Feedback Given</strong></center>
             <% } %>
+        </div>
+        <div class="selection full" data-key="users">
+            <table class="table" cellpadding="0" cellspacing="0">
+                <thead>
+                    <% $.each(tables.users.headers, function(index, header) { %>
+                        <th data-field="<%= header %>"><%=: header | header %></th>
+                    <% }); %>
+                </thead>
+                <tbody>
+                    <% $.each(tables.users.body, function(index, user) { %>
+                        <tr>
+                            <% $.each(tables.users.headers, function(index, field) { %>
+                                <td data-field="<%= field %>"><%=: user[field] | format %></td>
+                            <% }); %>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

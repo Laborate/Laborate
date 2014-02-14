@@ -69,6 +69,7 @@
 
             &.full {
                 width: 100%;
+                overflow: auto;
             }
 
             .container {
@@ -114,6 +115,36 @@
                         text-transform: uppercase;
                         font-size: 12px;
                         color: darken(@color_body, 50%);
+                    }
+                }
+            }
+
+            .table {
+                text-align: center;
+
+                thead {
+                    background: @color_header_bottom;
+                    color: darken(@color_header_bottom, 50%);
+
+                    th {
+                        padding: 10px 15px;
+                        border-left: solid 1px darken(@color_header_bottom, 5%);
+
+                        &:first-child {
+                            border: none;
+                        }
+                    }
+                }
+
+                tbody {
+                    td {
+                        padding: 10px 15px;
+                        font-size: 13px;
+                        border-left: solid 1px @color_header_bottom;
+
+                        &:first-child {
+                            border: none;
+                        }
                     }
                 }
             }
