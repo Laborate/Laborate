@@ -2,8 +2,15 @@ var async = require('async');
 
 exports.index = function(req, res, next) {
     async.parallel({
-        users_count: req.models.users.count,
-        documents_count: req.models.documents.count,
+        documents_count: function(callback) {
+            req.models.documents.count(callback);
+        },
+        users_count: function(callback) {
+            req.models.users.count({
+                verify: null,
+                admin: false
+            }, callback);
+        },
         paid_count: function(callback) {
             req.models.users.count({
                 pricing_id: req.db.tools.ne(1),
