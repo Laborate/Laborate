@@ -137,18 +137,32 @@
                 }
 
                 tbody {
-                    td {
-                        color: #333;
-                        padding: 10px 15px;
-                        font-size: 13px;
-                        border-left: solid 1px @color_header_bottom;
-
-                        &:first-child {
-                            border: none;
+                    tr {
+                        &.admin > td {
+                            background: lighten(@color_blue, 40%);
                         }
 
-                        .green {
-                            color: darken(@color_green, 10%);
+                        &.no-verify > td {
+                            background: lighten(@color_purple, 30%);
+                        }
+
+                        &.deliquent > td {
+                            background: lighten(@color_red, 30%);
+                        }
+
+                        td {
+                            color: #333;
+                            padding: 10px 15px;
+                            font-size: 13px;
+                            border-left: solid 1px @color_header_bottom;
+
+                            &:first-child {
+                                border: none;
+                            }
+
+                            .green {
+                                color: darken(@color_green, 10%);
+                            }
                         }
                     }
                 }

@@ -144,7 +144,7 @@
                 </thead>
                 <tbody>
                     <% $.each(tables.users.body, function(index, user) { %>
-                        <tr>
+                        <tr class="<%= (user.admin) ? "admin" : (user.verify) ? "no-verify" : "" %>">
                             <% $.each(tables.users.headers, function(index, field) { %>
                                 <% user[field] = (field == "verify") ? !user[field] : user[field]; %>
                                 <td data-field="<%= field %>"><%-: user[field] | format %></td>
