@@ -23,15 +23,15 @@ module.exports = function(root_dir) {
             //Users Feedback (On: 12th hour)
             tab.remove(tab.findComment("users_feedback"));
             var feedback = tab.create(nodeCommand + path.join(root_dir, "/cron/users/feedback.js"), "users_feedback")
-            feedback.hour().on(12);
-            feedback.minute().on(1);
+                feedback.hour().on(12);
+                feedback.minute().on(1);
 
             //Users Feedback Notifications (On: 12th hour)
             tab.remove(tab.findComment("users_feedback_notifications"));
             if(config.feedback.enabled) {
                 var notification = tab.create(nodeCommand + path.join(root_dir, "/cron/users/feedback_notifications.js"), "users_feedback_notifications");
-                notification.hour().on(12);
-                notification.minute().on(1);
+                    notification.hour().on(12);
+                    notification.minute().on(1);
             }
 
             //Users Tracking (Every: 10 minutes)
@@ -45,6 +45,12 @@ module.exports = function(root_dir) {
             //Editor Changes (Every: 2 Minutes)
             tab.remove(tab.findComment("editor_changes"));
             tab.create(nodeCommand + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(2);
+
+            //Documents Cleanup (On: 12th hour)
+            tab.remove(tab.findComment("cleanup_documents"));
+            var document_cleanup = tab.create(nodeCommand + path.join(root_dir, "/cron/cleanup/documents.js"), "cleanup_documents");
+                document_cleanup.hour().on(12);
+                document_cleanup.minute().on(1);
 
             //Save Crontab
             tab.save();

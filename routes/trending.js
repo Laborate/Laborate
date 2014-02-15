@@ -4,7 +4,7 @@ exports.index = function(req, res, next) {
     req.models.documents.all({
         private: false
     }, {
-        autoFetch:true,
+        autoFetch: true,
         autoFetchLimit: 3
     }, 10, ["viewed", "Z"], function (error, documents) {
         if(!error) {
