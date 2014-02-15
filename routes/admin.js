@@ -32,11 +32,31 @@ exports.index = function(req, res, next) {
             req.models.users.all({}, {
                 autoFetch: false
             })
-                .only(config.admin.users.table.fields)
+                .only(config.admin.users.table.values)
                 .order("created", "Z")
-                .run(callback);
+                .run(function(error, users) {
+                    if(!error) {
+                        async.map(users, function(user, next) {
+                            async.parallel([
+                                function(done) {
+                                    req.models.documents.count({
+                                        owner_id: user.id
+                                    }, function(error, count) {
+                                        user.documents = count;
+                                        done(error);
+                                    });
+                                }
+                            ], function(error) {
+                                next(error, user);
+                            });
+                        }, callback);
+                    } else {
+                        callback(error);
+                    }
+                });
         }
     }, function(errors, data) {
+
         res.renderOutdated('admin/index', {
             title: 'Admin',
             users: {
@@ -49,7 +69,8 @@ exports.index = function(req, res, next) {
             tables: {
                 users: {
                     headers: config.admin.users.table.headers,
-                    body: data.users
+                    fields: config.admin.users.table.fields,
+                    values: data.users
                 }
             },
             top_documents: data.top_documents,
