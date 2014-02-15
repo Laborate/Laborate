@@ -4,6 +4,7 @@ var terminal = require("./terminal");
 
 module.exports = function(app) {
     /* Core */
+    app.io.route('join', core.join);
     app.io.route('pageTrack', core.pageTrack);
     app.io.route('notifications', core.notifications);
 
@@ -22,7 +23,7 @@ module.exports = function(app) {
     app.io.route('terminalData', terminal.data);
     app.io.route('terminalResize', terminal.resize);
 
-    /* Disconnect */
+    /* Connect */
     app.io.route('connected', core.track);
 
     /* Disconnect */

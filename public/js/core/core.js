@@ -72,16 +72,26 @@ window.socketUtil = {
             "sync disconnect on unload": true
         });
 
-        _this.socket.on("connect", _this.pageTrack);
-        _this.socket.on("reconnect", _this.pageTrack);
+        _this.socket.on("connect", _this.load);
+        _this.socket.on("reconnect", _this.load);
         _this.socket.on("notification", _this.notification);
 
         _this.notifications();
         _this.onNotification();
+
+    },
+    load: function() {
+        _this = window.socketUtil;
+        _this.join();
+        _this.pageTrack();
     },
     unload: function() {
       window.unload = true;
       window.socketUtil.socket.socket.disconnect();
+    },
+    join: function() {
+        _this = window.socketUtil;
+        _this.socket.emit("join");
     },
     pageTrack: function() {
         if(config.pageTrack) {

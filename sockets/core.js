@@ -1,6 +1,12 @@
 var editor = require("./editor");
 var terminal = require("./terminal");
 
+exports.join = function(req) {
+    if(req.session.user) {
+        req.io.join("user" + req.session.user.pub_id);
+    }
+}
+
 exports.pageTrack = function(req) {
     exports.track(req, req.session);
     req.session.last_page = req.data;
