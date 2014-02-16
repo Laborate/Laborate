@@ -184,17 +184,33 @@ exports.reload = function(req, res, next) {
 
 exports.backdrop = function(req, res, next) {
     req.backdrop = function(theme) {
-        theme = theme || (req.session.organization.theme || config.general.backdrop);
-        var files = backdrop_themes[theme];
-        var style_css = "";
+        var files;
 
-        if(!files) {
-           var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
-            if(fs.existsSync(theme_path) && fs.lstatSync(theme_path).isDirectory()) {
-                files = fs.readdirSync(theme_path);
+        if(!theme) {
+            if(req.session.organization.theme) {
+                theme = req.session.organization.theme;
+            } else if(req.location.city) {
+                theme = req.location.city.toLowerCase().replace(/ /g, '_');
+            } else {
+                theme = config.general.backdrop;
+            }
+        }
 
-                if(files.length != 0) {
-                    backdrop_themes[theme] = files;
+        if(theme in backdrop_themes) {
+            files = backdrop_themes[theme];
+        } else {
+            var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
+            if(fs.existsSync(theme_path)) {
+                var stats = fs.lstatSync(theme_path);
+
+                if(stats.isDirectory() || stats.isSymbolicLink()) {
+                    files = fs.readdirSync(theme_path);
+
+                    if(files.length != 0) {
+                        backdrop_themes[theme] = files;
+                    } else {
+                        return req.backdrop(config.general.backdrop);
+                    }
                 } else {
                     return req.backdrop(config.general.backdrop);
                 }
@@ -203,11 +219,8 @@ exports.backdrop = function(req, res, next) {
             }
         }
 
-        style_css = ("background-image: url('/img/backgrounds/" +
-                    theme + "/" + files[Math.floor((Math.random() * files.length))] +
-                    "');");
-
-        return style_css.replace(/ /g, '');
+        var file = files[Math.floor((Math.random() * files.length))];
+        return "background-image: url('/img/backgrounds/" + theme + "/" + file + "');".replace(/ /g, '');
     }
 
     next();

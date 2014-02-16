@@ -37,16 +37,10 @@ exports.index = function(req, res, next) {
                 .run(function(error, users) {
                     if(!error) {
                         async.map(users, function(user, next) {
-                            async.parallel([
-                                function(done) {
-                                    req.models.documents.count({
-                                        owner_id: user.id
-                                    }, function(error, count) {
-                                        user.documents = count;
-                                        done(error);
-                                    });
-                                }
-                            ], function(error) {
+                            req.models.documents.count({
+                                owner_id: user.id
+                            }, function(error, count) {
+                                user.documents = count;
                                 next(error, user);
                             });
                         }, callback);

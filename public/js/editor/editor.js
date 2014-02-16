@@ -130,4 +130,15 @@ $(function() {
         setTimeout(window.editorUtil.terminal, 200);
         return true;
     });
+
+    //Prevent Ctrl/Command-S Popup
+    $(document).keydown(function(event) {
+        console.log(event.which)
+        if (event.which == 115 && (event.ctrlKey||event.metaKey) || ([19, 83].indexOf(event.which) != -1)) {
+            event.preventDefault();
+            // do stuff
+            return false;
+        }
+        return true;
+    });
 });
