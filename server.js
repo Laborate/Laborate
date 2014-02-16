@@ -172,6 +172,11 @@ require('./sockets')(app);
 /* Listen To Server */
 if(config.general.ssl) {
     app.listen(config.general.ports.https);
+
+    /* HTTP -> HTTPS Redirect */
+    express.createServer().get('*',function(req,res){
+        res.redirect("https://" + req.host + "/" + req.url);
+    }).listen(config.general.ports.http);
 } else {
     app.listen(config.general.ports.http);
 }

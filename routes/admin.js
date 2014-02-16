@@ -37,6 +37,8 @@ exports.index = function(req, res, next) {
                 .run(function(error, users) {
                     if(!error) {
                         async.map(users, function(user, next) {
+                            user.locations = Object.keys(user.locations).length;
+
                             req.models.documents.count({
                                 owner_id: user.id
                             }, function(error, count) {

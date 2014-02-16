@@ -59,7 +59,7 @@
             window.config = {
                 csrf: "<%= csrf %>",
                 host: "<%= host %>",
-                port: "<%= port %>",
+                port: <%= port || null %>,
                 socket: "<%= socket %>",
                 title: "<%= title %>",
                 name: "<%= site_title %>",

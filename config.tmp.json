@@ -56,7 +56,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "pFsoSQJzUT9dPwWK48gTT1HAJcBvpImvxtD6QaxpDKeTwhHbWn"
+            "secret": "CPkmKxpP1gKlexqRfkV9JBbzfabBMuaDq5KrtOBgi9uAtIXl1R"
         }
     },
     "orm": {
@@ -324,6 +324,7 @@
                     "email",
                     "verify",
                     "deliquent",
+                    "locations",
                     "admin",
                     "created"
                 ],
@@ -332,6 +333,7 @@
                     "name",
                     "screen_name",
                     "email",
+                    "locations",
                     "documents",
                     "verify",
                     "deliquent",
@@ -343,6 +345,7 @@
                     "name",
                     "screen_name",
                     "email",
+                    "locations",
                     "documents",
                     "verify",
                     "deliquent",
