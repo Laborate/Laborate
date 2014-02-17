@@ -3,7 +3,7 @@ var bitbucket = require("./bitbucket");
 var sftp = require("./sftp");
 
 exports.index = function(req, res, next) {
-    res.renderOutdated('editor/join', {
+    res.renderOutdated('editor/index', {
         title: "Join A Document",
         js: clientJS.renderTags("backdrop"),
         css: clientCSS.renderTags("backdrop"),
@@ -22,7 +22,7 @@ exports.editor = function(req, res, next) {
                 if(!document.private) {
                     document.getOwner(function(error, owner) {
                         if(!error && owner) {
-                            res.renderOutdated('editor/index', {
+                            res.renderOutdated('editor/code/index', {
                                 title: document.name,
                                 document: document,
                                 description: function() {
@@ -44,7 +44,7 @@ exports.editor = function(req, res, next) {
             } else if(req.session.user) {
                 document.join(req.session.user, 2, function(access, permission) {
                     if(access) {
-                        res.renderOutdated('editor/index', {
+                        res.renderOutdated('editor/code/index', {
                             title: document.name,
                             user: req.session.user,
                             document: document,
@@ -82,7 +82,7 @@ exports.embed = function(req, res, next) {
                 var document = documents[0];
 
                 if(!document.private) {
-                    res.renderOutdated('editor/embed/index', {
+                    res.renderOutdated('editor/code/embed/index', {
                         title: document.name,
                         document: document,
                         js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
@@ -110,7 +110,7 @@ exports.embed = function(req, res, next) {
 
 exports.embed_test = function(req, res, next) {
     if(!req.robot) {
-        res.renderOutdated('editor/embed/tester', {
+        res.renderOutdated('editor/code/embed/tester', {
             title: "Embed Tester",
             document: req.param("document"),
         });

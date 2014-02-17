@@ -1178,7 +1178,7 @@ window.documents = {
                     break;
                 case "file-notebook":
                     item["class"] = "file";
-                    item["color"] = "green";
+                    item["color"] = "orange";
                     item["icon"] = config.icons.file_notebook;
                     break;
                 case "file-math":
@@ -1189,7 +1189,7 @@ window.documents = {
 
                 default:
                     item["class"] = "file";
-                    item["color"] = "blue";
+                    item["color"] = "";
                     item["icon"] = config.icons.file;
                     break;
             }
