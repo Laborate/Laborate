@@ -133,7 +133,6 @@ $(function() {
 
     //Prevent Ctrl/Command-S Popup
     $(document).keydown(function(event) {
-        console.log(event.which)
         if(event.ctrlKey||event.metaKey) {
             if ([17, 83, 115].indexOf(event.which) != -1) {
                 event.preventDefault();
