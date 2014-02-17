@@ -175,7 +175,7 @@ if(config.general.ssl) {
     app.listen(config.general.ports.https);
 
     /* HTTP -> HTTPS Redirect */
-    express.createServer().get('*',function(req,res){
+    express().http().all('*', function(req, res) {
         res.redirect("https://" + req.host + req.url);
     }).listen(config.general.ports.http);
 } else {
