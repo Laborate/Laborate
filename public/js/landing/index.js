@@ -1,12 +1,6 @@
 $(function() {
     $("#classroom #backdrop-header div").vAlign();
 
-    $("#slider")
-        .html(Array(6).join("<div><div></div></div>"))
-        .vAlign()
-        .find("div").eq(0)
-        .addClass("active");
-
     $(".refer-form").on("submit", function() {
         var _this = $(this),
             input = _this.find("input[type=text]"),
@@ -27,26 +21,6 @@ $(function() {
         }
 
         return false;
-    });
-
-    $("#slider").on("click", "div", function() {
-        var slide = $(".slide").eq($(this).index());
-        $('html, body').scrollTop(slide.offset().top - slide.outerHeight(true)/3);
-    });
-
-    $('.slide').each(function() {
-        var slide = $(this);
-        slide.waypoint(function(direction) {
-            $("#slider > div")
-                .removeClass("active")
-                .eq(slide.index())
-                .addClass("active");
-
-            $('.slide').removeClass("active");
-            slide.addClass("active");
-        }, {
-            offset: (slide.index() == 0) ? -50 : slide.height()/1.5
-        });
     });
 
     CodeMirror.modeURL = "/codemirror/mode/%N/%N.js";
