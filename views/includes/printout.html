@@ -2,9 +2,9 @@
 | |/ _` | '_ \ / _ \| '__/ _` | __/ _ \ | |/ _ \
 | | (_| | |_) | (_) | | | (_| | ||  __/_| | (_) |
 |_|\__,_|_.__/ \___/|_|  \__,_|\__\___(_)_|\___/
-<% if(production && hiring) { %>
-Hi curious laborator, nice to meet you!
 
+Hi curious laborator, nice to meet you!
+<% if(production && hiring) { %>
 Interested in joining a small startup? Join Laborate, and
 become part of a community that’s helping to build a brighter
 future for the world through better education tools.
@@ -20,4 +20,7 @@ email us at support@laborate.io with the following:
     5) Where you are located, right now we only accept applicants
        in the Silicon Valley.
     6) Suggestions for site improvement (design, security, code quality, etc)
+<% } else { %>
+Send us an email at support@laborate.io so we can chat about your experience on laborate.
+At laborate we think all feedback is good feedback!
 <% } %>

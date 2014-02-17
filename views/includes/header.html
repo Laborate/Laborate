@@ -91,7 +91,7 @@
             Raven.config("<%= sentry %>").install();
             window.onerror = Raven.process;
 
-            <% if(production && hiring) { %>
+            <% if(production) { %>
                 $(function() {
                     console.log($("#printout").text());
                 });
@@ -99,6 +99,6 @@
         </script>
     </head>
     <body class="<%= (organization.id) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %> <%= (embed) ? "embed" : "" %>">
-        <% if(production && hiring) { %>
+        <% if(production) { %>
             <div id="printout" class="hidden"><% include ./printout.html %></div>
         <% } %>
