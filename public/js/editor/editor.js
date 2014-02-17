@@ -134,11 +134,15 @@ $(function() {
     //Prevent Ctrl/Command-S Popup
     $(document).keydown(function(event) {
         console.log(event.which)
-        if (event.which == 115 && (event.ctrlKey||event.metaKey) || ([19, 83].indexOf(event.which) != -1)) {
-            event.preventDefault();
-            // do stuff
-            return false;
+        if(event.ctrlKey||event.metaKey) {
+            if ([17, 83, 115].indexOf(event.which) != -1) {
+                event.preventDefault();
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
         }
-        return true;
     });
 });
