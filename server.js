@@ -29,8 +29,9 @@ process.nextTick(function() {
 /* Set App & Server Variables */
 if(config.general.ssl) {
     var app = express().https({
-        key: fs.readFileSync('./laborate.key'),
-        cert: fs.readFileSync('./laborate.crt')
+        key: fs.readFileSync(__dirname + '/credentials/laborate.key').toString(),
+        cert: fs.readFileSync(__dirname + '/credentials/laborate.crt').toString(),
+        ca: fs.readFileSync(__dirname + '/credentials/gandi_standard.pem').toString()
     }).io();
 } else {
     var app = express().http().io();
@@ -175,7 +176,7 @@ if(config.general.ssl) {
 
     /* HTTP -> HTTPS Redirect */
     express.createServer().get('*',function(req,res){
-        res.redirect("https://" + req.host + "/" + req.url);
+        res.redirect("https://" + req.host + req.url);
     }).listen(config.general.ports.http);
 } else {
     app.listen(config.general.ports.http);
