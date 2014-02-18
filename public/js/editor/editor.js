@@ -114,6 +114,12 @@ $(function() {
     //Resize Editor on Window Resize
     $(window).resize(function() {
         window.editorUtil.resize();
+
+        if($(window).width() < 1077) {
+            $(".terminal").width($(".CodeMirror").width());
+        } else {
+            $(".terminal").width("")
+        }
     });
 
     //Toogle Full Screen Mode
