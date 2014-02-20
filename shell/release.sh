@@ -23,7 +23,8 @@ done
 # Create Release
 git checkout .;
 git checkout $to;
-git pull;
+git checkout .;
+git pull --rebase;
 git merge $from;
 git push origin $to;
 
