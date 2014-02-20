@@ -19,37 +19,37 @@
          <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
          <div id="backdrop-container" class="largerTwo">
              <div id="backdrop-header">
-                <%= user.name %>
-                <% if(user.admin) { %>
+                <%= laborator.name %>
+                <% if(laborator.admin) { %>
                     <span>(Staff)</span>
                 <% } %>
              </div>
              <div class="gravatar">
-                 <img src="<%= user.gravatar %>" />
+                 <img src="<%= laborator.gravatar %>" />
              </div>
              <div class="information">
                  <div class="item">
                      <div class="key">Screen Name</div>
-                     <div class="value"><%= user.screen_name %></div>
+                     <div class="value"><%= laborator.screen_name %></div>
                  </div>
-                 <% if(user.location) { %>
+                 <% if(laborator.location) { %>
                      <div class="item">
                          <div class="key">Location</div>
-                         <div class="value"><%= user.location %></div>
+                         <div class="value"><%= laborator.location %></div>
                      </div>
                  <% } %>
-                 <% if(user.url) { %>
+                 <% if(laborator.url) { %>
                      <div class="item">
                          <div class="key">Url</div>
                          <div class="value">
-                            <a target="_blank" href="<%= user.url %>"><%=: user.url | link %></a>
+                            <a target="_blank" href="<%= laborator.url %>"><%=: laborator.url | link %></a>
                          </div>
                      </div>
                  <% } %>
-                 <% if(user.organizations.length != 0) { %>
+                 <% if(laborator.organizations.length != 0) { %>
                     <div class="item">
-                        <div class="key"><%= user.organizations[0].permission.name %> at</div>
-                        <div class="value"><%= user.organizations[0].organization.name %></div>
+                        <div class="key"><%= laborator.organizations[0].permission.name %> at</div>
+                        <div class="value"><%= laborator.organizations[0].organization.name %></div>
                     </div>
                 <% } %>
              </div>
