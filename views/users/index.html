@@ -2,6 +2,19 @@
 <div id="backdrop">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
+    <% if(user) { %>
+        <div id="backdrop-nav">
+            <a class="bubble gravatar" href="/users/<%= user.screen_name %>/">
+                <img src="<%= user.gravatar %>" />
+            </a>
+            <a class="bubble color blue" href="/documents/">
+                <div class="<%= icons.online %>"></div>
+            </a>
+            <a class="bubble color red" href="/trending/">
+                <div class="<%= icons.trending %>"></div>
+            </a>
+        </div>
+    <% } %>
     <div id="backdrop-core">
          <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
          <div id="backdrop-container" class="largerTwo">
