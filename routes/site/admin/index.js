@@ -1,5 +1,3 @@
-var async = require('async');
-
 exports.index = function(req, res, next) {
     async.parallel({
         documents_count: function(callback) {

@@ -1,4 +1,4 @@
-exports.index = function(req, res, next) {
+module.exports = function(req, res, next) {
     switch(req.param(0)) {
         case "refer":
             req.email_test("refer", {

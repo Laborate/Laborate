@@ -22,31 +22,17 @@
             <div class="sub-header">
                 cloud-based solutions that connect students in ways once impossible
             </div>
-            <% if(user) { %>
-                <form class="refer-form" action="/refer/" method="post">
-                    <div class="quote">Refer your friends, create a community!</div>
-                    <div class="input-pair">
-                        <input type="hidden" name="_csrf" value="<%= csrf %>"/>
-                        <input class="input" name="email" type="text" placeholder="enter your friends emails"/>
-                        <input class="submit" type="submit" value="Refer"/>
-                    </div>
-                    <div class="link">
-                        or start laborating on your <a href="/documents/">documents</a>
-                    </div>
-                </form>
-            <% } else { %>
-                <form action="/register/" method="post">
-                    <div class="quote">Join the alpha launch, it's free!</div>
-                    <div class="input-pair">
-                        <input type="hidden" name="_csrf" value="<%= csrf %>"/>
-                        <input class="input" name="email" type="email" placeholder="enter your email"/>
-                        <input class="submit" type="submit" value="Sign Up"/>
-                    </div>
-                    <div class="link">
-                        or <a href="/login/">Sign In</a>
-                    </div>
-                </form>
-            <% } %>
+            <form action="/register/" method="post">
+                <div class="quote">Join the alpha launch, it's free!</div>
+                <div class="input-pair">
+                    <input type="hidden" name="_csrf" value="<%= csrf %>"/>
+                    <input class="input" name="email" type="email" placeholder="enter your email"/>
+                    <input class="submit" type="submit" value="Sign Up"/>
+                </div>
+                <div class="link">
+                    or <a href="/login/">Sign In</a>
+                </div>
+            </form>
             <div class="footer">
                 <div id="backdrop-header">Learn About Laborate</div>
                 <div class="video-container">
@@ -185,20 +171,6 @@
                             <input type="hidden" name="_csrf" value="<%= csrf %>"/>
                             <input class="input" name="email" type="email" placeholder="enter your email"/>
                             <input class="submit" type="submit" value="Sign Up"/>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        <% } else { %>
-            <!-- Slide: Refer -->
-            <div id="refer" class="slide colored">
-                <div class="center">
-                    <div class="quote">So what are you waiting for? Refer your friends!</div>
-                    <form class="refer-form" action="/refer/" method="post">
-                        <div class="input-pair">
-                            <input type="hidden" name="_csrf" value="<%= csrf %>"/>
-                            <input class="input" name="email" type="text" placeholder="enter your friends emails"/>
-                            <input class="submit" type="submit" value="Refer"/>
                         </div>
                     </form>
                 </div>

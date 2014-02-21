@@ -1,11 +1,11 @@
 var fs = require("fs");
-var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
     //Set Server Root For Non Express Calls
     req.session.server = req.protocol + "://" + req.host;
+    req.verified = (req.host.split(".").slice(-2).join(".") == config.general.security);
 
     if(!config.general.production || !config.random) {
         config.random = Math.floor((Math.random()*1000000)+1);
@@ -169,19 +169,6 @@ exports.redirects = function(req, res, next) {
     }
 }
 
-exports.reload = function(req, res, next) {
-    if(req.session.user) {
-        req.models.users.get(req.session.user.id, function(error, user) {
-            req.session.user = user;
-            req.session.save();
-            lib.error.capture(error);
-            next();
-        });
-    } else {
-        next();
-    }
-}
-
 exports.backdrop = function(req, res, next) {
     req.backdrop = function(theme) {
         var files;
@@ -199,7 +186,8 @@ exports.backdrop = function(req, res, next) {
         if(theme in backdrop_themes) {
             files = backdrop_themes[theme];
         } else {
-            var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
+            var theme_path = __dirname + "/../../public/img/backgrounds/" + theme;
+
             if(fs.existsSync(theme_path)) {
                 var stats = fs.lstatSync(theme_path);
 
@@ -224,34 +212,4 @@ exports.backdrop = function(req, res, next) {
     }
 
     next();
-}
-
-exports.organization = function(req, res, next) {
-    if(req.session.organization) {
-        if(["register", "verify", "reset"].indexOf(req.url.split("/")[1]) != -1) {
-            if(!req.session.organization.register) {
-                res.error(404);
-            } else {
-                next();
-            }
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-}
-
-exports.sitemap = function(req, res, next) {
-    req.sitemap(req, function(xml) {
-        res.set('Content-Type', 'application/xml');
-        res.send(xml);
-    });
-}
-
-exports.robots = function(req, res, next) {
-    res.set('Content-Type', 'text/plain');
-    res.renderOutdated("robots", {
-        disallow: config.robots
-    });
 }

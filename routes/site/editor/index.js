@@ -1,7 +1,3 @@
-var github = require("./github");
-var bitbucket = require("./bitbucket");
-var sftp = require("./sftp");
-
 exports.index = function(req, res, next) {
     res.renderOutdated('editor/index', {
         title: "Join A Document",
@@ -414,11 +410,11 @@ exports.commit = function(req, res, next) {
                     if(!document.content.empty) {
                         switch(location.type) {
                             case (!config.apps.github || "github"):
-                                github.commit(req, res, location, document);
+                                req.routes.external.github.commit(req, res, location, document);
                                 break;
                             /*
                             case (!config.apps.bitbucket || "bitbucket"):
-                                bitbucket.contents(req, res, next);
+                                req.routes.external.bitbucket.contents(req, res, next);
                                 break;
                             */
                             default:
@@ -455,7 +451,7 @@ exports.save = function(req, res, next) {
                     if(!document.content.empty) {
                         switch(location.type) {
                             case (!config.apps.sftp || "sftp"):
-                                sftp.save(req, res, location, document);
+                                req.routes.external.sftp.save(req, res, location, document);
                                 break;
                             default:
                                 res.error(200, "Failed To Save");

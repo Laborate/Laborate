@@ -10,6 +10,7 @@ var fs         = require('fs');
 
 /* IMPORTANT - Global Variables */
 GLOBAL.$              = require("jquery");
+GLOBAL.async          = require("async");
 GLOBAL.config         = require('./config');
 GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
@@ -111,31 +112,34 @@ app.configure(function() {
     }));
 
     //Custom Setup
-    app.use(require("./routes/core").setup);
+    app.use(require("./routes/global").core.setup);
 
     //Redirects
-    app.use(require("./routes/core").redirects);
+    app.use(require("./routes/global").core.redirects);
+
+    //Routes
+    app.use(require("./routes/global").routes);
 
     //Custom Libraries
     app.use(lib.express);
 
     //Custom Backdrop
-    app.use(require("./routes/core").backdrop);
+    app.use(require("./routes/global").core.backdrop);
 
     //Error Handler (Routes)
-    app.use(require("./routes/error").handler);
+    app.use(require("./routes/global").error.handler);
 
     //Device Check
-    app.use(require("./routes/core").device);
+    app.use(require("./routes/global").core.device);
 
     //Custom Authentication
-    app.use(require("./routes/security").core(crsf, express.basicAuth));
+    app.use(require("./routes/global").security(crsf, express.basicAuth));
 
     //Routes Tracking
-    app.use(require("./routes/core").tracking);
+    app.use(require("./routes/global").core.tracking);
 
     //Custom Routing
-    app.use(require("./routes/core").locals);
+    app.use(require("./routes/global").core.locals);
 });
 
 /* Development Only */
@@ -162,10 +166,12 @@ app.use(app.router);
 app.use(raven.middleware.express(config.sentry.node));
 
 /* Error Handler (Express) */
-app.use(require("./routes/error").global);
+app.use(require("./routes/global").error.global);
 
 /* Express: Import Routes */
-require('./routes')(app);
+require('./routes/api')(app);
+require('./routes/site')(app);
+require('./routes/notfound')(app);
 
 /* Socket IO: Import Routes */
 require('./sockets')(app);

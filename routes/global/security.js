@@ -1,19 +1,19 @@
-exports.core = function(crsf, basicAuth) {
+module.exports = function(crsf, basicAuth) {
     return function(req, res, next) {
         if(req.session.allowed) {
-            exports.finish(req, res, next, crsf, basicAuth);
+            finish(req, res, next, crsf, basicAuth);
         } else {
             if(req.host) {
-                if(req.host.split(".").slice(-2).join(".") == config.general.security) {
+                if(req.verified) {
                     req.session.organization = { register: true, icons: {} };
-                    exports.finish(req, res, next, crsf, basicAuth);
+                    finish(req, res, next, crsf, basicAuth);
                 } else {
                     req.models.organizations.find({
                         dns: req.host
                     }, function(error, organizations) {
                         if(!error && organizations.length == 1) {
                             req.session.organization = organizations[0];
-                            exports.finish(req, res, next, crsf, basicAuth);
+                            finish(req, res, next, crsf, basicAuth);
                         } else {
                             res.send(403);
                             req.error.capture(error);
@@ -28,9 +28,9 @@ exports.core = function(crsf, basicAuth) {
     }
 }
 
-exports.finish = function(req, res, next, crsf, basicAuth) {
+function finish(req, res, next, crsf, basicAuth) {
     if(!req.robot && !(/^\/webhook\/.*/.exec(req.url))) {
-        if(!config.general.production && Object.keys(config.development.basicAuth).length != 0) {
+        if(!config.general.production && !$.isEmptyObject(config.development.basicAuth)) {
             crsf(req, res, function() {
                 basicAuth(function(username, password) {
                     return (config.development.basicAuth[username] == password);
