@@ -29,7 +29,11 @@ module.exports = function(crsf, basicAuth) {
 }
 
 function finish(req, res, next, crsf, basicAuth) {
-    if(!req.robot && !(/^\/webhook\/.*/.exec(req.url))) {
+    if(
+        !req.robot &&
+        !(/^\/webhook\/.*/.exec(req.url)) &&
+        !(/^\/api\/.*/.exec(req.url))
+    ) {
         if(!config.general.production && !$.isEmptyObject(config.development.basicAuth)) {
             crsf(req, res, function() {
                 basicAuth(function(username, password) {
