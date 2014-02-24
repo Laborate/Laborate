@@ -1,13 +1,6 @@
 /* Modules: NPM */
 var fs = require('fs');
 var rand = require("generate-key");
-var async = require("async");
-
-/* Modules: Custom */
-var github = require("./github");
-var bitbucket = require("./bitbucket");
-var google = require("./google");
-var sftp = require("./sftp");
 
 exports.index = function(req, res, next) {
     res.renderOutdated('documents/index', {
@@ -244,16 +237,16 @@ exports.location = function(req, res, next) {
     if(req.param("0") in req.session.user.locations) {
         switch(req.session.user.locations[req.param("0")].type) {
             case (!config.apps.github || "github"):
-                github.contents(req, res, next);
+                req.routes.external.github.contents(req, res, next);
                 break;
             case (!config.apps.bitbucket || "bitbucket"):
-                bitbucket.contents(req, res, next);
+                req.routes.external.bitbucket.contents(req, res, next);
                 break;
             case (!config.apps.google || "google"):
-                google.contents(req, res, next);
+                req.routes.external.google.contents(req, res, next);
                 break;
             case (!config.apps.sftp || "sftp"):
-                sftp.contents(req, res, next);
+                req.routes.external.sftp.contents(req, res, next);
                 break;
             default:
                 res.error(200, "Location Does Not Exist");

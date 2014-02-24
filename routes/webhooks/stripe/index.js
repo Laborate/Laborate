@@ -1,4 +1,4 @@
-exports.stripe = function(req, res) {
+module.exports = function(req, res) {
     res.send(200);
 
     if(!config.general.production) {

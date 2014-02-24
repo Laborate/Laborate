@@ -58,54 +58,57 @@
         <div class="selection dashboard" data-key="dashboard">
             <div class="container">
                 <div class="side">
-                    <div class="data"><%= users.total %></div>
-                    <div class="label">user<%= (users.total != 1) ?  "s" : "" %></div>
+                    <div class="data"><%=: users.total | format %></div>
+                    <div class="label">user<%=: (users.total != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
-                    <div class="data"><%= users.paid %></div>
-                    <div class="label">paid user<%= (users.paid != 1) ?  "s" : "" %></div>
+                    <div class="data"><%=: users.paid | format %></div>
+                    <div class="label">paid user<%=: (users.paid != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
-                    <div class="data"><%= documents %></div>
-                    <div class="label">document<%= ([0,1].indexOf(documents) == -1) ?  "s" : "" %></div>
+                    <div class="data"><%=: documents | format %></div>
+                    <div class="label">document<%=: ([0,1].indexOf(documents) == -1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
-                    <div class="data"><%= feedbacks.length %></div>
-                    <div class="label">feedback<%= (feedbacks.length != 1) ?  "s" : "" %></div>
+                    <div class="data"><%=: feedbacks.length | format %></div>
+                    <div class="label">feedback<%=: (feedbacks.length != 1) ?  "s" : "" %></div>
                 </div>
             </div>
             <div class="container">
-                <% if(!top_documents.empty) { %>
-                    <div id="plans" class="listing compact">
-                        <div class="item header center">Popular Files</div>
-
-                        <% $.each(top_documents, function(key, document) { %>
-                            <div class="item selectable">
-                                <a href="/editor/<%= document.pub_id %>/">
-                                    <div class="name"><%= document.name %></div>
-                                    <div class="action">
-                                        <% if(!document.password && document.roles.length - 1 != 0) { %>
-                                            <span class="users">
-                                                <%= document.roles.length - 1 %>
-                                                <span class="<%= icons.users %>"></span>
-                                            </span>
-                                        <% } %>
-                                        <% if(document.private) { %>
-                                            <span class="locked <%= icons.locked_defined %>"></span>
-                                        <% } %>
-                                    </div>
-                                    <div class="clear"></div>
-                                </a>
-                            </div>
-                        <% }); %>
-                    </div>
-                <% } else { %>
-                    <div class="listing">
-                        <div class="item empty">
-                            No documents have been created
-                        </div>
-                    </div>
-                <% } %>
+                <div class="side">
+                    <div class="data"><%=: tracking.hourly | format %></div>
+                    <div class="label">hourly hits</div>
+                </div>
+                <div class="side">
+                    <div class="data"><%=: tracking.daily | format %></div>
+                    <div class="label">daily hits</div>
+                </div>
+                <div class="side">
+                    <div class="data"><%=: tracking.monthly | format %></div>
+                    <div class="label">monthly hits</div>
+                </div>
+                <div class="side">
+                    <div class="data"><%=: tracking.yearly | format %></div>
+                    <div class="label">yearly hits</div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="side">
+                    <div class="data"><%=: tracking.hourly_loggedin | format %></div>
+                    <div class="label">hourly hits<br>(logged in)</div>
+                </div>
+                <div class="side">
+                    <div class="data"><%=: tracking.daily_loggedin | format %></div>
+                    <div class="label">daily hits<br>(logged in)</div>
+                </div>
+                <div class="side">
+                    <div class="data"><%=: tracking.monthly_loggedin | format %></div>
+                    <div class="label">monthly hits<br>(logged in)</div>
+                </div>
+                <div class="side">
+                    <div class="data"><%=: tracking.yearly_loggedin | format %></div>
+                    <div class="label">yearly hits<br>(logged in)</div>
+                </div>
             </div>
         </div>
         <div class="selection full" data-key="feedback">

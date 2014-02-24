@@ -1,5 +1,3 @@
-var async = require('async');
-
 /* Checks */
 exports.restrictAccess = function(req, res, next) {
     if(req.session.user) {

@@ -1,11 +1,11 @@
 var fs = require("fs");
-var async = require("async");
 var outdatedhtml = require('express-outdatedhtml');
 var backdrop_themes = {};
 
 exports.setup = function(req, res, next) {
     //Set Server Root For Non Express Calls
     req.session.server = req.protocol + "://" + req.host;
+    req.verified = (req.host.split(".").slice(-2).join(".") == config.general.security);
 
     if(!config.general.production || !config.random) {
         config.random = Math.floor((Math.random()*1000000)+1);
@@ -53,7 +53,64 @@ exports.setup = function(req, res, next) {
     next();
 }
 
-exports.tracking = function(req, res, next) {
+exports.redirects = function(req, res, next) {
+    if(req.subdomains.indexOf('www') === -1) {
+        next();
+    } else {
+        res.redirect(req.protocol + "://" + req.host.split(".").slice(1).join(".") + req.path);
+    }
+}
+
+exports.imports = function(req, res, next) {
+    //Import Lib
+    req.core = lib.core;
+    req.bitbucket = lib.bitbucket;
+    req.email = lib.email(req.session.server);
+    req.email_test = lib.email_test(req.session.server);
+    req.email_init = lib.email_init;
+    req.github = lib.github;
+    req.google = lib.google;
+    req.jsdom = lib.jsdom;
+    req.sftp = lib.sftp;
+    req.stripe = lib.stripe;
+    req.redis = lib.redis;
+    req.redis_init = lib.redis_init;
+    req.error = lib.error;
+    req.geoip = lib.geoip;
+    req.sitemap = lib.sitemap;
+    req.location = lib.geoip(req.address.ip) || {
+        city: null,
+        region: null,
+        country: null,
+        ll: [null, null]
+    };
+
+    //Device Info
+    var device = req.device.type.toLowerCase();
+    req.mobile = ["phone", "tablet"].indexOf(device) != -1;
+    req.robot = device == "bot";
+
+    //Site Routes
+    if(req.verified) {
+        require("../site/routes")(function(routes) {
+            req.routes = routes;
+        });
+
+    //Api Routes
+    } else if(req.subdomains.indexOf("api") != -1) {
+        require("../site/api")(function(routes) {
+            req.routes = routes;
+        });
+
+    //Webhooks Routes
+    } else if(req.subdomains.indexOf("webhook") != -1) {
+        require("../site/webhooks")(function(routes) {
+            req.routes = routes;
+        });
+
+    }
+
+    //Tracking
     if(!req.robot && req.headers['user-agent']) {
         req.redis.get("tracking", function(error, data) {
             var user = req.session.user;
@@ -61,7 +118,7 @@ exports.tracking = function(req, res, next) {
             var tracking = (data) ? JSON.parse(data) : [];
 
             tracking.push({
-                type: "web",
+                type: (req.mobile) ? "mobile" : ((req.xhr) ? "xhr" : "web"),
                 agent: req.headers['user-agent'],
                 lat: req.location.ll[0],
                 lon: req.location.ll[1],
@@ -83,7 +140,47 @@ exports.tracking = function(req, res, next) {
         });
     }
 
-    next();
+    //Backdrop
+    if(!req.robot && !req.xhr && req.headers['user-agent']) {
+        req.backdrop = function(theme) {
+            if(!theme) {
+                if(req.session.organization.theme) {
+                    theme = req.session.organization.theme;
+                } else if(req.location.city) {
+                    theme = req.location.city.toLowerCase().replace(/ /g, '_');
+                } else {
+                    theme = config.general.backdrop;
+                }
+            }
+
+            if($.isEmptyObject(backdrop_themes)) {
+                var themes = __dirname + "/../../public/img/backgrounds/";
+
+                $.each(fs.readdirSync(themes), function(index, theme) {
+                    var theme_path = themes + "/" + theme;
+                    var stats = fs.lstatSync(theme_path);
+
+                    if(stats.isDirectory() || stats.isSymbolicLink()) {
+                        var files = fs.readdirSync(theme_path);
+
+                        if(!files.empty) {
+                            backdrop_themes[theme] = files;
+                        }
+                    }
+                });
+            }
+
+            if(theme in backdrop_themes) {
+                var file = backdrop_themes[theme][Math.floor((Math.random() * backdrop_themes[theme].length))];
+                return "background-image: url('/img/backgrounds/" + theme + "/" + file + "');".replace(/ /g, '');
+            } else {
+                return req.backdrop(config.general.backdrop);
+            }
+        }
+    }
+
+    //Import Models
+    lib.models_express(req, res, next);
 }
 
 exports.locals = function(req, res, next) {
@@ -150,108 +247,4 @@ exports.locals = function(req, res, next) {
     };
 
     next();
-}
-
-exports.device = function(req, res, next) {
-    var device = req.device.type.toLowerCase();
-
-    req.mobile = ["phone", "tablet"].indexOf(device) != -1;
-    req.robot = device == "bot";
-
-    next();
-}
-
-exports.redirects = function(req, res, next) {
-    if(req.subdomains.indexOf('www') === -1) {
-        next();
-    } else {
-        res.redirect(req.protocol + "://" + req.host.split(".").slice(1).join(".") + req.path);
-    }
-}
-
-exports.reload = function(req, res, next) {
-    if(req.session.user) {
-        req.models.users.get(req.session.user.id, function(error, user) {
-            req.session.user = user;
-            req.session.save();
-            lib.error.capture(error);
-            next();
-        });
-    } else {
-        next();
-    }
-}
-
-exports.backdrop = function(req, res, next) {
-    req.backdrop = function(theme) {
-        var files;
-
-        if(!theme) {
-            if(req.session.organization.theme) {
-                theme = req.session.organization.theme;
-            } else if(req.location.city) {
-                theme = req.location.city.toLowerCase().replace(/ /g, '_');
-            } else {
-                theme = config.general.backdrop;
-            }
-        }
-
-        if(theme in backdrop_themes) {
-            files = backdrop_themes[theme];
-        } else {
-            var theme_path = __dirname + "/../public/img/backgrounds/" + theme;
-            if(fs.existsSync(theme_path)) {
-                var stats = fs.lstatSync(theme_path);
-
-                if(stats.isDirectory() || stats.isSymbolicLink()) {
-                    files = fs.readdirSync(theme_path);
-
-                    if(files.length != 0) {
-                        backdrop_themes[theme] = files;
-                    } else {
-                        return req.backdrop(config.general.backdrop);
-                    }
-                } else {
-                    return req.backdrop(config.general.backdrop);
-                }
-            } else {
-                return req.backdrop(config.general.backdrop);
-            }
-        }
-
-        var file = files[Math.floor((Math.random() * files.length))];
-        return "background-image: url('/img/backgrounds/" + theme + "/" + file + "');".replace(/ /g, '');
-    }
-
-    next();
-}
-
-exports.organization = function(req, res, next) {
-    if(req.session.organization) {
-        if(["register", "verify", "reset"].indexOf(req.url.split("/")[1]) != -1) {
-            if(!req.session.organization.register) {
-                res.error(404);
-            } else {
-                next();
-            }
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-}
-
-exports.sitemap = function(req, res, next) {
-    req.sitemap(req, function(xml) {
-        res.set('Content-Type', 'application/xml');
-        res.send(xml);
-    });
-}
-
-exports.robots = function(req, res, next) {
-    res.set('Content-Type', 'text/plain');
-    res.renderOutdated("robots", {
-        disallow: config.robots
-    });
 }

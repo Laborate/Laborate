@@ -1,4 +1,3 @@
-var async = require("async");
 var pages = ["index", "creative", "social", "explore"];
 
 exports.index = function(req, res) {

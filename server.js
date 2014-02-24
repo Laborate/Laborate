@@ -6,10 +6,12 @@ var ejs        = require('ejs');
 var RedisStore = require('connect-redis')(express);
 var raven      = require('raven');
 var device     = require('express-device');
+var subdomains = require('express-subdomains');
 var fs         = require('fs');
 
 /* IMPORTANT - Global Variables */
 GLOBAL.$              = require("jquery");
+GLOBAL.async          = require("async");
 GLOBAL.config         = require('./config');
 GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
@@ -96,6 +98,17 @@ app.configure(function() {
     app.use(slashes(true));
     app.use(device.capture());
 
+    /* Express Subdomains */
+    async.each(config.general.subdomains, function(subdomain, next) {
+        if(subdomain != "") {
+            subdomains.use(subdomain);
+        }
+
+        next();
+    }, function() {
+        app.use(subdomains.middleware);
+    });
+
     //Express Logger & Cookie
     app.use(express.logger('dev'));
     app.use(express.compress());
@@ -110,32 +123,26 @@ app.configure(function() {
         })
     }));
 
+    //Send Error Logging To Sentry
+    app.use(raven.middleware.express(config.sentry.node));
+
     //Custom Setup
-    app.use(require("./routes/core").setup);
+    app.use(require("./routes/global").core.setup);
 
     //Redirects
-    app.use(require("./routes/core").redirects);
+    app.use(require("./routes/global").core.redirects);
 
-    //Custom Libraries
-    app.use(lib.express);
-
-    //Custom Backdrop
-    app.use(require("./routes/core").backdrop);
+    //Import Librarys
+    app.use(require("./routes/global").core.imports);
 
     //Error Handler (Routes)
-    app.use(require("./routes/error").handler);
-
-    //Device Check
-    app.use(require("./routes/core").device);
+    app.use(require("./routes/global").error.handler);
 
     //Custom Authentication
-    app.use(require("./routes/security").core(crsf, express.basicAuth));
-
-    //Routes Tracking
-    app.use(require("./routes/core").tracking);
+    app.use(require("./routes/global").security(crsf, express.basicAuth));
 
     //Custom Routing
-    app.use(require("./routes/core").locals);
+    app.use(require("./routes/global").core.locals);
 });
 
 /* Development Only */
@@ -149,7 +156,7 @@ app.configure('development', function() {
 /* Production Only */
 app.configure('production', function() {
     /* Last Resort Error Handling */
-    process.on('uncaughtException', function (exception) {
+    process.on('uncaughtException', function(exception) {
         lib.error.capture(exception);
         return false;
     });
@@ -158,14 +165,14 @@ app.configure('production', function() {
 /* Express: Start Router */
 app.use(app.router);
 
-/* Send Error Logging To Sentry */
-app.use(raven.middleware.express(config.sentry.node));
-
 /* Error Handler (Express) */
-app.use(require("./routes/error").global);
+app.use(require("./routes/global").error.global);
 
 /* Express: Import Routes */
-require('./routes')(app);
+require('./routes/api')(app);
+require('./routes/webhooks')(app);
+require('./routes/site')(app);
+require('./routes/notfound')(app);
 
 /* Socket IO: Import Routes */
 require('./sockets')(app);

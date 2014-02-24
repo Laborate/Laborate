@@ -1,5 +1,3 @@
-var async = require('async');
-
 exports.index = function(req, res) {
     async.parallel({
         laborators: function(callback) {
