@@ -124,7 +124,7 @@ exports.imports = function(req, res, next) {
                 var file = backdrop_themes[theme][Math.floor((Math.random() * backdrop_themes[theme].length))];
                 return "background-image: url('/img/backgrounds/" + theme + "/" + file + "');".replace(/ /g, '');
             } else {
-                return req.backdrop(config.general.backdrop);
+                return (req.backdrop) ? req.backdrop(config.general.backdrop) : "";
             }
         }
     }
