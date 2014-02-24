@@ -90,6 +90,45 @@ exports.imports = function(req, res, next) {
     req.mobile = ["phone", "tablet"].indexOf(device) != -1;
     req.robot = device == "bot";
 
+    //Backdrop
+    if(!req.robot && !req.xhr && req.headers['user-agent']) {
+        req.backdrop = function(theme) {
+            if(!theme) {
+                if(req.session.organization.theme) {
+                    theme = req.session.organization.theme;
+                } else if(req.location.city) {
+                    theme = req.location.city.toLowerCase().replace(/ /g, '_');
+                } else {
+                    theme = config.general.backdrop;
+                }
+            }
+
+            if($.isEmptyObject(backdrop_themes)) {
+                var themes = __dirname + "/../../public/img/backgrounds/";
+
+                $.each(fs.readdirSync(themes), function(index, theme) {
+                    var theme_path = themes + "/" + theme;
+                    var stats = fs.lstatSync(theme_path);
+
+                    if(stats.isDirectory() || stats.isSymbolicLink()) {
+                        var files = fs.readdirSync(theme_path);
+
+                        if(!files.empty) {
+                            backdrop_themes[theme] = files;
+                        }
+                    }
+                });
+            }
+
+            if(theme in backdrop_themes) {
+                var file = backdrop_themes[theme][Math.floor((Math.random() * backdrop_themes[theme].length))];
+                return "background-image: url('/img/backgrounds/" + theme + "/" + file + "');".replace(/ /g, '');
+            } else {
+                return req.backdrop(config.general.backdrop);
+            }
+        }
+    }
+
     //Site Routes
     if(req.verified) {
         require("../site/routes")(function(routes) {
@@ -138,45 +177,6 @@ exports.imports = function(req, res, next) {
                 req.error.capture
             );
         });
-    }
-
-    //Backdrop
-    if(!req.robot && !req.xhr && req.headers['user-agent']) {
-        req.backdrop = function(theme) {
-            if(!theme) {
-                if(req.session.organization.theme) {
-                    theme = req.session.organization.theme;
-                } else if(req.location.city) {
-                    theme = req.location.city.toLowerCase().replace(/ /g, '_');
-                } else {
-                    theme = config.general.backdrop;
-                }
-            }
-
-            if($.isEmptyObject(backdrop_themes)) {
-                var themes = __dirname + "/../../public/img/backgrounds/";
-
-                $.each(fs.readdirSync(themes), function(index, theme) {
-                    var theme_path = themes + "/" + theme;
-                    var stats = fs.lstatSync(theme_path);
-
-                    if(stats.isDirectory() || stats.isSymbolicLink()) {
-                        var files = fs.readdirSync(theme_path);
-
-                        if(!files.empty) {
-                            backdrop_themes[theme] = files;
-                        }
-                    }
-                });
-            }
-
-            if(theme in backdrop_themes) {
-                var file = backdrop_themes[theme][Math.floor((Math.random() * backdrop_themes[theme].length))];
-                return "background-image: url('/img/backgrounds/" + theme + "/" + file + "');".replace(/ /g, '');
-            } else {
-                return req.backdrop(config.general.backdrop);
-            }
-        }
     }
 
     //Import Models
