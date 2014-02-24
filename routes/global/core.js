@@ -89,6 +89,7 @@ exports.imports = function(req, res, next) {
     var device = req.device.type.toLowerCase();
     req.mobile = ["phone", "tablet"].indexOf(device) != -1;
     req.robot = (device == "bot");
+    req.tv = (device == "tv");
 
     //Backdrop
     if(!req.xhr) {
@@ -151,33 +152,50 @@ exports.imports = function(req, res, next) {
 
     //Tracking
     if(!req.robot && req.headers['user-agent'] && req.headers['user-agent'].indexOf("bot") == -1) {
-        req.redis.get("tracking", function(error, data) {
-            var user = req.session.user;
-            var organization = req.session.organization.id;
-            var tracking = (data) ? JSON.parse(data) : [];
-
-            tracking.push({
-                type: (req.mobile) ? "mobile" : ((req.xhr) ? "xhr" : "web"),
-                agent: req.headers['user-agent'],
-                lat: req.location.ll[0],
-                lon: req.location.ll[1],
-                city: req.location.city,
-                state: req.location.region,
-                country: req.location.country,
-                ip: req.address.ip,
-                port: req.address.port,
-                user_id: (user) ? user.id : null,
-                organization_id: (organization) ? organization.id : null,
-                url: req.protocol + "://" + req.get('host') + req.url
-            });
-
-            req.redis.set(
-                "tracking",
-                JSON.stringify(tracking),
-                req.error.capture
-            );
-        });
     }
+
+    req.redis.get("tracking", function(error, data) {
+        var user = req.session.user;
+        var organization = req.session.organization.id;
+        var tracking = (data) ? JSON.parse(data) : [];
+
+        tracking.push({
+            agent: req.headers['user-agent'],
+            lat: req.location.ll[0],
+            lon: req.location.ll[1],
+            city: req.location.city,
+            state: req.location.region,
+            country: req.location.country,
+            ip: req.address.ip,
+            port: req.address.port,
+            user_id: (user) ? user.id : null,
+            organization_id: (organization) ? organization.id : null,
+            url: req.protocol + "://" + req.get('host') + req.url,
+            type: function(req) {
+                if(
+                    req.robot ||
+                    !req.headers['user-agent'] ||
+                    req.headers['user-agent'].indexOf("bot") != -1
+                ) {
+                    return "bot";
+                } else if(req.mobile) {
+                    return "mobile";
+                } else if(req.tv) {
+                    type = "tv";
+                } else if(req.xhr) {
+                    return "xhr";
+                } else {
+                    return "web";
+                }
+            }(req)
+        });
+
+        req.redis.set(
+            "tracking",
+            JSON.stringify(tracking),
+            req.error.capture
+        );
+    });
 
     //Import Models
     lib.models_express(req, res, next);
