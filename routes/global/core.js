@@ -88,7 +88,7 @@ exports.imports = function(req, res, next) {
     //Device Info
     var device = req.device.type.toLowerCase();
     req.mobile = ["phone", "tablet"].indexOf(device) != -1;
-    req.robot = device == "bot";
+    req.robot = (device == "bot");
 
     //Backdrop
     if(!req.xhr) {
@@ -150,7 +150,7 @@ exports.imports = function(req, res, next) {
     }
 
     //Tracking
-    if(!req.robot && req.headers['user-agent']) {
+    if(!req.robot && req.headers['user-agent'] && req.headers['user-agent'].indexOf("bot") == -1) {
         req.redis.get("tracking", function(error, data) {
             var user = req.session.user;
             var organization = req.session.organization.id;
