@@ -15,42 +15,45 @@ exports.pageTrack = function(req) {
 
 exports.track = function(req, session) {
     if(req.handshake && req.headers) {
-        lib.redis.get("tracking", function(error, data) {
-            var user = (session) ? (session.user || {}) : {};
-            var organization = (session) ? (session.organization || {}) : {};
-            var tracking = (data) ? JSON.parse(data) : [];
-            var address = {
-                ip: req.headers['x-forwarded-for'] || req.handshake.address.address,
-                port: req.headers['x-forwarded-port'] || req.handshake.address.port
-            };
-            var location = lib.geoip(address.ip) || {
-                city: null,
-                region: null,
-                country: null,
-                ll: [null, null]
-            };
+        var user = (session) ? (session.user || {}) : {};
 
-            tracking.push({
-                type: "socket",
-                agent: req.handshake.headers['user-agent'],
-                lat: location.ll[0],
-                lon: location.ll[1],
-                city: location.city,
-                state: location.region,
-                country: location.country,
-                ip: address.ip,
-                port: address.port,
-                user_id: user.id || null,
-                organization_id: organization.id || null,
-                url: req.headers.referer
+        if(!user.admin) {
+            lib.redis.get("tracking", function(error, data) {
+                var tracking = (data) ? JSON.parse(data) : [];
+                var organization = (session) ? (session.organization || {}) : {};
+                var address = {
+                    ip: req.headers['x-forwarded-for'] || req.handshake.address.address,
+                    port: req.headers['x-forwarded-port'] || req.handshake.address.port
+                };
+                var location = lib.geoip(address.ip) || {
+                    city: null,
+                    region: null,
+                    country: null,
+                    ll: [null, null]
+                };
+
+                tracking.push({
+                    type: "socket",
+                    agent: req.handshake.headers['user-agent'],
+                    lat: location.ll[0],
+                    lon: location.ll[1],
+                    city: location.city,
+                    state: location.region,
+                    country: location.country,
+                    ip: address.ip,
+                    port: address.port,
+                    user_id: user.id || null,
+                    organization_id: organization.id || null,
+                    url: req.headers.referer
+                });
+
+                lib.redis.set(
+                    "tracking",
+                    JSON.stringify(tracking),
+                    lib.error.capture
+                );
             });
-
-            lib.redis.set(
-                "tracking",
-                JSON.stringify(tracking),
-                lib.error.capture
-            );
-        });
+        }
     }
 }
 
