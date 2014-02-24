@@ -15,16 +15,114 @@ exports.index = function(req, res, next) {
                 deliquent: false
             }, callback);
         },
+        tracking_hourly_count: function(callback) {
+            var created = new Date();
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created)
+            }, callback);
+        },
+        tracking_daily_count: function(callback) {
+            var created = new Date();
+            created.setHours(0);
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created)
+            }, callback);
+        },
+        tracking_monthly_count: function(callback) {
+            var created = new Date();
+            created.setMonth(created.getMonth() - 1);
+            created.setHours(0);
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created)
+            }, callback);
+        },
+        tracking_yearly_count: function(callback) {
+            var created = new Date();
+            created.setFullYear(created.getFullYear() - 1);
+            created.setMonth(0);
+            created.setHours(0);
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created)
+            }, callback);
+        },
+        tracking_hourly_loggedin_count: function(callback) {
+            var created = new Date();
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created),
+                user_id: req.db.tools.ne(null)
+            }, callback);
+        },
+        tracking_daily_loggedin_count: function(callback) {
+            var created = new Date();
+            created.setHours(0);
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created),
+                user_id: req.db.tools.ne(null)
+            }, callback);
+        },
+        tracking_monthly_loggedin_count: function(callback) {
+            var created = new Date();
+            created.setMonth(created.getMonth() - 1);
+            created.setHours(0);
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created),
+                user_id: req.db.tools.ne(null)
+            }, callback);
+        },
+        tracking_yearly_loggedin_count: function(callback) {
+            var created = new Date();
+            created.setFullYear(created.getFullYear() - 1);
+            created.setMonth(0);
+            created.setHours(0);
+            created.setMinutes(0);
+            created.setSeconds(0);
+            created.setMilliseconds(0);
+
+            req.models.tracking.count({
+                type: "web",
+                created: req.db.tools.gte(created),
+                user_id: req.db.tools.ne(null)
+            }, callback);
+        },
         feedback: function(callback) {
             req.models.users.feedback.all({}, {
                 autoFetch: true
             }, ["created", "Z"], callback);
-        },
-        top_documents: function(callback) {
-            req.models.documents.all({}, {
-                autoFetch: true,
-                autoFetchLimit: 1
-            }, ["viewed", "Z"], 10, callback);
         },
         users: function(callback) {
             req.models.users.all({}, {
@@ -57,6 +155,17 @@ exports.index = function(req, res, next) {
                 total: data.users_count,
                 paid: data.paid_count
             },
+            tracking: {
+                hourly: data.tracking_hourly_count,
+                daily: data.tracking_daily_count,
+                monthly: data.tracking_monthly_count,
+                yearly: data.tracking_yearly_count,
+
+                hourly_loggedin: data.tracking_hourly_loggedin_count,
+                daily_loggedin: data.tracking_daily_loggedin_count,
+                monthly_loggedin: data.tracking_monthly_loggedin_count,
+                yearly_loggedin: data.tracking_yearly_loggedin_count
+            },
             documents: data.documents_count,
             questions: config.feedback.questions,
             feedbacks: data.feedback,
@@ -67,7 +176,6 @@ exports.index = function(req, res, next) {
                     values: data.users
                 }
             },
-            top_documents: data.top_documents,
             js: clientJS.renderTags("admin"),
             css: clientCSS.renderTags("admin"),
             pageTrack: true
