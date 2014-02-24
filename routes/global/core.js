@@ -91,7 +91,7 @@ exports.imports = function(req, res, next) {
     req.robot = device == "bot";
 
     //Backdrop
-    if(!req.robot && !req.xhr && req.headers['user-agent']) {
+    if(!req.xhr) {
         req.backdrop = function(theme) {
             if(!theme) {
                 if(req.session.organization.theme) {
@@ -124,7 +124,7 @@ exports.imports = function(req, res, next) {
                 var file = backdrop_themes[theme][Math.floor((Math.random() * backdrop_themes[theme].length))];
                 return "background-image: url('/img/backgrounds/" + theme + "/" + file + "');".replace(/ /g, '');
             } else {
-                return (req.backdrop) ? req.backdrop(config.general.backdrop) : "";
+                return req.backdrop(config.general.backdrop);
             }
         }
     }
