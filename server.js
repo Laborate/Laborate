@@ -98,17 +98,6 @@ app.configure(function() {
     app.use(slashes(true));
     app.use(device.capture());
 
-    /* Express Subdomains */
-    async.each(config.general.subdomains, function(subdomain, next) {
-        if(subdomain != "") {
-            subdomains.use(subdomain);
-        }
-
-        next();
-    }, function() {
-        app.use(subdomains.middleware);
-    });
-
     //Express Logger & Cookie
     app.use(express.logger('dev'));
     app.use(express.compress());
@@ -132,7 +121,18 @@ app.configure(function() {
     //Redirects
     app.use(require("./routes/global").core.redirects);
 
-    //Import Librarys
+    //Express Subdomains
+    async.each(config.general.subdomains, function(subdomain, next) {
+        if(subdomain != "") {
+            subdomains.use(subdomain);
+        }
+
+        next();
+    }, function() {
+        app.use(subdomains.middleware);
+    });
+
+    //Import Libraries
     app.use(require("./routes/global").core.imports);
 
     //Error Handler (Routes)
