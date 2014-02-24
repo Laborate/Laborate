@@ -13,6 +13,8 @@ module.exports = function(root) {
     clientCSS.addFile(css_path + 'core/header.less');
     clientCSS.addFile(css_path + 'core/jscroll.less');
 
+    clientCSS.addUrl('https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,700,600');
+
     clientJS.addUrl('https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js');
     clientJS.addUrl('https://d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js');
     clientJS.addUrl('/socket.io/socket.io.js');

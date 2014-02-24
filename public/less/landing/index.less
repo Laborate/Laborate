@@ -6,7 +6,7 @@
     z-index: 100002;
     width: 100%;
     overflow: hidden;
-    font-family: "Gill Sans";
+    font-family: 'Open Sans', sans-serif;
 
     .slide {
         position: relative;
@@ -49,13 +49,17 @@
     }
 
     .sub-header {
-        font-size: 45px;
+        font-size: 40px;
         font-weight: lighter;
         margin-bottom: 25px;
         text-shadow: 0 2px 0 rgba(0, 0, 0, .6);
 
         strong {
             font-weight: 500;
+        }
+
+        @media only screen and (max-width : 1350px) {
+            font-size: 35px;
         }
     }
 
@@ -65,6 +69,10 @@
         font-size: 21px;
         font-style: italic;
         text-shadow: 0 1px 0 rgba(0, 0, 0, .6);
+
+        @media only screen and (max-width : 1350px) {
+            font-size: 18px;
+        }
     }
 
     .input-pair {
