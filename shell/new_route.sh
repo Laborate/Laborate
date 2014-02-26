@@ -12,14 +12,14 @@ mkdir "./views/$1";
 
 # Copy Template Files
 cp "./views/template.html" "./views/$1/index.html";
-cp -r "./routes/template" "./routes/site/$1";
+cp -r "./routes/site/template" "./routes/site/$1";
 
 # Enter New Info
 sed -i "s/<replace>/$1/g" "./routes/site/$1/route.js";
 
 # Create API Route
 if [[ "$api" == "Y" || "$api" == "y" ]]; then
-    cp -r "./routes/template" "./routes/api/$1";
+    cp -r "./routes/api/template" "./routes/api/$1";
     sed -i "s/<replace>/$1/g" "./routes/api/$1/route.js";
 fi
 
