@@ -148,16 +148,14 @@ module.exports = function(root) {
     clientJS.addFile("admin", js_path + 'admin/admin.js');
     clientJS.addFile("admin", js_path + 'admin/adminUtil.js');
     clientJS.addFile("admin", js_path + 'admin/adminInit.js');
+
+	/* News */
+	clientCSS.addFile('news', css_path + 'news/index.less');
+	clientJS.addFile('news', js_path + 'news/index.js');
+
+
+	/* News */
+	clientCSS.addFile('news', css_path + 'news/index.less');
+	clientJS.addFile('news', js_path + 'news/index.js');
 };
-\n/*  */
-\nclientCSS.addFile('admin', css_path + 'news/index.less');
-\nclientJS.addFile('admin', js_path + 'news/index.js');
-\n/*  */
-\nclientCSS.addFile('admin', css_path + 'news/index.less');
-\nclientJS.addFile('admin', js_path + 'news/index.js');
-\n/*  */
-\nclientCSS.addFile('admin', css_path + 'news/index.less');
-\nclientJS.addFile('admin', js_path + 'news/index.js');
-\n/* news */
-\nclientCSS.addFile('admin', css_path + 'news/index.less');
-\nclientJS.addFile('admin', js_path + 'news/index.js');
+
