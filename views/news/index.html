@@ -1,5 +1,41 @@
 <% include ../includes/header.html %>
-
-<!-- Code Goes Here -->
+<div class="header">
+    <a href="/" class="logo">
+        <img src="/img/logo.png" />
+    </a>
+    <div class="apps">
+        <div class="app news">
+            <div class="icon <%= icons.news_feed %>"></div>
+            <div class="active"></div>
+        </div>
+        <div class="app documents">
+            <div class="icon <%= icons.documents %>"></div>
+            <div class="active"></div>
+        </div>
+        <div class="app terminal">
+            <div class="icon <%= icons.terminal %>"></div>
+            <div class="active"></div>
+        </div>
+        <div class="app groups">
+            <div class="icon <%= icons.groups %>"></div>
+            <div class="active"></div>
+        </div>
+        <div class="app help">
+            <div class="icon <%= icons.help %>"></div>
+            <div class="active"></div>
+        </div>
+    </div>
+    <div class="search">
+        <div class="icon <%= icons.search %>"></div>
+    </div>
+    <div class="profile">
+        <a href="/users/<%= user.screen_name %>/" class="name">
+            <%= user.screen_name %>
+        </a>
+        <div class="gravatar">
+            <img src="<%= user.gravatar %>"/>
+        </div>
+    </div>
+</div>
 
 <% include ../includes/footer.html %>

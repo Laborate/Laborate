@@ -1,4 +1,189 @@
 @import '../core/index';
 @import '../compless/all';
 
-//Code Goes Here
+.header {
+    color: #fff;
+    background: @color_header;
+    height: 60px;
+    .box-shadow(0 3px 0 rgba(0,0,0,0.15));
+    .clearfix();
+
+    & > * {
+        height: 100%;
+    }
+
+    .logo {
+        cursor: pointer;
+        padding: 5px;
+        background: lighten(@color_header_top, 8%);
+        .float-left();
+        .transition(background);
+
+        &:hover {
+            background: lighten(@color_header_top, 11%);
+
+            &:active {
+                background: lighten(@color_header_top, 15%);
+            }
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
+    .apps {
+        .float-left();
+
+        .app {
+            cursor: pointer;
+            position: relative;
+            text-align: center;
+            width: 60px;
+            height: 100%;
+            border-right: solid 1px lighten(@color_header, 3%);
+            .float-left();
+            .transition(background);
+
+            &:hover {
+                background: lighten(@color_header, 10%);
+
+                &:active {
+                    .icon {
+                        opacity: 1;
+                    }
+                }
+
+                .active {
+                    height: 3px;
+                }
+            }
+
+            &.activated {
+                background: @color_header;
+
+                .icon {
+                    opacity: 1;
+                }
+
+                .active {
+                    height: 3px;
+                }
+            }
+
+            &.news {
+                .icon {
+                    color: @color_blue;
+                }
+
+                .active {
+                    background: darken(@color_blue, 5%);
+                }
+            }
+
+            &.documents {
+                .icon {
+                    color: @color_purple;
+                }
+
+                .active {
+                    background: darken(@color_purple, 5%);
+                }
+            }
+
+            &.terminal {
+                .icon {
+                    color: @color_green;
+                }
+
+                .active {
+                    background: darken(@color_green, 5%);
+                }
+            }
+
+            &.groups {
+                .icon {
+                    color: @color_red_nice;
+                }
+
+                .active {
+                    background: darken(@color_red_nice, 5%);
+                }
+            }
+
+            &.help {
+                .icon {
+                    color: @color_yellow;
+                }
+
+                .active {
+                    background: darken(@color_yellow, 5%);
+                }
+            }
+
+            .icon {
+                opacity: .8;
+                margin-top: 18px;
+                font-size: 25px;
+            }
+
+            .active {
+                position: absolute;
+                bottom: 0;
+                width: inherit;
+                height: 0;
+                .transition(height);
+            }
+        }
+    }
+
+    .search {
+        .float-right();
+
+        .icon {
+            cursor: pointer;
+            margin: 18px 18px 0 18px;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.5);
+            .transition(color);
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.6);
+
+                &:active {
+                    color: rgba(255, 255, 255, 0.7);
+                }
+            }
+        }
+    }
+
+    .profile {
+        .float-right();
+
+        .name {
+            margin: 20px 10px 0 0;
+            .float-left();
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .gravatar {
+            overflow: hidden;
+            margin-top: 10px;
+            width: 40px;
+            height: 40px;
+            border: solid 1px rgba(0, 0, 0, 0.2);
+            .border-radius(3px);
+            .float-left();
+
+            img {
+               width: 40px;
+               height: 40px;
+            }
+        }
+    }
+
+}

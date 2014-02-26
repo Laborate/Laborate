@@ -1,3 +1,8 @@
 exports.index = function(req, res, next) {
-    /* Code Goes Here */
+    res.renderOutdated('news/index', {
+        title: "News Feed",
+        user: req.session.user,
+        js: clientJS.renderTags("news"),
+        css: clientCSS.renderTags("news")
+    });
 }

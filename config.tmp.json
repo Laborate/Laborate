@@ -58,7 +58,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "hk23VDrHyHvxzJUumTHohn8vs1MqB1h2xJXndFQRIiA4mxqXZz"
+            "secret": "Tmx57NFdvuKlpUPte32e7wAhcpnDk9Sdnw0Qf6B4n494gTgJ38"
         }
     },
     "orm": {
@@ -84,7 +84,7 @@
         "google": false
     },
     "icons": {
-        "search": "icon-search",
+        "search": "icon-search-2",
         "online": "icon-briefcase",
         "sftp": "icon-drive",
         "github": "icon-github-3",
@@ -146,7 +146,11 @@
         "terminal": "icon-window",
         "public": "icon-users",
         "tracking": "icon-binoculars",
-        "trending": "icon-stats-2"
+        "trending": "icon-stats-2",
+        "news_feed": "icon-comment",
+        "documents": "icon-folder",
+        "groups": "icon-users",
+        "help": "icon-help"
     },
     "github": {
         "id": "",
