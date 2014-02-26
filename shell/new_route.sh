@@ -8,7 +8,7 @@ read -p "Create API Routes [Y/n]: " api;
 read -p "Create Public Assests [Y/n]: " assests;
 
 # Create Directories
-mkdir -p "./views/$1";
+mkdir "./views/$1";
 
 # Copy Template Files
 cp "./views/template.html" "./views/$1/index.html";
@@ -27,8 +27,8 @@ fi
 if [[ "$assests" == "Y" || "$assests" == "y" ]]; then
     name=$1;
 
-    mkdir -p "./public/js/$1";
-    mkdir -p "./public/less/$1";
+    mkdir "./public/js/$1";
+    mkdir "./public/less/$1";
 
     cp -r "./public/js/template.js" "./public/js/$1/index.js";
     cp -r "./public/less/template.less" "./public/less/$1/index.less";
