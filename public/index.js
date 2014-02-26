@@ -153,3 +153,4 @@ module.exports = function(root) {
 	clientCSS.addFile('news', css_path + 'news/index.less');
 	clientJS.addFile('news', js_path + 'news/index.js');
 };
+
