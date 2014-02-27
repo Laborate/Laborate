@@ -1,9 +1,6 @@
 <% include ../includes/start.html %>
 <% include ../includes/header.html %>
 <div class="container">
-    <a href="/">
-        <div class="logo"><%= logo %></div>
-    </a>
     <div class="listing">
         <% $.each(locations, function(index, location) { %>
             <% if(location.type == "sftp") { %>
