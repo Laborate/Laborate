@@ -77,7 +77,7 @@ exports.loginGenerate = function(req, res, next) {
 
 exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
-        res.redirect('/documents/');
+        res.redirect(config.general.default);
     } else {
         if(config.cookies.rememberme in req.cookies) {
             req.models.users.find({
@@ -86,7 +86,7 @@ exports.loginCheck = function(req, res, next) {
                 if(!error && user.length == 1) {
                     user[0].set_recovery(req, res);
                     req.session.user = user[0];
-                    res.redirect('/documents/');
+                    res.redirect(config.general.default);
                 } else {
                     if(next) next();
                 }
@@ -127,7 +127,7 @@ exports.xhr = function(req, res, next) {
     if(req.xhr) {
         next();
     } else {
-        res.redirect("/documents/");
+        res.redirect(config.general.default);
     }
 }
 
@@ -159,7 +159,7 @@ exports.login = function(req, res, next) {
                             req.session.user = user;
                             res.json({
                                 success: true,
-                                next: req.session.redirect_url || "/documents/"
+                                next: req.session.redirect_url || config.general.default
                              });
                              delete req.session.reset;
                              delete req.session.redirect_url;
@@ -169,7 +169,7 @@ exports.login = function(req, res, next) {
                         req.session.user = user;
                         res.json({
                             success: true,
-                            next: req.session.redirect_url || "/documents/"
+                            next: req.session.redirect_url || config.general.default
                         });
                         delete req.session.redirect_url;
                         req.session.save();
@@ -266,7 +266,7 @@ exports.register = function(req, res, next) {
 
 exports.verify = function(req, res, next) {
     if(!req.session.user.verify) {
-        res.redirect("/documents/");
+        res.redirect(config.general.default);
     } else if($.trim(req.param('code')) != req.session.user.verify) {
         res.error(402);
     } else {
@@ -283,7 +283,7 @@ exports.verify = function(req, res, next) {
 
 exports.verifyResend = function(req, res, next) {
     if(!req.session.user.verify) {
-        res.redirect("/documents/");
+        res.redirect(config.general.default);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error) {
@@ -314,7 +314,7 @@ exports.reload = function(req, res, next) {
             if(!error && user) {
                 user.set_recovery(req, res);
                 req.session.user = user;
-                res.redirect(req.session.last_page || '/documents/');
+                res.redirect(req.session.last_page || config.general.default);
                 delete req.session.reset;
                 delete req.session.last_page;
                 req.session.save();

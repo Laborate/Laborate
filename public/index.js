@@ -152,5 +152,8 @@ module.exports = function(root) {
 	/* News */
 	clientCSS.addFile('news', css_path + 'news/index.less');
 	clientJS.addFile('news', js_path + 'news/index.js');
-};
 
+	/* New Header (TEMP) */
+	clientCSS.addFile('new-header', css_path + 'news/header.less');
+	clientJS.addFile('new-header', js_path + 'news/header.js');
+};

@@ -14,7 +14,9 @@ exports.editor = function(req, res, next) {
         if(!error && !documents.empty) {
             var document = documents[0];
 
-            if(req.robot) {
+            if(req.mobile) {
+                res.redirect(req.url + "embed/");
+            } else if(req.robot) {
                 if(!document.private) {
                     document.getOwner(function(error, owner) {
                         if(!error && owner) {
@@ -78,6 +80,8 @@ exports.embed = function(req, res, next) {
                 var document = documents[0];
 
                 if(!document.private) {
+                    req.mobile = false;
+
                     res.renderOutdated('editor/code/embed/index', {
                         title: document.name,
                         document: document,
