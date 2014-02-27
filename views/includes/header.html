@@ -1,25 +1,25 @@
-<div class="header <%= (darken) ? "darken" : "" %>">
+<div class="header <%= (header_darken) ? "darken" : "" %>">
     <a href="/" class="logo">
         <img src="/img/logo.png" />
     </a>
     <div class="apps">
-        <a href="/news/" class="app news <%= (page == "news") ? "activated" : "" %>">
+        <a href="/news/" class="app news <%= (header == "news") ? "activated" : "" %>">
             <div class="icon <%= icons.news_feed %>"></div>
             <div class="active"></div>
         </a>
-        <a href="/documents/" class="app documents <%= (page == "documents") ? "activated" : "" %>">
+        <a href="/documents/" class="app documents <%= (header == "documents") ? "activated" : "" %>">
             <div class="icon <%= icons.documents %>"></div>
             <div class="active"></div>
         </a>
-        <a href="/terminals/" class="app terminal <%= (page == "terminal") ? "activated" : "" %>">
+        <a href="/terminals/" class="app terminals <%= (header == "terminal") ? "activated" : "" %>">
             <div class="icon <%= icons.terminal %>"></div>
             <div class="active"></div>
         </a>
-        <a href="/groups/" class="app groups <%= (page == "groups") ? "activated" : "" %>">
+        <a href="/groups/" class="app groups <%= (header == "groups") ? "activated" : "" %>">
             <div class="icon <%= icons.groups %>"></div>
             <div class="active"></div>
         </a>
-        <a href="/help/" class="app help <%= (page == "help") ? "activated" : "" %>">
+        <a href="/help/" class="app help <%= (header == "help") ? "activated" : "" %>">
             <div class="icon <%= icons.help %>"></div>
             <div class="active"></div>
         </a>

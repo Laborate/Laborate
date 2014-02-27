@@ -1280,7 +1280,7 @@ window.documents = {
             $(".terminal").addClass("active");
             $('.terminal iframe')
                 .hide()
-                .attr("src", terminal)
+                .attr("src", terminal + "embed/")
                 .load(function() {
                     $(this).show();
                 });

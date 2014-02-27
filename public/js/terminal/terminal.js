@@ -1,24 +1,22 @@
 $.extend(window.socketUtil, {
     connect: function(reconnect) {
         if(!window.term) {
-            var term_width = (Math.ceil(($(window).width() - 40)/7));
-            var term_height = (Math.ceil(($(window).height() - 40)/13));
+            resize(function(width, height) {
+                window.socketUtil.socket.emit("terminalJoin", [width, height], function() {
+                    window.term = new Terminal({
+                        cols: width,
+                        rows: height,
+                        useStyle: true,
+                        screenKeys: true
+                    });
 
-            window.socketUtil.socket.emit("terminalJoin", [term_width, term_height], function() {
-                window.term = new Terminal({
-                    cols: term_width,
-                    rows: term_height,
-                    useStyle: true,
-                    screenKeys: true
+                    window.term.on('data', function(data) {
+                        window.socketUtil.socket.emit('terminalData', data);
+                    });
+
+                    window.term.open($(".container").get(0));
+                    status(false);
                 });
-
-                window.term.on('data', function(data) {
-                    window.socketUtil.socket.emit('terminalData', data);
-                });
-
-                window.term.open(document.body);
-                $(".terminal").hAlign().vAlign();
-                status(false);
             });
         }
     },
@@ -89,16 +87,21 @@ $(function() {
     });
 });
 
-$(window).on("resize", function() {
-    if(window.term) {
-        var term_width = (Math.ceil(($(window).width() - 40)/7));
-        var term_height = (Math.ceil(($(window).height() - 40)/13));
+$(window).on("resize", resize);
 
-        term.resize(term_width, term_height);
-        window.socketUtil.socket.emit('terminalResize', [term_width, term_height]);
-        $(".terminal").hAlign().vAlign();
+function resize(callback) {
+    var width = (Math.ceil(($(window).width() - 40)/7));
+    var height = (Math.ceil(($(window).height() - $(".header").height() - 40)/13));
+
+    if(window.term) {
+        term.resize(width, height);
+        window.socketUtil.socket.emit('terminalResize', [width, height]);
     }
-});
+
+    if(typeof callback == "function") {
+        callback(width, height);
+    }
+}
 
 function status(message, url) {
     if(message) {

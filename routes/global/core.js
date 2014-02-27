@@ -229,8 +229,8 @@ exports.locals = function(req, res, next) {
     res.locals.hiring = config.general.hiring;
     res.locals.random = "?rand=" + config.random;
     res.locals.embed = false;
-    res.locals.page = "";
-    res.locals.darken = false;
+    res.locals.header = "";
+    res.locals.header_darken = false;
 
     res.locals.apps = {
         sftp: {
