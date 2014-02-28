@@ -1,3 +1,8 @@
+//TODO: Merge When Site Is Fully Upgraded
+window.socketUtil.notification = function(notification) {
+    $(".header .notifications").toggleClass("activated", notification);
+}
+
 $(function() {
     $(".header .app").click(function() {
          $(".header .app").removeClass("activated");

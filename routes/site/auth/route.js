@@ -15,6 +15,7 @@ module.exports = function(app, routes) {
 
     /* Register */
     app.get('/register', auth.util.loginCheck, core.organization, auth.register);
+    app.post('/register', auth.util.loginCheck, core.organization, auth.register);
     app.post('/auth/register', core.organization, auth.util.register);
 
     /* Verify Email */

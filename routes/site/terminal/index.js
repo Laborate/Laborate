@@ -1,6 +1,7 @@
 exports.index = function(req, res, next) {
     res.renderOutdated('terminal/index', {
         title: "Terminals",
+        user: req.session.user,
         header: "terminal",
         header_darken: true,
         locations: req.session.user.locations,
@@ -15,6 +16,7 @@ exports.terminal = function(req, res, next) {
     if(location && location.type == "sftp") {
         res.renderOutdated('terminal/terminal', {
             title: location.name + config.general.delimeter.web  + "Terminal",
+            user: req.session.user,
             location: location,
             header: "terminal",
             header_darken: true,
@@ -32,6 +34,7 @@ exports.embed = function(req, res, next) {
     if(location && location.type == "sftp") {
         res.renderOutdated('terminal/embed', {
             title: location.name + config.general.delimeter.web  + "Terminal",
+            user: req.session.user,
             location: location,
             js: clientJS.renderTags("terminal"),
             css: clientCSS.renderTags("terminal")

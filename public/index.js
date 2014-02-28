@@ -19,6 +19,7 @@ module.exports = function(root) {
     clientJS.addUrl('https://d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js');
     clientJS.addUrl('/socket.io/socket.io.js');
 
+    clientJS.addFile(js_path + 'core/resize.js');
     clientJS.addFile(js_path + 'core/waypoints.js');
     clientJS.addFile(js_path + 'core/jscrollpane.js');
     clientJS.addFile(js_path + 'core/mousewheel.js');

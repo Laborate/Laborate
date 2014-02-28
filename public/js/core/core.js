@@ -18,6 +18,9 @@ $(function() {
     //Initalize Socket
     window.socketUtil.init();
 
+    //Check For Notifications (Every Minute)
+    setInterval(window.socketUtil.notifications, 60000);
+
     //Prevent Rewriting Of Document
     setInterval(function() {
         $("body").attr("contenteditable", "false");

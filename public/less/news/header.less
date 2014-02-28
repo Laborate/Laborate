@@ -302,40 +302,40 @@
     }
 
     .notifications {
-        display: none;
-        opacity: 0;
-        color: @color_header_blink;
+        opacity: 0.3;
+        color: @color_grey;
         font-size: 22px;
         margin-right: 10px;
         padding-top: 18px;
         .float-right();
+        .transition(opacity);
 
         &.activated {
-            display: inherit;
-            .animation(fade 2s ease 5s normal infinite);
+            opacity: 1;
+            .animation(fade 2s ease 0s normal infinite);
 
             @-webkit-keyframes fade {
-                0% { opacity: 0; }
-                50% { opacity: 1; }
-                100% { opacity: 0; }
+                0% { color: @color_grey; }
+                50% { color: @color_header_blink; }
+                100% { color: @color_grey; }
             }
 
             @-moz-keyframes fade {
-                0% { opacity: 0; }
-                50% { opacity: 1; }
-                100% { opacity: 0; }
+                0% { color: @color_grey; }
+                50% { color: @color_header_blink; }
+                100% { color: @color_grey; }
             }
 
             @-o-keyframes fade {
-                0% { opacity: 0; }
-                50% { opacity: 1; }
-                100% { opacity: 0; }
+                0% { color: @color_grey; }
+                50% { color: @color_header_blink; }
+                100% { color: @color_grey; }
             }
 
             @keyframes fade {
-                0% { opacity: 0; }
-                50% { opacity: 1; }
-                100% { opacity: 0; }
+                0% { color: @color_grey; }
+                50% { color: @color_header_blink; }
+                100% { color: @color_grey; }
             }
         }
     }

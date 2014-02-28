@@ -1,0 +1,316 @@
+@import '../core/index';
+@import '../compless/all';
+
+.panel {
+    position: absolute;
+    padding: 85px 30px 30px 30px;
+    min-height: 100%;
+    .box-sizing(border-box);
+
+    &.main {
+        left: 0;
+        width: 60%;
+        background: rgba(255, 255, 255, 0.4);
+        border-right: solid 1px rgba(0, 0, 0, 0.05);
+
+        .container {
+            width: 550px;
+            .float-right();
+
+            & > .form {
+                margin-bottom: 50px;
+                width: 100%;
+                background: darken(#fff, 1%);
+                border: solid 2px darken(@color_body, 10%);
+                position: relative;
+                .border-radius(3px);
+                .box-sizing(border-box);
+
+                textarea {
+                    color: #333;
+                    background-image: url('/img/tshadow.png');
+                    background-repeat: repeat-x;
+                    background-position: 0 -5px;
+                    background-color: darken(#fff, 1%);
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                    padding: 10px;
+                    border: none;
+                    resize: none;
+                    min-height: 60px;
+                    font-size: 13px;
+                    position: relative;
+                    z-index: 2;
+                    .border-radius(2px);
+                }
+
+                .buttons {
+                    position: relative;
+                    width: 100%;
+                    height: 26px;
+                    background: rgba(0, 0, 0, 0.02);
+                    border-top: solid 2px darken(@color_body, 10%);
+
+                    .preview {
+                        cursor: pointer;
+                        color: @color_news_button;
+                        font-size: 12px;
+                        margin: 7px 105px 0 0;
+                        opacity: 0.6;
+                        .float-right();
+                        .border-radius(2px);
+                        .transition(opacity);
+
+                        &:hover {
+                            opacity: 0.8;
+
+                            &:active {
+                                opacity: 1;
+                            }
+                        }
+
+                        &.active {
+                            opacity: 1;
+                        }
+                    }
+
+                    .post {
+                        position: absolute;
+                        top: -2px;
+                        right: -2px;
+                        font-size: 10px;
+                        font-weight: 500;
+                        margin: 0;
+                        padding: 0 12px;
+                        background: @color_news_button;
+                        color: #fff;
+                        cursor: pointer;
+                        border: none;
+                        height: 30px;
+                        .border-radius(0 0 2px 0);
+
+                        &:hover {
+                            background: darken(@color_news_button, 5%);
+
+                            &:active {
+                                background: darken(@color_news_button, 10%);
+                            }
+                        }
+                    }
+                }
+            }
+
+            & > .posts {
+                .post {
+                    margin-bottom: 55px;
+                    .clearfix();
+
+                    .gravatar {
+                        width: 60px;
+                        height: 60px;
+                        overflow: hidden;
+                        .border-radius(3px);
+
+                        img {
+                            width: 60px;
+                            height: 60px;
+                        }
+                    }
+
+                    .data {
+                        width: 470px;
+
+                        .name {
+                            font-size: 14px;
+                            margin-bottom: 5px;
+                            display: block;
+                            color: darken(@color_blue, 10%);
+
+                            &:hover {
+                                text-decoration: underline;
+
+                                &:active {
+                                    color: darken(@color_blue, 15%);
+                                }
+                            }
+                        }
+
+                        .bubble {
+                            position: relative;
+                            border: solid 2px darken(@color_body, 10%);
+                            background: darken(#fff, 1%);
+                            .border-radius(3px);
+
+                            .arrow {
+                                content: "";
+                                position: absolute;
+                                z-index: 1;
+                                top: 4px;
+                                left: -3px;
+                                border: solid 14px transparent;
+                                background: darken(@color_body, 10%);
+                                display: block;
+                                border-color: darken(@color_body, 10%);
+                                width: 0;
+                                .border-radius(0 2px);
+                                .transform(rotate(45deg));
+                            }
+
+                            .information {
+                                position: relative;
+                                z-index: 2;
+                                padding: 10px;
+                                color: #333;
+                                background: darken(#fff, 1%);
+                                min-height: 40px;
+                                font-size: 14px;
+                                word-wrap: break-word;
+                                .border-radius(2px);
+                            }
+
+                            .bottom {
+                                font-size: 12px;
+                                margin: 0 10px 8px 10px;
+                                .clearfix();
+
+                                .actions {
+                                    color: darken(@color_blue, 10%);
+                                    .float-left();
+
+                                    .action {
+                                        cursor: pointer;
+                                        margin: 0 5px;
+
+                                        &:first-child {
+                                            margin-left: 0;
+                                        }
+
+                                        &:hover {
+                                            text-decoration: underline;
+
+                                            &:active {
+                                                color: darken(@color_blue, 15%);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                .time {
+                                    color: @color_grey;
+                                    .float-right();
+                                }
+                            }
+
+                            .replies {
+                                background-color: rgba(0, 0, 0, 0.035);
+                                background-image: url('/img/tshadow.png');
+                                background-repeat: repeat-x;
+                                background-position: 0 -5px;
+                                border-top: solid 1px darken(@color_body, 10%);
+
+                                .reply {
+                                    padding: 15px;
+                                    border-top: solid 1px darken(@color_body, 5%);
+                                    .clearfix();
+
+                                    &:first-child {
+                                        border: none;
+                                    }
+
+                                    .gravatar {
+                                        width: 35px;
+                                        height: 35px;
+                                        margin-right: 10px;
+                                        overflow: hidden;
+                                        .border-radius(2px);
+
+                                        img {
+                                            width: 35px;
+                                            height: 35px;
+                                        }
+                                    }
+
+                                    .data {
+                                        width: 390px;
+
+                                        .name {
+                                            margin-bottom: 10px;
+                                        }
+
+                                        .information {
+                                            padding: 0;
+                                            background: none;
+                                            min-height: inherit;
+                                            .border-radius(none);
+                                        }
+
+                                        .bottom {
+                                            opacity: 0.8;
+                                            margin: 20px 0 0 0;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .more {
+                                background: rgba(0, 0, 0, 0.08);
+                                border-top: solid 1px darken(@color_body, 10%);
+                                text-align: center;
+                                padding: 10px 0;
+                                font-size: 13px;
+                                color: rgba(0, 0, 0, 0.5);
+
+                                a:hover {
+                                    text-decoration: underline;
+
+                                    &:active {
+                                        color: rgba(0, 0, 0, 0.7);
+                                    }
+
+                                }
+                            }
+
+                            & > .comment {
+                                padding: 10px;
+                                background-color: rgba(0, 0, 0, 0.015);
+                                background-image: url('/img/tshadow.png');
+                                background-repeat: repeat-x;
+                                background-position: 0 -6px;
+                                border-top: solid 1px darken(@color_body, 10%);
+                                .clearfix();
+
+                                .gravatar {
+                                    width: 30px;
+                                    height: 30px;
+                                    margin-right: 10px;
+                                    overflow: hidden;
+                                    .border-radius(2px);
+
+                                    img {
+                                        width: 30px;
+                                        height: 30px;
+                                    }
+                                }
+
+                                .input {
+                                    font-size: 14px;
+                                    background: none;
+                                    border: none;
+                                    padding: 5px 0;
+                                    color: #333;
+                                    .calc-width(~"100% - 40px");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    &.filters {
+        right: 0;
+        width: 40%;
+    }
+}

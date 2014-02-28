@@ -1,4 +1,98 @@
 <% include ../includes/start.html %>
 <% include ../includes/header.html %>
+<div class="panel main">
+    <div class="container">
+        <form name="post" class="form">
+            <textarea placeholder="Whats new..."></textarea>
+            <div class="buttons">
+                <div class="preview <%= icons.preview %>"></div>
+                <input type="submit" class="post" value="Post Comment"/>
+            </div>
+        </form>
+        <div class="posts">
 
+            <!-- Start Post -->
+            <div class="post">
+                <div class="gravatar left">
+                    <img src="<%= user.gravatar %>"/>
+                </div>
+                <div class="data right">
+                    <a class="name" href="/users/<%= user.screen_name %>/">
+                        <%= user.screen_name %>
+                    </a>
+                    <div class="bubble">
+                        <div class="arrow"></div>
+                        <div class="information">
+                            asdasdfasdfasdf
+                        </div>
+                        <div class="bottom">
+                            <div class="actions">
+                                <span class="action like">Like</span>
+                                <span><%= site_delimeter %></span>
+                                <span class="action comment">Comment</span>
+                                <span><%= site_delimeter %></span>
+                                <span class="action share">Share</span>
+                            </div>
+                            <div class="time">4 minutes ago</div>
+                        </div>
+                        <div class="replies">
+                            <div class="reply">
+                                <div class="gravatar left">
+                                    <img src="<%= user.gravatar %>"/>
+                                </div>
+                                <div class="data right">
+                                    <a class="name" href="/users/<%= user.screen_name %>/">
+                                        <%= user.screen_name %>
+                                    </a>
+                                    <div class="information">what?</div>
+                                    <div class="bottom">
+                                        <div class="actions">
+                                            <span class="action like">Like</span>
+                                            <span><%= site_delimeter %></span>
+                                            <span class="action mention">Mention</span>
+                                        </div>
+                                        <div class="time">4 minutes ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reply">
+                                <div class="gravatar left">
+                                    <img src="<%= user.gravatar %>"/>
+                                </div>
+                                <div class="data right">
+                                    <a class="name" href="/users/<%= user.screen_name %>/">
+                                        <%= user.screen_name %>
+                                    </a>
+                                    <div class="information">what?</div>
+                                    <div class="bottom">
+                                        <div class="actions">
+                                            <span class="action like">Like</span>
+                                            <span><%= site_delimeter %></span>
+                                            <span class="action mention">Mention</span>
+                                        </div>
+                                        <div class="time">4 minutes ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="more">
+                            <a href="#">View all comments...</a>
+                        </div>
+                        <div class="comment">
+                            <form class="form">
+                                <div class="gravatar left">
+                                    <img src="<%= user.gravatar %>"/>
+                                </div>
+                                <input class="input" type="text" placeholder="Reply to this post..."/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Post -->
+
+        </div>
+    </div>
+</div>
+<div class="panel filters"></div>
 <% include ../includes/end.html %>
