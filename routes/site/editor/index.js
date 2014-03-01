@@ -88,6 +88,7 @@ exports.embed = function(req, res, next) {
                         js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
                         css: clientCSS.renderTags("backdrop", "codemirror", "editor", "editor-embed"),
                         embed: true,
+                        header: (req.param("header") != "false"),
                         config: {
                             embed: true,
                             permission: {

@@ -59,7 +59,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "Dq0273gsmfxRTRIvUL36PJoIVDEyK4q32kzg9D9Ex6pLtEZ3LH"
+            "secret": "S1utvryBE4rH5l4eTiXT5rih0BQxAdpUTmBnmLKlVgMKSWlMtq"
         }
     },
     "orm": {
@@ -101,6 +101,7 @@
         "add_square": "icon-plus",
         "subtract_square": "icon-minus",
         "add_circle": "icon-plus-3",
+        "add": "icon-plus-4",
         "circle_arrow_up": "icon-arrow-up-2",
         "circle_arrow_down": "icon-arrow-down-2",
         "circle_notice": "icon-notice",
