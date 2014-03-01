@@ -3,7 +3,83 @@ exports.index = function(req, res, next) {
         title: "News Feed",
         header: "news",
         user: req.session.user,
-        js: clientJS.renderTags("news", "new-header"),
-        css: clientCSS.renderTags("news", "new-header")
+        config: {
+            auto_pull: true
+        },
+        js: clientJS.renderTags("news", "new-header", "highlight"),
+        css: clientCSS.renderTags("news", "new-header", "highlight")
+    });
+}
+
+exports.post = function(req, res, next) {
+    req.models.posts.find({
+        pub_id: req.param("post"),
+        parent_id: null
+    }, function (error, posts) {
+        if(!error && posts) {
+            res.renderOutdated('news/post', {
+                title: "News Feed",
+                header: "news",
+                posts: posts,
+                user: req.session.user,
+                config: {
+                    auto_pull: false
+                },
+                restrict: false,
+                js: clientJS.renderTags("news", "new-header", "highlight"),
+                css: clientCSS.renderTags("news", "new-header", "highlight")
+            });
+        } else {
+            res.error(404, null, error);
+        }
+    });
+}
+
+exports.posts = function(req, res, next) {
+    req.models.posts.pages(function (error, pages) {
+        var page = parseInt(req.param("page"));
+
+        if(!error && page >= 1 && page <= pages) {
+            req.models.posts.page(page).order("-created").run(function(error, posts) {
+                if(!error && posts) {
+                    res.renderOutdated('news/posts/index', {
+                        posts: posts,
+                        user: req.session.user,
+                        restrict: true
+                    });
+                } else {
+                    res.error(404, null, error);
+                }
+            });
+        } else {
+            res.error(404, null, error);
+        }
+    });
+}
+
+exports.preview = function(req, res, next) {
+    res.send(req.markdown(req.param("content")));
+}
+
+exports.create = function(req, res, next) {
+    req.models.posts.create({
+        content: req.markdown(req.param("content")),
+        owner_id: req.session.user.id
+    }, function (error, post) {
+        if(!error && post) {
+            req.models.posts.get(post.id, function(error, post) {
+                if(!error && post) {
+                    res.renderOutdated('news/posts/index', {
+                        posts: [post],
+                        user: req.session.user,
+                        restrict: true,
+                    });
+                } else {
+                    res.error(404, null, error);
+                }
+            });
+        } else {
+            res.error(404, null, error);
+        }
     });
 }

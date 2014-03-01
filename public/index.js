@@ -69,6 +69,10 @@ module.exports = function(root) {
     /* Copy */
     clientJS.addFile("copy", js_path + 'core/copy.js');
 
+    /* Highlight.js */
+    clientJS.addFile("highlight", js_path + 'highlight/index.js');
+    clientCSS.addFile("highlight", css_path + 'highlight/index.less');
+
     /* CodeMirror */
     clientCSS.addFile("codemirror", codemirror_path + 'lib/codemirror.css');
     clientCSS.addFile("codemirror", css_path + 'editor/laborate.less');
@@ -153,6 +157,8 @@ module.exports = function(root) {
 	/* News */
 	clientCSS.addFile('news', css_path + 'news/index.less');
 	clientJS.addFile('news', js_path + 'news/index.js');
+	clientJS.addFile('news', js_path + 'news/util.js');
+	clientJS.addFile('news', js_path + 'news/init.js');
 
 	/* New Header (TEMP) */
 	clientCSS.addFile('new-header', css_path + 'news/header.less');

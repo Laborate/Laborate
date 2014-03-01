@@ -1,76 +1,21 @@
-<div class="posts">
-    <div class="post">
-        <div class="gravatar left">
-            <img src="<%= user.gravatar %>"/>
-        </div>
-        <div class="data right">
-            <a class="name" href="/users/<%= user.screen_name %>/">
-                <%= user.screen_name %>
-            </a>
-            <div class="bubble">
-                <div class="arrow"></div>
-                <div class="information">
-                    Can you guys join this doc and help me out?
-                    <a href="http://brian.dev.laborate.io/editor/h1aRzRCfXDPxNboH81EPd5w3MrtiA/">
-                        http://brian.dev.laborate.io/editor/h1aRzRCfXDPxNboH81EPd5w3MrtiA/
-                    </a>
-                    <br><br>
-                    <div class="iframe">
-                        <iframe src="http://brian.dev.laborate.io/editor/h1aRzRCfXDPxNboH81EPd5w3MrtiA/embed/?header=false"
-                            width="100%" height="400px" frameborder="0"></iframe>
-                    </div>
+<% $.each(posts, function(index, post) { %>
+    <% if(!post.parent) { %>
+        <div class="post">
+            <div class="gravatar left">
+                <img src="<%= post.owner.gravatar %>"/>
+            </div>
+            <div class="data right">
+                <a class="name" href="/users/<%= post.owner.screen_name %>/">
+                    <%= post.owner.screen_name %>
+                </a>
+                <div class="bubble">
+                    <div class="arrow"></div>
+                    <div class="information"><%- post.content %></div>
+                    <% include ./bottom.html %>
+                    <% include ./replies.html %>
+                    <% include ./comment.html %>
                 </div>
-                <% include ./bottom.html %>
-                <% include ./comment.html %>
             </div>
         </div>
-    </div>
-
-    <div class="post">
-        <div class="gravatar left">
-            <img src="<%= user.gravatar %>"/>
-        </div>
-        <div class="data right">
-            <a class="name" href="/users/<%= user.screen_name %>/">
-                <%= user.screen_name %>
-            </a>
-            <div class="bubble">
-                <div class="arrow"></div>
-                <div class="information">
-                    Can you guys join my terminal session and help me out?
-                    <a href="http://brian.dev.laborate.io/terminals/6AA5DGonXobVra7xyEupfdUM18Sf/">
-                        http://brian.dev.laborate.io/terminals/6AA5DGonXobVra7xyEupfdUM18Sf/
-                    </a>
-                    <br><br>
-                    <div class="iframe">
-                        <iframe src="http://brian.dev.laborate.io/terminals/6AA5DGonXobVra7xyEupfdUM18Sf/embed/"
-                            width="100%" height="400px" frameborder="0"></iframe>
-                    </div>
-                </div>
-                <% include ./bottom.html %>
-                <% include ./replies.html %>
-                <% include ./comment.html %>
-            </div>
-        </div>
-    </div>
-
-    <div class="post">
-        <div class="gravatar left">
-            <img src="<%= user.gravatar %>"/>
-        </div>
-        <div class="data right">
-            <a class="name" href="/users/<%= user.screen_name %>/">
-                <%= user.screen_name %>
-            </a>
-            <div class="bubble">
-                <div class="arrow"></div>
-                <div class="information">
-                    asdasdfasdfasdf
-                </div>
-                <% include ./bottom.html %>
-                <% include ./replies.html %>
-                <% include ./comment.html %>
-            </div>
-        </div>
-    </div>
-</div>
+    <% } %>
+<% }); %>

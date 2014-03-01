@@ -45,9 +45,7 @@
             "panels": [
                 "locals",
                 "request",
-                "session",
-                "template",
-                "nav"
+                "session"
             ]
         }
     },
@@ -59,11 +57,13 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "S1utvryBE4rH5l4eTiXT5rih0BQxAdpUTmBnmLKlVgMKSWlMtq"
+            "secret": "mBKsMTAMC761qhfDVTrHhDaWaDPlHM4Tm0JN7Fv3D51ap1LHUv"
         }
     },
     "orm": {
         "reset": true,
+        "preload": "",
+        "sync": "",
         "debug": "",
         "protocol": "mysql",
         "host": "127.0.0.1",

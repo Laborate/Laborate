@@ -78,6 +78,7 @@ exports.imports = function(req, res, next) {
     req.error = lib.error;
     req.geoip = lib.geoip;
     req.sitemap = lib.sitemap;
+    req.markdown = lib.markdown;
     req.location = lib.geoip(req.address.ip) || {
         city: null,
         region: null,

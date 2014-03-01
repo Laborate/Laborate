@@ -4,12 +4,13 @@
     <div class="container">
         <form name="post" class="form">
             <textarea placeholder="Whats new..."></textarea>
+            <div class="previewer"></div>
             <div class="buttons">
                 <div class="preview <%= icons.preview %>"></div>
                 <input type="submit" class="post" value="Post Comment"/>
             </div>
         </form>
-        <% include ./posts/index.html %>
+        <div class="posts"></div>
         <div class="loader">
             <div class="spinner <%= icons.spinner %>"></div>
         </div>

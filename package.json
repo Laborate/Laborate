@@ -47,7 +47,10 @@
     "pty.js": "0.2.3",
     "term.js": "0.0.3",
     "express-subdomains": "0.0.5",
-    "orm-random": "0.0.1"
+    "orm-random": "0.0.1",
+    "moment-range": "1.0.1",
+    "marked": "0.3.1",
+    "highlight.js": "8.0.0"
   },
   "devDependencies": {
     "express-debug": "*"

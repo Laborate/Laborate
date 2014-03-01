@@ -1,12 +1,14 @@
 $(function() {
-    $('textarea').autosize();
+    $(".main .container > .form").submit(function(e) {
+        window.newsUtil.post($(this));
+        e.preventDefault();
+    });
+
+    $(".main .container > .form .preview").click(function() {
+        window.newsUtil.preview(!$(this).hasClass("activated"), $(this).parents(".form"));
+    });
 
     $(".filters .groups").on("click", ".option", function() {
-        $(this).toggleClass("activated");
+        window.newsUtil.group($(this));
     });
-});
-
-$(window).scroll(function() {
-   var bottom = ($(window).scrollTop() + $(window).height() > $(document).height() - 20);
-   $(".loader").toggleClass("activated", bottom);
 });

@@ -1,10 +1,23 @@
 <div class="bottom">
     <div class="actions">
-        <span class="action like">Like</span>
+        <%
+            var liked = false;
+            $.each(post.likes, function(index, laborator) {
+                if(user.id == laborator.id) {
+                    liked = true;
+                    return false;
+                }
+            });
+        %>
+        <% if(liked) { %>
+            <span class="action unlike">Unlike</span>
+        <% } else { %>
+            <span class="action like">Like</span>
+        <% } %>
         <span><%= site_delimeter %></span>
         <span class="action comment">Comment</span>
         <span><%= site_delimeter %></span>
         <span class="action share">Share</span>
     </div>
-    <div class="time">4 minutes ago</div>
+    <div class="time"><%=: post.created | duration %></div>
 </div>
