@@ -7,7 +7,11 @@ window.newsUtil = {
                 tags: tags || []
             },
             success: function(data) {
-              $(".main .posts").append(data);
+                if(typeof data == "string") {
+                    $(".main .posts").append(data);
+                } else {
+                    $(".main .loader").fadeOut(200);
+                }
             }
         });
     },
@@ -65,7 +69,13 @@ window.newsUtil = {
         element.toggleClass("activated");
     },
     scroll: function() {
-        var bottom = ($(window).scrollTop() + $(window).height() > $(document).height() - 10);
-        $(".loader").toggleClass("activated", bottom);
+        if(!$(".main .loader").is(":hidden")) {
+            var bottom = ($(window).scrollTop() + $(window).height() > $(document).height() - 10);
+            $(".loader").toggleClass("activated", bottom);
+
+            if(bottom) {
+                window.newsUtil.feed((Math.ceil($(".posts .post").length/11) + 1));
+            }
+        }
     }
 }
