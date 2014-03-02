@@ -4,6 +4,8 @@ var error_handler = function(status, message, locals, req, res) {
     var redirect_url;
 
     locals = locals || {};
+    locals.home = locals.home || true;
+    locals.embed = locals.embed || false;
 
     switch(status) {
         case 401:
@@ -24,16 +26,18 @@ var error_handler = function(status, message, locals, req, res) {
             break;
         case 500:
             error_message = "Internal Server Error";
-            error_html = 'Sorry we are having<br>technical difficulties.';
+            error_html = 'Sorry we are having<br>technical difficulties';
             break;
         default:
             error_message = (message) ? message : "Page Not Found";
-            error_html = (message) ? message : 'Sorry, this page is not available.';
+            error_html = (message) ? message : 'Sorry, this page is not available';
             break;
     }
 
-    if(error_html) {
+    if((error_html && locals.home && !locals.embed) || error_html.split(". ").length > 1) {
         error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
+    } else {
+        error_html = (error_html.slice(-1) == ".") ? error_html.slice(0, -1) : error_html;
     }
 
     if(req.xhr) {
@@ -61,8 +65,8 @@ var error_handler = function(status, message, locals, req, res) {
                         backdrop: req.backdrop(),
                         pageTrack: false,
                         mobile: false,
-                        home: locals.home || true,
-                        embed: locals.embed || false
+                        home: locals.home,
+                        embed: locals.embed
                     }, locals));
                 }
             },

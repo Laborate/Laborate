@@ -6,7 +6,7 @@
          <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
          <div id="backdrop-container" class="larger backdrop-text">
             <%- error_html %>
-            <% if(home != false) { %>
+            <% if(home && !embed) { %>
                 <br/>Please continue back
                 <% if(embed == true) { %>
                     <a class="backdrop-link" target="_blank" href="/">home</a>.

@@ -27,7 +27,7 @@
     "mysql": "2.0.0-rc1",
     "redis": "0.8.4",
     "connect-redis": "1.4.5",
-    "codemirror": "3.21.0",
+    "codemirror": "3.22.0",
     "raven": "0.5.1",
     "node-cryptojs-aes": "0.3.9",
     "jquery": "1.8.3",
