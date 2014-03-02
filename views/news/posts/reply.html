@@ -1,0 +1,36 @@
+<div id="post_<%= child.pub_id %>"
+     data-id="<%= child.pub_id %>"
+     data-from="<%= child.owner.screen_name %>"
+     class="reply"
+>
+    <div class="gravatar left">
+        <img src="<%= child.owner.gravatar %>"/>
+    </div>
+    <div class="data right">
+        <a class="name" href="/users/<%= child.owner.screen_name %>/">
+            <%= child.owner.screen_name %>
+        </a>
+        <div class="information"><%- child.content %></div>
+        <div class="bottom">
+            <div class="actions">
+                <%
+                    var liked = false;
+                    $.each(child.likes, function(index, laborator) {
+                        if(user.id == laborator.id) {
+                            liked = true;
+                            return false;
+                        }
+                    });
+                %>
+                <% if(liked) { %>
+                    <span class="action unlike">Unlike</span>
+                <% } else { %>
+                    <span class="action like">Like</span>
+                <% } %>
+                <span><%= site_delimeter %></span>
+                <span class="action mention">Mention</span>
+            </div>
+            <div class="time"><%=: child.created | duration %></div>
+        </div>
+    </div>
+</div>

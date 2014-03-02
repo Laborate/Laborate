@@ -15,8 +15,8 @@ exports.post = function(req, res, next) {
     req.models.posts.find({
         pub_id: req.param("post"),
         parent_id: null
-    }, function (error, posts) {
-        if(!error && posts) {
+    }, function(error, posts) {
+        if(!error && !posts.empty) {
             res.renderOutdated('news/post', {
                 title: "News Feed",
                 header: "news",
@@ -30,7 +30,7 @@ exports.post = function(req, res, next) {
                 css: clientCSS.renderTags("news", "new-header", "highlight")
             });
         } else {
-            res.error(404, null, error);
+            res.redirect("/news/");
         }
     });
 }
@@ -77,6 +77,43 @@ exports.create = function(req, res, next) {
                 } else {
                     res.error(404, null, error);
                 }
+            });
+        } else {
+            res.error(404, null, error);
+        }
+    });
+}
+
+
+exports.reply = function(req, res, next) {
+    async.waterfall([
+        function(callback) {
+            if(req.param("parent")) {
+                req.models.posts.find({
+                    pub_id: req.param("parent")
+                }).only("id").run(function(error, posts) {
+                    callback(error, ((!posts.empty) ? posts[0].id : null));
+                });
+            } else {
+                callback(null, null);
+            }
+        },
+        function(parent, callback) {
+            req.models.posts.create({
+                content: req.markdown(req.param("content")),
+                owner_id: req.session.user.id,
+                parent_id: parent
+            }, callback);
+        },
+        function(post, callback) {
+            req.models.posts.get(post.id, callback);
+        }
+    ], function(errors, post) {
+        if(!errors && post) {
+            res.renderOutdated('news/posts/reply', {
+                child: post,
+                user: req.session.user,
+                restrict: false,
             });
         } else {
             res.error(404, null, error);

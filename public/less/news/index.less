@@ -243,6 +243,14 @@
                                 .iframe {
                                     margin: 0 -11px;
                                 }
+
+                                p code {
+                                    font-size: 13px;
+                                    background: #f8f8f8;
+                                    padding: 3px 4px;
+                                    border: solid 1px darken(#f8f8f8, 10%);
+                                    .border-radius(4px);
+                                }
                             }
 
                             .bottom {
@@ -280,7 +288,7 @@
                             }
 
                             .replies {
-                                background-color: spin(lighten(@color_blue, 48.5%), 10);
+                                background-color: spin(lighten(@color_blue, 49%), 10);
                                 background-image: url('/img/tshadow.png');
                                 background-repeat: repeat-x;
                                 background-position: 0 -5px;
@@ -312,19 +320,24 @@
                                         width: 490px;
 
                                         .name {
-                                            margin-bottom: 10px;
+                                            margin-bottom: 0;
                                         }
 
                                         .information {
                                             padding: 0;
                                             background: none;
                                             min-height: inherit;
+                                            overflow: visible;
                                             .border-radius(none);
+
+                                            pre, .iframe {
+                                                margin: 0;
+                                            }
                                         }
 
                                         .bottom {
                                             opacity: 0.8;
-                                            margin: 20px 0 0 0;
+                                            margin: 10px 0 0 0;
                                         }
                                     }
                                 }

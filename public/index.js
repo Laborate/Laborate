@@ -45,10 +45,6 @@ module.exports = function(root) {
     clientCSS.addFile("welcome", css_path + 'welcome/index.less');
     clientJS.addFile("welcome", js_path + 'welcome/index.js');
 
-    /* Trending */
-    clientCSS.addFile("trending", css_path + 'trending/index.less');
-    clientJS.addFile("trending", js_path + 'trending/index.js');
-
     /* Users */
     clientCSS.addFile("users", css_path + 'users/index.less');
 

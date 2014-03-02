@@ -1,6 +1,10 @@
 <% $.each(posts, function(index, post) { %>
     <% if(!post.parent) { %>
-        <div class="post">
+        <div id="post_<%= post.pub_id %>"
+            data-id="<%= post.pub_id %>"
+            data-from="<%= post.owner.screen_name %>"
+            class="post"
+        >
             <div class="gravatar left">
                 <img src="<%= post.owner.gravatar %>"/>
             </div>
