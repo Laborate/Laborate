@@ -124,7 +124,7 @@ window.newsUtil = {
         });
     },
     mention: function(element) {
-        var post = element.parents(".reply");
+        var post = element.parents(".post");
         var input = post.find(".comment .input");
 
         if(input.val()) {
@@ -151,7 +151,7 @@ window.newsUtil = {
                 tag: tag
             }, function(data) {
                 _this.tags.push(tag);
-                _this.feed(_this.page, true);
+                _this.feed(1, true);
 
                 $(".filters > .tags .tags").append(data);
                 form.find(".input").val("");
@@ -162,7 +162,7 @@ window.newsUtil = {
     },
     tag_remove: function(element) {
         this.tags.remove(this.tags.indexOf(element.attr("data-name")));
-        this.feed(_this.page, true);
+        this.feed(1, true);
         element.remove();
     },
     scroll: function() {

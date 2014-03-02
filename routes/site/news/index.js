@@ -127,12 +127,23 @@ exports.like = function(req, res, next) {
     }, function(error, posts) {
         if(!error && !posts.empty) {
             var post = posts[0];
+            var like = (req.param("like") == "true");
 
-            console.log(post.hasLike);
+            req.models.users.get(req.session.user.id, function(error, user) {
+                if(!error && user) {
+                    if(like) {
+                        post.addLikes(user, req.error.capture);
+                    } else {
+                        post.removeLikes(user, req.error.capture);
+                    }
 
-            res.json({
-                success: true
-            })
+                    res.json({
+                        success: true
+                    });
+                } else {
+                    res.error(404, null, error);
+                }
+            });
         } else {
             res.error(404, null, error);
         }
