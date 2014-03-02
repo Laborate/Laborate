@@ -32,7 +32,8 @@
             "we are your solution to facilitating realtime collaboration."
         ],
         "backdrop": "blurry",
-        "hiring": false
+        "hiring": false,
+        "default": ""
     },
     "development": {
         "basicAuth": {
@@ -44,9 +45,7 @@
             "panels": [
                 "locals",
                 "request",
-                "session",
-                "template",
-                "nav"
+                "session"
             ]
         }
     },
@@ -58,11 +57,13 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "ntHgE9WI7bhIVSWhWOJ9rHiToSyQGSXgD6n2tr0ZtpTaECkV6u"
+            "secret": "FF4Z6vzop7Jz57dB2Eg5GlFkvei1ch0TAe6PN2eS0NZS8lxorz"
         }
     },
     "orm": {
         "reset": true,
+        "preload": "",
+        "sync": "",
         "debug": "",
         "protocol": "mysql",
         "host": "127.0.0.1",
@@ -84,7 +85,7 @@
         "google": false
     },
     "icons": {
-        "search": "icon-search",
+        "search": "icon-search-2",
         "online": "icon-briefcase",
         "sftp": "icon-drive",
         "github": "icon-github-3",
@@ -100,11 +101,12 @@
         "add_square": "icon-plus",
         "subtract_square": "icon-minus",
         "add_circle": "icon-plus-3",
+        "add": "icon-plus-4",
         "circle_arrow_up": "icon-arrow-up-2",
         "circle_arrow_down": "icon-arrow-down-2",
         "circle_notice": "icon-notice",
         "menu_arrows": "icon-menu",
-        "profile": "icon-users",
+        "profile": "icon-user-3",
         "settings": "icon-cog",
         "locations": "icon-layers",
         "notifications": "icon-volume-3",
@@ -146,7 +148,16 @@
         "terminal": "icon-window",
         "public": "icon-users",
         "tracking": "icon-binoculars",
-        "trending": "icon-stats-2"
+        "trending": "icon-stats-2",
+        "news_feed": "icon-chat",
+        "documents": "icon-folder",
+        "groups": "icon-users",
+        "help": "icon-help",
+        "admin": "icon-presentation",
+        "account": "icon-settings",
+        "sign_out": "icon-off",
+        "notification": "icon-notice-2",
+        "preview": "icon-binoculars"
     },
     "github": {
         "id": "",
