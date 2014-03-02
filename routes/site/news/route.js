@@ -9,5 +9,6 @@ module.exports = function(app, routes) {
     app.post('/news/preview', auth.util.restrictAccess, news.preview);
     app.post('/news/create', auth.util.restrictAccess, news.create);
     app.post('/news/tags/create', auth.util.restrictAccess, news.tags.create);
+    app.post('/news/:post/like', auth.util.restrictAccess, news.like);
     app.post('/news/:parent/reply', auth.util.restrictAccess, news.reply);
 }

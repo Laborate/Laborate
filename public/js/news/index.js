@@ -9,6 +9,13 @@ $(function() {
         e.preventDefault();
     });
 
+    $(".main .container > .posts").on("click", ".like", function() {
+        window.newsUtil.like($(this));
+    });
+
+    $(".main .container > .posts").on("click", ".reply-like", function() {
+        window.newsUtil.reply_like($(this));
+    });
 
     $(".main .container > .posts").on("click", ".mention", function() {
         window.newsUtil.mention($(this));

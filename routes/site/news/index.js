@@ -120,3 +120,21 @@ exports.reply = function(req, res, next) {
         }
     });
 }
+
+exports.like = function(req, res, next) {
+    req.models.posts.find({
+        pub_id: req.param("post")
+    }, function(error, posts) {
+        if(!error && !posts.empty) {
+            var post = posts[0];
+
+            console.log(post.hasLike);
+
+            res.json({
+                success: true
+            })
+        } else {
+            res.error(404, null, error);
+        }
+    });
+}

@@ -23,9 +23,9 @@
                     });
                 %>
                 <% if(liked) { %>
-                    <span class="action unlike">Unlike</span>
+                    <span class="action reply-like" data-like="true">Unlike</span>
                 <% } else { %>
-                    <span class="action like">Like</span>
+                    <span class="action reply-like" data-like="false">Like</span>
                 <% } %>
                 <span><%= site_delimeter %></span>
                 <span class="action mention">Mention</span>

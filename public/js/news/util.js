@@ -99,8 +99,32 @@ window.newsUtil = {
             });
         }
     },
+    like: function(element) {
+        var post = element.parents(".post").attr("data-id");
+        var like = !(element.attr("data-like") == "true");
+
+        element
+            .text((like) ? "Unlike" : "Like")
+            .attr("data-like", like);
+
+        $.post("/news/" + post + "/like/", {
+            like: like
+        });
+    },
+    reply_like: function(element) {
+        var post = element.parents(".reply").attr("data-id");
+        var like = !(element.attr("data-like") == "true");
+
+        element
+            .text((like) ? "Unlike" : "Like")
+            .attr("data-like", like);
+
+        $.post("/news/" + post + "/like/", {
+            like: like
+        });
+    },
     mention: function(element) {
-        var post = element.parents(".post");
+        var post = element.parents(".reply");
         var input = post.find(".comment .input");
 
         if(input.val()) {
