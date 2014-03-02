@@ -3,19 +3,24 @@ window.newsUtil = {
     loading: false,
     tags: [],
     groups: [],
-    feed: function(page) {
+    feed: function(page, override) {
         var _this = this;
 
-        if(!_this.loading && page > _this.page) {
+        if(!_this.loading) {
             _this.loading = true;
 
-            $.get("/news/page/" + page + "/", {
+            $.get("/news/pages/" + page + "/", {
                 groups: _this.groups,
                 tags: _this.tags
             }, function(data) {
                 if(typeof data == "string") {
-                    $(".main .posts").append(data);
-                    _this.page += 1;
+                    if(override) {
+                        $(".main .posts").html(data);
+                        _this.page = 1;
+                    } else {
+                        $(".main .posts").append(data);
+                        _this.page += 1;
+                    }
                 } else {
                     $(".main .loader").fadeOut(200);
                 }
@@ -104,6 +109,12 @@ window.newsUtil = {
             input.val("@" + post.attr("data-from"));
         }
     },
+    comment: function(element) {
+        element
+            .parents(".post")
+            .find(".comment .input")
+            .focus();
+    },
     group: function(element) {
         element.toggleClass("activated");
     },
@@ -111,12 +122,12 @@ window.newsUtil = {
         var _this = this;
         var tag = form.find(".input").val();
 
-        if($("#tag_" + tag).length == 0) {
+        if(_this.tags.indexOf(tag) == -1) {
             $.post("/news/tags/create/", {
                 tag: tag
             }, function(data) {
                 _this.tags.push(tag);
-                _this.feed(_this.page);
+                _this.feed(_this.page, true);
 
                 $(".filters > .tags .tags").append(data);
                 form.find(".input").val("");
@@ -124,6 +135,11 @@ window.newsUtil = {
         } else {
             form.find(".input").val("");
         }
+    },
+    tag_remove: function(element) {
+        this.tags.remove(this.tags.indexOf(element.attr("data-name")));
+        this.feed(_this.page, true);
+        element.remove();
     },
     scroll: function() {
         if(!$(".main .loader").is(":hidden")) {

@@ -9,8 +9,13 @@ $(function() {
         e.preventDefault();
     });
 
+
     $(".main .container > .posts").on("click", ".mention", function() {
         window.newsUtil.mention($(this));
+    });
+
+    $(".main .container > .posts").on("click", ".comment", function() {
+        window.newsUtil.comment($(this));
     });
 
     $(".main .container > .form .preview").click(function() {
@@ -24,5 +29,9 @@ $(function() {
     $(".filters > .tags .form").submit(function(e) {
         window.newsUtil.tag($(this));
         e.preventDefault();
+    });
+
+    $(".filters > .tags").on("click", ".tag .remove", function() {
+        window.newsUtil.tag_remove($(this).parents(".tag"));
     });
 });

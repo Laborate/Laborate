@@ -3,7 +3,7 @@ module.exports = function(app, routes) {
     var news = routes.news;
 
     app.get('/news', auth.util.restrictAccess, news.index);
-    app.get('/news/page/:page', auth.util.restrictAccess, news.posts);
+    app.get('/news/pages/:page', auth.util.restrictAccess, news.posts);
     app.get('/news/:post', auth.util.restrictAccess, news.post);
 
     app.post('/news/preview', auth.util.restrictAccess, news.preview);
