@@ -15,10 +15,11 @@ module.exports = function(name, callback) {
     var _this = this;
     _this.redis = lib.redis;
     _this.finish = function() {
+        //Give 60 Seconds To Finish
         setTimeout(function() {
             _this.redis.end();
             process.exit(code=0);
-        }, 500);
+        }, 60000);
     }
 
     if(config.general.ssl) {
@@ -27,21 +28,16 @@ module.exports = function(name, callback) {
         var protocol = "http://";
     }
 
-    if(config.general.production) {
-        _this.email = lib.email(protocol + config.general.host);
-    } else {
-        _this.email = lib.email(protocol + config.profile.name + ".dev." + config.general.host);
-    }
-
+    _this.email = lib.email(protocol + config.general.host);
     lib.models_init(_this, callback);
 
-    /* Exit After 2 Minutes (Safegaurd) */
+    /* Exit After 5 Minutes (Safegaurd) */
     setTimeout(function() {
-        lib.error.report("cronjob: " + name + " took longer than a 2 minutes", function() {
+        lib.error.report("cronjob: " + name + " took longer than a 5 minutes", function() {
             _this.redis.end();
             process.exit(code=0);
         });
-    }, 120000);
+    }, 300000);
 }
 
 /* Error Handling */

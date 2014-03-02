@@ -10,36 +10,45 @@ require('../init')("user.feedback", function() {
         admin: false
     }, {autoFetch: true}, function(error, users) {
         if(!error && !users.empty) {
-            $.each(users, function(key, user) {
+            async.each(users, function(user, next) {
                 var timeDiff = Math.abs(today.getTime() - user.created.getTime());
                 var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
                 if(diffDays >= 3 && user.feedbacks.empty) {
-                    user.save({
-                        feedback_asked: true
-                    }, lib.error.capture);
+                    async.parallel([
+                        function(callback) {
+                            user.save({
+                                feedback_asked: true
+                            }, callback);
+                        },
+                        function(callback) {
+                            _this.models.notifications.create({
+                                message: "We noticed you have been using our service \
+                                for a couple days, do you have any <a href='/feedback/'>feedback</a>?",
+                                priority: true,
+                                user_id: user.id
+                            }, callback);
+                        }, function(callback) {
+                            if(config.general.production) {
+                                 _this.email("feedback", {
+                                    subject: "Help Us Improve",
+                                    users: [{
+                                        email: user.email,
+                                        name: user.name
+                                    }]
+                                }, callback);
+                            } else {
+                                callback();
+                            }
+                        }
 
-                    _this.models.notifications.create({
-                        message: "We noticed you have been using our service \
-                        for a couple days, do you have any <a href='/feedback/'>feedback</a>?",
-                        priority: true,
-                        user_id: user.id
-                    }, lib.error.capture);
-
-                     _this.email("feedback", {
-                        subject: "Help Us Improve",
-                        users: [{
-                            email: user.email,
-                            name: user.name
-                        }]
-                    }, lib.error.capture);
-
-                    if(users.end(key)) {
-                        _this.finish();
-                    }
-                } else if(users.end(key)) {
-                    _this.finish();
+                    ], next);
+                } else {
+                    next();
                 }
+            }, function(errors) {
+                lib.error.capture(errors);
+                _this.finish();
             });
         } else {
             lib.error.capture(error);
