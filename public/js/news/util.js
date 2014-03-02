@@ -140,6 +140,13 @@ window.newsUtil = {
             .focus();
     },
     group: function(element) {
+        if(element.hasClass("activated")) {
+            this.groups.remove(this.groups.indexOf(element.attr("data-id")));
+        } else {
+            this.groups.push(element.attr("data-id"));
+        }
+
+        this.feed(1, true);
         element.toggleClass("activated");
     },
     tag: function(form) {
