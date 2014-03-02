@@ -68,6 +68,7 @@
                     font-size: 14px;
                     word-wrap: break-word;
                     overflow: hidden;
+                    line-height: 25px;
 
                     a {
                         cursor: pointer;
@@ -86,10 +87,23 @@
                         margin: 0 -10px -10px -10px;
                         padding: 10px;
                         background: #f9f9f8;
+                        overflow: auto;
+
+                        code * {
+                            white-space: nowrap;
+                        }
                     }
 
                     .iframe {
                         margin: 0 -11px;
+                    }
+
+                    p code {
+                        font-size: 13px;
+                        background: #f8f8f8;
+                        padding: 3px 4px;
+                        border: solid 1px darken(#f8f8f8, 10%);
+                        .border-radius(4px);
                     }
                 }
 
@@ -219,6 +233,7 @@
                                 font-size: 14px;
                                 word-wrap: break-word;
                                 overflow: hidden;
+                                line-height: 25px;
                                 .border-radius(2px);
 
                                 a {
@@ -238,6 +253,11 @@
                                     margin: 0 -10px;
                                     padding: 10px;
                                     background: #f9f9f8;
+                                    overflow: auto;
+
+                                    code * {
+                                        white-space: nowrap;
+                                    }
                                 }
 
                                 .iframe {
