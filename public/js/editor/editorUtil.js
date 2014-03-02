@@ -329,17 +329,17 @@ window.editorUtil = {
                             }
                         ]);
                     } else {
-                        if(json.error_message) {
-                            window.editorUtil.error(json.error_message, json.redirect_url);
-                        } else {
-                            window.location.href = json.redirect_url;
-                        }
+                        window.editorUtil.error(json.error_message, json.redirect_url);
                     }
                 });
             }
         }, 100);
     },
     error: function(message, url) {
+        if(config.embed) {
+            url = true;
+        }
+
         window.socketUtil.socket.removeAllListeners();
         window.backdrop.error(message, url);
     }

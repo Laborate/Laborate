@@ -53,16 +53,16 @@ $(function() {
     window.onoffline = window.socketUtil.disconnect;
 
     window.socketUtil.socket.on('connect_failed', function() {
-        window.backdrop.error("Failed To Connect. Retrying now...", true);
+        window.editorUtil.error("Failed To Connect. Retrying now...", true);
     });
 
     window.socketUtil.socket.on('reconnect_failed', function() {
-        window.backdrop.error("Failed To Reconnect. Retrying now...", true);
+        window.editorUtil.error("Failed To Reconnect. Retrying now...", true);
     });
 
     window.socketUtil.socket.on('error', function(reason) {
         Raven.captureException(reason);
-        window.backdrop.error("Failed To Connect", '/');
+        window.editorUtil.error("Failed To Connect", '/');
     });
 
     var interval = setInterval(function() {
