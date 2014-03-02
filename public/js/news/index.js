@@ -20,4 +20,9 @@ $(function() {
     $(".filters .groups").on("click", ".option", function() {
         window.newsUtil.group($(this));
     });
+
+    $(".filters > .tags .form").submit(function(e) {
+        window.newsUtil.tag($(this));
+        e.preventDefault();
+    });
 });

@@ -1,15 +1,17 @@
 window.newsUtil = {
     page: 0,
     loading: false,
-    feed: function(page, groups, tags) {
+    tags: [],
+    groups: [],
+    feed: function(page) {
         var _this = this;
 
         if(!_this.loading && page > _this.page) {
             _this.loading = true;
 
             $.get("/news/page/" + page + "/", {
-                groups: groups || [],
-                tags: tags || []
+                groups: _this.groups,
+                tags: _this.tags
             }, function(data) {
                 if(typeof data == "string") {
                     $(".main .posts").append(data);
@@ -104,6 +106,24 @@ window.newsUtil = {
     },
     group: function(element) {
         element.toggleClass("activated");
+    },
+    tag: function(form) {
+        var _this = this;
+        var tag = form.find(".input").val();
+
+        if($("#tag_" + tag).length == 0) {
+            $.post("/news/tags/create/", {
+                tag: tag
+            }, function(data) {
+                _this.tags.push(tag);
+                _this.feed(_this.page);
+
+                $(".filters > .tags .tags").append(data);
+                form.find(".input").val("");
+            });
+        } else {
+            form.find(".input").val("");
+        }
     },
     scroll: function() {
         if(!$(".main .loader").is(":hidden")) {
