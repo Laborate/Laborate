@@ -30,6 +30,23 @@ body {
         z-index: 3;
         width: 250px;
 
+        .status {
+            font-size: 18px;
+            text-align: center;
+
+            a {
+                color: @color_blue;
+
+                &:hover {
+                    text-decoration: underline;
+
+                    &:active {
+                        color: darken(@color_blue, 5%);
+                    }
+                }
+            }
+        }
+
         .listing {
             overflow: auto;
             height: 250px;

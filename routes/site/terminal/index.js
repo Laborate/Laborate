@@ -1,14 +1,25 @@
 exports.index = function(req, res, next) {
-    res.renderOutdated('terminal/index', {
-        title: "Terminals",
-        user: req.session.user,
-        header: "terminal",
-        header_darken: true,
-        locations: req.session.user.locations,
-        js: clientJS.renderTags("terminal-lookup", "new-header"),
-        css: clientCSS.renderTags("terminal-lookup", "new-header"),
-        backdrop: req.backdrop()
+    var locations = $.map(req.session.user.locations, function(location, index) {
+        if(location.type == "sftp") {
+            location.id = index;
+            return location;
+        }
     });
+
+    if(locations.length != 1) {
+        res.renderOutdated('terminal/index', {
+            title: "Terminals",
+            user: req.session.user,
+            header: "terminal",
+            header_darken: true,
+            locations: locations,
+            js: clientJS.renderTags("terminal-lookup", "new-header"),
+            css: clientCSS.renderTags("terminal-lookup", "new-header"),
+            backdrop: req.backdrop()
+        });
+    } else {
+        res.redirect("/terminals/" + locations[0].id + "/");
+    }
 }
 
 exports.terminal = function(req, res, next) {
