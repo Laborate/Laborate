@@ -125,12 +125,13 @@ window.newsUtil = {
     },
     mention: function(element) {
         var post = element.parents(".post");
+        var reply = element.parents(".reply");
         var input = post.find(".comment .input");
 
         if(input.val()) {
-            input.val(input.val() + " @" + post.attr("data-from"));
+            input.val(input.val() + " @" + reply.attr("data-from"));
         } else {
-            input.val("@" + post.attr("data-from"));
+            input.val("@" + reply.attr("data-from"));
         }
     },
     comment: function(element) {
