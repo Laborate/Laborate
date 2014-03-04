@@ -15,10 +15,10 @@ window.newsUtil = {
             }, function(data) {
                 if(typeof data == "string") {
                     if(override) {
-                        $(".main .posts").html(data);
+                        $(".main .posts").html(data || "");
                         _this.page = 1;
                     } else {
-                        $(".main .posts").append(data);
+                        $(".main .posts").append(data || "");
                         _this.page += 1;
                     }
                 } else {

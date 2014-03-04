@@ -11,7 +11,7 @@ exports.index = function(req, res, next) {
             title: "Terminals",
             user: req.session.user,
             header: "terminal",
-            header_darken: true,
+            header_class: "lighten",
             locations: locations,
             js: clientJS.renderTags("terminal-lookup", "new-header"),
             css: clientCSS.renderTags("terminal-lookup", "new-header"),
@@ -31,7 +31,7 @@ exports.terminal = function(req, res, next) {
             user: req.session.user,
             location: location,
             header: "terminal",
-            header_darken: true,
+            header_class: "lighten",
             js: clientJS.renderTags("terminal", "new-header"),
             css: clientCSS.renderTags("terminal", "new-header"),
             backdrop: req.backdrop()
