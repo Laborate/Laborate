@@ -34,10 +34,12 @@ var error_handler = function(status, message, locals, req, res) {
             break;
     }
 
-    if((error_html && locals.home && !locals.embed) || error_html.split(". ").length > 1) {
-        error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
-    } else {
-        error_html = (error_html.slice(-1) == ".") ? error_html.slice(0, -1) : error_html;
+    if(error_html) {
+        if((locals.home && !locals.embed) || error_html.split(". ").length > 1) {
+            error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
+        } else {
+            error_html = (error_html.slice(-1) == ".") ? error_html.slice(0, -1) : error_html;
+        }
     }
 
     if(req.xhr) {
