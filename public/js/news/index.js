@@ -5,7 +5,7 @@ $(function() {
     });
 
     $(".main .container > .posts").on("submit", ".form", function(e) {
-        window.newsUtil.sub_post($(this));
+        window.newsUtil.reply($(this));
         e.preventDefault();
     });
 

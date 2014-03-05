@@ -1,6 +1,7 @@
 var core = require("./core");
 var editor = require("./editor");
 var terminal = require("./terminal");
+var news = require("./news");
 
 module.exports = function(app) {
     /* Core */
@@ -22,6 +23,11 @@ module.exports = function(app) {
     app.io.route('terminalJoin', terminal.join);
     app.io.route('terminalData', terminal.data);
     app.io.route('terminalResize', terminal.resize);
+
+    /* Terminal */
+    app.io.route('newsJoin', news.join);
+    app.io.route('newsPost', news.post);
+    app.io.route('newsReply', news.reply);
 
     /* Connect */
     app.io.route('connected', core.track);

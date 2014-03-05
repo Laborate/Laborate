@@ -17,6 +17,21 @@ GLOBAL.lib            = require("./lib");
 GLOBAL.clientJS       = piler.createJSManager({urlRoot: "/js/"});
 GLOBAL.clientCSS      = piler.createCSSManager({urlRoot: "/css/"});
 
+/* Set App & Server Variables */
+if(config.general.ssl) {
+    GLOBAL.app = express().https({
+        key: fs.readFileSync(__dirname + '/credentials/laborate.key').toString(),
+        cert: fs.readFileSync(__dirname + '/credentials/laborate.crt').toString(),
+        ca: fs.readFileSync(__dirname + '/credentials/gandi_standard.pem').toString()
+    }).io();
+} else {
+    GLOBAL.app = express().http().io();
+}
+
+var srv = app.server;
+var crsf = express.csrf();
+
+/* Initial Setup */
 process.nextTick(function() {
     /* Install Crontab */
     require("./cron")(__dirname);
@@ -27,20 +42,6 @@ process.nextTick(function() {
         ejs: ejs
     });
 });
-
-/* Set App & Server Variables */
-if(config.general.ssl) {
-    var app = express().https({
-        key: fs.readFileSync(__dirname + '/credentials/laborate.key').toString(),
-        cert: fs.readFileSync(__dirname + '/credentials/laborate.crt').toString(),
-        ca: fs.readFileSync(__dirname + '/credentials/gandi_standard.pem').toString()
-    }).io();
-} else {
-    var app = express().http().io();
-}
-
-var srv = app.server;
-var crsf = express.csrf();
 
 /* Socket IO: Configuration */
 app.io.configure(function() {

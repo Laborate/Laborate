@@ -1,8 +1,20 @@
+$.extend(window.socketUtil, {
+    connect: function() {
+       window.socketUtil.socket.emit("newsJoin");
+    }
+});
+
+
 $(function() {
     $('textarea').autosize();
+
+    window.socketUtil.socket.on("connect", window.socketUtil.connect);
+    window.socketUtil.socket.on("reconnect", window.socketUtil.connect);
+    window.socketUtil.socket.on("newsReply", window.newsUtil.new_reply);
 
     if(config.auto_pull) {
         window.newsUtil.feed(1);
         $(window).scroll(window.newsUtil.scroll);
+        window.socketUtil.socket.on("newsPost", window.newsUtil.new_post);
     }
 });
