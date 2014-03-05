@@ -93,7 +93,7 @@ exports.posts = function(req, res, next) {
                 });
             }
         ], function(errors) {
-            if(!errors) {
+            if(!errors && !total_posts.empty) {
                 res.renderOutdated('news/posts/index', {
                     posts: total_posts,
                     user: req.session.user,
