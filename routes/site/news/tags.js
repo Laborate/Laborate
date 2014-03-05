@@ -1,6 +1,8 @@
 exports.posts = function(req, res, next) {
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
-        tag.getPosts(function(error, posts) {
+        tag.getPosts().where({
+                parent_id: null
+        }).run(function(error, posts) {
             if(!error && !posts.empty) {
                 res.renderOutdated('news/post', {
                     title: "News Feed",
@@ -15,7 +17,7 @@ exports.posts = function(req, res, next) {
                     css: clientCSS.renderTags("news", "new-header", "highlight")
                 });
             } else {
-                res.error(404, null, error);
+                res.redirect("/news/");
             }
         });
     });
