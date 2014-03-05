@@ -15,7 +15,7 @@ window.newsUtil = {
             }, function(data) {
                 if(typeof data == "string") {
                     data = $(data).map(function() {
-                        if($("#post_" + $(this).attr("data-id")).length == 0) {
+                        if(override || $("#post_" + $(this).attr("data-id")).length == 0) {
                             return this;
                         }
                     });

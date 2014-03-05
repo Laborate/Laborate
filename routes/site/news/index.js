@@ -36,27 +36,72 @@ exports.post = function(req, res, next) {
 }
 
 exports.posts = function(req, res, next) {
-    req.models.posts.pages(function (error, pages) {
-        var page = parseInt(req.param("page"));
+    var tags = req.param("tags") || [];
+    var groups = req.param("groups") || [];
+    var page = parseInt(req.param("page"));
 
-        if(!error && page >= 1 && page <= pages) {
-            req.models.posts.page(page).order("-created").where({
-                parent_id: null
-            }).run(function(error, posts) {
-                if(!error && posts) {
-                    res.renderOutdated('news/posts/index', {
-                        posts: posts,
-                        user: req.session.user,
-                        restrict: true
-                    });
-                } else {
-                    res.error(404, null, error);
-                }
-            });
-        } else {
-            res.error(404, null, error);
-        }
-    });
+    if(tags.empty && groups.empty) {
+        req.models.posts.page(page).order("-created").where({
+            parent_id: null
+        }).run(function(error, posts) {
+            if(!error && !posts.empty) {
+                res.renderOutdated('news/posts/index', {
+                    posts: posts,
+                    user: req.session.user,
+                    restrict: true
+                });
+            } else {
+                res.error(404, null, error);
+            }
+        });
+    } else {
+        var total_posts = [];
+        var total_post_ids = [];
+
+        async.parallel([
+            //Get Posts Related To Tags
+            function(callback) {
+                req.models.posts.tags.page(page).order("-created").where({
+                    or: $.map(tags, function(tag) {
+                        name: tag
+                    })
+                }).run(function(error, tags) {
+                    if(!error && tags) {
+                        async.each(tags, function(tag, next) {
+                            tag.getPosts().where({
+                                parent_id: null
+                            }).run(function(error, posts) {
+                                if(!error && posts) {
+                                    async.each(posts, function(post, move) {
+                                        if(total_post_ids.indexOf(post.pub_id) == -1) {
+                                            total_posts.push(post);
+                                            total_post_ids.push(post.pub_id);
+                                        }
+
+                                        move();
+                                    }, next);
+                                } else {
+                                    next(error);
+                                }
+                            });
+                        }, callback);
+                    } else {
+                        callback(error);
+                    }
+                });
+            }
+        ], function(errors) {
+            if(!errors) {
+                res.renderOutdated('news/posts/index', {
+                    posts: total_posts,
+                    user: req.session.user,
+                    restrict: true
+                });
+            } else {
+                res.error(404, null, errors);
+            }
+        });
+    }
 }
 
 exports.preview = function(req, res, next) {
