@@ -85,6 +85,10 @@ $(function() {
     $(".status").on("click", "span", function() {
         window.socketUtil.connect();
     });
+
+    $(".toggle").click(function() {
+        toggleBackground(!$(this).hasClass("active"));
+    });
 });
 
 $(window).on("resize", resize);
@@ -121,5 +125,22 @@ function status(message, url) {
                 window.location.href = url;
             }
         }, 3000)
+    }
+}
+
+function toggleBackground(show) {
+    $.cookie("background", show, {
+        path: '/terminals',
+        expires: 365
+    });
+
+    $(".header").removeClass("lighten darken");
+    $(".header").addClass((show) ? "lighten" : "darken");
+    $(".toggle").toggleClass("active", show);
+
+    if(show) {
+        $(".backdrop").fadeIn();
+    } else {
+        $(".backdrop").fadeOut();
     }
 }

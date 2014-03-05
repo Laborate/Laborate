@@ -1,7 +1,9 @@
 <% include ../includes/start.html %>
 <% include ../includes/header.html %>
-<div class="backdrop image" style="<%= backdrop %>"></div>
-<div class="backdrop darkener"></div>
+<div class="backdrop image" style="<%= backdrop + ((background) ? "" : "display:none") %>"></div>
+<div class="backdrop darkener" style="<%= (background) ? "" : "display:none" %>"></div>
 <div class="status"></div>
-<div class="container"></div>
+<div class="container">
+    <div class="toggle <%= icons.image %> <%= (background) ? "active" : "" %>"></div>
+</div>
 <% include ../includes/end.html %>

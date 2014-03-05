@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "ZtSGSSoVVPTHHAakZZuT3P6wFuEAioPb5sGf9yRg9FBC6DFwft"
+            "secret": "Vv2uvHvmGTQHV9zTUzvSBTzoLWQrWfNDfnnDX9ZqRqqLmre3wT"
         }
     },
     "orm": {
@@ -158,7 +158,8 @@
         "account": "icon-settings",
         "sign_out": "icon-off",
         "notification": "icon-notice-2",
-        "preview": "icon-binoculars"
+        "preview": "icon-binoculars",
+        "image": "icon-image"
     },
     "github": {
         "id": "",

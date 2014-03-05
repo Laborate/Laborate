@@ -26,12 +26,14 @@ exports.terminal = function(req, res, next) {
     var location = req.session.user.locations[req.param("location")];
 
     if(location && location.type == "sftp") {
+        var background = (req.cookies.background === "true");
+
         res.renderOutdated('terminal/terminal', {
             title: location.name + config.general.delimeter.web  + "Terminal",
             user: req.session.user,
-            location: location,
             header: "terminal",
-            header_class: "lighten",
+            header_class: ((background) ? "lighten" : "darken"),
+            background: background,
             js: clientJS.renderTags("terminal", "new-header"),
             css: clientCSS.renderTags("terminal", "new-header"),
             backdrop: req.backdrop()
@@ -48,7 +50,6 @@ exports.embed = function(req, res, next) {
         res.renderOutdated('terminal/embed', {
             title: location.name + config.general.delimeter.web  + "Terminal",
             user: req.session.user,
-            location: location,
             js: clientJS.renderTags("terminal"),
             css: clientCSS.renderTags("terminal"),
             backdrop: req.backdrop()
