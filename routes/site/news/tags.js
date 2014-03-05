@@ -1,7 +1,7 @@
 exports.posts = function(req, res, next) {
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
         tag.getPosts(function(error, posts) {
-            if(!error) {
+            if(!error && !posts.empty) {
                 res.renderOutdated('news/post', {
                     title: "News Feed",
                     header: "news",
