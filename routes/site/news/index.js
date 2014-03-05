@@ -40,7 +40,9 @@ exports.posts = function(req, res, next) {
         var page = parseInt(req.param("page"));
 
         if(!error && page >= 1 && page <= pages) {
-            req.models.posts.page(page).order("-created").run(function(error, posts) {
+            req.models.posts.page(page).order("-created").where({
+                parent_id: null
+            }).run(function(error, posts) {
                 if(!error && posts) {
                     res.renderOutdated('news/posts/index', {
                         posts: posts,
