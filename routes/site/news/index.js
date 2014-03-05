@@ -71,6 +71,16 @@ exports.create = function(req, res, next) {
         if(!error && post) {
             req.models.posts.get(post.id, function(error, post) {
                 if(!error && post) {
+                    var tags = req.markdown_links("tags", req.param("content"));
+
+                    if(!tags.empty) {
+                        $.each(tags, function(index, name) {
+                            req.models.posts.tags.findOrCreate(name, function(error, tag) {
+                                post.addTags(tag, req.error.capture);
+                            });
+                        });
+                    }
+
                     res.renderOutdated('news/posts/index', {
                         posts: [post],
                         user: req.session.user,
@@ -108,7 +118,20 @@ exports.reply = function(req, res, next) {
         },
         function(post, callback) {
             req.models.posts.get(post.id, callback);
-        }
+        },
+        function(post, callback) {
+            var tags = req.markdown_links("tags", req.param("content"));
+
+            if(!tags.empty) {
+                $.each(tags, function(index, name) {
+                    req.models.posts.tags.findOrCreate(name, function(error, tag) {
+                        post.addTags(tag, req.error.capture);
+                    });
+                });
+            }
+
+            callback(null, post);
+        },
     ], function(errors, post) {
         if(!errors && post) {
             res.renderOutdated('news/posts/reply', {
