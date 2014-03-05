@@ -14,17 +14,26 @@ window.newsUtil = {
                 tags: _this.tags
             }, function(data) {
                 if(typeof data == "string") {
-                    data = $.trim(data);
+                    data = $(data).map(function() {
+                        if($("#post_" + $(this).attr("data-id")).length == 0) {
+                            return this;
+                        }
+                    });
 
                     if(override) {
-                        $(".main .posts").html(data || "");
+                        $(".main .posts").html(data);
                         _this.page = 1;
                     } else {
-                        $(".main .posts").append(data || "");
+                        $(".main .posts").append(data);
                         _this.page += 1;
                     }
                 } else {
                     $(".main .loader").fadeOut(200);
+
+                    if(override) {
+                        $(".main .posts").html(data);
+                        _this.page = 1;
+                    }
                 }
 
                 _this.loading = false;
@@ -33,6 +42,7 @@ window.newsUtil = {
     },
     new_post: function(data) {
         var post = $(data);
+        post.find(".comment .gravatar img").attr("src", config.gravatar);
         post.hide().css("opacity", 0);
 
         $(".main .posts").prepend(post);
