@@ -63,7 +63,9 @@ exports.posts = function(req, res, next) {
             function(callback) {
                 req.models.posts.tags.page(page).order("-created").where({
                     or: $.map(tags, function(tag) {
-                        name: tag
+                        return {
+                            name: tag
+                        }
                     })
                 }).run(function(error, tags) {
                     if(!error && tags) {
