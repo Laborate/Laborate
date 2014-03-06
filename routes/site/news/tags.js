@@ -1,6 +1,6 @@
 exports.posts = function(req, res, next) {
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
-        tag.getPosts().where({
+        tag.getPosts().order("-created").where({
                 parent_id: null
         }).run(function(error, posts) {
             if(!error && !posts.empty) {

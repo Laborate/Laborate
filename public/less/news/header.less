@@ -209,6 +209,32 @@ body > .header {
         }
     }
 
+    .linkables {
+        position: relative;
+        margin: 15px 5px 0 0;
+        font-size: 18px;
+        .float-right();
+
+        a {
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0 5px;
+            padding: 0 5px;
+            .transition(color);
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.9);
+
+                &:active {
+                    color: rgba(255, 255, 255, 1);
+                }
+            }
+        }
+
+        span {
+            color: rgba(255, 255, 255, 0.2);
+        }
+    }
+
     .profile {
         position: relative;
         margin-right: 10px;

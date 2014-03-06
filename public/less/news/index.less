@@ -61,7 +61,7 @@
                     display: none;
                     position: relative;
                     z-index: 2;
-                    padding: 0 10px;
+                    padding: 5px 10px 0 10px;
                     color: #333;
                     background: #fff;
                     min-height: 40px;
@@ -73,6 +73,14 @@
                     a {
                         cursor: pointer;
                         color: darken(@color_blue, 10%);
+
+                        &.tag {
+                            color: darken(@color_green, 10%);
+
+                            &:hover:active {
+                                color: darken(@color_green, 15%);
+                            }
+                        }
 
                         &:hover {
                             text-decoration: underline;
@@ -94,12 +102,12 @@
                         }
                     }
 
-                    .iframe {
-                        margin: 0 -11px;
-                    }
-
                     p {
                         margin: 5px 0;
+
+                        &:first-child {
+                            margin-top: 0;
+                        }
 
                         code {
                             font-size: 13px;
@@ -108,6 +116,17 @@
                             border: solid 1px darken(#f8f8f8, 10%);
                             .border-radius(4px);
                         }
+                    }
+
+                    blockquote {
+                        border-left: 4px solid #DDD;
+                        padding: 0 15px;
+                        color: #777;
+                        margin: 0;
+                    }
+
+                    .iframe {
+                        margin: 0 -11px;
                     }
                 }
 
@@ -230,7 +249,7 @@
                             .information {
                                 position: relative;
                                 z-index: 2;
-                                padding: 0 10px;
+                                padding: 5px 10px 0 10px;
                                 color: #333;
                                 background: #fff;
                                 min-height: 40px;
@@ -243,6 +262,14 @@
                                 a {
                                     cursor: pointer;
                                     color: darken(@color_blue, 10%);
+
+                                    &.tag {
+                                        color: darken(@color_green, 10%);
+
+                                        &:hover:active {
+                                            color: darken(@color_green, 15%);
+                                        }
+                                    }
 
                                     &:hover {
                                         text-decoration: underline;
@@ -264,12 +291,19 @@
                                     }
                                 }
 
-                                .iframe {
-                                    margin: 0 -11px;
+                                blockquote {
+                                    border-left: 4px solid #DDD;
+                                    padding: 0 15px;
+                                    color: #777;
+                                    margin: 0;
                                 }
 
                                 p {
                                     margin: 5px 0;
+
+                                    &:first-child {
+                                        margin-top: 0;
+                                    }
 
                                     code {
                                         font-size: 13px;
@@ -278,6 +312,10 @@
                                         border: solid 1px darken(#f8f8f8, 10%);
                                         .border-radius(4px);
                                     }
+                                }
+
+                                .iframe {
+                                    margin: 0 -11px;
                                 }
                             }
 

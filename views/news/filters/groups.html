@@ -1,11 +1,13 @@
-<div class="filter groups">
-    <div class="header">Groups</div>
-    <div class="options">
-        <div class="option" data-id="friends">
-            <div class="gravatar left">
-                <img src="<%= user.gravatar %>"/>
+<% if(!user.fake) { %>
+    <div class="filter groups">
+        <div class="header">Groups</div>
+        <div class="options">
+            <div class="option" data-id="friends">
+                <div class="gravatar left">
+                    <img src="<%= user.gravatar %>"/>
+                </div>
+                <div class="name left">Friends</div>
             </div>
-            <div class="name left">Friends</div>
         </div>
     </div>
-</div>
+<% } %>

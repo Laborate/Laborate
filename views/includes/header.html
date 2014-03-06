@@ -24,48 +24,56 @@
             <div class="active"></div>
         </a>
     </div>
-    <div class="search">
-        <div class="icon <%= icons.search %>"></div>
-        <form class="form" action="/search/">
-            <input name="q" class="input" type="text" placeholder="Search for ..."/>
-        </form>
-    </div>
-    <div class="profile">
-        <a href="/users/<%= user.screen_name %>/" class="name">
-            <%= user.screen_name %>
-        </a>
-        <div class="gravatar">
-            <img src="<%= user.gravatar %>"/>
+    <% if(!user.fake) { %>
+        <div class="search">
+            <div class="icon <%= icons.search %>"></div>
+            <form class="form" action="/search/">
+                <input name="q" class="input" type="text" placeholder="Search for ..."/>
+            </form>
         </div>
-        <div class="dropdown">
-            <div class="top"></div>
-            <div class="bottom">
-                <% if(user.admin) { %>
+        <div class="profile">
+            <a href="/users/<%= user.screen_name %>/" class="name">
+                <%= user.screen_name %>
+            </a>
+            <div class="gravatar">
+                <img src="<%= user.gravatar %>"/>
+            </div>
+            <div class="dropdown">
+                <div class="top"></div>
+                <div class="bottom">
+                    <% if(user.admin) { %>
+                        <div class="section">
+                            <a href="/admin/">
+                                <span class="icon <%= icons.admin %>"></span>
+                                Admin Center
+                            </a>
+                        </div>
+                    <% } %>
                     <div class="section">
-                        <a href="/admin/">
-                            <span class="icon <%= icons.admin %>"></span>
-                            Admin Center
+                        <a href="/account/profile/">
+                            <span class="icon <%= icons.profile %>"></span>
+                            Profile
+                        </a>
+                        <a href="/account/">
+                            <span class="icon <%= icons.account %>"></span>
+                            Account
+                        </a>
+                        <a href="/logout/">
+                            <span class="icon <%= icons.sign_out %>"></span>
+                            Sign Out
                         </a>
                     </div>
-                <% } %>
-                <div class="section">
-                    <a href="/account/profile/">
-                        <span class="icon <%= icons.profile %>"></span>
-                        Profile
-                    </a>
-                    <a href="/account/">
-                        <span class="icon <%= icons.account %>"></span>
-                        Account
-                    </a>
-                    <a href="/logout/">
-                        <span class="icon <%= icons.sign_out %>"></span>
-                        Sign Out
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
-    <a href="/account/notifications/" class="notifications">
-        <div class="icon <%= icons.notification %>"></div>
-    </a>
+        <a href="/account/notifications/" class="notifications">
+            <div class="icon <%= icons.notification %>"></div>
+        </a>
+    <% } else { %>
+        <div class="linkables">
+            <a class="link" href="/login/">Login</a>
+            <span>|</span>
+            <a class="link" href="/register/">Register</a>
+        </div>
+    <% } %>
 </div>

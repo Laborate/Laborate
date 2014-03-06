@@ -2,7 +2,7 @@ exports.index = function(req, res, next) {
     res.renderOutdated('news/index', {
         title: "News Feed",
         header: "news",
-        user: req.session.user,
+        user: req.session.user || req.fake_user,
         config: {
             auto_pull: true
         },
@@ -21,7 +21,7 @@ exports.post = function(req, res, next) {
                 title: "News Feed",
                 header: "news",
                 posts: posts,
-                user: req.session.user,
+                user: req.session.user || req.fake_user,
                 config: {
                     auto_pull: false
                 },
@@ -47,7 +47,7 @@ exports.posts = function(req, res, next) {
             if(!error && !posts.empty) {
                 res.renderOutdated('news/posts/index', {
                     posts: posts,
-                    user: req.session.user,
+                    user: req.session.user || req.fake_user,
                     restrict: true
                 });
             } else {
@@ -61,42 +61,86 @@ exports.posts = function(req, res, next) {
         async.parallel([
             //Get Posts Related To Tags
             function(callback) {
-                req.models.posts.tags.page(page).order("-created").where({
-                    or: $.map(tags, function(tag) {
-                        return {
-                            name: tag
-                        }
-                    })
-                }).run(function(error, tags) {
-                    if(!error && tags) {
-                        async.each(tags, function(tag, next) {
-                            tag.getPosts().where({
-                                parent_id: null
-                            }).run(function(error, posts) {
-                                if(!error && posts) {
-                                    async.each(posts, function(post, move) {
-                                        if(total_post_ids.indexOf(post.pub_id) == -1) {
-                                            total_posts.push(post);
-                                            total_post_ids.push(post.pub_id);
-                                        }
+                if(!tags.empty) {
+                    req.models.posts.tags.page(page).where({
+                        or: $.map(tags, function(tag) {
+                            return {
+                                name: tag
+                            }
+                        })
+                    }).run(function(error, tags) {
+                        if(!error && tags) {
+                            async.each(tags, function(tag, next) {
+                                tag.getPosts().order("-created").where({
+                                    parent_id: null
+                                }).run(function(error, posts) {
+                                    if(!error && posts) {
+                                        async.each(posts, function(post, move) {
+                                            if(total_post_ids.indexOf(post.pub_id) == -1) {
+                                                total_posts.push(post);
+                                                total_post_ids.push(post.pub_id);
+                                            }
 
-                                        move();
-                                    }, next);
-                                } else {
-                                    next(error);
+                                            move();
+                                        }, next);
+                                    } else {
+                                        next(error);
+                                    }
+                                });
+                            }, callback);
+                        } else {
+                            callback(error);
+                        }
+                    });
+                } else {
+                    callback(null);
+                }
+            },
+
+            //Get Group Related Posts
+            function(callback) {
+                if(!groups.empty) {
+                    var laborators = [];
+
+                    async.each(groups, function(group, next) {
+                        async.each(group, function(laborator, move) {
+                            if(laborators.indexOf(laborator) == -1) {
+                                laborators.push(laborator);
+                            }
+
+                            move();
+                        }, next);
+                    }, function() {
+                        req.models.posts.page(page).where({
+                            or: $.map(laborators, function(laborator) {
+                                return {
+                                    owner_id: laborator
                                 }
-                            });
-                        }, callback);
-                    } else {
-                        callback(error);
-                    }
-                });
+                            })
+                        }, function(error, posts) {
+                            if(!error && posts) {
+                                async.each(posts, function(post, next) {
+                                    if(total_post_ids.indexOf(post.pub_id) == -1) {
+                                        total_posts.push(post);
+                                        total_post_ids.push(post.pub_id);
+                                    }
+
+                                    next();
+                                }, callback);
+                            } else {
+                                callback(error);
+                            }
+                        });
+                    });
+                } else {
+                    callback(null);
+                }
             }
         ], function(errors) {
             if(!errors && !total_posts.empty) {
                 res.renderOutdated('news/posts/index', {
                     posts: total_posts,
-                    user: req.session.user,
+                    user: req.session.user || req.fake_user,
                     restrict: true
                 });
             } else {

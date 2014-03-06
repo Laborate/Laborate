@@ -11,26 +11,28 @@
             <%= child.owner.name %>
         </a>
         <div class="information"><%- child.content %></div>
-        <div class="bottom">
-            <div class="actions">
-                <%
-                    var liked = false;
-                    $.each(child.likes, function(index, laborator) {
-                        if(user.id == laborator.id) {
-                            liked = true;
-                            return false;
-                        }
-                    });
-                %>
-                <% if(liked) { %>
-                    <span class="action reply-like" data-like="true">Unlike</span>
-                <% } else { %>
-                    <span class="action reply-like" data-like="false">Like</span>
-                <% } %>
-                <span><%= site_delimeter %></span>
-                <span class="action mention">Mention</span>
+        <% if(!user.fake) { %>
+            <div class="bottom">
+                <div class="actions">
+                    <%
+                        var liked = false;
+                        $.each(child.likes, function(index, laborator) {
+                            if(user.id == laborator.id) {
+                                liked = true;
+                                return false;
+                            }
+                        });
+                    %>
+                    <% if(liked) { %>
+                        <span class="action reply-like" data-like="true">Unlike</span>
+                    <% } else { %>
+                        <span class="action reply-like" data-like="false">Like</span>
+                    <% } %>
+                    <span><%= site_delimeter %></span>
+                    <span class="action mention">Mention</span>
+                </div>
+                <div class="time"><%=: child.created | duration %></div>
             </div>
-            <div class="time"><%=: child.created | duration %></div>
-        </div>
+        <% } %>
     </div>
 </div>

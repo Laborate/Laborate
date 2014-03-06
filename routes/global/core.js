@@ -86,6 +86,10 @@ exports.imports = function(req, res, next) {
         country: null,
         ll: [null, null]
     };
+    req.fake_user = {
+        name: "An Amazaing Laborator",
+        fake: true
+    };
 
     //Device Info
     var device = req.device.type.toLowerCase();
