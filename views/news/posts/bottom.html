@@ -1,24 +1,22 @@
 <div class="bottom">
     <div class="actions">
-        <% if(!user.fake) { %>
-            <%
-                var liked = false;
-                $.each(post.likes, function(index, laborator) {
-                    if(user.id == laborator.id) {
-                        liked = true;
-                        return false;
-                    }
-                });
-            %>
-            <% if(liked) { %>
-                <span class="action like" data-like="true">Unlike</span>
-            <% } else { %>
-                <span class="action like" data-like="false">Like</span>
-            <% } %>
-            <span><%= site_delimeter %></span>
-            <span class="action comment">Comment</span>
-            <span><%= site_delimeter %></span>
+        <%
+            var liked = false;
+            $.each(post.likes, function(index, laborator) {
+                if(user.id == laborator.id) {
+                    liked = true;
+                    return false;
+                }
+            });
+        %>
+        <% if(liked) { %>
+            <span class="action like" data-like="true">Unlike</span>
+        <% } else { %>
+            <span class="action like" data-like="false">Like</span>
         <% } %>
+        <span><%= site_delimeter %></span>
+        <span class="action comment">Comment</span>
+        <span><%= site_delimeter %></span>
         <span class="action share">Share</span>
     </div>
     <div class="time"><%=: post.created | duration %></div>

@@ -88,6 +88,8 @@ exports.imports = function(req, res, next) {
     };
     req.fake_user = {
         name: "An Amazaing Laborator",
+        screen_name: "laborator",
+        gravatar: config.gravatar,
         fake: true
     };
 
