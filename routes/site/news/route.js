@@ -1,8 +1,9 @@
 module.exports = function(app, routes) {
+    var core = routes.core;
     var auth = routes.auth;
     var news = routes.news;
 
-    app.get('/news', auth.util.removeRedirect, news.index);
+    app.get('/news', auth.util.removeRedirect, core.reload, news.index);
     app.get('/news/pages/:page', news.posts);
     app.get('/news/:post', news.post);
     app.get('/news/tags/:tag', news.tags.posts);
