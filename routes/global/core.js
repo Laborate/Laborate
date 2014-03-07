@@ -164,7 +164,7 @@ exports.imports = function(req, res, next) {
     if(!user.admin) {
         req.redis.get("tracking", function(error, data) {
             var tracking = (data) ? JSON.parse(data) : [];
-            var organization = req.session.organization.id;
+            var organization = req.session.organization;
 
             tracking.push({
                 agent: req.headers['user-agent'],
