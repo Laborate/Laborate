@@ -134,8 +134,8 @@ function toggleBackground(show) {
         expires: 365
     });
 
-    $(".header").removeClass("lighten darken");
-    $(".header").addClass((show) ? "lighten" : "darken");
+    $(".header, .error_popup").removeClass("lighten darken");
+    $(".header, .error_popup").addClass((show) ? "lighten" : "darken");
     $(".toggle").toggleClass("active", show);
 
     if(show) {

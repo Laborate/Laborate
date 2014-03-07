@@ -68,6 +68,7 @@
                 gravatar: "<%= gravatar %>",
                 apps: <%- JSON.stringify(apps) %>,
                 icons: <%- JSON.stringify(icons) %>,
+                logged_in: <%= (user && !user.fake) ? true : false %>,
 
                 <% $.each(config, function(key, value) { %>
                     <% if(typeof value == "boolean") { %>
@@ -102,3 +103,4 @@
         <% if(production) { %>
             <div id="printout" class="hidden"><% include ./printout.html %></div>
         <% } %>
+        <div class="error_popup <%= header_class %>"></div>

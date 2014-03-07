@@ -2,7 +2,7 @@ window.newsUtil = {
     page: 0,
     loading: false,
     tags: [],
-    groups: [],
+    groups: null,
     feed: function(page, override) {
         var _this = this;
 
@@ -87,85 +87,101 @@ window.newsUtil = {
         }
     },
     post: function(form) {
-        var content = form.find("textarea").val();
+        if(config.logged_in) {
+            var content = form.find("textarea").val();
 
-        if(content) {
-            form.find(".post").attr("disabled", "disabled");
+            if(content) {
+                form.find(".post").attr("disabled", "disabled");
 
-            $.post("/news/create/", {
-                content: content
-            }, function(data) {
-                var post = $(data);
-                post.hide().css("opacity", 0);
+                $.post("/news/create/", {
+                    content: content
+                }, function(data) {
+                    var post = $(data);
+                    post.hide().css("opacity", 0);
 
-                $(".main .posts").prepend(post);
-                post.slideDown(200);
+                    $(".main .posts").prepend(post);
+                    post.slideDown(200);
 
-                setTimeout(function() {
-                    post.animate({ "opacity": 1}, 200)
-                }, 250);
+                    setTimeout(function() {
+                        post.animate({ "opacity": 1}, 200)
+                    }, 250);
 
-                form.find(".previewer").hide().html("");
-                form.find("textarea").show().val("").trigger('autosize.resize');
-                form.find(".post").attr("disabled", false);
+                    form.find(".previewer").hide().html("");
+                    form.find("textarea").show().val("").trigger('autosize.resize');
+                    form.find(".post").attr("disabled", false);
 
-                window.socketUtil.socket.emit("newsPost", data);
-            });
+                    window.socketUtil.socket.emit("newsPost", data);
+                });
+            }
+        } else {
+            window.error.open("Login Required");
         }
     },
     reply: function(form) {
-        var content = form.find(".input").val();
-        var parent = form.find(".hidden").val();
+        if(config.logged_in) {
+            var content = form.find(".input").val();
+            var parent = form.find(".hidden").val();
 
-        if(content) {
-            $.post("/news/" + parent + "/reply/", {
-                content: content
-            }, function(data) {
-                var post = $(data);
-                post.hide().css("opacity", 0);
+            if(content) {
+                $.post("/news/" + parent + "/reply/", {
+                    content: content
+                }, function(data) {
+                    var post = $(data);
+                    post.hide().css("opacity", 0);
 
-                $("#post_" + parent + " .replies")
-                    .append(post)
-                    .removeClass("hidden");
+                    $("#post_" + parent + " .replies")
+                        .append(post)
+                        .removeClass("hidden");
 
-                post.slideDown(200);
+                    post.slideDown(200);
 
-                setTimeout(function() {
-                    post.animate({ "opacity": 1}, 200)
-                }, 250);
+                    setTimeout(function() {
+                        post.animate({ "opacity": 1}, 200)
+                    }, 250);
 
-                form.find(".input").val("");
+                    form.find(".input").val("");
 
-                window.socketUtil.socket.emit("newsReply", {
-                    parent: parent,
-                    content: data
+                    window.socketUtil.socket.emit("newsReply", {
+                        parent: parent,
+                        content: data
+                    });
                 });
-            });
+            }
+        } else {
+            window.error.open("Login Required");
         }
     },
     like: function(element) {
-        var post = element.parents(".post").attr("data-id");
-        var like = !(element.attr("data-like") == "true");
+        if(config.logged_in) {
+            var post = element.parents(".post").attr("data-id");
+            var like = !(element.attr("data-like") == "true");
 
-        element
-            .text((like) ? "Unlike" : "Like")
-            .attr("data-like", like);
+            element
+                .text((like) ? "Unlike" : "Like")
+                .attr("data-like", like);
 
-        $.post("/news/" + post + "/like/", {
-            like: like
-        });
+            $.post("/news/" + post + "/like/", {
+                like: like
+            });
+        } else {
+            window.error.open("Login Required");
+        }
     },
     reply_like: function(element) {
-        var post = element.parents(".reply").attr("data-id");
-        var like = !(element.attr("data-like") == "true");
+        if(config.logged_in) {
+            var post = element.parents(".reply").attr("data-id");
+            var like = !(element.attr("data-like") == "true");
 
-        element
-            .text((like) ? "Unlike" : "Like")
-            .attr("data-like", like);
+            element
+                .text((like) ? "Unlike" : "Like")
+                .attr("data-like", like);
 
-        $.post("/news/" + post + "/like/", {
-            like: like
-        });
+            $.post("/news/" + post + "/like/", {
+                like: like
+            });
+        } else {
+            window.error.open("Login Required");
+        }
     },
     mention: function(element) {
         var post = element.parents(".post");
@@ -185,14 +201,18 @@ window.newsUtil = {
             .focus();
     },
     group: function(element) {
-        if(element.hasClass("activated")) {
-            this.groups.remove(this.groups.indexOf(element.attr("data-id")));
+        var activated = element.hasClass("activated");
+        $(".groups .option").removeClass("activated");
+
+        if(activated) {
+            this.groups = null;
+            element.removeClass("activated");
         } else {
-            this.groups.push(element.attr("data-id"));
+            this.groups = element.attr("data-id");
+            element.addClass("activated");
         }
 
         this.feed(1, true);
-        element.toggleClass("activated");
     },
     tag: function(form) {
         var _this = this;

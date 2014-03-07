@@ -124,6 +124,27 @@ iframe {
 	overflow: auto;
 }
 
+.error_popup {
+    position: fixed !important;
+    z-index: 1000;
+    font-size: 30px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: none;
+    .border-radius(3px);
+    .transition(background);
+
+    &.lighten {
+        color: #000;
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    &.darken {
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
 @font-face {
 	font-family: 'Not Just Groovy';
 	src:url('/fonts/not_just_groovy.eot');

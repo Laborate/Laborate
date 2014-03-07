@@ -66,6 +66,22 @@ $(function() {
     });
 });
 
+window.error = {
+    open: function(message) {
+        _this = window.error;
+        $(".error_popup")
+            .html(message)
+            .vAlign()
+            .hAlign()
+            .fadeIn(300);
+
+        setTimeout(_this.close, 3000);
+    },
+    close: function() {
+        $(".error_popup").fadeOut(300);
+    }
+}
+
 window.socketUtil = {
     socket: null,
     init: function() {
