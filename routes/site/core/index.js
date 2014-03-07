@@ -7,7 +7,7 @@ exports.reload = function(req, res, next) {
             next();
         });
     } else {
-        next();
+        req.routes.auth.util.loginGenerate(req, res, next);
     }
 }
 

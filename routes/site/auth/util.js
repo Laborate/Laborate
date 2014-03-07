@@ -13,8 +13,8 @@ exports.restrictAccess = function(req, res, next) {
                     user.set_recovery(req, res);
                     if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
                             res.redirect("/verify/");
-                    } else {
-                        if(next) next();
+                    } else if(next) {
+                        next();
                     }
                 } else {
                     res.error(401, false, error);
@@ -61,10 +61,9 @@ exports.loginGenerate = function(req, res, next) {
                 if(!error && user.length == 1) {
                     user[0].set_recovery(req, res);
                     req.session.user = user[0];
-                    next();
-                } else {
-                    next();
                 }
+
+                next();
             });
         } else {
             next();
@@ -87,8 +86,8 @@ exports.loginCheck = function(req, res, next) {
                     user[0].set_recovery(req, res);
                     req.session.user = user[0];
                     res.redirect(config.general.default);
-                } else {
-                    if(next) next();
+                } else if(next) {
+                    next();
                 }
             });
         } else {

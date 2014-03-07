@@ -8,7 +8,7 @@ exports.posts = function(req, res, next) {
                     title: "News Feed",
                     header: "news",
                     posts: posts,
-                    user: req.session.user,
+                    user: req.session.user || req.fake_user,
                     config: {
                         auto_pull: false
                     },

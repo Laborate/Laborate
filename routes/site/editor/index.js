@@ -62,6 +62,8 @@ exports.editor = function(req, res, next) {
                         res.error(404);
                     }
                 });
+            } else if(req.param("login")) {
+                res.error(401);
             } else {
                 res.redirect(req.url + "embed/");
             }
