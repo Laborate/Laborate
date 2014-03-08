@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "Kh7Qk6hSmJLxQxkV7OARHTGi2nGDuN40OFL3y6s7HNCJ4hi03P"
+            "secret": "T45huhgHKG9BAJs5WOEHoIlgaPqGsePADrLhXA9optJsxPm4lN"
         }
     },
     "orm": {
@@ -159,7 +159,8 @@
         "notification": "icon-notice-2",
         "preview": "icon-binoculars",
         "image": "icon-image",
-        "reply": "icon-reply"
+        "reply": "icon-reply",
+        "forward": "icon-forward"
     },
     "github": {
         "id": "",

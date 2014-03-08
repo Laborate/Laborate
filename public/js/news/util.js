@@ -99,15 +99,14 @@ window.newsUtil = {
         $(".main .container > .form .preview").toggleClass("activated", preview);
 
         if(preview) {
-            $.ajax({
-                type: "post",
-                url: "/news/preview",
-                data: {
-                    content: form.find("textarea").val()
-                },
-                success: function(data) {
+            $.post("/news/preview", {
+                content: form.find("textarea").val()
+            }, function(data) {
+                if(typeof data == "string") {
                     $(".main .container > .form .previewer").html(data).show();
                     $(".main .container > .form textarea").hide();
+                } else {
+                    window.error.open(data.error_message);
                 }
             });
         } else {
@@ -125,21 +124,25 @@ window.newsUtil = {
                 $.post("/news/create/", {
                     content: content
                 }, function(data) {
-                    var post = $(data);
-                    post.hide().css("opacity", 0);
+                    if(typeof data == "string") {
+                        var post = $(data);
+                        post.hide().css("opacity", 0);
 
-                    $(".main .posts").prepend(post);
-                    post.slideDown(200);
+                        $(".main .posts").prepend(post);
+                        post.slideDown(200);
 
-                    setTimeout(function() {
-                        post.animate({ "opacity": 1}, 200)
-                    }, 250);
+                        setTimeout(function() {
+                            post.animate({ "opacity": 1}, 200)
+                        }, 250);
 
-                    form.find(".previewer").hide().html("");
-                    form.find("textarea").show().val("").trigger('autosize.resize');
-                    form.find(".post").attr("disabled", false);
+                        form.find(".previewer").hide().html("");
+                        form.find("textarea").show().val("").trigger('autosize.resize');
+                        form.find(".post").attr("disabled", false);
 
-                    window.socketUtil.socket.emit("newsPost", data);
+                        window.socketUtil.socket.emit("newsPost", data);
+                    } else {
+                        window.error.open(data.error_message);
+                    }
                 });
             }
         } else {
@@ -155,37 +158,41 @@ window.newsUtil = {
                 $.post("/news/" + parent + "/reply/", {
                     content: content
                 }, function(data) {
-                    var post = $(data);
-                    var comment = $("#post_" + parent + " .bottom .comment");
-                    var count = parseInt(comment.attr("data-count")) + 1;
-                    var counter = "Comments";
+                    if(typeof data == "string") {
+                        var post = $(data);
+                        var comment = $("#post_" + parent + " .bottom .comment");
+                        var count = parseInt(comment.attr("data-count")) + 1;
+                        var counter = "Comments";
 
-                    if(count > 0) {
-                        counter += " <strong>(" + count + ")</strong>";
+                        if(count > 0) {
+                            counter += " <strong>(" + count + ")</strong>";
+                        }
+
+                        comment
+                            .attr("data-count", count)
+                            .html(counter);
+
+                        post.hide().css("opacity", 0);
+
+                        $("#post_" + parent + " .replies")
+                            .append(post)
+                            .removeClass("hidden");
+
+                        post.slideDown(200);
+
+                        setTimeout(function() {
+                            post.animate({ "opacity": 1}, 200)
+                        }, 250);
+
+                        form.find(".input").val("");
+
+                        window.socketUtil.socket.emit("newsReply", {
+                            parent: parent,
+                            content: data
+                        });
+                    } else {
+                        window.error.open(data.error_message);
                     }
-
-                    comment
-                        .attr("data-count", count)
-                        .html(counter);
-
-                    post.hide().css("opacity", 0);
-
-                    $("#post_" + parent + " .replies")
-                        .append(post)
-                        .removeClass("hidden");
-
-                    post.slideDown(200);
-
-                    setTimeout(function() {
-                        post.animate({ "opacity": 1}, 200)
-                    }, 250);
-
-                    form.find(".input").val("");
-
-                    window.socketUtil.socket.emit("newsReply", {
-                        parent: parent,
-                        content: data
-                    });
                 });
             }
         } else {
@@ -203,21 +210,25 @@ window.newsUtil = {
                 counter += " <strong>(" + count + ")</strong>";
             }
 
-            element
-                .html(counter)
-                .attr({
-                    "data-like": like,
-                    "data-count": count
-                });
-
             $.post("/news/" + post + "/like/", {
                 like: like
-            });
+            }, function(data) {
+                if(data.success) {
+                    element
+                        .html(counter)
+                        .attr({
+                            "data-like": like,
+                            "data-count": count
+                        });
 
-            window.socketUtil.socket.emit("newsLike", {
-                like: like,
-                post: post,
-                reply: false
+                    window.socketUtil.socket.emit("newsLike", {
+                        like: like,
+                        post: post,
+                        reply: false
+                    });
+                } else {
+                    window.error.open(data.error_message);
+                }
             });
         } else {
             window.error.open("Please Login or Register");
@@ -236,21 +247,25 @@ window.newsUtil = {
                 counter += " <strong>(" + count + ")</strong>";
             }
 
-            element
-                .html(((like) ? "Unlike" : "Like") + counter)
-                .attr({
-                    "data-like": like,
-                    "data-count": count
-                });
-
             $.post("/news/" + post + "/like/", {
                 like: like
-            });
+            }, function(data) {
+                if(data.success) {
+                    element
+                        .html(((like) ? "Unlike" : "Like") + counter)
+                        .attr({
+                            "data-like": like,
+                            "data-count": count
+                        });
 
-            window.socketUtil.socket.emit("newsLike", {
-                like: like,
-                post: post,
-                reply: true
+                    window.socketUtil.socket.emit("newsLike", {
+                        like: like,
+                        post: post,
+                        reply: true
+                    });
+                } else {
+                    window.error.open(data.error_message);
+                }
             });
         } else {
             window.error.open("Please Login or Register");

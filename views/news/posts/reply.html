@@ -7,6 +7,7 @@
         <img src="<%= child.owner.gravatar %>"/>
     </div>
     <div class="data right">
+        <a href="/news/<%= child.pub_id %>/" class="is_forward <%= icons.forward %>"></a>
         <a class="name" href="/users/<%= child.owner.screen_name %>/">
             <%= child.owner.name %>
         </a>

@@ -246,11 +246,11 @@
                             background: #fff;
                             .border-radius(3px);
 
-                            .is_reply {
+                            .is_reply, .is_forward {
                                 position: absolute;
                                 z-index: 3;
                                 top: 5px;
-                                right: 5px;
+                                right: 10px;
                                 font-size: 20px;
                                 color: darken(@color_body, 10%);
                                 cursor: pointer;
@@ -401,16 +401,26 @@
                                 border-top: solid 1px darken(@color_body, 10%);
 
                                 .reply {
+                                    position: relative;
                                     padding: 15px;
                                     border-top: solid 1px darken(@color_body, 5%);
                                     .clearfix();
 
-                                    &:hover .data .bottom .time {
-                                        opacity: 1;
+                                    &:hover {
+                                        .is_forward,
+                                        .data .bottom .time {
+                                            opacity: 1;
+                                        }
                                     }
 
                                     &:first-child {
                                         border: none;
+                                    }
+
+                                    .is_forward {
+                                        top: 10px;
+                                        opacity: 0;
+                                        .transition(opacity);
                                     }
 
                                     .gravatar {
