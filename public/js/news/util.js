@@ -79,7 +79,7 @@ window.newsUtil = {
         }, 250);
     },
     new_like: function(data) {
-        var like = $("#post_" + data.post + " .bottom ." + ((data.reply) ? "reply-like" : "like"));
+        var like = $("#like_" + data.post);
         var liked = (data.from == config.user) ? data.like : (like.attr("data-like") == "true");
         var counter = liked ? "Unlike" : "Like";
 
@@ -214,8 +214,7 @@ window.newsUtil = {
                     window.socketUtil.socket.emit("newsLike", {
                         like: data.like,
                         count: data.count,
-                        post: post,
-                        reply: reply
+                        post: post
                     });
                 } else {
                     window.error.open(data.error_message);

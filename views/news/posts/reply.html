@@ -24,14 +24,14 @@
                     });
                 %>
                 <% if(liked) { %>
-                    <span class="action reply-like" data-like="true">
+                    <span id="like_<%= child.pub_id %>" class="action reply-like" data-like="true">
                         Unlike
                         <% if(!child.likes.empty) { %>
                             <strong>(<%= child.likes.length %>)</strong>
                         <% } %>
                     </span>
                 <% } else { %>
-                    <span class="action reply-like" data-like="false">
+                    <span id="like_<%= child.pub_id %>" class="action reply-like" data-like="false">
                         Like
                         <% if(!child.likes.empty) { %>
                             <strong>(<%= child.likes.length %>)</strong>

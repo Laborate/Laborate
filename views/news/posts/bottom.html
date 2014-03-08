@@ -10,14 +10,14 @@
             });
         %>
         <% if(liked) { %>
-            <span class="action like" data-like="true">
+            <span id="like_<%= post.pub_id %>" class="action like" data-like="true">
                 Unlike
                 <% if(!post.likes.empty) { %>
                     <strong>(<%= post.likes.length %>)</strong>
                 <% } %>
             </span>
         <% } else { %>
-            <span class="action like" data-like="false">
+            <span id="like_<%= post.pub_id %>" class="action like" data-like="false">
                 Like
                 <% if(!post.likes.empty) { %>
                     <strong>(<%= post.likes.length %>)</strong>
