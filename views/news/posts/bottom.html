@@ -10,12 +10,27 @@
             });
         %>
         <% if(liked) { %>
-            <span class="action like" data-like="true">Unlike</span>
+            <span class="action like" data-like="true" data-count="<%= post.likes.length %>">
+                Unlike
+                <% if(!post.likes.empty) { %>
+                    <strong>(<%= post.likes.length %>)</strong>
+                <% } %>
+            </span>
         <% } else { %>
-            <span class="action like" data-like="false">Like</span>
+            <span class="action like" data-like="false" data-count="<%= post.likes.length %>">
+                Like
+                <% if(!post.likes.empty) { %>
+                    <strong>(<%= post.likes.length %>)</strong>
+                <% } %>
+            </span>
         <% } %>
         <span><%= site_delimeter %></span>
-        <span class="action comment">Comment</span>
+        <span class="action comment" data-count="<%= post.children.length %>">
+            Comment
+            <% if(!post.children.empty) { %>
+                <strong>(<%= post.children.length %>)</strong>
+            <% } %>
+        </span>
         <span><%= site_delimeter %></span>
         <span class="action share">Share</span>
     </div>

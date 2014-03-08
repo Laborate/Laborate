@@ -246,11 +246,17 @@ exports.like = function(req, res, next) {
 
             req.models.users.get(req.session.user.id, function(error, user) {
                 if(!error && user) {
-                    if(like) {
-                        post.addLikes(user, req.error.capture);
-                    } else {
-                        post.removeLikes(user, req.error.capture);
-                    }
+                    post.hasLikes(user, function(error, liked) {
+                        if(!error) {
+                            if(like && !liked) {
+                                post.addLikes(user, req.error.capture);
+                            } else if(liked) {
+                                post.removeLikes(user, req.error.capture);
+                            }
+                        } else {
+                            req.error.capture(error);
+                        }
+                    });
 
                     res.json({
                         success: true

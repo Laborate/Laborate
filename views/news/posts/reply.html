@@ -23,9 +23,19 @@
                     });
                 %>
                 <% if(liked) { %>
-                    <span class="action reply-like" data-like="true">Unlike</span>
+                    <span class="action reply-like" data-like="true" data-count="<%= child.likes.length %>">
+                        Unlike
+                        <% if(!child.likes.empty) { %>
+                            <strong>(<%= child.likes.length %>)</strong>
+                        <% } %>
+                    </span>
                 <% } else { %>
-                    <span class="action reply-like" data-like="false">Like</span>
+                    <span class="action reply-like" data-like="false" data-count="<%= child.likes.length %>">
+                        Like
+                        <% if(!child.likes.empty) { %>
+                            <strong>(<%= child.likes.length %>)</strong>
+                        <% } %>
+                    </span>
                 <% } %>
                 <span><%= site_delimeter %></span>
                 <span class="action mention">Mention</span>

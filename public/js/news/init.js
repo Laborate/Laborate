@@ -11,6 +11,7 @@ $(function() {
     window.socketUtil.socket.on("connect", window.socketUtil.connect);
     window.socketUtil.socket.on("reconnect", window.socketUtil.connect);
     window.socketUtil.socket.on("newsReply", window.newsUtil.new_reply);
+    window.socketUtil.socket.on("newsLike", window.newsUtil.new_like);
 
     if(config.auto_pull) {
         window.newsUtil.feed(1);

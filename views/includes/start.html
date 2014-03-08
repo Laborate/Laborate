@@ -69,6 +69,7 @@
                 apps: <%- JSON.stringify(apps) %>,
                 icons: <%- JSON.stringify(icons) %>,
                 logged_in: <%= (user && !user.fake) ? true : false %>,
+                user: "<%= (user && !user.fake) ? user.pub_id : "" %>",
 
                 <% $.each(config, function(key, value) { %>
                     <% if(typeof value == "boolean") { %>

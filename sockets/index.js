@@ -28,6 +28,7 @@ module.exports = function(app) {
     app.io.route('newsJoin', news.join);
     app.io.route('newsPost', news.post);
     app.io.route('newsReply', news.reply);
+    app.io.route('newsLike', news.like);
 
     /* Connect */
     app.io.route('connected', core.track);

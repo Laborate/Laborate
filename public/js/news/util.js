@@ -54,6 +54,18 @@ window.newsUtil = {
     },
     new_reply: function(data) {
         var post = $(data.content);
+        var comment = $("#post_" + data.parent + " .bottom .comment");
+        var count = parseInt(comment.attr("data-count")) + 1;
+        var counter = "Comment";
+
+        if(count > 0) {
+            counter += " <strong>(" + count + ")</strong>";
+        }
+
+        comment
+            .attr("data-count", count)
+            .html(counter);
+
         post.hide().css("opacity", 0);
 
         $("#post_" + data.parent + " .replies")
@@ -65,6 +77,23 @@ window.newsUtil = {
         setTimeout(function() {
             post.animate({ "opacity": 1}, 200)
         }, 250);
+    },
+    new_like: function(data) {
+        var like = $("#post_" + data.post + " .bottom ." + ((data.reply) ? "reply-like" : "like"));
+        var liked = (data.from == config.user) ? data.like : (like.attr("data-like") == "true");
+        var count = parseInt(like.attr("data-count")) + ((data.like) ? 1 : -1);
+        var counter = liked ? "Unlike" : "Like";
+
+        if(count > 0) {
+            counter += " <strong>(" + count + ")</strong>";
+        }
+
+        like
+            .html(counter)
+            .attr({
+                "data-like": liked,
+                "data-count": count
+            });
     },
     preview: function(preview, form) {
         $(".main .container > .form .preview").toggleClass("activated", preview);
@@ -127,6 +156,18 @@ window.newsUtil = {
                     content: content
                 }, function(data) {
                     var post = $(data);
+                    var comment = $("#post_" + parent + " .bottom .comment");
+                    var count = parseInt(comment.attr("data-count")) + 1;
+                    var counter = "Comment";
+
+                    if(count > 0) {
+                        counter += " <strong>(" + count + ")</strong>";
+                    }
+
+                    comment
+                        .attr("data-count", count)
+                        .html(counter);
+
                     post.hide().css("opacity", 0);
 
                     $("#post_" + parent + " .replies")
@@ -155,29 +196,61 @@ window.newsUtil = {
         if(config.logged_in) {
             var post = element.parents(".post").attr("data-id");
             var like = !(element.attr("data-like") == "true");
+            var count = parseInt(element.attr("data-count")) + ((like) ? 1 : -1);
+            var counter = (like) ? "Unlike" : "Like";
+
+            if(count > 0) {
+                counter += " <strong>(" + count + ")</strong>";
+            }
 
             element
-                .text((like) ? "Unlike" : "Like")
-                .attr("data-like", like);
+                .html(counter)
+                .attr({
+                    "data-like": like,
+                    "data-count": count
+                });
 
             $.post("/news/" + post + "/like/", {
                 like: like
+            });
+
+            window.socketUtil.socket.emit("newsLike", {
+                like: like,
+                post: post,
+                reply: false
             });
         } else {
             window.error.open("Login Required");
         }
     },
     reply_like: function(element) {
+        window.debug = element;
+
         if(config.logged_in) {
             var post = element.parents(".reply").attr("data-id");
             var like = !(element.attr("data-like") == "true");
+            var count = parseInt(element.attr("data-count")) + ((like) ? 1 : -1);
+            var counter = "";
+
+            if(count > 0) {
+                counter += " <strong>(" + count + ")</strong>";
+            }
 
             element
-                .text((like) ? "Unlike" : "Like")
-                .attr("data-like", like);
+                .html(((like) ? "Unlike" : "Like") + counter)
+                .attr({
+                    "data-like": like,
+                    "data-count": count
+                });
 
             $.post("/news/" + post + "/like/", {
                 like: like
+            });
+
+            window.socketUtil.socket.emit("newsLike", {
+                like: like,
+                post: post,
+                reply: true
             });
         } else {
             window.error.open("Login Required");
