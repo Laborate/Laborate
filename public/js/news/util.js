@@ -81,19 +81,15 @@ window.newsUtil = {
     new_like: function(data) {
         var like = $("#post_" + data.post + " .bottom ." + ((data.reply) ? "reply-like" : "like"));
         var liked = (data.from == config.user) ? data.like : (like.attr("data-like") == "true");
-        var count = parseInt(like.attr("data-count")) + ((data.like) ? 1 : -1);
         var counter = liked ? "Unlike" : "Like";
 
-        if(count > 0) {
-            counter += " <strong>(" + count + ")</strong>";
+        if(data.count > 0) {
+            counter += " <strong>(" + data.count + ")</strong>";
         }
 
         like
             .html(counter)
-            .attr({
-                "data-like": liked,
-                "data-count": count
-            });
+            .attr("data-like", liked);
     },
     preview: function(preview, form) {
         $(".main .container > .form .preview").toggleClass("activated", preview);
@@ -199,69 +195,27 @@ window.newsUtil = {
             window.error.open("Please Login or Register");
         }
     },
-    like: function(element) {
+    like: function(element, reply) {
         if(config.logged_in) {
-            var post = element.parents(".post").attr("data-id");
-            var like = !(element.attr("data-like") == "true");
-            var count = parseInt(element.attr("data-count")) + ((like) ? 1 : -1);
-            var counter = (like) ? "Unlike" : "Like";
+            var post = element.parents((reply) ? ".reply" : ".post").attr("data-id");
 
-            if(count > 0) {
-                counter += " <strong>(" + count + ")</strong>";
-            }
-
-            $.post("/news/" + post + "/like/", {
-                like: like
-            }, function(data) {
+            $.post("/news/" + post + "/like/", function(data) {
                 if(data.success) {
+                    var counter = (data.like) ? "Unlike" : "Like";
+
+                    if(data.count > 0) {
+                        counter += " <strong>(" + data.count + ")</strong>";
+                    }
+
                     element
                         .html(counter)
-                        .attr({
-                            "data-like": like,
-                            "data-count": count
-                        });
+                        .attr("data-like", data.like);
 
                     window.socketUtil.socket.emit("newsLike", {
-                        like: like,
+                        like: data.like,
+                        count: data.count,
                         post: post,
-                        reply: false
-                    });
-                } else {
-                    window.error.open(data.error_message);
-                }
-            });
-        } else {
-            window.error.open("Please Login or Register");
-        }
-    },
-    reply_like: function(element) {
-        window.debug = element;
-
-        if(config.logged_in) {
-            var post = element.parents(".reply").attr("data-id");
-            var like = !(element.attr("data-like") == "true");
-            var count = parseInt(element.attr("data-count")) + ((like) ? 1 : -1);
-            var counter = "";
-
-            if(count > 0) {
-                counter += " <strong>(" + count + ")</strong>";
-            }
-
-            $.post("/news/" + post + "/like/", {
-                like: like
-            }, function(data) {
-                if(data.success) {
-                    element
-                        .html(((like) ? "Unlike" : "Like") + counter)
-                        .attr({
-                            "data-like": like,
-                            "data-count": count
-                        });
-
-                    window.socketUtil.socket.emit("newsLike", {
-                        like: like,
-                        post: post,
-                        reply: true
+                        reply: reply
                     });
                 } else {
                     window.error.open(data.error_message);

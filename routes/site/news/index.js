@@ -246,24 +246,31 @@ exports.like = function(req, res, next) {
     }, function(error, posts) {
         if(!error && !posts.empty) {
             var post = posts[0];
-            var like = (req.param("like") == "true");
 
             req.models.users.get(req.session.user.id, function(error, user) {
                 if(!error && user) {
                     post.hasLikes(user, function(error, liked) {
                         if(!error) {
-                            if(like && !liked) {
+                            if(!liked) {
                                 post.addLikes(user, req.error.capture);
-                            } else if(liked) {
+
+                                res.json({
+                                    success: true,
+                                    like: true,
+                                    count: post.likes.length + 1
+                                });
+                            } else {
                                 post.removeLikes(user, req.error.capture);
+
+                                res.json({
+                                    success: true,
+                                    like: false,
+                                    count: post.likes.length - 1
+                                });
                             }
                         } else {
                             req.error.capture(error);
                         }
-                    });
-
-                    res.json({
-                        success: true
                     });
                 } else {
                     res.error(404, null, error);

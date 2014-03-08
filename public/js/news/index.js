@@ -10,11 +10,11 @@ $(function() {
     });
 
     $(".main .container > .posts").on("click", ".like", function() {
-        window.newsUtil.like($(this));
+        window.newsUtil.like($(this), false);
     });
 
     $(".main .container > .posts").on("click", ".reply-like", function() {
-        window.newsUtil.reply_like($(this));
+        window.newsUtil.like($(this), true);
     });
 
     $(".main .container > .posts").on("click", ".mention", function() {
