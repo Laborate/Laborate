@@ -67,6 +67,7 @@ $(function() {
 });
 
 window.error = {
+    timer: null,
     open: function(message) {
         _this = window.error;
         $(".error_popup")
@@ -75,7 +76,8 @@ window.error = {
             .hAlign()
             .fadeIn(300);
 
-        setTimeout(_this.close, 3000);
+        if(_this.timer) clearTimeout(_this.timer);
+        _this.timer = setTimeout(_this.close, 3000);
     },
     close: function() {
         $(".error_popup").fadeOut(300);
