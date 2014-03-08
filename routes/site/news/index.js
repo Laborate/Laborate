@@ -14,8 +14,7 @@ exports.index = function(req, res, next) {
 
 exports.post = function(req, res, next) {
     req.models.posts.find({
-        pub_id: req.param("post"),
-        parent_id: null
+        pub_id: req.param("post")
     }, function(error, posts) {
         if(!error && !posts.empty) {
             res.renderOutdated('news/post', {
@@ -23,7 +22,7 @@ exports.post = function(req, res, next) {
                 header: "news",
                 posts: posts,
                 user: req.session.user || req.fake_user,
-                allow_replies: false,
+                allow_replies: true,
                 config: {
                     auto_pull: false
                 },

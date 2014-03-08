@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "0GZ0WC4KVbZOZs94cf0VTBwhF0M8JANPcVEkn6kuxvmV8vfKge"
+            "secret": "bcwDVTSgpVNxVwbB7Rny9hiPkNU0NfAZu46cduWQmRCWD1X14I"
         }
     },
     "orm": {
@@ -149,7 +149,6 @@
         "terminal": "icon-window",
         "public": "icon-users",
         "tracking": "icon-binoculars",
-        "trending": "icon-stats-2",
         "news_feed": "icon-chat",
         "documents": "icon-folder",
         "groups": "icon-users",
@@ -240,10 +239,6 @@
             "reset": {
                 "freq": "monthly",
                 "priority": 0.7
-            },
-            "trending": {
-                "freq": "monthly",
-                "priority": 1
             },
             "documents": {
                 "freq": "hourly",
