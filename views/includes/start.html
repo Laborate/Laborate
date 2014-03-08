@@ -98,6 +98,17 @@
                 });
             <% } %>
         </script>
+
+        <!-- Distance.io -->
+        <script type='text/javascript' src='http://distance.io/js/distance.js'></script>
+        <script type='text/javascript'>
+            var distanceTracker = Distance.getTracker(null, 'undefined', {
+                'user': 'bvallelunga',  // OPTIONAL
+            });
+            //distanceTracker.trackPageView();
+        </script>
+        <!-- End Distance.io Tracking Code -->
+
     </head>
     <body class="<%= (organization.id) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %> <%= (embed) ? "embed" : "" %>">
         <% if(production) { %>
