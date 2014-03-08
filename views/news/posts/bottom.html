@@ -25,12 +25,12 @@
             </span>
         <% } %>
         <span><%= site_delimeter %></span>
-        <span class="action comment" data-count="<%= post.children.length %>">
-            Comment
+        <a href="/news/<%= post.pub_id %>/" class="action comment" data-count="<%= post.children.length %>">
+            Comments
             <% if(!post.children.empty) { %>
                 <strong>(<%= post.children.length %>)</strong>
             <% } %>
-        </span>
+        </a>
         <span><%= site_delimeter %></span>
         <span class="action share">Share</span>
     </div>

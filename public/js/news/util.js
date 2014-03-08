@@ -143,7 +143,7 @@ window.newsUtil = {
                 });
             }
         } else {
-            window.error.open("Login Required");
+            window.error.open("Please Login or Register");
         }
     },
     reply: function(form) {
@@ -158,7 +158,7 @@ window.newsUtil = {
                     var post = $(data);
                     var comment = $("#post_" + parent + " .bottom .comment");
                     var count = parseInt(comment.attr("data-count")) + 1;
-                    var counter = "Comment";
+                    var counter = "Comments";
 
                     if(count > 0) {
                         counter += " <strong>(" + count + ")</strong>";
@@ -189,7 +189,7 @@ window.newsUtil = {
                 });
             }
         } else {
-            window.error.open("Login Required");
+            window.error.open("Please Login or Register");
         }
     },
     like: function(element) {
@@ -220,7 +220,7 @@ window.newsUtil = {
                 reply: false
             });
         } else {
-            window.error.open("Login Required");
+            window.error.open("Please Login or Register");
         }
     },
     reply_like: function(element) {
@@ -253,7 +253,7 @@ window.newsUtil = {
                 reply: true
             });
         } else {
-            window.error.open("Login Required");
+            window.error.open("Please Login or Register");
         }
     },
     mention: function(element) {
@@ -266,12 +266,6 @@ window.newsUtil = {
         } else {
             input.val("@" + reply.attr("data-from"));
         }
-    },
-    comment: function(element) {
-        element
-            .parents(".post")
-            .find(".comment .input")
-            .focus();
     },
     group: function(element) {
         var activated = element.hasClass("activated");

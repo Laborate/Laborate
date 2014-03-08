@@ -1,5 +1,5 @@
 <% $.each(posts, function(index, post) { %>
-    <% if(!post.parent) { %>
+    <% if(allow_replies || !post.parent) { %>
         <div id="post_<%= post.pub_id %>"
             data-id="<%= post.pub_id %>"
             data-from="<%= post.owner.screen_name %>"
@@ -13,6 +13,9 @@
                     <%= post.owner.name %>
                 </a>
                 <div class="bubble">
+                    <% if(post.parent) { %>
+                        <a href="/news/<%= post.parent.pub_id %>/" class="is_reply <%= icons.reply %>"></a>
+                    <% } %>
                     <div class="arrow"></div>
                     <div class="information"><%- post.content %></div>
                     <% include ./bottom.html %>

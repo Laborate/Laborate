@@ -17,5 +17,10 @@ $(function() {
         window.newsUtil.feed(1);
         $(window).scroll(window.newsUtil.scroll);
         window.socketUtil.socket.on("newsPost", window.newsUtil.new_post);
+        window.addEventListener('popstate', function() {
+            if(event.state) {
+                window.newsUtil.feed(1, true);
+            }
+        }, false);
     }
 });

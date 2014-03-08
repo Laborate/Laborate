@@ -3,6 +3,7 @@ exports.index = function(req, res, next) {
         title: "News Feed",
         header: "news",
         user: req.session.user || req.fake_user,
+        allow_replies: false,
         config: {
             auto_pull: true
         },
@@ -22,6 +23,7 @@ exports.post = function(req, res, next) {
                 header: "news",
                 posts: posts,
                 user: req.session.user || req.fake_user,
+                allow_replies: false,
                 config: {
                     auto_pull: false
                 },
@@ -48,7 +50,8 @@ exports.posts = function(req, res, next) {
                 res.renderOutdated('news/posts/index', {
                     posts: posts,
                     user: req.session.user || req.fake_user,
-                    restrict: true
+                    restrict: true,
+                    allow_replies: false
                 });
             } else {
                 res.error(404, null, error);
@@ -141,7 +144,8 @@ exports.posts = function(req, res, next) {
                 res.renderOutdated('news/posts/index', {
                     posts: total_posts,
                     user: req.session.user || req.fake_user,
-                    restrict: true
+                    restrict: true,
+                    allow_replies: false
                 });
             } else {
                 res.error(404, null, errors);
@@ -176,6 +180,7 @@ exports.create = function(req, res, next) {
                         posts: [post],
                         user: req.session.user,
                         restrict: true,
+                        allow_replies: false
                     });
                 } else {
                     res.error(404, null, error);

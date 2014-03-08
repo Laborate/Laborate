@@ -21,10 +21,6 @@ $(function() {
         window.newsUtil.mention($(this));
     });
 
-    $(".main .container > .posts").on("click", ".comment", function() {
-        window.newsUtil.comment($(this));
-    });
-
     $(".main .container > .form .preview").click(function() {
         window.newsUtil.preview(!$(this).hasClass("activated"), $(this).parents(".form"));
     });

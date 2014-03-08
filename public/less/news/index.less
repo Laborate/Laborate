@@ -193,6 +193,7 @@
 
             & > .posts {
                 .post {
+                    position: relative;
                     margin-bottom: 55px;
                     .clearfix();
 
@@ -235,6 +236,25 @@
                             border: solid 2px darken(@color_body, 10%);
                             background: #fff;
                             .border-radius(3px);
+
+                            .is_reply {
+                                position: absolute;
+                                z-index: 3;
+                                top: 5px;
+                                right: 5px;
+                                font-size: 16px;
+                                color: darken(@color_body, 10%);
+                                cursor: pointer;
+                                .transition(color);
+
+                                &:hover {
+                                    color: @color_blue;
+
+                                    &:active {
+                                        color: darken(@color_blue, 10%);
+                                    }
+                                }
+                            }
 
                             .arrow {
                                 content: "";

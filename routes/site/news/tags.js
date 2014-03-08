@@ -1,14 +1,13 @@
 exports.posts = function(req, res, next) {
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
-        tag.getPosts().order("-created").where({
-                parent_id: null
-        }).run(function(error, posts) {
+        tag.getPosts().order("-created").run(function(error, posts) {
             if(!error && !posts.empty) {
                 res.renderOutdated('news/post', {
                     title: "News Feed",
                     header: "news",
                     posts: posts,
                     user: req.session.user || req.fake_user,
+                    allow_replies: true,
                     config: {
                         auto_pull: false
                     },
