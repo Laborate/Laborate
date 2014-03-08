@@ -251,23 +251,22 @@ exports.like = function(req, res, next) {
                 if(!error && user) {
                     post.hasLikes(user, function(error, liked) {
                         if(!error) {
+                            var count = post.likes.length;
+
                             if(!liked) {
                                 post.addLikes(user, req.error.capture);
+                                count++;
 
-                                res.json({
-                                    success: true,
-                                    like: true,
-                                    count: post.likes.length + 1
-                                });
                             } else {
                                 post.removeLikes(user, req.error.capture);
-
-                                res.json({
-                                    success: true,
-                                    like: false,
-                                    count: post.likes.length - 1
-                                });
+                                count--;
                             }
+
+                            res.json({
+                                success: true,
+                                like: !liked,
+                                count: count
+                            });
                         } else {
                             req.error.capture(error);
                         }
