@@ -280,3 +280,27 @@ exports.like = function(req, res, next) {
         }
     });
 }
+
+exports.share = function(req, res, next) {
+    req.models.posts.find({
+        pub_id: req.param("post")
+    }, function(error, posts) {
+        if(!error && !posts.empty) {
+            var post = posts[0];
+
+            post.shortner(function(error, url) {
+                if(!error && url) {
+                    res.renderOutdated('news/posts/share', {
+                        post: post,
+                        share: url,
+                        host: req.host
+                    });
+                } else {
+                    res.error(404, null, error);
+                }
+            });
+        } else {
+            res.error(404, null, error);
+        }
+    });
+}

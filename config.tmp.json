@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "O60XUenckh0k4EctQgmVqJG0id2618qqJo5Hy7gnhC6h8nhwgA"
+            "secret": "5Ep0ur3y1rzUXVq2fuWZ9CzrE8sm1CB09eSvmrS1Q9zNmKuyyt"
         }
     },
     "orm": {
@@ -278,16 +278,12 @@
             "enabled": true
         },
         "twitter": {
-            "link": "https://twitter.com/Laborate_io",
+            "link": "https://twitter.com/laborateio",
             "enabled": true
         },
         "google_plus": {
             "link": "https://plus.google.com/110415483446798636481",
             "enabled": true
-        },
-        "tumblr": {
-            "link": "",
-            "enabled": false
         }
     },
     "feedback": {

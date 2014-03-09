@@ -21,6 +21,14 @@ $(function() {
         window.newsUtil.mention($(this));
     });
 
+    $(".main .container > .posts").on("click", ".share", function() {
+        window.newsUtil.share($(this));
+    });
+
+    $(".main .container").on("click", ".share_popup img", function() {
+        window.newsUtil.social($(this));
+    });
+
     $(".main .container > .form .preview").click(function() {
         window.newsUtil.preview(!$(this).hasClass("activated"), $(this).parents(".form"));
     });

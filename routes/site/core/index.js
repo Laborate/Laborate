@@ -27,6 +27,18 @@ exports.organization = function(req, res, next) {
     }
 }
 
+exports.shortner = function(req, res, next) {
+    req.models.shortner.find({
+        pub_id: req.param("code")
+    }, 1, function(error, shortned) {
+        if(!error, !shortned.empty) {
+            res.redirect(shortned[0].url);
+        } else {
+            res.error(404, null, error);
+        }
+    });
+}
+
 exports.sitemap = function(req, res, next) {
     req.sitemap(req, function(xml) {
         res.set('Content-Type', 'application/xml');

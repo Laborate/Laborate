@@ -235,6 +235,71 @@ window.newsUtil = {
             input.val("@" + reply.attr("data-from"));
         }
     },
+    share: function(element) {
+        var post = element.parents(".post").attr("data-id");
+
+        $.get("/news/" + post + "/share/", function(data) {
+            if(typeof data == "string") {
+                var popup = $(data);
+                var container = $(".main .container");
+                var offset = element.offset();
+                var offset_container = container.offset();
+                var timer = setTimeout(function() {
+                    popup.fadeIn(300);
+
+                    setTimeout(function() {
+                        popup.remove();
+                    }, 350);
+                }, 20000);
+
+                container.append(popup);
+                popup.fadeIn(300);
+
+                popup
+                    .css({
+                        top: (offset.top - offset_container.top - popup.outerHeight(true) - 10),
+                        left: (offset.left - offset_container.left + (element.width()/2) - (popup.outerWidth(true)/2))
+                    })
+                    .mouseenter(function() {
+                        clearTimeout(timer);
+                    })
+                    .mouseleave(function() {
+                        popup.fadeOut(300);
+
+                        setTimeout(function() {
+                            popup.remove();
+                        }, 350);
+                    });
+            } else {
+                window.error.open(data.error_message);
+            }
+        });
+    },
+    social: function(element) {
+        var url = "";
+        var post = element.parents(".share_popup").attr("data-post");
+
+        switch(element.attr("data-id")) {
+            case "facebook":
+                url = "https://www.facebook.com/sharer/sharer.php?";
+                url += "u=" + config.host + "/news/" + post + "/";
+                break;
+
+            case "twitter":
+                url = "https://twitter.com/intent/tweet?";
+                url += "text=@laborateio";
+                url += "&related=laborateio";
+                url += "&url=" + config.host + "/news/" + post + "/";
+                break;
+
+            case "google_plus":
+                url = "https://plus.google.com/share?";
+                url += "url=" + config.host + "/news/" + post + "/";
+                break;
+        }
+
+        window.open(url, "sharer", "toolbar=0,status=0,width=500,height=400");
+    },
     group: function(element) {
         var activated = element.hasClass("activated");
         $(".groups .option").removeClass("activated");

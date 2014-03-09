@@ -1,0 +1,8 @@
+<div class="share_popup" data-post="<%= post.pub_id %>">
+    <input class="input" value="<%= host %>/s/<%= share %>" placeholder="share url..." readonly="readonly" />
+    <div class="social">
+        <% $.each(social, function(key, social) { %>
+            <img data-id="<%= key %>" src="/img/social/<%= key %>.png"/>
+        <% }); %>
+    </div>
+</div>
