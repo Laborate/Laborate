@@ -1,6 +1,8 @@
 <% if(!user.fake) { %>
     <div class="filter groups">
-        <div class="header">Groups</div>
+        <div class="header">
+            Groups <a href="/groups/add/" class="right <%= icons.add %>"></a>
+        </div>
         <div class="options">
             <% $.each(user.groups, function(index, group) { %>
                 <div class="option" data-id="<%= group.pub_id %>">
