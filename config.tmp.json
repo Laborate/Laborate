@@ -33,7 +33,7 @@
         ],
         "backdrop": "blurry",
         "hiring": false,
-        "default": ""
+        "default": "/news/"
     },
     "development": {
         "basicAuth": {
@@ -57,20 +57,22 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "UMXXq6afdNamMDvXM81uZHpf1DxuVDu0MPv8xucPp6DhhgwWi3"
+            "secret": "CmQ0lAoLb8nNSOLnDv8kaFLZDZadsnkw5GyvaxZBkROF1dXSac"
         }
     },
     "orm": {
         "reset": true,
-        "preload": "",
-        "sync": "",
-        "debug": "",
+        "preload": false,
+        "sync": true,
+        "debug": false,
         "protocol": "mysql",
         "host": "127.0.0.1",
         "database": "",
         "user": "",
         "password": "",
-        "query": {},
+        "query": {
+            "pool": true
+        },
         "timezone": ""
     },
     "stripe": {
@@ -178,7 +180,6 @@
         "secret": "",
         "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY"
     },
-    "nodetime": "d4d9e81534b285f634d161ed18d52a37dd292a2f",
     "email": {
         "from": "noreply@laborate.io",
         "mode": "SMTP",
