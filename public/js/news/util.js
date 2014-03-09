@@ -41,18 +41,22 @@ window.newsUtil = {
         }
     },
     new_post: function(data) {
-        var post = $(data);
-        post.find(".comment .gravatar img").attr("src", config.gravatar);
-        post.hide().css("opacity", 0);
+        var _this = window.newsUtil;
+        if(_this.group == data.group) {
+            var post = $(data.content);
+            post.find(".comment .gravatar img").attr("src", config.gravatar);
+            post.hide().css("opacity", 0);
 
-        $(".main .posts").prepend(post);
-        post.slideDown(200);
+            $(".main .posts").prepend(post);
+            post.slideDown(200);
 
-        setTimeout(function() {
-            post.animate({ "opacity": 1}, 200)
-        }, 250);
+            setTimeout(function() {
+                post.animate({ "opacity": 1}, 200)
+            }, 250);
+        }
     },
     new_reply: function(data) {
+        var _this = window.newsUtil;
         var post = $(data.content);
         var comment = $("#post_" + data.parent + " .bottom .comment");
         var count = parseInt(comment.attr("data-count")) + 1;
@@ -79,6 +83,7 @@ window.newsUtil = {
         }, 250);
     },
     new_like: function(data) {
+        var _this = window.newsUtil;
         var like = $("#like_" + data.post);
         var liked = (data.from == config.user) ? data.like : (like.attr("data-like") == "true");
         var counter = liked ? "Unlike" : "Like";
@@ -112,13 +117,15 @@ window.newsUtil = {
     },
     post: function(form) {
         if(config.logged_in) {
+            var _this = this;
             var content = form.find("textarea").val();
 
             if(content) {
                 form.find(".post").attr("disabled", "disabled");
 
                 $.post("/news/create/", {
-                    content: content
+                    content: content,
+                    group: _this.group
                 }, function(data) {
                     if(typeof data == "string") {
                         var post = $(data);
@@ -135,7 +142,10 @@ window.newsUtil = {
                         form.find("textarea").show().val("").trigger('autosize.resize');
                         form.find(".post").attr("disabled", false);
 
-                        window.socketUtil.socket.emit("newsPost", data);
+                        window.socketUtil.socket.emit("newsPost", {
+                            content: data,
+                            group: _this.group
+                        });
                     } else {
                         window.error.open(data.error_message);
                     }

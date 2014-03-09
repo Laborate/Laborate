@@ -38,152 +38,22 @@ exports.post = function(req, res, next) {
 
 exports.posts = function(req, res, next) {
     var tags = req.param("tags") || [];
-    var group = req.param("group") || null;
     var page = parseInt(req.param("page"));
 
-    if(tags.empty && !group) {
-        req.models.posts.page(page).order("-created").where({
-            parent_id: null
-        }).run(function(error, posts) {
-            if(!error && !posts.empty) {
-                res.renderOutdated('news/posts/index', {
-                    posts: posts,
-                    user: req.session.user || req.fake_user,
-                    restrict: true,
-                    allow_replies: false
-                });
-            } else {
-                res.error(404, null, error);
-            }
-        });
-    } else {
-        var total_posts = [];
-        var total_post_ids = [];
+    req.models.users.groups.find({
+        pub_id: req.param("group")
+    }, 1, function(error, groups) {
+        var group = ((!error && !groups.empty) ? groups[0].id : null);
 
-        async.parallel([
-            //Get Posts Related To Tags
-            function(callback) {
-                if(!tags.empty) {
-                    req.models.posts.tags.page(page).where({
-                        or: $.map(tags, function(tag) {
-                            return {
-                                name: tag
-                            }
-                        })
-                    }).run(function(error, tags) {
-                        if(!error && tags) {
-                            async.each(tags, function(tag, next) {
-                                tag.getPosts().order("-created").where({
-                                    parent_id: null
-                                }).run(function(error, posts) {
-                                    if(!error && posts) {
-                                        async.each(posts, function(post, move) {
-                                            if(total_post_ids.indexOf(post.pub_id) == -1) {
-                                                total_posts.push(post);
-                                                total_post_ids.push(post.pub_id);
-                                            }
-
-                                            move();
-                                        }, next);
-                                    } else {
-                                        next(error);
-                                    }
-                                });
-                            }, callback);
-                        } else {
-                            callback(error);
-                        }
-                    });
-                } else {
-                    callback(null);
-                }
-            },
-
-            //Get Group Related Posts
-            function(callback) {
-                if(group) {
-                    req.models.users.get(req.session.user.id, function(error, user) {
-                        if(!error && user) {
-                            user.getGroups().where({
-                                pub_id: group
-                            }).run(function(error, group) {
-                                if(!error && !group.empty) {
-                                    req.models.posts.page(page).order("-created").where({
-                                        or: $.map(group[0].users, function(laborator) {
-                                            if(laborator.id != user.id) {
-                                                return {
-                                                    owner_id: laborator.id,
-                                                    parent_id: null
-                                                }
-                                            }
-                                        })
-                                    }, function(error, posts) {
-
-                                        if(!error && posts) {
-                                            async.each(posts, function(post, next) {
-                                                if(total_post_ids.indexOf(post.pub_id) == -1) {
-                                                    total_posts.push(post);
-                                                    total_post_ids.push(post.pub_id);
-                                                }
-
-                                                next();
-                                            }, callback);
-                                        } else {
-                                            callback(error);
-                                        }
-                                    });
-                                } else {
-                                    callback(error);
-                                }
-                            });
-                        } else {
-                            callback(error);
-                        }
-                    });
-                } else {
-                    callback(null);
-                }
-            }
-        ], function(errors) {
-            if(!errors && !total_posts.empty) {
-                res.renderOutdated('news/posts/index', {
-                    posts: total_posts,
-                    user: req.session.user || req.fake_user,
-                    restrict: true,
-                    allow_replies: false
-                });
-            } else {
-                res.error(404, null, errors);
-            }
-        });
-    }
-}
-
-exports.preview = function(req, res, next) {
-    res.send(req.markdown(req.param("content")));
-}
-
-exports.create = function(req, res, next) {
-    req.models.posts.create({
-        content: req.markdown(req.param("content")),
-        owner_id: req.session.user.id
-    }, function (error, post) {
-        if(!error && post) {
-            req.models.posts.get(post.id, function(error, post) {
-                if(!error && post) {
-                    var tags = req.markdown_links("tags", req.param("content"));
-
-                    if(!tags.empty) {
-                        $.each(tags, function(index, name) {
-                            req.models.posts.tags.findOrCreate(name, function(error, tag) {
-                                post.addTags(tag, req.error.capture);
-                            });
-                        });
-                    }
-
+        if(tags.empty) {
+            req.models.posts.page(page).order("-created").where({
+                parent_id: null,
+                group_id: group
+            }).run(function(error, posts) {
+                if(!error && !posts.empty) {
                     res.renderOutdated('news/posts/index', {
-                        posts: [post],
-                        user: req.session.user,
+                        posts: posts,
+                        user: req.session.user || req.fake_user,
                         restrict: true,
                         allow_replies: false
                     });
@@ -192,8 +62,95 @@ exports.create = function(req, res, next) {
                 }
             });
         } else {
-            res.error(404, null, error);
+            var total_posts = [];
+            var total_post_ids = [];
+
+            req.models.posts.tags.page(page).where({
+                or: $.map(tags, function(tag) {
+                    return {
+                        name: tag
+                    }
+                })
+            }).run(function(error, tags) {
+                if(!error && tags) {
+                    async.each(tags, function(tag, next) {
+                        tag.getPosts().order("-created").where({
+                            parent_id: null,
+                            group_id: group
+                        }).run(function(error, posts) {
+                            if(!error && posts) {
+                                async.each(posts, function(post, move) {
+                                    if(total_post_ids.indexOf(post.pub_id) == -1) {
+                                        total_posts.push(post);
+                                        total_post_ids.push(post.pub_id);
+                                    }
+
+                                    move();
+                                }, next);
+                            } else {
+                                next(error);
+                            }
+                        });
+                    }, function(errors) {
+                        if(!errors && !total_posts.empty) {
+                            res.renderOutdated('news/posts/index', {
+                                posts: total_posts,
+                                user: req.session.user || req.fake_user,
+                                restrict: true,
+                                allow_replies: false
+                            });
+                        } else {
+                            res.error(404, null, errors);
+                        }
+                    });
+                } else {
+                    res.error(404, null, errors);
+                }
+            });
         }
+    });
+}
+
+exports.preview = function(req, res, next) {
+    res.send(req.markdown(req.param("content")));
+}
+
+exports.create = function(req, res, next) {
+    req.models.users.groups.find({
+        pub_id: req.param("group")
+    }, 1, function(error, groups) {
+        req.models.posts.create({
+            content: req.markdown(req.param("content")),
+            owner_id: req.session.user.id,
+            group_id: ((!error && !groups.empty) ? groups[0].id : null)
+        }, function (error, post) {
+            if(!error && post) {
+                req.models.posts.get(post.id, function(error, post) {
+                    if(!error && post) {
+                        var tags = req.markdown_links("tags", req.param("content"));
+
+                        if(!tags.empty) {
+                            $.each(tags, function(index, name) {
+                                req.models.posts.tags.findOrCreate(name, function(error, tag) {
+                                    post.addTags(tag, req.error.capture);
+                                });
+                            });
+                        }
+
+                        res.renderOutdated('news/posts/index', {
+                            posts: [post],
+                            user: req.session.user,
+                            restrict: true,
+                            allow_replies: false
+                        });
+                    } else {
+                        res.error(404, null, error);
+                    }
+                });
+            } else {
+                res.error(404, null, error);
+            }
+        });
     });
 }
 
