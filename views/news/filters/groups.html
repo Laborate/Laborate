@@ -2,12 +2,12 @@
     <div class="filter groups">
         <div class="header">Groups</div>
         <div class="options">
-            <div class="option" data-id="friends">
-                <div class="gravatar left">
-                    <img src="<%= user.gravatar %>"/>
+            <% $.each(user.groups, function(index, group) { %>
+                <div class="option" data-id="<%= group.pub_id %>">
+                    <div class="icon <%= icons.groups %>"></div>
+                    <div class="name"><%= group.name %></div>
                 </div>
-                <div class="name left">Friends</div>
-            </div>
+            <% }); %>
         </div>
     </div>
 <% } %>
