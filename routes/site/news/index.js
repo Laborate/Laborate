@@ -38,10 +38,10 @@ exports.post = function(req, res, next) {
 
 exports.posts = function(req, res, next) {
     var tags = req.param("tags") || [];
-    var groups = req.param("groups") || [];
+    var group = req.param("group") || null;
     var page = parseInt(req.param("page"));
 
-    if(tags.empty && groups.empty) {
+    if(tags.empty && !group) {
         req.models.posts.page(page).order("-created").where({
             parent_id: null
         }).run(function(error, posts) {
@@ -101,38 +101,44 @@ exports.posts = function(req, res, next) {
 
             //Get Group Related Posts
             function(callback) {
-                if(!groups.empty) {
-                    var laborators = [];
+                if(group) {
+                    req.models.users.get(req.session.user.id, function(error, user) {
+                        if(!error && user) {
+                            user.getGroups().where({
+                                pub_id: group
+                            }).run(function(error, group) {
+                                if(!error && !group.empty) {
+                                    req.models.posts.page(page).order("-created").where({
+                                        or: $.map(group[0].users, function(laborator) {
+                                            if(laborator.id != user.id) {
+                                                return {
+                                                    owner_id: laborator.id,
+                                                    parent_id: null
+                                                }
+                                            }
+                                        })
+                                    }, function(error, posts) {
 
-                    async.each(groups, function(group, next) {
-                        async.each(group, function(laborator, move) {
-                            if(laborators.indexOf(laborator) == -1) {
-                                laborators.push(laborator);
-                            }
+                                        if(!error && posts) {
+                                            async.each(posts, function(post, next) {
+                                                if(total_post_ids.indexOf(post.pub_id) == -1) {
+                                                    total_posts.push(post);
+                                                    total_post_ids.push(post.pub_id);
+                                                }
 
-                            move();
-                        }, next);
-                    }, function() {
-                        req.models.posts.page(page).where({
-                            or: $.map(laborators, function(laborator) {
-                                return {
-                                    owner_id: laborator
+                                                next();
+                                            }, callback);
+                                        } else {
+                                            callback(error);
+                                        }
+                                    });
+                                } else {
+                                    callback(error);
                                 }
-                            })
-                        }, function(error, posts) {
-                            if(!error && posts) {
-                                async.each(posts, function(post, next) {
-                                    if(total_post_ids.indexOf(post.pub_id) == -1) {
-                                        total_posts.push(post);
-                                        total_post_ids.push(post.pub_id);
-                                    }
-
-                                    next();
-                                }, callback);
-                            } else {
-                                callback(error);
-                            }
-                        });
+                            });
+                        } else {
+                            callback(error);
+                        }
                     });
                 } else {
                     callback(null);

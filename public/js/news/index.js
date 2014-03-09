@@ -39,7 +39,7 @@ $(function() {
     });
 
     $(".filters .groups").on("click", ".option", function() {
-        window.newsUtil.group($(this));
+        window.newsUtil.groups($(this));
     });
 
     $(".filters > .tags .form").submit(function(e) {

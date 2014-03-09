@@ -2,7 +2,7 @@ window.newsUtil = {
     page: 0,
     loading: false,
     tags: [],
-    groups: null,
+    group: null,
     feed: function(page, override) {
         var _this = this;
 
@@ -10,7 +10,7 @@ window.newsUtil = {
             _this.loading = true;
 
             $.get("/news/pages/" + page + "/", {
-                groups: _this.groups,
+                group: _this.group,
                 tags: _this.tags
             }, function(data) {
                 if(typeof data == "string") {
@@ -291,15 +291,15 @@ window.newsUtil = {
 
         window.open(url, "sharer", "width=500,height=400,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no");
     },
-    group: function(element) {
+    groups: function(element) {
         var activated = element.hasClass("activated");
         $(".groups .option").removeClass("activated");
 
         if(activated) {
-            this.groups = null;
+            this.group = null;
             element.removeClass("activated");
         } else {
-            this.groups = element.attr("data-id");
+            this.group = element.attr("data-id");
             element.addClass("activated");
         }
 
