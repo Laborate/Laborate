@@ -236,6 +236,7 @@ window.newsUtil = {
         }
     },
     share: function(element) {
+        var _this = this;
         var post = element.parents(".post").attr("data-id");
 
         $.get("/news/" + post + "/share/", function(data) {
@@ -244,40 +245,30 @@ window.newsUtil = {
                 var container = $(".main .container");
                 var offset = element.offset();
                 var offset_container = container.offset();
-                var timer = setTimeout(function() {
-                    popup.fadeIn(300);
-
-                    setTimeout(function() {
-                        popup.remove();
-                    }, 350);
-                }, 20000);
 
                 container.append(popup);
-                popup.fadeIn(300);
-
                 popup
+                    .fadeIn(300)
                     .css({
                         top: (offset.top - offset_container.top - popup.outerHeight(true) - 10),
                         left: (offset.left - offset_container.left + (element.width()/2) - (popup.outerWidth(true)/2))
-                    })
-                    .mouseenter(function() {
-                        clearTimeout(timer);
-                    })
-                    .mouseleave(function() {
-                        popup.fadeOut(300);
-
-                        setTimeout(function() {
-                            popup.remove();
-                        }, 350);
                     });
             } else {
                 window.error.open(data.error_message);
             }
         });
     },
+    share_close: function() {
+        var element = $(".share_popup");
+        element.fadeOut(300);
+
+        setTimeout(function() {
+            element.remove();
+        }, 350);
+    },
     social: function(element) {
-        var url = "";
-        var post = element.parents(".share_popup").attr("data-post");
+        var url,
+            post = element.parents(".share_popup").attr("data-post");
 
         switch(element.attr("data-id")) {
             case "facebook":
@@ -298,7 +289,7 @@ window.newsUtil = {
                 break;
         }
 
-        window.open(url, "sharer", "toolbar=0,status=0,width=500,height=400");
+        window.open(url, "sharer", "width=500,height=400,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no");
     },
     group: function(element) {
         var activated = element.hasClass("activated");

@@ -29,6 +29,11 @@ $(function() {
         window.newsUtil.social($(this));
     });
 
+    $(".main .container").on("click", ".share_popup", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+
     $(".main .container > .form .preview").click(function() {
         window.newsUtil.preview(!$(this).hasClass("activated"), $(this).parents(".form"));
     });
@@ -45,4 +50,6 @@ $(function() {
     $(".filters > .tags").on("click", ".tag .remove", function() {
         window.newsUtil.tag_remove($(this).parents(".tag"));
     });
+
+    $("body").on("click", "*", window.newsUtil.share_close);
 });
