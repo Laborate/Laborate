@@ -265,6 +265,27 @@
                 }
             }
 
+            & > .back {
+                background: @color_news_header;
+                border: solid 1px darken(@color_news_header, 5%);
+                text-align: center;
+                padding: 10px 0;
+                margin-bottom: 25px;
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.8);
+                .border-radius(3px);
+                .box-shadow(0 1px 0 darken(@color_news_header, 10%));
+
+                a:hover {
+                    text-decoration: underline;
+
+                    &:active {
+                        color: #fff;
+                    }
+
+                }
+            }
+
             & > .posts {
                 .post {
                     position: relative;
