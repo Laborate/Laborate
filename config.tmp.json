@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "oB5fDd9b30fAxxkKT5E1ifA7t7Q9X3Toq1OUqTPOWkP5Tgaf4h"
+            "secret": "khZQcbKqfIUywsBrlPysaHQd2Q8o43NrelVh7G9TZu95mbO0cb"
         }
     },
     "orm": {
@@ -104,6 +104,7 @@
         "add_square": "icon-plus",
         "subtract_square": "icon-minus",
         "add_circle": "icon-plus-3",
+        "add_circle_full": "icon-plus-2",
         "add": "icon-plus-4",
         "circle_arrow_up": "icon-arrow-up-2",
         "circle_arrow_down": "icon-arrow-down-2",
@@ -158,7 +159,7 @@
         "admin": "icon-presentation",
         "account": "icon-settings",
         "sign_out": "icon-off",
-        "notification": "icon-notice-2",
+        "notification": "icon-envelope-2",
         "preview": "icon-binoculars",
         "image": "icon-image",
         "reply": "icon-reply",

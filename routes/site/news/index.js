@@ -15,8 +15,10 @@ exports.index = function(req, res, next) {
 exports.post = function(req, res, next) {
     req.models.posts.find({
         pub_id: req.param("post")
-    }, function(error, posts) {
+    }, 1, function(error, posts) {
         if(!error && !posts.empty) {
+            res.locals.favicons.graph = posts[0].owner.gravatar;
+
             res.renderOutdated('news/post', {
                 title: "News Feed",
                 header: "news",
@@ -28,7 +30,8 @@ exports.post = function(req, res, next) {
                 },
                 restrict: false,
                 js: clientJS.renderTags("news", "new-header", "highlight"),
-                css: clientCSS.renderTags("news", "new-header", "highlight")
+                css: clientCSS.renderTags("news", "new-header", "highlight"),
+                description: $(posts[0].content).text()
             });
         } else {
             res.redirect("/news/");

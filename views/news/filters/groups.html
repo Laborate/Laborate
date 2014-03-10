@@ -1,14 +1,16 @@
 <% if(!user.fake) { %>
     <div class="filter groups">
         <div class="header">
-            Groups <a href="/groups/add/" class="right <%= icons.add %>"></a>
+            Groups <a href="/groups/add/" class="right <%= icons.add_circle_full %>"></a>
         </div>
         <div class="options">
             <% $.each(user.groups, function(index, group) { %>
-                <div class="option" data-id="<%= group.pub_id %>">
-                    <div class="icon <%= icons.groups %>"></div>
-                    <div class="name"><%= group.name %></div>
-                </div>
+                <% if(!(group.private && group.owner_id != user.id)) { %>
+                    <div class="option" data-id="<%= group.pub_id %>">
+                        <div class="icon <%= icons.groups %>"></div>
+                        <div class="name"><%= group.name %></div>
+                    </div>
+                <% } %>
             <% }); %>
         </div>
     </div>

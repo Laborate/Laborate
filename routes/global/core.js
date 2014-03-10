@@ -239,6 +239,7 @@ exports.locals = function(req, res, next) {
     res.locals.embed = false;
     res.locals.header = "";
     res.locals.header_class = "";
+    res.locals.image =
 
     res.locals.apps = {
         sftp: {
@@ -266,6 +267,7 @@ exports.locals = function(req, res, next) {
         }
     };
     res.locals.favicons = (!$.isEmptyObject(req.session.organization.icons)) ? req.session.organization.icons : {
+        "graph": res.locals.host + "/favicon/196.png",
         "196": res.locals.host + "/favicon/196.png",
         "160": res.locals.host + "/favicon/160.png",
         "114": res.locals.host + "/favicon/114.png",
