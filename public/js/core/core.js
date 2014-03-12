@@ -31,6 +31,9 @@ $(function() {
         .vAlign()
         .hAlign();
 
+    //AutoGrow Textarea
+    $('textarea.autogrow').autosize();
+
     //Setup Jscroll
     $(".scroll-pane").each(function() {
 		var _this = $(this);

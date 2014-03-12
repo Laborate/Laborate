@@ -22,7 +22,7 @@ exports.index = function(req, res, next) {
 
 exports.create = function(req, res, next) {
     res.renderOutdated('groups/create', {
-        title: "Create Group",
+        title: "Create a Group",
         header: "users",
         js: clientJS.renderTags("groups"),
         css: clientCSS.renderTags("groups"),

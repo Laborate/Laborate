@@ -6,8 +6,6 @@ $.extend(window.socketUtil, {
 
 
 $(function() {
-    $('textarea').autosize();
-
     window.socketUtil.socket.on("connect", window.socketUtil.connect);
     window.socketUtil.socket.on("reconnect", window.socketUtil.connect);
     window.socketUtil.socket.on("newsReply", window.newsUtil.new_reply);
