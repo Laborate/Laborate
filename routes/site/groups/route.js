@@ -4,9 +4,9 @@ module.exports = function(app, routes) {
     var groups = routes.groups;
 
     app.get('/groups', auth.util.restrictAccess, groups.index);
+    app.get('/groups/create', auth.util.restrictAccess, core.reload, groups.create);
     app.get('/groups/:group', auth.util.restrictAccess, core.reload, groups.group);
 
-    //app.get('/groups/add', auth.util.restrictAccess, core.reload, groups.add);
     //app.get('/groups/:group/edit', auth.util.restrictAccess, core.reload, groups.edit);
     //app.get('/groups/:group/leave', auth.util.restrictAccess, core.reload, groups.leave);
     //app.get('/groups/:group/remove', auth.util.restrictAccess, core.reload, groups.remove);

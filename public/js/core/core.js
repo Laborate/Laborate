@@ -26,6 +26,10 @@ $(function() {
         $("body").attr("contenteditable", "false");
     }, 500);
 
+    //Auto Center Module
+    $(".module")
+        .vAlign()
+        .hAlign();
 
     //Setup Jscroll
     $(".scroll-pane").each(function() {

@@ -2,6 +2,10 @@
 <% include ./printout.html %>
 -->
 <%
+    if(typeof title == "object") {
+        title = title.join(site_delimeter);
+    }
+
     if(title_first) {
         title = (title) ? (title + site_delimeter + site_title) : site_title;
     } else {

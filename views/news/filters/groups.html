@@ -1,7 +1,7 @@
 <% if(!user.fake) { %>
     <div class="filter groups">
         <div class="header">
-            Groups <a href="/groups/add/" class="right <%= icons.add_circle_full %>"></a>
+            Groups <a href="/groups/create/" class="right <%= icons.add_circle_full %>"></a>
         </div>
         <div class="options">
             <% $.each(user.groups, function(index, group) { %>

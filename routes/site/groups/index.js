@@ -20,9 +20,21 @@ exports.index = function(req, res, next) {
     });
 }
 
+exports.create = function(req, res, next) {
+    res.renderOutdated('groups/create', {
+        title: "Create Group",
+        header: "users",
+        js: clientJS.renderTags("groups"),
+        css: clientCSS.renderTags("groups"),
+        pageTrack: true
+    });
+}
+
 exports.group = function(req, res, next) {
     var access = !$.map(req.session.user.groups, function(group) {
-        return group.pub_id == req.param("group");
+        if(group.pub_id == req.param("group")) {
+            return true;
+        }
     }).empty;
 
     req.models.users.groups.find({
@@ -31,19 +43,23 @@ exports.group = function(req, res, next) {
         autoFetch: access,
         autoFetchLimit: 2
     }, function(error, groups) {
-        if(!error && !groups.empty) {
+        if(!error) {
             var group = groups[0];
-            var route = (access) ? "group" : "join";
+            var route = (access) ? "group" : "request";
 
-            res.renderOutdated('groups/' + route, {
-                title: group.name + res.locals.site_delimeter  + "Groups",
-                header: "users",
-                group: group,
-                js: clientJS.renderTags("groups"),
-                css: clientCSS.renderTags("groups"),
-                pageTrack: true,
-                background: req.backdrop("blurry")
-            });
+            if(!groups.empty && (access || !group.private)) {
+                res.renderOutdated('groups/' + route, {
+                    title: group.name,
+                    header: "users",
+                    group: group,
+                    js: clientJS.renderTags("groups"),
+                    css: clientCSS.renderTags("groups"),
+                    pageTrack: true,
+                    background: req.backdrop("blurry")
+                });
+            } else {
+                res.redirect("/groups/");
+            }
         } else {
             res.error(404, null, error);
         }

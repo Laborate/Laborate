@@ -29,7 +29,7 @@ exports.terminal = function(req, res, next) {
         var background = (req.cookies.background === "true");
 
         res.renderOutdated('terminal/terminal', {
-            title: location.name + res.locals.site_delimeter + "Terminal",
+            title: location.name,
             user: req.session.user,
             header: "terminal",
             header_class: ((background) ? "lighten" : "darken"),
@@ -48,7 +48,7 @@ exports.embed = function(req, res, next) {
 
     if(location && location.type == "sftp") {
         res.renderOutdated('terminal/embed', {
-            title: location.name + config.general.delimeter.web  + "Terminal",
+            title: location.name,
             user: req.session.user,
             js: clientJS.renderTags("terminal"),
             css: clientCSS.renderTags("terminal"),
