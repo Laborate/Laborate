@@ -1,0 +1,72 @@
+@import '../core/index';
+@import '../compless/all';
+
+.panel {
+    position: absolute;
+    padding: 85px 30px 30px 30px;
+    min-height: 100%;
+    .box-sizing(border-box);
+
+    &.main {
+        width: 70%;
+        background: @color_panels_main;
+
+        &.lefted {
+            left: 0;
+            border-right: solid 1px @color_panels_main_border;
+
+            .container {
+                .float-right();
+            }
+        }
+
+        &.right {
+            right: 0;
+            border-left: solid 1px @color_panels_main_border;
+
+            .container {
+                .float-left();
+            }
+        }
+
+        &.centered {
+            width: 100%;
+
+            .container {
+                float: none;
+                clear: both;
+                display: block;
+                margin: 0 auto;
+                width: 700px !important;
+
+                .post > .data {
+                    width: 625px !important;
+
+                    .reply > .data {
+                        width: 540px !important;
+                    }
+                }
+            }
+        }
+
+        .container {
+            position: relative;
+            width: 650px;
+        }
+
+    }
+
+    &.filters {
+        right: 0;
+        width: 30%;
+        padding-left: 0;
+        background: @color_panels_alternate;
+    }
+
+    &.sidebar {
+        left: 0;
+        width: 30%;
+        padding-left: 0;
+        background: @color_panels_alternate;
+    }
+}

@@ -32,11 +32,11 @@ exports.user = function(req, res, next) {
         if(!error && !users.empty) {
             res.renderOutdated('users/index', {
                 title: users[0].screen_name + " (" + users[0].name + ")",
-                header: "groups",
+                header: "users",
                 header_class: "lighten",
                 laborator: users[0],
-                js: clientJS.renderTags("users", "new-header", "backdrop"),
-                css: clientCSS.renderTags("users", "new-header", "backdrop"),
+                js: clientJS.renderTags("users", "backdrop"),
+                css: clientCSS.renderTags("users", "backdrop"),
                 backdrop: req.backdrop(),
                 pageTrack: true,
                 loggedIn: !!req.session.user

@@ -7,8 +7,8 @@ exports.index = function(req, res, next) {
         config: {
             auto_pull: true
         },
-        js: clientJS.renderTags("news", "new-header", "highlight"),
-        css: clientCSS.renderTags("news", "new-header", "highlight")
+        js: clientJS.renderTags("news", "highlight"),
+        css: clientCSS.renderTags("news", "highlight")
     });
 }
 
@@ -29,8 +29,8 @@ exports.post = function(req, res, next) {
                     auto_pull: false
                 },
                 restrict: false,
-                js: clientJS.renderTags("news", "new-header", "highlight"),
-                css: clientCSS.renderTags("news", "new-header", "highlight"),
+                js: clientJS.renderTags("news", "highlight"),
+                css: clientCSS.renderTags("news", "highlight"),
                 description: $(posts[0].content).text()
             });
         } else {

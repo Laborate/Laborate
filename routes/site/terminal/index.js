@@ -29,7 +29,7 @@ exports.terminal = function(req, res, next) {
         var background = (req.cookies.background === "true");
 
         res.renderOutdated('terminal/terminal', {
-            title: location.name + config.general.delimeter.web  + "Terminal",
+            title: location.name + res.locals.site_delimeter + "Terminal",
             user: req.session.user,
             header: "terminal",
             header_class: ((background) ? "lighten" : "darken"),

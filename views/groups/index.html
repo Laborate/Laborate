@@ -1,0 +1,39 @@
+<% include ../includes/start.html %>
+<% include ../includes/header.html %>
+<div class="panel main">
+    <div class="container">
+        <a href="/groups/add/" class="group blank">
+            <div class="create <%= icons.add_circle_full %>"></div>
+        </a>
+        <% $.each(groups, function(index, group) { %>
+            <% if(!(group.private && group.owner_id != user.id)) { %>
+                <div class="group">
+                    <div class="background" style="<%= background("blurry") %>"></div>
+                    <div class="cover"></div>
+                    <div class="gravatars">
+                        <% $.each(group.users.slice(0, 17), function(index, laborator) { %>
+                            <% if(laborator.id != user.id) { %>
+                                <div class="gravatar" style="background-image: url('<%= laborator.gravatar %>')"></div>
+                            <% } %>
+                        <% }); %>
+                    </div>
+                    <a href="/groups/<%= group.pub_id %>/" class="info">
+                        <% if(group.users.length - 1 > 0) { %>
+                            <div class="count"><%=: group.users.length - 1 | format %></div>
+                        <% } %>
+                        <div class="name"><%= group.name %></div>
+                    </a>
+                    <div class="actions">
+                        <% if(group.owner_id == user.id) { %>
+                            <a href="/groups/<%= group.pub_id %>/edit/" class="action edit">Edit</a>
+                            <a href="/groups/<%= group.pub_id %>/remove/" class="action remove">Remove</a>
+                        <% } else { %>
+                            <a href="/groups/<%= group.pub_id %>/leave/" class="action leave">Leave</a>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        <% }); %>
+    </div>
+</div>
+<% include ../includes/end.html %>

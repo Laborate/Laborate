@@ -121,15 +121,15 @@
         <div class="selection dashboard" data-key="dashboard">
             <div class="container">
                 <div class="side">
-                    <div class="data"><%= user.documents.total %></div>
+                    <div class="data"><%=: user.documents.total | format %></div>
                     <div class="label">document<%= (user.documents.total != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
-                    <div class="data"><%= user.documents.private %></div>
+                    <div class="data"><%=: user.documents.private | format %></div>
                     <div class="label">private document<%= (user.documents.private != 1) ?  "s" : "" %></div>
                 </div>
                 <div class="side">
-                    <div class="data"><%= user.notifications.length %></div>
+                    <div class="data"><%=: user.notifications.length | format %></div>
                     <div class="label">notification<%= (user.notifications.length != 1) ?  "s" : "" %></div>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                                     <div class="action">
                                         <% if(!document.password && document.roles.length - 1 != 0) { %>
                                             <span class="users">
-                                                <%= document.roles.length - 1 %>
+                                                <%=: document.roles.length - 1 | format %>
                                                 <span class="<%= icons.users %>"></span>
                                             </span>
                                         <% } %>

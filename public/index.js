@@ -6,11 +6,13 @@ module.exports = function(root) {
 
     /* Core */
     clientCSS.addFile(css_path + 'core/core.less');
+    clientCSS.addFile(css_path + 'core/body.less');
     clientCSS.addFile(css_path + 'core/icons.less');
     clientCSS.addFile(css_path + 'core/popup.less');
     clientCSS.addFile(css_path + 'core/contextmenu.less');
     clientCSS.addFile(css_path + 'core/sidebar.less');
-    clientCSS.addFile(css_path + 'core/header.less');
+    clientCSS.addFile(css_path + 'core/header.less'); //Remove After Migration
+    clientCSS.addFile(css_path + 'core/header2.less'); //Rename After Migration
     clientCSS.addFile(css_path + 'core/jscroll.less');
 
     clientCSS.addUrl('https://fonts.googleapis.com/css?family=Open+Sans:400,300');
@@ -27,6 +29,7 @@ module.exports = function(root) {
     clientJS.addFile(js_path + 'core/colors.js');
     clientJS.addFile(js_path + 'core/cookie.js');
     clientJS.addFile(js_path + 'core/core.js');
+    clientJS.addFile(js_path + 'core/header.js');
 
     clientJS.addExec(lib.core.extensions);
 
@@ -156,7 +159,7 @@ module.exports = function(root) {
 	clientJS.addFile('news', js_path + 'news/util.js');
 	clientJS.addFile('news', js_path + 'news/init.js');
 
-	/* New Header (TEMP) */
-	clientCSS.addFile('new-header', css_path + 'news/header.less');
-	clientJS.addFile('new-header', js_path + 'news/header.js');
+	/* Groups */
+	clientCSS.addFile('groups', css_path + 'groups/index.less');
+	clientJS.addFile('groups', js_path + 'groups/index.js');
 };

@@ -120,7 +120,9 @@ window.socketUtil = {
         }
     },
     notification: function(notification) {
+        //Remove After Migration
         $(".sidebar .profile .img").toggleClass("blink", notification);
+        $(".header .notifications").toggleClass("activated", notification);
     },
     notifications: function() {
         _this = window.socketUtil;

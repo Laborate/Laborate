@@ -29,6 +29,10 @@ $(function() {
         window.newsUtil.social($(this));
     });
 
+    $(".main .container").on("click", ".share_popup input", function() {
+        $(this).select();
+    });
+
     $(".main .container").on("click", ".share_popup", function(e) {
         e.preventDefault();
         e.stopPropagation();
