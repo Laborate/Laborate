@@ -6,7 +6,9 @@ exports.index = function(req, res, next) {
             res.renderOutdated('groups/index', {
                 title: "Groups",
                 header: "users",
-                groups: users[0].groups,
+                groups: users[0].groups.sort(function(a, b) {
+                    return a.private < b.private;
+                }),
                 js: clientJS.renderTags("groups"),
                 css: clientCSS.renderTags("groups"),
                 pageTrack: true,
