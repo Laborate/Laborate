@@ -23,7 +23,9 @@ exports.remove = function(req, res, next) {
     req.models.users.groups.find({
         pub_id: req.param("group"),
         owner_id: req.session.user.id
-    }).remove(function(error) {
+    }, function(error, groups) {
+        groups[0].remove();
+
         if(!error) {
             res.redirect("/groups/");
         } else {

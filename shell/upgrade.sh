@@ -1,9 +1,11 @@
 cd ~/middleware;
-git checkout .;
-git pull --rebase;
 
 forever stopall;
 standby start 80;
+
+git checkout .;
+git pull --rebase;
+npm install;
 
 read -p "Hit enter when done migrating config.json: ";
 
