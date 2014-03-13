@@ -1,9 +1,14 @@
 <% include ../includes/start.html %>
-<% include ../includes/header.html %>
+<% if(!embed) { %>
+    <% include ../includes/header.html %>
+<% } %>
 <div id="backdrop">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
     <div id="backdrop-core">
+        <% if(embed) { %>
+            <a target="_blank" href="/"><div id="backdrop-logo"><%= logo %></div></a>
+        <% } %>
          <div id="backdrop-container" class="larger backdrop-text">
             <%- error_html %>
             <% if(home && !embed) { %>
@@ -12,12 +17,10 @@
             <% } %>
          </div>
     </div>
-    <% if(home && !embed) { %>
-        <div id="backdrop-footer">
-            <ul>
-                <% include ../includes/backdrop_footer.html %>
-            </ul>
-        </div>
-    <% } %>
+    <div id="backdrop-footer">
+        <ul>
+            <% include ../includes/backdrop_footer.html %>
+        </ul>
+    </div>
 </div>
 <% include ../includes/end.html %>

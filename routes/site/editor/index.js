@@ -220,7 +220,7 @@ exports.download = function(req, res, next) {
                 res.error(404);
             }
         } else {
-            res.error(400, "Failed To Download File", error);
+            res.error(200, "Failed To Download File", error);
         }
     });
 }
