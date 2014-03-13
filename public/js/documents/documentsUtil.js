@@ -839,7 +839,7 @@ window.documents = {
                     if(json.success == false) {
                         if(json.error_message == "Bad Github Oauth Token") {
                             window.documents.headerBar(["message"],
-                                "Opps! Github Needs To Be <a href='" + json.github_oath + "'>Reauthorized</a>", true);
+                                "Opps! Github Needs To Be <a href='" + window.config.apps.github.link + "'>Reauthorized</a>", true);
                         } else {
                             if(history) {
                                 window.documents.headerBar(["message"], json.error_message);
