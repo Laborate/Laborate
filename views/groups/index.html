@@ -8,7 +8,6 @@
         <% $.each(groups, function(index, group) { %>
             <% if(!(group.private && group.owner_id != user.id)) { %>
                 <div class="group" style="<%= background("blurry") %>">
-                    <div class="background"></div>
                     <div class="cover"></div>
                     <div class="gravatars">
                         <% $.each(group.exclude(user.id).slice(0, 17), function(index, laborator) { %>
@@ -24,10 +23,10 @@
                     </a>
                     <div class="actions">
                         <% if(group.owner_id == user.id) { %>
-                            <a href="/groups/<%= group.pub_id %>/edit/" class="action edit">Edit</a>
-                            <a href="/groups/<%= group.pub_id %>/remove/" class="action remove">Remove</a>
+                            <a href="/groups/<%= group.pub_id %>/edit/" class="action blue">Edit</a>
+                            <a href="/groups/<%= group.pub_id %>/remove/" class="action red">Remove</a>
                         <% } else { %>
-                            <a href="/groups/<%= group.pub_id %>/leave/" class="action leave">Leave</a>
+                            <a href="/groups/<%= group.pub_id %>/leave/" class="action red">Leave</a>
                         <% } %>
                     </div>
                 </div>

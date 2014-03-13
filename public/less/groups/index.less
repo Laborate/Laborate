@@ -7,7 +7,6 @@
     .container {
         margin: 0 auto;
         width: 920px !important;
-        .clearfix();
 
         /* Groups */
         .group {
@@ -20,6 +19,31 @@
             background-size: cover;
             .float-left();
             .border-radius(4px);
+
+            &.request {
+                margin-top: 50px;
+                width: 350px;
+                height: 350px;
+
+                .info {
+                    &:hover, &:hover:active {
+                        color: #fff;
+                    }
+
+                    .count {
+                        font-size: 52px;
+                    }
+
+                    .name {
+                        font-size: 20px;
+                    }
+                }
+
+                .actions .action {
+                    padding: 20px 0;
+                    font-size: 16px;
+                }
+            }
 
             &.blank {
                 background: darken(@color_body, 10%);
@@ -52,6 +76,7 @@
                     .transition(all);
                 }
             }
+
             .cover {
                 position: absolute;
                 z-index: 2;
@@ -107,7 +132,7 @@
                     .transition(background);
                     .box-sizing(border-box);
 
-                    &:first-child {
+                    &.blue {
                         &:hover {
                             background: darken(@color_blue, 10%);
 
@@ -117,12 +142,22 @@
                         }
                     }
 
-                    &:last-child {
+                    &.red {
                         &:hover {
                             background: darken(@color_red, 10%);
 
                             &:active {
                                 background: darken(@color_red, 15%);
+                            }
+                        }
+                    }
+
+                    &.green {
+                        &:hover {
+                            background: darken(@color_green, 10%);
+
+                            &:active {
+                                background: darken(@color_green, 15%);
                             }
                         }
                     }

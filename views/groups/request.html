@@ -2,7 +2,24 @@
 <% include ../includes/header.html %>
 <div class="panel main">
     <div class="container">
-
+        <div class="group request" style="<%= background %>">
+            <div class="cover"></div>
+            <div class="gravatars">
+                <% $.each(group.exclude(user.id).slice(0, 50), function(index, laborator) { %>
+                    <div class="gravatar" style="background-image: url('<%= laborator.gravatar %>')"></div>
+                <% }); %>
+            </div>
+            <div class="info">
+                <% var count = group.exclude(user.id).length; %>
+                <% if(count > 0) { %>
+                    <div class="count"><%=: count | format %></div>
+                <% } %>
+                <div class="name"><%= group.name %></div>
+            </div>
+            <div class="actions">
+                <a class="action green" href="/groups/<%= group.pub_id %>/request/">Join Group</div>
+            </div>
+        </div>
     </div>
 </div>
 <% include ../includes/end.html %>
