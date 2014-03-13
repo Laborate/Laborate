@@ -21,7 +21,7 @@
     "node-fs": "0.1.7",
     "email-templates": "0.1.0",
     "nodemailer": "0.5.2",
-    "orm": "git://github.com/dresende/node-orm2.git#7e3d4b5feef9d94ca7a94c6a125a742a4bf81fbc",
+    "orm": "git://github.com/dresende/node-orm2.git#3d1d026c13f725d3dbf96f3a87e3faf18ef06889",
     "orm-paging": "0.0.1",
     "orm-timestamps": "0.2.1",
     "mysql": "2.0.0-rc1",
