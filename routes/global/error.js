@@ -65,6 +65,7 @@ var error_handler = function(status, message, locals, req, res) {
                         css: clientCSS.renderTags("backdrop"),
                         error_html: error_html,
                         backdrop: req.backdrop(),
+                        header_class: "lighten",
                         pageTrack: false,
                         mobile: false,
                         home: locals.home,

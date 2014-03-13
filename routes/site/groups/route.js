@@ -7,6 +7,8 @@ module.exports = function(app, routes) {
     app.get('/groups/create', auth.util.restrictAccess, core.reload, groups.create);
     app.get('/groups/:group', auth.util.restrictAccess, core.reload, groups.group);
 
+    app.post('/groups/create', auth.util.restrictAccess, groups.util.create);
+
     //app.get('/groups/:group/edit', auth.util.restrictAccess, core.reload, groups.edit);
     //app.get('/groups/:group/leave', auth.util.restrictAccess, core.reload, groups.leave);
     //app.get('/groups/:group/remove', auth.util.restrictAccess, core.reload, groups.remove);

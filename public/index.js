@@ -162,4 +162,6 @@ module.exports = function(root) {
 	/* Groups */
 	clientCSS.addFile('groups', css_path + 'groups/index.less');
 	clientJS.addFile('groups', js_path + 'groups/index.js');
+	clientJS.addFile('groups', js_path + 'groups/util.js');
+clientJS.addFile('groups', js_path + 'groups/init.js');
 };

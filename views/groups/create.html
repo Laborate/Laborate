@@ -2,11 +2,11 @@
 <% include ../includes/header.html %>
 <div class="panel main">
     <div class="module">
-        <form accept="/groups/create/" class="form" name="create">
+        <form action="/groups/create/" class="form" name="create">
             <div class="header">New Group</div>
             <div class="body">
-                <input class="input" name="name" type="text" placeholder="name..." />
-                <textarea class="textarea" name="description" placeholder="describe your amazing group..."></textarea>
+                <input class="input" name="name" type="text" placeholder="name..." required="required" />
+                <textarea class="textarea" name="description" placeholder="describe your group..."></textarea>
             </div>
             <div class="actions">
                 <input type="submit" class="button" value="Create Group" />

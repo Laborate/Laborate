@@ -34,6 +34,14 @@ $(function() {
     //AutoGrow Textarea
     $('textarea.autogrow').autosize();
 
+    //Set Original Value
+    $(".button").each(function() {
+        $(this).attr({
+            "data-original": $(this).val(),
+            "data-original-class": $(this).attr("class")
+        });
+    });
+
     //Setup Jscroll
     $(".scroll-pane").each(function() {
 		var _this = $(this);
