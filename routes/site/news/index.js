@@ -172,7 +172,7 @@ exports.reply = function(req, res, next) {
             if(req.param("parent")) {
                 req.models.posts.one({
                     pub_id: req.param("parent")
-                }).only("id").run(function(error, post) {
+                }, ["id"], function(error, post) {
                     callback(error, ((post) ? post.id : null));
                 });
             } else {
