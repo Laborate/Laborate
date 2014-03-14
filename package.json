@@ -48,6 +48,7 @@
     "term.js": "0.0.3",
     "express-subdomains": "0.0.5",
     "orm-random": "0.0.1",
+    "orm-transaction": "0.0.2",
     "migrate-orm2": "1.2.6",
     "moment-range": "1.0.1",
     "marked": "0.3.1",
