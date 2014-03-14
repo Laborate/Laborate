@@ -13,16 +13,16 @@ exports.index = function(req, res, next) {
 }
 
 exports.post = function(req, res, next) {
-    req.models.posts.find({
+    req.models.posts.one({
         pub_id: req.param("post")
-    }, 1, function(error, posts) {
-        if(!error && !posts.empty) {
-            res.locals.favicons.graph = posts[0].owner.gravatar;
+    }, function(error, post) {
+        if(!error && post) {
+            res.locals.favicons.graph = post.owner.gravatar;
 
             res.renderOutdated('news/post', {
                 title: "News Feed",
                 header: "news",
-                posts: posts,
+                posts: [post],
                 user: req.session.user || req.fake_user,
                 allow_replies: true,
                 config: {
@@ -31,7 +31,7 @@ exports.post = function(req, res, next) {
                 restrict: false,
                 js: clientJS.renderTags("news", "highlight"),
                 css: clientCSS.renderTags("news", "highlight"),
-                description: $(posts[0].content).text()
+                description: $(post.content).text()
             });
         } else {
             res.redirect("/news/");
@@ -43,10 +43,19 @@ exports.posts = function(req, res, next) {
     var tags = req.param("tags") || [];
     var page = parseInt(req.param("page"));
 
-    req.models.users.groups.find({
+    req.models.users.groups.one({
         pub_id: req.param("group")
-    }, 1, function(error, groups) {
-        var group = ((!error && !groups.empty) ? groups[0].id : null);
+    }, function(error, group) {
+        if(req.session.user && group) {
+            var group = (!$.map(req.session.user.groups, function(group) {
+                if(group.pub_id == req.param("group")) {
+                    return true;
+                }
+            }).empty) ? group.id : null;
+        } else {
+            var group = null;
+        }
+
 
         if(tags.empty) {
             req.models.posts.page(page).order("-created").where({
@@ -119,13 +128,13 @@ exports.preview = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
-    req.models.users.groups.find({
+    req.models.users.groups.one({
         pub_id: req.param("group")
-    }, 1, function(error, groups) {
+    }, function(error, group) {
         req.models.posts.create({
             content: req.markdown(req.param("content")),
             owner_id: req.session.user.id,
-            group_id: ((!error && !groups.empty) ? groups[0].id : null)
+            group_id: ((!error && group) ? group.id : null)
         }, function (error, post) {
             if(!error && post) {
                 req.models.posts.get(post.id, function(error, post) {
@@ -161,10 +170,10 @@ exports.reply = function(req, res, next) {
     async.waterfall([
         function(callback) {
             if(req.param("parent")) {
-                req.models.posts.find({
+                req.models.posts.one({
                     pub_id: req.param("parent")
-                }).only("id").run(function(error, posts) {
-                    callback(error, ((!posts.empty) ? posts[0].id : null));
+                }).only("id").run(function(error, post) {
+                    callback(error, ((post) ? post.id : null));
                 });
             } else {
                 callback(null, null);
@@ -207,12 +216,10 @@ exports.reply = function(req, res, next) {
 }
 
 exports.like = function(req, res, next) {
-    req.models.posts.find({
+    req.models.posts.one({
         pub_id: req.param("post")
-    }, function(error, posts) {
-        if(!error && !posts.empty) {
-            var post = posts[0];
-
+    }, function(error, post) {
+        if(!error && post) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 if(!error && user) {
                     post.hasLikes(user, function(error, liked) {
@@ -248,12 +255,10 @@ exports.like = function(req, res, next) {
 }
 
 exports.share = function(req, res, next) {
-    req.models.posts.find({
+    req.models.posts.one({
         pub_id: req.param("post")
-    }, function(error, posts) {
-        if(!error && !posts.empty) {
-            var post = posts[0];
-
+    }, function(error, post) {
+        if(!error && post) {
             post.shortner(function(error, url) {
                 if(!error && url) {
                     res.renderOutdated('news/posts/share', {

@@ -20,11 +20,11 @@ exports.create = function(req, res, next) {
 }
 
 exports.remove = function(req, res, next) {
-    req.models.users.groups.find({
+    req.models.users.groups.one({
         pub_id: req.param("group"),
         owner_id: req.session.user.id
-    }, function(error, groups) {
-        groups[0].remove();
+    }, function(error, group) {
+        group.remove();
 
         if(!error) {
             res.redirect("/groups/");

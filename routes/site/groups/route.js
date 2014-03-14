@@ -9,7 +9,7 @@ module.exports = function(app, routes) {
     app.get('/groups/:group/remove', auth.util.restrictAccess, groups.util.remove);
     app.get('/groups/:group/leave', auth.util.restrictAccess, groups.util.leave);
 
-    app.post('/groups/create', auth.util.restrictAccess, groups.util.create);
+    app.post('/groups/create', auth.util.restrictAccess, auth.util.xhr, groups.util.create);
 
     //app.get('/groups/:group/edit', auth.util.restrictAccess, core.reload, groups.edit);
     //app.get('/groups/:group/invite', auth.util.restrictAccess, core.reload, groups.invite);

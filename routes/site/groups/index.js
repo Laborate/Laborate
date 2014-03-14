@@ -1,12 +1,12 @@
 exports.index = function(req, res, next) {
-    req.models.users.find({
+    req.models.users.one({
         id: req.session.user.id
-    }, { autoFetchLimit: 3 }, 1, function(error, users) {
-        if(!error && !users.empty) {
+    }, { autoFetchLimit: 3 }, function(error, user) {
+        if(!error && user) {
             res.renderOutdated('groups/index', {
                 title: "Groups",
                 header: "users",
-                groups: users[0].groups.sort(function(a, b) {
+                groups: user.groups.sort(function(a, b) {
                     return a.private < b.private;
                 }),
                 js: clientJS.renderTags("groups"),
@@ -37,17 +37,16 @@ exports.group = function(req, res, next) {
         }
     }).empty;
 
-    req.models.users.groups.find({
+    req.models.users.groups.one({
         pub_id: req.param("group")
     }, {
         autoFetch: access,
         autoFetchLimit: 2
-    }, function(error, groups) {
+    }, function(error, group) {
         if(!error) {
-            var group = groups[0];
             var route = (access) ? "group" : "request";
 
-            if(!groups.empty && (access || !group.private)) {
+            if(group && (access || !group.private)) {
                 res.renderOutdated('groups/' + route, {
                     title: group.name,
                     header: "users",
