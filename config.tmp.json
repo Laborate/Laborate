@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "9v9BGbTSoNWlaQCfuWorR1e9lMTdxC3yah7TI2N9ROZAIE9BzP"
+            "secret": "EeEORzQp1dAVGKEdVCIDzeDyJX2KcsmlPSqeSD77zOtfn8sWx8"
         }
     },
     "orm": {
@@ -65,7 +65,7 @@
         "preload": false,
         "sync": true,
         "debug": false,
-        "protocol": "mysql",
+        "protocol": "mysql:",
         "host": "127.0.0.1",
         "database": "",
         "user": "",
