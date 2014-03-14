@@ -222,8 +222,9 @@ exports.like = function(req, res, next) {
         if(!error && post) {
             req.models.users.get(req.session.user.id, function(error, user) {
                 if(!error && user) {
-                    post.hasLikes(user, function(error, liked) {
+                    post.getLikes(user.id).only("id").run(function(error, likes) {
                         if(!error) {
+                            var liked = !likes.empty;
                             var count = post.likes.length;
 
                             if(!liked) {
@@ -241,7 +242,7 @@ exports.like = function(req, res, next) {
                                 count: count
                             });
                         } else {
-                            req.error.capture(error);
+                            res.error(404, null, error);
                         }
                     });
                 } else {
