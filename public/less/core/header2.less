@@ -30,12 +30,12 @@ body > .header.new {
     .logo {
         cursor: pointer;
         padding: 0 5px;
-        background: lighten(@color_header_logo, 8%);
+        background: @color_header_logo;
         .float-left();
         .transition(background);
 
         &:hover {
-            background: lighten(@color_header_logo, 11%);
+            background: lighten(@color_header_logo, 10%);
 
             &:active {
                 background: lighten(@color_header_logo, 15%);

@@ -1,20 +1,42 @@
 exports.index = function(req, res, next) {
-    res.renderOutdated('news/index', {
-        title: "News Feed",
-        header: "news",
-        user: req.session.user || req.fake_user,
-        allow_replies: false,
-        config: {
-            auto_pull: true
-        },
-        js: clientJS.renderTags("news", "highlight"),
-        css: clientCSS.renderTags("news", "highlight")
+    req.models.posts.tags.find({
+        explict: false
+    }).limit(15).only("name").run(function(error, tags) {
+        res.renderOutdated('news/index', {
+            title: "News Feed",
+            header: "news",
+            user: req.session.user || req.fake_user,
+            allow_replies: false,
+            config: {
+                auto_pull: true
+            },
+            js: clientJS.renderTags("news", "highlight"),
+            css: clientCSS.renderTags("news", "highlight"),
+            description: config.descriptions.news.sprintf([
+                $.map(tags, function(tag) {
+                    return tag.name;
+                }).join(", ")
+            ])
+        });
+
+        req.error.capture(error);
     });
 }
 
 exports.post = function(req, res, next) {
     req.models.posts.one({
-        pub_id: req.param("post")
+         or: $.merge(
+             [{
+                 pub_id: req.param("post"),
+                 group_id: null
+             }],
+             $.map(req.session.user.groups, function(group) {
+                return {
+                    pub_id: req.param("post"),
+                    group_id: group.id
+                }
+            })
+        )
     }, function(error, post) {
         if(!error && post) {
             res.locals.favicons.graph = post.owner.gravatar;
@@ -31,7 +53,9 @@ exports.post = function(req, res, next) {
                 restrict: false,
                 js: clientJS.renderTags("news", "highlight"),
                 css: clientCSS.renderTags("news", "highlight"),
-                description: $(post.content).text()
+                description: config.descriptions.news.sprintf([
+                    $(post.content).text()
+                ])
             });
         } else {
             res.redirect("/news/");

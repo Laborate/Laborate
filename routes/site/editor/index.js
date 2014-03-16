@@ -23,14 +23,11 @@ exports.editor = function(req, res, next) {
                             res.renderOutdated('editor/code/index', {
                                 title: document.name,
                                 document: document,
-                                description: function() {
-                                    var desc = document.name;
-                                    desc += " is a ";
-                                    desc += (document.private) ? "private" : "public";
-                                    desc += " document owned by ";
-                                    desc += owner.name + ".";
-                                    return desc;
-                                }()
+                                description: config.descriptions.editor.sprintf([
+                                    document.name,
+                                    owner.name,
+                                    document.name
+                                ])
                             });
                         } else {
                             res.error(404, null, error);

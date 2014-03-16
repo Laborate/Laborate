@@ -1,12 +1,16 @@
 <!--
-| | __ _| |__   ___  _ __ __ _| |_ ___  (_) ___
-| |/ _` | '_ \ / _ \| '__/ _` | __/ _ \ | |/ _ \
-| | (_| | |_) | (_) | | | (_| | ||  __/_| | (_) |
-|_|\__,_|_.__/ \___/|_|  \__,_|\__\___(_)_|\___/
+<% include ./includes/printout.html %>
 -->
 <%
-    title = (title) ? (title + site_delimeter + site_title) : site_title;
-    random = (!production) ? ("?rand=" + random) : "";
+    if(typeof title == "object") {
+        title = title.join(site_delimeter);
+    }
+
+    if(title_first) {
+        title = (title) ? (title + site_delimeter + site_title) : site_title;
+    } else {
+        title = (title) ? (site_title + site_delimeter + title) : site_title;
+    }
 %>
 <!DOCTYPE html>
 <html itemscope="itemscope" itemtype="http://schema.org/WebPage" lang="en">
@@ -21,15 +25,17 @@
         <!-- Open Graph Meta Tags -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="<%= host %>">
-        <meta property="og:image" content="<%= favicons["196"] + random %>">
+        <meta property="og:image" content="<%= favicons["graph"] + random %>">
         <meta property="og:title" content="<%= title %>">
         <meta property="og:description" content="<%= description %>">
+        <meta property="og:site_name" content="<%= site_title %>"/>
 
         <!-- Google Webmaster Meta Tags -->
         <meta name="google-site-verification" content="<%= google_verification %>" />
 
         <!-- Robot Meta Tags -->
-        <meta name="revisit-after" content="5 days">
+        <meta name="robots" content="INDEX, FOLLOW">
+        <meta name="revisit-after" content="1 day">
         <meta name="distribution" content="web">
 
         <% if(private) { %>
@@ -39,16 +45,14 @@
         <% } %>
 
         <!-- Favicon ICO -->
-        <link rel="shortcut icon" href="<%= favicons["ico"] + random %>" />
+        <link rel="shortcut icon" href="<%= favicons["32"] + random %>" />
         <!-- Standard Favicon -->
-        <link rel="icon" type="image/png" href="<%= favicons["196"] + random %>" />
-        <!-- Opera Speed Dial Favicon -->
-        <link rel="icon" type="image/png" href="<%= favicons["160"] + random %>" />
+        <link rel="icon" type="image/png" href="<%= favicons["32"] + random %>" />
         <!-- For iPhone 4 Retina display: -->
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= favicons["114"] + random %>">
         <!-- For iPad: -->
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= favicons["72"] + random %>">
         <!-- For iPhone: -->
-        <link rel="apple-touch-icon-precomposed" href="<%= favicons["57"] + random %>">
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= favicons["57"] + random %>">
     </head>
 </html>

@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "EeEORzQp1dAVGKEdVCIDzeDyJX2KcsmlPSqeSD77zOtfn8sWx8"
+            "secret": "A8wooSrIebBlDgtQHmS8ZmwfFTFxA8lHQJFbHxTThF6TdHBp0u"
         }
     },
     "orm": {
@@ -70,9 +70,6 @@
         "database": "",
         "user": "",
         "password": "",
-        "query": {
-            "pool": true
-        },
         "timezone": ""
     },
     "stripe": {
@@ -274,6 +271,14 @@
         "/google/",
         "/sftp/"
     ],
+    "descriptions": {
+        "editor": "",
+        "news": ""
+    },
+    "explict": {
+        "0": "",
+        "1": ""
+    },
     "social": {
         "facebook": {
             "link": "https://www.facebook.com/Laborate.io",
