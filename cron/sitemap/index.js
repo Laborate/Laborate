@@ -48,7 +48,9 @@ require('../init')("sitemap", function() {
             });
         },
         function(callback) {
-            _this.models.posts.tags.all(["name"], function(error, tags) {
+            _this.models.posts.tags.find({
+               explict: false
+            }, ["name"], function(error, tags) {
                 async.each(tags, function(tag, next) {
                     routes.push({
                         url: "/news/tags/" + tag.name + "/",
