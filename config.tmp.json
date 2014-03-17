@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "6gdAwX1qGs9FENLJu6Uc0DRLl7lIu1sILO9tuzucoDLHDI1sus"
+            "secret": "SuEybKpsCSGBrCTp2gsZtP74R1drFbPpmAzZRgXEQtv6xVys5T"
         }
     },
     "orm": {
@@ -258,13 +258,13 @@
             "logout",
             "reload",
             "verify",
+            "reset",
             "documents",
             "explore",
             "editor",
             "account",
             "github",
             "bitbucket",
-            "feedback",
             "sitemap.xml"
         ]
     },

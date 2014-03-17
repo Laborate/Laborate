@@ -58,7 +58,6 @@ module.exports = function(root_dir) {
             tab.remove(tab.findComment("editor_changes"));
             tab.create(nodeCommand + path.join(root_dir, "/cron/editor/changes.js"), "editor_changes").minute().every(2);
 
-
             //Save Crontab
             tab.save();
         });
