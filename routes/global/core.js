@@ -90,7 +90,9 @@ exports.imports = function(req, res, next) {
         name: "An Amazaing Laborator",
         screen_name: "laborator",
         gravatar: config.gravatar,
-        fake: true
+        fake: true,
+        groups: [],
+        organizations: []
     };
 
     //Device Info

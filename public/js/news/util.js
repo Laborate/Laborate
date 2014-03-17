@@ -278,28 +278,32 @@ window.newsUtil = {
     },
     social: function(element) {
         var url,
-            post = element.parents(".share_popup").attr("data-post");
+            post = element.parents(".share_popup").attr("data-url");
 
         switch(element.attr("data-id")) {
             case "facebook":
                 url = "https://www.facebook.com/sharer/sharer.php?";
-                url += "u=" + config.host + "/news/" + post + "/";
+                url += "u=" + post;
                 break;
 
             case "twitter":
                 url = "https://twitter.com/intent/tweet?";
-                url += "text=@laborateio";
+                url += "text=Check out this post on @laborateio";
                 url += "&related=laborateio";
-                url += "&url=" + config.host + "/news/" + post + "/";
+                url += "&url=" + post;
                 break;
 
             case "google_plus":
                 url = "https://plus.google.com/share?";
-                url += "url=" + config.host + "/news/" + post + "/";
+                url += "url=" + post;
                 break;
         }
 
-        window.open(url, "sharer", "width=500,height=400,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no");
+        window.open(url, "sharer", [
+            "width=500", "height=400", "directories=no", "titlebar=no",
+            "toolbar=no", "location=no", "status=no", "menubar=no",
+            "scrollbars=no", "resizable=no"
+        ].join(","));
     },
     groups: function(element) {
         var activated = element.hasClass("activated");

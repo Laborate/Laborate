@@ -352,14 +352,19 @@ body > .header.new {
 
         &.activated {
             opacity: 0.6;
-            .animation(fade 2s ease 0s normal infinite);
 
             &:hover {
                 opacity: 0.8;
+                color: @color_header_blink_to;
+                border-color: @color_header_blink_to;
 
                 &:active {
                     opacity: 1;
                 }
+            }
+
+            &:not(:hover) {
+                .animation(fade 2s ease 0s normal infinite);
             }
 
             @-webkit-keyframes fade {

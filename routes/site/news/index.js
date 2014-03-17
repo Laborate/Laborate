@@ -24,13 +24,15 @@ exports.index = function(req, res, next) {
 }
 
 exports.post = function(req, res, next) {
+    var user = req.session.user || req.fake_user;
+
     req.models.posts.one({
          or: $.merge(
              [{
                  pub_id: req.param("post"),
                  group_id: null
              }],
-             $.map(req.session.user.groups, function(group) {
+             $.map(user.groups, function(group) {
                 return {
                     pub_id: req.param("post"),
                     group_id: group.id
@@ -45,7 +47,7 @@ exports.post = function(req, res, next) {
                 title: "News Feed",
                 header: "news",
                 posts: [post],
-                user: req.session.user || req.fake_user,
+                user: user,
                 allow_replies: true,
                 config: {
                     auto_pull: false
@@ -289,7 +291,8 @@ exports.share = function(req, res, next) {
                     res.renderOutdated('news/posts/share', {
                         post: post,
                         share: url,
-                        host: req.host
+                        host: req.host,
+                        host_full: req.session.server
                     });
                 } else {
                     res.error(404, null, error);

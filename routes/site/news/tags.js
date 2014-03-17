@@ -1,11 +1,13 @@
 exports.posts = function(req, res, next) {
+    var user = req.session.user || req.fake_user;
+
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
         tag.getPosts().order("-created").where({
             or: $.merge(
                  [{
                      group_id: null
                  }],
-                 $.map(req.session.user.groups, function(group) {
+                 $.map(user.groups, function(group) {
                     return {
                         group_id: group.id
                     }
@@ -17,7 +19,7 @@ exports.posts = function(req, res, next) {
                     title: "News Feed",
                     header: "news",
                     posts: posts,
-                    user: req.session.user || req.fake_user,
+                    user: user,
                     allow_replies: true,
                     config: {
                         auto_pull: false
