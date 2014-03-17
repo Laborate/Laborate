@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "A8wooSrIebBlDgtQHmS8ZmwfFTFxA8lHQJFbHxTThF6TdHBp0u"
+            "secret": "0NPkzC4k20zr8AdNd793nHGk4n1guJ0irAORZNeNTe4AvabSqf"
         }
     },
     "orm": {
@@ -243,6 +243,14 @@
             "documents": {
                 "freq": "hourly",
                 "priority": 0.5
+            },
+            "posts": {
+                "freq": "daily",
+                "priority": 0.5
+            },
+            "tags": {
+                "freq": "hourly",
+                "priority": 0.5
             }
         },
         "ignore": [
@@ -272,13 +280,13 @@
         "/sftp/"
     ],
     "descriptions": {
-        "editor": "",
-        "news": ""
+        "editor": "%s is a public document owned by %s. Contribute to %s by creating an account on Laborate.",
+        "news": "%s - Contribute to the news feed by creating an account on Laborate."
     },
-    "explict": {
-        "0": "",
-        "1": ""
-    },
+    "explict": [
+        "shit",
+        "fuck"
+    ],
     "social": {
         "facebook": {
             "link": "https://www.facebook.com/Laborate.io",

@@ -52,6 +52,12 @@ module.exports = function(root_dir) {
                 document_cleanup.hour().on(12);
                 document_cleanup.minute().on(1);
 
+            //Sitemap (On: 12th hour)
+            tab.remove(tab.findComment("sitemap"));
+            var document_cleanup = tab.create(nodeCommand + path.join(root_dir, "/cron/sitemap/index.js"), "sitemap");
+                document_cleanup.hour().on(12);
+                document_cleanup.minute().on(1);
+
             //Save Crontab
             tab.save();
         });

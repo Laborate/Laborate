@@ -1,5 +1,6 @@
 /* Global Variables */
 GLOBAL.$ = require("jquery");
+GLOBAL.async = require("async");
 GLOBAL.config = require('../config');
 GLOBAL.lib = require('../lib');
 
@@ -31,13 +32,13 @@ module.exports = function(name, callback) {
     _this.email = lib.email(protocol + config.general.host);
     lib.models_init(_this, callback);
 
-    /* Exit After 5 Minutes (Safegaurd) */
+    /* Exit After 10 Minutes (Safegaurd) */
     setTimeout(function() {
-        lib.error.report("cronjob: " + name + " took longer than a 5 minutes", function() {
+        lib.error.report("cronjob: " + name + " took longer than a 10 minutes", function() {
             _this.redis.end();
             process.exit(code=0);
         });
-    }, 300000);
+    }, 600000);
 }
 
 /* Error Handling */
