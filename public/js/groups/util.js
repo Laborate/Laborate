@@ -10,6 +10,7 @@ window.groupsUtil = {
             _csrf: window.config.csrf,
             name: form.find(".input").val(),
             description: form.find(".textarea").val(),
+            private: form.find(".select select").val()
         }, function(data) {
             if(data.success) {
                 window.location.href = "/groups/" + data.group + "/";

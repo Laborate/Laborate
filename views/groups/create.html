@@ -7,6 +7,13 @@
             <div class="body">
                 <input class="input" name="name" type="text" placeholder="name..." required="required" />
                 <textarea class="textarea" name="description" placeholder="describe your group..."></textarea>
+                <div class="select">
+                    <select name="private">
+                        <option value="false">Public (Anyone Can View)</option>
+                        <option value="true">Private (Only You Can View)</option>
+                    </select>
+                    <div class="icon <%= icons.menu_arrows %>"></div>
+                </div>
             </div>
             <div class="actions">
                 <input type="submit" class="button" value="Create Group" />

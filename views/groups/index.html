@@ -29,6 +29,9 @@
                             <a href="/groups/<%= group.pub_id %>/leave/" class="action red">Leave</a>
                         <% } %>
                     </div>
+                    <% if(group.private) { %>
+                        <div class="icon <%= icons.locked %>"></div>
+                    <% } %>
                 </div>
             <% } %>
         <% }); %>

@@ -3,6 +3,7 @@ exports.create = function(req, res, next) {
         req.models.users.groups.create({
             name: req.param("name"),
             description: req.param("description"),
+            private: (req.param("private") === "true"),
             owner_id: req.session.user.id
         }, function(error, group) {
             if(!error && group) {

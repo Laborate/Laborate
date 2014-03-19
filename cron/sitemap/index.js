@@ -33,6 +33,21 @@ require('../init')("sitemap", function() {
             });
         },
         function(callback) {
+            _this.models.users.groups.find({
+                private: false
+            }, ["pub_id"], function(error, groups) {
+                async.each(groups, function(group, next) {
+                    routes.push({
+                        url: "/groups/" + group.pub_id + "/",
+                        changefreq: defaults.default.freq,
+                        priority: defaults.default.priority
+                    });
+
+                    next();
+                }, callback);
+            });
+        },
+        function(callback) {
             _this.models.posts.find({
                 group_id: null
             }, ["pub_id"], function(error, posts) {

@@ -30,6 +30,23 @@
         <meta property="og:description" content="<%= description %>">
         <meta property="og:site_name" content="<%= site_title %>"/>
 
+        <!-- Google Authorship and Publisher Markup -->
+        <link rel="author" href="https://plus.google.com/110415483446798636481/posts"/>
+        <link rel="publisher" href="https://plus.google.com/110415483446798636481"/>
+
+        <!-- Schema.org markup for Google+ -->
+        <meta itemprop="name" content="<%= title %>">
+        <meta itemprop="description" content="<%= description %>">
+        <meta itemprop="image" content="<%= favicons["graph"] + random %>">
+
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="<%= favicons["graph"] + random %>">
+        <meta name="twitter:site" content="@laborateio">
+        <meta name="twitter:title" content="<%= title %>">
+        <meta name="twitter:description" content="<%= description %>">
+        <meta name="twitter:creator" content="@laborateio">
+        <meta name="twitter:image:src" content="<%= favicons["graph"] + random %>">
+
         <!-- Google Webmaster Meta Tags -->
         <meta name="google-site-verification" content="<%= google_verification %>" />
 
@@ -105,12 +122,20 @@
         </script>
 
         <!-- Distance.io -->
-        <script type='text/javascript' src='http://distance.io/js/distance.js'></script>
         <script type='text/javascript'>
-            var distanceTracker = Distance.getTracker(null, 'undefined', {
-                'user': 'bvallelunga',  // OPTIONAL
-            });
-            distanceTracker.trackPageView();
+            var _paq = _paq || [];
+            (function(){
+                var u='https://distance.io/';
+                _paq.push(['setSiteId', '531a596d3adb49ea27f774a6']);
+                _paq.push(['trackPageView']);
+                var d=document,
+                    g=d.createElement('script'),
+                    s=d.getElementsByTagName('script')[0];
+                g.type='text/javascript';
+                g.defer=true; g.async=true;
+                g.src=u+'js/distance.js';
+                s.parentNode.insertBefore(g,s);
+            })();
         </script>
         <!-- End Distance.io Tracking Code -->
 
