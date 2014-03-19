@@ -31,8 +31,8 @@
         <meta property="og:site_name" content="<%= site_title %>"/>
 
         <!-- Google Authorship and Publisher Markup -->
-        <link rel="author" href="https://plus.google.com/110415483446798636481/posts"/>
-        <link rel="publisher" href="https://plus.google.com/110415483446798636481"/>
+        <link rel="author" href="https://plus.google.com/<%= google.plus %>/posts"/>
+        <link rel="publisher" href="https://plus.google.com/<%= google.plus %>"/>
 
         <!-- Schema.org markup for Google+ -->
         <meta itemprop="name" content="<%= title %>">
@@ -41,14 +41,14 @@
 
         <!-- Twitter Card data -->
         <meta name="twitter:card" content="<%= favicons["graph"] + random %>">
-        <meta name="twitter:site" content="@laborateio">
+        <meta name="twitter:site" content="<%= twitter %>">
         <meta name="twitter:title" content="<%= title %>">
         <meta name="twitter:description" content="<%= description %>">
-        <meta name="twitter:creator" content="@laborateio">
+        <meta name="twitter:creator" content="<%= twitter %>">
         <meta name="twitter:image:src" content="<%= favicons["graph"] + random %>">
 
         <!-- Google Webmaster Meta Tags -->
-        <meta name="google-site-verification" content="<%= google_verification %>" />
+        <meta name="google-site-verification" content="<%= google.verification %>" />
 
         <!-- Robot Meta Tags -->
         <meta name="robots" content="INDEX, FOLLOW">

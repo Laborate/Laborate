@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "2a0u8cqUEoDUGbNb2aCxfOfCUIRusAXCwepRZWU3yFNZCaGiBl"
+            "secret": "KuJcLMvByvF3bmXrwwQwnbPynAQvh8tP5WbzwbRC4zQGTaJ57H"
         }
     },
     "orm": {
@@ -176,8 +176,10 @@
     "google": {
         "id": "",
         "secret": "",
-        "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY"
+        "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY",
+        "plus": ""
     },
+    "twitter": "",
     "email": {
         "from": "noreply@laborate.io",
         "mode": "SMTP",
