@@ -18,6 +18,9 @@ $(function() {
     //Initalize Socket
     window.socketUtil.init();
 
+    //Check If Notifications Are Enabled
+    window.notifications.init();
+
     //Check For Notifications (Every Minute)
     setInterval(window.socketUtil.notifications, 60000);
 
@@ -81,6 +84,33 @@ $(function() {
     });
 });
 
+window.notifications = {
+    enabled: false,
+    notifications: window.webkitNotifications,
+    init: function() {
+        var _this = window.notifications;
+
+        if(_this.notifications && _this.notifications.checkPermission() == 1) {
+    	    _this.notifications.requestPermission(function() {
+                _this.enabled = (_this.notifications.checkPermission() == 0);
+    	    });
+        } else {
+            _this.enabled = (_this.notifications.checkPermission() == 0);
+        }
+    },
+    message: function(message, title, icon) {
+        var _this = window.notifications;
+
+        if(_this.enabled) {
+            _this.notifications.createNotification(
+                icon || config.logo,
+                title || config.name,
+                message
+            ).show();
+        }
+    }
+}
+
 window.error = {
     timer: null,
     open: function(message) {
@@ -110,11 +140,9 @@ window.socketUtil = {
 
         _this.socket.on("connect", _this.load);
         _this.socket.on("reconnect", _this.load);
-        _this.socket.on("notification", _this.notification);
 
         _this.notifications();
         _this.onNotification();
-
     },
     load: function() {
         _this = window.socketUtil;
@@ -147,8 +175,9 @@ window.socketUtil = {
     },
     onNotification: function() {
         _this = window.socketUtil;
-        _this.socket.on('notifications', function (notification) {
+        _this.socket.on('notification', function(notification) {
             _this.notification(notification);
+            window.notifications.message(notification);
         });
     }
 }

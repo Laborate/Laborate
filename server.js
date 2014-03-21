@@ -8,6 +8,7 @@ var raven      = require('raven');
 var device     = require('express-device');
 var subdomains = require('express-subdomains');
 var fs         = require('fs');
+var child      = require('child_process');
 
 /* IMPORTANT - Global Variables */
 GLOBAL.$              = require("jquery");

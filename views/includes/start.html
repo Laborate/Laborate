@@ -87,6 +87,7 @@
                 delimeter: "<%= site_delimeter %>",
                 pageTrack: <%= pageTrack %>,
                 gravatar: "<%= gravatar %>",
+                logo: "<%= favicons["500"] + random %>",
                 apps: <%- JSON.stringify(apps) %>,
                 icons: <%- JSON.stringify(icons) %>,
                 logged_in: <%= (user && !user.fake) ? true : false %>,

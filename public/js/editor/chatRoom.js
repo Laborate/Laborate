@@ -4,6 +4,7 @@
 window.chat = {
     focus: false,
     count: 0,
+    notifications: true,
     conversation: function() {
         return $('.chat .scroll-pane').data("jsp")
     },
@@ -26,13 +27,13 @@ window.chat = {
     	]);
     },
     toggle: function() {
-        if(window.notifications == false) {
-            window.notifications = true;
+        if(window.chat.notifications == false) {
+            window.chat.notifications = true;
             window.chat.status("Chat Notifications Turned On");
         }
         else {
             window.chat.status("Chat Notifications Turned Off");
-            window.notifications = false;
+            window.chat.notifications = false;
         }
         window.chat.resize();
         window.chat._scrollToBottom();
@@ -145,7 +146,7 @@ window.chat = {
         }
     },
     _inputMessage: function(from, message, direction, gravatar, name) {
-        if(direction == "in") window.chat._notify();
+        if(direction == "in") window.chat._notify(name, message);
         var last_message = $(".jspPane .item").eq(-1);
         if(last_message.attr("data-from") == from) {
             last_message
@@ -168,9 +169,8 @@ window.chat = {
         }
     },
     _inputStatus: function(status) {
-        window.chat._notify();
 
-        if(window.notifications != false) {
+        if(window.chat.notifications != false) {
     	   $(".jspPane").append('<div class="item status">' + status + '</div>');
         }
     },
@@ -193,14 +193,16 @@ window.chat = {
             "isStatus": false
         });
     },
-    _notify: function() {
-        if(!window.chat.focus && window.notifications != false) {
+    _notify: function(name, message) {
+        if(!window.chat.focus && window.chat.notifications != false) {
             window.chat.count++;
             window.sidebarUtil.setTitle(
                 "in",
                 window.editorUtil.name,
                 window.chat.count
             );
+
+            window.notifications.message(name + ": " + message);
         }
     }
 }
