@@ -27,7 +27,8 @@ window.sidebarUtil = {
                     form.find("select[name=languages]").val(),
                     form.find("select[name=keymapping]").val(),
                     (form.find("select[name=cursorSearch]").val() === "true"),
-                    (form.find("select[name=whiteSpace]").val() === "true")
+                    (form.find("select[name=whiteSpace]").val() === "true"),
+                    parseInt(form.find("select[name=tabs]").val())
                 );
                 break;
             case "beautify":
@@ -116,11 +117,29 @@ window.sidebarUtil = {
                 .prop('selected', true);
         }
 	},
-	typeMode: function(languages, keymapping, cursorSearch, whiteSpace) {
+	defaultTabs: function(tabs) {
+	    if(tabs) {
+    	    $(".form[name='type-mode'] select[name='tabs'] option")
+                .filter(function() {
+                    return ($(this).val() == tabs);
+                })
+                .prop('selected', true);
+        }
+	},
+	typeMode: function(languages, keymapping, cursorSearch, whiteSpace, tabs) {
 	    window.editorUtil.setModeLanguage(languages);
         this.keyMap(keymapping);
         this.cursorSearch(cursorSearch);
         this.whiteSpace(whiteSpace);
+        this.tabs(tabs);
+	},
+	tabs: function(tabs) {
+        tabs = tabs || 4;
+    	window.editor.setOption("indentUnit", tabs);
+    	$.cookie("tabs", tabs, {
+            path: '/editor',
+            expires: 365
+        });
 	},
 	whiteSpace: function(whiteSpace) {
     	window.editor.setOption("showTrailingSpace", whiteSpace);

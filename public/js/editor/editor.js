@@ -9,7 +9,6 @@ $(function() {
         extraKeys: {"Ctrl-J": "toMatchingTag"},
         tabMode: "indent",
         theme: "laborate",
-        indentUnit: 4,
         indentWithTabs: true,
         smartIndent: true,
         autofocus: true,
