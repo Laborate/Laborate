@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "rvEiTlIrMdiBfTAC0ma12e0ywSZllUFUMLOgTE5Z3C5InKMDhZ"
+            "secret": "V19Ucs21xyJkMIxkcRZS7zGbtQo2P9K3MtGBqJqrVuuvcPCCRf"
         }
     },
     "orm": {
@@ -69,8 +69,7 @@
         "host": "127.0.0.1",
         "database": "",
         "user": "",
-        "password": "",
-        "timezone": ""
+        "password": ""
     },
     "stripe": {
         "reset": true,
