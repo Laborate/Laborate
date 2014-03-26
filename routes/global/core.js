@@ -222,7 +222,6 @@ exports.locals = function(req, res, next) {
     res.locals.description = config.general.description.join("");
     res.locals.sentry = config.sentry.browser;
     res.locals.google = config.google;
-    res.locals.twitter = config.twitter;
     res.locals.company = config.general.company;
     res.locals.logo = req.session.organization.logo || config.general.logo;
     res.locals.social = config.social;

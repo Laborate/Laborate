@@ -8,6 +8,12 @@ window.newsUtil = {
 
         if(!_this.loading) {
             _this.loading = true;
+            $(".main .loader").addClass("activated");
+            $(".main .loader").removeClass("finished");
+
+            if(override) {
+                $(".main .posts").html("");
+            }
 
             $.get("/news/pages/" + page + "/", {
                 group: _this.group,
@@ -28,7 +34,7 @@ window.newsUtil = {
                         _this.page += 1;
                     }
                 } else {
-                    $(".main .loader").fadeOut(200);
+                    $(".main .loader").addClass("finished");
 
                     if(override) {
                         $(".main .posts").html(data);
@@ -37,6 +43,7 @@ window.newsUtil = {
                 }
 
                 _this.loading = false;
+                $(".main .loader").removeClass("activated");
             });
         }
     },
@@ -288,8 +295,8 @@ window.newsUtil = {
 
             case "twitter":
                 url = "https://twitter.com/intent/tweet?";
-                url += "text=Check out this post on @laborateio";
-                url += "&related=laborateio";
+                url += "text=Check out this post on @" + config.social.twitter;
+                url += "&related=" + config.social.twitter;
                 url += "&url=" + post;
                 break;
 
@@ -343,9 +350,9 @@ window.newsUtil = {
         element.remove();
     },
     scroll: function() {
-        if(!$(".main .loader").is(":hidden")) {
+        if(!$(".main .loader").hasClass("finished")) {
             var bottom = ($(window).scrollTop() + $(window).height() > $(document).height() - 5);
-            $(".loader").toggleClass("activated", bottom);
+            $(".main .loader").toggleClass("activated", bottom);
 
             if(bottom) {
                 window.newsUtil.feed(window.newsUtil.page + 1);

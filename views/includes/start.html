@@ -31,8 +31,8 @@
         <meta property="og:site_name" content="<%= site_title %>"/>
 
         <!-- Google Authorship and Publisher Markup -->
-        <link rel="author" href="https://plus.google.com/<%= google.plus %>/posts"/>
-        <link rel="publisher" href="https://plus.google.com/<%= google.plus %>"/>
+        <link rel="author" href="<%= social.google_plus.link %>/posts"/>
+        <link rel="publisher" href="<%= social.google_plus.link %>"/>
 
         <!-- Schema.org markup for Google+ -->
         <meta itemprop="name" content="<%= title %>">
@@ -40,11 +40,11 @@
         <meta itemprop="image" content="<%= favicons["graph"] + random %>">
 
         <!-- Twitter Card data -->
-        <meta name="twitter:card" content="<%= favicons["graph"] + random %>">
-        <meta name="twitter:site" content="<%= twitter %>">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:domain" content="<%= host %>">
+        <meta name="twitter:site" content="@<%= social.twitter.name %>">
         <meta name="twitter:title" content="<%= title %>">
         <meta name="twitter:description" content="<%= description %>">
-        <meta name="twitter:creator" content="<%= twitter %>">
         <meta name="twitter:image:src" content="<%= favicons["graph"] + random %>">
 
         <!-- Google Webmaster Meta Tags -->
@@ -92,6 +92,11 @@
                 icons: <%- JSON.stringify(icons) %>,
                 logged_in: <%= (user && !user.fake) ? true : false %>,
                 user: "<%= (user && !user.fake) ? user.pub_id : "" %>",
+                social: {
+                    <% $.each(social, function(key, value) { %>
+                        <%= key %>: "<%= value.name %>",
+                    <% }); %>
+                },
 
                 <% $.each(config, function(key, value) { %>
                     <% if(typeof value == "boolean") { %>

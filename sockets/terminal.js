@@ -5,7 +5,7 @@ var terminalUtil = require('./terminalUtil');
 var terminals = {};
 
 exports.join = function(req) {
-    if(!terminals[req.io.socket.id]) {
+    if(!terminals[req.io.socket.id] && req.session.user) {
         //Start Terminal
         var location = terminalUtil.location(req);
         var term = pty.spawn("ssh", [location.username + "@" + location.host], {
