@@ -4,17 +4,13 @@ require('../init')("user.feedback", function() {
         feedback: true
     }, function(error, users) {
         if(!error && !users.empty) {
-            $.each(users, function(key, user) {
+            async.each(users, function(user, next) {
                 user.save({
                     feedback: false
-                }, function(error) {
-                    lib.error.capture(error);
-                    _this.finish();
-                });
-            });
+                }, next);
+            }, _this.finish);
         } else {
-            lib.error.capture(error);
-            _this.finish();
+            _this.finish(error);
         }
     });
 });

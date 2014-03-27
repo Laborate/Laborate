@@ -39,13 +39,9 @@ require('../init')("editor.changes", function() {
                         next(error);
                     }
                 });
-            }, function(errors) {
-                lib.error.capture(errors);
-                _this.finish();
-            });
+            }, _this.finish);
         } else {
-            lib.error.capture(error);
-            _this.finish();
+            _this.finish(error);
         }
     });
 });

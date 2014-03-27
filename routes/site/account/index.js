@@ -64,7 +64,9 @@ exports.profile = function(req, res) {
                             email: req.param("email")
                         }, function(error) {
                             if(!error) {
-                                req.models.users.get(req.session.user.id, function(error, user) {
+                                req.models.users.one({
+                                    id: req.session.user.id
+                                }, { autoFetch: false }, function(error, user) {
                                     if(!error && user) {
                                         var profile = {
                                             name: req.param("name"),
@@ -100,7 +102,9 @@ exports.profile = function(req, res) {
 }
 
 exports.change_password = function(req, res) {
-    req.models.users.get(req.session.user.id, function(error, user) {
+    req.models.users.one({
+        id: req.session.user.id
+    }, { autoFetch: false }, function(error, user) {
         if(!error) {
             if(req.models.users.hash($.trim(req.param('old_password'))) == user.password) {
                 if($.trim(req.param('new_password')) != $.trim(req.param('confirm_password'))) {
@@ -158,7 +162,9 @@ exports.delete_account = function(req, res) {
 
 exports.remove_location = function(req, res) {
     if(req.session.user.locations && (req.param("location") in req.session.user.locations)) {
-        req.models.users.get(req.session.user.id, function(error, user) {
+        req.models.users.one({
+            id: req.session.user.id
+        }, { autoFetch: false }, function(error, user) {
             if(!error) {
                 delete user.locations[req.param("location")];
 
@@ -183,7 +189,9 @@ exports.remove_location = function(req, res) {
 };
 
 exports.add_card = function(req, res) {
-    req.models.users.get(req.session.user.id, function(error, user) {
+    req.models.users.one({
+        id: req.session.user.id
+    }, { autoFetch: false }, function(error, user) {
         if(!error) {
             req.stripe.customers.createCard(req.session.user.stripe, {
                 card: {
@@ -226,7 +234,9 @@ exports.add_card = function(req, res) {
 
 exports.remove_card = function(req, res, next) {
     if(!$.isEmptyObject(req.session.user.card)) {
-        req.models.users.get(req.session.user.id, function(error, user) {
+        req.models.users.one({
+            id: req.session.user.id
+        }, { autoFetch: false }, function(error, user) {
             if(!error) {
                 req.stripe.customers.deleteCard(
                     req.session.user.stripe,

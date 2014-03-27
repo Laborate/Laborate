@@ -28,7 +28,7 @@ var child = new (forever.Monitor)(__dirname + '/server.js', {
     outFile: __dirname + "/" + config.forever.output_log,
     errFile: __dirname + "/" + config.forever.error_log,
 
-    killTree: false
+    killTree: true
 });
 
 child.on('exit', function () {

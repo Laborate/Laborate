@@ -15,12 +15,15 @@ module.exports = function(name, callback) {
     /* Setup */
     var _this = this;
     _this.redis = lib.redis;
-    _this.finish = function() {
+    _this.finish = function(error) {
         //Give 60 Seconds To Finish
         setTimeout(function() {
             _this.redis.end();
             process.exit(code=0);
         }, 60000);
+
+        //Capture Error
+        lib.error.capture(error);
     }
 
     if(config.general.ssl) {

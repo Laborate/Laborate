@@ -159,6 +159,7 @@ exports.create = function(req, res, next) {
     }, function(error, group) {
         req.models.posts.create({
             content: req.markdown(req.param("content")),
+            markdown: req.param("content"),
             owner_id: req.session.user.id,
             group_id: ((!error && group) ? group.id : null)
         }, function (error, post) {
