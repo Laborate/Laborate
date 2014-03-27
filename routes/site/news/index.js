@@ -196,19 +196,16 @@ exports.create = function(req, res, next) {
 exports.reply = function(req, res, next) {
     async.waterfall([
         function(callback) {
-            if(req.param("parent")) {
-                req.models.posts.one({
-                    pub_id: req.param("parent")
-                }, ["id"], function(error, post) {
-                    callback(error, ((post) ? post.id : null));
-                });
-            } else {
-                callback(null, null);
-            }
+            req.models.posts.one({
+                pub_id: req.param("parent")
+            }, ["id"], function(error, post) {
+                callback(error, ((post) ? post.id : null));
+            });
         },
         function(parent, callback) {
             req.models.posts.create({
                 content: req.markdown(req.param("content")),
+                markdown: req.param("content"),
                 owner_id: req.session.user.id,
                 parent_id: parent
             }, callback);
@@ -222,7 +219,8 @@ exports.reply = function(req, res, next) {
             if(!tags.empty) {
                 $.each(tags, function(index, name) {
                     req.models.posts.tags.findOrCreate(name, function(error, tag) {
-                        post.addTags(tag, req.error.capture);
+                        post.addTags(tag, req.error.capture)
+                        post.parent.addTags(tag, req.error.capture);
                     });
                 });
             }
@@ -237,7 +235,7 @@ exports.reply = function(req, res, next) {
                 restrict: false,
             });
         } else {
-            res.error(404, null, error);
+            res.error(404, null, errors);
         }
     });
 }

@@ -19,6 +19,9 @@ window.newsUtil = {
                 group: _this.group,
                 tags: _this.tags
             }, function(data) {
+                _this.loading = false;
+                $(".main .loader").removeClass("activated");
+
                 if(typeof data == "string") {
                     data = $(data).map(function() {
                         if(override || $("#post_" + $(this).attr("data-id")).length == 0) {
@@ -41,9 +44,6 @@ window.newsUtil = {
                         _this.page = 1;
                     }
                 }
-
-                _this.loading = false;
-                $(".main .loader").removeClass("activated");
             });
         }
     },

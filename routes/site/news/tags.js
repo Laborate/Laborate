@@ -3,6 +3,7 @@ exports.posts = function(req, res, next) {
 
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
         tag.getPosts().order("-created").where({
+            parent_id: null,
             or: $.merge(
                  [{
                      group_id: null
