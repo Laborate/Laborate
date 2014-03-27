@@ -114,9 +114,6 @@ app.configure(function() {
         })
     }));
 
-    //Add NewRelic To Locals
-    app.locals.newrelic = newrelic;
-
     //Send Error Logging To Sentry
     app.use(raven.middleware.express(config.sentry.node));
 
