@@ -1,5 +1,4 @@
 /* Modules: NPM */
-var newrelic   = require('newrelic');
 var express    = require('express.io');
 var slashes    = require("connect-slashes");
 var piler      = require("piler");

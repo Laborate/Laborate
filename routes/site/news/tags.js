@@ -2,7 +2,7 @@ exports.posts = function(req, res, next) {
     var user = req.session.user || req.fake_user;
 
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
-        tag.getPosts().limit(15).order("-created").where({
+        tag.getPosts().limit(15).where({
             parent_id: null,
             or: $.merge(
                  [{
@@ -20,13 +20,17 @@ exports.posts = function(req, res, next) {
                     title: "News Feed",
                     header: "news",
                     user: user,
+                    search: req.param("tag"),
                     js: clientJS.renderTags("news", "highlight"),
                     css: clientCSS.renderTags("news", "highlight"),
                     description: config.descriptions.news.sprintf([
                         $.map(posts.slice(0, 5), function(post) {
                             return $.trim($(post.content).text().slice(0, 15)) + "...";
                         }).join(", ")
-                    ])
+                    ]),
+                    config: {
+                        tags: [req.param("tag")]
+                    }
                 });
             } else {
                 res.redirect("/news/");

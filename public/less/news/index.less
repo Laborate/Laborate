@@ -237,17 +237,20 @@
             padding: 10px 0;
             margin-bottom: 25px;
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.8);
+            color: #fff;
             .border-radius(3px);
             .box-shadow(0 1px 0 darken(@color_news_header, 10%));
 
-            a:hover {
-                text-decoration: underline;
+            a {
+                color: rgba(255, 255, 255, 0.6);
 
-                &:active {
-                    color: #fff;
+                &:hover {
+                    text-decoration: underline;
+
+                    &:active {
+                        color: rgba(255, 255, 255, 0.8);
+                    }
                 }
-
             }
         }
 
