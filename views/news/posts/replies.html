@@ -1,11 +1,11 @@
 <% if(!post.children.empty) { %>
-    <% if(restrict && post.children.length > 3) { %>
+    <% if(limit_replies && post.children.length > 3) { %>
         <div class="more">
             <a href="/news/<%= post.pub_id %>/">View all comments...</a>
         </div>
     <% } %>
     <div class="replies">
-        <% $.each(((restrict) ? post.children.slice(-3) : post.children), function(index, child) { %>
+        <% $.each(((limit_replies) ? post.children.slice(-3) : post.children), function(index, child) { %>
             <% include ./reply.html %>
         <% }); %>
     </div>

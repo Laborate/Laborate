@@ -32,6 +32,7 @@
         &.centered {
             width: 100%;
 
+            .loader,
             .container {
                 float: none;
                 clear: both;
@@ -52,6 +53,33 @@
         .container {
             position: relative;
             width: 650px;
+        }
+
+        .loader {
+            color: @color_news_button;
+            font-size: 25px;
+            width: 575px;
+            opacity: 0;
+            .float-right();
+            .transition(opacity);
+
+            &.activated {
+                opacity: 1;
+
+                .spinner {
+                    .animation(spin 1s linear infinite);
+
+                    @-moz-keyframes spin { 100% { .transform(rotate(360deg)); } }
+                    @-webkit-keyframes spin { 100% { .transform(rotate(360deg)); } }
+                    @-o-keyframes spin { 100% { .transform(rotate(360deg)); } }
+                    @keyframes spin spin { 100% { .transform(rotate(360deg)); } }
+                }
+            }
+
+            .spinner {
+                margin: 0 auto;
+                width: 25px;
+            }
         }
 
         .module {

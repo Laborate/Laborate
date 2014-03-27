@@ -10,6 +10,28 @@ Array.prototype.shuffle = function() {
     return o;
 };
 
+Array.prototype.intersections = function(b) {
+    return $(this).filter(b).get();
+}
+
+Array.prototype.__defineGetter__("empty", function() {
+    return this.length == 0;
+});
+
+Array.prototype.end = function(index) {
+    return (this.length - 1) == index;
+};
+
+JSON.cycle = function(data) {
+    return JSON.parse(JSON.stringify(data));
+}
+
+String.prototype.__defineGetter__("capitalize", function() {
+    return $.map(this.split(" "), function(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+    }).join(" ");
+});
+
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }

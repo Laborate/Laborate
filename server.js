@@ -1,4 +1,5 @@
 /* Modules: NPM */
+var newrelic   = require('newrelic');
 var express    = require('express.io');
 var slashes    = require("connect-slashes");
 var piler      = require("piler");
@@ -113,6 +114,9 @@ app.configure(function() {
             client: lib.redis
         })
     }));
+
+    //Add NewRelic To Locals
+    app.locals.newrelic = newrelic;
 
     //Send Error Logging To Sentry
     app.use(raven.middleware.express(config.sentry.node));

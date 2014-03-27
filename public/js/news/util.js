@@ -50,16 +50,20 @@ window.newsUtil = {
     new_post: function(data) {
         var _this = window.newsUtil;
         if(_this.group == data.group) {
-            var post = $(data.content);
-            post.find(".comment .gravatar img").attr("src", config.gravatar);
-            post.hide().css("opacity", 0);
+            console.log(_this.tags.empty, !_this.tags.intersections(data.tags).empty);
 
-            $(".main .posts").prepend(post);
-            post.slideDown(200);
+            if(_this.tags.emtpy || !_this.tags.intersections(data.tags).empty) {
+                var post = $(data.content);
+                post.find(".comment .gravatar img").attr("src", config.gravatar);
+                post.hide().css("opacity", 0);
 
-            setTimeout(function() {
-                post.animate({ "opacity": 1}, 200)
-            }, 250);
+                $(".main .posts").prepend(post);
+                post.slideDown(200);
+
+                setTimeout(function() {
+                    post.animate({ "opacity": 1}, 200)
+                }, 250);
+            }
         }
     },
     new_reply: function(data) {
@@ -151,7 +155,8 @@ window.newsUtil = {
 
                         window.socketUtil.socket.emit("newsPost", {
                             content: data,
-                            group: _this.group
+                            group: _this.group,
+                            tags: post.attr("data-tags").split(",")
                         });
                     } else {
                         window.error.open(data.error_message);

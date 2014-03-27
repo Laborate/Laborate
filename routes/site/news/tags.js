@@ -2,7 +2,7 @@ exports.posts = function(req, res, next) {
     var user = req.session.user || req.fake_user;
 
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
-        tag.getPosts().order("-created").where({
+        tag.getPosts().limit(15).order("-created").where({
             parent_id: null,
             or: $.merge(
                  [{
@@ -19,13 +19,7 @@ exports.posts = function(req, res, next) {
                 res.renderOutdated('news/post', {
                     title: "News Feed",
                     header: "news",
-                    posts: posts,
                     user: user,
-                    allow_replies: true,
-                    config: {
-                        auto_pull: false
-                    },
-                    restrict: false,
                     js: clientJS.renderTags("news", "highlight"),
                     css: clientCSS.renderTags("news", "highlight"),
                     description: config.descriptions.news.sprintf([

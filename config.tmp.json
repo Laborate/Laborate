@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "REsnk3T5yBkESVBzwiWFqcKJ9dGN41Czc3KFuJgcLUbFsnUhqS"
+            "secret": "MH4C5uL5ArhW8wkNMtBrzzx0h7utvKEemD4KcT1goCKsxsBapg"
         }
     },
     "orm": {
@@ -208,6 +208,7 @@
             "public/js/**",
             "shell/**",
             "wiki/**",
+            "**.log",
             ".*/**",
             ".*"
         ],

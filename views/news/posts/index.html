@@ -3,6 +3,7 @@
         <div id="post_<%= post.pub_id %>"
             data-id="<%= post.pub_id %>"
             data-from="<%= post.owner.screen_name %>"
+            data-tags="<%=: post.tags | map:'name' | join:',' %>"
             class="post"
         >
             <div class="gravatar left">

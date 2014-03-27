@@ -7,9 +7,6 @@ exports.index = function(req, res, next) {
             header: "news",
             user: req.session.user || req.fake_user,
             allow_replies: false,
-            config: {
-                auto_pull: true
-            },
             js: clientJS.renderTags("news", "highlight"),
             css: clientCSS.renderTags("news", "highlight"),
             description: config.descriptions.news.sprintf([
@@ -49,10 +46,7 @@ exports.post = function(req, res, next) {
                 posts: [post],
                 user: user,
                 allow_replies: true,
-                config: {
-                    auto_pull: false
-                },
-                restrict: false,
+                limit_replies: false,
                 js: clientJS.renderTags("news", "highlight"),
                 css: clientCSS.renderTags("news", "highlight"),
                 description: config.descriptions.news.sprintf([
@@ -92,7 +86,7 @@ exports.posts = function(req, res, next) {
                     res.renderOutdated('news/posts/index', {
                         posts: posts,
                         user: req.session.user || req.fake_user,
-                        restrict: true,
+                        limit_replies: true,
                         allow_replies: false
                     });
                 } else {
@@ -134,7 +128,7 @@ exports.posts = function(req, res, next) {
                             res.renderOutdated('news/posts/index', {
                                 posts: total_posts,
                                 user: req.session.user || req.fake_user,
-                                restrict: true,
+                                limit_replies: true,
                                 allow_replies: false
                             });
                         } else {
@@ -164,23 +158,25 @@ exports.create = function(req, res, next) {
             group_id: ((!error && group) ? group.id : null)
         }, function (error, post) {
             if(!error && post) {
-                req.models.posts.get(post.id, function(error, post) {
-                    if(!error && post) {
-                        var tags = req.markdown_links("tags", req.param("content"));
+                var tags = req.markdown_links("tags", req.param("content"));
 
-                        if(!tags.empty) {
-                            $.each(tags, function(index, name) {
-                                req.models.posts.tags.findOrCreate(name, function(error, tag) {
-                                    post.addTags(tag, req.error.capture);
+                async.each(tags, function(name, next) {
+                    req.models.posts.tags.findOrCreate(name, function(error, tag) {
+                        post.addTags(tag, next);
+                    });
+                }, function(errors) {
+                    if(!errors) {
+                        req.models.posts.get(post.id, function(error, post) {
+                            if(!error && post) {
+                                res.renderOutdated('news/posts/index', {
+                                    posts: [post],
+                                    user: req.session.user,
+                                    limit_replies: true,
+                                    allow_replies: false
                                 });
-                            });
-                        }
-
-                        res.renderOutdated('news/posts/index', {
-                            posts: [post],
-                            user: req.session.user,
-                            restrict: true,
-                            allow_replies: false
+                            } else {
+                                res.error(404, null, error);
+                            }
                         });
                     } else {
                         res.error(404, null, error);
@@ -232,7 +228,7 @@ exports.reply = function(req, res, next) {
             res.renderOutdated('news/posts/reply', {
                 child: post,
                 user: req.session.user,
-                restrict: false,
+                limit_replies: false,
             });
         } else {
             res.error(404, null, errors);
