@@ -45,13 +45,17 @@ exports.post = function(req, res, next) {
                 header: "news",
                 posts: [post],
                 user: user,
+                search: false,
                 allow_replies: true,
                 limit_replies: false,
                 js: clientJS.renderTags("news", "highlight"),
                 css: clientCSS.renderTags("news", "highlight"),
                 description: config.descriptions.news.sprintf([
                     $(post.content).text()
-                ])
+                ]),
+                config: {
+                    auto_pull: false
+                }
             });
         } else {
             res.redirect("/news/");

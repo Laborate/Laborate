@@ -20,6 +20,7 @@ exports.posts = function(req, res, next) {
                     title: "News Feed",
                     header: "news",
                     user: user,
+                    posts: false,
                     search: req.param("tag"),
                     js: clientJS.renderTags("news", "highlight"),
                     css: clientCSS.renderTags("news", "highlight"),

@@ -13,13 +13,16 @@ $(function() {
     window.socketUtil.socket.on("newsPost", window.newsUtil.new_post);
 
     window.newsUtil.tags = config.tags || [];
-    window.newsUtil.feed(1);
 
-    window.addEventListener('popstate', function() {
-        if(event.state) {
-            window.newsUtil.feed(1, true);
-        }
-    }, false);
+    if(config.auto_pull != false) {
+        window.newsUtil.feed(1);
 
-    $(window).scroll(window.newsUtil.scroll);
+        window.addEventListener('popstate', function() {
+            if(event.state) {
+                window.newsUtil.feed(1, true);
+            }
+        }, false);
+
+        $(window).scroll(window.newsUtil.scroll);
+    }
 });
