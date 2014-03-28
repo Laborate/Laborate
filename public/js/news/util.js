@@ -17,7 +17,8 @@ window.newsUtil = {
 
             $.get("/news/pages/" + page + "/", {
                 group: _this.group,
-                tags: _this.tags
+                tags: _this.tags,
+                _csrf: window.config.csrf
             }, function(data) {
                 _this.loading = false;
                 $(".main .loader").removeClass("activated");
@@ -50,8 +51,6 @@ window.newsUtil = {
     new_post: function(data) {
         var _this = window.newsUtil;
         if(_this.group == data.group) {
-            console.log(_this.tags.empty, !_this.tags.intersections(data.tags).empty);
-
             if(_this.tags.emtpy || !_this.tags.intersections(data.tags).empty) {
                 var post = $(data.content);
                 post.find(".comment .gravatar img").attr("src", config.gravatar);
@@ -112,7 +111,8 @@ window.newsUtil = {
 
         if(preview) {
             $.post("/news/preview", {
-                content: form.find("textarea").val()
+                content: form.find("textarea").val(),
+                _csrf: window.config.csrf
             }, function(data) {
                 if(typeof data == "string") {
                     $(".main .container > .form .previewer").html(data).show();
@@ -136,7 +136,8 @@ window.newsUtil = {
 
                 $.post("/news/create/", {
                     content: content,
-                    group: _this.group
+                    group: _this.group,
+                    _csrf: window.config.csrf
                 }, function(data) {
                     if(typeof data == "string") {
                         var post = $(data);
@@ -174,7 +175,8 @@ window.newsUtil = {
 
             if(content) {
                 $.post("/news/" + parent + "/reply/", {
-                    content: content
+                    content: content,
+                    _csrf: window.config.csrf
                 }, function(data) {
                     if(typeof data == "string") {
                         var post = $(data);
@@ -221,7 +223,9 @@ window.newsUtil = {
         if(config.logged_in) {
             var post = element.parents((reply) ? ".reply" : ".post").attr("data-id");
 
-            $.post("/news/" + post + "/like/", function(data) {
+            $.post("/news/" + post + "/like/", {
+                _csrf: window.config.csrf
+            }, function(data) {
                 if(data.success) {
                     var counter = (data.like) ? "Unlike" : "Like";
 
@@ -337,7 +341,8 @@ window.newsUtil = {
 
         if(_this.tags.indexOf(tag) == -1) {
             $.post("/news/tags/create/", {
-                tag: tag
+                tag: tag,
+                _csrf: window.config.csrf
             }, function(data) {
                 _this.tags.push(tag);
                 _this.feed(1, true);

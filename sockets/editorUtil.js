@@ -262,9 +262,9 @@ exports.room = function(req, socket, embed) {
 
         if(socket) {
             if(embed) {
-                return "editorEmbed" + room;
+                return "editor:embed:" + room;
             } else {
-                return "editor" + room;
+                return "editor:" + room;
             }
         } else {
             return room;

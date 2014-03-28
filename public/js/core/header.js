@@ -27,6 +27,7 @@ $(function() {
 
             setTimeout(function() {
                 $(".header .search").addClass("activated");
+                $(".header .search .input").focus();
             }, 250);
         }
     });

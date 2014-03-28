@@ -241,7 +241,7 @@ exports.locals = function(req, res, next) {
     res.locals.embed = false;
     res.locals.header = "";
     res.locals.header_class = "";
-    res.locals.image =
+    res.locals.type = "website";
 
     res.locals.apps = {
         sftp: {

@@ -2,7 +2,7 @@ var async = require("async");
 
 require('../init')("editor.changes", function() {
     var _this = this;
-    _this.redis.keys("editor*", function(error, documents) {
+    _this.redis.keys("editor:*", function(error, documents) {
         if(!error && !documents.empty) {
             async.each(documents, function(room, next) {
                 _this.redis.get(room, function(error, reply) {

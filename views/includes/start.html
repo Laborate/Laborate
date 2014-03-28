@@ -1,76 +1,10 @@
 <!--
 <% include ./printout.html %>
 -->
-<%
-    if(typeof title == "object") {
-        title = title.join(site_delimeter);
-    }
-
-    if(title_first) {
-        title = (title) ? (title + site_delimeter + site_title) : site_title;
-    } else {
-        title = (title) ? (site_title + site_delimeter + title) : site_title;
-    }
-%>
 <!DOCTYPE html>
 <html itemscope="itemscope" itemtype="http://schema.org/WebPage" lang="en">
     <head>
-        <!-- Base Meta Tags -->
-        <title><%= title %></title>
-        <meta name="description" content="<%= description %>">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <meta charset="utf-8">
-
-        <!-- Open Graph Meta Tags -->
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="<%= host %>">
-        <meta property="og:image" content="<%= favicons["graph"] + random %>">
-        <meta property="og:title" content="<%= title %>">
-        <meta property="og:description" content="<%= description %>">
-        <meta property="og:site_name" content="<%= site_title %>"/>
-
-        <!-- Google Authorship and Publisher Markup -->
-        <link rel="author" href="<%= social.google_plus.link %>/posts"/>
-        <link rel="publisher" href="<%= social.google_plus.link %>"/>
-
-        <!-- Schema.org markup for Google+ -->
-        <meta itemprop="name" content="<%= title %>">
-        <meta itemprop="description" content="<%= description %>">
-        <meta itemprop="image" content="<%= favicons["graph"] + random %>">
-
-        <!-- Twitter Card data -->
-        <meta name="twitter:card" content="summary">
-        <meta name="twitter:domain" content="<%= host %>">
-        <meta name="twitter:site" content="@<%= social.twitter.name %>">
-        <meta name="twitter:title" content="<%= title %>">
-        <meta name="twitter:description" content="<%= description %>">
-        <meta name="twitter:image:src" content="<%= favicons["graph"] + random %>">
-
-        <!-- Google Webmaster Meta Tags -->
-        <meta name="google-site-verification" content="<%= google.verification %>" />
-
-        <!-- Robot Meta Tags -->
-        <meta name="robots" content="INDEX, FOLLOW">
-        <meta name="revisit-after" content="1 day">
-        <meta name="distribution" content="web">
-
-        <% if(private) { %>
-            <meta name="robots" content="noindex">
-        <% } else { %>
-            <meta name="robots" content="index, follow">
-        <% } %>
-
-        <!-- Favicon ICO -->
-        <link rel="shortcut icon" href="<%= favicons["32"] + random %>" />
-        <!-- Standard Favicon -->
-        <link rel="icon" type="image/png" href="<%= favicons["32"] + random %>" />
-        <!-- For iPhone 4 Retina display: -->
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<%= favicons["114"] + random %>">
-        <!-- For iPad: -->
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<%= favicons["72"] + random %>">
-        <!-- For iPhone: -->
-        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="<%= favicons["57"] + random %>">
+        <% include ./meta.html %>
 
         <!-- CSS -->
         <%- css %>
@@ -82,7 +16,7 @@
                 host: "<%= host %>",
                 port: <%= port || null %>,
                 socket: "<%= socket %>",
-                title: "<%= title %>",
+                title: "<%= full_title %>",
                 name: "<%= site_title %>",
                 delimeter: "<%= site_delimeter %>",
                 pageTrack: <%= pageTrack %>,

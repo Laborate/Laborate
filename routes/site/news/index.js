@@ -43,6 +43,7 @@ exports.post = function(req, res, next) {
             res.renderOutdated('news/post', {
                 title: "News Feed",
                 header: "news",
+                type: "article",
                 posts: [post],
                 user: user,
                 search: false,
