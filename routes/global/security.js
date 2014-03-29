@@ -5,14 +5,14 @@ module.exports = function(crsf, basicAuth) {
         } else {
             if(req.host) {
                 if(req.verified) {
-                    req.session.organization = { register: true, icons: {} };
+                    req.session.organization = req.fake.organization;
                     finish(req, res, next, crsf, basicAuth);
                 } else {
-                    req.models.organizations.find({
+                    req.models.organizations.one({
                         dns: req.host
-                    }, function(error, organizations) {
-                        if(!error && organizations.length == 1) {
-                            req.session.organization = organizations[0];
+                    }, function(error, organization) {
+                        if(!error && organization) {
+                            req.session.organization = organization;
                             finish(req, res, next, crsf, basicAuth);
                         } else {
                             res.send(403);

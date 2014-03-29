@@ -5,7 +5,7 @@ exports.index = function(req, res, next) {
         res.renderOutdated('news/index', {
             title: "News Feed",
             header: "news",
-            user: req.session.user || req.fake_user,
+            user: req.session.user || req.fake.user,
             allow_replies: false,
             js: clientJS.renderTags("news", "highlight"),
             css: clientCSS.renderTags("news", "highlight"),
@@ -21,7 +21,7 @@ exports.index = function(req, res, next) {
 }
 
 exports.post = function(req, res, next) {
-    var user = req.session.user || req.fake_user;
+    var user = req.session.user || req.fake.user;
 
     req.models.posts.one({
          or: $.merge(
@@ -90,7 +90,7 @@ exports.posts = function(req, res, next) {
                 if(!error && !posts.empty) {
                     res.renderOutdated('news/posts/index', {
                         posts: posts,
-                        user: req.session.user || req.fake_user,
+                        user: req.session.user || req.fake.user,
                         limit_replies: true,
                         allow_replies: false
                     });
@@ -132,7 +132,7 @@ exports.posts = function(req, res, next) {
                         if(!errors && !total_posts.empty) {
                             res.renderOutdated('news/posts/index', {
                                 posts: total_posts,
-                                user: req.session.user || req.fake_user,
+                                user: req.session.user || req.fake.user,
                                 limit_replies: true,
                                 allow_replies: false
                             });

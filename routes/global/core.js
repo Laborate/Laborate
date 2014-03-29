@@ -86,13 +86,20 @@ exports.imports = function(req, res, next) {
         country: null,
         ll: [null, null]
     };
-    req.fake_user = {
-        name: "An Amazaing Laborator",
-        screen_name: "laborator",
-        gravatar: config.gravatar,
-        fake: true,
-        groups: [],
-        organizations: []
+    req.fake= {
+        user: {
+            name: "An Amazaing Laborator",
+            screen_name: "laborator",
+            gravatar: config.gravatar,
+            fake: true,
+            groups: [],
+            organizations: []
+        },
+        organization: {
+            fake: true,
+            register: true,
+            icons: {}
+        }
     };
 
     //Device Info

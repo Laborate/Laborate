@@ -236,10 +236,10 @@ window.editorUtil = {
                     window.editor.setOption("mode", $.trim(object.mode));
                     setTimeout(function () {
                         window.editor.refresh();
-                    }, 100);
+                    }, 500);
                 }
-            }, 100);
-        }, 100);
+            }, 500);
+        }, 500);
     },
     setModeExtension: function(extension) {
         if(extension) {

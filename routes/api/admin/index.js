@@ -1,12 +1,12 @@
 var proccess = require('child_process');
 
 exports.restart = function(req, res, next) {
-    req.models.users.find({
+    req.models.users.exists({
         screen_name: req.param("user"),
         password: req.models.users.hash($.trim(req.param('password'))),
         admin: true
-    }, function(error, users) {
-        if(!error && !users.empty) {
+    }, function(error, exists) {
+        if(!error && exists) {
             proccess.exec("forever restartall");
 
             res.json({

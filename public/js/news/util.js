@@ -339,6 +339,10 @@ window.newsUtil = {
         var _this = this;
         var tag = form.find(".input").val();
 
+        if(tag.charAt(0) === '#') {
+            tag = tag.substr(1);
+        }
+
         if(_this.tags.indexOf(tag) == -1) {
             $.post("/news/tags/create/", {
                 tag: tag,

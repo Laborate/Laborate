@@ -1,5 +1,5 @@
 exports.posts = function(req, res, next) {
-    var user = req.session.user || req.fake_user;
+    var user = req.session.user || req.fake.user;
 
     req.models.posts.tags.findOrCreate(req.param("tag"), function(error, tag) {
         tag.getPosts().limit(15).where({

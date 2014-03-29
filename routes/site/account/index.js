@@ -280,15 +280,15 @@ exports.plan_change = function(req, res) {
                 trial_end: req.core.days.next_month()
             }, function(error) {
                 if(!error) {
-                    req.models.pricing.find({
+                    req.models.pricing.one({
                         plan: req.param("plan")
-                    }, function(error, plans) {
-                        if(!error && plans.length != 0) {
-                            user.setPricing(plans[0], function(error, user) {
+                    }, function(error, plan) {
+                        if(!error && plan) {
+                            user.setPricing(plan, function(error, user) {
                                 if(!error) {
                                     user.save({
                                         trial: false,
-                                        deliquent: (plans[0].amount == 0) ? false : user.deliquent
+                                        deliquent: (plan.amount == 0) ? false : user.deliquent
                                     }, function(error, user) {
                                         if(!error) {
                                             req.session.user = user;
