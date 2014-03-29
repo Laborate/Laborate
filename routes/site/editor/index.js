@@ -10,30 +10,10 @@ exports.index = function(req, res, next) {
 exports.editor = function(req, res, next) {
     req.models.documents.one({
         pub_id: req.param("document")
-    }, function(error, document) {
+    }, { autoFetch: true }, function(error, document) {
         if(!error && document) {
-            if(req.mobile) {
+            if(req.mobile || req.robot) {
                 res.redirect(req.url + "embed/");
-            } else if(req.robot) {
-                if(!document.private) {
-                    document.getOwner(function(error, owner) {
-                        if(!error && owner) {
-                            res.renderOutdated('editor/code/index', {
-                                title: document.name,
-                                document: document,
-                                description: config.descriptions.editor.sprintf([
-                                    document.name,
-                                    owner.name,
-                                    document.name
-                                ])
-                            });
-                        } else {
-                            res.error(404, null, error);
-                        }
-                    });
-                } else {
-                    res.error(404);
-                }
             } else if(req.session.user) {
                 document.join(req.session.user, 2, function(access, permission) {
                     if(access) {
@@ -51,7 +31,12 @@ exports.editor = function(req, res, next) {
                                     id: 2,
                                     owner: false
                                 }
-                            }
+                            },
+                            description: config.descriptions.editor.sprintf([
+                                document.name,
+                                document.owner.name,
+                                document.name
+                            ])
                         });
                     } else {
                         res.error(404);
@@ -69,39 +54,40 @@ exports.editor = function(req, res, next) {
 }
 
 exports.embed = function(req, res, next) {
-    if(!req.robot) {
-        req.models.documents.one({
-            pub_id: req.param("document")
-        }, function(error, document) {
-            if(!error && document) {
-                if(!document.private) {
-                    req.mobile = false;
+    req.models.documents.one({
+        pub_id: req.param("document")
+    }, { autoFetch: true }, function(error, document) {
+        if(!error && document) {
+            if(!document.private) {
+                req.mobile = false;
 
-                    res.renderOutdated('editor/code/embed/index', {
-                        title: document.name,
-                        document: document,
-                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
-                        css: clientCSS.renderTags("backdrop", "codemirror", "editor", "editor-embed"),
+                res.renderOutdated('editor/code/embed/index', {
+                    title: document.name,
+                    document: document,
+                    js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
+                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "editor-embed"),
+                    embed: true,
+                    header: (req.param("header") != "false"),
+                    config: {
                         embed: true,
-                        header: (req.param("header") != "false"),
-                        config: {
-                            embed: true,
-                            permission: {
-                                id: 2,
-                                owner: false
-                            }
+                        permission: {
+                            id: 2,
+                            owner: false
                         }
-                    });
-                } else {
-                   res.error(404, null, null, { embed: true });
-                }
+                    },
+                    description: config.descriptions.editor.sprintf([
+                        document.name,
+                        document.owner.name,
+                        document.name
+                    ])
+                });
             } else {
-                res.error(404, null, error, { embed: true });
+               res.error(404, null, null, { embed: true });
             }
-        });
-    } else {
-        res.error(404, null, null, { embed: true });
-    }
+        } else {
+            res.error(404, null, error, { embed: true });
+        }
+    });
 }
 
 exports.embed_test = function(req, res, next) {

@@ -31,8 +31,6 @@ exports.setup = function(req, res, next) {
                     animate: false
                 }
             }, outdatedhtml.makeoutdated(req, res));
-        } else if(req.robot) {
-            res.render("robot", data, outdatedhtml.makeoutdated(req, res));
         } else {
             res.render(view, data, outdatedhtml.makeoutdated(req, res));
         }
