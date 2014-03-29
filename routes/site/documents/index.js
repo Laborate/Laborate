@@ -147,14 +147,17 @@ exports.file_upload = function(req, res, next) {
 }
 
 exports.file_rename = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            document = documents[0].document;
-            document.save({ name: req.param("name") });
+    }, function(error, document) {
+        if(!error && document) {
+            document = document.document;
+            document.save({
+                name: req.param("name")
+            });
+
             res.json({
                 success: true,
                 document: {
@@ -170,14 +173,14 @@ exports.file_rename = function(req, res, next) {
 };
 
 exports.file_private = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
+    }, function(error, document) {
+        if(!error && document) {
             var user = req.session.user;
-            var document = documents[0].document;
+            var document = document.document;
 
             if(document.owner_id == user.id) {
                 document.private = (req.param("private") === "true");
@@ -202,13 +205,13 @@ exports.file_private = function(req, res, next) {
 }
 
 exports.file_remove = function(req, res, next) {
-     req.models.documents.roles.find({
+     req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            document = documents[0].document;
+    }, function(error, document) {
+        if(!error && document) {
+            document = document.document;
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {

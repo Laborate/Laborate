@@ -44,7 +44,7 @@
     </div>
     <div id="backdrop-footer">
         <ul>
-            <% if(loggedIn) { %>
+            <% if(user && !user.fake) { %>
                 <li><a href="/logout/">Logout</a></li>
             <% } else { %>
                 <li><a href="/login/">Log In</a></li>

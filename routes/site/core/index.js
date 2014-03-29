@@ -28,11 +28,11 @@ exports.organization = function(req, res, next) {
 }
 
 exports.shortner = function(req, res, next) {
-    req.models.shortner.find({
+    req.models.shortner.one({
         pub_id: req.param("code")
-    }, 1, function(error, shortned) {
-        if(!error, !shortned.empty) {
-            res.redirect(shortned[0].url);
+    }, function(error, shortned) {
+        if(!error && shortned) {
+            res.redirect(shortned.url);
         } else {
             res.error(404, null, error);
         }

@@ -26,20 +26,19 @@ exports.index = function(req, res, next) {
 }
 
 exports.user = function(req, res, next) {
-    req.models.users.find({
+    req.models.users.one({
         screen_name: req.param("user")
-    }, function(error, users){
-        if(!error && !users.empty) {
+    }, function(error, user){
+        if(!error && user) {
             res.renderOutdated('users/index', {
-                title: users[0].screen_name + " (" + users[0].name + ")",
+                title: user.screen_name + " (" + user.name + ")",
                 header: "users",
                 header_class: "lighten",
-                laborator: users[0],
+                laborator: user,
                 js: clientJS.renderTags("users", "backdrop"),
                 css: clientCSS.renderTags("users", "backdrop"),
                 backdrop: req.backdrop(),
-                pageTrack: true,
-                loggedIn: !!req.session.user
+                pageTrack: true
             });
         } else {
             res.error(404, null, error);

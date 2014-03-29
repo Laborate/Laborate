@@ -21,7 +21,7 @@
                 delimeter: "<%= site_delimeter %>",
                 pageTrack: <%= pageTrack %>,
                 gravatar: "<%= gravatar %>",
-                logo: "<%= favicons["500"] + random %>",
+                logo: "<%= logos["500"] + random %>",
                 apps: <%- JSON.stringify(apps) %>,
                 icons: <%- JSON.stringify(icons) %>,
                 logged_in: <%= (user && !user.fake) ? true : false %>,
@@ -80,7 +80,7 @@
         <!-- End Distance.io Tracking Code -->
 
     </head>
-    <body class="<%= (organization.id) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %> <%= (embed) ? "embed" : "" %>">
+    <body class="<%= (!organization.fake) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %> <%= (embed) ? "embed" : "" %>">
         <% if(production) { %>
             <div id="printout" class="hidden"><% include ./printout.html %></div>
         <% } %>

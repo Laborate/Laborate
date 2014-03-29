@@ -8,12 +8,10 @@ exports.index = function(req, res, next) {
 }
 
 exports.editor = function(req, res, next) {
-    req.models.documents.find({
+    req.models.documents.one({
         pub_id: req.param("document")
-    }, function(error, documents) {
-        if(!error && !documents.empty) {
-            var document = documents[0];
-
+    }, function(error, document) {
+        if(!error && document) {
             if(req.mobile) {
                 res.redirect(req.url + "embed/");
             } else if(req.robot) {
@@ -72,12 +70,10 @@ exports.editor = function(req, res, next) {
 
 exports.embed = function(req, res, next) {
     if(!req.robot) {
-        req.models.documents.find({
+        req.models.documents.one({
             pub_id: req.param("document")
-        }, function(error, documents) {
-            if(!error && !documents.empty) {
-                var document = documents[0];
-
+        }, function(error, document) {
+            if(!error && document) {
                 if(!document.private) {
                     req.mobile = false;
 
@@ -151,21 +147,22 @@ exports.exists = function(req, res, next) {
 }
 
 exports.update = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
-    }, function(error, documents) {
-        if(documents.length == 1) {
-            if(!error) {
+    }, function(error, role) {
+        if(!error) {
+            if(role) {
                 var user = req.session.user;
-                var document = documents[0].document;
+                var permission = role.permission;
+                var document = role.document;
                 var changeReadonly = false;
                 var changePrivate = false;
 
                 document.name = req.param("name");
 
-                if(documents[0].permission.owner) {
+                if(permission.owner) {
                     if(!user.organizations.empty) {
                         if(!user.organizations[0].permission.student) {
                             var readonly = (req.param("readonly") === "true");
@@ -193,23 +190,23 @@ exports.update = function(req, res, next) {
                     }
                 });
             } else {
-                res.error(200, "Failed To Update File", error);
+                res.error(404);
             }
         } else {
-            res.error(404);
+            res.error(200, "Failed To Update File", error);
         }
     });
 }
 
 exports.download = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
-    }, function(error, documents) {
+    }, function(error, role) {
         if(!error) {
-            if(documents.length == 1) {
-                var document = documents[0].document;
+            if(role) {
+                var document = role.document;
                 res.cookie("fileDownload", true, { path: "/" });
                 res.attachment(document.name);
                 res.end((document.content) ? document.content.join("\n") : "", "UTF-8");
@@ -223,16 +220,14 @@ exports.download = function(req, res, next) {
 }
 
 exports.remove = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            var document = documents[0].document;
-
-            if(documents[0].permission.owner) {
-                document.remove(function(error) {
+    }, function(error, document) {
+        if(!error && role) {
+            if(role.permission.owner) {
+                role.document.remove(function(error) {
                     if(!error) {
                         res.json({
                             success: true,
@@ -243,7 +238,7 @@ exports.remove = function(req, res, next) {
                     }
                 });
             } else {
-                documents[0].remove(function(error) {
+                role.remove(function(error) {
                     if(!error) {
                         res.json({
                             success: true,
@@ -261,14 +256,14 @@ exports.remove = function(req, res, next) {
 }
 
 exports.invite = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
-    }, function(error, documents) {
+    }, function(error, role) {
         if(!error) {
-            if(documents.length == 1) {
-                var document = documents[0].document;
+            if(role) {
+                var document = role.document;
 
                 req.models.users.find({
                     screen_name: req.param("screen_name").toLowerCase()
@@ -330,7 +325,7 @@ exports.laborators = function(req, res, next) {
     req.models.documents.roles.find({
         user_id: req.db.tools.ne(req.session.user.id),
         document_pub_id: req.param("document")
-    }, {autoFetch:true}, function(error, roles) {
+    }, { autoFetch:true }, function(error, roles) {
         if(!error) {
             res.json({
                 success: true,
@@ -366,16 +361,16 @@ exports.laborators = function(req, res, next) {
 }
 
 exports.laborator = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_pub_id: req.param("user"),
         document_pub_id: req.param("document")
-    }, function(error, roles) {
-        if(!error && !roles.empty) {
-            if(roles[0].document.owner_id == req.session.user.id) {
+    }, function(error, role) {
+        if(!error && role) {
+            if(role.document.owner_id == req.session.user.id) {
                 req.models.documents.permissions.get(
                     req.param("permission"), function(error, permission) {
                         if(!error && permission) {
-                            roles[0].setPermission(permission, function(error, role) {
+                            role.setPermission(permission, function(error, role) {
                                 if(!error) {
                                     res.json({ success: true });
                                 } else {
@@ -400,14 +395,14 @@ exports.laborator = function(req, res, next) {
     Release an API for Committing
 */
 exports.commit = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, roles) {
-        if(!error && !roles.empty) {
-            if(!roles[0].permission.readonly) {
-                var document = roles[0].document;
+    }, function(error, role) {
+        if(!error && role) {
+            if(!role.permission.readonly) {
+                var document = role.document;
                 var location = req.session.user.locations[document.location];
 
                 if(location) {
@@ -441,14 +436,14 @@ exports.commit = function(req, res, next) {
 }
 
 exports.save = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, roles) {
-        if(!error && !roles.empty) {
-            if(!roles[0].permission.readonly) {
-                var document = roles[0].document;
+    }, function(error, role) {
+        if(!error && role) {
+            if(!role.permission.readonly) {
+                var document = role.document;
                 var location = req.session.user.locations[document.location];
 
                 if(location) {

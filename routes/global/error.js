@@ -1,3 +1,4 @@
+var expressError = require('express-error');
 var error_handler = function(status, message, locals, req, res) {
     var error_message;
     var error_html;
@@ -85,12 +86,14 @@ var error_handler = function(status, message, locals, req, res) {
 
 exports.global = function(error, req, res, next) {
     if(error) {
-        var html = error
-                    .toString()
-                    .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-                    .replace(/\n/g, '<br>');
+        if(config.general.production) {
+            error_handler(500, "Laborate is experiencing technical difficalties", {
+                home: false
+            }, req, res);
+        } else {
+            expressError.express3({contextLinesCount: 3, handleUncaughtException: true})(error, req, res, next);
+        }
 
-        res.send(html);
         lib.error.capture(error);
     } else {
         next();
@@ -99,7 +102,12 @@ exports.global = function(error, req, res, next) {
 
 exports.handler = function(req, res, next) {
     res.error = function(status, message, error, locals) {
-        error_handler(status, message, locals, req, res);
+        if(config.general.production || !error) {
+            error_handler(status, message, locals, req, res);
+        } else {
+            expressError.express3({contextLinesCount: 3, handleUncaughtException: true})(error, req, res, next);
+        }
+
         req.error.capture(error);
     }
     next();

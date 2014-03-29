@@ -35,7 +35,6 @@ exports.leave = function(req, override) {
                 //Only Non-forced Disconnects
                 if((req.data == "booted" && socket == req.io.socket.id) || override == true) {
                     editorUtil.broadcast(req, "chatroom left");
-                    editorUtil.saveDocument(req);
                 }
 
                 editorUtil.removeUser(req);

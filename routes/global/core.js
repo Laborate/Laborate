@@ -86,7 +86,7 @@ exports.imports = function(req, res, next) {
         country: null,
         ll: [null, null]
     };
-    req.fake= {
+    req.fake = {
         user: {
             name: "An Amazaing Laborator",
             screen_name: "laborator",
@@ -98,7 +98,7 @@ exports.imports = function(req, res, next) {
         organization: {
             fake: true,
             register: true,
-            icons: {}
+            logos: {}
         }
     };
 
@@ -147,14 +147,8 @@ exports.imports = function(req, res, next) {
         }
     }
 
-    //Site Routes
-    if(req.verified) {
-        require("../site/routes")(function(routes) {
-            req.routes = routes;
-        });
-
     //Api Routes
-    } else if(req.subdomains.indexOf("api") != -1) {
+    if(req.subdomains.indexOf("api") != -1) {
         require("../site/api")(function(routes) {
             req.routes = routes;
         });
@@ -165,6 +159,11 @@ exports.imports = function(req, res, next) {
             req.routes = routes;
         });
 
+    //Site Routes
+    } else {
+        require("../site/routes")(function(routes) {
+            req.routes = routes;
+        });
     }
 
     //Tracking
@@ -237,7 +236,7 @@ exports.locals = function(req, res, next) {
     res.locals.pageTrack = true;
     res.locals.config = {};
     res.locals.icons = config.icons;
-    res.locals.user = req.session.user || req.fake_user;
+    res.locals.user = req.session.user || req.fake.user;
     res.locals.organization = req.session.organization;
     res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
     res.locals.mobile = req.mobile;
@@ -275,16 +274,17 @@ exports.locals = function(req, res, next) {
             link: "/google/token/"
         }
     };
-    res.locals.favicons = (!$.isEmptyObject(req.session.organization.icons)) ? req.session.organization.icons : {
-        "graph": res.locals.host + "/favicon/196.png",
-        "1000": res.locals.host + "/favicon/1000.png",
-        "500": res.locals.host + "/favicon/500.png",
-        "196": res.locals.host + "/favicon/196.png",
-        "160": res.locals.host + "/favicon/160.png",
-        "114": res.locals.host + "/favicon/114.png",
-        "72": res.locals.host + "/favicon/72.png",
-        "57": res.locals.host + "/favicon/57.png",
-        "32": res.locals.host + "/favicon/32.png"
+    res.locals.logos = {
+        "logo":  req.session.organization.logos["logo"]  || res.locals.host + "/img/logo.png",
+        "graph": req.session.organization.logos["graph"] || res.locals.host + "/favicon/196.png",
+        "1000":  req.session.organization.logos["1000"]  || res.locals.host + "/favicon/1000.png",
+        "500":   req.session.organization.logos["500"]   || res.locals.host + "/favicon/500.png",
+        "196":   req.session.organization.logos["196"]   || res.locals.host + "/favicon/196.png",
+        "160":   req.session.organization.logos["160"]   || res.locals.host + "/favicon/160.png",
+        "114":   req.session.organization.logos["114"]   || res.locals.host + "/favicon/114.png",
+        "72":    req.session.organization.logos["72"]    || res.locals.host + "/favicon/72.png",
+        "57":    req.session.organization.logos["57"]    || res.locals.host + "/favicon/57.png",
+        "32":    req.session.organization.logos["32"]    || res.locals.host + "/favicon/32.png"
     };
 
     next();

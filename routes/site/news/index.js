@@ -38,7 +38,7 @@ exports.post = function(req, res, next) {
         )
     }, function(error, post) {
         if(!error && post) {
-            res.locals.favicons.graph = post.owner.gravatar;
+            res.locals.logos.graph = post.owner.gravatar;
 
             res.renderOutdated('news/post', {
                 title: "News Feed",

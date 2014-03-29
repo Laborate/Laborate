@@ -6,6 +6,7 @@
     "express.io": "1.1.13",
     "express-outdatedhtml": "0.0.1",
     "express-device": "0.3.7",
+    "express-error": "0.0.7",
     "connect-slashes": "0.0.10",
     "ejs": "0.8.4",
     "less": "1.5.1",
