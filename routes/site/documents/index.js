@@ -151,9 +151,9 @@ exports.file_rename = function(req, res, next) {
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, document) {
-        if(!error && document) {
-            document = document.document;
+    }, function(error, role) {
+        if(!error && role) {
+            document = role.document;
             document.save({
                 name: req.param("name")
             });
@@ -177,10 +177,10 @@ exports.file_private = function(req, res, next) {
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, document) {
-        if(!error && document) {
+    }, function(error, role) {
+        if(!error && role) {
             var user = req.session.user;
-            var document = document.document;
+            var document = role.document;
 
             if(document.owner_id == user.id) {
                 document.private = (req.param("private") === "true");
@@ -209,9 +209,10 @@ exports.file_remove = function(req, res, next) {
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, document) {
-        if(!error && document) {
-            document = document.document;
+    }, function(error, role) {
+        if(!error && role) {
+            var document = role.document;
+
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {
@@ -221,7 +222,7 @@ exports.file_remove = function(req, res, next) {
                     }
                 });
             } else {
-                documents[0].remove(function(error) {
+                role.remove(function(error) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
