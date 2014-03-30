@@ -1,0 +1,31 @@
+<% include ../includes/start.html %>
+<% include ../includes/header.html %>
+<div class="panel main">
+    <div class="container profile">
+        <div class="group-header">
+            <div class="gravatars" style="<%= background %>">
+                <% if(group.private) { %>
+                    <div class="icon <%= icons.locked %>"></div>
+                <% } %>
+                <div class="cover"></div>
+                <div class="gravatars">
+                    <% $.each(group.exclude(user.id).slice(0, 16), function(index, laborator) { %>
+                        <div class="gravatar" style="background-image: url('<%= laborator.gravatar %>')"></div>
+                    <% }); %>
+                </div>
+            </div>
+            <div class="info">
+                <div class="name"><%= group.name %></div>
+                <div class="description"><%= group.description %></div>
+            </div>
+            <% if(!access) { %>
+                <a class="corner-button join">/groups/<%= group.pub_id %>/join/</a>
+            <% } else if(group.owner_id == user.id) { %>
+                <div class="corner-button owner">Owner</div>
+            <% } else { %>
+                <div class="corner-button member">Member</div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% include ../includes/end.html %>

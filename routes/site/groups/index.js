@@ -44,13 +44,12 @@ exports.group = function(req, res, next) {
         autoFetchLimit: 2
     }, function(error, group) {
         if(!error) {
-            var route = (access) ? "group" : "request";
-
             if(group && (access || !group.private)) {
-                res.renderOutdated('groups/' + route, {
+                res.renderOutdated('groups/profile', {
                     title: group.name,
                     header: "users",
                     group: group,
+                    access: access,
                     js: clientJS.renderTags("groups"),
                     css: clientCSS.renderTags("groups"),
                     pageTrack: true,

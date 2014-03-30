@@ -57,7 +57,8 @@
     "highlight.js": "8.0.0",
     "twitter-text": "1.8.0",
     "sprintf-js": "0.0.7",
-    "wordfilter": "0.1.5"
+    "wordfilter": "0.1.5",
+    "pluralize": "0.0.7"
   },
   "devDependencies": {
     "express-debug": "*"

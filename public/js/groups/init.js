@@ -1,4 +1,4 @@
 $(function(){
-    $(".group .info").vAlign();
-    $(".group.request").hAlign();
+    $(".container.listing .info").vAlign();
+    $(".container.profile .icon").vAlign().hAlign();
 });
