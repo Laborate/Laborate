@@ -19,7 +19,7 @@ exports.index = function(req, res) {
                         .skip(Math.floor(Math.random() * count))
                         .limit(1)
                         .run(function(error, user) {
-                            if(!error && screen_names.indexOf(user[0].screen_name) == -1) {
+                            if(!error && !user.empty && screen_names.indexOf(user[0].screen_name) == -1) {
                                 counter++;
                                 users.push(user[0]);
                                 screen_names.push(user[0].screen_name);

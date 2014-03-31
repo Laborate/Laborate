@@ -3,9 +3,9 @@ module.exports = function(app, routes) {
     var auth = routes.auth;
     var groups = routes.groups;
 
-    app.get('/groups', auth.util.restrictAccess, groups.index);
+    app.get('/groups', auth.util.robotDenied, auth.util.restrictAccess, groups.index);
     app.get('/groups/create', auth.util.restrictAccess, core.reload, groups.create);
-    app.get('/groups/:group', auth.util.restrictAccess, core.reload, groups.group);
+    app.get('/groups/:group', core.reload, groups.group);
     app.get('/groups/:group/remove', auth.util.restrictAccess, groups.util.remove);
     app.get('/groups/:group/leave', auth.util.restrictAccess, groups.util.leave);
 

@@ -86,6 +86,7 @@ exports.imports = function(req, res, next) {
     };
     req.fake = {
         user: {
+            id: null,
             name: "An Amazaing Laborator",
             screen_name: "laborator",
             gravatar: config.gravatar,

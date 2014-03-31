@@ -102,6 +102,14 @@ exports.removeRedirect = function(req, res, next) {
     next();
 }
 
+exports.robotDenied = function(req, res, next) {
+    if(req.robot) {
+        res.error(404);
+    } else {
+        next();
+    }
+}
+
 exports.loginDenied = function(req, res, next) {
     if(req.session.user) {
         res.error(404);
