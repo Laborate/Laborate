@@ -58,7 +58,7 @@
     "twitter-text": "1.8.0",
     "sprintf-js": "0.0.7",
     "wordfilter": "0.1.5",
-    "pluralize": "0.0.7"
+    "i": "0.3.2"
   },
   "devDependencies": {
     "express-debug": "*"

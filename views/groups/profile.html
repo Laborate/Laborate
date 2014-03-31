@@ -9,7 +9,7 @@
                 <% } %>
                 <div class="cover"></div>
                 <div class="gravatars">
-                    <% $.each(group.exclude(user.id).slice(0, 16), function(index, laborator) { %>
+                    <% $.each(group.users.slice(0, 16), function(index, laborator) { %>
                         <div class="gravatar" style="background-image: url('<%= laborator.gravatar %>')"></div>
                     <% }); %>
                 </div>
@@ -26,19 +26,52 @@
                 <div class="corner-button member">Member</div>
             <% } %>
         </div>
+        <% if(group.owner_id == user.id) { %>
+            <div class="group-actions">
+                <div class="action">
+                    <div data-action="invite">Invite Users</div>
+                </div>
+                <div class="action">
+                    <div data-action="remove">Remove Users</div>
+                </div>
+                <div class="action">
+                    <a href="/groups/<%= group.pub_id %>/edit/">Edit Group</a>
+                </div>
+                <div class="action">
+                    <a href="/groups/<%= group.pub_id %>/remove/">Delete Group</a>
+                </div>
+            </div>
+        <% } %>
         <div class="group-metrics">
             <div class="metric">
-                <div class="count"><%=: group.exclude(user.id).length | format %></div>
-                <div class="name">Members</div>
+                <div class="count"><%=: group.users.length | format %></div>
+                <div class="name"><%=: "Member" | pluralize:(group.users.length != 1) %></div>
             </div>
             <div class="metric">
                 <div class="count"><%=: group.posts | format %></div>
-                <div class="name">Posts</div>
+                <div class="name"><%=: "Post" | pluralize:(group.posts != 1) %></div>
             </div>
             <div class="metric">
                 <div class="count"><%=: group.documents | format %></div>
-                <div class="name">Active Documents</div>
+                <div class="name">Active <%=: "Document" | pluralize:(group.documents != 1) %></div>
             </div>
+        </div>
+        <div class="group-users">
+            <% $.each(group.users, function(key, user) { %>
+                <div class="user">
+                    <div class="gravatar">
+                        <img src="<%= user.gravatar %>" />
+                    </div>
+                    <div class="information">
+                        <a target="_blank" href="/users/<%= user.screen_name %>/">
+                            <div class="name"><%= user.name %></div>
+                        </a>
+                        <div class="screen"><%= user.screen_name %></div>
+                    </div>
+                    <canvas data-activity="<%= JSON.stringify(user.activity) %>"></canvas>
+                    <div class="clear"></div>
+                </div>
+            <% }); %>
         </div>
     </div>
 </div>

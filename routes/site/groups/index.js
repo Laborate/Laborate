@@ -53,10 +53,25 @@ exports.group = function(req, res, next) {
                         req.models.documents.roles.count({
                             viewed: req.db.tools.gte(10)
                         }, callback);
+                    },
+                    users: function(callback) {
+                        async.mapSeries(group.exclude(req.session.user.id), function(user, next) {
+                            user.activity = [];
+                            req.models.posts.count({
+                                owner_id: user.id,
+                            }, function(error, posts) {
+                                for(var i = 0; i < posts; i++) {
+                                    user.activity.push(Math.floor(Math.random() * (51)));
+                                }
+
+                                next(error, user);
+                            });
+                        }, callback);
                     }
                 }, function(error, data) {
                     group.posts = data.posts;
                     group.documents = data.documents;
+                    group.users = data.users;
                     callback(error, group);
                 });
             });
