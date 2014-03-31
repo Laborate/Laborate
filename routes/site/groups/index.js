@@ -31,19 +31,41 @@ exports.create = function(req, res, next) {
 }
 
 exports.group = function(req, res, next) {
-    var access = !$.map(req.session.user.groups, function(group) {
-        if(group.pub_id == req.param("group")) {
-            return true;
+    async.parallel({
+        access: function(callback) {
+            callback(null, !$.map(req.session.user.groups, function(group) {
+                if(group.pub_id == req.param("group")) {
+                    return true;
+                }
+            }).empty);
+        },
+        group: function(callback) {
+            req.models.users.groups.one({
+                pub_id: req.param("group")
+            }, function(error, group) {
+                async.parallel({
+                    posts: function(callback) {
+                        req.models.posts.count({
+                            group_id: group.id
+                        }, callback);
+                    },
+                    documents: function(callback) {
+                        req.models.documents.roles.count({
+                            viewed: req.db.tools.gte(10)
+                        }, callback);
+                    }
+                }, function(error, data) {
+                    group.posts = data.posts;
+                    group.documents = data.documents;
+                    callback(error, group);
+                });
+            });
         }
-    }).empty;
+    }, function(errors, data) {
+        var group = data.group;
+        var access = data.access;
 
-    req.models.users.groups.one({
-        pub_id: req.param("group")
-    }, {
-        autoFetch: access,
-        autoFetchLimit: 2
-    }, function(error, group) {
-        if(!error) {
+        if(!errors) {
             if(group && (access || !group.private)) {
                 res.renderOutdated('groups/profile', {
                     title: group.name,

@@ -19,12 +19,26 @@
                 <div class="description"><%= group.description %></div>
             </div>
             <% if(!access) { %>
-                <a class="corner-button join">/groups/<%= group.pub_id %>/join/</a>
+                <a class="corner-button join" href="/groups/<%= group.pub_id %>/join/">Join Group</a>
             <% } else if(group.owner_id == user.id) { %>
                 <div class="corner-button owner">Owner</div>
             <% } else { %>
                 <div class="corner-button member">Member</div>
             <% } %>
+        </div>
+        <div class="group-metrics">
+            <div class="metric">
+                <div class="count"><%=: group.exclude(user.id).length | format %></div>
+                <div class="name">Members</div>
+            </div>
+            <div class="metric">
+                <div class="count"><%=: group.posts | format %></div>
+                <div class="name">Posts</div>
+            </div>
+            <div class="metric">
+                <div class="count"><%=: group.documents | format %></div>
+                <div class="name">Active Documents</div>
+            </div>
         </div>
     </div>
 </div>
