@@ -71,7 +71,17 @@ exports.group = function(req, res, next) {
                 }, function(error, data) {
                     group.posts = data.posts;
                     group.documents = data.documents;
-                    group.users = data.users;
+                    group.users = data.users.sort(function(a, b) {
+                        if(a.activity.length === b.activity.length) {
+                            var c = (a.activity.empty) ? 0 : Math.max.apply(null, a.activity);
+                            var d = (b.activity.empty) ? 0 : Math.max.apply(null, b.activity);
+                        } else {
+                            var c = a.activity.length;
+                            var d = b.activity.length;
+                        }
+
+                        return (c > d) ? -1 : ((c < d) ? 1 : 0);
+                    });
                     callback(error, group);
                 });
             });
