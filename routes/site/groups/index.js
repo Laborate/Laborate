@@ -57,13 +57,30 @@ exports.group = function(req, res, next) {
                     users: function(callback) {
                         async.mapSeries(group.exclude(req.session.user.id), function(user, next) {
                             user.activity = [];
-                            req.models.posts.count({
-                                owner_id: user.id,
-                            }, function(error, posts) {
-                                for(var i = 0; i < posts; i++) {
-                                    user.activity.push(Math.floor(Math.random() * (51)));
-                                }
+                                async.parallel([
+                                    function(move) {
+                                        req.models.posts.count({
+                                            owner_id: user.id,
+                                        }, function(error, posts) {
+                                            for(var i = 0; i < posts; i++) {
+                                                user.activity.push(Math.floor(Math.random() * (31)));
+                                            }
 
+                                            move(error);
+                                        });
+                                    },
+                                    function(move) {
+                                        req.models.documents.roles.count({
+                                            user_id: user.id,
+                                        }, function(error, roles) {
+                                            for(var i = 0; i < roles; i++) {
+                                                user.activity.push(Math.floor(Math.random() * (51)));
+                                            }
+
+                                            move(error);
+                                        });
+                                    }
+                            ], function(error) {
                                 next(error, user);
                             });
                         }, callback);
