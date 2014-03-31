@@ -70,7 +70,7 @@ exports.group = function(req, res, next) {
                                                 owner_id: user.id,
                                             }, function(error, posts) {
                                                 for(var i = 0; i < posts; i++) {
-                                                    user.activity.push(Math.floor(Math.random() * (31)));
+                                                    user.activity.push(Math.floor(Math.random() * (10)));
                                                 }
 
                                                 move(error);
@@ -81,7 +81,7 @@ exports.group = function(req, res, next) {
                                                 user_id: user.id,
                                             }, function(error, roles) {
                                                 for(var i = 0; i < roles; i++) {
-                                                    user.activity.push(Math.floor(Math.random() * (51)));
+                                                    user.activity.push(Math.floor(Math.random() * (15)));
                                                 }
 
                                                 move(error);
