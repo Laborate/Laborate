@@ -22,6 +22,16 @@
                 .float-left();
                 .border-radius(4px);
 
+                &:hover {
+                    .hovered {
+                        opacity: 1;
+                    }
+
+                    &:active .hovered {
+                        color: #fff;
+                    }
+                }
+
                 &.request {
                     margin-top: 50px;
                     width: 350px;
@@ -79,6 +89,15 @@
                     }
                 }
 
+                .hovered {
+                    position: absolute;
+                    z-index: 4;
+                    color: darken(#fff, 25%);
+                    font-size: 35px;
+                    opacity: 0;
+                    .transition(all);
+                }
+
                 .cover {
                     position: absolute;
                     z-index: 2;
@@ -89,93 +108,29 @@
 
                 .info {
                     position: absolute;
-                    top: 30%;
+                    bottom: 0;
                     z-index: 3;
                     width: 100%;
-                    text-align: center;
                     color: #fff;
-                    text-shadow: 0 2px 0 #000;
-                    .transition(color);
+                    font-size: 16px;
+                    padding: 5px 10px;
+                    .box-sizing(border-box);
+                    .clearfix();
 
-                    &:hover {
-                        color: spin(lighten(@color_blue, 20%), -10%);
-
-                        &:active {
-                            color: spin(lighten(@color_blue, 10%), -10%);
-                        }
+                    .name {
+                        font-size: 16px;
+                        margin-bottom: 3px;
+                        display: block;
                     }
 
                     .count {
-                        font-size: 48px;
-                        line-height: 40px;
-                        margin-bottom: 5px;
+                        font-size: 12px;
+                        color: rgba(255, 255, 255, 0.8);
                     }
 
-                    .name {
-                        font-weight: bold;
-                        font-size: 16px;
-                    }
-                }
-
-                .icon {
-                    position: absolute;
-                    z-index: 5;
-                    color: #fff;
-                    top: 10px;
-                    right: 10px;
-                    font-size: 14px;
-                }
-
-                .actions {
-                    position: absolute;
-                    z-index: 3;
-                    bottom: 0;
-                    color: #fff;
-                    font-size: 13px;
-                    line-height: 14px;
-                    width: 100%;
-
-                    .action {
-                        padding: 8px 0 8px 0;
-                        text-align: center;
-                        width: 50%;
-                        .float-left();
-                        .transition(background);
-                        .box-sizing(border-box);
-
-                        &.blue {
-                            &:hover {
-                                background: darken(@color_blue, 10%);
-
-                                &:active {
-                                    background: darken(@color_blue, 15%);
-                                }
-                            }
-                        }
-
-                        &.red {
-                            &:hover {
-                                background: darken(@color_red, 10%);
-
-                                &:active {
-                                    background: darken(@color_red, 15%);
-                                }
-                            }
-                        }
-
-                        &.green {
-                            &:hover {
-                                background: darken(@color_green, 10%);
-
-                                &:active {
-                                    background: darken(@color_green, 15%);
-                                }
-                            }
-                        }
-
-                        &:only-child {
-                            width: 100%;
-                        }
+                    .icon {
+                        margin-top: 10px;
+                        .float-right();
                     }
                 }
 

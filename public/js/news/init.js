@@ -13,6 +13,9 @@ $(function() {
     window.socketUtil.socket.on("newsPost", window.newsUtil.new_post);
 
     window.newsUtil.tags = config.tags || [];
+    window.newsUtil.group = config.group || null;
+
+    $(".filter.groups .option[data-id=" + config.group + "]").addClass("activated");
 
     if(config.auto_pull != false) {
         window.newsUtil.feed(1);

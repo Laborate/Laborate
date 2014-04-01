@@ -103,7 +103,7 @@ exports.removeRedirect = function(req, res, next) {
 }
 
 exports.robotDenied = function(req, res, next) {
-    if(req.robot) {
+    if(req.robot && !req.session.user) {
         res.error(404);
     } else {
         next();

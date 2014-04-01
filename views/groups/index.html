@@ -7,32 +7,29 @@
         </a>
         <% $.each(groups, function(index, group) { %>
             <% if(!(group.private && group.owner_id != user.id)) { %>
-                <div class="group" style="<%= background("blurry") %>">
+                <a class="group" href="/groups/<%= group.pub_id %>/" style="<%= background("blurry") %>">
+                    <div class="hovered <%= icons.forward %>"></div>
                     <div class="cover"></div>
+                    <div class="info">
+                        <div class="left">
+                            <div class="name">
+                                <%= group.name %>
+                            </div>
+                            <div class="count">
+                                <% var count = group.exclude(user.id).length; %>
+                                <div class="count"><%=: count | format %> <%=: "Member" | pluralize:(count != 1) %></div>
+                            </div>
+                        </div>
+                        <% if(group.private) { %>
+                            <div class="icon <%= icons.locked %>"></div>
+                        <% } %>
+                    </div>
                     <div class="gravatars">
                         <% $.each(group.exclude(user.id).slice(0, 17), function(index, laborator) { %>
                             <div class="gravatar" style="background-image: url('<%= laborator.gravatar %>')"></div>
                         <% }); %>
                     </div>
-                    <a href="/groups/<%= group.pub_id %>/" class="info">
-                        <% var count = group.exclude(user.id).length; %>
-                        <% if(count > 0) { %>
-                            <div class="count"><%=: count | format %></div>
-                        <% } %>
-                        <div class="name"><%=: group.name | pluralize %></div>
-                    </a>
-                    <div class="actions">
-                        <% if(group.owner_id == user.id) { %>
-                            <a href="/groups/<%= group.pub_id %>/edit/" class="action blue">Edit</a>
-                            <a href="/groups/<%= group.pub_id %>/remove/" class="action red">Remove</a>
-                        <% } else { %>
-                            <a href="/groups/<%= group.pub_id %>/leave/" class="action red">Leave</a>
-                        <% } %>
-                    </div>
-                    <% if(group.private) { %>
-                        <div class="icon <%= icons.locked %>"></div>
-                    <% } %>
-                </div>
+                </a>
             <% } %>
         <% }); %>
     </div>

@@ -13,7 +13,10 @@ exports.index = function(req, res, next) {
                 $.map(tags, function(tag) {
                     return tag.name;
                 }).join(", ")
-            ])
+            ]),
+            config: {
+                group: req.param("group")
+            }
         });
 
         req.error.capture(error);

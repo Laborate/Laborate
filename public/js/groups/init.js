@@ -1,5 +1,5 @@
 $(function(){
-    $(".container.listing .info").vAlign();
+    $(".container.listing .hovered").vAlign().hAlign();
     $(".container.profile .icon").vAlign().hAlign();
 
     $(".group-users canvas").each(function() {
@@ -20,7 +20,7 @@ $(function(){
             canvas.heigth = $(this).height() * 2;
 
             graph.beginPath();
-            graph.fillStyle="rgba(0, 0, 0, .05)";
+            graph.fillStyle="rgba(0, 0, 0, .08)";
 
             $.each(data, function(key, height) {
                 height = height / scaler;
