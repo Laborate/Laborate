@@ -115,6 +115,10 @@ exports.clientData = function(req, role, callback) {
                     }
                 });
 
+                role.document.save({
+                    content: (content != "") ? content.split("\n") : []
+                });
+
                 document.changes = [];
                 _this.setRedis(room, document);
                 req.io.join(room);
