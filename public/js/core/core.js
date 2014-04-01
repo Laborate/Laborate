@@ -106,10 +106,10 @@ $(function() {
     });
 
     //Coming Soon Popup
-    $("body").on("click", ".coming-soon", function(e) {
+    $("body").on("click submit", ".coming-soon", function(e) {
         e.preventDefault();
         e.stopPropagation();
-        window.error.open("Coming Soon");
+        window.error.open("Coming Soon...");
     });
 });
 

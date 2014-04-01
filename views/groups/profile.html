@@ -28,28 +28,26 @@
         </div>
         <% if(!user.fake) { %>
             <div class="group-actions">
+                <div class="action">
+                    <div class="coming-soon" data-action="invite">Invite Users</div>
+                </div>
+
                 <% if(group.owner_id == user.id) { %>
                     <div class="action">
-                        <div data-action="invite">Invite Users</div>
+                        <div class="coming-soon" data-action="remove">Remove Users</div>
                     </div>
                     <div class="action">
-                        <div data-action="remove">Remove Users</div>
-                    </div>
-                    <div class="action">
-                        <a href="/groups/<%= group.pub_id %>/edit/">Edit Group</a>
+                        <a class="coming-soon" href="/groups/<%= group.pub_id %>/edit/">Edit Group</a>
                     </div>
                     <div class="action">
                         <a href="/groups/<%= group.pub_id %>/remove/">Delete Group</a>
                     </div>
                 <% } else { %>
                     <div class="action">
-                        <div data-action="invite">Invite Users</div>
-                    </div>
-                    <div class="action">
                         <a href="/news/?group=<%= group.pub_id %>">Group Posts</a>
                     </div>
                     <div class="action">
-                        <a href="/search/?type=groups&q=<%= group.description %>">Similar Groups</a>
+                        <a class="coming-soon" href="/search/?type=groups&q=<%= group.description %>">Similar Groups</a>
                     </div>
                     <div class="action">
                         <a href="/groups/<%= group.pub_id %>/leave/">Leave Group</a>
