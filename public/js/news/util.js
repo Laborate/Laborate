@@ -1,8 +1,8 @@
 window.newsUtil = {
     page: 0,
     loading: false,
-    tags: [],
-    group: null,
+    tags: config.tags || [],
+    group: config.group || null,
     feed: function(page, override) {
         var _this = this;
 
@@ -325,12 +325,12 @@ window.newsUtil = {
         var activated = element.hasClass("activated");
         $(".groups .option").removeClass("activated");
 
-        if(activated) {
-            this.group = null;
-            element.removeClass("activated");
-        } else {
+        if(!activated && element.length != 0) {
             this.group = element.attr("data-id");
             element.addClass("activated");
+        } else {
+            this.group = null;
+            element.removeClass("activated");
         }
 
         this.feed(1, true);

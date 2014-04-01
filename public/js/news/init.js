@@ -12,10 +12,13 @@ $(function() {
     window.socketUtil.socket.on("newsLike", window.newsUtil.new_like);
     window.socketUtil.socket.on("newsPost", window.newsUtil.new_post);
 
-    window.newsUtil.tags = config.tags || [];
-    window.newsUtil.group = config.group || null;
-
-    $(".filter.groups .option[data-id=" + config.group + "]").addClass("activated");
+    window.onpopstate = function() {
+        if(window.newsUtil.page != 0) {
+            var group = /.*\?group=(.*)/g.exec(window.location.href);
+            window.newsUtil.group = (group) ? group[1] : null;
+            window.newsUtil.groups($(".filter.groups .option[data-id=" + window.newsUtil.group + "]"));
+        }
+    }
 
     if(config.auto_pull != false) {
         window.newsUtil.feed(1);
@@ -28,4 +31,6 @@ $(function() {
 
         $(window).scroll(window.newsUtil.scroll);
     }
+
+    $(".filter.groups .option[data-id=" + config.group + "]").addClass("activated");
 });
