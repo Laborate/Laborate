@@ -148,13 +148,13 @@ exports.imports = function(req, res, next) {
 
     //Api Routes
     if(req.subdomains.indexOf("api") != -1) {
-        require("../site/api")(function(routes) {
+        require("../api/routes")(function(routes) {
             req.routes = routes;
         });
 
     //Webhooks Routes
     } else if(req.subdomains.indexOf("webhook") != -1) {
-        require("../site/webhooks")(function(routes) {
+        require("../webhooks/routes")(function(routes) {
             req.routes = routes;
         });
 
