@@ -334,7 +334,7 @@ window.newsUtil = {
         }
 
         this.feed(1, true);
-        window.history.pushState(null, null, "/news/" + ((this.group) ? ("?group=" + this.group) : ""));
+        window.history.pushState(null, null, "/news/" + ((this.group) ? ("group/" + this.group + "/") : ""));
     },
     tag: function(form) {
         var _this = this;

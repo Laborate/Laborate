@@ -4,6 +4,7 @@ module.exports = function(app, routes) {
     var news = routes.news;
 
     app.get('/news', auth.util.removeRedirect, core.reload, news.index);
+    app.get('/news/group/:group', auth.util.removeRedirect, core.reload, news.index);
     app.get('/news/tags/:tag', news.tags.posts);
     app.get('/news/pages/:page', auth.util.xhr, news.posts);
     app.get('/news/:post', news.post);
