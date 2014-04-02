@@ -2,22 +2,33 @@ exports.index = function(req, res, next) {
     req.models.posts.tags.find({
         explict: false
     }).limit(15).only("name").run(function(error, tags) {
-        res.renderOutdated('news/index', {
-            title: "News Feed",
-            header: "news",
-            user: req.session.user || req.fake.user,
-            allow_replies: false,
-            js: clientJS.renderTags("news", "highlight"),
-            css: clientCSS.renderTags("news", "highlight"),
-            description: config.descriptions.news.sprintf([
-                $.map(tags, function(tag) {
-                    return tag.name;
-                }).join(", ")
-            ]),
-            config: {
-                group: req.param("group")
+        var user = req.session.user || req.fake.user;
+        var access = ((!$.map(user.groups, function(group) {
+            if(group.pub_id == req.param("group")) {
+                return true;
             }
-        });
+        }).empty) || !req.param("group"));
+
+        if(access) {
+            res.renderOutdated('news/index', {
+                title: "News Feed",
+                header: "news",
+                user: user,
+                allow_replies: false,
+                js: clientJS.renderTags("news", "highlight"),
+                css: clientCSS.renderTags("news", "highlight"),
+                description: config.descriptions.news.sprintf([
+                    $.map(tags, function(tag) {
+                        return tag.name;
+                    }).join(", ")
+                ]),
+                config: {
+                    group: req.param("group") || null
+                }
+            });
+        } else {
+            res.redirect("/news/");
+        }
 
         req.error.capture(error);
     });

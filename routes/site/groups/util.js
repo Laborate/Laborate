@@ -25,12 +25,11 @@ exports.remove = function(req, res, next) {
         pub_id: req.param("group"),
         owner_id: req.session.user.id
     }, function(error, group) {
-        group.remove();
-
-        if(!error) {
+        if(!error && group) {
+            group.remove();
             res.redirect("/groups/");
         } else {
-            res.error(200, "Failed To Remove Group", error);
+            res.error(404, null, error);
         }
     });
 }
@@ -48,11 +47,27 @@ exports.leave = function(req, res, next) {
                 if(!errors) {
                     res.redirect("/groups/");
                 } else {
-                    res.error(200, "Failed To Leave Group", errors);
+                    res.error(404, null, errors);
                 }
             });
         } else {
             res.error(401, null, error);
+        }
+    });
+}
+
+exports.private = function(req, res, next) {
+    req.models.users.groups.one({
+        pub_id: req.param("group")
+    }, { autoFetch: false },  function(error, group) {
+        if(!error && group && req.session.user.id == group.owner_id) {
+            group.save({
+                private: !group.private
+            });
+
+            res.redirect("/groups/" + group.pub_id + "/");
+        } else {
+            res.error(404, null, error);
         }
     });
 }

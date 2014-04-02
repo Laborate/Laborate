@@ -6,8 +6,9 @@ module.exports = function(app, routes) {
     app.get('/groups', auth.util.robotDenied, auth.util.restrictAccess, groups.index);
     app.get('/groups/create', auth.util.restrictAccess, core.reload, groups.create);
     app.get('/groups/:group', core.reload, groups.group);
-    app.get('/groups/:group/remove', auth.util.restrictAccess, groups.util.remove);
-    app.get('/groups/:group/leave', auth.util.restrictAccess, groups.util.leave);
+    app.get('/groups/:group/private', auth.util.robotDenied, auth.util.restrictAccess, groups.util.private);
+    app.get('/groups/:group/remove', auth.util.robotDenied, auth.util.restrictAccess, groups.util.remove);
+    app.get('/groups/:group/leave', auth.util.robotDenied, auth.util.restrictAccess, groups.util.leave);
 
     app.post('/groups/create', auth.util.restrictAccess, auth.util.xhr, groups.util.create);
 

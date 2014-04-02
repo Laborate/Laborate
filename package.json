@@ -25,7 +25,7 @@
     "orm": "2.1.4",
     "orm-paging": "0.0.1",
     "orm-timestamps": "0.2.1",
-    "mysql": "2.0.0-rc1",
+    "mysql": "2.1.1",
     "redis": "0.8.4",
     "connect-redis": "1.4.5",
     "codemirror": "3.22.0",

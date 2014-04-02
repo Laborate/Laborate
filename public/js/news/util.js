@@ -51,7 +51,7 @@ window.newsUtil = {
     new_post: function(data) {
         var _this = window.newsUtil;
         if(_this.group == data.group) {
-            if(_this.tags.emtpy || !_this.tags.intersections(data.tags).empty) {
+            if(_this.tags.empty || !_this.tags.intersections(data.tags).empty) {
                 var post = $(data.content);
                 post.find(".comment .gravatar img").attr("src", config.gravatar);
                 post.hide().css("opacity", 0);

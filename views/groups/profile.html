@@ -34,7 +34,9 @@
 
                 <% if(group.owner_id == user.id) { %>
                     <div class="action">
-                        <div class="coming-soon" data-action="remove">Remove Users</div>
+                        <a href="/groups/<%= group.pub_id %>/private/">
+                            Make <%= (group.private) ? "Public" : "Private" %>
+                        </a>
                     </div>
                     <div class="action">
                         <a class="coming-soon" href="/groups/<%= group.pub_id %>/edit/">Edit Group</a>
