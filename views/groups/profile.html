@@ -46,7 +46,7 @@
                     </div>
                 <% } else { %>
                     <div class="action">
-                        <a href="/news/?group=<%= group.pub_id %>">Group Posts</a>
+                        <a href="/news/group/<%= group.pub_id %>/">Group Posts</a>
                     </div>
                     <div class="action">
                         <a class="coming-soon" href="/search/?type=groups&q=<%= group.description %>">Similar Groups</a>
@@ -83,22 +83,24 @@
                         </a>
                         <div class="screen"><%= laborator.screen_name %></div>
                     </div>
-                    <% laborator_groups = laborator.get_groups(user); %>
-                    <% if(laborator_groups.empty) { %>
-                        <div class="add-groups" data-user="<%= laborator.pub_id %>">
-                            <span class="<%= icons.share %>"></span>
-                            Groups
-                        </div>
-                    <% } else if(laborator_groups.length == 1) { %>
-                        <div class="add-groups green" data-user="<%= laborator.pub_id %>">
-                            <span class="<%= icons.groups %>"></span>
-                            <%= laborator_groups[0].name %>
-                        </div>
-                    <% } else { %>
-                        <div class="add-groups green" data-user="<%= laborator.pub_id %>">
-                            <span class="<%= icons.groups %>"></span>
-                            <%= laborator_groups.length %> Groups
-                        </div>
+                    <% if(!user.fake) { %>
+                        <% laborator_groups = laborator.get_groups(user); %>
+                        <% if(laborator_groups.empty) { %>
+                            <div class="add-groups" data-user="<%= laborator.pub_id %>">
+                                <span class="<%= icons.share %>"></span>
+                                Groups
+                            </div>
+                        <% } else if(laborator_groups.length == 1) { %>
+                            <div class="add-groups green" data-user="<%= laborator.pub_id %>">
+                                <span class="<%= icons.groups %>"></span>
+                                <%= laborator_groups[0].name %>
+                            </div>
+                        <% } else { %>
+                            <div class="add-groups green" data-user="<%= laborator.pub_id %>">
+                                <span class="<%= icons.groups %>"></span>
+                                <%= laborator_groups.length %> Groups
+                            </div>
+                        <% } %>
                     <% } %>
                     <canvas data-activity="<%= JSON.stringify(laborator.activity) %>"></canvas>
                     <div class="clear"></div>

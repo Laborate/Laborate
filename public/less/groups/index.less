@@ -222,7 +222,6 @@
                     top: 0;
                     right: 0;
                     font-size: 12px;
-                    line-height: 12px;
                     text-transform: uppercase;
                     border: solid 1px transparent;
                     padding: 6px 10px;
@@ -242,9 +241,10 @@
 
                     &.join {
                         color: @color_purple;
+                        font-weight: bold;
                         border-color: @color_purple;
                         border-bottom: solid 2px darken(@color_purple, 5%);
-                        .rgba-background(@color_purple, 0.04);
+                        .rgba-background(@color_purple, 0.06);
                         .transition(all);
 
                         &:hover {
