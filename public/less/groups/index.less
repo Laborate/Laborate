@@ -341,13 +341,8 @@
             .group-users {
                 .user {
                     position: relative;
-                    margin-bottom: 15px;
-                    padding: 0 0 15px 0;
+                    padding: 15px 0 15px 0;
                     border-bottom: solid 1px darken(@color_body, 2%);
-
-                    &:hover .add-groups {
-                        opacity: 1;
-                    }
 
                     canvas {
                         position: absolute;
@@ -355,7 +350,7 @@
                         bottom: 0;
                         right: 0;
                         width: 80%;
-                        height: 60%;
+                        height: 40%;
                     }
 
                     .gravatar {
@@ -379,22 +374,30 @@
                         right: 15px;
                         cursor: pointer;
                         color: #fff;
-                        opacity: 0;
                         font-size: 14px;
                         background: lighten(@color_blue, 10%);
-                        border: solid 1px lighten(@color_blue, 5%);
-                        padding: 5px;
-                        .border-radius(2px);
+                        padding: 7px 8px;
+                        .border-radius(3px);
                         .box-shadow(~"4px 0 0 #F6F5F5, -4px 0 0 #F6F5F5, 0 4px 0 #F6F5F5, 0 -4px 0 #F6F5F5");
-                        .transition(all);
+                        .transition(background);
 
                         &:hover {
                            background: @color_blue;
-                           border: solid 1px darken(@color_blue, 5%);
 
                            &:active {
                                background: darken(@color_blue, 10%);
-                               border: solid 1px darken(@color_blue, 15%);
+                            }
+                        }
+
+                        &.green {
+                            background: @color_green;
+
+                            &:hover {
+                               background: darken(@color_green, 5%);
+
+                               &:active {
+                                   background: darken(@color_green, 10%);
+                                }
                             }
                         }
                     }

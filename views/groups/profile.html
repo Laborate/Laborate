@@ -72,21 +72,35 @@
             </div>
         </div>
         <div class="group-users">
-            <% $.each(group.users, function(key, user) { %>
+            <% $.each(group.users, function(key, laborator) { %>
                 <div class="user">
                     <div class="gravatar">
-                        <img src="<%= user.gravatar %>" />
+                        <img src="<%= laborator.gravatar %>" />
                     </div>
                     <div class="information">
-                        <a href="/users/<%= user.screen_name %>/">
-                            <div class="name"><%= user.name %></div>
+                        <a href="/users/<%= laborator.screen_name %>/">
+                            <div class="name"><%= laborator.name %></div>
                         </a>
-                        <div class="screen"><%= user.screen_name %></div>
+                        <div class="screen"><%= laborator.screen_name %></div>
                     </div>
-                    <div class="add-groups" data-user="<%= user.pub_id %>">
-                        <span class="<%= icons.share %>"></span> Groups
-                    </div>
-                    <canvas data-activity="<%= JSON.stringify(user.activity) %>"></canvas>
+                    <% laborator_groups = laborator.get_groups(user); %>
+                    <% if(laborator_groups.empty) { %>
+                        <div class="add-groups" data-user="<%= laborator.pub_id %>">
+                            <span class="<%= icons.share %>"></span>
+                            Groups
+                        </div>
+                    <% } else if(laborator_groups.length == 1) { %>
+                        <div class="add-groups green" data-user="<%= laborator.pub_id %>">
+                            <span class="<%= icons.groups %>"></span>
+                            <%= laborator_groups[0].name %>
+                        </div>
+                    <% } else { %>
+                        <div class="add-groups green" data-user="<%= laborator.pub_id %>">
+                            <span class="<%= icons.groups %>"></span>
+                            <%= laborator_groups.length %> Groups
+                        </div>
+                    <% } %>
+                    <canvas data-activity="<%= JSON.stringify(laborator.activity) %>"></canvas>
                     <div class="clear"></div>
                 </div>
             <% }); %>
