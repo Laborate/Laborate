@@ -753,9 +753,9 @@ window.documents = {
         }).responseJSON;
 
         if(json.success == false) {
-            if(json.error_message == "Bad " + type.capitalize() + " Oauth Token") {
+            if(json.error_message == "Bad " + type.capitalize + " Oauth Token") {
                 window.documents.headerBar(["message"],
-                    "Opps! " + type.capitalize() + " Needs To Be <a href='" + config.apps[type].link + "'>Reauthorized</a>", true);
+                    "Opps! " + type.capitalize + " Needs To Be <a href='" + config.apps[type].link + "'>Reauthorized</a>", true);
             } else {
                 window.documents.headerBar(["message"], json.error_message);
             }
