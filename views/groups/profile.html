@@ -83,6 +83,9 @@
                         </a>
                         <div class="screen"><%= user.screen_name %></div>
                     </div>
+                    <div class="add-groups" data-user="<%= user.pub_id %>">
+                        <span class="<%= icons.share %>"></span> Groups
+                    </div>
                     <canvas data-activity="<%= JSON.stringify(user.activity) %>"></canvas>
                     <div class="clear"></div>
                 </div>

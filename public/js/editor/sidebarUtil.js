@@ -654,11 +654,9 @@ window.sidebarUtil = {
     	    .html(button.attr("data-original"))
     	    .attr({
                 "disabled": null,
-                "data-original": null
             });
 	},
 	buttonLoading: function(button) {
-	    this.buttonReset(button);
 	    if(!button.is(":disabled")) {
             button
                 .attr({

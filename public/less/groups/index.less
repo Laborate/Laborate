@@ -345,6 +345,10 @@
                     padding: 0 0 15px 0;
                     border-bottom: solid 1px darken(@color_body, 2%);
 
+                    &:hover .add-groups {
+                        opacity: 1;
+                    }
+
                     canvas {
                         position: absolute;
                         z-index: 0;
@@ -358,13 +362,40 @@
                         width: 55px;
                         height: 55px;
                         overflow: hidden;
-                        margin-right: 10px;
+                        margin: 0 10px 0 15px;
                         .float-left();
                         .border-radius(2px);
 
                         img {
                            width: 55px;
                            height: 55px;
+                        }
+                    }
+
+                    .add-groups {
+                        position: absolute;
+                        z-index: 2;
+                        top: 15px;
+                        right: 15px;
+                        cursor: pointer;
+                        color: #fff;
+                        opacity: 0;
+                        font-size: 14px;
+                        background: lighten(@color_blue, 10%);
+                        border: solid 1px lighten(@color_blue, 5%);
+                        padding: 5px;
+                        .border-radius(2px);
+                        .box-shadow(~"4px 0 0 #F6F5F5, -4px 0 0 #F6F5F5, 0 4px 0 #F6F5F5, 0 -4px 0 #F6F5F5");
+                        .transition(all);
+
+                        &:hover {
+                           background: @color_blue;
+                           border: solid 1px darken(@color_blue, 5%);
+
+                           &:active {
+                               background: darken(@color_blue, 10%);
+                               border: solid 1px darken(@color_blue, 15%);
+                            }
                         }
                     }
 
