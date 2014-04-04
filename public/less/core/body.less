@@ -191,6 +191,13 @@
         width: 30%;
         padding-left: 0;
         background: @color_panels_alternate;
+
+        .filter {
+            .header,
+            .options .option {
+                .border-radius(0 2px 2px 0);
+            }
+        }
     }
 
     &.sidebar {
@@ -198,5 +205,85 @@
         width: 30%;
         padding-left: 0;
         background: @color_panels_alternate;
+
+        .action {
+            .header,
+            .options .option {
+                .border-radius(2px 0 0 2px);
+            }
+        }
     }
+
+    .action,
+    .filter {
+        width: 200px;
+        margin-bottom: 70px;
+
+        .header {
+            color: #fff;
+            font-size: 16px;
+            background: @color_news_header;
+            margin: 0;
+            padding: 8px 10px;
+            width: 100%;
+            .box-sizing(border-box);
+
+            a {
+                font-size: 17px;
+                opacity: 0.6;
+                .transition(opacity);
+
+                &:hover {
+                    opacity: 0.8;
+
+                    &:active {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .options .option {
+            cursor: pointer;
+            width: 200px;
+            padding: 8px 0 8px 15px;
+            margin-bottom: 5px;
+            line-height: 16px;
+            color: #333;
+            .clearfix();
+            .box-sizing(border-box);
+            .ellipsis();
+
+            &:first-child {
+                margin-top: 10px;
+            }
+
+            &:hover {
+                color: #fff;
+                background: spin(@color_green, 15);
+
+                &:active {
+                    background: darken(spin(@color_green, 15), 2%);
+                }
+            }
+
+            &.activated {
+                color: #fff;
+                background: darken(spin(@color_green, 15), 4%);
+            }
+
+            .icon {
+                font-size: 16px;
+                margin-right: 8px;
+                opacity: 0.8;
+                .float-left();
+            }
+
+            .name {
+                font-size: 16px;
+                .float-left();
+            }
+        }
+    }
+
 }
