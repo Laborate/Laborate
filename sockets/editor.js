@@ -141,31 +141,29 @@ exports.permission = function(req) {
     if(req.session.user && !isEmbed) {
         var sockets = req.io.socket.manager.sockets.sockets;
 
-        lib.models_init(null, function(db, models) {
-            models.documents.roles.find({
-                user_pub_id: req.data,
-                document_pub_id: editorUtil.room(req)
-            }, function(error, roles) {
-                if(!error && !roles.empty) {
-                    if(roles[0].document.owner_id == req.session.user.id) {
-                        editorUtil.userSockets(req, req.data, function(user_sockets) {
-                            $.each(user_sockets, function(index, socket) {
-                                if(socket in sockets) {
-                                    if(roles[0].access) {
-                                        sockets[socket].emit('editorExtras', {
-                                            readonly: true
-                                        });
-                                    } else {
-                                        sockets[socket].emit('editorExtras', {
-                                            docDelete: true
-                                        });
-                                    }
+        lib.models.documents.roles.find({
+            user_pub_id: req.data,
+            document_pub_id: editorUtil.room(req)
+        }, function(error, roles) {
+            if(!error && !roles.empty) {
+                if(roles[0].document.owner_id == req.session.user.id) {
+                    editorUtil.userSockets(req, req.data, function(user_sockets) {
+                        $.each(user_sockets, function(index, socket) {
+                            if(socket in sockets) {
+                                if(roles[0].access) {
+                                    sockets[socket].emit('editorExtras', {
+                                        readonly: true
+                                    });
+                                } else {
+                                    sockets[socket].emit('editorExtras', {
+                                        docDelete: true
+                                    });
                                 }
-                            });
+                            }
                         });
-                    }
+                    });
                 }
-            });
+            }
         });
     } else if(!isEmbed) {
         editorUtil.error(req, "kickout");

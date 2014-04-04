@@ -82,6 +82,26 @@
                             <div class="name"><%= laborator.name %></div>
                         </a>
                         <div class="screen"><%= laborator.screen_name %></div>
+
+                        <div class="additional">
+                            <% if(laborator.location) { %>
+                                 <div class="item">
+                                    <span class="<%= icons.location %>"></span>
+                                    <%= laborator.location %>
+                                 </div>
+                             <% } %>
+                             <% if(laborator.url) { %>
+                                 <div class="item">
+                                    <span class="<%=: icons.url | link %>"></span>
+                                    <a href="<%= laborator.url %>" target="_blank">
+                                        <%=: laborator.url | link:(15) %>
+                                    </a>
+                                 </div>
+                             <% } %>
+                             <div class="item">
+                                Joined <%=: laborator.created | format:("MMM YYYY") %>
+                             </div>
+                        </div>
                     </div>
                     <% if(!user.fake) { %>
                         <% laborator_groups = laborator.get_groups(user); %>

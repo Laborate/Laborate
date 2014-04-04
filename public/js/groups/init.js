@@ -21,7 +21,7 @@ $(function(){
             canvas.heigth = $(this).height() * 2;
 
             graph.beginPath();
-            graph.fillStyle="rgba(0, 0, 0, .05)";
+            graph.fillStyle="rgba(0, 0, 0, .04)";
 
             $.each(data, function(key, height) {
                 height = height / scaler;

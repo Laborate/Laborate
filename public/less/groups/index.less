@@ -354,16 +354,16 @@
                     }
 
                     .gravatar {
-                        width: 55px;
-                        height: 55px;
+                        width: 60px;
+                        height: 60px;
                         overflow: hidden;
                         margin: 0 10px 0 15px;
                         .float-left();
                         .border-radius(2px);
 
                         img {
-                           width: 55px;
-                           height: 55px;
+                           width: 60px;
+                           height: 60px;
                         }
                     }
 
@@ -378,7 +378,6 @@
                         background: lighten(@color_blue, 10%);
                         padding: 7px 8px;
                         .border-radius(3px);
-                        .box-shadow(~"4px 0 0 #F6F5F5, -4px 0 0 #F6F5F5, 0 4px 0 #F6F5F5, 0 -4px 0 #F6F5F5");
                         .transition(background);
 
                         &:hover {
@@ -420,6 +419,25 @@
                         .screen {
                             font-size: 14px;
                             color: darken(@color_body, 50%);
+                        }
+
+                        .additional {
+                            margin-top: 10px;
+                            font-size: 12px;
+                            color: darken(@color_body, 40%);
+                            .clearfix();
+
+                            .item {
+                                margin-left: 15px;
+                                max-width: 130px;
+                                .ellipsis();
+                                .float-left();
+                                .box-shadow(0 0 20px @color_body);
+
+                                &:first-child {
+                                    margin: 0;
+                                }
+                            }
                         }
                     }
                 }

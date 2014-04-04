@@ -61,13 +61,11 @@ exports.notifications = function(req) {
     if(req.session.user) {
         var url = req.headers.referer.replace(req.session.server + "/", "");
         if(!(/^account\/.*/.test(url))) {
-            lib.models_init(null, function(db, models) {
-                models.notifications.exists({
-                    user_id: req.session.user.id,
-                    priority: true
-                }, function(error, exists) {
-                    req.io.respond(!error && exists);
-                });
+            lib.models.notifications.exists({
+                user_id: req.session.user.id,
+                priority: true
+            }, function(error, exists) {
+                req.io.respond(!error && exists);
             });
         } else {
             req.io.respond(false);
