@@ -366,7 +366,7 @@ window.newsUtil = {
     },
     scroll: function() {
         if(!$(".main .loader").hasClass("finished")) {
-            var bottom = ($(window).scrollTop() + $(window).height() > $(document).height() - 5);
+            var bottom = (($(window).scrollTop() + $(document).height()) > ($(document).height() - 50));
             $(".main .loader").toggleClass("activated", bottom);
 
             if(bottom) {
