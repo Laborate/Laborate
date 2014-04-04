@@ -12,7 +12,7 @@ $(function(){
             var scaler = (max - min)/100;
 
             var width = 15;
-            var rightShift = 80;
+            var rightShift = 130;
 
             var canvas = $(this).get()[0];
             var graph = canvas.getContext("2d");
@@ -21,7 +21,7 @@ $(function(){
             canvas.heigth = $(this).height() * 2;
 
             graph.beginPath();
-            graph.fillStyle="rgba(0, 0, 0, .04)";
+            graph.fillStyle="rgba(0, 0, 0, .03)";
 
             $.each(data, function(key, height) {
                 height = height / scaler;
