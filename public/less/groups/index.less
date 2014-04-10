@@ -370,37 +370,9 @@
                     .add-groups {
                         position: absolute;
                         z-index: 2;
-                        top: 15px;
+                        top: 35px;
                         right: 15px;
-                        cursor: pointer;
-                        color: #fff;
-                        font-size: 14px;
-                        background: lighten(@color_blue, 10%);
-                        border: solid 1px transparent;
                         border-bottom: solid 2px rgba(0, 0, 0, 0.2);
-                        padding: 6px 7px;
-                        .border-radius(3px);
-                        .transition(background);
-
-                        &:hover {
-                           background: @color_blue;
-
-                           &:active {
-                               background: darken(@color_blue, 10%);
-                            }
-                        }
-
-                        &.green {
-                            background: @color_green;
-
-                            &:hover {
-                               background: darken(@color_green, 5%);
-
-                               &:active {
-                                   background: darken(@color_green, 10%);
-                                }
-                            }
-                        }
                     }
 
                     .information {

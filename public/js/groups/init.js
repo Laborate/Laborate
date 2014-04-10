@@ -1,7 +1,6 @@
 $(function(){
     $(".container.listing .hovered").vAlign().hAlign();
     $(".container.profile .icon").vAlign().hAlign();
-    $(".container.profile .add-groups").vAlign();
 
     $(".group-users canvas").each(function() {
         var data = JSON.parse($(this).attr("data-activity"));

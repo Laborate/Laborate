@@ -1,17 +1,19 @@
-<% laborator_groups = laborator.get_groups(user); %>
-<% if(laborator_groups.empty) { %>
-    <div class="add-groups" data-user="<%= laborator.pub_id %>">
-        <span class="<%= icons.share %>"></span>
-        Groups
-    </div>
-<% } else if(laborator_groups.length == 1) { %>
-    <div class="add-groups green" data-user="<%= laborator.pub_id %>">
-        <span class="<%= icons.groups %>"></span>
-        <%= laborator_groups[0].name %>
-    </div>
-<% } else { %>
-    <div class="add-groups green" data-user="<%= laborator.pub_id %>">
-        <span class="<%= icons.groups %>"></span>
-        <%= laborator_groups.length %> Groups
-    </div>
+<% if(user && !user.fake) { %>
+    <% laborator_groups = laborator.get_groups(user); %>
+    <% if(laborator_groups.empty) { %>
+        <div class="add-groups" data-user="<%= laborator.pub_id %>">
+            <span class="<%= icons.share %>"></span>
+            Groups
+        </div>
+    <% } else if(laborator_groups.length == 1) { %>
+        <div class="add-groups green" data-user="<%= laborator.pub_id %>">
+            <span class="<%= icons.groups %>"></span>
+            <%= laborator_groups[0].name %>
+        </div>
+    <% } else { %>
+        <div class="add-groups green" data-user="<%= laborator.pub_id %>">
+            <span class="<%= icons.groups %>"></span>
+            <%= laborator_groups.length %> Groups
+        </div>
+    <% } %>
 <% } %>

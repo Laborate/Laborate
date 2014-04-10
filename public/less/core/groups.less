@@ -1,6 +1,38 @@
 @import '../core/index';
 @import '../compless/all';
 
+.add-groups {
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    background: lighten(@color_blue, 10%);
+    border: solid 1px transparent;
+    padding: 6px 7px;
+    display: inline-block;
+    .border-radius(3px);
+    .transition(background);
+
+    &:hover {
+       background: @color_blue;
+
+       &:active {
+           background: darken(@color_blue, 10%);
+        }
+    }
+
+    &.green {
+        background: @color_green;
+
+        &:hover {
+           background: darken(@color_green, 5%);
+
+           &:active {
+               background: darken(@color_green, 10%);
+            }
+        }
+    }
+}
+
 .popup-groups {
     position: absolute;
     z-index: 3;

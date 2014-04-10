@@ -168,7 +168,7 @@ window.groups = {
         $.get("/groups/popup/" + button.attr("data-user") + "/", function(data) {
             if(typeof data != "object") {
                 var popup = $(data);
-                var container = $(".main .container");
+                var container = $(".main .container, #backdrop-container");
                 var offset = button.offset();
                 var offset_container = container.offset();
 
@@ -177,7 +177,7 @@ window.groups = {
                 popup
                     .fadeIn(300)
                     .css({
-                        top: (offset.top - offset_container.top + (button.outerHeight(true)/2) - (popup.outerHeight(true)/2) + 8),
+                        top: (offset.top - offset_container.top + (button.outerHeight(true)/2) - (popup.outerHeight(true)/2)),
                         left: (offset.left - offset_container.left + button.outerWidth(true) + 15)
                     });
 
@@ -202,7 +202,7 @@ window.groups = {
         }, function(data) {
             if(typeof data != "object") {
                 var button = $(".add-groups[data-user='" + user + "']");
-                var user_row = button.parent(".user");
+                var parent = button.parent();
                 var new_button = $(data);
 
                 if(group.hasClass("active")) {
@@ -218,8 +218,7 @@ window.groups = {
                 }
 
                 button.remove();
-                user_row.append(new_button);
-                new_button.vAlign();
+                parent.append(new_button);
             } else if(!data.success) {
                 window.error.open(data.error_message);
             }
