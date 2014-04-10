@@ -10,7 +10,8 @@ module.exports = function(root) {
     clientCSS.addFile(css_path + 'core/icons.less');
     clientCSS.addFile(css_path + 'core/popup.less');
     clientCSS.addFile(css_path + 'core/contextmenu.less');
-    clientCSS.addFile(css_path + 'core/sidebar.less');
+    clientCSS.addFile(css_path + 'core/groups.less');
+    clientCSS.addFile(css_path + 'core/sidebar.less'); //Remove After Migration
     clientCSS.addFile(css_path + 'core/header.less'); //Remove After Migration
     clientCSS.addFile(css_path + 'core/header2.less'); //Rename After Migration
     clientCSS.addFile(css_path + 'core/jscroll.less');

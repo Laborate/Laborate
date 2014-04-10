@@ -71,3 +71,47 @@ exports.private = function(req, res, next) {
         }
     });
 }
+
+exports.popup = function(req, res, next) {
+    async.parallel({
+        group: function(callback) {
+            req.models.users.groups.one({
+                pub_id: req.param("group")
+            }, callback);
+        },
+        user: function(callback) {
+            req.models.users.one({
+                pub_id: req.param("user")
+            }, callback);
+        }
+    }, function(errors, data) {
+        if(!errors && data) {
+            data.user.hasGroups(data.group, function(error, exists) {
+                if(!error) {
+                    if(exists) {
+                        data.user.removeGroups(data.group, finish);
+                    } else {
+                        data.user.addGroups(data.group, finish);
+                    }
+
+                    function finish() {
+                        data.user.getGroups(function(error, groups) {
+                            if(!error && groups) {
+                                data.user.groups = groups;
+                                res.renderOutdated('groups/button', {
+                                    laborator: data.user
+                                });
+                            } else {
+                                res.error(404, "Failed to Get User Groups", error);
+                            }
+                        });
+                    }
+                } else {
+                    res.error(404, "Failed to Get User Groups", error);
+                }
+            });
+        } else {
+            res.error(404, "Failed to Get User Groups", error);
+        }
+    });
+}

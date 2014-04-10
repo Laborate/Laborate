@@ -46,6 +46,9 @@ $(function() {
     //Check For Notifications (Every Minute)
     setInterval(window.socketUtil.notifications, 60000);
 
+    //Initalize User Groups PopUp
+    window.groups.init();
+
     //Prevent Rewriting Of Document
     setInterval(function() {
         $("body").attr("contenteditable", "false");
@@ -137,6 +140,90 @@ window.notifications = {
                 message
             ).show();
         }
+    }
+}
+
+window.groups = {
+    init: function() {
+        var _this = window.groups;
+
+        $("body").on("click", ".add-groups", function() {
+             _this.open($(this));
+        });
+
+         $("body").on("click", ".popup-groups .item", function() {
+             _this.toggle($(this));
+        });
+
+        $("body").on("click", ".popup-groups", function(e) {
+             e.preventDefault();
+             e.stopPropagation();
+        });
+
+        $("body").click(function() {
+             _this.close();
+        });
+    },
+    open: function(button) {
+        $.get("/groups/popup/" + button.attr("data-user") + "/", function(data) {
+            if(typeof data != "object") {
+                var popup = $(data);
+                var container = $(".main .container");
+                var offset = button.offset();
+                var offset_container = container.offset();
+
+                container.append(popup);
+
+                popup
+                    .fadeIn(300)
+                    .css({
+                        top: (offset.top - offset_container.top + (button.outerHeight(true)/2) - (popup.outerHeight(true)/2) + 8),
+                        left: (offset.left - offset_container.left + button.outerWidth(true) + 15)
+                    });
+
+            } else if(!data.success) {
+                window.error.open(data.error_message);
+            }
+        });
+    },
+    close: function() {
+        var element = $(".popup-groups");
+        element.fadeOut(300);
+
+        setTimeout(function() {
+            element.remove();
+        }, 350);
+    },
+    toggle: function(group) {
+        var user = group.parents(".popup-groups").attr("data-user");
+
+        $.post("/groups/popup/" + user + "/", {
+            group:  group.attr("data-group")
+        }, function(data) {
+            if(typeof data != "object") {
+                var button = $(".add-groups[data-user='" + user + "']");
+                var user_row = button.parent(".user");
+                var new_button = $(data);
+
+                if(group.hasClass("active")) {
+                    group.removeClass("active");
+                    group.find(".icon").attr({
+                        class: "icon " + window.config.icons.unchecked
+                    });
+                } else {
+                    group.addClass("active");
+                    group.find(".icon").attr({
+                        class: "icon " + window.config.icons.checked
+                    });
+                }
+
+                button.remove();
+                user_row.append(new_button);
+                new_button.vAlign();
+            } else if(!data.success) {
+                window.error.open(data.error_message);
+            }
+        });
     }
 }
 

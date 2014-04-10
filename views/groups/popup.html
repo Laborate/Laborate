@@ -1,0 +1,14 @@
+<div class="popup-groups" data-user="<%= his_id %>">
+    <div class="arrow"></div>
+    <div class="list">
+        <% my_groups.forEach(function(group) { %>
+            <% if(group.owner_id == user.id) { %>
+                <% var in_group = (his_groups.indexOf(group.pub_id) != -1); %>
+                <div class="item <%= in_group ? "active" : "" %>" data-group="<%= group.pub_id %>">
+                    <div class="icon <%= icons[in_group ? "checked" : "unchecked"] %>"></div>
+                    <div class="name"><%= group.name %></div>
+                </div>
+            <% } %>
+        <% }); %>
+    </div>
+</div>

@@ -139,3 +139,28 @@ exports.group = function(req, res, next) {
         }
     });
 }
+
+exports.popup = function(req, res, next) {
+    async.parallel({
+        me: function(callback) {
+            req.models.users.get(req.session.user.id, callback);
+        },
+        user: function(callback) {
+            req.models.users.one({
+                pub_id: req.param("user")
+            }, callback);
+        }
+    }, function(errors, data) {
+        if(!errors && data) {
+            res.renderOutdated('groups/popup', {
+                my_groups: data.me.groups,
+                his_id: data.user.pub_id,
+                his_groups: $.map(data.user.get_groups(data.me), function(group) {
+                    return group.pub_id;
+                })
+            });
+        } else {
+            res.error(404, "Failed to Get User Groups", error);
+        }
+    });
+}

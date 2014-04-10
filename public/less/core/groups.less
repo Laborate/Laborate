@@ -1,0 +1,70 @@
+@import '../core/index';
+@import '../compless/all';
+
+.popup-groups {
+    position: absolute;
+    z-index: 3;
+    color: #fff;
+    font-size: 14px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        left: -5px;
+        top: 50%;
+        margin-top: -10px;
+        border: solid 10px transparent;
+        background: lighten(@color_header, 15%);
+        display: block;
+        border-color: lighten(@color_header, 15%);
+        width: 0;
+        .border-radius(0 2px);
+        .transform(rotate(45deg));
+    }
+
+    .list {
+        position: relative;
+        z-index: 2;
+        background: lighten(@color_header, 15%);
+        min-width: 125px;
+        overflow: hidden;
+        padding: 5px;
+        .border-radius(4px);
+
+        .item {
+            cursor: pointer;
+            padding: 5px;
+            .clearfix();
+
+            &:first-child {
+                .border-radius(3px 3px 0 0);
+            }
+
+            &:last-child {
+                .border-radius(0 0 3px 3px);
+            }
+
+            &:hover {
+                background: lighten(@color_header, 25%);
+
+                &:active {
+                    background: lighten(@color_header, 35%);
+                }
+            }
+
+            & > * {
+                .float-left();
+            }
+
+            .icon {
+                margin: 1px 10px 0 0;
+            }
+
+            .name {
+                width: 90px;
+                .ellipsis();
+            }
+        }
+    }
+}
