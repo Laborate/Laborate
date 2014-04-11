@@ -278,7 +278,7 @@ exports.verify = function(req, res, next) {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified(function(user) {
                 req.session.user = user;
-                res.redirect(req.session.redirect_url || "/welcome/");
+                res.redirect("/welcome/");
                 delete req.session.redirect_url;
                 req.session.save();
             });

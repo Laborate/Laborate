@@ -147,7 +147,7 @@ window.groups = {
     init: function() {
         var _this = window.groups;
 
-        $("body").on("click", ".add-groups", function() {
+        $("body").on("click", "div.add-groups:not(.disabled)", function() {
              _this.open($(this));
         });
 
@@ -156,7 +156,6 @@ window.groups = {
         });
 
         $("body").on("click", ".popup-groups", function(e) {
-             e.preventDefault();
              e.stopPropagation();
         });
 

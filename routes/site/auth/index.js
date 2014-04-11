@@ -1,15 +1,21 @@
 exports.login = function(req, res) {
+    req.session.redirect_url = req.session.redirect_url || req.param("next");
+    req.session.save();
+
     res.renderOutdated('auth/login/index', {
         title: 'Login',
         js: clientJS.renderTags("backdrop", "crypto"),
         css: clientCSS.renderTags("backdrop"),
         backdrop: req.backdrop(),
         pageTrack: false,
-        attempted: !!req.session.redirect_url
+        attempted: !!req.session.redirect_url,
     });
 };
 
 exports.login_user = function(req, res) {
+    req.session.redirect_url = req.session.redirect_url || req.param("next");
+    req.session.save();
+
     req.models.users.one({
         pub_id: req.param("user")
     }, function(error, user) {
