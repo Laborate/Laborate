@@ -11,7 +11,7 @@ $(function() {
         theme: "laborate",
         indentWithTabs: true,
         smartIndent: true,
-        autofocus: true,
+        autofocus: !config.embed,
         dragDrop: true,
         autoCloseBrackets: true,
         autoCloseTags: true,
