@@ -26,7 +26,7 @@
                     top: 12px;
                     left: 14px;
                     font-size: 26px;
-                    color: darken(@color_header_bottom_select, 20%);
+                    color: darken(@color_subheader_select, 20%);
                 }
 
                 input {
@@ -96,13 +96,13 @@
         .bottom {
             position: relative;
             font-weight: bold;
-            background: @color_header_bottom;
+            background: @color_subheader;
             padding: 8px 25px;
             height: 45px;
             .box-sizing(border-box);
 
             .message {
-                color: darken(@color_header_bottom, 50%);
+                color: darken(@color_subheader, 50%);
                 padding: 7px 0;
                 font-size: 12px;
                 text-align: center;
@@ -110,13 +110,13 @@
                 text-transform: uppercase;
 
                 a {
-                    color: darken(@color_header_bottom, 60%);
+                    color: darken(@color_subheader, 60%);
 
                     &:hover {
                         text-decoration: underline;
 
                         &:active {
-                            color: darken(@color_header_bottom, 65%);
+                            color: darken(@color_subheader, 65%);
                         }
                     }
                 }
@@ -135,7 +135,7 @@
             .filters {
                 font-size: 14px;
                 line-height: 17px;
-                color: darken(@color_header_bottom, 25%);
+                color: darken(@color_subheader, 25%);
                 .float-left();
 
                 .filter {
@@ -159,9 +159,9 @@
                         font-weight: bold;
                         margin: 1px 0;
                         padding: 5px 25px 5px 10px;
-                        background: @color_header_bottom_select;
-                        color: darken(@color_header_bottom_select, 30%);
-                        border: solid 1px darken(@color_header_bottom_select, 5%);
+                        background: @color_subheader_select;
+                        color: darken(@color_subheader_select, 30%);
+                        border: solid 1px darken(@color_subheader_select, 5%);
                         outline: none;
                         cursor: pointer;
 
@@ -173,7 +173,7 @@
                         .border-radius(2px);
 
                         &:hover {
-                            border: solid 1px darken(@color_header_bottom_select, 10%);
+                            border: solid 1px darken(@color_subheader_select, 10%);
                         }
                     }
                 }

@@ -5,6 +5,7 @@ var rand = require("generate-key");
 exports.index = function(req, res, next) {
     res.renderOutdated('documents/index', {
         title: 'Documents',
+        header: "documents",
         js: clientJS.renderTags("documents", "download"),
         css: clientCSS.renderTags("documents")
     });

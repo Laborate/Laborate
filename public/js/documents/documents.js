@@ -1,4 +1,4 @@
-$(document).on("click", ".sidebar .list .item", function() {
+$(document).on("click", ".sidebar .options .option", function() {
     window.documents.location($(this).data("key"), "", true, true);
 
     if(window.documents.terminalActive != window.documents.locationActivated) {
@@ -13,7 +13,7 @@ $(document).on("mouseover mouseout", ".pane .item", function() {
     }
 });
 
-$(document).on("click", ".content .pane .item:not(.disabled)", function() {
+$(document).on("click", ".pane .item:not(.disabled)", function() {
     if(window.documents.locationActivated == "online") {
         window.location.href = "/editor/" + $(this).data("id") + "/";
     } else {

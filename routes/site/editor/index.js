@@ -207,18 +207,17 @@ exports.download = function(req, res, next) {
 
 exports.remove = function(req, res, next) {
     req.models.documents.roles.one({
-        access: true,
         user_id: req.session.user.id,
-        document_pub_id: req.param("document")
-    }, function(error, document) {
+        document_pub_id: req.param("document"),
+        access: true
+    }, function(error, role) {
         if(!error && role) {
-            if(role.permission.owner) {
-                role.document.remove(function(error) {
+            var document = role.document;
+
+            if(document.owner_id == req.session.user.id) {
+                document.remove(function(error) {
                     if(!error) {
-                        res.json({
-                            success: true,
-                            owner: true
-                        });
+                        res.json({ success: true });
                     } else {
                         res.error(200, "Failed To Remove File", error);
                     }
@@ -226,17 +225,14 @@ exports.remove = function(req, res, next) {
             } else {
                 role.remove(function(error) {
                     if(!error) {
-                        res.json({
-                            success: true,
-                            owner: false
-                        });
+                        res.json({ success: true });
                     } else {
                         res.error(200, "Failed To Remove File", error);
                     }
                 });
             }
         } else {
-            res.error(400, false, error);
+            res.error(200, "Failed To Remove File", error);
         }
     });
 }

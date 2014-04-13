@@ -14,7 +14,7 @@
         <% } else { %>
             <div class="add-groups green" data-user="<%= laborator.pub_id %>">
                 <span class="<%= icons.groups %>"></span>
-                <%= laborator_groups.length %> Groups
+                <%=: laborator_groups.length | format %> Groups
             </div>
         <% } %>
     <% } else { %>

@@ -127,13 +127,13 @@
                 text-align: center;
 
                 thead {
-                    background: @color_header_bottom;
+                    background: @color_subheader;
 
                     th {
                         font-size: 14px;
                         font-weight: bold;
                         padding: 10px 15px;
-                        color: darken(@color_header_bottom, 50%);
+                        color: darken(@color_subheader, 50%);
                         border-bottom: solid 1px darken(@color_body, 10%);
                         outline: none;
                         .box-shadow(0 1px 1px #C7C7C7);
@@ -158,7 +158,7 @@
                             color: #333;
                             padding: 10px 15px;
                             font-size: 13px;
-                            border-left: solid 1px @color_header_bottom;
+                            border-left: solid 1px @color_subheader;
 
                             &:first-child {
                                 border: none;
@@ -223,13 +223,13 @@
 
                     &.empty {
                         font-size: 14px;
-                        color: darken(@color_header_bottom, 70%);
+                        color: darken(@color_subheader, 70%);
                         text-align: center;
                         font-weight: bold;
                         border: none !important;
 
                         a {
-                            color: darken(@color_header_bottom, 50%);
+                            color: darken(@color_subheader, 50%);
 
                             &:hover {
                                 text-decoration: underline;
@@ -365,8 +365,8 @@
                     &.header {
                         font-size: 14px;
                         font-weight: bold;
-                        background: @color_header_bottom;
-                        color: darken(@color_header_bottom, 50%);
+                        background: @color_subheader;
+                        color: darken(@color_subheader, 50%);
                         border-bottom: solid 1px darken(@color_body, 10%);
                         .box-shadow(0 1px 1px #C7C7C7);
                     }

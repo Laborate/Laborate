@@ -20,8 +20,9 @@
             }
         }
 
-        &.right {
+        &.righted {
             right: 0;
+            width: 80%;
             border-left: solid 1px @color_panels_main_border;
 
             .container {
@@ -79,6 +80,93 @@
             .spinner {
                 margin: 0 auto;
                 width: 25px;
+            }
+        }
+
+        .subheader {
+            position: relative;
+            font-weight: bold;
+            background: darken(@color_body, 5%);
+            padding: 8px 10px;
+            .box-sizing(border-box);
+            .border-radius(2px);
+
+            .message {
+                color: darken(@color_subheader, 50%);
+                padding: 7px 0;
+                font-size: 12px;
+                text-align: center;
+                width: 100%;
+                text-transform: uppercase;
+
+                a {
+                    color: darken(@color_subheader, 60%);
+
+                    &:hover {
+                        text-decoration: underline;
+
+                        &:active {
+                            color: darken(@color_subheader, 65%);
+                        }
+                    }
+                }
+            }
+
+            .side-button  {
+                color: #fff;
+                font-size: 13px;
+                padding: 5px 8px;
+                margin-left: 15px;
+                cursor: pointer;
+                .border-radius(2px);
+                .float-right();
+            }
+
+            .filters {
+                font-size: 14px;
+                line-height: 17px;
+                color: darken(@color_subheader, 25%);
+                .float-left();
+
+                .filter {
+                    position: relative;
+                    margin-right: 34px;
+                    .float-left();
+
+                    span {
+                        position: relative;
+                        top: 1px;
+                    }
+
+                    .icon {
+                        position: absolute;
+                        top: 8px;
+                        right: 5px;
+                    }
+
+                    select {
+                        position: relative;
+                        font-weight: bold;
+                        margin: 1px 0;
+                        padding: 5px 25px 5px 10px;
+                        background: @color_subheader_select;
+                        color: darken(@color_subheader_select, 30%);
+                        border: solid 1px darken(@color_subheader_select, 5%);
+                        outline: none;
+                        cursor: pointer;
+
+                        //Mozila Arrow Fix
+                        text-indent: 0.01px;
+                        text-overflow: '';
+
+                        .appearance(none);
+                        .border-radius(2px);
+
+                        &:hover {
+                            border: solid 1px darken(@color_subheader_select, 10%);
+                        }
+                    }
+                }
             }
         }
 
@@ -191,8 +279,11 @@
         width: 30%;
         padding-left: 0;
         background: @color_panels_alternate;
+        .clearfix();
 
         .filter {
+            .float-left();
+
             .header,
             .options .option {
                 .border-radius(0 2px 2px 0);
@@ -202,11 +293,14 @@
 
     &.sidebar {
         left: 0;
-        width: 30%;
-        padding-left: 0;
+        width: 20%;
+        padding-right: 0;
         background: @color_panels_alternate;
+        .clearfix();
 
         .filter {
+            .float-right();
+
             .header,
             .options .option {
                 .border-radius(2px 0 0 2px);
@@ -214,7 +308,7 @@
         }
     }
 
-    .filter {
+    & > .filter {
         width: 200px;
         margin-bottom: 70px;
 
@@ -227,7 +321,8 @@
             width: 100%;
             .box-sizing(border-box);
 
-            a {
+            div, a {
+                cursor: pointer;
                 font-size: 17px;
                 opacity: 0.6;
                 .transition(opacity);
@@ -251,7 +346,6 @@
             color: #333;
             .clearfix();
             .box-sizing(border-box);
-            .ellipsis();
 
             &:first-child {
                 margin-top: 10px;
@@ -279,8 +373,10 @@
             }
 
             .name {
+                width: 150px;
                 font-size: 16px;
                 .float-left();
+                .ellipsis();
             }
         }
     }

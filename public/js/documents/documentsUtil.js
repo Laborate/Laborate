@@ -516,17 +516,16 @@ window.documents = {
         $(".context-menu").hide();
     },
     headerBar: function(action, message, permanent) {
-        $(".bottom > div:not(.clear)").hide();
-        $(".bottom .filter").hide();
-        $(".bottom .filter select").val("add filter");
-        $(".top input").val("");
+        $(".subheader > div:not(.clear)").hide();
+        $(".subheader .filter").hide();
+        $(".subheader .filter select").val("add filter");
         window.documents.mode = [];
 
         $.each(action, function(i, item) {
             switch(item) {
                 case "message":
                     window.documents.popup("close");
-                    $(".bottom .message").html(message).show();
+                    $(".subheader .message").html(message).show();
 
                     if(window.documents.headerBarPrevious && !permanent) {
                         setTimeout(function() {
@@ -536,19 +535,19 @@ window.documents = {
 
                     break;
                 case "filters-online":
-                    $(".bottom .filters, .bottom .filter[data-type='online']").show();
+                    $(".subheader .filters, .subheader .filter[data-type='online']").show();
                     break;
                 case "filters-non-online":
-                    $(".bottom .filters, .bottom .filter[data-type='non-online']").show();
+                    $(".subheader .filters, .subheader .filter[data-type='non-online']").show();
                     break;
                 case "add":
-                    $(".bottom .add-files").show();
+                    $(".subheader .add-files").show();
                     break;
                 case "download":
-                    $(".bottom .download-files").show();
+                    $(".subheader .download-files").show();
                     break;
                 case "terminal":
-                    $(".bottom .terminal-button").show();
+                    $(".subheader .terminal-button").show();
                     break;
                 case "side-button":
                     $(".side-button").show();
@@ -568,41 +567,35 @@ window.documents = {
             }
 
             var locations = ('                                                \
-                <div class="item" data-key="online" data-counter="0">         \
-                    <div class="container">                                   \
-                        <div class="name">Your Drive</div>                    \
-                        <div class="icon ' + config.icons.online + '"></div>  \
-                    </div>                                                    \
-                    <div class="active"></div>                                \
+                <div class="option" data-key="online" data-counter="0">       \
+                    <div class="icon ' + config.icons.online + '"></div>      \
+                    <div class="name">Your Drive</div>                        \
                 </div>                                                        \
             ');
 
 
             $.each(json, function(i, item) {
                 locations += ('                                                         \
-                    <div class="item"                                                   \
+                    <div class="option"                                                 \
                         data-key="' + item.key + '"                                     \
                         data-name="' + item.name + '"                                   \
                         data-type="' + item.type + '"                                   \
                         data-counter="0">                                               \
-                        <div class="container">                                         \
-                            <div class="name">' + item.name + '</div>                   \
-                            <div class="icon ' + config.icons[item.type] + '"></div>    \
-                        </div>                                                          \
-                        <div class="active"></div>                                      \
+                        <div class="icon ' + config.icons[item.type] + '"></div>        \
+                        <div class="name">' + item.name + '</div>                       \
                     </div>                                                              \
                 ');
             });
 
-            $(".sidebar .list .item").not("[data-key='online']").remove();
-            $(".sidebar .list .listing").html(locations);
+            $(".sidebar .options .option").not("[data-key='online']").remove();
+            $(".sidebar .options").html(locations);
             if(typeof callback == "function") {
                 callback();
             }
 
             var interval = setInterval(function() {
                 if(window.documents.locationActivated) {
-                    var location = $(".list .item[data-key='" + window.documents.locationActivated + "']")
+                    var location = $(".options .option[data-key='" + window.documents.locationActivated + "']")
                         .addClass("activated");
 
                     if(window.documents.locationActivated != "online") {
@@ -616,8 +609,8 @@ window.documents = {
     },
     location: function(location, path, history, override) {
         $(".sidebar .info").text("");
-        $(".list .item").removeClass("activated");
-        var location_element = $(".list .item[data-key='" + location + "']").addClass("activated");
+        $(".options .option").removeClass("activated");
+        var location_element = $(".options .option[data-key='" + location + "']").addClass("activated");
         if(location != window.url_params()["location"] || path != window.url_params()["dir"]) {
             $(".pane").html("");
         }
@@ -626,7 +619,6 @@ window.documents = {
 
         if(!location || ["popup", "search", "online"].indexOf(location) != -1) {
             $("title").text(window.config.title);
-            window.documents.locationNotification("online", false);
             if(location == "popup") {
                 window.documents.mode = null;
                 window.history.pushState(null, null, "/documents/");
@@ -672,55 +664,6 @@ window.documents = {
                 window.documents.locations();
                 window.documents.location(window.url_params()["location"], window.url_params()["dir"], false, true);
             }
-        }
-    },
-    locationNotification: function(location, action, count) {
-        var element = $(".list .item[data-key='" + location + "']").find(".icon");
-
-        if(element.length > 0) {
-            if(!(location in window.documents.locationIcons)) {
-                window.documents.locationIcons[location] = element.attr("class");
-            }
-
-            if(action) {
-                var actions = {
-                    "upload": config.icons.circle_arrow_up,
-                    "download": config.icons.circle_arrow_down,
-                    "counter": function() {
-                        if(count) {
-                            var parentContainer = element.parents(".item");
-                            count += parseInt(parentContainer.attr("data-counter"));
-                            parentContainer.attr("data-counter", count);
-                            if(count <= 9 && element.attr("class").indexOf(config.icons.circle_notice) == -1) {
-                                return config.icons.number + ((count != 1) ? "-" + count : "");
-                            } else {
-                                return config.icons.circle_notice;
-                            }
-                        }
-                    }()
-                };
-
-                if(action in actions) {
-                    window.documents.locationNotificationChange(element,
-                        element.attr("class").replace(/icon-.*/g, actions[action]), true);
-                }
-            } else {
-                window.documents.locationNotificationChange(element,
-                    window.documents.locationIcons[location], false, false);
-                element.parents(".item").attr("data-counter", 0);
-            }
-        }
-    },
-    locationNotificationChange: function(element, className, active, big) {
-        if(element.attr("class").indexOf(className) == -1) {
-            element.fadeOut(200);
-            setTimeout(function() {
-                element
-                    .attr("class", className)
-                    .toggleClass("notify", active)
-                    .toggleClass("big", active)
-                    .fadeIn(200);
-            }, 300);
         }
     },
     cachedLocations: function(location) {
@@ -1059,7 +1002,6 @@ window.documents = {
                 .attr("class", "icon spin " + config.icons.spinner);
         }
 
-        window.documents.locationNotification("online", "upload");
         window.documents.fileProgress(files, 0, false, function() {
             files.each(function(count) {
                 var file = $(this);
@@ -1072,10 +1014,6 @@ window.documents = {
                                 window.location.href = "/editor/" + json.document + "/";
                             }
                         });
-
-                        if((count+1) == files.length) {
-                            window.documents.locationNotification("online", "counter", files.length);
-                        }
                     }
                 });
             });
