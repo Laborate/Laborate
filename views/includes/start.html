@@ -60,25 +60,6 @@
                 });
             <% } %>
         </script>
-
-        <!-- Distance.io -->
-        <script type='text/javascript'>
-            var _paq = _paq || [];
-            (function(){
-                var u='https://distance.io/';
-                _paq.push(['setSiteId', '531a596d3adb49ea27f774a6']);
-                _paq.push(['trackPageView']);
-                var d=document,
-                    g=d.createElement('script'),
-                    s=d.getElementsByTagName('script')[0];
-                g.type='text/javascript';
-                g.defer=true; g.async=true;
-                g.src=u+'js/distance.js';
-                s.parentNode.insertBefore(g,s);
-            })();
-        </script>
-        <!-- End Distance.io Tracking Code -->
-
     </head>
     <body class="<%= (!organization.fake) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %> <%= (embed) ? "embed" : "" %>">
         <% if(production) { %>
