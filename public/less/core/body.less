@@ -91,6 +91,10 @@
             .box-sizing(border-box);
             .border-radius(2px);
 
+            & > div:not(.clear) {
+                display: none;
+            }
+
             .message {
                 color: darken(@color_subheader, 50%);
                 padding: 7px 0;
