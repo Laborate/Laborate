@@ -87,14 +87,16 @@
                     font-weight: bold;
                     padding: 10px 15px;
                     color: darken(@color_subheader, 50%);
-                    border-bottom: solid 1px darken(@color_body, 10%);
                     outline: none;
-                    .box-shadow(0 1px 1px #C7C7C7);
                 }
             }
 
             tbody {
                 tr {
+                    &:nth-child(odd) > td {
+                        background: darken(@color_body, 1%);
+                    }
+
                     &.admin > td {
                         background: lighten(@color_blue, 40%);
                     }
@@ -320,8 +322,6 @@
                     font-weight: bold;
                     background: @color_subheader;
                     color: darken(@color_subheader, 50%);
-                    border-bottom: solid 1px darken(@color_body, 10%);
-                    .box-shadow(0 1px 1px #C7C7C7);
                 }
 
                 &:not(.header) {
@@ -335,31 +335,11 @@
 
                         &:hover {
                             background: #d0f0ff;
-
-                            &:not(:first-child) {
-                                border-top: solid 1px darken(#d0f0ff, 5%);
-                            }
-
-                            & + .item:not(:first-child) {
-                                border-top: solid 1px darken(#d0f0ff, 5%);
-                            }
                         }
 
                         &:active {
                            background: darken(#d0f0ff, 5%);
-
-                            &:not(:first-child) {
-                                border-top: solid 1px darken(#d0f0ff, 10%);
-                            }
-
-                            & + .item:not(:first-child) {
-                                border-top: solid 1px darken(#d0f0ff, 10%);
-                            }
                         }
-                    }
-
-                    &:not(:first-child) {
-                        border-top: solid 1px darken(@color_body, 10%);
                     }
 
                     &:nth-child(odd) {
