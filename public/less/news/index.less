@@ -66,6 +66,25 @@
 }
 
 .panel {
+    &.centered {
+        .loader,
+        .container {
+            float: none;
+            clear: both;
+            display: block;
+            margin: 0 auto;
+            width: 700px !important;
+
+            .post > .data {
+                width: 625px !important;
+
+                .reply > .data {
+                    width: 540px !important;
+                }
+            }
+        }
+    }
+
 
     &.main .container {
         & > .form {
