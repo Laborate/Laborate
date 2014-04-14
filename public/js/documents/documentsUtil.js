@@ -361,7 +361,7 @@ window.documents = {
                     } else if(key == "google" && value.show) {
                         list.push({
                             "name": "Google Drive Account",
-                            "icon": config.icons.drive,
+                            "icon": config.icons.google,
                             "class": "selectable",
                             "data": {
                                 "data-next": (value.enabled) ? "drive" : "link",

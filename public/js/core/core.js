@@ -122,12 +122,16 @@ window.notifications = {
     init: function() {
         var _this = window.notifications;
 
-        if(_this.notifications && _this.notifications.checkPermission() == 1) {
-    	    _this.notifications.requestPermission(function() {
+        if(_this.notifications) {
+            if(_this.notifications.checkPermission() == 1) {
+        	    _this.notifications.requestPermission(function() {
+                    _this.enabled = (_this.notifications.checkPermission() == 0);
+        	    });
+            } else {
                 _this.enabled = (_this.notifications.checkPermission() == 0);
-    	    });
+            }
         } else {
-            _this.enabled = (_this.notifications.checkPermission() == 0);
+            _this.enabled = false;
         }
     },
     message: function(message, title, icon) {
