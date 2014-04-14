@@ -33,9 +33,4 @@ $(function() {
     $(document).on("click", ".main #notifications .remove", function() {
         window.account.notificationRemove($(this).parents(".item"));
     });
-
-    $(document).on("submit", "#search", function() {
-        window.account.fileSearch($(this).find("input").val());
-        return false;
-    });
 });

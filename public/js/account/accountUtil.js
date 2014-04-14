@@ -229,8 +229,5 @@ window.account = {
                     .text("Failded")
             }
         });
-    },
-    fileSearch: function(search) {
-        window.location.href = "/documents/search/" + encodeURI(search) + "/";
     }
 }

@@ -15,7 +15,7 @@ exports.posts = function(req, res, next) {
                 })
             )
         }).run(function(error, posts) {
-            if(!error && !posts.empty) {
+            if(!error) {
                 res.renderOutdated('news/post', {
                     title: "News Feed",
                     header: "news",
