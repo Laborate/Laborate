@@ -139,7 +139,7 @@
         .transition(padding-bottom);
 
         &.extend {
-            padding-bottom: 350px;
+            padding-bottom: 300px;
         }
 
         .item {
@@ -200,26 +200,50 @@
 
             &.back {
                 background: darken(@color_body, 25%);
+
+                &:not(.disabled):active {
+                    background: darken(@color_body, 30%);
+                }
             }
 
             &.red {
                 background: @color_red;
+
+                &:not(.disabled):active {
+                    background: darken(@color_red, 5%);
+                }
             }
 
             &.blue {
                 background: @color_blue;
+
+                &:not(.disabled):active {
+                    background: darken(@color_blue, 5%);
+                }
             }
 
             &.green {
                 background: @color_green;
+
+                &:not(.disabled):active {
+                    background: darken(@color_green, 5%);
+                }
             }
 
             &.purple {
                 background: @color_purple;
+
+                &:not(.disabled):active {
+                    background: darken(@color_purple, 5%);
+                }
             }
 
             &.orange {
                 background: @color_orange;
+
+                &:not(.disabled):active {
+                    background: darken(@color_orange, 5%);
+                }
             }
 
             .corner {
@@ -281,8 +305,8 @@
 .terminal {
     position: fixed;
     width: 100%;
-    bottom: -350px;
-    height: 350px;
+    bottom: -300px;
+    height: 300px;
     opacity: 0;
     background: @color_terminal;
     .transition();
