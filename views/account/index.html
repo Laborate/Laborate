@@ -227,11 +227,11 @@
             <form class="container" action="/account/billing/card/add" autocomplete="off">
                 <div class="item">
                     <div class="name">Name On Card</div>
-                    <input class="input" type="text" name="name" data-required="true" />
+                    <input class="input" type="text" name="name" data-required="true" value="<%= user.name %>" />
                 </div>
                 <div class="item half">
                     <div class="name">Credit Card</div>
-                    <input id="card" class="input" type="text" name="card" data-required="true" />
+                    <input id="card" class="input" type="text" name="card" data-required="true" placeholder="DDDD DDDD DDDD DDDD" />
                     <img id="card-company" class="card-type">
                 </div>
                 <div class="item quarter">
@@ -240,7 +240,7 @@
                 </div>
                 <div class="item quarter">
                     <div class="name">CVC</div>
-                    <input id="cvc" class="input" type="text" name="cvc" data-required="true" />
+                    <input id="cvc" class="input" type="text" name="cvc" data-required="true" placeholder="DDD" />
                 </div>
                 <div class="clear"></div>
                 <input class="button" type="submit" value="Add Credit Card" data-success="Credit Card Added"/>
@@ -270,7 +270,7 @@
                 <div class="item header">
                     <div class="small-text">Plan</div>
                     <div class="tiny-text">Price</div>
-                    <div class="icon">Pro</div>
+                    <div class="smaller-text">Pro Features</div>
                     <div class="left">Private Documents</div>
                 </div>
 
@@ -311,7 +311,7 @@
                     <div class="item <%= item %>" data-plan="<%= pricing.plan %>">
                         <div class="small-text"><%= pricing.name %></div>
                         <div class="tiny-text"><%= amount %></div>
-                        <div class="icon <%= icon_class %>"></div>
+                        <div class="smaller-text <%= icon_class %>"></div>
                         <div class="small-text"><%- documents %></div>
                         <div class="action button <%= button_class %>"><%= button %></div>
                     </div>
