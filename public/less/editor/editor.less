@@ -33,6 +33,7 @@ html, body {
 
     &.main {
         width: 60%;
+        height: 100%;
         left: 20%;
         padding: 85px 0 0 0;
         border-left: solid 1px darken(@color_body, 5%);
@@ -46,11 +47,19 @@ html, body {
         }
 
         .subheader {
-            padding: 0 30px;
+            padding: 0 15px;
             height: 35px;
 
             & > div:not(.message) {
                 display: inherit !important;
+            }
+
+            .filters {
+                color: darken(@color_body, 45%);
+
+                strong {
+                    margin-bottom: -1px;
+                }
             }
 
             .toggles {
@@ -91,6 +100,10 @@ html, body {
                     right: 50px;
                 }
             }
+        }
+
+        .pane {
+            .calc-height(~"100% - 35px");
         }
     }
 }

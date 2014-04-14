@@ -78,7 +78,12 @@ $(function() {
     if(!config.embed) {
         //Setup Fullscreen
         if($.cookie("fullscreen") != null) {
-            window.editorUtil.fullscreen($.cookie("fullscreen") == "false");
+            window.editorUtil.fullscreen($.cookie("fullscreen") == "true");
+        }
+
+        //Check Fullscreen
+        if($(window).width() < 1100) {
+            window.editorUtil.fullscreen(true);
         }
 
         $.get("/editor/" + url_params()["document"] + "/permissions/", function(response) {

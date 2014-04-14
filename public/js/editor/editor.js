@@ -111,18 +111,18 @@ $(function() {
     });
 
     //Resize Editor on Window Resize
-    $(window).resize(function() {
+    if(!config.embed) {
+        $(window).resize(function() {
 
-        if($(window).width() < 1077) {
-            $(".terminal").width($(".CodeMirror").width());
-        } else {
-            $(".terminal").width("")
-        }
-    });
+            if($(window).width() < 1100) {
+                window.editorUtil.fullscreen(true);
+            }
+        });
+    }
 
     //Toogle Full Screen Mode
     $(".fullscreen-toggle").on("click", function() {
-        window.editorUtil.fullscreen(window.editorUtil.fullscreenActive);
+        window.editorUtil.fullscreen(!window.editorUtil.fullscreenActive);
     });
 
     //Toogle Terminal

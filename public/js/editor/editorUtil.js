@@ -48,15 +48,15 @@ window.editorUtil = {
             $(".terminal a").attr("href", terminal);
         }
     },
-    fullscreen: function(show) {
+    fullscreen: function(fullscreen) {
         var _this = this;
-        _this.fullscreenActive = !show;
-        $.cookie("fullscreen", !show, {
+        _this.fullscreenActive = fullscreen;
+        $.cookie("fullscreen", fullscreen, {
             path: '/editor',
             expires: 365
         });
 
-        if(show) {
+        if(!fullscreen) {
             $(".main .fullscreen-toggle")
                 .removeClass(window.config.icons.contract + " active")
                 .addClass(window.config.icons.expand);
