@@ -1,10 +1,5 @@
 exports.index = function(req, res, next) {
-    res.renderOutdated('editor/index', {
-        title: "Join A Document",
-        js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop"),
-        backdrop: req.backdrop()
-    });
+    res.redirect("/documents/");
 }
 
 exports.editor = function(req, res, next) {
@@ -21,6 +16,7 @@ exports.editor = function(req, res, next) {
                             title: document.name,
                             user: req.session.user,
                             document: document,
+                            header: "documents",
                             js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
                             css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
                             backdrop: req.backdrop(),
@@ -110,24 +106,6 @@ exports.permissions = function(req, res, next) {
             });
         } else {
             res.error(200, "Failed To Get Permissions", error);
-        }
-    });
-}
-
-exports.exists = function(req, res, next) {
-    req.models.documents.exists({
-        pub_id: req.param("document")
-    }, function(error, exists) {
-        if(!error && exists) {
-            res.json({
-                success: true,
-                next: {
-                    function: "window.backdrop.urlChange",
-                    arguments: "/editor/" + req.param("document") + "/"
-                }
-            });
-        } else {
-            res.error(200, "Document Doesn't Exist", error);
         }
     });
 }

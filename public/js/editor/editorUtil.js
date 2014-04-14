@@ -4,7 +4,6 @@
 window.editorUtil = {
     clean: true,
     fullscreenActive: false,
-    fullscreeenTransitioning: false,
     name: "",
     interval: null,
     notification: function(message, permanent) {
@@ -36,7 +35,6 @@ window.editorUtil = {
             setTimeout(function() {
                 $(".terminal iframe").attr("src", "");
                 $(".terminal, .terminal-toggle").removeClass("active");
-                setTimeout(_this.resize, 500);
             }, 200);
         } else {
             var terminal =  "/terminals/" + $('.terminal iframe').data("location") + "/";
@@ -48,53 +46,29 @@ window.editorUtil = {
                     $(this).show();
                 });
             $(".terminal a").attr("href", terminal);
-            setTimeout(_this.resize, 500);
         }
     },
     fullscreen: function(show) {
         var _this = this;
         _this.fullscreenActive = !show;
-        _this.fullscreeenTransitioning = true;
         $.cookie("fullscreen", !show, {
             path: '/editor',
             expires: 365
         });
 
         if(show) {
-            $(".sidebar")
-                .removeClass("fullscreen");
+            $(".main .fullscreen-toggle")
+                .removeClass(window.config.icons.contract + " active")
+                .addClass(window.config.icons.expand);
 
-            setTimeout(function() {
-                $(".content .fullscreen-toggle")
-                    .removeClass(window.config.icons.contract + " active")
-                    .addClass(window.config.icons.expand);
-                $(".sidebar .profile , .header .top").slideDown(500);
-                $(".chat").animate({
-                    top: 95,
-                    height: $(window).height() - $(".header .top").outerHeight()
-                }, 500);
-            }, 100);
+            $(".panel").removeClass("fullscreen");
         } else {
-            $(".content .fullscreen-toggle")
+            $(".main .fullscreen-toggle")
                 .removeClass(window.config.icons.expand)
                 .addClass(window.config.icons.contract + " active");
-            $(".sidebar .profile , .header .top").slideUp(500);
-            $(".chat").animate({
-                top: 0,
-                height: $(window).height()
-            }, 500);
 
-            setTimeout(function() {
-                $(".sidebar")
-                    .addClass("fullscreen");
-            }, 600);
+            $(".panel").addClass("fullscreen");
         }
-
-        setTimeout(function() {
-            _this.fullscreeenTransitioning = false;
-            _this.resize();
-            window.chat.resize();
-        }, 600);
     },
     setChanges: function(direction, data, override) {
         window.editorUtil.setInfo();
@@ -216,14 +190,6 @@ window.editorUtil = {
         //File Line Count
         $(".filter[data-key='file-lines'] strong").text(file.split("\n").length);
     },
-    resize: function() {
-        if(!window.editorUtil.fullscreeenTransitioning) {
-            window.editor.setSize("",
-                $(window).height() - $(".header").height() - $(".terminal").height() - (parseInt($(".terminal").css("bottom"))|| 0)
-            );
-            editor.refresh();
-        }
-    },
     setMode: function(name, object) {
         window.sidebarUtil.defaultLanguage(name);
         CodeMirror.autoLoadMode(window.editor, $.trim(object.mode));
@@ -234,9 +200,6 @@ window.editorUtil = {
             setTimeout(function() {
                 if(editor.getMode().name == "null") {
                     window.editor.setOption("mode", $.trim(object.mode));
-                    setTimeout(function () {
-                        window.editor.refresh();
-                    }, 500);
                 }
             }, 500);
         }, 500);

@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "gsrFCv9T8L54mikhC5e0UxBHllVJFZoP1kqeS3mToJxOeJZCg0"
+            "secret": "ImPvLc8hJLmNFzfonaB2Fln69OVvmadJ5uiMuOOpZfsOx8esua"
         }
     },
     "orm": {
@@ -162,7 +162,8 @@
         "forward": "icon-forward",
         "vcard": "icon-vcard",
         "location": "icon-location",
-        "url": "icon-cloud"
+        "url": "icon-cloud",
+        "editor": "icon-document"
     },
     "github": {
         "id": "",

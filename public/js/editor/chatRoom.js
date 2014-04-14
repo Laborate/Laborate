@@ -10,7 +10,6 @@ window.chat = {
     },
     clear: function() {
         $(".jspPane").html("");
-         window.chat.resize();
     },
     help: function() {
     	window.chat.helper([
@@ -35,7 +34,6 @@ window.chat = {
             window.chat.status("Chat Notifications Turned Off");
             window.chat.notifications = false;
         }
-        window.chat.resize();
         window.chat._scrollToBottom();
 
     },
@@ -53,27 +51,15 @@ window.chat = {
                 window.chat._inputMessage(from, linkContent, direction, gravatar, name);
             }
         }
-        window.chat.resize();
         window.chat._scrollToBottom();
     },
     status: function(message) {
         window.chat._inputStatus(message);
-        window.chat.resize();
         window.chat._scrollToBottom();
     },
     helper: function(messages) {
         window.chat._inputHelper(messages);
-        window.chat.resize();
         window.chat._scrollToBottom();
-    },
-    resize: function() {
-        if(!window.editorUtil.fullscreeenTransitioning) {
-            if($(".header .top").is(":visible")) {
-                $(".chat").height($(window).height() - $(".header .top").outerHeight());
-            } else {
-                $(".chat").height($(window).height());
-            }
-        }
     },
     signIn: function(screenName) {
         window.screenName = screenName;
@@ -213,8 +199,6 @@ window.chat = {
 $(function() {
     if(!config.embed) {
         setTimeout(window.chat.help, 10);
-        setInterval(window.chat.resize, 1000);
-        $(window).resize(window.chat.resize);
 
         //Submit New Message
         $(".messenger textarea").on('keydown', function(e) {

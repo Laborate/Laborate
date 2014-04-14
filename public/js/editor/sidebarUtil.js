@@ -553,11 +553,9 @@ window.sidebarUtil = {
 	},
 	print: function() {
         $("html").addClass("print");
-        window.editorUtil.resize();
         window.print();
         setTimeout(function() {
             $("html").removeClass("print");
-            window.editorUtil.resize();
         }, 100);
 	},
 	download: function() {

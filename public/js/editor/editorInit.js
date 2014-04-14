@@ -75,9 +75,6 @@ $(function() {
     //Set Array of Users
     window.users = new Array();
 
-    //Refresh Editor
-    window.editorUtil.resize();
-
     if(!config.embed) {
         //Setup Fullscreen
         if($.cookie("fullscreen") != null) {
