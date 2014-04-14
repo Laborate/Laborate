@@ -8,7 +8,7 @@ $(document).on("click", ".sidebar .options .option", function() {
 
 $(document).on("mouseover mouseout", ".pane .item", function() {
     if(window.documents.locationActivated == "online") {
-        var location = $(".list .item[data-key='" + $(this).data("location") + "']")
+        var location = $(".options .option[data-key='" + $(this).data("location") + "']")
         location.toggleClass("hover", (!location.hasClass("hover")));
     }
 });
