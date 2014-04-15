@@ -1,4 +1,18 @@
 $(function() {
+    var counter;
+
+    function setTimer() {
+        clearTimeout(counter);
+        setTimeout(function() {
+            if($(".header .dropdown").has(":hover").length != -1) {
+                setTimer();
+            } else {
+                $(".header .dropdown").removeClass("activated");
+                clearTimeout(counter);
+            }
+        }, 5000);
+    }
+
     $(".header .app:not(.coming-soon)").click(function() {
          $(".header .app").removeClass("activated");
          $(this).addClass("activated");
@@ -6,10 +20,12 @@ $(function() {
 
     $(".header").on("mouseover", ".gravatar", function() {
          $(".header .dropdown").addClass("activated");
+         setTimer();
     });
 
     $(".header .dropdown").on("mouseleave", function() {
          $(".header .dropdown").removeClass("activated");
+         clearTimeout(counter);
     });
 
     $(".header .search .icon").click(function(e) {
