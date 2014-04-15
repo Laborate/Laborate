@@ -1,4 +1,3 @@
-var expressError = require('express-error');
 var error_handler = function(status, message, locals, req, res, error) {
     var error_message;
     var error_html;
@@ -58,27 +57,20 @@ var error_handler = function(status, message, locals, req, res, error) {
                 if(redirect_url) {
                     res.redirect(redirect_url);
                 } else {
-                    if(config.general.production) {
-                        res.renderOutdated('error/index', $.extend(true, {
-                            host: req.host,
-                            title: error_message,
-                            mode: error_message,
-                            js: clientJS.renderTags("backdrop"),
-                            css: clientCSS.renderTags("backdrop"),
-                            error_html: error_html,
-                            backdrop: req.backdrop(),
-                            header_class: "lighten",
-                            pageTrack: false,
-                            mobile: false,
-                            home: locals.home,
-                            embed: locals.embed
-                        }, locals));
-                    } else {
-                        expressError.express3({
-                            contextLinesCount: 3,
-                            handleUncaughtException: true
-                        })(error, req, res);
-                    }
+                    res.renderOutdated('error/index', $.extend(true, {
+                        host: req.host,
+                        title: error_message,
+                        mode: error_message,
+                        js: clientJS.renderTags("backdrop"),
+                        css: clientCSS.renderTags("backdrop"),
+                        error_html: error_html,
+                        backdrop: req.backdrop(),
+                        header_class: "lighten",
+                        pageTrack: false,
+                        mobile: false,
+                        home: locals.home,
+                        embed: locals.embed
+                    }, locals));
                 }
             },
             'application/json': function() {

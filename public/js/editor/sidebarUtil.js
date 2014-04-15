@@ -172,7 +172,7 @@ window.sidebarUtil = {
 	    window.editorUtil.name = title;
 
         $(".sidebar .form[name=settings] .input[name=name]").val(title);
-		$(".header .filter[data-key='file-name'] strong").text(title);
+		$(".subheader .filter[data-key='file-name'] strong").text(title);
 		$("title").text(name + notify + window.config.delimeter + window.config.name);
 		if(direction == "out") {
     		window.socketUtil.socket.emit('editorExtras' , {
@@ -461,12 +461,12 @@ window.sidebarUtil = {
 
                         if(!header.empty) {
                             if(permissions[1].count == 0 && permissions[2].count == 0) {
-                                $(".chat .controller").text("Chat Room");
+                                $(".chat .header").text("Chat Room");
                             } else {
-                                $(".chat .controller").html(header.join(delimiter));
+                                $(".chat .header").html(header.join(delimiter));
                             }
                         } else {
-                            $(".chat .controller").text("Chat Room");
+                            $(".chat .header").text("Chat Room");
                         }
                     }
                 });

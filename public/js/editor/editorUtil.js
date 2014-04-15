@@ -165,18 +165,20 @@ window.editorUtil = {
             } else if(direction == "in") {
                 var user = window.users[data.from];
 
-                if(user && user.selection) {
-                    user.selection.clear();
-                }
+                if(user) {
+                    if(user.selection) {
+                        user.selection.clear();
+                    }
 
-                if(data.leave) {
-                    user.hide();
-                } else if(data.cord) {
-                    window.editor.addWidget(data.cord, user.cursor.get(0), false);
-                } else if(data.selection) {
-                    user.selection = window.editor.markText(data.selection.from, data.selection.to, {
-                        "className": "u" + data.from
-                    });
+                    if(data.leave) {
+                        user.hide();
+                    } else if(data.cord) {
+                        window.editor.addWidget(data.cord, user.cursor.get(0), false);
+                    } else if(data.selection) {
+                        user.selection = window.editor.markText(data.selection.from, data.selection.to, {
+                            "className": "u" + data.from
+                        });
+                    }
                 }
             }
         }

@@ -135,17 +135,13 @@ exports.delete_account = function(req, res) {
     req.models.users.get(req.session.user.id, function(error, user) {
         if(!error) {
             if(req.models.users.hash($.trim(req.param('password'))) == user.password) {
-                req.stripe.customers.del(req.session.user.stripe, function(error, customer) {
-                    if(!error && customer) {
-                        user.remove(function(error) {
-                            if(!error) {
-                                res.json({
-                                    success: true,
-                                    callback: "window.location.href = '/logout/';"
-                                });
-                            } else {
-                                res.error(200, "Failed To Delete Account", error);
-                            }
+                req.stripe.customers.del(req.session.user.stripe, req.error.capture);
+
+                user.remove(function(error) {
+                    if(!error) {
+                        res.json({
+                            success: true,
+                            callback: "window.location.href = '/logout/';"
                         });
                     } else {
                         res.error(200, "Failed To Delete Account", error);

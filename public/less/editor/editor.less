@@ -71,8 +71,8 @@ html, body {
                     &.pane {
                         left: -210px;
 
-                        .item {
-                            padding: 10px 10px 10px 0;
+                        & > .item {
+                            padding: 15px 15px 15px 0;
 
                             .form {
                                 border-bottom: solid 1px darken(@color_body, 10%);
@@ -323,7 +323,7 @@ html, body {
                                         position: relative;
                                         font-weight: bold;
                                         margin: 1px 0;
-                                        padding: 8px 25px 8px 10px;
+                                        padding: 7px 25px 7px 8px;
                                         background: lighten(@color_subheader_select, 10%);
                                         color: darken(@color_subheader_select, 30%);
                                         border: none;
@@ -346,7 +346,7 @@ html, body {
                                     outline: none;
                                     color: #fff;
                                     font-size: 13px;
-                                    padding: 7px 0;
+                                    padding: 6px 0;
                                     width: 100%;
                                     text-align: center;
                                     background: @color_blue;
@@ -411,7 +411,7 @@ html, body {
                                     color: #333;
                                     background: #fff;
                                     font-size: 12px;
-                                    padding: 8px 10px;
+                                    padding: 7px 8px;
                                     border: none;
                                     outline: none;
                                     .border-radius(2px);
@@ -439,10 +439,15 @@ html, body {
 
         &.chat {
             right: 0;
+            padding-left: 0;
             .transition(right);
 
             &.fullscreen {
                 right: -25%;
+            }
+
+            .header {
+                .border-radius(0 2px 2px 0);
             }
         }
     }
@@ -482,28 +487,29 @@ html, body {
                 position: absolute;
                 top: -5px;
                 padding: 5px;
-                color: darken(@color_body, 50%);
-                background: darken(@color_body, 10%);
+                color: @color_panels_header;
+                background: lighten(@color_panels_header, 50%);
                 cursor: pointer;
                 .border-radius(2px);
 
                 &:hover {
-                    background: darken(@color_body, 15%);
+                    color: darken(@color_panels_header, 10%);
+                    background: lighten(@color_panels_header, 40%);
 
                     &:active {
-                        background: darken(@color_body, 20%);
+                        background: lighten(@color_panels_header, 30%);
                     }
                 }
 
                 &.active {
-                    color: darken(@color_body, 10%);
-                    background: darken(@color_body, 50%);
+                    color: darken(#fff, 10%);
+                    background: @color_panels_header;
 
                     &:hover {
-                        background: darken(@color_body, 55%);
+                        background: darken(@color_panels_header, 5%);
 
                         &:active {
-                            background: darken(@color_body, 60%);
+                            background: darken(@color_panels_header, 10%);
                         }
                     }
                 }

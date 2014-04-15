@@ -268,14 +268,16 @@
     <% } %>
 </div>
 <div class="panel chat">
-    <div class="controller">Chat Room</div>
-    <div class="conversation">
-        <div class="shadow-top"></div>
-        <div class="scroll-pane"></div>
-        <div class="shadow-bottom"></div>
-    </div>
-    <div class="messenger">
-        <textarea placeholder="message goes here"></textarea>
+    <div class="filter">
+        <div class="header">Chat Room</div>
+        <div class="conversation">
+            <div class="shadow-top"></div>
+            <div class="scroll-pane"></div>
+            <div class="shadow-bottom"></div>
+        </div>
+        <div class="messenger">
+            <textarea placeholder="message goes here"></textarea>
+        </div>
     </div>
 </div>
 <% if(document.owner_id == user.id) { %>
