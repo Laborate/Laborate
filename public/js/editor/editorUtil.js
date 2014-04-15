@@ -165,7 +165,7 @@ window.editorUtil = {
             } else if(direction == "in") {
                 var user = window.users[data.from];
 
-                if(user.selection) {
+                if(user && user.selection) {
                     user.selection.clear();
                 }
 
