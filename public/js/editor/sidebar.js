@@ -1,6 +1,6 @@
 $(function() {
     /* Core Operations */
-    $(".sidebar .list .item").on("click", function() {
+    $(".sidebar .options .option").on("click", function() {
         window.sidebarUtil.change($(this).attr("data-key"), false);
     });
 

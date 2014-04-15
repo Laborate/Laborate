@@ -1,17 +1,14 @@
 window.sidebarUtil = {
 	change: function(module, permanent) {
-	    var element = $(".sidebar .list .item[data-key='" + module + "']");
-	    if(module != false && (permanent || !element.hasClass("activated"))) {
-	        $(".sidebar").addClass("menu");
+	    var element = $(".sidebar .options .option[data-key='" + module + "']");
+	    if(module != false || permanent) {
+	        $(".sidebar").addClass("active");
 	        $(".sidebar .pane > .item").hide();
-	        $(".sidebar .list .item").removeClass("activated");
-	        element.addClass("activated");
             $(".sidebar .pane > .item[data-key='" + module + "']").show();
-            $(".sidebar .controller .title").text(element.find(".name").text());
+            $(".sidebar .header .title").text(element.find(".name").text());
         } else {
-            $(".sidebar").removeClass("menu");
-            $(".sidebar .controller .title").text("Menu Panel");
-            $(".sidebar .list .item").removeClass("activated");
+            $(".sidebar").removeClass("active");
+            $(".sidebar .header .title").text("Navigation");
         }
 	},
 	submit: function(form) {
@@ -432,17 +429,17 @@ window.sidebarUtil = {
                     }
 
                     $(".sidebar .form[name='invite'] .laborators")
-                        .append("                                                           \
-                            <div class='item " + item + "'                                  \
-                                 data-id='" + laborator.id + "'                             \
-                                 data-permission='" + laborator.permission.id + "'>         \
-                                 <div class='gravatar'>                                     \
-                                    <img src='" + laborator.gravatar + "'>                  \
-                                 </div>                                                     \
-                                 <div class='name'>" + laborator.screen_name + "</div>      \
-                                 <div class='" + settings + "'></div>                       \
-                                 <div class='bubble u" + laborator.id + "'></div>           \
-                            </div>                                                          \
+                        .append("                                                            \
+                            <div class='item " + item + "'                                   \
+                                 data-id='" + laborator.id + "'                              \
+                                 data-permission='" + laborator.permission.id + "'>          \
+                                 <div class='gravatar'>                                      \
+                                    <img src='" + laborator.gravatar + "'>                   \
+                                 </div>                                                      \
+                                 <div class='name'>" + laborator.screen_name + "</div>       \
+                                 <div class='" + settings + "'></div>                        \
+                                 <div class='bubble u" + laborator.id + "'><div></div></div> \
+                            </div>                                                           \
                         ");
 
                     if(data.laborators.end(key)) {

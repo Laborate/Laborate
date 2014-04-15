@@ -19,6 +19,421 @@ html, body {
             &.fullscreen {
                 left: -25%;
             }
+
+            &.active {
+                .header .back {
+                    margin: 0 !important;
+                }
+
+                .locations {
+                    .options {
+                        left: 210px !important;
+                    }
+
+                    .pane {
+                        left: 0 !important;
+
+                    }
+                }
+            }
+
+            .header .back {
+                cursor: pointer;
+                opacity: 0.6;
+                font-size: 15px;
+                margin: 0 10px 0 -30px;
+                display: inline-block;
+                .transition(margin);
+                .transform(rotate(-90deg));
+
+                &:hover {
+                    opacity: 0.8;
+
+                    &:active {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            .locations {
+                overflow: hidden;
+                min-height: 800px;
+
+                .options, .pane {
+                    position: absolute;
+                    width: 200px;
+                    .transition(left);
+
+                    &.options {
+                        left: 0;
+                    }
+
+                    &.pane {
+                        left: -210px;
+
+                        .item {
+                            padding: 10px 10px 10px 0;
+
+                            .form {
+                                border-bottom: solid 1px darken(@color_body, 10%);
+                                padding-bottom: 15px;
+                                margin-bottom: 15px;
+
+                                &:last-child {
+                                    padding: 0;
+                                    margin: 0;
+                                    border: none;
+                                }
+
+                                &.pair {
+                                    .clearfix();
+
+                                    form {
+                                        .float-left();
+                                        .calc-width(~"50% - 5px");
+
+                                        &:first-child {
+                                            margin-right: 10px;
+                                        }
+                                    }
+                                }
+
+                                &.connected {
+                                    .clearfix();
+
+                                    .input {
+                                        margin-right: 10px;
+                                        .float-left();
+                                        .calc-width(~"75% - 5px");
+                                    }
+
+                                    .button {
+                                        .float-left();
+                                        .calc-width(~"25% - 5px");
+                                    }
+                                }
+
+                                &.collection {
+                                    & > * {
+                                        margin-bottom: 8px;
+
+                                        &:last-child {
+                                            margin-bottom: 0;
+                                        }
+                                    }
+                                }
+
+                                .error_message {
+                                    background: @color_red;
+                                    padding: 6px 5px;
+                                    color: #ededed;
+                                    font-size: 11px;
+                                    font-weight: bold;
+                                    text-align: center;
+                                    margin: 5px 0;
+                                    display: none;
+                                    .border-radius(2px);
+                                }
+
+                                .listing {
+                                    .item {
+                                        width: 100%;
+                                        padding-top: 10px;
+                                        .clearfix();
+
+                                        .name {
+                                            font-size: 14px;
+                                            color: lighten(@color_panels_header, 5%);
+                                            .float-left();
+                                            .ellipsis();
+                                        }
+                                    }
+
+                                    &.search {
+                                        .name {
+                                            .calc-width(~"100% - 16px");
+                                        }
+
+                                        .remove {
+                                            color: lighten(@color_red, 5%);
+                                            font-size: 16px;
+                                            cursor: pointer;
+                                            .float-right();
+
+                                            &:hover {
+                                                color: @color_red;
+                                            }
+                                        }
+                                    }
+
+                                    &.screen_names {
+                                        display: none;
+                                        margin-top: 10px;
+                                        padding: 10px;
+                                        background: lighten(@color_panels_header, 10%);
+                                        .border-radius(3px);
+                                        .box-shadow(inset 0 0 10px rgba(0, 0,0, 0.1));
+
+                                        .item {
+                                            cursor: pointer;
+
+                                            &:first-child {
+                                                padding-top: 0;
+                                            }
+
+                                            .name {
+                                                .calc-width(~"100% - 23px");
+
+                                                span {
+                                                    color: #fff;
+                                                }
+                                            }
+
+                                            .gravatar {
+                                                width: 15px;
+                                                height: 15px;
+                                                overflow: hidden;
+                                                margin-right: 8px;
+                                                .border-radius(2px);
+                                                .float-left();
+
+                                                img {
+                                                    width: 15px;
+                                                    height: 15px;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    &.laborators {
+                                        .settings {
+                                            cursor: pointer;
+                                            font-size: 14px;
+                                            color: lighten(@color_sidebar_header, 40%);
+                                            margin: 1px 8px 0 0;
+                                            .float-right();
+
+                                            &:hover {
+                                                color: lighten(@color_sidebar_header, 30%);
+
+                                                &:active {
+                                                    color: lighten(@color_sidebar_header, 20%);
+                                                }
+                                            }
+                                        }
+
+                                        .bubble {
+                                            width: 8px;
+                                            height: 8px;
+                                            margin: 4px 8px 0 0;
+                                            display: none;
+                                            overflow: hidden;
+                                            .border-radius(50%);
+                                            .float-right();
+
+                                            div {
+                                                width: 100%;
+                                                height: 100%;
+                                                background: rgba(0, 0, 0, 0.2);
+                                            }
+                                        }
+
+                                        .name {
+                                            .calc-width(~"100% - 65px");
+                                        }
+
+                                        .gravatar {
+                                            width: 15px;
+                                            height: 15px;
+                                            overflow: hidden;
+                                            margin-right: 8px;
+                                            opacity: .3;
+                                            .border-radius(2px);
+                                            .float-left();
+
+                                            img {
+                                                width: 15px;
+                                                height: 15px;
+                                            }
+                                        }
+
+                                        .item {
+                                            &.active {
+                                                .bubble {
+                                                    display: inline-block;
+                                                }
+
+                                                .gravatar {
+                                                    opacity: 1;
+                                                }
+
+                                                .name {
+                                                    color: lighten(@color_panels_header, 5%);
+                                                }
+                                            }
+
+                                            &.blocked {
+                                                .settings {
+                                                    color: @color_red;
+
+                                                    &:hover {
+                                                        color: darken(@color_red, 5%);
+
+                                                        &:active {
+                                                            color: darken(@color_red, 10%);
+                                                        }
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+
+                                .disabled {
+                                    opacity: .5;
+                                }
+
+                                .select {
+                                    position: relative;
+
+                                    &:hover {
+                                        .icon {
+                                            color: #fff;
+                                        }
+
+                                        select {
+                                            background: lighten(@color_panels_header, 10%);
+                                            color: #fff;
+                                        }
+                                    }
+
+                                    .icon {
+                                        font-size: 14px;
+                                        position: absolute;
+                                        top: 8px;
+                                        right: 2px;
+                                        z-index: 2;
+                                        color: darken(@color_subheader_select, 15%);
+                                    }
+
+                                    select {
+                                        position: relative;
+                                        font-weight: bold;
+                                        margin: 1px 0;
+                                        padding: 8px 25px 8px 10px;
+                                        background: lighten(@color_subheader_select, 10%);
+                                        color: darken(@color_subheader_select, 30%);
+                                        border: none;
+                                        outline: none;
+                                        cursor: pointer;
+                                        width: 100%;
+
+                                        //Mozila Arrow Fix
+                                        text-indent: 0.01px;
+                                        text-overflow: '';
+
+                                        .appearance(none);
+                                        .border-radius(2px);
+                                        .box-sizing(border-box);
+                                    }
+                                }
+
+                                .button {
+                                    border: none;
+                                    outline: none;
+                                    color: #fff;
+                                    font-size: 13px;
+                                    padding: 7px 0;
+                                    width: 100%;
+                                    text-align: center;
+                                    background: @color_blue;
+                                    cursor: pointer;
+                                    .border-radius(2px);
+
+                                    &:disabled {
+                                        .disabled;
+                                    }
+
+                                    &:hover {
+                                        background: darken(@color_blue, 5%);
+
+                                        &:active {
+                                            background: darken(@color_blue, 10%);
+                                        }
+                                    }
+
+                                    &.red {
+                                        background: @color_red;
+
+                                        &:hover {
+                                            background: darken(@color_red, 5%);
+
+                                            &:active {
+                                                background: darken(@color_red, 10%);
+                                            }
+                                        }
+                                    }
+
+                                    &.error {
+                                        background: darken(@color_red, 5%);
+
+                                        &:hover {
+                                            background: darken(@color_red, 10%);
+
+                                            &:active {
+                                                background: darken(@color_red, 15%);
+                                            }
+                                        }
+                                    }
+
+                                    &.success {
+                                        background: darken(@color_green, 5%);
+
+                                        &:hover {
+                                            background: darken(@color_green, 10%);
+
+                                            &:active {
+                                                background: darken(@color_green, 15%);
+                                            }
+                                        }
+                                    }
+
+                                    .icon {
+                                        margin-right: 5px;
+                                    }
+                                }
+
+                                .input, .textarea {
+                                    width: 100%;
+                                    color: #333;
+                                    background: #fff;
+                                    font-size: 12px;
+                                    padding: 8px 10px;
+                                    border: none;
+                                    outline: none;
+                                    .border-radius(2px);
+                                    .transition(background);
+                                    .box-sizing(border-box);
+
+                                    &:disabled {
+                                        .disabled;
+                                    }
+                                }
+
+                                .textarea {
+                                    font-size: 11px;
+                                    padding: 5px;
+                                    max-height: 250px;
+                                    min-height: 80px;
+                                    resize: vertical;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         &.chat {
@@ -42,7 +457,7 @@ html, body {
         .transition(all);
 
         &.fullscreen {
-            left: 0%;
+            left: 0;
             width: 100%;
         }
 
@@ -103,7 +518,110 @@ html, body {
         }
 
         .pane {
+            background: lighten(@color_panels_main, 2%);
             .calc-height(~"100% - 35px");
+        }
+    }
+}
+
+
+.context-menu {
+    z-index: 1001;
+    overflow: visible;
+    .box-shadow(0 1px 1px #333);
+
+    .arrow {
+        content: "";
+        position: absolute;
+        z-index: 10;
+        top: -moz-calc(~"50% - 10px");
+        top: -webkit-calc(~"50% - 10px");
+        top: -o-calc(~"50% - 10px");
+        top: calc(~"50% - 10px");
+        left: -7px;
+        border: solid 10px transparent;
+        background: @color_panels_header;
+        display: block;
+        border-color: @color_panels_header;
+        width: 0;
+        .border-radius(0 2px);
+        .transform(rotate(45deg));
+    }
+
+    .list {
+        position: relative;
+        z-index: 11;
+        background: @color_panels_header;
+        overflow: hidden;
+        width: 100%;
+        .border-radius(3px);
+
+        .item {
+            &:not(:first-child) {
+                border-top: solid 1px darken(@color_panels_header, 5%);
+            }
+
+            &:hover {
+                background: darken(@color_panels_header, 8%);
+
+                &:not(:first-child) {
+                    border-top: solid 1px darken(@color_panels_header, 13%);
+                }
+
+                & + .item:not(:first-child) {
+                    border-top: solid 1px darken(@color_panels_header, 13%);
+                }
+
+                &:active {
+                    background: darken(@color_panels_header, 11%);
+
+                    &:not(:first-child) {
+                        border-top: solid 1px darken(@color_panels_header, 18%);
+                    }
+
+                    & + .item:not(:first-child) {
+                        border-top: solid 1px darken(@color_panels_header, 18%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.print {
+    & {
+        overflow: visible !important;
+
+        body {
+            overflow: visible !important;
+            background: #fff !important;
+            margin: 0;
+            padding: 0;
+
+            .sidebar,
+            .chat,
+            .header,
+            .terminal,
+            .context-menu {
+                display: none !important;
+            }
+
+            .main {
+                width: 100%;
+                border: none;
+                left: 0;
+                padding: 0;
+                margin: 0;
+
+                .subheader {
+                    padding: 6px 15px;
+
+                    .toggles {
+                        display: none !important;
+                    }
+                }
+            }
         }
     }
 }

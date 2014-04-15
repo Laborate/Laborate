@@ -1,5 +1,5 @@
 var expressError = require('express-error');
-var error_handler = function(status, message, locals, req, res) {
+var error_handler = function(status, message, locals, req, res, error) {
     var error_message;
     var error_html;
     var redirect_url;
@@ -58,20 +58,27 @@ var error_handler = function(status, message, locals, req, res) {
                 if(redirect_url) {
                     res.redirect(redirect_url);
                 } else {
-                    res.renderOutdated('error/index', $.extend(true, {
-                        host: req.host,
-                        title: error_message,
-                        mode: error_message,
-                        js: clientJS.renderTags("backdrop"),
-                        css: clientCSS.renderTags("backdrop"),
-                        error_html: error_html,
-                        backdrop: req.backdrop(),
-                        header_class: "lighten",
-                        pageTrack: false,
-                        mobile: false,
-                        home: locals.home,
-                        embed: locals.embed
-                    }, locals));
+                    if(config.general.production) {
+                        res.renderOutdated('error/index', $.extend(true, {
+                            host: req.host,
+                            title: error_message,
+                            mode: error_message,
+                            js: clientJS.renderTags("backdrop"),
+                            css: clientCSS.renderTags("backdrop"),
+                            error_html: error_html,
+                            backdrop: req.backdrop(),
+                            header_class: "lighten",
+                            pageTrack: false,
+                            mobile: false,
+                            home: locals.home,
+                            embed: locals.embed
+                        }, locals));
+                    } else {
+                        expressError.express3({
+                            contextLinesCount: 3,
+                            handleUncaughtException: true
+                        })(error, req, res);
+                    }
                 }
             },
             'application/json': function() {
@@ -91,7 +98,9 @@ exports.global = function(error, req, res, next) {
                 home: false
             }, req, res);
         } else {
-            expressError.express3({contextLinesCount: 3, handleUncaughtException: true})(error, req, res, next);
+            error_handler(500, error.message, {
+                home: false
+            }, req, res, error);
         }
 
         lib.error.capture(error);
@@ -102,12 +111,7 @@ exports.global = function(error, req, res, next) {
 
 exports.handler = function(req, res, next) {
     res.error = function(status, message, error, locals) {
-        if(config.general.production || !error) {
-            error_handler(status, message, locals, req, res);
-        } else {
-            expressError.express3({contextLinesCount: 3, handleUncaughtException: true})(error, req, res, next);
-        }
-
+        error_handler(status, message, locals, req, res, error);
         req.error.capture(error);
     }
     next();
