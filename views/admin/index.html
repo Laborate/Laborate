@@ -43,6 +43,24 @@
         </div>
         <div class="container">
             <div class="side">
+                <div class="data"><%=: users.groups | format %></div>
+                <div class="label">group<%=: (users.groups != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: posts.total | format %></div>
+                <div class="label">post<%=: (posts.total != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: posts.groups | format %></div>
+                <div class="label">group post<%=: (posts.groups != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: posts.tags | format %></div>
+                <div class="label">tag<%=: (posts.tags != 1)?  "s" : "" %></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="side">
                 <div class="data"><%=: tracking.hourly | format %></div>
                 <div class="label">hourly hits</div>
             </div>

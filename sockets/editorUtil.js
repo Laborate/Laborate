@@ -195,7 +195,10 @@ exports.broadcast = function(req, type, socket, callback) {
 
     if(room && message) {
         data = $.extend(true, {
-            success: true
+            success: true,
+            name: req.session.user.screen_name,
+            from: req.session.user.pub_id,
+            gravatar: req.session.user.gravatar
         }, message);
 
         if(socket) {

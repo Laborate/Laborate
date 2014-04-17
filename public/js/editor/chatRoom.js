@@ -138,6 +138,18 @@ window.chat = {
                 .find(".bubble")
                 .append('<div class="separator"></div>' + message);
         } else {
+            if(config.user == from) {
+                direction = "out";
+            }
+
+            if(direction == "in") {
+                var name_tag = ('<a class="name" href="/users/' + name + '/" target="_blank"> \
+                    ' + name + '                                                              \
+                </a>');
+            } else {
+                var name_tag = "";
+            }
+
             var html = ('                                                               \
                 <div data-from="' + from + '"                                           \
                     class="item message ' + direction + '">                             \
@@ -145,9 +157,7 @@ window.chat = {
                         <img src="' + gravatar + '" />                                  \
                     </div>                                                              \
                     <div class="information">                                           \
-                        <a class="name" href="/users/' + name + '/" target="_blank">    \
-                            ' + name + '                                                \
-                        </a>                                                            \
+                        ' + name_tag + '                                                \
                         <div class="bubble">' + message + '</div>                       \
                     </div>                                                              \
                 </div>                                                                  \
@@ -207,7 +217,7 @@ $(function() {
             if(e.which == 13) {
                 var _this = $(this);
             	if($.trim(_this.val()) != "") {
-            		  window.chat.message("me", $.trim(_this.val()), "out", config.gravatar, "");
+            		  window.chat.message(config.user, $.trim(_this.val()), "out", config.gravatar, "");
             		  _this.val("");
             	}
 
@@ -227,7 +237,7 @@ $(function() {
             }
 
             if(data.isStatus) {
-                window.chat.status(data.from, data.message);
+                window.chat.status(data.message);
             } else {
                 window.chat.message(data.from, data.message, "in", data.gravatar, data.name);
             }

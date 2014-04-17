@@ -9,11 +9,27 @@ exports.index = function(req, res, next) {
                 admin: false
             }, callback);
         },
+        users_groups_count: function(callback) {
+            req.models.users.groups.count(callback);
+        },
         paid_count: function(callback) {
             req.models.users.count({
                 pricing_id: req.db.tools.ne(1),
                 deliquent: false
             }, callback);
+        },
+        posts_count: function(callback) {
+            req.models.posts.count({
+                parent_id: null,
+            },callback);
+        },
+        posts_groups_count: function(callback) {
+            req.models.posts.count({
+                group_id: req.db.tools.ne(null)
+            },callback);
+        },
+        posts_tags_count: function(callback) {
+            req.models.posts.tags.count(callback);
         },
         tracking_hourly_count: function(callback) {
             var created = new Date();
@@ -153,7 +169,13 @@ exports.index = function(req, res, next) {
             title: 'Admin',
             users: {
                 total: data.users_count,
-                paid: data.paid_count
+                paid: data.paid_count,
+                groups: data.users_groups_count
+            },
+            posts: {
+                total: data.posts_count,
+                groups: data.posts_groups_count,
+                tags: data.posts_tags_count
             },
             tracking: {
                 hourly: data.tracking_hourly_count,
