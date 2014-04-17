@@ -454,7 +454,7 @@ html, body {
             }
 
             .messenger {
-                padding: 10px;
+                padding: 10px 0 15px 10px;
 
                 textarea {
                     border: solid 1px darken(@color_body, 15%);
@@ -463,13 +463,12 @@ html, body {
                     background-repeat: repeat-x;
                     background-position: 0 -5px;
                     width: 100%;
-                    height: 100px;
+                    height: 80px;
                     margin: 0;
                     outline: none;
                     padding: 5px;
                     resize: none;
                     .transition(border-color);
-                    .border-radius(2px);
 
                     &:focus {
                         border-color: darken(@color_blue, 5%);
@@ -482,13 +481,13 @@ html, body {
                 overflow: hidden;
                 padding: 0;
                 .box-sizing(border-box);
-                .calc-height(~"100% - 155px");
+                .calc-height(~"100% - 140px");
 
                 .scroll-pane {
                     height: 100%;
 
                     .item {
-                        margin: 15px 10px;
+                        margin: 15px 0 15px 10px;
                         .box-sizing(border-box);
                     }
 
