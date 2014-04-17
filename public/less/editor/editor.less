@@ -657,6 +657,11 @@ html, body {
         &.fullscreen {
             left: 0;
             width: 100%;
+
+            .terminal {
+                left: 0;
+                width: 100%;
+            }
         }
 
         .subheader {
@@ -722,8 +727,9 @@ html, body {
             bottom: -280px;
             height: 280px;
             opacity: 0;
+            left: 230px;
             background: @color_terminal;
-            .calc-width(~"100% - 462px");
+            .calc-width(~"100% - 460px");
             .transition();
 
             &.active {
