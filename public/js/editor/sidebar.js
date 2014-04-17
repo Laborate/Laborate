@@ -17,7 +17,7 @@ $(function() {
         return false;
     });
 
-    $(".sidebar .form[name='invite'] input").on("keyup", function() {
+    $(".sidebar .form[name='invite'] input").keyup(function() {
         window.sidebarUtil.screenNames($(this).val());
     });
 
