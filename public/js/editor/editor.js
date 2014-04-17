@@ -17,7 +17,6 @@ $(function() {
         autoCloseTags: true,
         highlightSelectionMatches: true,
         styleSelectedText: true,
-        styleActiveLine: false,
         gutters: (config.embed) ? false : [
             "CodeMirror-linenumbers",
             "breakpoints"
@@ -115,7 +114,7 @@ $(function() {
         $(window).resize(function() {
 
             if($(window).width() < 1100) {
-                window.editorUtil.fullscreen(true);
+                window.editorUtil.fullscreen(true, false);
             }
         });
     }

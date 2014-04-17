@@ -46,13 +46,16 @@ window.editorUtil = {
             window.editor.refresh();
         }, 500);
     },
-    fullscreen: function(fullscreen) {
+    fullscreen: function(fullscreen, cookie) {
         var _this = this;
         _this.fullscreenActive = fullscreen;
-        $.cookie("fullscreen", fullscreen, {
-            path: '/editor',
-            expires: 365
-        });
+
+        if(cookie != false) {
+            $.cookie("fullscreen", fullscreen, {
+                path: '/editor',
+                expires: 365
+            });
+        }
 
         if(!fullscreen) {
             $(".main .fullscreen-toggle")

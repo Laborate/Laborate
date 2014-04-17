@@ -307,13 +307,8 @@ html, body {
                                 position: relative;
 
                                 &:hover {
-                                    .icon {
-                                        color: #fff;
-                                    }
-
                                     select {
-                                        background: lighten(@color_panels_header, 10%);
-                                        color: #fff;
+                                        border-color: darken(@color_blue, 5%);
                                     }
                                 }
 
@@ -330,10 +325,10 @@ html, body {
                                     position: relative;
                                     font-weight: bold;
                                     margin: 1px 0;
-                                    padding: 7px 25px 7px 8px;
+                                    padding: 6px 25px 6px 8px;
                                     background: lighten(@color_subheader_select, 10%);
                                     color: darken(@color_subheader_select, 30%);
-                                    border: none;
+                                    border: solid 1px darken(@color_body, 15%);
                                     outline: none;
                                     cursor: pointer;
                                     width: 100%;
@@ -345,6 +340,7 @@ html, body {
                                     .appearance(none);
                                     .border-radius(2px);
                                     .box-sizing(border-box);
+                                    .transition(border-color);
                                 }
                             }
 
@@ -416,14 +412,21 @@ html, body {
                             .input, .textarea {
                                 width: 100%;
                                 color: #333;
-                                background: #fff;
+                                background-color: #fff;
+                                background-image: url('/img/tshadow.png');
+                                background-repeat: repeat-x;
+                                background-position: 0 -6px;
+                                border: solid 1px darken(@color_body, 15%);
                                 font-size: 12px;
-                                padding: 7px 8px;
-                                border: none;
+                                padding: 6px 8px;
                                 outline: none;
                                 .border-radius(2px);
-                                .transition(background);
+                                .transition(border-color);
                                 .box-sizing(border-box);
+
+                                &:focus {
+                                    border-color: darken(@color_blue, 5%);
+                                }
 
                                 &:disabled {
                                     .disabled;
@@ -431,11 +434,9 @@ html, body {
                             }
 
                             .textarea {
-                                font-size: 11px;
-                                padding: 5px;
-                                max-height: 250px;
-                                min-height: 80px;
-                                resize: vertical;
+                                background-position: 0 -5px;
+                                height: 100px;
+                                resize: none;
                             }
                         }
                     }
