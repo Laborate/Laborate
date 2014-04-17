@@ -254,10 +254,6 @@
             <% } %>
         <% } %>
     </div>
-    <div class="pane">
-        <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
-        <div class="shadow-top"></div>
-    </div>
     <% if(document.location && user.locations[document.location]) { %>
         <% if(user.locations[document.location].type == "sftp") { %>
             <div class="terminal">
@@ -266,6 +262,10 @@
             </div>
         <% } %>
     <% } %>
+    <div class="pane">
+        <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
+        <div class="shadow-top"></div>
+    </div>
 </div>
 <div class="panel chat">
     <div class="filter">

@@ -716,6 +716,38 @@ html, body {
             }
         }
 
+        .terminal {
+            position: fixed;
+            z-index: 10;
+            bottom: -280px;
+            height: 280px;
+            opacity: 0;
+            background: @color_terminal;
+            .calc-width(~"100% - 462px");
+            .transition();
+
+            &.active {
+                opacity: 1;
+                bottom: 0;
+
+                & + .pane {
+                    .calc-height(~"100% - 315px");
+                }
+            }
+
+            a {
+                display: inline-block;
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                color: darken(#fff, 15%);
+
+                &:hover {
+                    color: #fff;
+                }
+            }
+        }
+
         .pane {
             background: lighten(@color_panels_main, 2%);
             .calc-height(~"100% - 35px");
