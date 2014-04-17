@@ -22,7 +22,7 @@ exports.setup = function(req, res, next) {
     res.renderOutdated = function(view, data) {
         if(req.mobile) {
             res.render('landing/mobile', {
-                title: null,
+                title: "",
                 js: clientJS.renderTags("mobile"),
                 css: clientCSS.renderTags("backdrop", "mobile"),
                 backdrop: req.backdrop(),
