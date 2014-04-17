@@ -145,6 +145,14 @@ html, body {
                                         color: lighten(@color_panels_header, 5%);
                                         .float-left();
                                         .ellipsis();
+
+                                        &:hover {
+                                            text-decoration: underline;
+
+                                            &:active {
+                                                color: darken(@color_panels_header, 5%);
+                                            }
+                                        }
                                     }
                                 }
 
@@ -468,7 +476,9 @@ html, body {
                     outline: none;
                     padding: 5px;
                     resize: none;
+                    font-size: 13px;
                     .transition(border-color);
+                    .border-radius(2px);
 
                     &:focus {
                         border-color: darken(@color_blue, 5%);
@@ -531,7 +541,7 @@ html, body {
                     }
 
                     .message {
-                        font-size: 12px;
+                        font-size: 13px;
                         color: darken(@color_panels_header, 5%);
                         .clearfix();
 
@@ -597,6 +607,15 @@ html, body {
                             .name {
                                 color: darken(@color_panels_header, 5%);
                                 margin-bottom: 3px;
+                                display: inline-block;
+
+                                &:hover {
+                                    text-decoration: underline;
+
+                                    &:active {
+                                        color: darken(@color_panels_header, 10%);
+                                    }
+                                }
                             }
 
                             .bubble {

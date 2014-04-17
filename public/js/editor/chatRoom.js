@@ -132,24 +132,25 @@ window.chat = {
         }
     },
     _inputMessage: function(from, message, direction, gravatar, name) {
-        if(direction == "in") window.chat._notify(name, message);
         var last_message = $(".jspPane .item").eq(-1);
         if(last_message.attr("data-from") == from) {
             last_message
                 .find(".bubble")
                 .append('<div class="separator"></div>' + message);
         } else {
-            var html = ('                                           \
-                <div data-from="' + from + '"                       \
-                    class="item message ' + direction + '">         \
-                    <div class="gravatar">                          \
-                        <img src="' + gravatar + '" />              \
-                    </div>                                          \
-                    <div class="information">                       \
-                        <div class="name">' + name + '</div>        \
-                        <div class="bubble">' + message + '</div>   \
-                    </div>                                          \
-                </div>                                              \
+            var html = ('                                                               \
+                <div data-from="' + from + '"                                           \
+                    class="item message ' + direction + '">                             \
+                    <div class="gravatar">                                              \
+                        <img src="' + gravatar + '" />                                  \
+                    </div>                                                              \
+                    <div class="information">                                           \
+                        <a class="name" href="/users/' + name + '/" target="_blank">    \
+                            ' + name + '                                                \
+                        </a>                                                            \
+                        <div class="bubble">' + message + '</div>                       \
+                    </div>                                                              \
+                </div>                                                                  \
             ');
             $(".jspPane").append(html);
         }
@@ -221,10 +222,13 @@ $(function() {
 
         //Pull Message
         window.socketUtil.socket.on('editorChatRoom', function (data) {
-            if(data.isStatus) {
-                window.chat.status(data.message);
+            if(config.user != data.from) {
+                window.chat._notify(data.name, data.message);
             }
-            else {
+
+            if(data.isStatus) {
+                window.chat.status(data.from, data.message);
+            } else {
                 window.chat.message(data.from, data.message, "in", data.gravatar, data.name);
             }
         });

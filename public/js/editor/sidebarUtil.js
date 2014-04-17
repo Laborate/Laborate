@@ -429,17 +429,19 @@ window.sidebarUtil = {
                     }
 
                     $(".sidebar .form[name='invite'] .laborators")
-                        .append("                                                            \
-                            <div class='item " + item + "'                                   \
-                                 data-id='" + laborator.id + "'                              \
-                                 data-permission='" + laborator.permission.id + "'>          \
-                                 <div class='gravatar'>                                      \
-                                    <img src='" + laborator.gravatar + "'>                   \
-                                 </div>                                                      \
-                                 <div class='name'>" + laborator.screen_name + "</div>       \
-                                 <div class='" + settings + "'></div>                        \
-                                 <div class='bubble u" + laborator.id + "'><div></div></div> \
-                            </div>                                                           \
+                        .append("                                                                              \
+                            <div class='item " + item + "'                                                     \
+                                 data-id='" + laborator.id + "'                                                \
+                                 data-permission='" + laborator.permission.id + "'>                            \
+                                 <div class='gravatar'>                                                        \
+                                    <img src='" + laborator.gravatar + "'>                                     \
+                                 </div>                                                                        \
+                                 <a class='name' href='/users/" + laborator.screen_name + "/' target='_blank'> \
+                                    " + laborator.screen_name + "                                              \
+                                 </a>                                                                          \
+                                 <div class='" + settings + "'></div>                                          \
+                                 <div class='bubble u" + laborator.id + "'><div></div></div>                   \
+                            </div>                                                                             \
                         ");
 
                     if(data.laborators.end(key)) {
