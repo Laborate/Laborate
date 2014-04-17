@@ -218,10 +218,19 @@ exports.reply = function(req, res, next) {
             });
         },
         function(parent, callback) {
+            req.models.users.groups.one({
+                pub_id: req.param("group")
+            }, function(error, group) {
+                console.log(error, group);
+                callback(error, parent, group);
+            });
+        },
+        function(parent, group, callback) {
             req.models.posts.create({
                 content: req.markdown(req.param("content")),
                 markdown: req.param("content"),
                 owner_id: req.session.user.id,
+                group_id: ((group) ? group.id : null),
                 parent_id: parent
             }, callback);
         },

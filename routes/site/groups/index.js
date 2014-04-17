@@ -53,12 +53,14 @@ exports.group = function(req, res, next) {
                     async.parallel({
                         posts: function(callback) {
                             req.models.posts.count({
-                                group_id: group.id
+                                group_id: group.id,
+                                parent_id: null
                             }, callback);
                         },
-                        documents: function(callback) {
-                            req.models.documents.roles.count({
-                                viewed: req.db.tools.gte(10)
+                        replies: function(callback) {
+                            req.models.posts.count({
+                                group_id: group.id,
+                                parent_id: req.db.tools.ne(null)
                             }, callback);
                         },
                         users: function(callback) {
@@ -94,7 +96,7 @@ exports.group = function(req, res, next) {
                         }
                     }, function(error, data) {
                         group.posts = data.posts;
-                        group.documents = data.documents;
+                        group.replies = data.replies;
                         group.users = data.users.sort(function(a, b) {
                             if(a.activity.length === b.activity.length) {
                                 var c = (a.activity.empty) ? 0 : Math.max.apply(null, a.activity);

@@ -170,11 +170,13 @@ window.newsUtil = {
     },
     reply: function(form) {
         if(config.logged_in) {
+            var _this = this;
             var content = form.find(".input").val();
             var parent = form.find(".hidden").val();
 
             if(content) {
                 $.post("/news/" + parent + "/reply/", {
+                    group: _this.group,
                     content: content,
                     _csrf: window.config.csrf
                 }, function(data) {

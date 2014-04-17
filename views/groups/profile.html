@@ -67,8 +67,8 @@
                 <div class="name"><%=: "Post" | pluralize:(group.posts != 1) %></div>
             </div>
             <div class="metric">
-                <div class="count"><%=: group.documents | format %></div>
-                <div class="name">Active <%=: "Document" | pluralize:(group.documents != 1) %></div>
+                <div class="count"><%=: group.replies | format %></div>
+                <div class="name"><%=: "Reply" | pluralize:(group.replies != 1) %></div>
             </div>
         </div>
         <div class="group-users">
