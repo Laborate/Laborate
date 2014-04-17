@@ -1,6 +1,10 @@
 @import '../core/index';
 @import '../compless/all';
 
+html, body {
+    background: #f9f9f9;
+}
+
 #backdrop {
     display: none;
     background: @color_header_top;
@@ -12,24 +16,35 @@
     }
 }
 
-.content {
+.panel.main {
+    left: 0;
+    top: 0;
     margin: 0;
     padding: 0;
     width: 100%;
-
-    .header,
-    .header .bottom,
-    .pane {
-        width: 100%;
-    }
+    height: 100%;
+    border: none;
+    overflow: hidden;
 
     .pane {
         background: #f9f9f9;
         border: solid 1px #ccc;
+        border-top: none;
+        width: 100%;
         height: 100%;
-        margin-top: -2px;
         position: relative;
         z-index: 1;
+        .box-sizing(border-box);
+
+        .shadow-top {
+            position: absolute;
+            z-index: 5;
+            top: -3px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: url('/img/tshadow.png') repeat-x;
+        }
 
         .cm-s-laborate .CodeMirror-gutters {
             background: #f9f9f9;
@@ -39,103 +54,105 @@
             padding-left: 15px;
             margin-right: 0;
         }
-
-        .shadow-top {
-            top: -3px;
-        }
     }
 
-    .header {
+    .subheader {
         position: relative;
-        z-index: 2;
+        background: @color_header_top;
+        border-bottom: none;
+        color: #fff;
+        padding: 9px 25px 7px 55px;
         height: 40px;
+        overflow: hidden;
+        z-index: 6;
 
-        .bottom {
-            position: relative;
-            background: @color_header_top;
-            color: #fff;
-            padding: 7px 25px 7px 55px;
+        & + .pane {
+            .calc-height(~"100% - 40px");
+        }
 
-            .linkable {
-                position: absolute;
-                top: 0;
-                display: inline-block;
-                .clearfix();
+        .linkable {
+            position: absolute;
+            top: 0;
+            display: inline-block;
+            .clearfix();
 
-                &.edit {
-                    right: 0;
-                    font-family: "Not Just Groovy";
-                    font-weight: bold;
-                    padding: 14px;
-                    background: darken(@color_header_top, 5%);
+            &.edit {
+                right: 0;
+                font-family: "Not Just Groovy";
+                font-weight: bold;
+                padding: 14px;
+                background: darken(@color_header_top, 5%);
+                color: #fff;
+                font-weight: lighter;
+                font-size: 12px;
+
+                &:hover {
+                    background: darken(@color_header_top, 8%);
+
+                    &:active {
+                        background: darken(@color_header_top, 11%);
+                    }
+                }
+            }
+
+            &.logo {
+                left: 0;
+                padding: 5px;
+                background: lighten(@color_header_top, 8%);
+
+                &:hover {
+                    background: lighten(@color_header_top, 11%);
+
+                    &:active {
+                        background: lighten(@color_header_top, 13%);
+                    }
+                }
+
+                img {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+        }
+
+
+        .message {
+            color: darken(#fff, 5%);
+        }
+
+        .filters {
+            font-size: 13px;
+            color: darken(#fff, 5%);
+
+            .filter {
+                span {
                     color: #fff;
-                    font-weight: lighter;
-                    font-size: 12px;
-
-                    &:hover {
-                        background: darken(@color_header_top, 8%);
-
-                        &:active {
-                            background: darken(@color_header_top, 11%);
-                        }
-                    }
                 }
 
-                &.logo {
-                    left: 0;
-                    padding: 5px;
-                    background: lighten(@color_header_top, 8%);
-
-                    &:hover {
-                        background: lighten(@color_header_top, 11%);
-
-                        &:active {
-                            background: lighten(@color_header_top, 13%);
-                        }
-                    }
-
-                    img {
-                        width: 30px;
-                        height: 30px;
-                    }
+                strong {
+                    color: darken(#fff, 10%);
                 }
-            }
 
+                @media only screen and (max-width: 550px) {
+                    & {
+                        display: none;
 
-            .message {
-                color: darken(#fff, 5%);
-            }
-
-            .filters {
-                font-size: 13px;
-                color: darken(#fff, 5%);
-
-                .filter {
-                    strong {
-                        color: darken(#fff, 10%);
-                    }
-
-                    @media only screen and (max-width: 550px) {
-                        & {
-                            display: none;
-
-                            &:first-child,
-                            &:nth-child(2) {
-                                display: block;
-                                max-width: inherit;
-                            }
-                        }
-                    }
-
-                    @media only screen and (max-width: 480px) {
-                        & strong {
-                            color: #fff;
-                        }
-
-                        & span,
+                        &:first-child,
                         &:nth-child(2) {
-                            display: none;
+                            display: block;
+                            max-width: inherit;
                         }
+                    }
+                }
+
+                @media only screen and (max-width: 480px) {
+                    & strong {
+                        color: #fff;
+                    }
+
+                    & span,
+                    &:nth-child(2) {
+                        display: none;
                     }
                 }
             }

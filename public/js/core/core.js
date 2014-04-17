@@ -81,12 +81,6 @@ $(function() {
     	    hideFocus: true
 		});
 
-		if(_this.parent('.pane').length) {
-		    $(".pane .scroll-pane").css("height", function() {
-                return $(window).height() - $(".header").height();
-            }());
-		}
-
 		var api = _this.data('jsp');
 		var throttleTimeout;
 		$(window).bind('resize', function() {
@@ -99,12 +93,6 @@ $(function() {
 					throttleTimeout = null;
                 }, 50);
 			}
-
-			if(_this.parent('.pane').length) {
-    		   _this.css("height", function() {
-                    return $(window).height() - $(".header").height();
-                }());
-    		}
         });
     });
 

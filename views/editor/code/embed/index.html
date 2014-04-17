@@ -6,32 +6,30 @@
          </div>
     </div>
 </div>
-<div class="content">
+<div class="panel main">
     <% if(header) { %>
-        <div class="header">
-            <div class="bottom">
-                <a class="linkable logo" target="_blank" href="/">
-                    <img src="/img/logo.png"/>
-                </a>
-                <div class="filters">
-                    <div class="filter" data-key="file-name">
-                        <span>Name:</span>
-                        <strong><%= document.name %></strong>
-                    </div>
-                    <div class="filter" data-key="file-size">
-                        <span>Size:</span>
-                        <strong></strong>
-                    </div>
-                    <div class="filter" data-key="file-lines">
-                        <span>Lines:</span>
-                        <strong></strong>
-                    </div>
+        <div class="subheader">
+            <a class="linkable logo" target="_blank" href="/">
+                <img src="/img/logo.png"/>
+            </a>
+            <div class="filters">
+                <div class="filter" data-key="file-name">
+                    <span>Name:</span>
+                    <strong><%= document.name %></strong>
                 </div>
-                <a class="linkable edit" target="_blank" href="/editor/<%= document.pub_id %>/?login=true">
-                    Edit in <span>Laborate</span>
-                </a>
-                <div class="message"></div>
+                <div class="filter" data-key="file-size">
+                    <span>Size:</span>
+                    <strong></strong>
+                </div>
+                <div class="filter" data-key="file-lines">
+                    <span>Lines:</span>
+                    <strong></strong>
+                </div>
             </div>
+            <div class="message"></div>
+            <a class="linkable edit" target="_blank" href="/editor/<%= document.pub_id %>/?login=true">
+                Edit in <span>Laborate</span>
+            </a>
         </div>
     <% } %>
     <div class="pane">

@@ -550,10 +550,15 @@ window.sidebarUtil = {
 	},
 	print: function() {
         $("html").addClass("print");
-        window.print();
+
         setTimeout(function() {
-            $("html").removeClass("print");
-        }, 100);
+            window.editor.refresh();
+            window.print();
+
+            setTimeout(function() {
+                $("html").removeClass("print");
+            }, 100);
+        }, 600);
 	},
 	download: function() {
         var _this = this;

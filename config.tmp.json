@@ -57,7 +57,7 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "OcOQUCob4wsSqmCtVxDkvcIFtcBldESW2X0XfoGVXxH0KNWdsJ"
+            "secret": "gyG6My8BuKFrJAcRURysoSpzCH3Au6iKT9MWPENVXkLZA2Ru9A"
         }
     },
     "orm": {
@@ -304,8 +304,8 @@
             "enabled": true
         },
         "google_plus": {
-            "name": "110415483446798636481",
-            "link": "https://plus.google.com/110415483446798636481",
+            "name": "Laborateio",
+            "link": "https://plus.google.com/+Laborateio",
             "enabled": true
         }
     },

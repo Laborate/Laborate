@@ -4,11 +4,11 @@ $(function() {
     function setTimer() {
         clearTimeout(counter);
         setTimeout(function() {
-            if($(".header .dropdown").has(":hover").length != -1) {
-                setTimer();
-            } else {
+            if($(".header .dropdown").has(":hover").length == 0) {
                 $(".header .dropdown").removeClass("activated");
                 clearTimeout(counter);
+            } else {
+                setTimer();
             }
         }, 5000);
     }

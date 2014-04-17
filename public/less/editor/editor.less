@@ -9,7 +9,13 @@ html, body {
 
 .panel {
     &.sidebar, &.chat {
-        width: 20% !important;
+        width: 230px !important;
+        height: 100%;
+
+        .filter {
+            height: 100%;
+            overflow: hidden;
+        }
 
         &.sidebar {
             left: 0;
@@ -24,15 +30,13 @@ html, body {
                     margin: 0 !important;
                 }
 
-                .locations {
-                    .options {
-                        left: 210px !important;
-                    }
+                .options {
+                    left: 210px !important;
+                }
 
-                    .pane {
-                        left: 0 !important;
+                .pane {
+                    left: 0 !important;
 
-                    }
                 }
             }
 
@@ -54,192 +58,135 @@ html, body {
                 }
             }
 
-            .locations {
-                overflow: hidden;
-                min-height: 800px;
+            .options, .pane {
+                position: absolute;
+                width: 200px;
+                .transition(left);
 
-                .options, .pane {
-                    position: absolute;
-                    width: 200px;
-                    .transition(left);
+                &.options {
+                    left: 0;
+                }
 
-                    &.options {
-                        left: 0;
-                    }
+                &.pane {
+                    left: -210px;
 
-                    &.pane {
-                        left: -210px;
+                    & > .item {
+                        padding: 15px 15px 15px 0;
 
-                        & > .item {
-                            padding: 15px 15px 15px 0;
+                        .form {
+                            border-bottom: solid 1px darken(@color_body, 10%);
+                            padding-bottom: 15px;
+                            margin-bottom: 15px;
 
-                            .form {
-                                border-bottom: solid 1px darken(@color_body, 10%);
-                                padding-bottom: 15px;
-                                margin-bottom: 15px;
+                            &:last-child {
+                                padding: 0;
+                                margin: 0;
+                                border: none;
+                            }
 
-                                &:last-child {
-                                    padding: 0;
-                                    margin: 0;
-                                    border: none;
+                            &.pair {
+                                .clearfix();
+
+                                form {
+                                    .float-left();
+                                    .calc-width(~"50% - 5px");
+
+                                    &:first-child {
+                                        margin-right: 10px;
+                                    }
+                                }
+                            }
+
+                            &.connected {
+                                .clearfix();
+
+                                .input {
+                                    margin-right: 10px;
+                                    .float-left();
+                                    .calc-width(~"75% - 5px");
                                 }
 
-                                &.pair {
+                                .button {
+                                    .float-left();
+                                    .calc-width(~"25% - 5px");
+                                }
+                            }
+
+                            &.collection {
+                                & > * {
+                                    margin-bottom: 8px;
+
+                                    &:last-child {
+                                        margin-bottom: 0;
+                                    }
+                                }
+                            }
+
+                            .error_message {
+                                background: @color_red;
+                                padding: 6px 5px;
+                                color: #ededed;
+                                font-size: 11px;
+                                font-weight: bold;
+                                text-align: center;
+                                margin: 5px 0;
+                                display: none;
+                                .border-radius(2px);
+                            }
+
+                            .listing {
+                                .item {
+                                    width: 100%;
+                                    padding-top: 10px;
                                     .clearfix();
 
-                                    form {
+                                    .name {
+                                        font-size: 14px;
+                                        color: lighten(@color_panels_header, 5%);
                                         .float-left();
-                                        .calc-width(~"50% - 5px");
+                                        .ellipsis();
+                                    }
+                                }
+
+                                &.search {
+                                    .name {
+                                        .calc-width(~"100% - 16px");
+                                    }
+
+                                    .remove {
+                                        color: lighten(@color_red, 5%);
+                                        font-size: 16px;
+                                        cursor: pointer;
+                                        .float-right();
+
+                                        &:hover {
+                                            color: @color_red;
+                                        }
+                                    }
+                                }
+
+                                &.screen_names {
+                                    display: none;
+                                    margin-top: 10px;
+                                    padding: 10px;
+                                    background: lighten(@color_panels_header, 10%);
+                                    .border-radius(3px);
+                                    .box-shadow(inset 0 0 10px rgba(0, 0,0, 0.1));
+
+                                    .item {
+                                        cursor: pointer;
 
                                         &:first-child {
-                                            margin-right: 10px;
-                                        }
-                                    }
-                                }
-
-                                &.connected {
-                                    .clearfix();
-
-                                    .input {
-                                        margin-right: 10px;
-                                        .float-left();
-                                        .calc-width(~"75% - 5px");
-                                    }
-
-                                    .button {
-                                        .float-left();
-                                        .calc-width(~"25% - 5px");
-                                    }
-                                }
-
-                                &.collection {
-                                    & > * {
-                                        margin-bottom: 8px;
-
-                                        &:last-child {
-                                            margin-bottom: 0;
-                                        }
-                                    }
-                                }
-
-                                .error_message {
-                                    background: @color_red;
-                                    padding: 6px 5px;
-                                    color: #ededed;
-                                    font-size: 11px;
-                                    font-weight: bold;
-                                    text-align: center;
-                                    margin: 5px 0;
-                                    display: none;
-                                    .border-radius(2px);
-                                }
-
-                                .listing {
-                                    .item {
-                                        width: 100%;
-                                        padding-top: 10px;
-                                        .clearfix();
-
-                                        .name {
-                                            font-size: 14px;
-                                            color: lighten(@color_panels_header, 5%);
-                                            .float-left();
-                                            .ellipsis();
-                                        }
-                                    }
-
-                                    &.search {
-                                        .name {
-                                            .calc-width(~"100% - 16px");
-                                        }
-
-                                        .remove {
-                                            color: lighten(@color_red, 5%);
-                                            font-size: 16px;
-                                            cursor: pointer;
-                                            .float-right();
-
-                                            &:hover {
-                                                color: @color_red;
-                                            }
-                                        }
-                                    }
-
-                                    &.screen_names {
-                                        display: none;
-                                        margin-top: 10px;
-                                        padding: 10px;
-                                        background: lighten(@color_panels_header, 10%);
-                                        .border-radius(3px);
-                                        .box-shadow(inset 0 0 10px rgba(0, 0,0, 0.1));
-
-                                        .item {
-                                            cursor: pointer;
-
-                                            &:first-child {
-                                                padding-top: 0;
-                                            }
-
-                                            .name {
-                                                color: darken(#fff, 10%);
-                                                .calc-width(~"100% - 23px");
-
-                                                span {
-                                                    color: #fff;
-                                                }
-                                            }
-
-                                            .gravatar {
-                                                width: 15px;
-                                                height: 15px;
-                                                overflow: hidden;
-                                                margin-right: 8px;
-                                                .border-radius(2px);
-                                                .float-left();
-
-                                                img {
-                                                    width: 15px;
-                                                    height: 15px;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    &.laborators {
-                                        .settings {
-                                            cursor: pointer;
-                                            font-size: 14px;
-                                            color: lighten(@color_sidebar_header, 40%);
-                                            margin: 1px 8px 0 0;
-                                            .float-right();
-
-                                            &:hover {
-                                                color: lighten(@color_sidebar_header, 30%);
-
-                                                &:active {
-                                                    color: lighten(@color_sidebar_header, 20%);
-                                                }
-                                            }
-                                        }
-
-                                        .bubble {
-                                            width: 8px;
-                                            height: 8px;
-                                            margin: 4px 8px 0 0;
-                                            overflow: hidden;
-                                            .border-radius(50%);
-                                            .float-right();
-                                            display: none;
-
-                                            div {
-                                                width: 100%;
-                                                height: 100%;
-                                                background: rgba(0, 0, 0, 0.2);
-                                            }
+                                            padding-top: 0;
                                         }
 
                                         .name {
-                                            .calc-width(~"100% - 65px");
+                                            color: darken(#fff, 10%);
+                                            .calc-width(~"100% - 23px");
+
+                                            span {
+                                                color: #fff;
+                                            }
                                         }
 
                                         .gravatar {
@@ -247,7 +194,6 @@ html, body {
                                             height: 15px;
                                             overflow: hidden;
                                             margin-right: 8px;
-                                            opacity: .3;
                                             .border-radius(2px);
                                             .float-left();
 
@@ -256,179 +202,232 @@ html, body {
                                                 height: 15px;
                                             }
                                         }
-
-                                        .item {
-                                            &.active {
-                                                .bubble {
-                                                    display: inline-block;
-                                                }
-
-                                                .gravatar {
-                                                    opacity: 1;
-                                                }
-
-                                                .name {
-                                                    color: lighten(@color_panels_header, 5%);
-                                                }
-                                            }
-
-                                            &.blocked {
-                                                .settings {
-                                                    color: @color_red;
-
-                                                    &:hover {
-                                                        color: darken(@color_red, 5%);
-
-                                                        &:active {
-                                                            color: darken(@color_red, 10%);
-                                                        }
-                                                    }
-
-                                                }
-                                            }
-                                        }
                                     }
                                 }
 
-
-                                .disabled {
-                                    opacity: .5;
-                                }
-
-                                .select {
-                                    position: relative;
-
-                                    &:hover {
-                                        .icon {
-                                            color: #fff;
-                                        }
-
-                                        select {
-                                            background: lighten(@color_panels_header, 10%);
-                                            color: #fff;
-                                        }
-                                    }
-
-                                    .icon {
+                                &.laborators {
+                                    .settings {
+                                        cursor: pointer;
                                         font-size: 14px;
-                                        position: absolute;
-                                        top: 8px;
-                                        right: 2px;
-                                        z-index: 2;
-                                        color: darken(@color_subheader_select, 15%);
+                                        color: lighten(@color_sidebar_header, 40%);
+                                        margin: 1px 8px 0 0;
+                                        .float-right();
+
+                                        &:hover {
+                                            color: lighten(@color_sidebar_header, 30%);
+
+                                            &:active {
+                                                color: lighten(@color_sidebar_header, 20%);
+                                            }
+                                        }
+                                    }
+
+                                    .bubble {
+                                        width: 8px;
+                                        height: 8px;
+                                        margin: 4px 8px 0 0;
+                                        overflow: hidden;
+                                        .border-radius(50%);
+                                        .float-right();
+                                        display: none;
+
+                                        div {
+                                            width: 100%;
+                                            height: 100%;
+                                            background: rgba(0, 0, 0, 0.2);
+                                        }
+                                    }
+
+                                    .name {
+                                        .calc-width(~"100% - 65px");
+                                    }
+
+                                    .gravatar {
+                                        width: 15px;
+                                        height: 15px;
+                                        overflow: hidden;
+                                        margin-right: 8px;
+                                        opacity: .3;
+                                        .border-radius(2px);
+                                        .float-left();
+
+                                        img {
+                                            width: 15px;
+                                            height: 15px;
+                                        }
+                                    }
+
+                                    .item {
+                                        &.active {
+                                            .bubble {
+                                                display: inline-block;
+                                            }
+
+                                            .gravatar {
+                                                opacity: 1;
+                                            }
+
+                                            .name {
+                                                color: lighten(@color_panels_header, 5%);
+                                            }
+                                        }
+
+                                        &.blocked {
+                                            .settings {
+                                                color: @color_red;
+
+                                                &:hover {
+                                                    color: darken(@color_red, 5%);
+
+                                                    &:active {
+                                                        color: darken(@color_red, 10%);
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            .disabled {
+                                opacity: .5;
+                            }
+
+                            .select {
+                                position: relative;
+
+                                &:hover {
+                                    .icon {
+                                        color: #fff;
                                     }
 
                                     select {
-                                        position: relative;
-                                        font-weight: bold;
-                                        margin: 1px 0;
-                                        padding: 7px 25px 7px 8px;
-                                        background: lighten(@color_subheader_select, 10%);
-                                        color: darken(@color_subheader_select, 30%);
-                                        border: none;
-                                        outline: none;
-                                        cursor: pointer;
-                                        width: 100%;
-
-                                        //Mozila Arrow Fix
-                                        text-indent: 0.01px;
-                                        text-overflow: '';
-
-                                        .appearance(none);
-                                        .border-radius(2px);
-                                        .box-sizing(border-box);
+                                        background: lighten(@color_panels_header, 10%);
+                                        color: #fff;
                                     }
                                 }
 
-                                .button {
+                                .icon {
+                                    font-size: 14px;
+                                    position: absolute;
+                                    top: 8px;
+                                    right: 2px;
+                                    z-index: 2;
+                                    color: darken(@color_subheader_select, 15%);
+                                }
+
+                                select {
+                                    position: relative;
+                                    font-weight: bold;
+                                    margin: 1px 0;
+                                    padding: 7px 25px 7px 8px;
+                                    background: lighten(@color_subheader_select, 10%);
+                                    color: darken(@color_subheader_select, 30%);
                                     border: none;
                                     outline: none;
-                                    color: #fff;
-                                    font-size: 13px;
-                                    padding: 6px 0;
-                                    width: 100%;
-                                    text-align: center;
-                                    background: @color_blue;
                                     cursor: pointer;
-                                    .border-radius(2px);
+                                    width: 100%;
 
-                                    &:disabled {
-                                        .disabled;
+                                    //Mozila Arrow Fix
+                                    text-indent: 0.01px;
+                                    text-overflow: '';
+
+                                    .appearance(none);
+                                    .border-radius(2px);
+                                    .box-sizing(border-box);
+                                }
+                            }
+
+                            .button {
+                                border: none;
+                                outline: none;
+                                color: #fff;
+                                font-size: 13px;
+                                padding: 6px 0;
+                                width: 100%;
+                                text-align: center;
+                                background: @color_blue;
+                                cursor: pointer;
+                                .border-radius(2px);
+
+                                &:disabled {
+                                    .disabled;
+                                }
+
+                                &:hover {
+                                    background: darken(@color_blue, 5%);
+
+                                    &:active {
+                                        background: darken(@color_blue, 10%);
                                     }
+                                }
+
+                                &.red {
+                                    background: @color_red;
 
                                     &:hover {
-                                        background: darken(@color_blue, 5%);
-
-                                        &:active {
-                                            background: darken(@color_blue, 10%);
-                                        }
-                                    }
-
-                                    &.red {
-                                        background: @color_red;
-
-                                        &:hover {
-                                            background: darken(@color_red, 5%);
-
-                                            &:active {
-                                                background: darken(@color_red, 10%);
-                                            }
-                                        }
-                                    }
-
-                                    &.error {
                                         background: darken(@color_red, 5%);
 
-                                        &:hover {
+                                        &:active {
                                             background: darken(@color_red, 10%);
-
-                                            &:active {
-                                                background: darken(@color_red, 15%);
-                                            }
                                         }
                                     }
+                                }
 
-                                    &.success {
-                                        background: darken(@color_green, 5%);
+                                &.error {
+                                    background: darken(@color_red, 5%);
 
-                                        &:hover {
-                                            background: darken(@color_green, 10%);
+                                    &:hover {
+                                        background: darken(@color_red, 10%);
 
-                                            &:active {
-                                                background: darken(@color_green, 15%);
-                                            }
+                                        &:active {
+                                            background: darken(@color_red, 15%);
                                         }
                                     }
+                                }
 
-                                    .icon {
-                                        margin-right: 5px;
+                                &.success {
+                                    background: darken(@color_green, 5%);
+
+                                    &:hover {
+                                        background: darken(@color_green, 10%);
+
+                                        &:active {
+                                            background: darken(@color_green, 15%);
+                                        }
                                     }
                                 }
 
-                                .input, .textarea {
-                                    width: 100%;
-                                    color: #333;
-                                    background: #fff;
-                                    font-size: 12px;
-                                    padding: 7px 8px;
-                                    border: none;
-                                    outline: none;
-                                    .border-radius(2px);
-                                    .transition(background);
-                                    .box-sizing(border-box);
-
-                                    &:disabled {
-                                        .disabled;
-                                    }
+                                .icon {
+                                    margin-right: 5px;
                                 }
+                            }
 
-                                .textarea {
-                                    font-size: 11px;
-                                    padding: 5px;
-                                    max-height: 250px;
-                                    min-height: 80px;
-                                    resize: vertical;
+                            .input, .textarea {
+                                width: 100%;
+                                color: #333;
+                                background: #fff;
+                                font-size: 12px;
+                                padding: 7px 8px;
+                                border: none;
+                                outline: none;
+                                .border-radius(2px);
+                                .transition(background);
+                                .box-sizing(border-box);
+
+                                &:disabled {
+                                    .disabled;
                                 }
+                            }
+
+                            .textarea {
+                                font-size: 11px;
+                                padding: 5px;
+                                max-height: 250px;
+                                min-height: 80px;
+                                resize: vertical;
                             }
                         }
                     }
@@ -439,6 +438,7 @@ html, body {
         &.chat {
             right: 0;
             padding-left: 0;
+            padding-bottom: 0;
             .transition(right);
 
             &.fullscreen {
@@ -447,19 +447,213 @@ html, body {
 
             .header {
                 .border-radius(0 2px 2px 0);
+
+                span {
+                    margin: 0 5px;
+                }
+            }
+
+            .messenger {
+                padding: 10px;
+
+                textarea {
+                    border: solid 1px darken(@color_body, 15%);
+                    background-color: #fff;
+                    background-image: url('/img/tshadow.png');
+                    background-repeat: repeat-x;
+                    background-position: 0 -5px;
+                    width: 100%;
+                    height: 100px;
+                    margin: 0;
+                    outline: none;
+                    padding: 5px;
+                    resize: none;
+                    .transition(border-color);
+                    .border-radius(2px);
+
+                    &:focus {
+                        border-color: darken(@color_blue, 5%);
+                    }
+                }
+            }
+
+            .conversation {
+                position: relative;
+                overflow: hidden;
+                padding: 0;
+                .box-sizing(border-box);
+                .calc-height(~"100% - 155px");
+
+                .scroll-pane {
+                    height: 100%;
+
+                    .item {
+                        margin: 15px 10px;
+                        .box-sizing(border-box);
+                    }
+
+                    .status {
+                        font-weight: bold;
+                        font-size: 11px;
+                        color: lighten(@color_panels_header, 10%);
+                        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+                        text-align: center;
+                    }
+
+                    .helper {
+                        font-size: 13px;
+                        color: lighten(@color_panels_header, 10%);
+
+                        & > div {
+                            margin: 5px 0;
+                        }
+
+                        .underline {
+                            text-decoration: underline;
+                        }
+
+                        .bold {
+                            font-weight: bold;
+                        }
+
+                        .indent {
+                            text-indent: 5px;
+                        }
+
+                        .small {
+                            color: lighten(@color_panels_header, 20%);
+                            font-size: 12px;
+                            margin-bottom: 10px;
+                        }
+
+                        .seperator {
+                            height: 15px;
+                        }
+                    }
+
+                    .message {
+                        font-size: 12px;
+                        color: darken(@color_panels_header, 5%);
+                        .clearfix();
+
+                        &.in {
+                            .gravatar {
+                                .float-left();
+                            }
+
+                            .information {
+                                .float-right();
+
+                                .bubble:before {
+                                    left: -3px;
+                                }
+                            }
+                        }
+
+                        &.out {
+                            .gravatar {
+                                .float-right();
+                            }
+
+                            .information {
+                                .float-left();
+
+                                .bubble:before {
+                                    right: -3px;
+                                }
+                            }
+
+                            .name {
+                                display: none;
+                            }
+                        }
+
+                        .gravatar {
+                            width: 30px;
+                            height: 30px;
+                            overflow: hidden;
+                            .border-radius(2px);
+
+                            img {
+                                width: 30px;
+                                height: 30px;
+
+                                &:before {
+                                    content: '';
+                                    position: absolute;
+                                	top: 1px;
+                                	left: 1px;
+                                	bottom: 1px;
+                                	right: 1px;
+                                	.border-radius(2px);
+                                	.box-shadow(~"inset 0 0 1px 1px rgba(255,255,255,.3)");
+                                	.linear-gradient(0deg, rgba(255, 255, 255, .3), transparent);
+                                }
+                            }
+                        }
+
+                        .information {
+                            .calc-width(~"100% - 40px");
+
+                            .name {
+                                color: darken(@color_panels_header, 5%);
+                                margin-bottom: 3px;
+                            }
+
+                            .bubble {
+                                position: relative;
+                                padding: 5px 7px;
+                                background: darken(@color_body, 5%);
+                                word-break: break-word;
+                                word-wrap: break-word;
+                                .border-radius(2px);
+
+                                &:before {
+                                    content: "";
+                                    position: absolute;
+                                    top: 5px;
+                                    border: solid 4px transparent;
+                                    background: darken(@color_body, 5%);
+                                    display: block;
+                                    border-color: darken(@color_body, 5%);
+                                    width: 0;
+                                    .border-radius(0 2px);
+                                    .transform(rotate(45deg));
+                                }
+
+                                .separator {
+                                    height: 10px;
+                                }
+
+                                .link {
+                                    cursor: pointer;
+                                    color: darken(@color_blue, 5%);
+
+                                    &:hover {
+                                        text-decoration: underline;
+
+                                        &:active {
+                                            color: darken(@color_blue, 10%);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
     &.main {
-        width: 60%;
         height: 100%;
-        left: 20%;
+        left: 230px;
         padding: 85px 0 0 0;
         border-left: solid 1px darken(@color_body, 5%);
         border-right: solid 1px darken(@color_body, 5%);
         .float-left();
         .transition(all);
+        .calc-width(~"100% - 460px");
 
         &.fullscreen {
             left: 0;
@@ -598,6 +792,7 @@ html, body {
 .print {
     & {
         overflow: visible !important;
+        background: #fff !important;
 
         body {
             overflow: visible !important;
@@ -615,10 +810,13 @@ html, body {
 
             .main {
                 width: 100%;
+                height: auto;
                 border: none;
                 left: 0;
                 padding: 0;
                 margin: 0;
+                background: transparent;
+                border: none;
 
                 .subheader {
                     padding: 6px 15px;
@@ -626,6 +824,12 @@ html, body {
                     .toggles {
                         display: none !important;
                     }
+                }
+
+                .pane {
+                    height: auto;
+                    padding-bottom: 50px;
+                    background: transparent;
                 }
             }
         }
