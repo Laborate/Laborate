@@ -23,12 +23,6 @@ window.editorUtil = {
     terminal: function(show) {
         var _this = this;
 
-        if($(window).width() < 1077) {
-            $(".terminal").width($(".CodeMirror").width());
-        } else {
-            $(".terminal").width("")
-        }
-
         if($(".terminal").hasClass("active") || show == false) {
             $(".terminal iframe").fadeOut(150);
 
@@ -47,6 +41,10 @@ window.editorUtil = {
                 });
             $(".terminal a").attr("href", terminal);
         }
+
+        setTimeout(function() {
+            window.editor.refresh();
+        }, 500);
     },
     fullscreen: function(fullscreen) {
         var _this = this;

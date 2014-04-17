@@ -88,12 +88,12 @@ $(document).on("click", ".confirm-files, .cancel-files", function() {
     window.documents.headerBar(window.documents.headerBarPreviousDouble);
 });
 
-$(document).on("keyup", "#search input", function() {
-    $(this).parent("form").submit();
+$(document).on("keyup", ".search input", function() {
+    window.documents.fileSearch($(this).val(), $(".filters select:visible"));
 });
 
 $(document).on("submit change", "#search, .filters select:visible", function() {
-    window.documents.fileSearch($("#search").find("input").val(), $(".filters select:visible"));
+    window.documents.fileSearch($(".search input").val(), $(".filters select:visible"));
     return false;
 });
 

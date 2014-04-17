@@ -371,13 +371,18 @@
                 margin-top: 10px;
             }
 
-            &:hover, &.hover {
+            &:hover {
                 color: #fff;
                 background: lighten(spin(@color_green, 15), 2%);
 
                 &:active {
                     background: darken(spin(@color_green, 15), 4%);
                 }
+            }
+
+            &.hover {
+                color: #fff;
+                background: lighten(spin(@color_blue, -5), 2%);
             }
 
             &.activated {

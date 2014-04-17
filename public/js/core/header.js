@@ -30,7 +30,7 @@ $(function() {
 
     $(".header .search .icon").click(function(e) {
         e.stopPropagation();
-        $(".header .search .input").val("");
+        $(".header .search .input").val("").keyup();
 
         if($(".header .search").hasClass("activated")) {
             $(".header .search").removeClass("activated");
