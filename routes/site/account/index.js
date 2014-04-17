@@ -21,10 +21,24 @@ exports.index = function(req, res, next) {
             req.models.payments.find({
                 user_id: user.id
             }, callback);
+        },
+        posts: function(callback) {
+            req.models.posts.count({
+                owner_id: user.id,
+                parent_id: null
+            }, callback);
+        },
+        replies: function(callback) {
+            req.models.posts.count({
+                owner_id: user.id,
+                parent_id: req.db.tools.ne(null)
+            }, callback);
         }
     }, function(errors, data) {
         req.error.capture(errors);
 
+        user.posts = data.posts;
+        user.replies = data.replies;
         user.payments = data.payments;
         user.notifications = data.notifications;
 

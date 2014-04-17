@@ -82,6 +82,20 @@
             </div>
         </div>
         <div class="container">
+            <div class="side">
+                <div class="data"><%=: user.groups.length | format %></div>
+                <div class="label">group<%= (user.groups.length != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: user.posts | format %></div>
+                <div class="label">post<%= (user.posts != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: user.replies | format %></div>
+                <div class="label"><%=: "reply" | pluralize:(user.replies != 1) %></div>
+            </div>
+        </div>
+        <div class="container">
             <% if(user.documents.top_viewed.length != 0) { %>
                 <div id="plans" class="listing compact">
                     <div class="item header center">Popular Files</div>
