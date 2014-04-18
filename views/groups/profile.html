@@ -19,7 +19,11 @@
                 <div class="description"><%= group.description %></div>
             </div>
             <% if(!access) { %>
-                <a class="corner-button join" href="/groups/<%= group.pub_id %>/join/">Join Group</a>
+                <% if(!user.fake) { %>
+                    <a class="corner-button join coming-soon" href="/groups/<%= group.pub_id %>/join/">Join Group</a>
+                <% } else { %>
+                    <a class="corner-button join coming-soon" href="/login/?next=/groups/<%= group.pub_id %>/join/">Join Group</a>
+                <% } %>
             <% } else if(group.owner_id == user.id) { %>
                 <div class="corner-button owner">Owner</div>
             <% } else { %>
