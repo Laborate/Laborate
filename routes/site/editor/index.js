@@ -7,7 +7,7 @@ exports.editor = function(req, res, next) {
         pub_id: req.param("document")
     }, { autoFetch: true }, function(error, document) {
         if(!error && document) {
-            if(req.mobile || req.robot) {
+            if(req.mobile) {
                 res.redirect(req.url + "embed/");
             } else if(req.session.user) {
                 document.join(req.session.user, 2, function(access, permission) {
