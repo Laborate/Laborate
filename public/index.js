@@ -113,7 +113,7 @@ module.exports = function(root) {
     clientJS.addFile("editor", js_path + 'editor/sidebar.js');
     clientJS.addFile("editor", js_path + 'editor/sidebarInit.js');
     clientJS.addFile("editor", js_path + 'editor/sidebarUtil.js');
-    clientJS.addFile("editor", js_path + 'editor/chatRoom.js');
+    clientJS.addFile("editor", js_path + 'editor/chat.js');
 
 
     /* Editor Embed */

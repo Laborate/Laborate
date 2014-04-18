@@ -755,7 +755,7 @@ window.documents = {
                 });
 
                 $(".pane").html($(files).toggle(!hide));
-                $(".sidebar .info").text(json.length + " files");
+                $(".sidebar .info").text(json.length + " file" + ((json.length != 1) ? "s" : ""));
                 if(history) window.history.pushState(null, null, "/documents/");
                 window.socketUtil.pageTrack();
                 window.documents.locationActivated = "online";
@@ -819,7 +819,7 @@ window.documents = {
             });
 
             $(".pane").html(files);
-            $(".sidebar .info").text(response.length + " files");
+            $(".sidebar .info").text(response.length + " file" + ((response.length != 1) ? "s" : ""));
             path = (path.substr(-1) != '/' && path) ? path + "/" : path;
             if(history) window.history.pushState(null, null, "/documents/" + location + "/" + path);
             window.socketUtil.pageTrack();
