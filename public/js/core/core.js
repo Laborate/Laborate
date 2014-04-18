@@ -189,6 +189,7 @@ window.groups = {
         var user = group.parents(".popup-groups").attr("data-user");
 
         $.post("/groups/popup/" + user + "/", {
+            _csrf: config.csrf,
             group:  group.attr("data-group")
         }, function(data) {
             if(typeof data != "object") {
