@@ -53,16 +53,16 @@ $(function() {
     window.onoffline = window.socketUtil.disconnect;
 
     window.socketUtil.socket.on('connect_failed', function() {
-        window.backdrop.error("Failed To Connect. Retrying now...", true);
+        window.editorUtil.error("Failed To Connect. Retrying now...", true);
     });
 
     window.socketUtil.socket.on('reconnect_failed', function() {
-        window.backdrop.error("Failed To Reconnect. Retrying now...", true);
+        window.editorUtil.error("Failed To Reconnect. Retrying now...", true);
     });
 
     window.socketUtil.socket.on('error', function(reason) {
         Raven.captureException(reason);
-        window.backdrop.error("Failed To Connect", '/');
+        window.editorUtil.error("Failed To Connect", '/');
     });
 
     var interval = setInterval(function() {
@@ -75,13 +75,15 @@ $(function() {
     //Set Array of Users
     window.users = new Array();
 
-    //Refresh Editor
-    window.editorUtil.resize();
-
     if(!config.embed) {
         //Setup Fullscreen
         if($.cookie("fullscreen") != null) {
-            window.editorUtil.fullscreen($.cookie("fullscreen") == "false");
+            window.editorUtil.fullscreen($.cookie("fullscreen") == "true", false);
+        }
+
+        //Check Fullscreen
+        if($(window).width() < 1100) {
+            window.editorUtil.fullscreen(true, false);
         }
 
         $.get("/editor/" + url_params()["document"] + "/permissions/", function(response) {

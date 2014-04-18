@@ -5,6 +5,7 @@ var rand = require("generate-key");
 exports.index = function(req, res, next) {
     res.renderOutdated('documents/index', {
         title: 'Documents',
+        header: "documents",
         js: clientJS.renderTags("documents", "download"),
         css: clientCSS.renderTags("documents")
     });
@@ -147,14 +148,17 @@ exports.file_upload = function(req, res, next) {
 }
 
 exports.file_rename = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            document = documents[0].document;
-            document.save({ name: req.param("name") });
+    }, function(error, role) {
+        if(!error && role) {
+            document = role.document;
+            document.save({
+                name: req.param("name")
+            });
+
             res.json({
                 success: true,
                 document: {
@@ -170,14 +174,14 @@ exports.file_rename = function(req, res, next) {
 };
 
 exports.file_private = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
+    }, function(error, role) {
+        if(!error && role) {
             var user = req.session.user;
-            var document = documents[0].document;
+            var document = role.document;
 
             if(document.owner_id == user.id) {
                 document.private = (req.param("private") === "true");
@@ -202,13 +206,14 @@ exports.file_private = function(req, res, next) {
 }
 
 exports.file_remove = function(req, res, next) {
-     req.models.documents.roles.find({
+     req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            document = documents[0].document;
+    }, function(error, role) {
+        if(!error && role) {
+            var document = role.document;
+
             if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {
@@ -218,7 +223,7 @@ exports.file_remove = function(req, res, next) {
                     }
                 });
             } else {
-                documents[0].remove(function(error) {
+                role.remove(function(error) {
                     if(!error) {
                         res.json({ success: true });
                     } else {
@@ -309,7 +314,7 @@ exports.create_location = function(req, res, next) {
 };
 
 exports.stats = function(req, res, next) {
-    if(!req.robot && req.session.user) {
+    if(req.session.user) {
         async.parallel({
             total: function(callback) {
                 req.models.documents.roles.count({

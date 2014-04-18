@@ -21,10 +21,24 @@ exports.index = function(req, res, next) {
             req.models.payments.find({
                 user_id: user.id
             }, callback);
+        },
+        posts: function(callback) {
+            req.models.posts.count({
+                owner_id: user.id,
+                parent_id: null
+            }, callback);
+        },
+        replies: function(callback) {
+            req.models.posts.count({
+                owner_id: user.id,
+                parent_id: req.db.tools.ne(null)
+            }, callback);
         }
     }, function(errors, data) {
         req.error.capture(errors);
 
+        user.posts = data.posts;
+        user.replies = data.replies;
         user.payments = data.payments;
         user.notifications = data.notifications;
 
@@ -64,7 +78,9 @@ exports.profile = function(req, res) {
                             email: req.param("email")
                         }, function(error) {
                             if(!error) {
-                                req.models.users.get(req.session.user.id, function(error, user) {
+                                req.models.users.one({
+                                    id: req.session.user.id
+                                }, { autoFetch: false }, function(error, user) {
                                     if(!error && user) {
                                         var profile = {
                                             name: req.param("name"),
@@ -100,7 +116,9 @@ exports.profile = function(req, res) {
 }
 
 exports.change_password = function(req, res) {
-    req.models.users.get(req.session.user.id, function(error, user) {
+    req.models.users.one({
+        id: req.session.user.id
+    }, { autoFetch: false }, function(error, user) {
         if(!error) {
             if(req.models.users.hash($.trim(req.param('old_password'))) == user.password) {
                 if($.trim(req.param('new_password')) != $.trim(req.param('confirm_password'))) {
@@ -131,17 +149,13 @@ exports.delete_account = function(req, res) {
     req.models.users.get(req.session.user.id, function(error, user) {
         if(!error) {
             if(req.models.users.hash($.trim(req.param('password'))) == user.password) {
-                req.stripe.customers.del(req.session.user.stripe, function(error, customer) {
-                    if(!error && customer) {
-                        user.remove(function(error) {
-                            if(!error) {
-                                res.json({
-                                    success: true,
-                                    callback: "window.location.href = '/logout/';"
-                                });
-                            } else {
-                                res.error(200, "Failed To Delete Account", error);
-                            }
+                req.stripe.customers.del(req.session.user.stripe, req.error.capture);
+
+                user.remove(function(error) {
+                    if(!error) {
+                        res.json({
+                            success: true,
+                            callback: "window.location.href = '/logout/';"
                         });
                     } else {
                         res.error(200, "Failed To Delete Account", error);
@@ -158,7 +172,9 @@ exports.delete_account = function(req, res) {
 
 exports.remove_location = function(req, res) {
     if(req.session.user.locations && (req.param("location") in req.session.user.locations)) {
-        req.models.users.get(req.session.user.id, function(error, user) {
+        req.models.users.one({
+            id: req.session.user.id
+        }, { autoFetch: false }, function(error, user) {
             if(!error) {
                 delete user.locations[req.param("location")];
 
@@ -183,7 +199,9 @@ exports.remove_location = function(req, res) {
 };
 
 exports.add_card = function(req, res) {
-    req.models.users.get(req.session.user.id, function(error, user) {
+    req.models.users.one({
+        id: req.session.user.id
+    }, { autoFetch: false }, function(error, user) {
         if(!error) {
             req.stripe.customers.createCard(req.session.user.stripe, {
                 card: {
@@ -226,7 +244,9 @@ exports.add_card = function(req, res) {
 
 exports.remove_card = function(req, res, next) {
     if(!$.isEmptyObject(req.session.user.card)) {
-        req.models.users.get(req.session.user.id, function(error, user) {
+        req.models.users.one({
+            id: req.session.user.id
+        }, { autoFetch: false }, function(error, user) {
             if(!error) {
                 req.stripe.customers.deleteCard(
                     req.session.user.stripe,
@@ -270,15 +290,15 @@ exports.plan_change = function(req, res) {
                 trial_end: req.core.days.next_month()
             }, function(error) {
                 if(!error) {
-                    req.models.pricing.find({
+                    req.models.pricing.one({
                         plan: req.param("plan")
-                    }, function(error, plans) {
-                        if(!error && plans.length != 0) {
-                            user.setPricing(plans[0], function(error, user) {
+                    }, function(error, plan) {
+                        if(!error && plan) {
+                            user.setPricing(plan, function(error, user) {
                                 if(!error) {
                                     user.save({
                                         trial: false,
-                                        deliquent: (plans[0].amount == 0) ? false : user.deliquent
+                                        deliquent: (plan.amount == 0) ? false : user.deliquent
                                     }, function(error, user) {
                                         if(!error) {
                                             req.session.user = user;

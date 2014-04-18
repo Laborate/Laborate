@@ -1,9 +1,11 @@
-var error_handler = function(status, message, locals, req, res) {
+var error_handler = function(status, message, locals, req, res, error) {
     var error_message;
     var error_html;
     var redirect_url;
 
     locals = locals || {};
+    locals.home = locals.home || true;
+    locals.embed = locals.embed || false;
 
     switch(status) {
         case 401:
@@ -24,16 +26,20 @@ var error_handler = function(status, message, locals, req, res) {
             break;
         case 500:
             error_message = "Internal Server Error";
-            error_html = 'Sorry we are having<br>technical difficulties.';
+            error_html = 'Sorry we are having<br>technical difficulties';
             break;
         default:
             error_message = (message) ? message : "Page Not Found";
-            error_html = (message) ? message : 'Sorry, this page is not available.';
+            error_html = (message) ? message : 'Sorry, this page is not available';
             break;
     }
 
     if(error_html) {
-        error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
+        if((locals.home && !locals.embed) || error_html.split(". ").length > 1) {
+            error_html = (error_html.slice(-1) == ".") ? error_html : error_html + ".";
+        } else {
+            error_html = (error_html.slice(-1) == ".") ? error_html.slice(0, -1) : error_html;
+        }
     }
 
     if(req.xhr) {
@@ -59,10 +65,11 @@ var error_handler = function(status, message, locals, req, res) {
                         css: clientCSS.renderTags("backdrop"),
                         error_html: error_html,
                         backdrop: req.backdrop(),
+                        header_class: "lighten",
                         pageTrack: false,
                         mobile: false,
-                        home: locals.home || true,
-                        embed: locals.embed || false
+                        home: locals.home,
+                        embed: locals.embed
                     }, locals));
                 }
             },
@@ -78,12 +85,16 @@ var error_handler = function(status, message, locals, req, res) {
 
 exports.global = function(error, req, res, next) {
     if(error) {
-        var html = error
-                    .toString()
-                    .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-                    .replace(/\n/g, '<br>');
+        if(config.general.production) {
+            error_handler(500, "Laborate is experiencing technical difficalties", {
+                home: false
+            }, req, res);
+        } else {
+            error_handler(500, error.message, {
+                home: false
+            }, req, res, error);
+        }
 
-        res.send(html);
         lib.error.capture(error);
     } else {
         next();
@@ -92,7 +103,7 @@ exports.global = function(error, req, res, next) {
 
 exports.handler = function(req, res, next) {
     res.error = function(status, message, error, locals) {
-        error_handler(status, message, locals, req, res);
+        error_handler(status, message, locals, req, res, error);
         req.error.capture(error);
     }
     next();

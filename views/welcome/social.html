@@ -1,4 +1,4 @@
-<% include ../includes/header.html %>
+<% include ../includes/start.html %>
 <div id="backdrop">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
@@ -32,9 +32,9 @@
                             data-documents="<%= JSON.stringify(user.documents) %>"></canvas>
                         <div class="clear"></div>
                     </div>
-                <% }) %>
+                <% }); %>
             </div>
         </div>
     </div>
 </div>
-<% include ../includes/footer.html %>
+<% include ../includes/end.html %>

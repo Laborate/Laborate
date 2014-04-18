@@ -1,42 +1,14 @@
 exports.index = function(req, res, next) {
-    res.renderOutdated('editor/index', {
-        title: "Join A Document",
-        js: clientJS.renderTags("backdrop"),
-        css: clientCSS.renderTags("backdrop"),
-        backdrop: req.backdrop()
-    });
+    res.redirect("/documents/");
 }
 
 exports.editor = function(req, res, next) {
-    req.models.documents.find({
+    req.models.documents.one({
         pub_id: req.param("document")
-    }, function(error, documents) {
-        if(!error && !documents.empty) {
-            var document = documents[0];
-
-            if(req.robot) {
-                if(!document.private) {
-                    document.getOwner(function(error, owner) {
-                        if(!error && owner) {
-                            res.renderOutdated('editor/code/index', {
-                                title: document.name,
-                                document: document,
-                                description: function() {
-                                    var desc = document.name;
-                                    desc += " is a ";
-                                    desc += (document.private) ? "private" : "public";
-                                    desc += " document owned by ";
-                                    desc += owner.name + ".";
-                                    return desc;
-                                }()
-                            });
-                        } else {
-                            res.error(404, null, error);
-                        }
-                    });
-                } else {
-                    res.error(404);
-                }
+    }, { autoFetch: true }, function(error, document) {
+        if(!error && document) {
+            if(req.mobile) {
+                res.redirect(req.url + "embed/");
             } else if(req.session.user) {
                 document.join(req.session.user, 2, function(access, permission) {
                     if(access) {
@@ -44,6 +16,7 @@ exports.editor = function(req, res, next) {
                             title: document.name,
                             user: req.session.user,
                             document: document,
+                            header: "documents",
                             js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc", "copy", "download"),
                             css: clientCSS.renderTags("backdrop", "codemirror", "editor", "contextmenu"),
                             backdrop: req.backdrop(),
@@ -54,12 +27,19 @@ exports.editor = function(req, res, next) {
                                     id: 2,
                                     owner: false
                                 }
-                            }
+                            },
+                            description: config.descriptions.editor.sprintf([
+                                document.name,
+                                document.owner.name,
+                                document.name
+                            ])
                         });
                     } else {
                         res.error(404);
                     }
                 });
+            } else if(req.param("login")) {
+                res.error(401);
             } else {
                 res.redirect(req.url + "embed/");
             }
@@ -70,38 +50,40 @@ exports.editor = function(req, res, next) {
 }
 
 exports.embed = function(req, res, next) {
-    if(!req.robot) {
-        req.models.documents.find({
-            pub_id: req.param("document")
-        }, function(error, documents) {
-            if(!error && !documents.empty) {
-                var document = documents[0];
+    req.models.documents.one({
+        pub_id: req.param("document")
+    }, { autoFetch: true }, function(error, document) {
+        if(!error && document) {
+            if(!document.private) {
+                req.mobile = false;
 
-                if(!document.private) {
-                    res.renderOutdated('editor/code/embed/index', {
-                        title: document.name,
-                        document: document,
-                        js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
-                        css: clientCSS.renderTags("backdrop", "codemirror", "editor", "editor-embed"),
+                res.renderOutdated('editor/code/embed/index', {
+                    title: document.name,
+                    document: document,
+                    js: clientJS.renderTags("backdrop", "codemirror", "editor", "aysnc"),
+                    css: clientCSS.renderTags("backdrop", "codemirror", "editor", "editor-embed"),
+                    embed: true,
+                    header: (req.param("header") != "false"),
+                    config: {
                         embed: true,
-                        config: {
-                            embed: true,
-                            permission: {
-                                id: 2,
-                                owner: false
-                            }
+                        permission: {
+                            id: 2,
+                            owner: false
                         }
-                    });
-                } else {
-                   res.error(404, null, null, { embed: true });
-                }
+                    },
+                    description: config.descriptions.editor.sprintf([
+                        document.name,
+                        document.owner.name,
+                        document.name
+                    ])
+                });
             } else {
-                res.error(404, null, error, { embed: true });
+               res.error(404, null, null, { embed: true });
             }
-        });
-    } else {
-        res.error(404, null, null, { embed: true });
-    }
+        } else {
+            res.error(404, null, error, { embed: true });
+        }
+    });
 }
 
 exports.embed_test = function(req, res, next) {
@@ -128,40 +110,23 @@ exports.permissions = function(req, res, next) {
     });
 }
 
-exports.exists = function(req, res, next) {
-    req.models.documents.exists({
-        pub_id: req.param("document")
-    }, function(error, exists) {
-        if(!error && exists) {
-            res.json({
-                success: true,
-                next: {
-                    function: "window.backdrop.urlChange",
-                    arguments: "/editor/" + req.param("document") + "/"
-                }
-            });
-        } else {
-            res.error(200, "Document Doesn't Exist", error);
-        }
-    });
-}
-
 exports.update = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
-    }, function(error, documents) {
-        if(documents.length == 1) {
-            if(!error) {
+    }, function(error, role) {
+        if(!error) {
+            if(role) {
                 var user = req.session.user;
-                var document = documents[0].document;
+                var permission = role.permission;
+                var document = role.document;
                 var changeReadonly = false;
                 var changePrivate = false;
 
                 document.name = req.param("name");
 
-                if(documents[0].permission.owner) {
+                if(permission.owner) {
                     if(!user.organizations.empty) {
                         if(!user.organizations[0].permission.student) {
                             var readonly = (req.param("readonly") === "true");
@@ -189,23 +154,23 @@ exports.update = function(req, res, next) {
                     }
                 });
             } else {
-                res.error(200, "Failed To Update File", error);
+                res.error(404);
             }
         } else {
-            res.error(404);
+            res.error(200, "Failed To Update File", error);
         }
     });
 }
 
 exports.download = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
-    }, function(error, documents) {
+    }, function(error, role) {
         if(!error) {
-            if(documents.length == 1) {
-                var document = documents[0].document;
+            if(role) {
+                var document = role.document;
                 res.cookie("fileDownload", true, { path: "/" });
                 res.attachment(document.name);
                 res.end((document.content) ? document.content.join("\n") : "", "UTF-8");
@@ -213,58 +178,52 @@ exports.download = function(req, res, next) {
                 res.error(404);
             }
         } else {
-            res.error(400, "Failed To Download File", error);
+            res.error(200, "Failed To Download File", error);
         }
     });
 }
 
 exports.remove = function(req, res, next) {
-    req.models.documents.roles.find({
-        access: true,
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
-        document_pub_id: req.param("document")
-    }, function(error, documents) {
-        if(!error && documents.length == 1) {
-            var document = documents[0].document;
+        document_pub_id: req.param("document"),
+        access: true
+    }, function(error, role) {
+        if(!error && role) {
+            var document = role.document;
 
-            if(documents[0].permission.owner) {
+            if(document.owner_id == req.session.user.id) {
                 document.remove(function(error) {
                     if(!error) {
-                        res.json({
-                            success: true,
-                            owner: true
-                        });
+                        res.json({ success: true });
                     } else {
                         res.error(200, "Failed To Remove File", error);
                     }
                 });
             } else {
-                documents[0].remove(function(error) {
+                role.remove(function(error) {
                     if(!error) {
-                        res.json({
-                            success: true,
-                            owner: false
-                        });
+                        res.json({ success: true });
                     } else {
                         res.error(200, "Failed To Remove File", error);
                     }
                 });
             }
         } else {
-            res.error(400, false, error);
+            res.error(200, "Failed To Remove File", error);
         }
     });
 }
 
 exports.invite = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         access: true,
         user_id: req.session.user.id,
         document_pub_id: req.param("document")
-    }, function(error, documents) {
+    }, function(error, role) {
         if(!error) {
-            if(documents.length == 1) {
-                var document = documents[0].document;
+            if(role) {
+                var document = role.document;
 
                 req.models.users.find({
                     screen_name: req.param("screen_name").toLowerCase()
@@ -326,7 +285,7 @@ exports.laborators = function(req, res, next) {
     req.models.documents.roles.find({
         user_id: req.db.tools.ne(req.session.user.id),
         document_pub_id: req.param("document")
-    }, {autoFetch:true}, function(error, roles) {
+    }, { autoFetch:true }, function(error, roles) {
         if(!error) {
             res.json({
                 success: true,
@@ -362,16 +321,16 @@ exports.laborators = function(req, res, next) {
 }
 
 exports.laborator = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_pub_id: req.param("user"),
         document_pub_id: req.param("document")
-    }, function(error, roles) {
-        if(!error && !roles.empty) {
-            if(roles[0].document.owner_id == req.session.user.id) {
+    }, function(error, role) {
+        if(!error && role) {
+            if(role.document.owner_id == req.session.user.id) {
                 req.models.documents.permissions.get(
                     req.param("permission"), function(error, permission) {
                         if(!error && permission) {
-                            roles[0].setPermission(permission, function(error, role) {
+                            role.setPermission(permission, function(error, role) {
                                 if(!error) {
                                     res.json({ success: true });
                                 } else {
@@ -396,14 +355,14 @@ exports.laborator = function(req, res, next) {
     Release an API for Committing
 */
 exports.commit = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, roles) {
-        if(!error && !roles.empty) {
-            if(!roles[0].permission.readonly) {
-                var document = roles[0].document;
+    }, function(error, role) {
+        if(!error && role) {
+            if(!role.permission.readonly) {
+                var document = role.document;
                 var location = req.session.user.locations[document.location];
 
                 if(location) {
@@ -437,14 +396,14 @@ exports.commit = function(req, res, next) {
 }
 
 exports.save = function(req, res, next) {
-    req.models.documents.roles.find({
+    req.models.documents.roles.one({
         user_id: req.session.user.id,
         document_pub_id: req.param("document"),
         access: true
-    }, function(error, roles) {
-        if(!error && !roles.empty) {
-            if(!roles[0].permission.readonly) {
-                var document = roles[0].document;
+    }, function(error, role) {
+        if(!error && role) {
+            if(!role.permission.readonly) {
+                var document = role.document;
                 var location = req.session.user.locations[document.location];
 
                 if(location) {

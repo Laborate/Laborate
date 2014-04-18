@@ -1,141 +1,135 @@
 @import '../core/index';
 @import '../compless/all';
 
-.content {
+.main {
     margin-left: 180px;
     .box-sizing(border-box);
 
-    .header {
-        .bottom {
-            & > div:not(.clear) {
-                display: none;
+    .subheader {
+        .terminal-button {
+            color: #fff;
+            font-size: 13px;
+            padding: 5px 8px;
+            cursor: pointer;
+            margin-right: 15px;
+            background: darken(@color_green, 5%);
+            border: solid 1px darken(@color_green, 10%);
+            .border-radius(2px);
+            .float-right();
+
+            &:hover {
+                background: darken(@color_green, 7%);
             }
 
-            .terminal-button {
-                color: #fff;
+            &:active {
+                background: darken(@color_green, 9%);
+            }
+
+            &.active {
+                opacity: .6;
+            }
+
+            .icon {
+                position: relative;
+                top: 1px;
+            }
+        }
+
+        .download-files {
+            background: @color_subheader_button;
+            border: solid 1px darken(@color_subheader_button, 5%);
+
+            &:hover {
+                background: darken(@color_subheader_button, 2%);
+            }
+
+            &:active {
+                background: darken(@color_subheader_button, 4%);
+            }
+
+            &.active {
+                opacity: .6;
+            }
+        }
+
+        .confirm-files {
+            background: @color_subheader_confirm;
+            border: solid 1px darken(@color_subheader_confirm, 5%);
+
+            &:hover {
+                background: darken(@color_subheader_confirm, 2%);
+            }
+
+            &:active {
+                background: darken(@color_subheader_confirm, 4%);
+            }
+        }
+
+        .cancel-files {
+            background: @color_subheader_cancel;
+            border: solid 1px darken(@color_subheader_cancel, 5%);
+
+            &:hover {
+                background: darken(@color_subheader_cancel, 2%);
+            }
+
+            &:active {
+                background: darken(@color_subheader_cancel, 4%);
+            }
+        }
+
+        .select-files {
+            background: @color_subheader_button;
+            border: solid 1px darken(@color_subheader_button, 5%);
+
+            &:hover {
+                background: darken(@color_subheader_button, 2%);
+            }
+
+            &:active {
+                background: darken(@color_subheader_button, 4%);
+            }
+        }
+
+        .add-files {
+            color: #fff;
+            cursor: pointer;
+            .float-right();
+
+            #create {
                 font-size: 13px;
+                line-height: 16px;
+                background: @color_subheader_button;
                 padding: 5px 8px;
-                cursor: pointer;
-                margin-right: 15px;
-                background: darken(@color_green, 5%);
-                border: solid 1px darken(@color_green, 10%);
-                .border-radius(2px);
-                .float-right();
+                border: solid 1px #0072bc;
+                .border-radius(2px 0 0 2px);
+                .float-left();
 
                 &:hover {
-                    background: darken(@color_green, 7%);
+                    background: darken(@color_subheader_button, 2%);
                 }
 
                 &:active {
-                    background: darken(@color_green, 9%);
-                }
-
-                &.active {
-                    opacity: .6;
-                }
-
-                .icon {
-                    position: relative;
-                    top: 1px;
+                    background: darken(@color_subheader_button, 4%);
                 }
             }
 
-            .download-files {
-                background: @color_header_bottom_button;
-                border: solid 1px darken(@color_header_bottom_button, 5%);
+            #upload {
+                font-size: 13px;
+                line-height: 16px;
+                padding: 5px 7px;
+                border: solid 1px #0072bc;
+                border-left: none;
+                background: darken(@color_subheader_button, 5%);
+                .border-radius(0 2px 2px 0);
+                .float-left();
 
                 &:hover {
-                    background: darken(@color_header_bottom_button, 2%);
+                    background: darken(@color_subheader_button, 7%);
                 }
 
                 &:active {
-                    background: darken(@color_header_bottom_button, 4%);
-                }
-
-                &.active {
-                    opacity: .6;
-                }
-            }
-
-            .confirm-files {
-                background: @color_header_bottom_confirm;
-                border: solid 1px darken(@color_header_bottom_confirm, 5%);
-
-                &:hover {
-                    background: darken(@color_header_bottom_confirm, 2%);
-                }
-
-                &:active {
-                    background: darken(@color_header_bottom_confirm, 4%);
-                }
-            }
-
-            .cancel-files {
-                background: @color_header_bottom_cancel;
-                border: solid 1px darken(@color_header_bottom_cancel, 5%);
-
-                &:hover {
-                    background: darken(@color_header_bottom_cancel, 2%);
-                }
-
-                &:active {
-                    background: darken(@color_header_bottom_cancel, 4%);
-                }
-            }
-
-            .select-files {
-                background: @color_header_bottom_button;
-                border: solid 1px darken(@color_header_bottom_button, 5%);
-
-                &:hover {
-                    background: darken(@color_header_bottom_button, 2%);
-                }
-
-                &:active {
-                    background: darken(@color_header_bottom_button, 4%);
-                }
-            }
-
-            .add-files {
-                color: #fff;
-                cursor: pointer;
-                .float-right();
-
-                #create {
-                    font-size: 13px;
-                    line-height: 16px;
-                    background: @color_header_bottom_button;
-                    padding: 5px 8px;
-                    border: solid 1px #0072bc;
-                    .border-radius(2px 0 0 2px);
-                    .float-left();
-
-                    &:hover {
-                        background: darken(@color_header_bottom_button, 2%);
-                    }
-
-                    &:active {
-                        background: darken(@color_header_bottom_button, 4%);
-                    }
-                }
-
-                #upload {
-                    font-size: 13px;
-                    line-height: 16px;
-                    padding: 5px 7px;
-                    border: solid 1px #0072bc;
-                    border-left: none;
-                    background: darken(@color_header_bottom_button, 5%);
-                    .border-radius(0 2px 2px 0);
-                    .float-left();
-
-                    &:hover {
-                        background: darken(@color_header_bottom_button, 7%);
-                    }
-
-                    &:active {
-                        background: darken(@color_header_bottom_button, 9%);
-                    }
+                    background: darken(@color_subheader_button, 9%);
                 }
             }
         }
@@ -145,7 +139,7 @@
         .transition(padding-bottom);
 
         &.extend {
-            padding-bottom: 350px;
+            padding-bottom: 300px;
         }
 
         .item {
@@ -178,7 +172,7 @@
                     border: solid 9px transparent;
                     background: rgba(0, 0, 0, 0.3);
                     display: block;
-                    border-color: @color_body @color_body transparent transparent;
+                    border-color: @color_panels_main @color_panels_main transparent transparent;
                     width: 0; // Firefox 3.0 damage limitation
 
                     .transition(border-width);
@@ -204,24 +198,52 @@
                 opacity: .5;
             }
 
+            &.back {
+                background: darken(@color_body, 25%);
+
+                &:not(.disabled):active {
+                    background: darken(@color_body, 30%);
+                }
+            }
+
             &.red {
                 background: @color_red;
+
+                &:not(.disabled):active {
+                    background: darken(@color_red, 5%);
+                }
             }
 
             &.blue {
                 background: @color_blue;
+
+                &:not(.disabled):active {
+                    background: darken(@color_blue, 5%);
+                }
             }
 
             &.green {
                 background: @color_green;
+
+                &:not(.disabled):active {
+                    background: darken(@color_green, 5%);
+                }
             }
 
             &.purple {
                 background: @color_purple;
+
+                &:not(.disabled):active {
+                    background: darken(@color_purple, 5%);
+                }
             }
 
             &.orange {
                 background: @color_orange;
+
+                &:not(.disabled):active {
+                    background: darken(@color_orange, 5%);
+                }
             }
 
             .corner {
@@ -278,33 +300,41 @@
             }
         }
     }
+}
 
-    .terminal {
-        position: fixed;
-        bottom: -350px;
-        height: 350px;
-        opacity: 0;
-        background: @color_terminal;
-        .calc-width(~"100% - 180px");
-        .transition();
+.terminal {
+    position: fixed;
+    width: 100%;
+    bottom: -300px;
+    height: 300px;
+    opacity: 0;
+    background: @color_terminal;
+    .transition();
 
-        &.active {
-            opacity: 1;
-            bottom: 0;
-        }
+    &.active {
+        opacity: 1;
+        bottom: 0;
+    }
 
-        a {
-            display: inline-block;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            color: darken(#fff, 15%);
+    a {
+        display: inline-block;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        color: darken(#fff, 15%);
 
-            &:hover {
-                color: #fff;
-            }
+        &:hover {
+            color: #fff;
         }
     }
+}
+
+.sidebar .info {
+    text-align: center;
+    color: #666;
+    padding: 10px 0 0 0;
+    margin-top: -60px;
+    border-top: solid 1px darken(@color_body, 10%);
 }
 
 .popup {

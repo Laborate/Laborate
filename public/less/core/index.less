@@ -6,11 +6,37 @@
 @color_green: #1abc9c;
 @color_purple: #9b59b6;
 @color_orange: #b59159;
+@color_yellow: #fff600;
 @color_grey: #a4a5a5;
 
 //Scroll Bar Colors
 @color_scroll_track: transparent;
 @color_scroll_thumb: #ccc;
+
+//Header Colors
+@color_header: #1f2628;
+@color_header_logo: #156f95;
+@color_header_blink_from: @color_grey;
+@color_header_blink_to: @color_blue;
+@color_header_apps: rgba(0, 0, 0, 0.8);
+@color_header_search: rgba(0, 0, 0, 0.8);
+
+//Panels Colors
+@color_panels_main: lighten(@color_body, 2%);
+@color_panels_main_border: darken(@color_body, 5%);
+@color_panels_alternate: transparent;
+@color_panels_header: #5d6b71;
+
+//Module Colors
+@color_module: #fff;
+@color_module_header: #5d6b71;
+@color_module_inputs: rgba(0, 0, 0, 0.04);
+@color_module_inputs_focus: lighten(@color_header, 78%);
+@color_module_actions: spin(lighten(@color_blue, 48%), 10%);
+
+
+//News Colors
+@color_news_button: #5d6b71;
 
 // Backdrop Colors
 @color_backdrop: #736677;
@@ -27,7 +53,7 @@
 @color_sidebar_footer: #404549;
 @color_sidebar_locations_icon: #bcbaba;
 @color_sidebar_locations_active: #00aeef;
-@color_sidebar_blink_from: lighten(@color_sidebar_profile, 5%);
+@color_sidebar_blink_from: lighten(@color_sidebar_profile, 8%);
 @color_sidebar_blink_to: desaturate(lighten(@color_red, 2%), 15%);
 @color_sidebar_list: #242e30;
 
@@ -37,11 +63,11 @@
 @color_header_button: #00a7ed;
 @color_header_button_border: #009de0;
 @color_header_action_links: #afe1ef;
-@color_header_bottom: #dcdbdb;
-@color_header_bottom_select: #c7c6c6;
-@color_header_bottom_button: #048fce;
-@color_header_bottom_confirm: #00972C;
-@color_header_bottom_cancel: #a82700;
+@color_subheader: #dcdbdb;
+@color_subheader_select: darken(@color_body, 5%);
+@color_subheader_button: #048fce;
+@color_subheader_confirm: #00972C;
+@color_subheader_cancel: #a82700;
 
 // Popup Colors
 @color_popup: #34495e;

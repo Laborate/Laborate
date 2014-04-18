@@ -4,14 +4,10 @@ require('../init')("user.tracking", function() {
         if(!error && tracking) {
             _this.models.tracking.create(JSON.parse(tracking), function(error) {
                 lib.error.capture(error);
-                _this.redis.set("tracking", JSON.stringify([]), function(error) {
-                    lib.error.capture(error);
-                    _this.finish();
-                });
+                _this.redis.set("tracking", JSON.stringify([]), _this.finish);
             });
         } else {
-            lib.error.capture(error);
-            _this.finish();
+            _this.finish(error);
         }
     });
 });

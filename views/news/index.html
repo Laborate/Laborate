@@ -1,0 +1,25 @@
+<% include ../includes/start.html %>
+<% include ../includes/header.html %>
+<div class="panel main lefted">
+    <div class="container">
+        <% if(!user.fake) { %>
+            <form name="post" class="form">
+                <textarea class="autogrow" placeholder="Whats new..."></textarea>
+                <div class="previewer"></div>
+                <div class="buttons">
+                    <div class="preview <%= icons.preview %>"></div>
+                    <input type="submit" class="post" value="Share Post"/>
+                </div>
+            </form>
+        <% } %>
+        <div class="posts"></div>
+        <div class="loader">
+            <div class="spinner <%= icons.spinner %>"></div>
+        </div>
+    </div>
+</div>
+<div class="panel filters">
+    <% include ./filters/groups.html %>
+    <% include ./filters/tags.html %>
+</div>
+<% include ../includes/end.html %>

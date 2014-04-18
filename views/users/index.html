@@ -1,23 +1,11 @@
+<% include ../includes/start.html %>
 <% include ../includes/header.html %>
 <div id="backdrop">
     <div id="backdrop-gradient"></div>
     <div id="backdrop-img" style="<%= backdrop %>"></div>
-    <% if(user) { %>
-        <div id="backdrop-nav">
-            <a class="bubble gravatar" href="/users/<%= user.screen_name %>/">
-                <img src="<%= user.gravatar %>" />
-            </a>
-            <a class="bubble color blue" href="/documents/">
-                <div class="<%= icons.online %>"></div>
-            </a>
-            <a class="bubble color red" href="/trending/">
-                <div class="<%= icons.trending %>"></div>
-            </a>
-        </div>
-    <% } %>
     <div id="backdrop-core">
-         <a href="/"><div id="backdrop-logo"><%= logo %></div></a>
          <div id="backdrop-container" class="largerTwo">
+             <% include ../groups/button.html %>
              <div id="backdrop-header">
                 <%= laborator.name %>
                 <% if(laborator.admin) { %>
@@ -57,7 +45,7 @@
     </div>
     <div id="backdrop-footer">
         <ul>
-            <% if(loggedIn) { %>
+            <% if(user && !user.fake) { %>
                 <li><a href="/logout/">Logout</a></li>
             <% } else { %>
                 <li><a href="/login/">Log In</a></li>
@@ -66,4 +54,4 @@
         </ul>
     </div>
 </div>
-<% include ../includes/footer.html %>
+<% include ../includes/end.html %>

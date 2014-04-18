@@ -1,19 +1,14 @@
-<% include ../../../includes/header.html %>
+<% include ../../../includes/start.html %>
 <div id="backdrop">
     <div id="backdrop-core">
          <div id="backdrop-container">
-            <div class="backdrop-text"><%= document.name %></div>
-            <form action="/editor/<%= document.pub_id %>/join/">
-                <div class="loader-bar">
-                    <div class="loader-bar-block"></div>
-                </div>
-            </form>
+            <form action="/editor/<%= document.pub_id %>/join/"></form>
          </div>
     </div>
 </div>
-<div class="content">
-    <div class="header">
-        <div class="bottom">
+<div class="panel main">
+    <% if(header) { %>
+        <div class="subheader">
             <a class="linkable logo" target="_blank" href="/">
                 <img src="/img/logo.png"/>
             </a>
@@ -31,15 +26,15 @@
                     <strong></strong>
                 </div>
             </div>
-            <a class="linkable edit" target="_blank" href="/editor/<%= document.pub_id %>/">
+            <div class="message"></div>
+            <a class="linkable edit" target="_blank" href="/editor/<%= document.pub_id %>/?login=true">
                 Edit in <span>Laborate</span>
             </a>
-            <div class="message"></div>
         </div>
-    </div>
+    <% } %>
     <div class="pane">
-        <textarea id="code" name="code" placeholder="Code goes here..."></textarea>
+        <textarea id="code" name="code"></textarea>
         <div class="shadow-top"></div>
     </div>
 </div>
-<% include ../../../includes/footer.html %>
+<% include ../../../includes/end.html %>

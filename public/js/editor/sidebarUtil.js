@@ -1,17 +1,14 @@
 window.sidebarUtil = {
 	change: function(module, permanent) {
-	    var element = $(".sidebar .list .item[data-key='" + module + "']");
-	    if(module != false && (permanent || !element.hasClass("activated"))) {
-	        $(".sidebar").addClass("menu");
+	    var element = $(".sidebar .options .option[data-key='" + module + "']");
+	    if(module != false || permanent) {
+	        $(".sidebar").addClass("active");
 	        $(".sidebar .pane > .item").hide();
-	        $(".sidebar .list .item").removeClass("activated");
-	        element.addClass("activated");
             $(".sidebar .pane > .item[data-key='" + module + "']").show();
-            $(".sidebar .controller .title").text(element.find(".name").text());
+            $(".sidebar .header .title").text(element.find(".name").text());
         } else {
-            $(".sidebar").removeClass("menu");
-            $(".sidebar .controller .title").text("Menu Panel");
-            $(".sidebar .list .item").removeClass("activated");
+            $(".sidebar").removeClass("active");
+            $(".sidebar .header .title").text("Navigation");
         }
 	},
 	submit: function(form) {
@@ -175,7 +172,7 @@ window.sidebarUtil = {
 	    window.editorUtil.name = title;
 
         $(".sidebar .form[name=settings] .input[name=name]").val(title);
-		$(".header .filter[data-key='file-name'] strong").text(title);
+		$(".subheader .filter[data-key='file-name'] strong").text(title);
 		$("title").text(name + notify + window.config.delimeter + window.config.name);
 		if(direction == "out") {
     		window.socketUtil.socket.emit('editorExtras' , {
@@ -432,17 +429,19 @@ window.sidebarUtil = {
                     }
 
                     $(".sidebar .form[name='invite'] .laborators")
-                        .append("                                                           \
-                            <div class='item " + item + "'                                  \
-                                 data-id='" + laborator.id + "'                             \
-                                 data-permission='" + laborator.permission.id + "'>         \
-                                 <div class='gravatar'>                                     \
-                                    <img src='" + laborator.gravatar + "'>                  \
-                                 </div>                                                     \
-                                 <div class='name'>" + laborator.screen_name + "</div>      \
-                                 <div class='" + settings + "'></div>                       \
-                                 <div class='bubble u" + laborator.id + "'></div>           \
-                            </div>                                                          \
+                        .append("                                                                              \
+                            <div class='item " + item + "'                                                     \
+                                 data-id='" + laborator.id + "'                                                \
+                                 data-permission='" + laborator.permission.id + "'>                            \
+                                 <div class='gravatar'>                                                        \
+                                    <img src='" + laborator.gravatar + "'>                                     \
+                                 </div>                                                                        \
+                                 <a class='name' href='/users/" + laborator.screen_name + "/' target='_blank'> \
+                                    " + laborator.screen_name + "                                              \
+                                 </a>                                                                          \
+                                 <div class='" + settings + "'></div>                                          \
+                                 <div class='bubble u" + laborator.id + "'><div></div></div>                   \
+                            </div>                                                                             \
                         ");
 
                     if(data.laborators.end(key)) {
@@ -464,12 +463,12 @@ window.sidebarUtil = {
 
                         if(!header.empty) {
                             if(permissions[1].count == 0 && permissions[2].count == 0) {
-                                $(".chat .controller").text("Chat Room");
+                                $(".chat .header").text("Chat Room");
                             } else {
-                                $(".chat .controller").html(header.join(delimiter));
+                                $(".chat .header").html(header.join(delimiter));
                             }
                         } else {
-                            $(".chat .controller").text("Chat Room");
+                            $(".chat .header").text("Chat Room");
                         }
                     }
                 });
@@ -553,12 +552,15 @@ window.sidebarUtil = {
 	},
 	print: function() {
         $("html").addClass("print");
-        window.editorUtil.resize();
-        window.print();
+
         setTimeout(function() {
-            $("html").removeClass("print");
-            window.editorUtil.resize();
-        }, 100);
+            window.editor.refresh();
+            window.print();
+
+            setTimeout(function() {
+                $("html").removeClass("print");
+            }, 100);
+        }, 600);
 	},
 	download: function() {
         var _this = this;
@@ -654,11 +656,9 @@ window.sidebarUtil = {
     	    .html(button.attr("data-original"))
     	    .attr({
                 "disabled": null,
-                "data-original": null
             });
 	},
 	buttonLoading: function(button) {
-	    this.buttonReset(button);
 	    if(!button.is(":disabled")) {
             button
                 .attr({

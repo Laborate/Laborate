@@ -11,13 +11,12 @@ $(function() {
         theme: "laborate",
         indentWithTabs: true,
         smartIndent: true,
-        autofocus: true,
+        autofocus: !config.embed,
         dragDrop: true,
         autoCloseBrackets: true,
         autoCloseTags: true,
         highlightSelectionMatches: true,
         styleSelectedText: true,
-        styleActiveLine: false,
         gutters: (config.embed) ? false : [
             "CodeMirror-linenumbers",
             "breakpoints"
@@ -111,19 +110,18 @@ $(function() {
     });
 
     //Resize Editor on Window Resize
-    $(window).resize(function() {
-        window.editorUtil.resize();
+    if(!config.embed) {
+        $(window).resize(function() {
 
-        if($(window).width() < 1077) {
-            $(".terminal").width($(".CodeMirror").width());
-        } else {
-            $(".terminal").width("")
-        }
-    });
+            if($(window).width() < 1100) {
+                window.editorUtil.fullscreen(true, false);
+            }
+        });
+    }
 
     //Toogle Full Screen Mode
     $(".fullscreen-toggle").on("click", function() {
-        window.editorUtil.fullscreen(window.editorUtil.fullscreenActive);
+        window.editorUtil.fullscreen(!window.editorUtil.fullscreenActive);
     });
 
     //Toogle Terminal

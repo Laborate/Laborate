@@ -7,7 +7,7 @@ exports.reload = function(req, res, next) {
             next();
         });
     } else {
-        next();
+        req.routes.auth.util.loginGenerate(req, res, next);
     }
 }
 
@@ -25,6 +25,18 @@ exports.organization = function(req, res, next) {
     } else {
         next();
     }
+}
+
+exports.shortner = function(req, res, next) {
+    req.models.shortner.one({
+        pub_id: req.param("code")
+    }, function(error, shortned) {
+        if(!error && shortned) {
+            res.redirect(shortned.url);
+        } else {
+            res.error(404, null, error);
+        }
+    });
 }
 
 exports.sitemap = function(req, res, next) {

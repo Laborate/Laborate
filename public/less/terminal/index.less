@@ -10,43 +10,64 @@ body {
     height: 100%;
     color: #fff;
 
+    .backdrop {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+
+        &.image {
+            z-index: 1;
+        }
+
+        &.darkener {
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.7);
+        }
+    }
+
     .container {
+        position: relative;
+        z-index: 3;
         width: 250px;
 
-        .logo {
-            font-size: 28px;
-            font-family: "Not Just Groovy";
-            width: 100%;
+        .status {
+            font-size: 18px;
             text-align: center;
-            margin-bottom: 5px;
+
+            a {
+                color: @color_blue;
+
+                &:hover {
+                    text-decoration: underline;
+
+                    &:active {
+                        color: darken(@color_blue, 5%);
+                    }
+                }
+            }
         }
 
         .listing {
             overflow: auto;
             height: 250px;
-            background: lighten(@color_terminal, 10%);
-            .box-shadow(0 3px 3px darken(@color_terminal, 5%));
+            background: rgba(255, 255, 255, 0.2);
+            .box-shadow(0 3px 3px rgba(0, 0, 0, 0.2));
             .border-radius(3px);
 
             a {
                 display: block;
                 padding: 15px;
-                border-top: solid 1px lighten(@color_terminal, 15%);
                 .clearfix();
 
-                &:first-child {
-                    border: none;
-                }
-
                 &:nth-child(even) {
-                    background: lighten(@color_terminal, 12%);
+                    background: rgba(0, 0, 0, 0.1);
                 }
 
                 &:hover {
-                    background: lighten(@color_terminal, 15%);
+                    background: rgba(0, 0, 0, 0.3);
 
                     &:active {
-                        background: lighten(@color_terminal, 20%);
+                        background: rgba(0, 0, 0, 0.4);
                     }
                 }
 

@@ -1,6 +1,6 @@
 $(function() {
     /* Core Operations */
-    $(".sidebar .list .item").on("click", function() {
+    $(".sidebar .options .option").on("click", function() {
         window.sidebarUtil.change($(this).attr("data-key"), false);
     });
 
@@ -17,7 +17,7 @@ $(function() {
         return false;
     });
 
-    $(".sidebar .form[name='invite'] input").on("keyup", function() {
+    $(".sidebar .form[name='invite'] input").keyup(function() {
         window.sidebarUtil.screenNames($(this).val());
     });
 

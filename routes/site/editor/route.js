@@ -14,7 +14,7 @@ module.exports = function(app, routes) {
 
     app.get('/editor/:document/download', auth.util.restrictAccess, editor.download);
     app.get('/editor/:document/permissions', auth.util.restrictAccess, auth.util.xhr, editor.permissions);
-    app.post('/editor/exists', auth.util.restrictAccess,  editor.exists);
+
     app.post('/editor/:document/update', auth.util.restrictAccess, auth.util.xhr, documents.stats, editor.update);
     app.post('/editor/:document/remove', auth.util.restrictAccess, auth.util.xhr, editor.remove);
     app.post('/editor/:document/commit', auth.util.restrictAccess, auth.util.xhr, editor.commit);

@@ -13,8 +13,8 @@ exports.restrictAccess = function(req, res, next) {
                     user.set_recovery(req, res);
                     if(req.session.user.verify && !(/^\/verify/.exec(req.url))) {
                             res.redirect("/verify/");
-                    } else {
-                        if(next) next();
+                    } else if(next) {
+                        next();
                     }
                 } else {
                     res.error(401, false, error);
@@ -33,12 +33,12 @@ exports.restrictAccess = function(req, res, next) {
             });
         } else {
             if(config.cookies.rememberme in req.cookies) {
-                req.models.users.find({
+                req.models.users.one({
                     recovery: req.cookies[config.cookies.rememberme]
                 }, function(error, user) {
-                    if(!error && user.length == 1) {
-                        user[0].set_recovery(req, res);
-                        req.session.user = user[0];
+                    if(!error && user) {
+                        user.set_recovery(req, res);
+                        req.session.user = user;
                         req.session.save();
                         res.redirect(req.originalUrl);
                     } else {
@@ -55,16 +55,15 @@ exports.restrictAccess = function(req, res, next) {
 exports.loginGenerate = function(req, res, next) {
     if(!req.session.user) {
         if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({
+            req.models.users.one({
                 recovery: req.cookies[config.cookies.rememberme]
             }, function(error, user) {
-                if(!error && user.length == 1) {
-                    user[0].set_recovery(req, res);
-                    req.session.user = user[0];
-                    next();
-                } else {
-                    next();
+                if(!error && user) {
+                    user.set_recovery(req, res);
+                    req.session.user = user;
                 }
+
+                next();
             });
         } else {
             next();
@@ -77,18 +76,18 @@ exports.loginGenerate = function(req, res, next) {
 
 exports.loginCheck = function(req, res, next) {
     if(req.session.user) {
-        res.redirect('/documents/');
+        res.redirect(config.general.default);
     } else {
         if(config.cookies.rememberme in req.cookies) {
-            req.models.users.find({
+            req.models.users.one({
                 recovery: req.cookies[config.cookies.rememberme]
             }, function(error, user) {
-                if(!error && user.length == 1) {
-                    user[0].set_recovery(req, res);
-                    req.session.user = user[0];
-                    res.redirect('/documents/');
-                } else {
-                    if(next) next();
+                if(!error && user) {
+                    user.set_recovery(req, res);
+                    req.session.user = user;
+                    res.redirect(config.general.default);
+                } else if(next) {
+                    next();
                 }
             });
         } else {
@@ -101,6 +100,14 @@ exports.removeRedirect = function(req, res, next) {
     delete req.session.redirect_url;
     req.session.save();
     next();
+}
+
+exports.robotDenied = function(req, res, next) {
+    if(req.robot && !req.session.user) {
+        res.error(404);
+    } else {
+        next();
+    }
 }
 
 exports.loginDenied = function(req, res, next) {
@@ -127,7 +134,7 @@ exports.xhr = function(req, res, next) {
     if(req.xhr) {
         next();
     } else {
-        res.redirect("/documents/");
+        res.redirect(config.general.default);
     }
 }
 
@@ -136,7 +143,7 @@ exports.login = function(req, res, next) {
     var name = $.trim(req.param('name'));
     var password = req.models.users.hash($.trim(req.param('password')));
 
-    req.models.users.find({
+    req.models.users.one({
         or: [
             {
                 email: name,
@@ -147,10 +154,8 @@ exports.login = function(req, res, next) {
                 password: password
             }
         ]
-    }, function(error, users) {
-        if(!error && users.length == 1) {
-            var user = users[0];
-
+    }, function(error, user) {
+        if(!error && user) {
             user.has_organization(req.session.organization.id, function(has_organization) {
                 if(has_organization) {
                     if(user.admin && $.isEmptyObject(user.stripe)) {
@@ -159,7 +164,7 @@ exports.login = function(req, res, next) {
                             req.session.user = user;
                             res.json({
                                 success: true,
-                                next: req.session.redirect_url || "/documents/"
+                                next: req.session.redirect_url || config.general.default
                              });
                              delete req.session.reset;
                              delete req.session.redirect_url;
@@ -169,7 +174,7 @@ exports.login = function(req, res, next) {
                         req.session.user = user;
                         res.json({
                             success: true,
-                            next: req.session.redirect_url || "/documents/"
+                            next: req.session.redirect_url || config.general.default
                         });
                         delete req.session.redirect_url;
                         req.session.save();
@@ -266,14 +271,14 @@ exports.register = function(req, res, next) {
 
 exports.verify = function(req, res, next) {
     if(!req.session.user.verify) {
-        res.redirect("/documents/");
+        res.redirect(config.general.default);
     } else if($.trim(req.param('code')) != req.session.user.verify) {
         res.error(402);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
             user.verified(function(user) {
                 req.session.user = user;
-                res.redirect(req.session.redirect_url || "/welcome/");
+                res.redirect("/welcome/");
                 delete req.session.redirect_url;
                 req.session.save();
             });
@@ -283,7 +288,7 @@ exports.verify = function(req, res, next) {
 
 exports.verifyResend = function(req, res, next) {
     if(!req.session.user.verify) {
-        res.redirect("/documents/");
+        res.redirect(config.general.default);
     } else {
         req.models.users.get(req.session.user.id, function(error, user) {
             if(!error) {
@@ -314,7 +319,7 @@ exports.reload = function(req, res, next) {
             if(!error && user) {
                 user.set_recovery(req, res);
                 req.session.user = user;
-                res.redirect(req.session.last_page || '/documents/');
+                res.redirect(req.session.last_page || config.general.default);
                 delete req.session.reset;
                 delete req.session.last_page;
                 req.session.save();
@@ -328,12 +333,10 @@ exports.reload = function(req, res, next) {
 }
 
 exports.reset = function(req, res, next) {
-    req.models.users.find({
+    req.models.users.one({
         email: req.param("email")
-    }, function(error, users) {
-        if(!error && users.length == 1) {
-            var user = users[0];
-
+    }, function(error, user) {
+        if(!error && user) {
             user.has_organization(req.session.organization.id, function(has_organization) {
                 if(has_organization) {
                     user.set_reset();
@@ -366,16 +369,15 @@ exports.reset = function(req, res, next) {
 }
 
 exports.reset_password = function(req, res, next) {
-    req.models.users.find({
+    req.models.users.one({
         reset: req.param("code")
-    }, function(error, users) {
-        if(!error && users.length == 1) {
+    }, function(error, user) {
+        if(!error && user) {
             if($.trim(req.param("password")) != $.trim(req.param("password_confirm"))) {
                 res.error(200, "Passwords Do Not Match");
             } else if($.trim(req.param('password')).length <= 6) {
                 res.error(200, "Password Is To Short");
             } else {
-                var user = users[0];
 
                 user.save({
                     reset: null,

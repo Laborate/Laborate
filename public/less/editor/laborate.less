@@ -26,7 +26,7 @@
 }
 
 .cm-s-laborate {
-    background: transparent;
+    background: lighten(@color_panels_main, 2%);
     color: #000;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .cm-s-laborate .CodeMirror-gutters {
-    background: @color_body;
+    background: lighten(@color_panels_main, 2%);
     border-right: 0px;
     padding-right: 10px;
 }
@@ -231,6 +231,7 @@
     .cm-s-laborate {
         height: 100% !important;
         overflow: visible;
+        background: #fff !important;
     }
 
     .cm-s-laborate .CodeMirror-gutters {

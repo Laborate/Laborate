@@ -6,7 +6,7 @@ module.exports = function(callback) {
         async.each(fs.readdirSync(__dirname), function(directory, next) {
             var path = __dirname + "/" + directory;
 
-            if(fs.statSync(path).isDirectory()) {
+            if(directory != "template" && fs.statSync(path).isDirectory()) {
 
                 if(fs.existsSync(path + "/index.js")) {
                     routes[directory] = require(path);

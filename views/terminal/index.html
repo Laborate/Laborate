@@ -1,17 +1,21 @@
+<% include ../includes/start.html %>
 <% include ../includes/header.html %>
+<div class="backdrop image" style="<%= backdrop %>"></div>
+<div class="backdrop darkener"></div>
 <div class="container">
-    <a href="/">
-        <div class="logo"><%= logo %></div>
-    </a>
-    <div class="listing">
-        <% $.each(locations, function(index, location) { %>
-            <% if(location.type == "sftp") { %>
-                <a href="/terminals/<%= index %>/">
+    <% if(!locations.empty) { %>
+        <div class="listing">
+            <% $.each(locations, function(index, location) { %>
+                <a href="/terminals/<%= location.id %>/">
                     <div class="icon <%= icons.sftp %>"></div>
                     <div class="name"><%= location.name %></div>
                 </a>
-            <% } %>
-        <% }); %>
-    </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="status">
+            You do not have any SFTP locations, create <a href="/documents/popup/add/location/">one</a>
+        </div>
+    <% } %>
 </div>
-<% include ../includes/footer.html %>
+<% include ../includes/end.html %>

@@ -1,0 +1,68 @@
+<!--
+<% include ./printout.html %>
+-->
+<!DOCTYPE html>
+<html itemscope="itemscope" itemtype="http://schema.org/WebPage" lang="en">
+    <head>
+        <% include ./meta.html %>
+
+        <!-- CSS -->
+        <%- css %>
+
+        <!-- Site Config -->
+        <script type="text/javascript">
+            window.config = {
+                csrf: "<%= csrf %>",
+                host: "<%= host %>",
+                port: <%= port || null %>,
+                socket: "<%= socket %>",
+                title: "<%= full_title %>",
+                name: "<%= site_title %>",
+                delimeter: "<%= site_delimeter %>",
+                pageTrack: <%= pageTrack %>,
+                gravatar: "<%= gravatar %>",
+                logo: "<%= logos["500"] + random %>",
+                apps: <%- JSON.stringify(apps) %>,
+                icons: <%- JSON.stringify(icons) %>,
+                logged_in: <%= (user && !user.fake) ? true : false %>,
+                user: "<%= (user && !user.fake) ? user.pub_id : "" %>",
+                social: {
+                    <% $.each(social, function(key, value) { %>
+                        <%= key %>: "<%= value.name %>",
+                    <% }); %>
+                },
+
+                <% $.each(config, function(key, value) { %>
+                    <% if(typeof value == "boolean") { %>
+                        <%= key %>: <%- value %>,
+                    <% } else if(typeof value == "object") { %>
+                        <%= key %>: <%- JSON.stringify(value) %>,
+                    <% } else if(typeof value == "number") { %>
+                        <%= key %>: <%= value %>,
+                    <% } else  { %>
+                        <%= key %>: "<%= value %>",
+                    <% } %>
+                <% }); %>
+            }
+        </script>
+
+        <!-- Javascript -->
+        <%- js %>
+
+        <!-- Raven Exception Handling -->
+        <script type="text/javascript">
+            Raven.config("<%= sentry %>").install();
+            window.onerror = Raven.process;
+
+            <% if(production) { %>
+                $(function() {
+                    console.log($("#printout").text());
+                });
+            <% } %>
+        </script>
+    </head>
+    <body class="<%= (!organization.fake) ? "organization" : "" %> <%= (mobile) ? "mobile" : "" %> <%= (embed) ? "embed" : "" %>">
+        <% if(production) { %>
+            <div id="printout" class="hidden"><% include ./printout.html %></div>
+        <% } %>
+        <div class="error_popup <%= header_class %>"></div>

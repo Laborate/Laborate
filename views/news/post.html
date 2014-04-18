@@ -1,0 +1,25 @@
+<% include ../includes/start.html %>
+<% include ../includes/header.html %>
+<div class="panel main centered">
+    <div class="container">
+        <% if(search) { %>
+            <div class="back">
+                Showing posts tagged with <strong><%= search %></strong>.
+                <a href="/news/">Return to main feed...</a>
+            </div>
+        <% } else { %>
+            <div class="back">
+                <a href="/news/">Return to main feed...</a>
+            </div>
+        <% } %>
+        <div class="posts">
+            <% if(posts) { %>
+                <% include ./posts/index.html %>
+            <% } %>
+        </div>
+        <div class="loader">
+            <div class="spinner <%= icons.spinner %>"></div>
+        </div>
+    </div>
+</div>
+<% include ../includes/end.html %>

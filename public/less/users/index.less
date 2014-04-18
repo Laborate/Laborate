@@ -2,6 +2,21 @@
 @import '../compless/all';
 
 #backdrop-core {
+    #backdrop-header {
+        text-align: left;
+        padding-left: 20px;
+        .box-sizing(border-box);
+    }
+
+    .add-groups {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 15px;
+        padding: 9px 11px;
+        .border-radius(0 5px 0 0);
+    }
+
     .gravatar {
         width: 125px;
         height: 125px;
@@ -18,6 +33,7 @@
     }
 
     .information {
+        position: relative;
         .float-left();
 
         .item {

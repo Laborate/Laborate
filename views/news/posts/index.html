@@ -1,0 +1,31 @@
+<% if(!posts.empty) { %>
+    <% $.each(posts, function(index, post) { %>
+        <% if(allow_replies || !post.parent) { %>
+            <div class="post"
+                id="post_<%= post.pub_id %>"
+                data-id="<%= post.pub_id %>"
+                data-from="<%= post.owner.screen_name %>"
+                data-tags="<%=: post.tags | map:'name' | join:',' %>"
+            >
+                <div class="gravatar left">
+                    <img src="<%= post.owner.gravatar %>"/>
+                </div>
+                <div class="data right">
+                    <a class="name" href="/users/<%= post.owner.screen_name %>/">
+                        <%= post.owner.name %>
+                    </a>
+                    <div class="bubble">
+                        <% if(post.parent) { %>
+                            <a href="/news/<%= post.parent.pub_id %>/" class="is_reply <%= icons.reply %>"></a>
+                        <% } %>
+                        <div class="arrow"></div>
+                        <div class="information"><%- post.content %></div>
+                        <% include ./bottom.html %>
+                        <% include ./replies.html %>
+                        <% include ./comment.html %>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    <% }); %>
+<% } %>

@@ -22,7 +22,7 @@ exports.setup = function(req, res, next) {
     res.renderOutdated = function(view, data) {
         if(req.mobile) {
             res.render('landing/mobile', {
-                title: null,
+                title: "",
                 js: clientJS.renderTags("mobile"),
                 css: clientCSS.renderTags("backdrop", "mobile"),
                 backdrop: req.backdrop(),
@@ -31,8 +31,6 @@ exports.setup = function(req, res, next) {
                     animate: false
                 }
             }, outdatedhtml.makeoutdated(req, res));
-        } else if(req.robot) {
-            res.render("robot", data, outdatedhtml.makeoutdated(req, res));
         } else {
             res.render(view, data, outdatedhtml.makeoutdated(req, res));
         }
@@ -78,11 +76,29 @@ exports.imports = function(req, res, next) {
     req.error = lib.error;
     req.geoip = lib.geoip;
     req.sitemap = lib.sitemap;
+    req.markdown = lib.markdown(req.session.server);
+    req.markdown_links = lib.markdown_links;
     req.location = lib.geoip(req.address.ip) || {
         city: null,
         region: null,
         country: null,
         ll: [null, null]
+    };
+    req.fake = {
+        user: {
+            id: null,
+            name: "An Amazaing Laborator",
+            screen_name: "laborator",
+            gravatar: config.gravatar,
+            fake: true,
+            groups: [],
+            organizations: []
+        },
+        organization: {
+            fake: true,
+            register: true,
+            logos: {}
+        }
     };
 
     //Device Info
@@ -130,24 +146,23 @@ exports.imports = function(req, res, next) {
         }
     }
 
-    //Site Routes
-    if(req.verified) {
-        require("../site/routes")(function(routes) {
-            req.routes = routes;
-        });
-
     //Api Routes
-    } else if(req.subdomains.indexOf("api") != -1) {
-        require("../site/api")(function(routes) {
+    if(req.subdomains.indexOf("api") != -1) {
+        require("../api/routes")(function(routes) {
             req.routes = routes;
         });
 
     //Webhooks Routes
     } else if(req.subdomains.indexOf("webhook") != -1) {
-        require("../site/webhooks")(function(routes) {
+        require("../webhooks/routes")(function(routes) {
             req.routes = routes;
         });
 
+    //Site Routes
+    } else {
+        require("../site/routes")(function(routes) {
+            req.routes = routes;
+        });
     }
 
     //Tracking
@@ -156,7 +171,7 @@ exports.imports = function(req, res, next) {
     if(!user.admin) {
         req.redis.get("tracking", function(error, data) {
             var tracking = (data) ? JSON.parse(data) : [];
-            var organization = req.session.organization.id;
+            var organization = req.session.organization;
 
             tracking.push({
                 agent: req.headers['user-agent'],
@@ -206,12 +221,13 @@ exports.locals = function(req, res, next) {
     res.locals.port = config.general.port;
     res.locals.production = config.general.production;
     res.locals.host = req.session.server;
+    res.locals.url = req.url;
     res.locals.socket = req.session.server;
     res.locals.site_title = req.session.organization.logo || config.general.company;
     res.locals.site_delimeter = config.general.delimeter.web;
     res.locals.description = config.general.description.join("");
     res.locals.sentry = config.sentry.browser;
-    res.locals.google_verification = config.google.verification;
+    res.locals.google = config.google;
     res.locals.company = config.general.company;
     res.locals.logo = req.session.organization.logo || config.general.logo;
     res.locals.social = config.social;
@@ -220,7 +236,7 @@ exports.locals = function(req, res, next) {
     res.locals.pageTrack = true;
     res.locals.config = {};
     res.locals.icons = config.icons;
-    res.locals.user = req.session.user;
+    res.locals.user = req.session.user || req.fake.user;
     res.locals.organization = req.session.organization;
     res.locals.gravatar = (req.session.user) ? req.session.user.gravatar : config.gravatar;
     res.locals.mobile = req.mobile;
@@ -229,6 +245,9 @@ exports.locals = function(req, res, next) {
     res.locals.hiring = config.general.hiring;
     res.locals.random = "?rand=" + config.random;
     res.locals.embed = false;
+    res.locals.header = "";
+    res.locals.header_class = "";
+    res.locals.type = "website";
 
     res.locals.apps = {
         sftp: {
@@ -255,13 +274,17 @@ exports.locals = function(req, res, next) {
             link: "/google/token/"
         }
     };
-    res.locals.favicons = (!$.isEmptyObject(req.session.organization.icons)) ? req.session.organization.icons : {
-        "196": res.locals.host + "/favicon/196.png",
-        "160": res.locals.host + "/favicon/160.png",
-        "114": res.locals.host + "/favicon/114.png",
-        "72": res.locals.host + "/favicon/72.png",
-        "57": res.locals.host + "/favicon/57.png",
-        "32": res.locals.host + "/favicon/32.png"
+    res.locals.logos = {
+        "logo":  req.session.organization.logos["logo"]  || res.locals.host + "/img/logo.png",
+        "graph": req.session.organization.logos["graph"] || res.locals.host + "/favicon/196.png",
+        "1000":  req.session.organization.logos["1000"]  || res.locals.host + "/favicon/1000.png",
+        "500":   req.session.organization.logos["500"]   || res.locals.host + "/favicon/500.png",
+        "196":   req.session.organization.logos["196"]   || res.locals.host + "/favicon/196.png",
+        "160":   req.session.organization.logos["160"]   || res.locals.host + "/favicon/160.png",
+        "114":   req.session.organization.logos["114"]   || res.locals.host + "/favicon/114.png",
+        "72":    req.session.organization.logos["72"]    || res.locals.host + "/favicon/72.png",
+        "57":    req.session.organization.logos["57"]    || res.locals.host + "/favicon/57.png",
+        "32":    req.session.organization.logos["32"]    || res.locals.host + "/favicon/32.png"
     };
 
     next();

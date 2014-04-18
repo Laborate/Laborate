@@ -120,14 +120,12 @@ exports.contents = function(req, res, next) {
                         });
                         break;
                 }
+            } else if(error.message == "Bad credentials") {
+                res.error(200, "Bad Github Oauth Token", error);
+            } else if(error.message == "This repository is empty.") {
+                res.json([]);
             } else {
-                if(error.message == "Bad credentials") {
-                    res.error(200, "Bad Github Oauth Token", error);
-                } if(error.message == "This repository is empty.") {
-                    res.json([]);
-                } else {
-                    res.error(200, "Failed To Load Github Contents", error);
-                }
+                res.error(200, "Failed To Load Github Contents", error);
             }
         });
     } else {

@@ -1,0 +1,135 @@
+@import '../core/index';
+@import '../compless/all';
+
+.add-groups {
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    background: lighten(@color_blue, 10%);
+    border: solid 1px transparent;
+    padding: 6px 7px;
+    display: inline-block;
+    .border-radius(3px);
+    .transition(background);
+
+    &.disabled {
+        opacity: 1;
+        cursor: default;
+        background: @color_purple;
+    }
+
+    &:not(.disabled):hover {
+       background: @color_blue;
+
+       &:active {
+           background: darken(@color_blue, 10%);
+        }
+    }
+
+    &.green {
+        background: @color_green;
+
+        &:hover {
+           background: darken(@color_green, 5%);
+
+           &:active {
+               background: darken(@color_green, 10%);
+            }
+        }
+    }
+}
+
+.popup-groups {
+    position: absolute;
+    z-index: 3;
+    color: #fff;
+    font-size: 14px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        left: -5px;
+        top: 50%;
+        margin-top: -10px;
+        border: solid 10px transparent;
+        background: lighten(@color_header, 15%);
+        display: block;
+        border-color: lighten(@color_header, 15%);
+        width: 0;
+        .border-radius(0 2px);
+        .transform(rotate(45deg));
+    }
+
+    .create {
+        position: relative;
+        z-index: 2;
+        background: lighten(@color_header, 15%);
+        width: 180px;
+        overflow: hidden;
+        padding: 10px 15px;
+        text-align: center;
+        .border-radius(4px);
+
+        a {
+            color: lighten(@color_blue, 15%);
+
+            &:hover {
+                text-decoration: underline;
+
+                &:active {
+                    color: lighten(@color_blue, 20%);
+                }
+            }
+        }
+    }
+
+    .list {
+        position: relative;
+        z-index: 2;
+        background: lighten(@color_header, 15%);
+        min-width: 125px;
+        overflow: hidden;
+        padding: 5px;
+        .border-radius(4px);
+
+        .item {
+            cursor: pointer;
+            padding: 5px;
+            .clearfix();
+
+            &:first-child {
+                .border-radius(3px 3px 0 0);
+            }
+
+            &:last-child {
+                .border-radius(0 0 3px 3px);
+            }
+
+            &:only-child {
+                .border-radius(3px);
+            }
+
+            &:hover {
+                background: lighten(@color_header, 25%);
+
+                &:active {
+                    background: lighten(@color_header, 35%);
+                }
+            }
+
+            & > * {
+                .float-left();
+            }
+
+            .icon {
+                margin: 1px 10px 0 0;
+            }
+
+            .name {
+                width: 90px;
+                .ellipsis();
+            }
+        }
+    }
+}

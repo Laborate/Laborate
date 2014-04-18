@@ -4,7 +4,6 @@
 window.editorUtil = {
     clean: true,
     fullscreenActive: false,
-    fullscreeenTransitioning: false,
     name: "",
     interval: null,
     notification: function(message, permanent) {
@@ -24,77 +23,53 @@ window.editorUtil = {
     terminal: function(show) {
         var _this = this;
 
-        if($(window).width() < 1077) {
-            $(".terminal").width($(".CodeMirror").width());
-        } else {
-            $(".terminal").width("")
-        }
-
         if($(".terminal").hasClass("active") || show == false) {
             $(".terminal iframe").fadeOut(150);
 
             setTimeout(function() {
                 $(".terminal iframe").attr("src", "");
                 $(".terminal, .terminal-toggle").removeClass("active");
-                setTimeout(_this.resize, 500);
             }, 200);
         } else {
             var terminal =  "/terminals/" + $('.terminal iframe').data("location") + "/";
             $(".terminal, .terminal-toggle").addClass("active");
             $('.terminal iframe')
                 .hide()
-                .attr("src", terminal)
+                .attr("src", terminal + "embed/")
                 .load(function() {
                     $(this).show();
                 });
             $(".terminal a").attr("href", terminal);
-            setTimeout(_this.resize, 500);
-        }
-    },
-    fullscreen: function(show) {
-        var _this = this;
-        _this.fullscreenActive = !show;
-        _this.fullscreeenTransitioning = true;
-        $.cookie("fullscreen", !show, {
-            path: '/editor',
-            expires: 365
-        });
-
-        if(show) {
-            $(".sidebar")
-                .removeClass("fullscreen");
-
-            setTimeout(function() {
-                $(".content .fullscreen-toggle")
-                    .removeClass(window.config.icons.contract + " active")
-                    .addClass(window.config.icons.expand);
-                $(".sidebar .profile , .header .top").slideDown(500);
-                $(".chat").animate({
-                    top: 95,
-                    height: $(window).height() - $(".header .top").outerHeight()
-                }, 500);
-            }, 100);
-        } else {
-            $(".content .fullscreen-toggle")
-                .removeClass(window.config.icons.expand)
-                .addClass(window.config.icons.contract + " active");
-            $(".sidebar .profile , .header .top").slideUp(500);
-            $(".chat").animate({
-                top: 0,
-                height: $(window).height()
-            }, 500);
-
-            setTimeout(function() {
-                $(".sidebar")
-                    .addClass("fullscreen");
-            }, 600);
         }
 
         setTimeout(function() {
-            _this.fullscreeenTransitioning = false;
-            _this.resize();
-            window.chat.resize();
-        }, 600);
+            window.editor.refresh();
+        }, 500);
+    },
+    fullscreen: function(fullscreen, cookie) {
+        var _this = this;
+        _this.fullscreenActive = fullscreen;
+
+        if(cookie != false) {
+            $.cookie("fullscreen", fullscreen, {
+                path: '/editor',
+                expires: 365
+            });
+        }
+
+        if(!fullscreen) {
+            $(".main .fullscreen-toggle")
+                .removeClass(window.config.icons.contract + " active")
+                .addClass(window.config.icons.expand);
+
+            $(".panel").removeClass("fullscreen");
+        } else {
+            $(".main .fullscreen-toggle")
+                .removeClass(window.config.icons.expand)
+                .addClass(window.config.icons.contract + " active");
+
+            $(".panel").addClass("fullscreen");
+        }
     },
     setChanges: function(direction, data, override) {
         window.editorUtil.setInfo();
@@ -191,18 +166,20 @@ window.editorUtil = {
             } else if(direction == "in") {
                 var user = window.users[data.from];
 
-                if(user.selection) {
-                    user.selection.clear();
-                }
+                if(user) {
+                    if(user.selection) {
+                        user.selection.clear();
+                    }
 
-                if(data.leave) {
-                    user.hide();
-                } else if(data.cord) {
-                    window.editor.addWidget(data.cord, user.cursor.get(0), false);
-                } else if(data.selection) {
-                    user.selection = window.editor.markText(data.selection.from, data.selection.to, {
-                        "className": "u" + data.from
-                    });
+                    if(data.leave) {
+                        user.hide();
+                    } else if(data.cord) {
+                        window.editor.addWidget(data.cord, user.cursor.get(0), false);
+                    } else if(data.selection) {
+                        user.selection = window.editor.markText(data.selection.from, data.selection.to, {
+                            "className": "u" + data.from
+                        });
+                    }
                 }
             }
         }
@@ -216,14 +193,6 @@ window.editorUtil = {
         //File Line Count
         $(".filter[data-key='file-lines'] strong").text(file.split("\n").length);
     },
-    resize: function() {
-        if(!window.editorUtil.fullscreeenTransitioning) {
-            window.editor.setSize("",
-                $(window).height() - $(".header").height() - $(".terminal").height() - (parseInt($(".terminal").css("bottom"))|| 0)
-            );
-            editor.refresh();
-        }
-    },
     setMode: function(name, object) {
         window.sidebarUtil.defaultLanguage(name);
         CodeMirror.autoLoadMode(window.editor, $.trim(object.mode));
@@ -234,12 +203,9 @@ window.editorUtil = {
             setTimeout(function() {
                 if(editor.getMode().name == "null") {
                     window.editor.setOption("mode", $.trim(object.mode));
-                    setTimeout(function () {
-                        window.editor.refresh();
-                    }, 100);
                 }
-            }, 100);
-        }, 100);
+            }, 500);
+        }, 500);
     },
     setModeExtension: function(extension) {
         if(extension) {
@@ -329,17 +295,17 @@ window.editorUtil = {
                             }
                         ]);
                     } else {
-                        if(json.error_message) {
-                            window.editorUtil.error(json.error_message, json.redirect_url);
-                        } else {
-                            window.location.href = json.redirect_url;
-                        }
+                        window.editorUtil.error(json.error_message, json.redirect_url);
                     }
                 });
             }
         }, 100);
     },
     error: function(message, url) {
+        if(config.embed) {
+            url = true;
+        }
+
         window.socketUtil.socket.removeAllListeners();
         window.backdrop.error(message, url);
     }

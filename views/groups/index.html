@@ -1,0 +1,37 @@
+<% include ../includes/start.html %>
+<% include ../includes/header.html %>
+<div class="panel main">
+    <div class="container listing">
+        <a href="/groups/create/" class="group blank">
+            <div class="create <%= icons.add_circle_full %>"></div>
+        </a>
+        <% $.each(groups, function(index, group) { %>
+            <% if(!(group.private && group.owner_id != user.id)) { %>
+                <a class="group" href="/groups/<%= group.pub_id %>/" style="<%= background("blurry") %>">
+                    <div class="hovered <%= icons.forward %>"></div>
+                    <div class="cover"></div>
+                    <div class="info">
+                        <div class="left">
+                            <div class="name">
+                                <%= group.name %>
+                            </div>
+                            <div class="count">
+                                <% var count = group.exclude(user.id).length; %>
+                                <div class="count"><%=: count | format %> <%=: "Member" | pluralize:(count != 1) %></div>
+                            </div>
+                        </div>
+                        <% if(group.private) { %>
+                            <div class="icon <%= icons.locked %>"></div>
+                        <% } %>
+                    </div>
+                    <div class="gravatars">
+                        <% $.each(group.exclude(user.id).slice(0, 17), function(index, laborator) { %>
+                            <div class="gravatar" style="background-image: url('<%= laborator.gravatar %>')"></div>
+                        <% }); %>
+                    </div>
+                </a>
+            <% } %>
+        <% }); %>
+    </div>
+</div>
+<% include ../includes/end.html %>

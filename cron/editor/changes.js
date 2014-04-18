@@ -2,7 +2,7 @@ var async = require("async");
 
 require('../init')("editor.changes", function() {
     var _this = this;
-    _this.redis.keys("editor*", function(error, documents) {
+    _this.redis.keys("editor:*", function(error, documents) {
         if(!error && !documents.empty) {
             async.each(documents, function(room, next) {
                 _this.redis.get(room, function(error, reply) {
@@ -39,13 +39,9 @@ require('../init')("editor.changes", function() {
                         next(error);
                     }
                 });
-            }, function(errors) {
-                lib.error.capture(errors);
-                _this.finish();
-            });
+            }, _this.finish);
         } else {
-            lib.error.capture(error);
-            _this.finish();
+            _this.finish(error);
         }
     });
 });

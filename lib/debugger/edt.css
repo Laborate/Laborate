@@ -126,6 +126,12 @@
     display: inline-block;
 }
 
+#EDT-menu > div.sep,
+#EDT-menu > span.text,
+#EDT-menu ul div.sep:first-child {
+    display: none;
+}
+
 #EDT-menu ul, #EDT-menu li, #EDT-menu a {
     display: inline-block;
     list-style: none;

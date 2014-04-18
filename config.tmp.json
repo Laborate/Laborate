@@ -33,7 +33,7 @@
         ],
         "backdrop": "blurry",
         "hiring": false,
-        "default": ""
+        "default": "/news/"
     },
     "development": {
         "basicAuth": {
@@ -57,20 +57,19 @@
         "rememberme": "usrr",
         "session": {
             "key": "usrs",
-            "secret": "FF4Z6vzop7Jz57dB2Eg5GlFkvei1ch0TAe6PN2eS0NZS8lxorz"
+            "secret": "CB0xXM7zTl38KsSEur5zdzhPaSHX6HmhI5Fqpf4RteSkxkr2a7"
         }
     },
     "orm": {
         "reset": true,
-        "preload": "",
-        "sync": "",
-        "debug": "",
-        "protocol": "mysql",
+        "preload": false,
+        "sync": true,
+        "debug": false,
+        "protocol": "mysql:",
         "host": "127.0.0.1",
         "database": "",
         "user": "",
-        "password": "",
-        "timezone": ""
+        "password": ""
     },
     "stripe": {
         "reset": true,
@@ -85,7 +84,7 @@
         "google": false
     },
     "icons": {
-        "search": "icon-search-2",
+        "search": "icon-search",
         "online": "icon-briefcase",
         "sftp": "icon-drive",
         "github": "icon-github-3",
@@ -101,6 +100,7 @@
         "add_square": "icon-plus",
         "subtract_square": "icon-minus",
         "add_circle": "icon-plus-3",
+        "add_circle_full": "icon-plus-2",
         "add": "icon-plus-4",
         "circle_arrow_up": "icon-arrow-up-2",
         "circle_arrow_down": "icon-arrow-down-2",
@@ -148,16 +148,23 @@
         "terminal": "icon-window",
         "public": "icon-users",
         "tracking": "icon-binoculars",
-        "trending": "icon-stats-2",
         "news_feed": "icon-chat",
         "documents": "icon-folder",
         "groups": "icon-users",
         "help": "icon-help",
+        "search": "icon-search-2",
         "admin": "icon-presentation",
         "account": "icon-settings",
         "sign_out": "icon-off",
-        "notification": "icon-notice-2",
-        "preview": "icon-binoculars"
+        "notification": "icon-envelope-2",
+        "preview": "icon-binoculars",
+        "image": "icon-image",
+        "reply": "icon-reply",
+        "forward": "icon-forward",
+        "vcard": "icon-vcard",
+        "location": "icon-location",
+        "url": "icon-cloud",
+        "editor": "icon-document"
     },
     "github": {
         "id": "",
@@ -173,9 +180,9 @@
     "google": {
         "id": "",
         "secret": "",
-        "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY"
+        "verification": "4g9NUq3Lq47WdtRmxG09zcJrX1P1RBxiG9of54jIhyY",
+        "plus": ""
     },
-    "nodetime": "d4d9e81534b285f634d161ed18d52a37dd292a2f",
     "email": {
         "from": "noreply@laborate.io",
         "mode": "SMTP",
@@ -206,6 +213,7 @@
             "public/js/**",
             "shell/**",
             "wiki/**",
+            "**.log",
             ".*/**",
             ".*"
         ],
@@ -238,11 +246,15 @@
                 "freq": "monthly",
                 "priority": 0.7
             },
-            "trending": {
-                "freq": "monthly",
-                "priority": 1
-            },
             "documents": {
+                "freq": "hourly",
+                "priority": 0.5
+            },
+            "posts": {
+                "freq": "daily",
+                "priority": 0.5
+            },
+            "tags": {
                 "freq": "hourly",
                 "priority": 0.5
             }
@@ -252,13 +264,14 @@
             "logout",
             "reload",
             "verify",
+            "reset",
+            "feedback/success",
             "documents",
             "explore",
             "editor",
             "account",
             "github",
             "bitbucket",
-            "feedback",
             "sitemap.xml"
         ]
     },
@@ -266,29 +279,35 @@
         "/admin/",
         "/account/",
         "/documents/",
-        "/feedback/",
         "/dropbox/",
         "/github/",
         "/bitbucket/",
         "/google/",
         "/sftp/"
     ],
+    "descriptions": {
+        "editor": "%s is a public document owned by %s. Contribute to %s by creating an account on Laborate.",
+        "news": "%s - Contribute to the news feed by creating an account on Laborate."
+    },
+    "explict": [
+        "shit",
+        "fuck"
+    ],
     "social": {
         "facebook": {
+            "name": "Laborate.io",
             "link": "https://www.facebook.com/Laborate.io",
             "enabled": true
         },
         "twitter": {
-            "link": "https://twitter.com/Laborate_io",
+            "name": "laborateio",
+            "link": "https://twitter.com/laborateio",
             "enabled": true
         },
         "google_plus": {
-            "link": "https://plus.google.com/110415483446798636481",
+            "name": "Laborateio",
+            "link": "https://plus.google.com/+Laborateio",
             "enabled": true
-        },
-        "tumblr": {
-            "link": "",
-            "enabled": false
         }
     },
     "feedback": {

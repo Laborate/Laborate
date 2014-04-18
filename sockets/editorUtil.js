@@ -3,64 +3,60 @@ var async = require('async');
 
 /* Authentication */
 exports.accessCheck = function(req, callback) {
-    lib.models_init(null, function(db, models) {
-        models.documents.roles.find({
-            user_id: req.session.user.id,
-            document_pub_id: _this.room(req),
-            access: true
-        }, function(error, roles) {
-            if(!error && !roles.empty) {
-                _this.clientData(req, {
-                    isEmbed: false,
-                    document: roles[0].document,
-                    permission: roles[0].permission
-                }, callback);
-            } else {
-                callback("exists");
-            }
-        });
+    lib.models.documents.roles.find({
+        user_id: req.session.user.id,
+        document_pub_id: _this.room(req),
+        access: true
+    }, function(error, roles) {
+        if(!error && !roles.empty) {
+            _this.clientData(req, {
+                isEmbed: false,
+                document: roles[0].document,
+                permission: roles[0].permission
+            }, callback);
+        } else {
+            callback("exists");
+        }
     });
 }
 
 exports.accessCheckEmbed = function(req, callback) {
-    lib.models_init(null, function(db, models) {
-        async.series({
-            document: function(next) {
-                models.documents.find({
-                    pub_id: _this.room(req),
-                    private: false
-                }, function(error, documents) {
-                    if(!error && !documents.empty) {
-                        next(null, documents[0]);
-                    } else {
-                        next("exists");
-                    }
-                });
-            },
-            permission: function(next) {
-                models.documents.permissions.find({
-                    owner: false,
-                    readonly: true,
-                    access: true
-                }, function(error, permissions) {
-                    if(!error && !permissions.empty) {
-                        next(null, permissions[0]);
-                    } else {
-                        next("exists");
-                    }
-                });
-            }
-        }, function(errors, data) {
-            if(!errors && data) {
-                _this.clientData(req, {
-                    isEmbed: true,
-                    document: data.document,
-                    permission: data.permission
-                }, callback);
-            } else {
-                callback(errors[0]);
-            }
-        });
+    async.series({
+        document: function(next) {
+            lib.models.documents.find({
+                pub_id: _this.room(req),
+                private: false
+            }, function(error, documents) {
+                if(!error && !documents.empty) {
+                    next(null, documents[0]);
+                } else {
+                    next("exists");
+                }
+            });
+        },
+        permission: function(next) {
+            lib.models.documents.permissions.find({
+                owner: false,
+                readonly: true,
+                access: true
+            }, function(error, permissions) {
+                if(!error && !permissions.empty) {
+                    next(null, permissions[0]);
+                } else {
+                    next("exists");
+                }
+            });
+        }
+    }, function(errors, data) {
+        if(!errors && data) {
+            _this.clientData(req, {
+                isEmbed: true,
+                document: data.document,
+                permission: data.permission
+            }, callback);
+        } else {
+            callback(errors[0]);
+        }
     });
 }
 
@@ -115,6 +111,10 @@ exports.clientData = function(req, role, callback) {
                     }
                 });
 
+                role.document.save({
+                    content: (content != "") ? content.split("\n") : []
+                });
+
                 document.changes = [];
                 _this.setRedis(room, document);
                 req.io.join(room);
@@ -134,26 +134,24 @@ exports.saveDocument = function(req, callback) {
     var room = _this.room(req, true);
 
     _this.getRedis(room, function(error, reply) {
-        lib.models_init(null, function(db, models) {
-            models.documents.roles.find({
-                user_id: req.session.user.id,
-                document_id: reply.id,
-                access: true
-            }, function(error, roles) {
-                if(!error && !roles.empty) {
-                    var document = roles[0].document;
-                    lib.jsdom.editor(document.content, reply.changes, function(content) {
-                        document.save({
-                            content: (content != "") ? content.split("\n") : [],
-                            breakpoints: reply.breakpoints
-                        });
-
-                        reply.changes = [];
-                        _this.setRedis(room, reply);
-                        if(callback) callback();
+        lib.models.documents.roles.find({
+            user_id: req.session.user.id,
+            document_id: reply.id,
+            access: true
+        }, function(error, roles) {
+            if(!error && !roles.empty) {
+                var document = roles[0].document;
+                lib.jsdom.editor(document.content, reply.changes, function(content) {
+                    document.save({
+                        content: (content != "") ? content.split("\n") : [],
+                        breakpoints: reply.breakpoints
                     });
-                }
-            });
+
+                    reply.changes = [];
+                    _this.setRedis(room, reply);
+                    if(callback) callback();
+                });
+            }
         });
     });
 }
@@ -197,7 +195,10 @@ exports.broadcast = function(req, type, socket, callback) {
 
     if(room && message) {
         data = $.extend(true, {
-            success: true
+            success: true,
+            name: req.session.user.screen_name,
+            from: req.session.user.pub_id,
+            gravatar: req.session.user.gravatar
         }, message);
 
         if(socket) {
@@ -262,9 +263,9 @@ exports.room = function(req, socket, embed) {
 
         if(socket) {
             if(embed) {
-                return "editorEmbed" + room;
+                return "editor:embed:" + room;
             } else {
-                return "editor" + room;
+                return "editor:" + room;
             }
         } else {
             return room;

@@ -1,170 +1,154 @@
+<% include ../includes/start.html %>
 <% include ../includes/header.html %>
-<div class="sidebar">
-    <div class="profile">
-        <div class="img">
-            <a href="/account/notifications/">
-                <img src="<%= gravatar %>" />
-            </a>
+<div class="panel sidebar new eighty">
+    <div class="filter locations">
+        <div class="header">
+            Settings
         </div>
-    </div>
-    <div class="list">
-        <div class="shadow-top"></div>
-        <div class="listing">
-            <div class="item" data-key="dashboard">
-                <div class="container">
-                    <div class="name">Dashboard</div>
-                    <div class="icon <%= icons.dashboard %>"></div>
-                </div>
-                <div class="active"></div>
+        <div class="options">
+            <div class="option" data-key="dashboard">
+                <div class="icon <%= icons.dashboard %>"></div>
+                <div class="name">Dashboard</div>
             </div>
-            <div class="item" data-key="users">
-                <div class="container">
-                    <div class="name">Users</div>
-                    <div class="icon <%= icons.profile %>"></div>
-                </div>
-                <div class="active"></div>
+            <div class="option" data-key="users">
+                <div class="icon <%= icons.profile %>"></div>
+                <div class="name">Users</div>
             </div>
-            <div class="item" data-key="feedback">
-                <div class="container">
-                    <div class="name">Feedback</div>
-                    <div class="icon <%= icons.feedback %>"></div>
-                </div>
-                <div class="active"></div>
+            <div class="option" data-key="feedback">
+                <div class="icon <%= icons.feedback %>"></div>
+                <div class="name">Feedback</div>
             </div>
         </div>
     </div>
 </div>
-<div class="content">
-    <div class="header">
-        <div class="top">
-            <div class="search">
-                <form id="search" autocomplete="off">
-                    <div class="icon <%= icons.search %>"></div>
-                    <input type="text" placeholder="Search your files..." />
-                    <button type="submit">Search</button>
-                </form>
+<div class="panel main righted eighty">
+    <div class="selection dashboard" data-key="dashboard">
+        <div class="container">
+            <div class="side">
+                <div class="data"><%=: users.total | format %></div>
+                <div class="label">user<%=: (users.total != 1) ?  "s" : "" %></div>
             </div>
-            <div class="accounts">
-                <a href="/account/">Account</a>
-                <span>|</span>
-                <a href="/documents/">Documents</a>
-                <span>|</span>
-                <a href="/logout/">Sign Out</a>
+            <div class="side">
+                <div class="data"><%=: users.paid | format %></div>
+                <div class="label">paid user<%=: (users.paid != 1) ?  "s" : "" %></div>
             </div>
-            <div class="clear"></div>
+            <div class="side">
+                <div class="data"><%=: documents | format %></div>
+                <div class="label">document<%=: ([0,1].indexOf(documents) == -1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: feedbacks.length | format %></div>
+                <div class="label">feedback<%=: (feedbacks.length != 1) ?  "s" : "" %></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="side">
+                <div class="data"><%=: users.groups | format %></div>
+                <div class="label">group<%=: (users.groups != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: posts.total | format %></div>
+                <div class="label">post<%=: (posts.total != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: posts.groups | format %></div>
+                <div class="label">group post<%=: (posts.groups != 1) ?  "s" : "" %></div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: posts.tags | format %></div>
+                <div class="label">tag<%=: (posts.tags != 1)?  "s" : "" %></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="side">
+                <div class="data"><%=: tracking.hourly | format %></div>
+                <div class="label">hourly hits</div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: tracking.daily | format %></div>
+                <div class="label">daily hits</div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: tracking.monthly | format %></div>
+                <div class="label">monthly hits</div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: tracking.yearly | format %></div>
+                <div class="label">yearly hits</div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="side">
+                <div class="data"><%=: tracking.hourly_loggedin | format %></div>
+                <div class="label">hourly hits<br>(logged in)</div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: tracking.daily_loggedin | format %></div>
+                <div class="label">daily hits<br>(logged in)</div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: tracking.monthly_loggedin | format %></div>
+                <div class="label">monthly hits<br>(logged in)</div>
+            </div>
+            <div class="side">
+                <div class="data"><%=: tracking.yearly_loggedin | format %></div>
+                <div class="label">yearly hits<br>(logged in)</div>
+            </div>
         </div>
     </div>
-    <div class="pane">
-        <div class="selection dashboard" data-key="dashboard">
-            <div class="container">
-                <div class="side">
-                    <div class="data"><%=: users.total | format %></div>
-                    <div class="label">user<%=: (users.total != 1) ?  "s" : "" %></div>
+    <div class="selection full" data-key="feedback">
+        <% if(!feedbacks.empty) { %>
+            <% $.each(feedbacks, function(key, feedback) { %>
+                <div class="block">
+                    <strong>User</strong>
+                    <div class="value"><%= feedback.user.name %> - <%= feedback.user.pub_id %></div>
                 </div>
-                <div class="side">
-                    <div class="data"><%=: users.paid | format %></div>
-                    <div class="label">paid user<%=: (users.paid != 1) ?  "s" : "" %></div>
+                <div class="block">
+                    <strong>Submitted</strong>
+                    <div class="value"><%= feedback.created.toDateString() %></div>
                 </div>
-                <div class="side">
-                    <div class="data"><%=: documents | format %></div>
-                    <div class="label">document<%=: ([0,1].indexOf(documents) == -1) ?  "s" : "" %></div>
-                </div>
-                <div class="side">
-                    <div class="data"><%=: feedbacks.length | format %></div>
-                    <div class="label">feedback<%=: (feedbacks.length != 1) ?  "s" : "" %></div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="side">
-                    <div class="data"><%=: tracking.hourly | format %></div>
-                    <div class="label">hourly hits</div>
-                </div>
-                <div class="side">
-                    <div class="data"><%=: tracking.daily | format %></div>
-                    <div class="label">daily hits</div>
-                </div>
-                <div class="side">
-                    <div class="data"><%=: tracking.monthly | format %></div>
-                    <div class="label">monthly hits</div>
-                </div>
-                <div class="side">
-                    <div class="data"><%=: tracking.yearly | format %></div>
-                    <div class="label">yearly hits</div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="side">
-                    <div class="data"><%=: tracking.hourly_loggedin | format %></div>
-                    <div class="label">hourly hits<br>(logged in)</div>
-                </div>
-                <div class="side">
-                    <div class="data"><%=: tracking.daily_loggedin | format %></div>
-                    <div class="label">daily hits<br>(logged in)</div>
-                </div>
-                <div class="side">
-                    <div class="data"><%=: tracking.monthly_loggedin | format %></div>
-                    <div class="label">monthly hits<br>(logged in)</div>
-                </div>
-                <div class="side">
-                    <div class="data"><%=: tracking.yearly_loggedin | format %></div>
-                    <div class="label">yearly hits<br>(logged in)</div>
-                </div>
-            </div>
-        </div>
-        <div class="selection full" data-key="feedback">
-            <% if(!feedbacks.empty) { %>
-                <% $.each(feedbacks, function(key, feedback) { %>
-                    <div class="block">
-                        <strong>User</strong>
-                        <div class="value"><%= feedback.user.name %> - <%= feedback.user.pub_id %></div>
-                    </div>
-                    <div class="block">
-                        <strong>Submitted</strong>
-                        <div class="value"><%= feedback.created.toDateString() %></div>
-                    </div>
 
-                    <% $.each(feedback.feedback, function(key, answer) { %>
-                        <div class="block">
-                            <strong><%= questions[key].question %></strong>
-                            <div class="value"><%= answer %></div>
-                        </div>
-                    <% }); %>
-
-                    <% if(!feedbacks.end(key)) { %>
-                        <div class="page-break"></div>
-                    <% } %>
+                <% $.each(feedback.feedback, function(key, answer) { %>
+                    <div class="block">
+                        <strong><%= questions[key].question %></strong>
+                        <div class="value"><%= answer %></div>
+                    </div>
                 <% }); %>
-            <% } else { %>
-                <center><strong>No Feedback Given</strong></center>
-            <% } %>
-        </div>
-        <div class="selection full" data-key="users">
-            <table class="table" cellpadding="0" cellspacing="0">
-                <thead>
-                    <% $.each(tables.users.headers, function(index, header) { %>
-                        <th data-field="<%= tables.users.fields[index] %>"><%=: header | header %></th>
-                    <% }); %>
-                </thead>
-                <tbody>
-                    <% $.each(tables.users.values, function(index, user) { %>
-                        <tr class="<%= (user.admin) ? "admin" : (user.verify) ? "no-verify" : "" %>">
-                            <% $.each(tables.users.fields, function(index, field) { %>
-                                <% user[field] = (field == "verify") ? !user[field] : user[field]; %>
-                                <td data-field="<%= field %>">
-                                    <% if(field == "gravatar") { %>
-                                        <div class="gravatar">
-                                            <img src="<%= user[field] %>"/>
-                                        </div>
-                                    <% } else { %>
-                                        <%-: user[field] | format %>
-                                    <% } %>
-                                </td>
-                            <% }); %>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
-        </div>
+
+                <% if(!feedbacks.end(key)) { %>
+                    <div class="page-break"></div>
+                <% } %>
+            <% }); %>
+        <% } else { %>
+            <center><strong>No Feedback Given</strong></center>
+        <% } %>
+    </div>
+    <div class="selection full" data-key="users">
+        <table class="table" cellpadding="0" cellspacing="0">
+            <thead>
+                <% $.each(tables.users.headers, function(index, header) { %>
+                    <th data-field="<%= tables.users.fields[index] %>"><%=: header | header %></th>
+                <% }); %>
+            </thead>
+            <tbody>
+                <% $.each(tables.users.values, function(index, user) { %>
+                    <tr class="<%= (user.admin) ? "admin" : (user.verify) ? "no-verify" : "" %>">
+                        <% $.each(tables.users.fields, function(index, field) { %>
+                            <% user[field] = (field == "verify") ? !user[field] : user[field]; %>
+                            <td data-field="<%= field %>">
+                                <% if(field == "gravatar") { %>
+                                    <div class="gravatar">
+                                        <img src="<%= user[field] %>"/>
+                                    </div>
+                                <% } else { %>
+                                    <%-: user[field] | format %>
+                                <% } %>
+                            </td>
+                        <% }); %>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
     </div>
 </div>
-<% include ../includes/footer.html %>
+<% include ../includes/end.html %>

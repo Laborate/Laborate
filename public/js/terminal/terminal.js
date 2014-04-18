@@ -1,24 +1,22 @@
 $.extend(window.socketUtil, {
     connect: function(reconnect) {
         if(!window.term) {
-            var term_width = (Math.ceil(($(window).width() - 40)/7));
-            var term_height = (Math.ceil(($(window).height() - 40)/13));
+            resize(function(width, height) {
+                window.socketUtil.socket.emit("terminalJoin", [width, height], function() {
+                    window.term = new Terminal({
+                        cols: width,
+                        rows: height,
+                        useStyle: true,
+                        screenKeys: true
+                    });
 
-            window.socketUtil.socket.emit("terminalJoin", [term_width, term_height], function() {
-                window.term = new Terminal({
-                    cols: term_width,
-                    rows: term_height,
-                    useStyle: true,
-                    screenKeys: true
+                    window.term.on('data', function(data) {
+                        window.socketUtil.socket.emit('terminalData', data);
+                    });
+
+                    window.term.open($(".container").get(0));
+                    status(false);
                 });
-
-                window.term.on('data', function(data) {
-                    window.socketUtil.socket.emit('terminalData', data);
-                });
-
-                window.term.open(document.body);
-                $(".terminal").hAlign().vAlign();
-                status(false);
             });
         }
     },
@@ -48,7 +46,7 @@ $.extend(window.socketUtil, {
 
 $(function() {
     //Terminal Colors
-    window.Terminal.defaults.colors[256] = '#242e30';
+    window.Terminal.defaults.colors[256] = 'transparent';
 
     //Socket Events
     window.socketUtil.socket.on("connect", window.socketUtil.connect);
@@ -87,18 +85,27 @@ $(function() {
     $(".status").on("click", "span", function() {
         window.socketUtil.connect();
     });
+
+    $(".toggle").click(function() {
+        toggleBackground(!$(this).hasClass("active"));
+    });
 });
 
-$(window).on("resize", function() {
+$(window).on("resize", resize);
+
+function resize(callback) {
+    var width = (Math.ceil(($(window).width() - 40)/7));
+    var height = (Math.ceil(($(window).height() - $(".header").height() - 40)/13));
+
     if(window.term) {
-        var term_width = (Math.ceil(($(window).width() - 40)/7));
-        var term_height = (Math.ceil(($(window).height() - 40)/13));
-
-        term.resize(term_width, term_height);
-        window.socketUtil.socket.emit('terminalResize', [term_width, term_height]);
-        $(".terminal").hAlign().vAlign();
+        term.resize(width, height);
+        window.socketUtil.socket.emit('terminalResize', [width, height]);
     }
-});
+
+    if(typeof callback == "function") {
+        callback(width, height);
+    }
+}
 
 function status(message, url) {
     if(message) {
@@ -118,5 +125,22 @@ function status(message, url) {
                 window.location.href = url;
             }
         }, 3000)
+    }
+}
+
+function toggleBackground(show) {
+    $.cookie("background", show, {
+        path: '/terminals',
+        expires: 365
+    });
+
+    $(".header, .error_popup").removeClass("lighten darken");
+    $(".header, .error_popup").addClass((show) ? "lighten" : "darken");
+    $(".toggle").toggleClass("active", show);
+
+    if(show) {
+        $(".backdrop").fadeIn();
+    } else {
+        $(".backdrop").fadeOut();
     }
 }

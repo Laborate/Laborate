@@ -6,10 +6,11 @@ module.exports = function(root) {
 
     /* Core */
     clientCSS.addFile(css_path + 'core/core.less');
+    clientCSS.addFile(css_path + 'core/body.less');
     clientCSS.addFile(css_path + 'core/icons.less');
     clientCSS.addFile(css_path + 'core/popup.less');
     clientCSS.addFile(css_path + 'core/contextmenu.less');
-    clientCSS.addFile(css_path + 'core/sidebar.less');
+    clientCSS.addFile(css_path + 'core/groups.less');
     clientCSS.addFile(css_path + 'core/header.less');
     clientCSS.addFile(css_path + 'core/jscroll.less');
 
@@ -19,6 +20,7 @@ module.exports = function(root) {
     clientJS.addUrl('https://d3nslu0hdya83q.cloudfront.net/dist/1.0/raven.min.js');
     clientJS.addUrl('/socket.io/socket.io.js');
 
+    clientJS.addFile(js_path + 'core/resize.js');
     clientJS.addFile(js_path + 'core/waypoints.js');
     clientJS.addFile(js_path + 'core/jscrollpane.js');
     clientJS.addFile(js_path + 'core/mousewheel.js');
@@ -26,6 +28,7 @@ module.exports = function(root) {
     clientJS.addFile(js_path + 'core/colors.js');
     clientJS.addFile(js_path + 'core/cookie.js');
     clientJS.addFile(js_path + 'core/core.js');
+    clientJS.addFile(js_path + 'core/header.js');
 
     clientJS.addExec(lib.core.extensions);
 
@@ -43,10 +46,6 @@ module.exports = function(root) {
     /* Welcome */
     clientCSS.addFile("welcome", css_path + 'welcome/index.less');
     clientJS.addFile("welcome", js_path + 'welcome/index.js');
-
-    /* Trending */
-    clientCSS.addFile("trending", css_path + 'trending/index.less');
-    clientJS.addFile("trending", js_path + 'trending/index.js');
 
     /* Users */
     clientCSS.addFile("users", css_path + 'users/index.less');
@@ -67,6 +66,10 @@ module.exports = function(root) {
 
     /* Copy */
     clientJS.addFile("copy", js_path + 'core/copy.js');
+
+    /* Highlight.js */
+    clientJS.addFile("highlight", js_path + 'highlight/index.js');
+    clientCSS.addFile("highlight", css_path + 'highlight/index.less');
 
     /* CodeMirror */
     clientCSS.addFile("codemirror", codemirror_path + 'lib/codemirror.css');
@@ -89,7 +92,6 @@ module.exports = function(root) {
     clientJS.addFile("editor", codemirror_path + 'addon/search/search.js');
     clientJS.addFile("editor", codemirror_path + 'addon/search/searchcursor.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/matchbrackets.js');
-    clientJS.addFile("editor", codemirror_path + 'addon/selection/active-line.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/trailingspace.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/closebrackets.js');
     clientJS.addFile("editor", codemirror_path + 'addon/edit/closetag.js');
@@ -111,7 +113,7 @@ module.exports = function(root) {
     clientJS.addFile("editor", js_path + 'editor/sidebar.js');
     clientJS.addFile("editor", js_path + 'editor/sidebarInit.js');
     clientJS.addFile("editor", js_path + 'editor/sidebarUtil.js');
-    clientJS.addFile("editor", js_path + 'editor/chatRoom.js');
+    clientJS.addFile("editor", js_path + 'editor/chat.js');
 
 
     /* Editor Embed */
@@ -148,4 +150,16 @@ module.exports = function(root) {
     clientJS.addFile("admin", js_path + 'admin/admin.js');
     clientJS.addFile("admin", js_path + 'admin/adminUtil.js');
     clientJS.addFile("admin", js_path + 'admin/adminInit.js');
+
+	/* News */
+	clientCSS.addFile('news', css_path + 'news/index.less');
+	clientJS.addFile('news', js_path + 'news/index.js');
+	clientJS.addFile('news', js_path + 'news/util.js');
+	clientJS.addFile('news', js_path + 'news/init.js');
+
+	/* Groups */
+	clientCSS.addFile('groups', css_path + 'groups/index.less');
+	clientJS.addFile('groups', js_path + 'groups/index.js');
+	clientJS.addFile('groups', js_path + 'groups/util.js');
+    clientJS.addFile('groups', js_path + 'groups/init.js');
 };

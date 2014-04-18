@@ -1,0 +1,38 @@
+<div class="bottom">
+    <div class="actions">
+        <%
+            var liked = false;
+            $.each(post.likes, function(index, laborator) {
+                if(user.id == laborator.id) {
+                    liked = true;
+                    return false;
+                }
+            });
+        %>
+        <% if(liked) { %>
+            <span id="like_<%= post.pub_id %>" class="action like" data-like="true">
+                Unlike
+                <% if(!post.likes.empty) { %>
+                    <strong>(<%= post.likes.length %>)</strong>
+                <% } %>
+            </span>
+        <% } else { %>
+            <span id="like_<%= post.pub_id %>" class="action like" data-like="false">
+                Like
+                <% if(!post.likes.empty) { %>
+                    <strong>(<%= post.likes.length %>)</strong>
+                <% } %>
+            </span>
+        <% } %>
+        <span><%= site_delimeter %></span>
+        <a href="/news/<%= post.pub_id %>/" class="action comment" data-count="<%= post.children.length %>">
+            Comments
+            <% if(!post.children.empty) { %>
+                <strong>(<%= post.children.length %>)</strong>
+            <% } %>
+        </a>
+        <span><%= site_delimeter %></span>
+        <span class="action share">Share</span>
+    </div>
+    <div class="time"><%=: post.created | duration %></div>
+</div>
