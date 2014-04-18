@@ -404,7 +404,7 @@ window.sidebarUtil = {
                     }
                 });
 
-        	    $(".sidebar .form[name='invite'] .listing").html("");
+        	    $(".sidebar .form[name='invite'] .laborators").html("");
 
                 $.each(data.laborators, function(key, laborator) {
                     var item = "";
