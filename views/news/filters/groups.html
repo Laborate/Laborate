@@ -5,7 +5,7 @@
         </div>
         <div class="options">
             <% $.each(user.groups, function(index, group) { %>
-                <% if(!(group.private && group.owner_id != user.id)) { %>
+                <% if(!group.private) { %>
                     <div class="option" data-id="<%= group.pub_id %>">
                         <div class="icon <%= icons.groups %>"></div>
                         <div class="name"><%= group.name %></div>
