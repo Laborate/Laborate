@@ -24,7 +24,7 @@ exports.login_user = function(req, res) {
                 if(has_organization) {
                     res.renderOutdated('auth/login/user', {
                         title: 'Login',
-                        user: users[0],
+                        user: user,
                         js: clientJS.renderTags("backdrop"),
                         css: clientCSS.renderTags("backdrop"),
                         backdrop: req.backdrop(),
