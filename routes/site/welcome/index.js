@@ -32,17 +32,6 @@ exports.creative = function(req, res) {
     });
 };
 
-exports.gravatar = function(req, res) {
-    res.renderOutdated('welcome/gravatar', {
-        title: 'Welcome',
-        user: req.session.user,
-        js: clientJS.renderTags("backdrop", "welcome"),
-        css: clientCSS.renderTags("backdrop", "welcome"),
-        backdrop: req.backdrop(),
-        pageTrack: true
-    });
-};
-
 exports.social = function(req, res) {
     var users = [];
     var screen_names = [];

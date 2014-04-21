@@ -86,7 +86,7 @@ var error_handler = function(status, message, locals, req, res, error) {
 exports.global = function(error, req, res, next) {
     if(error) {
         if(config.general.production) {
-            error_handler(500, "Laborate is experiencing technical difficalties", {
+            error_handler(500, null, {
                 home: false
             }, req, res);
         } else {

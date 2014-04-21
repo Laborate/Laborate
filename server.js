@@ -172,12 +172,6 @@ if (cluster.isMaster) {
         });
     });
 
-    /* Express: Start Router */
-    app.use(app.router);
-
-    /* Error Handler (Express) */
-    app.use(require("./routes/global").error.global);
-
     /* Express: Import Routes */
     require('./routes/api')(app);
     require('./routes/webhooks')(app);
@@ -186,6 +180,12 @@ if (cluster.isMaster) {
 
     /* Socket IO: Import Routes */
     require('./sockets')(app);
+
+    /* Express: Start Router */
+    app.use(app.router);
+
+    /* Error Handler (Express) */
+    app.use(require("./routes/global").error.global);
 
     /* Listen To Server */
     if(config.general.ssl) {
