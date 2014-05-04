@@ -67,7 +67,7 @@ $(document).on("click", ".terminal a", function() {
 });
 
 $(document).on("click", ".select-files", function() {
-    window.documents.fileSelectClick($(".pane .file:not(.disabled)"));
+    window.documents.fileSelectClick($(".pane .file:visible:not(.disabled)"));
 });
 
 $(document).on("click", ".download-files", function() {
