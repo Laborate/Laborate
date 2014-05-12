@@ -33,12 +33,6 @@
                     or <a href="/login/">Sign In</a>
                 </div>
             </form>
-            <div class="footer">
-                <div id="backdrop-header">Learn About Laborate</div>
-                <div class="video-container">
-                    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/DaK8eYEB5TA?rel=0" frameborder="0" allowfullscreen></iframe>
-                </div>
-            </div>
         </div>
 
         <!-- Slide: Community -->
@@ -135,35 +129,9 @@
             </div>
         </div>
 
-        <!-- Slide: Students -->
-        <div id="students" class="slide">
-            <div class="center">
-                <div class="left">
-                    <div class="sub-header">
-                        Made by students<br>for students
-                    </div>
-                    <div class="quote">
-                        We have experienced your pain,
-                        <br> which drives us to build tools
-                        <br> for you!
-                    </div>
-                </div>
-                <div class="right founders">
-                    <% $.each(admins, function(key, admin) { %>
-                        <a class="founder" target="_blank" href="/users/<%= admin.screen_name %>/">
-                            <div class="gravatar">
-                                <img src="<%= admin.gravatar %>" />
-                            </div>
-                            <div class="name"><%= admin.name %></div>
-                        </a>
-                    <% }); %>
-                </div>
-            </div>
-        </div>
-
         <% if(!user) { %>
             <!-- Slide: Register -->
-            <div id="register" class="slide colored">
+            <div id="register" class="slide">
                 <div class="center">
                     <div class="quote">So what are you waiting for? Sign up, its free!</div>
                     <form action="/register/" method="post">
