@@ -1,10 +1,14 @@
+[Meet Laborate Video](http://www.youtube.com/watch?v=DaK8eYEB5TA)
+-------------------------
+[![Meet Laborate](https://raw.githubusercontent.com/laborate/Laborate/master/screenshot.png)](http://www.youtube.com/watch?v=DaK8eYEB5TA)
+
 Install After [base-init](https://github.com/Laborate/base-init)
 ----------------------------------------------------------------
 
 1. **Run Installer Script**
 
    ```bash
-cd ~; git clone -b <branch> git@github.com:bvallelunga/laborate.git; bash laborate/shell/init.sh;
+cd ~; git clone git@github.com:Laborate/middleware.git; bash middleware/shell/init.sh;
    ```
 
 2. **Fill In** ```config.json``` **With Your Info**
